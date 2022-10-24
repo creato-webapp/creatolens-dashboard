@@ -122,6 +122,7 @@
   }
   .code {
     background: #111;
+    color: #f0f0f0;
   }
   .logo img {
     filter: invert(1);
