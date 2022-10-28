@@ -1,12 +1,10 @@
-import Row from './Row'
 import { BodyProps } from './Interface'
+import React, { FC, ReactElement } from 'react'
 
-const Body = (props: BodyProps) => {
+const Body: FC<BodyProps> = (props: BodyProps): ReactElement => {
   return (
     <tbody>
-      {props.dataSource.map((e, index) => (
-        <Row columns={props.columns} rowData={e} key={index} />
-      ))}
+      <>{props.children}</>
     </tbody>
   )
 }

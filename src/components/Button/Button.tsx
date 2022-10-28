@@ -1,21 +1,23 @@
 import React from 'react'
 import { ButtonProps } from './interface'
 
-const Button = (props: ButtonProps) => {
-  const { children, type, onClick, disabled, loading } = props
-  return loading ? (
-    <button
-      disabled
-      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-    >
-      <svg className="animate-spin h-5 w-5 mr-3 ..." viewBox="0 0 24 24" />
-      {children}
-    </button>
-  ) : (
+const Button: React.FC<ButtonProps> = ({
+  children,
+  type = 'primary',
+  onClick,
+  disabled = false,
+  loading,
+}) => {
+  const ButtonConfig = {
+    primary: 'bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded',
+    text: 'bg-transparent text-blue-700 hover:text-blue-900 py-2 px-4',
+  }
+
+  return (
     <button
       onClick={onClick}
-      disabled={disabled}
-      className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+      disabled={loading || disabled}
+      className={`${ButtonConfig[type]}`}
     >
       {children}
     </button>

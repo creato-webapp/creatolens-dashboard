@@ -1,5 +1,4 @@
-import { ReactNode } from 'react'
-import internal from 'stream'
+import { ReactNode, PropsWithChildren, FC } from 'react'
 
 export interface rowData {
   [key: string]: any
@@ -8,25 +7,19 @@ export interface rowData {
 export interface Column {
   title: string
   dataIndex: string
-  render?: ReactNode
+  render?: Function
 }
 
-export interface HeaderProps {
+export interface HeaderProps extends PropsWithChildren {
   columns: Column[]
 }
 
-export interface RowProps {
+export interface RowProps extends PropsWithChildren {
   key: number
   columns: Column[]
   rowData: rowData
 }
 
-export interface BodyProps {
-  dataSource: rowData[]
-  columns: Column[]
-}
+export interface BodyProps extends PropsWithChildren {}
 
-export interface TableProps {
-  columns: Column[]
-  dataSource: any[]
-}
+export interface TableProps extends PropsWithChildren {}
