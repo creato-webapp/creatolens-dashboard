@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react'
-import Card from '../src/components/Card'
-import { Table } from '../src/components/Table'
-import Button from '../src/components/Button/Button'
-import { IAccount } from '../src/components/Account/interface'
+import Card from '@components/Card'
+import { Table } from '@components/Table'
+import Button from '@components/Button/Button'
+import { IAccount } from '@components/Account/interface'
 import useSWR from 'swr'
+import Link from 'next/link'
+import moment from 'moment'
 
 const fetcher = (url: string) =>
   fetch(url).then((res) => {
@@ -12,7 +14,7 @@ const fetcher = (url: string) =>
 
 const AccountsPage = () => {
   const { data, error, isValidating } = useSWR(
-    'api/accounts/query?filter=username != null',
+    'api/accounts?filter=username != null',
     fetcher
   )
 
@@ -31,6 +33,13 @@ const AccountsPage = () => {
     {
       title: 'document_id',
       dataIndex: 'id',
+      render: (e: string) => {
+        return (
+          <Link href="/accounts/[id]" as={`/accounts/${e}`} legacyBehavior>
+            <a style={{ color: '#0070f3' }}>{e}</a>
+          </Link>
+        )
+      },
     },
     { title: 'username', dataIndex: 'username' },
     {
@@ -38,6 +47,25 @@ const AccountsPage = () => {
       dataIndex: 'is_occupied',
       render: (e: any) => {
         return <div>{e.toString()}</div>
+      },
+    },
+    {
+      title: 'is enabled',
+      dataIndex: 'enabled',
+      render: (e: any) => {
+        return <div>{e.toString()}</div>
+      },
+    },
+    {
+      title: 'last_login_dt(HK Time)',
+      dataIndex: 'last_login_dt',
+      render: (e: any) => {
+        const date = moment(e, 'YYYY-MM-DD THH:mm:ss')
+        return moment
+          .utc(date)
+          .local()
+          .add(8, 'hours')
+          .format('YYYY-MM-DD HH:mm:ss')
       },
     },
     {

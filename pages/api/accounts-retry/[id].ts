@@ -1,22 +1,25 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-export default function userHandler(req: NextApiRequest, res: NextApiResponse) {
+export default function AccountHandler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   const {
     query: { id, name },
     method,
   } = req
-
+  console.log(id)
   switch (method) {
     case 'GET':
-      fetch('https://jsonplaceholder.typicode.com/posts?_limit=10')
+      fetch(`https://account-service-y7nazd37ga-df.a.run.app/accounts/${id}`)
         .then((response) => response.json())
         .then((data) => {
-          console.log(data)
+          res.status(200).json(data)
         })
         .catch((err) => {
-          console.log(err.message)
+          console.log(err.me)
         })
-      res.status(200).json({ id, name: `User ${id}` })
+
       break
     case 'PUT':
       // Update or create data in your database

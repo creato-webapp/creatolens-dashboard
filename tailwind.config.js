@@ -2,12 +2,12 @@
 module.exports = {
   darkMode: 'media',
   // ...
-  content: [
-    "./pages/*.{js,ts,jsx,tsx}",
-    "./src/components/*.{js,ts,jsx,tsx}",
-  ],
+  content: ['./pages/*.{js,ts,jsx,tsx}', './src/components/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {},
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/forms'),
+    require('prettier-plugin-tailwindcss'),
+  ],
 }

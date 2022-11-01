@@ -2,14 +2,14 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-  async rewrites() {
-    return [
-      {
-        source: '/api/:path*',
-        destination: 'https://account-service-y7nazd37ga-df.a.run.app/:path*' // Proxy to Backend
-      }
-    ]
-  }
+  // async rewrites() {
+  //   return [
+  //     {
+  //       source: '/api/:path*',
+  //       destination: 'http://localhost:3000/api/:path*' // Proxy to Backend
+  //     }
+  //   ]
+  // }
 }
 
 module.exports = nextConfig
