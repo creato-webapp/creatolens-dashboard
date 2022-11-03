@@ -70,7 +70,7 @@ const AccountsPage = () => {
     },
     {
       title: 'action',
-      dataIndex: 'action',
+      dataIndex: 'id',
       render: (e: any) => (
         <Button
           type="text"

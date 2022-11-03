@@ -17,12 +17,17 @@ export default function AccountHandler(
           res.status(200).json(data)
         })
         .catch((err) => {
-          console.log(err.me)
+          console.log(err.message)
         })
 
       break
     case 'PUT':
       // Update or create data in your database
+      res.status(200).json({ id, name: name || `User ${id}` })
+      break
+    case 'PATCH':
+      // Update or create data in your database
+      console.log(req.query)
       res.status(200).json({ id, name: name || `User ${id}` })
       break
     default:
