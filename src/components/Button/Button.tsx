@@ -7,6 +7,7 @@ const Button: React.FC<ButtonProps> = ({
   onClick,
   disabled = false,
   loading,
+  ...res
 }) => {
   const ButtonConfig = {
     primary: 'bg-blue-500 hover:bg-blue-700 text-white py-2 px-4 rounded',
@@ -18,6 +19,7 @@ const Button: React.FC<ButtonProps> = ({
       onClick={onClick}
       disabled={loading || disabled}
       className={`${ButtonConfig[type]}`}
+      {...res}
     >
       {children}
     </button>
