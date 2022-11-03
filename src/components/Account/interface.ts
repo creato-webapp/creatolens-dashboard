@@ -20,4 +20,5 @@ export interface IAccount {
     | 'scrapping'
     | 'occupied'
   updated_at: string
+  [key: string]: string | number | boolean
 }
