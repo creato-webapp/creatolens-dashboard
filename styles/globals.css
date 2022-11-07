@@ -19,6 +19,15 @@ a {
   box-sizing: border-box;
 }
 
+input[required] {
+  display: block;
+}
+
+input[required]::after {
+  content: '*';
+  color: red;
+}
+
 @media (prefers-color-scheme: dark) {
   html {
     color-scheme: light;
