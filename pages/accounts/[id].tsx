@@ -1,26 +1,29 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Card from '@components/Card'
 import { useRouter } from 'next/router'
-import { Form, FormExample } from '@components/Form'
+import { Form } from '@components/Form'
 import { IField } from '@components/Form/interface'
-import Button from '@components/Button/Button'
 import { IAccount } from '@components/Account/interface'
-import useSWR, { useSWRConfig } from 'swr'
+import useSWR from 'swr'
 import moment from 'moment'
 
-const fetcher = (url: string) =>
-  fetch(url).then((res) => {
-    //massage datetime
+const fetcher = (url: string) => {
+  if (url === 'create-account') {
+    return
+  }
+  const res = fetch(url).then((res) => {
     return res.json()
   })
+  return res
+}
 
 const AccountsPage = () => {
+  const [loading, setIsLoading] = useState<boolean>(false)
   const router = useRouter()
   const { id } = router.query
-
-  const { mutate } = useSWRConfig()
+  const isCreate = id === 'create-account'
   const { data, error, isValidating } = useSWR(
-    router.query.id ? `/api/accounts/${router.query.id}` : null,
+    id ? `/api/accounts/${id}` : null,
     fetcher
   )
 
@@ -35,14 +38,14 @@ const AccountsPage = () => {
   }
 
   const account: IAccount = {
-    ...data.data,
+    ...data?.data,
     last_login_dt: moment(
-      data.data.last_login_dt,
+      data?.data?.last_login_dt,
       'YYYY-MM-DD THH:mm:ss'
     ).format('YYYY-MM-DDTHH:mm'),
   }
 
-  const fields: IField[] = [
+  const fieldsUpdate: IField[] = [
     {
       label: 'document_id',
       type: 'Input',
@@ -52,6 +55,13 @@ const AccountsPage = () => {
       label: 'username',
       type: 'Input',
       name: 'username',
+      customFormItemProps: { required: true },
+    },
+    {
+      label: 'pwd',
+      type: 'Input',
+      name: 'pwd',
+      customFormItemProps: { required: true },
     },
     {
       label: 'status',
@@ -70,36 +80,53 @@ const AccountsPage = () => {
     },
     {
       label: 'last_login_dt',
-      type: 'Input',
+      type: 'DateTimePicker',
       name: 'last_login_dt',
     },
   ]
 
-  const handleSubmit = async (
-    event: React.FormEvent<EventTarget | HTMLFormElement>
-  ) => {
-    event.preventDefault()
-    const target = event.target as typeof event.target & {
-      [key: string]: { value: string }
-    }
-    var obj: { [key: string]: string | number | boolean } = {}
+  const fieldsCreate: IField[] = [
+    {
+      label: 'username',
+      type: 'Input',
+      name: 'username',
+      customFormItemProps: { required: true },
+    },
+    {
+      label: 'pwd',
+      type: 'Input',
+      name: 'pwd',
+      customFormItemProps: { required: true },
+    },
+  ]
 
-    fields.map((e) => (obj[e.name] = target[e.name].value))
-    const values = {
+  const handleSubmit = async (values: IAccount) => {
+    isCreate ? createAccount(values) : updateAccount(values)
+  }
+
+  const createAccount = async (values: IAccount) => {
+    fetch(`/api/accounts`, {
+      method: 'POST',
+      headers: { 'Content-type': 'application/json' },
+      body: JSON.stringify(values),
+    }).then((response) => {
+      return response.json()
+    })
+  }
+  const updateAccount = async (values: IAccount) => {
+    const newValues = {
       ...account,
-      ...obj,
+      ...values,
     }
     fetch(`/api/accounts/${router.query.id}`, {
       method: 'PATCH',
       headers: { 'Content-type': 'application/json' },
-      body: JSON.stringify(values),
+      body: JSON.stringify(newValues),
+    }).then((response) => {
+      return response.json()
     })
-      .then((response) => {
-        console.log(response.status)
-        return response.json()
-      })
-      .then((data) => console.log(data))
   }
+  const fields = isCreate ? fieldsCreate : fieldsUpdate
 
   return (
     <Card title="Accounts Info">
@@ -107,28 +134,22 @@ const AccountsPage = () => {
         onSubmit={handleSubmit}
         Header={account.username}
         loading={isValidating}
+        fields={fields}
       >
-        <Form.Item label="Document ID">
-          <Form.Input id="id" defaultValue={account.id} />
-        </Form.Item>
-        <Form.Item label="Username">
-          <Form.Input id="username" defaultValue={account.username} />
-        </Form.Item>
-        <Form.Item label="status">
-          <Form.Input id="status" defaultValue={account.status} />
-        </Form.Item>
-        <Form.Item label="enabled">
-          <Form.Checkbox id="enabled" defaultValue={account.enabled} />
-        </Form.Item>
-        <Form.Item label="is_occupied">
-          <Form.Checkbox id="is_occupied" defaultValue={account.is_occupied} />
-        </Form.Item>
-        <Form.Item label="last_login_dt">
-          <Form.DateTimePicker
-            id="last_login_dt"
-            defaultValue={account.last_login_dt}
-          />
-        </Form.Item>
+        {fields.map((e: IField, index) => (
+          <Form.Item
+            label={e.label}
+            key={index}
+            customFormItemProps={e.customFormItemProps}
+          >
+            <Form.CustomItem
+              id={e.name}
+              defaultValue={account[e.name]}
+              type={e.type}
+              customFormItemProps={e.customFormItemProps}
+            />
+          </Form.Item>
+        ))}
       </Form.Layout>
     </Card>
   )

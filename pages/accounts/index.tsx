@@ -86,6 +86,9 @@ const AccountsPage = () => {
   const dataSource = accounts
   return (
     <Card title="Accounts Table">
+      <Link href="/accounts/create-account">
+        <Button loading={false}>Create New Account</Button>
+      </Link>
       <Table.Layout>
         <Table.Header columns={columns} />
         <Table.Body>

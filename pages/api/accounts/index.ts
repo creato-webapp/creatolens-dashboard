@@ -6,16 +6,45 @@ export default function accountQueryHandler(
 ) {
   const {
     query: { id, name },
+    body,
     method,
   } = req
-  fetch(
-    `https://account-service-y7nazd37ga-df.a.run.app/accounts/query?filter=username != null`
-  )
-    .then((response) => response.json())
-    .then((data) => {
-      res.status(200).json(data)
-    })
-    .catch((err) => {
-      console.log(err.message)
-    })
+  switch (method) {
+    case 'GET':
+      fetch(
+        `https://account-service-y7nazd37ga-df.a.run.app/accounts/query?filter=username != null`
+      )
+        .then((response) => response.json())
+        .then((data) => {
+          return res.status(200).json(data)
+        })
+        .catch((err) => {
+          console.log(err.message)
+          return res.status(405)
+        })
+      break
+    case 'POST':
+      fetch(`http://localhost:2020/accounts/create`, {
+        method: 'POST',
+        headers: { 'Content-type': 'application/json' },
+        body: JSON.stringify(body),
+      })
+        .then((response) => {
+          if (response.status === 409) {
+            return { status: 409, body: 'Account Already Exist' }
+          }
+          return response.json().then((data) => ({
+            status: data.status,
+            body: data,
+          }))
+        })
+        .then((data) => {
+          return res.status(data.status).json(data)
+        })
+        .catch((err) => {
+          console.log(err)
+          console.log(err.message)
+        })
+      break
+  }
 }

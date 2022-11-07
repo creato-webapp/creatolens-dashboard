@@ -6,12 +6,12 @@ export default function AccountHandler(
 ) {
   const {
     query: { id, name },
+    body,
     method,
   } = req
-  console.log(id)
   switch (method) {
     case 'GET':
-      fetch(`https://account-service-y7nazd37ga-df.a.run.app/accounts/${id}`)
+      fetch(`http://localhost:2020/accounts/${id}`)
         .then((response) => response.json())
         .then((data) => {
           res.status(200).json(data)
@@ -26,12 +26,25 @@ export default function AccountHandler(
       res.status(200).json({ id, name: name || `User ${id}` })
       break
     case 'PATCH':
-      // Update or create data in your database
-      console.log(req.query)
-      res.status(200).json({ id, name: name || `User ${id}` })
+      fetch(
+        `https://account-service-y7nazd37ga-df.a.run.app/accounts/update/${id}`,
+        {
+          method: 'PATCH',
+          headers: { 'Content-type': 'application/json' },
+          body: JSON.stringify(body),
+        }
+      )
+        .then((response) => {
+          console.log(response.status)
+          return response.json()
+        })
+        .then((data) => res.status(200).json(data))
+        .catch((err) => {
+          console.log(err.message)
+        })
       break
     default:
-      res.setHeader('Allow', ['GET', 'PUT'])
+      res.setHeader('Allow', ['GET', 'PATCH', 'PUT'])
       res.status(405).end(`Method ${method} Not Allowed`)
   }
 }

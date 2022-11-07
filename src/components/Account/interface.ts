@@ -1,4 +1,4 @@
-export interface IAccount {
+export interface IAccount extends Record<string, string | number | boolean> {
   id: string
   username: string
   created_at: string
@@ -20,5 +20,4 @@ export interface IAccount {
     | 'scrapping'
     | 'occupied'
   updated_at: string
-  [key: string]: string | number | boolean
 }
