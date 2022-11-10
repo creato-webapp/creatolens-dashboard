@@ -4,9 +4,9 @@ import { useRouter } from 'next/router'
 import { Form } from '@components/Form'
 import { IField } from '@components/Form/interface'
 import { IAccount } from '@components/Account/interface'
-import useSWR from 'swr'
+import useSWR, { useSWRConfig } from 'swr'
 import moment from 'moment'
-import { GetStaticProps, GetStaticPaths, GetServerSideProps } from 'next'
+import { GetServerSideProps } from 'next'
 
 const fetcher = (url: string) => {
   if (url === 'create-account') {
@@ -34,14 +34,18 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 }
 
 const AccountsPage = ({ accountData }: Props) => {
-  const [loading, setIsLoading] = useState<boolean>(false)
+  const { mutate } = useSWRConfig()
   const router = useRouter()
   const { id } = router.query
   const isCreate = id === 'create-account'
-  const { data, error, isValidating } = useSWR(
-    id ? `/api/accounts/${id}` : null,
-    fetcher
-  )
+
+  const {
+    data,
+    error,
+    mutate: mutateAccountsId,
+  } = useSWR(id ? `/api/accounts/${id}` : null, fetcher, {
+    fallbackData: accountData,
+  })
 
   if (error) {
     console.log(data)
@@ -117,7 +121,9 @@ const AccountsPage = ({ accountData }: Props) => {
   ]
 
   const handleSubmit = async (values: IAccount) => {
-    isCreate ? createAccount(values) : updateAccount(values)
+    isCreate ? await createAccount(values) : await updateAccount(values)
+    mutate('api/accounts')
+    mutateAccountsId()
   }
 
   const createAccount = async (values: IAccount) => {
@@ -133,14 +139,21 @@ const AccountsPage = ({ accountData }: Props) => {
     const newValues = {
       ...account,
       ...values,
+      last_login_dt: moment(values.last_login_dt, 'YYYY-MM-DDTHH:mm').format(
+        'YYYY-MM-DD THH:mm:ss'
+      ),
     }
     fetch(`/api/accounts/${router.query.id}`, {
       method: 'PATCH',
       headers: { 'Content-type': 'application/json' },
       body: JSON.stringify(newValues),
-    }).then((response) => {
-      return response.json()
     })
+      .then((response) => {
+        console.log(response.status)
+      })
+      .catch((err) => {
+        console.log(err.message)
+      })
   }
   const fields = isCreate ? fieldsCreate : fieldsUpdate
 
@@ -149,7 +162,7 @@ const AccountsPage = ({ accountData }: Props) => {
       <Form.Layout
         onSubmit={handleSubmit}
         Header={account.username}
-        loading={isValidating}
+        loading={!error && !data}
         fields={fields}
       >
         {fields.map((e: IField, index) => (

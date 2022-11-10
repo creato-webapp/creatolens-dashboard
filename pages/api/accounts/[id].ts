@@ -11,7 +11,7 @@ export default function AccountHandler(
   } = req
   switch (method) {
     case 'GET':
-      fetch(`https://account-service-y7nazd37ga-df.a.run.app/accounts/${id}`)
+      fetch(process.env.ACCOUNT_SERVICE + `/accounts/${id}`)
         .then((response) => response.json())
         .then((data) => {
           res.status(200).json(data)
@@ -26,19 +26,17 @@ export default function AccountHandler(
       res.status(200).json({ id, name: name || `User ${id}` })
       break
     case 'PATCH':
-      fetch(
-        `https://account-service-y7nazd37ga-df.a.run.app/accounts/update/${id}`,
-        {
-          method: 'PATCH',
-          headers: { 'Content-type': 'application/json' },
-          body: JSON.stringify(body),
-        }
-      )
+      let resCode = 400
+      fetch(process.env.ACCOUNT_SERVICE + `/accounts/update/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-type': 'application/json' },
+        body: JSON.stringify(body),
+      })
         .then((response) => {
+          resCode = response.status
           console.log(response.status)
-          return response.json()
         })
-        .then((data) => res.status(200).json(data))
+        .then((data) => res.status(resCode).json(data))
         .catch((err) => {
           console.log(err.message)
         })

@@ -4,7 +4,7 @@ const Row: React.FC<RowProps> = (props: RowProps) => {
   return (
     <tr
       key={props.key}
-      className=" border-b dark:bg-gray-800 dark:border-gray-700"
+      className=" border-b dark:border-gray-700 dark:bg-gray-800"
     >
       {props.columns.map(({ title, dataIndex, render }, index) => (
         <td key={index} className="border border-slate-300 py-2 px-4">

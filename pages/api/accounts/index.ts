@@ -12,7 +12,7 @@ export default function accountQueryHandler(
   switch (method) {
     case 'GET':
       fetch(
-        `https://account-service-y7nazd37ga-df.a.run.app/accounts/query?filter=username != null`
+        process.env.ACCOUNT_SERVICE + `/accounts/query?filter=username != null`
       )
         .then((response) => response.json())
         .then((data) => {
@@ -24,7 +24,7 @@ export default function accountQueryHandler(
         })
       break
     case 'POST':
-      fetch(`http://localhost:2020/accounts/create`, {
+      fetch(process.env.ACCOUNT_SERVICE + `/accounts/create`, {
         method: 'POST',
         headers: { 'Content-type': 'application/json' },
         body: JSON.stringify(body),

@@ -22,7 +22,7 @@ export interface IField {
 export interface FormLayoutProps extends PropsWithChildren {
   Header?: string
   subHeader?: string
-  fields: IField[] | null
+  fields: IField[]
   loading: boolean
   onSubmit: Function
 }

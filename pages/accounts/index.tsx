@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react'
+import React from 'react'
 import Card from '@components/Card'
 import { Table } from '@components/Table'
 import Button from '@components/Button/Button'
@@ -6,16 +6,17 @@ import { IAccount } from '@components/Account/interface'
 import useSWR from 'swr'
 import Link from 'next/link'
 import { useSession } from 'next-auth/react'
-import { GetStaticProps, GetStaticPaths, GetServerSideProps } from 'next'
+import { GetServerSideProps } from 'next'
 import moment from 'moment'
 
 const fetcher = (url: string) =>
-  fetch(url).then((res) => {
+  fetch(url + '?filter=username != null').then((res) => {
     return res.json()
   })
 
 type Props = {
   accountData: IAccount[]
+  session: 
 }
 
 export const getServerSideProps: GetServerSideProps = async () => {
@@ -30,12 +31,8 @@ export const getServerSideProps: GetServerSideProps = async () => {
   return { props: { accountData } }
 }
 
-const AccountsPage = ({ accountData }: Props) => {
-  const { data: session } = useSession()
-  const { data, error, isValidating } = useSWR(
-    'api/accounts?filter=username != null',
-    fetcher
-  )
+const AccountsPage = ({ accountData, session }: Props) => {
+  const { data, error, isValidating } = useSWR('api/accounts', fetcher)
 
   if (error) {
     console.log(data)
@@ -98,7 +95,7 @@ const AccountsPage = ({ accountData }: Props) => {
     },
   ]
 
-  // const dataSource = accounts
+  const dataSource = accounts
   return (
     <Card title="Accounts Table">
       <Link href="/accounts/create-account">

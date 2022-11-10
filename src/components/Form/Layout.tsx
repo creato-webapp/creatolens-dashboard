@@ -5,6 +5,7 @@ import moment from 'moment'
 
 const Layout: FC<FormLayoutProps> = (props: FormLayoutProps) => {
   const { Header, subHeader, loading, onSubmit, fields } = props
+  console.log({ loading })
   const SubmitHandler = (
     event: React.FormEvent<EventTarget | HTMLFormElement>
   ) => {
