@@ -6,6 +6,7 @@ import { IField } from '@components/Form/interface'
 import { IAccount } from '@components/Account/interface'
 import useSWR from 'swr'
 import moment from 'moment'
+import { GetStaticProps, GetStaticPaths, GetServerSideProps } from 'next'
 
 const fetcher = (url: string) => {
   if (url === 'create-account') {
@@ -17,7 +18,22 @@ const fetcher = (url: string) => {
   return res
 }
 
-const AccountsPage = () => {
+type Props = {
+  accountData: IAccount[]
+}
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  // Fetch data from external API
+  const { params } = context
+  const res = await fetch(`http://localhost:3000/api/accounts?${params?.id}`)
+  const data = await res.json()
+
+  // Pass data to the page via props
+  const accountData: IAccount = data.data
+  return { props: { accountData } }
+}
+
+const AccountsPage = ({ accountData }: Props) => {
   const [loading, setIsLoading] = useState<boolean>(false)
   const router = useRouter()
   const { id } = router.query

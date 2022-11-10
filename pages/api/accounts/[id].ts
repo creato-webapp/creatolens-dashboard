@@ -11,7 +11,7 @@ export default function AccountHandler(
   } = req
   switch (method) {
     case 'GET':
-      fetch(`http://localhost:2020/accounts/${id}`)
+      fetch(`https://account-service-y7nazd37ga-df.a.run.app/accounts/${id}`)
         .then((response) => response.json())
         .then((data) => {
           res.status(200).json(data)

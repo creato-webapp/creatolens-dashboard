@@ -1,10 +1,12 @@
-import React, { useEffect } from 'react'
+import React, { FC, useEffect } from 'react'
 import Card from '@components/Card'
 import { Table } from '@components/Table'
 import Button from '@components/Button/Button'
 import { IAccount } from '@components/Account/interface'
 import useSWR from 'swr'
 import Link from 'next/link'
+import { useSession } from 'next-auth/react'
+import { GetStaticProps, GetStaticPaths, GetServerSideProps } from 'next'
 import moment from 'moment'
 
 const fetcher = (url: string) =>
@@ -12,7 +14,24 @@ const fetcher = (url: string) =>
     return res.json()
   })
 
-const AccountsPage = () => {
+type Props = {
+  accountData: IAccount[]
+}
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  // Fetch data from external API
+  const res = await fetch(
+    'http://localhost:3000/api/accounts?filter=username != null'
+  )
+  const data = await res.json()
+
+  // Pass data to the page via props
+  const accountData: IAccount[] = data.data
+  return { props: { accountData } }
+}
+
+const AccountsPage = ({ accountData }: Props) => {
+  const { data: session } = useSession()
   const { data, error, isValidating } = useSWR(
     'api/accounts?filter=username != null',
     fetcher
@@ -72,18 +91,14 @@ const AccountsPage = () => {
       title: 'action',
       dataIndex: 'id',
       render: (e: any) => (
-        <Button
-          type="text"
-          loading={isValidating}
-          onClick={() => console.log(e)}
-        >
+        <Button type="text" loading={false} onClick={() => console.log(e)}>
           Edit
         </Button>
       ),
     },
   ]
 
-  const dataSource = accounts
+  // const dataSource = accounts
   return (
     <Card title="Accounts Table">
       <Link href="/accounts/create-account">
@@ -92,7 +107,7 @@ const AccountsPage = () => {
       <Table.Layout>
         <Table.Header columns={columns} />
         <Table.Body>
-          {dataSource.map((e, index) => (
+          {accountData.map((e, index) => (
             <Table.Row columns={columns} rowData={e} key={index} />
           ))}
         </Table.Body>
