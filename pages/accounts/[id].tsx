@@ -7,34 +7,26 @@ import { IAccount } from '@components/Account/interface'
 import useSWR, { useSWRConfig } from 'swr'
 import moment from 'moment'
 import { GetServerSideProps } from 'next'
-
-const fetcher = (url: string) => {
-  if (url === 'create-account') {
-    return
-  }
-  const res = fetch(url).then((res) => {
-    return res.json()
-  })
-  return res
-}
+import { Fetcher } from 'services/fetcher'
+import axios from 'axios'
 
 type Props = {
-  accountData: IAccount[]
+  accountData: IAccount
 }
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  // Fetch data from external API
+export const getServerSideProps: GetServerSideProps = async (context: any) => {
+  //remove any
   const { params } = context
-  const res = await fetch(`http://localhost:3000/api/accounts?${params?.id}`)
-  const data = await res.json()
-
+  const res = await axios.get(`http://localhost:3000/api/accounts/${params.id}`)
   // Pass data to the page via props
-  const accountData: IAccount = data.data
+  const accountData: IAccount = res.data
   return { props: { accountData } }
 }
 
 const AccountsPage = ({ accountData }: Props) => {
   const { mutate } = useSWRConfig()
+  const [shouldFetch, setShouldFetch] = useState(false)
+
   const router = useRouter()
   const { id } = router.query
   const isCreate = id === 'create-account'
@@ -42,8 +34,10 @@ const AccountsPage = ({ accountData }: Props) => {
   const {
     data,
     error,
-    mutate: mutateAccountsId,
-  } = useSWR(id ? `/api/accounts/${id}` : null, fetcher, {
+    mutate: mutateAccountInfo,
+    isValidating,
+  } = useSWR(shouldFetch ? ['/api/accounts/', id] : null, Fetcher.GET, {
+    refreshInterval: 0,
     fallbackData: accountData,
   })
 
@@ -121,20 +115,27 @@ const AccountsPage = ({ accountData }: Props) => {
   ]
 
   const handleSubmit = async (values: IAccount) => {
-    isCreate ? await createAccount(values) : await updateAccount(values)
-    mutate('api/accounts')
-    mutateAccountsId()
+    try {
+      setShouldFetch(true)
+      if (isCreate) {
+        createAccount(values)
+        router.replace(`/accounts`)
+      }
+
+      const res = isCreate
+        ? await createAccount(values)
+        : await updateAccount(values)
+      mutateAccountInfo()
+    } catch (error) {
+      window.alert(error)
+    }
   }
 
   const createAccount = async (values: IAccount) => {
-    fetch(`/api/accounts`, {
-      method: 'POST',
-      headers: { 'Content-type': 'application/json' },
-      body: JSON.stringify(values),
-    }).then((response) => {
-      return response.json()
-    })
+    const res = await axios.post(`/api/accounts`, values)
+    return res
   }
+
   const updateAccount = async (values: IAccount) => {
     const newValues = {
       ...account,
@@ -143,20 +144,11 @@ const AccountsPage = ({ accountData }: Props) => {
         'YYYY-MM-DD THH:mm:ss'
       ),
     }
-    fetch(`/api/accounts/${router.query.id}`, {
-      method: 'PATCH',
-      headers: { 'Content-type': 'application/json' },
-      body: JSON.stringify(newValues),
-    })
-      .then((response) => {
-        console.log(response.status)
-      })
-      .catch((err) => {
-        console.log(err.message)
-      })
+    const res = await axios.patch(`/api/accounts/${id}`, newValues)
+    return res
   }
-  const fields = isCreate ? fieldsCreate : fieldsUpdate
 
+  const fields = isCreate ? fieldsCreate : fieldsUpdate
   return (
     <Card title="Accounts Info">
       <Form.Layout

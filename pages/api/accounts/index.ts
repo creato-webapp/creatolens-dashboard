@@ -23,6 +23,7 @@ export default function accountQueryHandler(
           return res.status(405)
         })
       break
+
     case 'POST':
       fetch(process.env.ACCOUNT_SERVICE + `/accounts/create`, {
         method: 'POST',

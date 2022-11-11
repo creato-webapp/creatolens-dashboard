@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Card from '@components/Card'
 import { Table } from '@components/Table'
 import Button from '@components/Button/Button'
@@ -8,15 +8,10 @@ import Link from 'next/link'
 import { useSession } from 'next-auth/react'
 import { GetServerSideProps } from 'next'
 import moment from 'moment'
-
-const fetcher = (url: string) =>
-  fetch(url + '?filter=username != null').then((res) => {
-    return res.json()
-  })
+import { Fetcher } from 'services/fetcher'
 
 type Props = {
   accountData: IAccount[]
-  session: 
 }
 
 export const getServerSideProps: GetServerSideProps = async () => {
@@ -31,8 +26,18 @@ export const getServerSideProps: GetServerSideProps = async () => {
   return { props: { accountData } }
 }
 
-const AccountsPage = ({ accountData, session }: Props) => {
-  const { data, error, isValidating } = useSWR('api/accounts', fetcher)
+const AccountsPage = ({ accountData }: Props) => {
+  const [shouldFetch, setShouldFetch] = useState(false)
+  const {
+    data,
+    error,
+    mutate: mutateAccList,
+    isValidating,
+  } = useSWR(
+    shouldFetch ? ['api/accounts', '?filter=username != null'] : null,
+    Fetcher.GET,
+    { refreshInterval: 0, fallbackData: accountData }
+  )
 
   if (error) {
     console.log(data)
@@ -88,14 +93,16 @@ const AccountsPage = ({ accountData, session }: Props) => {
       title: 'action',
       dataIndex: 'id',
       render: (e: any) => (
-        <Button type="text" loading={false} onClick={() => console.log(e)}>
-          Edit
-        </Button>
+        <Link href="/accounts/[id]" as={`/accounts/${e}`} legacyBehavior>
+          <Button type="text" loading={false} onClick={() => console.log(e)}>
+            Edit
+          </Button>
+        </Link>
       ),
     },
   ]
 
-  const dataSource = accounts
+  const dataSource = accountData
   return (
     <Card title="Accounts Table">
       <Link href="/accounts/create-account">

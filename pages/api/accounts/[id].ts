@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-
+import axios from 'axios'
 export default function AccountHandler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -21,10 +21,7 @@ export default function AccountHandler(
         })
 
       break
-    case 'PUT':
-      // Update or create data in your database
-      res.status(200).json({ id, name: name || `User ${id}` })
-      break
+
     case 'PATCH':
       let resCode = 400
       fetch(process.env.ACCOUNT_SERVICE + `/accounts/update/${id}`, {
@@ -34,9 +31,14 @@ export default function AccountHandler(
       })
         .then((response) => {
           resCode = response.status
-          console.log(response.status)
+          console.log(
+            response.status,
+            process.env.ACCOUNT_SERVICE + `/accounts/update/${id}`
+          )
+          const data = fetch(process.env.ACCOUNT_SERVICE + `/accounts/${id}`)
+            .then((response) => response.json())
+            .then((data) => res.status(200).json(data))
         })
-        .then((data) => res.status(resCode).json(data))
         .catch((err) => {
           console.log(err.message)
         })
