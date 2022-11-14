@@ -38,13 +38,9 @@ const Layout: FC<FormLayoutProps> = (props: FormLayoutProps) => {
                 <div className="grid grid-cols-1 gap-6">
                   {props.children}
                   <div className="ml-auto flex justify-end py-4">
-                    <button
-                      type="submit"
-                      disabled={loading}
-                      className="bg-transparent py-2 px-4 text-blue-700 hover:text-blue-900"
-                    >
+                    <Button.Primary type="submit" loading={loading}>
                       Save
-                    </button>
+                    </Button.Primary>
                   </div>
                 </div>
               </div>

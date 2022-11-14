@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import Card from '@components/Card'
 import { Table } from '@components/Table'
-import Button from '@components/Button/Button'
+import { Button } from '@components/Button'
 import { IAccount } from '@components/Account/interface'
 import useSWR from 'swr'
 import Link from 'next/link'
-import { useSession } from 'next-auth/react'
+import { getSession, useSession } from 'next-auth/react'
 import { GetServerSideProps } from 'next'
 import moment from 'moment'
 import { Fetcher } from 'services/fetcher'
@@ -14,7 +14,16 @@ type Props = {
   accountData: IAccount[]
 }
 
-export const getServerSideProps: GetServerSideProps = async () => {
+//TODO getServerSideProps: GetServerSideProps; cannot set GetServerSideProps type.
+export const getServerSideProps = async (context: any) => {
+  const session = await getSession(context)
+  if (!session) {
+    return {
+      redirect: {
+        destination: '/login',
+      },
+    }
+  }
   // Fetch data from external API
   const res = await fetch(
     'http://localhost:3000/api/accounts?filter=username != null'
@@ -94,9 +103,9 @@ const AccountsPage = ({ accountData }: Props) => {
       dataIndex: 'id',
       render: (e: any) => (
         <Link href="/accounts/[id]" as={`/accounts/${e}`} legacyBehavior>
-          <Button type="text" loading={false} onClick={() => console.log(e)}>
+          <Button.Text loading={false} onClick={() => console.log(e)}>
             Edit
-          </Button>
+          </Button.Text>
         </Link>
       ),
     },
@@ -106,7 +115,7 @@ const AccountsPage = ({ accountData }: Props) => {
   return (
     <Card title="Accounts Table">
       <Link href="/accounts/create-account">
-        <Button loading={false}>Create New Account</Button>
+        <Button.Primary loading={false}>Create New Account</Button.Primary>
       </Link>
       <Table.Layout>
         <Table.Header columns={columns} />
