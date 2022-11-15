@@ -26,7 +26,7 @@ export const getServerSideProps = async (context: any) => {
   }
   // Fetch data from external API
   const res = await fetch(
-    'http://localhost:3000/api/accounts?filter=username != null'
+    `${process.env.LOCAL_SERVER_URL}/api/accounts?filter=username != null`
   )
   const data = await res.json()
 

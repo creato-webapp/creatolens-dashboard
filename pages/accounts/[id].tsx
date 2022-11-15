@@ -20,7 +20,7 @@ export const getServerSideProps = async (context: any) => {
   //remove any
 
   const session: any = await getSession(context)
-  if (!session || session.user.role !== 'admin') {
+  if (!session) {
     return {
       redirect: {
         destination: '/404',
@@ -28,7 +28,9 @@ export const getServerSideProps = async (context: any) => {
     }
   }
   const { params } = context
-  const res = await axios.get(`http://localhost:3000/api/accounts/${params.id}`)
+  const res = await axios.get(
+    `${process.env.LOCAL_SERVER_URL}/api/accounts/${params.id}`
+  )
   // Pass data to the page via props
   const accountData: IAccount = res.data
   return { props: { accountData } }
