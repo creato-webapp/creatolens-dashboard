@@ -1,4 +1,4 @@
-import { InputHTMLAttributes, PropsWithChildren } from 'react'
+import React, { InputHTMLAttributes, PropsWithChildren } from 'react'
 import { IAccount } from '../Account/interface'
 
 export type InputType =
@@ -58,4 +58,5 @@ export interface CustomItemProps
   defaultValue?: string | boolean | number | undefined
   disabled?: boolean
   customFormItemProps?: customFormItemProps
+  onChange?: React.ChangeEventHandler
 }

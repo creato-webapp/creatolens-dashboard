@@ -2,19 +2,21 @@ import type { FC } from 'react'
 import { CustomItemProps } from './interface'
 import { DatePicker, TimePicker, DateTimePicker } from './DatetimePicker'
 import Checkbox from './Checkbox'
-import Input from './Input'
+import TextInput from './TextInput'
+import BaseInput from './BaseInput'
 
 const CustomItem: FC<CustomItemProps> = (props: CustomItemProps) => {
   const { customFormItemProps } = props
   switch (props.type) {
     case 'Input':
       return (
-        <Input
+        <TextInput
           id={props.id}
           defaultValue={props.defaultValue as string}
           placeholder={props?.placeholder}
           disabled={props.disabled}
-          customFormItemProps={customFormItemProps}
+          onChange={props.onChange}
+          {...customFormItemProps}
         />
       )
     case 'Checkbox':
@@ -23,6 +25,7 @@ const CustomItem: FC<CustomItemProps> = (props: CustomItemProps) => {
           id={props.id}
           defaultChecked={props.defaultValue as boolean}
           disabled={props.disabled}
+          onChange={props.onChange}
           {...customFormItemProps}
         />
       )
@@ -32,6 +35,7 @@ const CustomItem: FC<CustomItemProps> = (props: CustomItemProps) => {
           id={props.id}
           defaultValue={props.defaultValue as string}
           disabled={props.disabled}
+          onChange={props.onChange}
           {...customFormItemProps}
         />
       )
@@ -41,6 +45,7 @@ const CustomItem: FC<CustomItemProps> = (props: CustomItemProps) => {
           id={props.id}
           defaultValue={props.defaultValue as string}
           disabled={props.disabled}
+          onChange={props.onChange}
           {...customFormItemProps}
         />
       )
@@ -49,16 +54,18 @@ const CustomItem: FC<CustomItemProps> = (props: CustomItemProps) => {
         <TimePicker
           id={props.id}
           defaultValue={props.defaultValue as string}
+          onChange={props.onChange}
           {...customFormItemProps}
         />
       )
     default:
       return (
-        <Input
+        <BaseInput
           id={props.id}
           defaultValue={props.defaultValue as string}
           placeholder={props.placeholder}
           disabled={props.disabled}
+          onChange={props.onChange}
           {...customFormItemProps}
         />
       )

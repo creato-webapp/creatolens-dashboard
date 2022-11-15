@@ -1,10 +1,11 @@
 import type { FC } from 'react'
 import { InputProps } from './interface'
+import BaseInput from './BaseInput'
 
-const Input: FC<InputProps> = (props: InputProps) => {
+const TextInput: FC<InputProps> = (props: InputProps) => {
   const { id, placeholder, defaultValue, customFormItemProps } = props
   return (
-    <input
+    <BaseInput
       type="text"
       name={id}
       className="
@@ -22,4 +23,4 @@ const Input: FC<InputProps> = (props: InputProps) => {
     />
   )
 }
-export default Input
+export default TextInput
