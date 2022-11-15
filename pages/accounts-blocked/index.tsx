@@ -26,7 +26,7 @@ export const getServerSideProps = async (context: any) => {
   }
   // Fetch data from external API
   const res = await fetch(
-    'http://localhost:3000/api/accounts?filter=username != null'
+    'http://localhost:3000/api/accounts-blocked?filter=username != null'
   )
   const data = await res.json()
 
@@ -113,9 +113,11 @@ const AccountsPage = ({ accountData }: Props) => {
 
   const dataSource = accountData
   return (
-    <Card title="Accounts Table">
+    <Card title="Blocked Accounts Table">
       <Link href="/accounts/create-account">
-        <Button.Primary loading={false}>Create New Account</Button.Primary>
+        <Button.Primary loading={false}>
+          Create New Blocked Account
+        </Button.Primary>
       </Link>
       <Table.Layout>
         <Table.Header columns={columns} />

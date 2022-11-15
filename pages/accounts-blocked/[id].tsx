@@ -20,6 +20,7 @@ export const getServerSideProps = async (context: any) => {
   //remove any
 
   const session: any = await getSession(context)
+  console.log(session)
   if (!session || session.user.role !== 'admin') {
     return {
       redirect: {
@@ -34,7 +35,7 @@ export const getServerSideProps = async (context: any) => {
   return { props: { accountData } }
 }
 
-const AccountsPage = ({ accountData }: Props) => {
+const AccountsBlockedPage = ({ accountData }: Props) => {
   const { mutate } = useSWRConfig()
   const [shouldFetch, setShouldFetch] = useState(false)
   const session = getSession()
@@ -187,4 +188,4 @@ const AccountsPage = ({ accountData }: Props) => {
   )
 }
 
-export default AccountsPage
+export default AccountsBlockedPage

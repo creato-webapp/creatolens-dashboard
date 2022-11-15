@@ -12,7 +12,8 @@ export default function accountQueryHandler(
   switch (method) {
     case 'GET':
       fetch(
-        process.env.ACCOUNT_SERVICE + `/accounts/query?filter=username != null `
+        process.env.ACCOUNT_SERVICE +
+          `/forbidden-accounts/query?filter=username != null `
       )
         .then((response) => response.json())
         .then((data) => {
@@ -25,7 +26,7 @@ export default function accountQueryHandler(
       break
 
     case 'POST':
-      fetch(process.env.ACCOUNT_SERVICE + `/accounts/create`, {
+      fetch(process.env.ACCOUNT_SERVICE + `/forbidden-accounts/create`, {
         method: 'POST',
         headers: { 'Content-type': 'application/json' },
         body: JSON.stringify(body),

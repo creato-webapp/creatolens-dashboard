@@ -6,7 +6,6 @@ interface loginProps {}
 
 const login: FC<loginProps> = ({}) => {
   const { data: session, status } = useSession()
-
   return (
     <Card title="Login Page">
       {session ? (

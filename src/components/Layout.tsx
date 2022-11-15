@@ -1,6 +1,7 @@
 import React from 'react'
 import { Popover } from '@headlessui/react'
 import { Bars3Icon } from '@heroicons/react/24/outline'
+import { useSession, signIn, signOut, getSession } from 'next-auth/react'
 import Link from 'next/link'
 
 interface NavbarProps {
@@ -17,7 +18,10 @@ export default function Navbar(props: NavbarProps) {
     { title: 'Docs', href: '/docs' },
     { title: 'About', href: '/about' },
     { title: 'Accounts', href: '/accounts' },
+    { title: 'Blocked Accounts', href: '/accounts-blocked' },
   ]
+
+  const { data: session, status } = useSession()
 
   return (
     <>
@@ -38,13 +42,7 @@ export default function Navbar(props: NavbarProps) {
               </Link>
             </div>
 
-            <div className="-my-2 -mr-2 md:hidden">
-              <Popover.Button className="inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
-                <span className="sr-only">Open menu</span>
-                <Bars3Icon className="h-6 w-6" aria-hidden="true" />
-              </Popover.Button>
-            </div>
-            <Popover.Group as="nav" className="hidden space-x-10 md:flex">
+            <Popover.Group as="nav" className="hidden space-x-8 md:flex">
               {navBarItemList.map((e, index) => (
                 <Link href={e.href} key={index} replace>
                   <a className="text-base font-medium text-gray-500 hover:text-gray-900">
@@ -54,12 +52,27 @@ export default function Navbar(props: NavbarProps) {
               ))}
             </Popover.Group>
             <div className="hidden items-center justify-end md:flex md:flex-1 lg:w-0">
-              <a
-                href="#"
-                className="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900"
-              >
-                Log in
-              </a>
+              {session ? (
+                <div className="grid grid-rows-2  justify-items-end">
+                  <div className="hidden space-x-10 px-1 text-gray-500 md:flex">
+                    {`Logged In as ${session.user?.name}`}
+                  </div>
+
+                  <button
+                    className="whitespace-nowrap text-base font-medium text-blue-500 hover:text-blue-700"
+                    onClick={() => signOut()}
+                  >
+                    Logout
+                  </button>
+                </div>
+              ) : (
+                <button
+                  className="whitespace-nowrap text-base font-medium text-gray-500 hover:text-gray-900"
+                  onClick={() => signIn()}
+                >
+                  Login
+                </button>
+              )}
             </div>
           </div>
         </div>
