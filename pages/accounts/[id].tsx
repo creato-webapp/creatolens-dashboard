@@ -18,7 +18,6 @@ type Props = {
 //TODO remove type any in context:any
 export const getServerSideProps = async (context: any) => {
   //remove any
-
   const session: any = await getSession(context)
   if (!session) {
     return {
