@@ -1,6 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import axios from 'axios'
-export default function AccountHandler(
+export default async function AccountHandler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {

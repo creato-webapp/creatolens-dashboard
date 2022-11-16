@@ -6,7 +6,6 @@ import { IAccount } from '@components/Account/interface'
 import useSWR from 'swr'
 import Link from 'next/link'
 import { getSession } from 'next-auth/react'
-import { GetServerSideProps } from 'next'
 import moment from 'moment'
 import { Fetcher } from 'services/fetcher'
 
@@ -24,7 +23,7 @@ export const getServerSideProps = async (context: any) => {
       },
     }
   }
-  // Fetch data from external API
+  // Fetch data from next API
   const res = await fetch(
     `${process.env.LOCAL_SERVER_URL}/api/accounts?filter=username != null`
   )
