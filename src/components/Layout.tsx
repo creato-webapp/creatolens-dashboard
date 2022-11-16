@@ -15,10 +15,10 @@ export default function Navbar(props: NavbarProps) {
   }
 
   const navBarItemList: Array<navBarItem> = [
-    { title: 'Docs', href: '/docs' },
-    { title: 'About', href: '/about' },
+    { title: 'Home', href: '/' },
     { title: 'Accounts', href: '/accounts' },
     { title: 'Blocked Accounts', href: '/accounts-blocked' },
+    { title: 'Account Login Error', href: '/docs' },
   ]
 
   const { data: session, status } = useSession()
@@ -28,20 +28,6 @@ export default function Navbar(props: NavbarProps) {
       <Popover className="relative bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           <div className="flex items-center justify-between border-b-2 border-gray-100 py-6 md:justify-start md:space-x-10">
-            <div className="flex justify-start lg:w-0 lg:flex-1">
-              <Link href="/">
-                <a>
-                  <span className="sr-only">Your Company</span>
-
-                  <img
-                    className="h-8 w-auto sm:h-10"
-                    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                    alt=""
-                  />
-                </a>
-              </Link>
-            </div>
-
             <Popover.Group as="nav" className="hidden space-x-8 md:flex">
               {navBarItemList.map((e, index) => (
                 <Link href={e.href} key={index} replace>

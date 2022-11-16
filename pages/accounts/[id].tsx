@@ -129,16 +129,13 @@ const AccountsPage = ({ accountData }: Props) => {
   const handleSubmit = async (values: IAccount) => {
     try {
       setShouldFetch(true)
-      if (isCreate) {
-        createAccount(values)
-        router.replace(`/accounts`)
-      }
-
       const res = isCreate
         ? await createAccount(values)
         : await updateAccount(values)
+      router.replace(`/accounts`)
       mutateAccountInfo()
     } catch (error) {
+      console.log(error)
       window.alert(error)
     }
   }
