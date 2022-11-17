@@ -112,6 +112,7 @@ const AccountsPage = ({ accountData }: Props) => {
   ]
 
   const dataSource = accountData
+
   return (
     <Card title="Blocked Accounts Table">
       <Link href="/accounts/create-account">

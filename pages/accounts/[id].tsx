@@ -13,6 +13,7 @@ import axios from 'axios'
 
 type Props = {
   accountData: IAccount
+  isCreate: boolean
 }
 
 //TODO remove type any in context:any
@@ -26,23 +27,25 @@ export const getServerSideProps = async (context: any) => {
       },
     }
   }
+
   const { params } = context
-  const res = await axios.get(
-    `${process.env.LOCAL_SERVER_URL}/api/accounts/${params.id}`
-  )
+  const isCreate = params.id === 'create-account'
+  const res =
+    !isCreate &&
+    (await axios.get(
+      `${process.env.LOCAL_SERVER_URL}/api/accounts/${params.id}`
+    ))
+
   // Pass data to the page via props
-  const accountData: IAccount = res.data
-  return { props: { accountData } }
+  const accountData: IAccount = res ? res?.data : null
+  return { props: { accountData, isCreate } }
 }
 
-const AccountsPage = ({ accountData }: Props) => {
-  const { mutate } = useSWRConfig()
+const AccountsPage = ({ accountData, isCreate }: Props) => {
   const [shouldFetch, setShouldFetch] = useState(false)
   const session = getSession()
   const router = useRouter()
   const { id } = router.query
-  const isCreate = id === 'create-account'
-
   const {
     data,
     error,
@@ -50,7 +53,7 @@ const AccountsPage = ({ accountData }: Props) => {
     isValidating,
   } = useSWR(shouldFetch ? ['/api/accounts/', id] : null, Fetcher.GET, {
     refreshInterval: 0,
-    fallbackData: accountData,
+    fallbackData: isCreate ? isCreate : accountData,
   })
 
   if (error) {

@@ -12,7 +12,7 @@ export default async function accountQueryHandler(
   switch (method) {
     case 'GET': {
       const response = await AccountInstance.get('/accounts/query', {
-        params: { filter: 'username != null' },
+        params: { filter: 'username != null', isAsc: false },
       })
       return res.status(response.status).json(response.data)
     }

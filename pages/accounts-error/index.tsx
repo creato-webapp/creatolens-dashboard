@@ -36,13 +36,8 @@ const AccountsErrorPage = ({ accountErrorData }: Props) => {
   const [username, setUsername] = useState('')
 
   const onChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-    console.log('onChange e', e)
-    console.log('onChange string', e.target.value)
-
-    if (e.target.value) {
-      setUsername(e.target.value)
-      if (!shouldFetch) setShouldFetch(true)
-    }
+    setUsername(e.target.value)
+    if (!shouldFetch) setShouldFetch(true)
   }
 
   const {
@@ -51,7 +46,7 @@ const AccountsErrorPage = ({ accountErrorData }: Props) => {
     mutate: mutateAccErrList,
     isValidating,
   } = useSWR(
-    shouldFetch && username !== '' ? ['api/accounts-error', username] : null,
+    shouldFetch ? ['api/accounts-error', username] : null,
     Fetcher.GET,
     { refreshInterval: 0, fallbackData: accountErrorData }
   )
