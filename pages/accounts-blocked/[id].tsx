@@ -21,7 +21,7 @@ export const getServerSideProps = async (context: any) => {
 
   const session: any = await getSession(context)
   console.log(session)
-  if (!session || session.user.role !== 'admin') {
+  if (!session) {
     return {
       redirect: {
         destination: '/404',
@@ -30,7 +30,7 @@ export const getServerSideProps = async (context: any) => {
   }
   const { params } = context
   const res = await axios.get(
-    `${process.env.LOCAL_SERVER_URL}/api/accounts/${params.id}`
+    `${process.env.LOCAL_SERVER_URL}/api/accounts-blocked/${params.id}`
   )
   // Pass data to the page via props
   const accountData: IAccount = res.data
@@ -50,7 +50,7 @@ const AccountsBlockedPage = ({ accountData }: Props) => {
     error,
     mutate: mutateAccountInfo,
     isValidating,
-  } = useSWR(shouldFetch ? ['/api/accounts/', id] : null, Fetcher.GET, {
+  } = useSWR(shouldFetch ? ['/api/accounts-blocked/', id] : null, Fetcher.GET, {
     refreshInterval: 0,
     fallbackData: accountData,
   })
@@ -131,14 +131,10 @@ const AccountsBlockedPage = ({ accountData }: Props) => {
   const handleSubmit = async (values: IAccount) => {
     try {
       setShouldFetch(true)
-      if (isCreate) {
-        createAccount(values)
-        router.replace(`/accounts`)
-      }
-
       const res = isCreate
         ? await createAccount(values)
         : await updateAccount(values)
+      router.replace(`/accounts-blocked`)
       mutateAccountInfo()
     } catch (error) {
       window.alert(error)
@@ -146,7 +142,7 @@ const AccountsBlockedPage = ({ accountData }: Props) => {
   }
 
   const createAccount = async (values: IAccount) => {
-    const res = await axios.post(`/api/accounts`, values)
+    const res = await axios.post(`/api/accounts-blocked`, values)
     return res
   }
 
@@ -158,7 +154,7 @@ const AccountsBlockedPage = ({ accountData }: Props) => {
         'YYYY-MM-DD THH:mm:ss'
       ),
     }
-    const res = await axios.patch(`/api/accounts/${id}`, newValues)
+    const res = await axios.patch(`/api/accounts-blocked/${id}`, newValues)
     return res
   }
 

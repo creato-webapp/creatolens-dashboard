@@ -9,6 +9,7 @@ import { getSession } from 'next-auth/react'
 import { GetServerSideProps } from 'next'
 import moment from 'moment'
 import { Fetcher } from 'services/fetcher'
+import axios from 'axios'
 
 type Props = {
   accountData: IAccount[]
@@ -36,6 +37,7 @@ export const getServerSideProps = async (context: any) => {
 }
 
 const AccountsPage = ({ accountData }: Props) => {
+  const [isLoading, setIsLoading] = useState(false)
   const [shouldFetch, setShouldFetch] = useState(false)
   const {
     data,
@@ -65,7 +67,11 @@ const AccountsPage = ({ accountData }: Props) => {
       dataIndex: 'id',
       render: (e: string) => {
         return (
-          <Link href="/accounts/[id]" as={`/accounts/${e}`} legacyBehavior>
+          <Link
+            href="/accounts-blocked/[id]"
+            as={`/accounts-blocked/${e}`}
+            legacyBehavior
+          >
             <a style={{ color: '#0070f3' }}>{e}</a>
           </Link>
         )
@@ -102,8 +108,12 @@ const AccountsPage = ({ accountData }: Props) => {
       title: 'action',
       dataIndex: 'id',
       render: (e: any) => (
-        <Link href="/accounts/[id]" as={`/accounts/${e}`} legacyBehavior>
-          <Button.Text loading={false} onClick={() => console.log(e)}>
+        <Link
+          href="/accounts-blocked/[id]"
+          as={`/accounts/${e}`}
+          legacyBehavior
+        >
+          <Button.Text loading={isLoading} onClick={() => console.log(e)}>
             Edit
           </Button.Text>
         </Link>
