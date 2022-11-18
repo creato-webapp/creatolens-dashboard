@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import AccountInstance from '../axios'
+import AccountInstance from '../axiosInstance/Account'
 export default async function accountQueryHandler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -12,7 +12,6 @@ export default async function accountQueryHandler(
   switch (method) {
     case 'GET': {
       let response = undefined
-      console.log(id)
       if (id) {
         response = await AccountInstance.get('/handler/query', {
           params: {

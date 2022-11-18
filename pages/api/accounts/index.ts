@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import AccountInstance from '../axios'
+import AccountInstance from '../axiosInstance/Account'
 export default async function accountQueryHandler(
   req: NextApiRequest,
   res: NextApiResponse
