@@ -18,6 +18,7 @@ export default function Navbar(props: NavbarProps) {
     { title: 'Home', href: '/' },
     { title: 'Accounts', href: '/accounts' },
     { title: 'Blocked Accounts', href: '/accounts-blocked' },
+    { title: 'Retry Accounts', href: '/accounts-retry' },
     { title: 'Account Login Error', href: '/accounts-error' },
   ]
 
