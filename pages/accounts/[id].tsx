@@ -3,11 +3,11 @@ import Card from '@components/Card'
 import { useRouter } from 'next/router'
 import { Form } from '@components/Form'
 import { IField } from '@components/Form/interface'
-import { IAccount } from '@components/Account/interface'
-import useSWR, { useSWRConfig } from 'swr'
+import { SessionModal, IAccount } from '@components/Account'
+import useSWR from 'swr'
 import { getSession } from 'next-auth/react'
+import { Button } from '@components/Button'
 import moment from 'moment'
-import { GetServerSideProps } from 'next'
 import { Fetcher } from 'services/fetcher'
 import axios from 'axios'
 
@@ -43,6 +43,8 @@ export const getServerSideProps = async (context: any) => {
 
 const AccountsPage = ({ accountData, isCreate }: Props) => {
   const [shouldFetch, setShouldFetch] = useState(false)
+  const [isShow, setIsShow] = useState(false)
+
   const session = getSession()
   const router = useRouter()
   const { id } = router.query
@@ -162,7 +164,16 @@ const AccountsPage = ({ accountData, isCreate }: Props) => {
 
   const fields = isCreate ? fieldsCreate : fieldsUpdate
   return (
-    <Card title="Accounts Info">
+    <Card
+      title="Accounts Info"
+      extra={
+        account.session_cookies ? (
+          <Button.Primary loading={false} onClick={() => setIsShow(true)}>
+            Open Session Modal
+          </Button.Primary>
+        ) : null
+      }
+    >
       <Form.Layout
         onSubmit={handleSubmit}
         Header={account.username}
@@ -184,6 +195,13 @@ const AccountsPage = ({ accountData, isCreate }: Props) => {
           </Form.Item>
         ))}
       </Form.Layout>
+
+      <SessionModal
+        isShow={isShow}
+        account={account}
+        loading={!error && !data}
+        closeModal={() => setIsShow(false)}
+      />
     </Card>
   )
 }
