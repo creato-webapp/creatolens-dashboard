@@ -2,10 +2,26 @@ import type { FC } from 'react'
 import { useSession, signIn, signOut, getSession } from 'next-auth/react'
 import Card from '@components/Card'
 import Link from 'next/link'
+import { setCookie } from 'cookies-next'
+
 interface loginProps {}
+
+export const getServerSideProps = async (context: any) => {
+  //remove any
+  const session: any = await getSession(context)
+
+  if (session?.token)
+    setCookie('accessToken', session.token.accessToken, {
+      req: context.req,
+      res: context.res,
+    })
+
+  return { props: {} }
+}
 
 const login: FC<loginProps> = ({}) => {
   const { data: session, status } = useSession()
+
   return (
     <Card title="Login Page">
       {session ? (

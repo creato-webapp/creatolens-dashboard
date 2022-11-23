@@ -2,6 +2,7 @@ import axios, { AxiosRequestConfig, AxiosError } from 'axios'
 
 const AccountInstance = axios.create({
   baseURL: process.env.ACCOUNT_SERVICE,
+  withCredentials: true,
   headers: { 'Content-Type': 'application/json' },
   timeout: 2000,
 })
