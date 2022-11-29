@@ -6,12 +6,14 @@ const Primary: React.FC<ButtonProps> = ({
   onClick,
   disabled = false,
   loading,
+  ...res
 }) => {
   return (
     <button
       onClick={onClick}
       disabled={loading || disabled}
       className="button-primary"
+      {...res}
     >
       {children}
     </button>

@@ -2,7 +2,7 @@ import type { FC } from 'react'
 import { IAccount } from './interface'
 import { Modal } from '@components/Modal'
 import { Form } from '@components/Form'
-
+import { Button } from '@components/Button'
 interface SessionModalProps {
   account: IAccount
   loading: boolean
@@ -40,6 +40,14 @@ const SessionModal: FC<SessionModalProps> = ({
           {dataItemToKeyValues(account.session_cookies)}
         </div>
       </code>
+      <div className="flex justify-start space-y-2">
+        <Button.Primary
+          loading={false}
+          onClick={() => console.log('update session')}
+        >
+          Update Session
+        </Button.Primary>
+      </div>
     </Modal>
   )
 }

@@ -22,7 +22,6 @@ const Layout: FC<FormLayoutProps> = (props: FormLayoutProps) => {
           ))
         : (values[e.name] = target[e.name].value)
     )
-    console.log(values)
     onSubmit(values)
   }
 
