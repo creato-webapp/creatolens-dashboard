@@ -1,5 +1,6 @@
 import React from 'react'
 import { ButtonProps } from './interface'
+import { Spinner } from '../Spinner'
 
 const Primary: React.FC<ButtonProps> = ({
   children,
@@ -15,7 +16,10 @@ const Primary: React.FC<ButtonProps> = ({
       className="button-primary"
       {...res}
     >
-      {children}
+      <div className="flex">
+        <Spinner loading={loading} />
+        {children}
+      </div>
     </button>
   )
 }

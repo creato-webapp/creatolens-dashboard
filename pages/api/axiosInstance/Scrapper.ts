@@ -1,16 +1,15 @@
 import axios, { AxiosRequestConfig, AxiosError } from 'axios'
 
-const AccountInstance = axios.create({
-  baseURL: process.env.ACCOUNT_SERVICE + '/',
+const ScrapperInstance = axios.create({
+  baseURL: process.env.SCRAPPER_SERVICE,
   withCredentials: true,
   headers: { 'Content-Type': 'application/json' },
-  timeout: 5000,
+  timeout: 20000,
 })
 
-AccountInstance.interceptors.request.use(
+ScrapperInstance.interceptors.request.use(
   function (config) {
     // Do something before request is sent
-    console.log({ baseUrl: config.baseURL, url: config.url })
     return config
   },
   function (error) {
@@ -19,10 +18,9 @@ AccountInstance.interceptors.request.use(
   }
 )
 
-AccountInstance.interceptors.response.use(
+ScrapperInstance.interceptors.response.use(
   function (response) {
     // Do something with response data
-    response.data = response.data.data
     return response
   },
   function (error: AxiosError) {
@@ -45,4 +43,4 @@ AccountInstance.interceptors.response.use(
   }
 )
 
-export default AccountInstance
+export default ScrapperInstance

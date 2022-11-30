@@ -8,7 +8,7 @@ import useSWR, { useSWRConfig } from 'swr'
 import { getSession } from 'next-auth/react'
 import moment from 'moment'
 import { GetServerSideProps } from 'next'
-import { Fetcher } from 'services/fetcher'
+import { Fetcher, FetchWithId } from 'services/fetcher'
 import axios from 'axios'
 
 type Props = {
@@ -20,7 +20,6 @@ export const getServerSideProps = async (context: any) => {
   //remove any
 
   const session: any = await getSession(context)
-  console.log(session)
   if (!session) {
     return {
       redirect: {
@@ -29,11 +28,12 @@ export const getServerSideProps = async (context: any) => {
     }
   }
   const { params } = context
-  const res = await axios.get(
-    `${process.env.LOCAL_SERVER_URL}/api/accounts-blocked/${params.id}`
+  const res = await FetchWithId.GET(
+    process.env.LOCAL_SERVER_URL + '/api/accounts-blocked/',
+    params.id
   )
   // Pass data to the page via props
-  const accountData: IAccount = res.data
+  const accountData: IAccount = res ? res : null
   return { props: { accountData } }
 }
 
@@ -50,10 +50,14 @@ const AccountsBlockedPage = ({ accountData }: Props) => {
     error,
     mutate: mutateAccountInfo,
     isValidating,
-  } = useSWR(shouldFetch ? ['/api/accounts-blocked/', id] : null, Fetcher.GET, {
-    refreshInterval: 0,
-    fallbackData: accountData,
-  })
+  } = useSWR(
+    shouldFetch ? ['/api/accounts-blocked/', id] : null,
+    FetchWithId.GET,
+    {
+      refreshInterval: 0,
+      fallbackData: accountData,
+    }
+  )
 
   if (error) {
     console.log(data)
@@ -66,11 +70,10 @@ const AccountsBlockedPage = ({ accountData }: Props) => {
   }
 
   const account: IAccount = {
-    ...data?.data,
-    last_login_dt: moment(
-      data?.data?.last_login_dt,
-      'YYYY-MM-DD THH:mm:ss'
-    ).format('YYYY-MM-DDTHH:mm'),
+    ...data,
+    last_login_dt: moment(data?.last_login_dt, 'YYYY-MM-DD THH:mm:ss').format(
+      'YYYY-MM-DDTHH:mm'
+    ),
   }
 
   const fieldsUpdate: IField[] = [
@@ -154,7 +157,7 @@ const AccountsBlockedPage = ({ accountData }: Props) => {
         'YYYY-MM-DD THH:mm:ss'
       ),
     }
-    const res = await axios.patch(`/api/accounts-blocked/${id}`, newValues)
+    const res = await Fetcher.PATCH(`/api/accounts-blocked/${id}`, newValues)
     return res
   }
 

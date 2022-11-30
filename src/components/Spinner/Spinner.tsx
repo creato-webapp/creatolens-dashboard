@@ -1,60 +1,31 @@
-import React, { CSSProperties } from 'react'
-import {
-  secondaryColorDefaultProps,
-  SecondaryColorSpinnerProps,
-} from './helper'
-import { SpinnersProps, withSharedProps } from './WithSharedProps'
-import styles from '../styles/SpinnerCircular.module.css'
+import type { FC } from 'react'
 
-export type SpinnerCircularProps = SpinnersProps & SecondaryColorSpinnerProps
-
-const Component = ({
-  secondaryColor,
-  speed = 30,
-  still,
-  thickness = 20,
-  ...svgProps
-}: SecondaryColorSpinnerProps) => {
-  const strokeWidth = 4 * (thickness / 100)
-  const circleStyle: CSSProperties = !still
-    ? { animation: `spinners-react-circular ${140 / speed}s linear infinite` }
-    : {}
-
-  return (
-    <svg fill="none" {...svgProps} viewBox="0 0 66 66">
-      <circle
-        cx="33"
-        cy="33"
-        fill="none"
-        r="28"
-        stroke={secondaryColor}
-        strokeWidth={strokeWidth}
-      />
-      <circle
-        cx="33"
-        cy="33"
-        fill="none"
-        r="28"
-        stroke="currentColor"
-        strokeDasharray="1, 174"
-        strokeDashoffset="306"
-        strokeLinecap="round"
-        strokeWidth={strokeWidth}
-        style={circleStyle}
-      />
-    </svg>
-  )
+interface SpinnerProps extends React.PropsWithChildren {
+  loading: boolean
 }
 
-Component.defaultProps = secondaryColorDefaultProps
-
-const SpinnerCircular = withSharedProps(Component)
-export default SpinnerCircular
-// @keyframes spinners-react-circular {
-//     0% { stroke-dashoffset: 306; }
-//     50% { stroke-dasharray: 40, 134; }
-//     100% {
-//       stroke-dasharray: 1, 174;
-//       stroke-dashoffset: 132;
-//     }
-//   }
+const Spinner: React.FC<SpinnerProps> = ({ loading }) => {
+  return loading ? (
+    <svg
+      className="-ml-1 mr-3 h-5 w-5 animate-spin text-white"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+    >
+      <circle
+        className="opacity-25"
+        cx="12"
+        cy="12"
+        r="10"
+        stroke="currentColor"
+        stroke-width="4"
+      ></circle>
+      <path
+        className="opacity-75"
+        fill="currentColor"
+        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+      ></path>
+    </svg>
+  ) : null
+}
+export default Spinner

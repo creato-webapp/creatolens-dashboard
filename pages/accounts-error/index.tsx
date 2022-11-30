@@ -26,7 +26,7 @@ export const getServerSideProps = async (context: any) => {
   const res = await axios.get(
     `${process.env.LOCAL_SERVER_URL}/api/accounts-error`
   )
-  const accountErrorData: IAccountError[] = await res.data
+  const accountErrorData: IAccountError[] = res.data
 
   return { props: { accountErrorData } }
 }
@@ -46,7 +46,7 @@ const AccountsErrorPage = ({ accountErrorData }: Props) => {
     mutate: mutateAccErrList,
     isValidating,
   } = useSWR(
-    shouldFetch ? ['api/accounts-error', username] : null,
+    shouldFetch ? ['api/accounts-error', { username: username }] : null,
     Fetcher.GET,
     { refreshInterval: 0, fallbackData: accountErrorData }
   )
@@ -60,8 +60,8 @@ const AccountsErrorPage = ({ accountErrorData }: Props) => {
     console.log(data)
     return <div>Loading...</div>
   }
-  const accountError: IAccountError[] = data.data
-
+  const accountError: IAccountError[] = data
+  console.log(data)
   const columns = [
     {
       title: 'document_id',

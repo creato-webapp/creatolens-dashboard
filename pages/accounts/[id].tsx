@@ -8,7 +8,7 @@ import useSWR from 'swr'
 import { getSession } from 'next-auth/react'
 import { Button } from '@components/Button'
 import moment from 'moment'
-import { Fetcher } from 'services/fetcher'
+import { Fetcher, FetchWithId } from 'services/fetcher'
 import axios from 'axios'
 
 type Props = {
@@ -32,12 +32,12 @@ export const getServerSideProps = async (context: any) => {
   const isCreate = params.id === 'create-account'
   const res =
     !isCreate &&
-    (await axios.get(
-      `${process.env.LOCAL_SERVER_URL}/api/accounts/${params.id}`
+    (await FetchWithId.GET(
+      process.env.LOCAL_SERVER_URL + '/api/accounts/',
+      params.id
     ))
-
   // Pass data to the page via props
-  const accountData: IAccount = res ? res?.data : null
+  const accountData: IAccount = res ? res : null
   return { props: { accountData, isCreate } }
 }
 
@@ -53,13 +53,12 @@ const AccountsPage = ({ accountData, isCreate }: Props) => {
     error,
     mutate: mutateAccountInfo,
     isValidating,
-  } = useSWR(shouldFetch ? ['/api/accounts/', id] : null, Fetcher.GET, {
+  } = useSWR(shouldFetch ? ['/api/accounts/', id] : null, FetchWithId.GET, {
     refreshInterval: 0,
     fallbackData: isCreate ? isCreate : accountData,
   })
 
   if (error) {
-    console.log(data)
     console.log(error)
     return <div>Failed to load users {id}</div>
   }
@@ -69,11 +68,10 @@ const AccountsPage = ({ accountData, isCreate }: Props) => {
   }
 
   const account: IAccount = {
-    ...data?.data,
-    last_login_dt: moment(
-      data?.data?.last_login_dt,
-      'YYYY-MM-DD THH:mm:ss'
-    ).format('YYYY-MM-DDTHH:mm'),
+    ...data,
+    last_login_dt: moment(data?.last_login_dt, 'YYYY-MM-DD THH:mm:ss').format(
+      'YYYY-MM-DDTHH:mm'
+    ),
   }
 
   const fieldsUpdate: IField[] = [
@@ -158,11 +156,12 @@ const AccountsPage = ({ accountData, isCreate }: Props) => {
         'YYYY-MM-DD THH:mm:ss'
       ),
     }
-    const res = await axios.patch(`/api/accounts/${id}`, newValues)
+    const res = await Fetcher.PATCH(`/api/accounts/${id}`, newValues)
     return res
   }
 
   const fields = isCreate ? fieldsCreate : fieldsUpdate
+
   return (
     <Card
       title="Accounts Info"
@@ -201,6 +200,12 @@ const AccountsPage = ({ accountData, isCreate }: Props) => {
         account={account}
         loading={!error && !data}
         closeModal={() => setIsShow(false)}
+        refresh={async () => {
+          if (!shouldFetch) {
+            setShouldFetch(true)
+          }
+          await mutateAccountInfo()
+        }}
       />
     </Card>
   )

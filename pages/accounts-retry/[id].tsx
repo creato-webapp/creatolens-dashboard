@@ -8,7 +8,7 @@ import useSWR, { useSWRConfig } from 'swr'
 import { getSession } from 'next-auth/react'
 import moment from 'moment'
 import { GetServerSideProps } from 'next'
-import { Fetcher } from 'services/fetcher'
+import { Fetcher, FetchWithId } from 'services/fetcher'
 import axios from 'axios'
 
 type Props = {
@@ -20,7 +20,6 @@ export const getServerSideProps = async (context: any) => {
   //remove any
 
   const session: any = await getSession(context)
-  console.log(session)
   if (!session) {
     return {
       redirect: {
@@ -29,11 +28,12 @@ export const getServerSideProps = async (context: any) => {
     }
   }
   const { params } = context
-  const res = await axios.get(
-    `${process.env.LOCAL_SERVER_URL}/api/accounts-retry/${params.id}`
+  const res = await FetchWithId.GET(
+    process.env.LOCAL_SERVER_URL + '/api/accounts-retry/',
+    params.id
   )
   // Pass data to the page via props
-  const accountData: IAccount = res.data
+  const accountData: IAccount = res ? res : null
   return { props: { accountData } }
 }
 
@@ -50,10 +50,14 @@ const AccountsRetryPage = ({ accountData }: Props) => {
     error,
     mutate: mutateAccountInfo,
     isValidating,
-  } = useSWR(shouldFetch ? ['/api/accounts-retry/', id] : null, Fetcher.GET, {
-    refreshInterval: 0,
-    fallbackData: accountData,
-  })
+  } = useSWR(
+    shouldFetch ? ['/api/accounts-retry/', id] : null,
+    FetchWithId.GET,
+    {
+      refreshInterval: 0,
+      fallbackData: accountData,
+    }
+  )
 
   if (error) {
     console.log(data)
@@ -66,11 +70,10 @@ const AccountsRetryPage = ({ accountData }: Props) => {
   }
 
   const account: IAccount = {
-    ...data?.data,
-    last_login_dt: moment(
-      data?.data?.last_login_dt,
-      'YYYY-MM-DD THH:mm:ss'
-    ).format('YYYY-MM-DDTHH:mm'),
+    ...data,
+    last_login_dt: moment(data?.last_login_dt, 'YYYY-MM-DD THH:mm:ss').format(
+      'YYYY-MM-DDTHH:mm'
+    ),
   }
 
   const fieldsUpdate: IField[] = [
@@ -134,8 +137,8 @@ const AccountsRetryPage = ({ accountData }: Props) => {
       const res = isCreate
         ? await createAccount(values)
         : await updateAccount(values)
-      router.replace(`/accounts-retry`)
       mutateAccountInfo()
+      router.replace(`/accounts-retry`)
     } catch (error) {
       window.alert(error)
     }
@@ -154,7 +157,7 @@ const AccountsRetryPage = ({ accountData }: Props) => {
         'YYYY-MM-DD THH:mm:ss'
       ),
     }
-    const res = await axios.patch(`/api/accounts-retry/${id}`, newValues)
+    const res = await Fetcher.PATCH(`/api/accounts-retry/${id}`, newValues)
     return res
   }
 

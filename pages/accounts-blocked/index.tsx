@@ -32,7 +32,7 @@ export const getServerSideProps = async (context: any) => {
   const data = await res.json()
 
   // Pass data to the page via props
-  const accountData: IAccount[] = data.data
+  const accountData: IAccount[] = data
   return { props: { accountData } }
 }
 
@@ -59,7 +59,7 @@ const AccountsPage = ({ accountData }: Props) => {
     console.log(data)
     return <div>Loading...</div>
   }
-  const accounts: IAccount[] = data.data
+  const accounts: IAccount[] = data
 
   const columns = [
     {

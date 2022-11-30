@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import AccountInstance from '../axiosInstance/Account'
+import AccountInstance from 'pages/api/axiosInstance/Account'
 export default async function accountQueryHandler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -18,18 +18,6 @@ export default async function accountQueryHandler(
         },
       })
       return res.status(response.status).json(response.data)
-    }
-
-    case 'POST': {
-      const response = await AccountInstance.post('/accounts/create', body, {
-        headers: {
-          Cookie: req.headers.cookie,
-        },
-      })
-        .then(function (response) {
-          return res.status(response.status).json(response.data)
-        })
-        .catch(function (error) {})
     }
   }
 }

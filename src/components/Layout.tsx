@@ -2,6 +2,7 @@ import React from 'react'
 import { Popover } from '@headlessui/react'
 import { Bars3Icon } from '@heroicons/react/24/outline'
 import { useSession, signIn, signOut, getSession } from 'next-auth/react'
+import { deleteCookie } from 'cookies-next'
 import Link from 'next/link'
 
 interface NavbarProps {
@@ -47,7 +48,10 @@ export default function Navbar(props: NavbarProps) {
 
                   <button
                     className="whitespace-nowrap text-base font-medium text-blue-500 hover:text-blue-700"
-                    onClick={() => signOut()}
+                    onClick={() => {
+                      deleteCookie('idToken')
+                      signIn()
+                    }}
                   >
                     Logout
                   </button>

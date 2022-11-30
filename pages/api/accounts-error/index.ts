@@ -5,17 +5,17 @@ export default async function accountQueryHandler(
   res: NextApiResponse
 ) {
   const {
-    query: { id },
+    query: { username },
     body,
     method,
   } = req
   switch (method) {
     case 'GET': {
       let response = undefined
-      if (id) {
+      if (username) {
         response = await AccountInstance.get('/handler/query', {
           params: {
-            filter: `account == ${id}`,
+            filter: `account == ${username}`,
             orderby: 'occurred_at',
             isAsc: false,
           },
