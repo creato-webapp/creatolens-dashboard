@@ -1,10 +1,60 @@
 import NextAuth from 'next-auth/next'
-import { User } from 'next-auth'
+import { User, NextAuthOptions } from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
-
 import { FireStoreAdapterWrapper } from 'services/customAdapter'
+import { NextApiRequest, NextApiResponse } from 'next'
+import { setCookie } from 'cookies-next'
 
-export default NextAuth({
+type NextAuthOptionsCallback = (
+  req: NextApiRequest,
+  res: NextApiResponse
+) => NextAuthOptions
+
+/**
+ * Takes a token, and returns a new token with updated
+ * `accessToken` and `accessTokenExpires`. If an error occurs,
+ * returns the old token and an error property
+ */
+async function refreshAccessToken(token) {
+  try {
+    const url =
+      'https://oauth2.googleapis.com/token?' +
+      new URLSearchParams({
+        client_id: process.env.GOOGLE_CLIENT_ID as string,
+        client_secret: process.env.GOOGLE_CLIENT_SECRET as string,
+        grant_type: 'refresh_token',
+        refresh_token: token.refreshToken,
+      })
+
+    const response = await fetch(url, {
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      method: 'POST',
+    })
+    const refreshedTokens = await response.json()
+
+    if (!response.ok) {
+      throw refreshedTokens
+    }
+
+    return {
+      ...token,
+      accessToken: refreshedTokens.access_token,
+      accessTokenExpires: Date.now() + refreshedTokens.expires_at * 1000,
+      refreshToken: refreshedTokens.refresh_token ?? token.refreshToken, // Fall back to old refresh token
+    }
+  } catch (error) {
+    console.log(error)
+
+    return {
+      ...token,
+      error: 'RefreshAccessTokenError',
+    }
+  }
+}
+
+const nextAuthOptions: NextAuthOptionsCallback = (req, res) => ({
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
@@ -24,8 +74,11 @@ export default NextAuth({
   session: { strategy: 'jwt' },
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
-      const isAllowedToSignIn = true
-      if (isAllowedToSignIn) {
+      if (account?.id_token) {
+        setCookie('idToken', account.id_token, {
+          req: req,
+          res: res,
+        })
         return true
       } else {
         // Return false to display a default error message
@@ -33,6 +86,13 @@ export default NextAuth({
         // Or you can return a URL to redirect to:
         // return '/unauthorized'
       }
+    },
+    async redirect({ url, baseUrl }) {
+      // Allows relative callback URLs
+      if (url.startsWith('/')) return `${baseUrl}${url}`
+      // Allows callback URLs on the same origin
+      else if (new URL(url).origin === baseUrl) return url
+      return baseUrl
     },
     async session({ session, token }) {
       // console.log({ session, token })
@@ -43,9 +103,16 @@ export default NextAuth({
       // Persist the OAuth access_token and or the user id to the token right after signin
       if (account && user) {
         token.accessToken = account.access_token
+        token.idToken = account.id_token
+        token.expires_at = Date.now()
+        //TODO refresh Token
         token.user = user
       }
       return token
     },
   },
 })
+
+export default (req: NextApiRequest, res: NextApiResponse) => {
+  return NextAuth(req, res, nextAuthOptions(req, res))
+}

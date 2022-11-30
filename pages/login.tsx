@@ -2,6 +2,7 @@ import type { FC } from 'react'
 import { useSession, signIn, signOut, getSession } from 'next-auth/react'
 import Card from '@components/Card'
 import Link from 'next/link'
+import { deleteCookie } from 'cookies-next'
 import { setCookie } from 'cookies-next'
 
 interface loginProps {}
@@ -10,11 +11,16 @@ export const getServerSideProps = async (context: any) => {
   //remove any
   const session: any = await getSession(context)
 
-  if (session?.token)
-    setCookie('accessToken', session.token.accessToken, {
-      req: context.req,
-      res: context.res,
-    })
+  // if (session?.token) {
+  //   setCookie('accessToken', session.token.accessToken, {
+  //     req: context.req,
+  //     res: context.res,
+  //   })
+  //   setCookie('idToken', session.token.idToken, {
+  //     req: context.req,
+  //     res: context.res,
+  //   })
+  // }
 
   return { props: {} }
 }
@@ -33,7 +39,14 @@ const login: FC<loginProps> = ({}) => {
             </Link>
           </div>
           <div>
-            <button onClick={() => signOut()}>Logout</button>
+            <button
+              onClick={() => {
+                deleteCookie('idToken')
+                signOut()
+              }}
+            >
+              Logout
+            </button>
           </div>
         </div>
       ) : (
@@ -41,7 +54,9 @@ const login: FC<loginProps> = ({}) => {
           <p>You are not signed in.</p>
           <button
             onClick={() => signIn('google', { callbackUrl: '/accounts' })}
-          ></button>
+          >
+            Sign In
+          </button>
         </div>
       )}
     </Card>
