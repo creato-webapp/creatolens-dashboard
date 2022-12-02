@@ -28,12 +28,16 @@ export const getServerSideProps = async (context: any) => {
     }
   }
   const { params } = context
-  const res = await FetchWithId.GET(
-    process.env.LOCAL_SERVER_URL + '/api/accounts-retry/',
-    params.id
+  const res = await axios.get(
+    process.env.LOCAL_SERVER_URL + '/api/accounts-retry/' + params.id,
+    {
+      headers: {
+        Cookie: context.req.headers.cookie,
+      },
+    }
   )
   // Pass data to the page via props
-  const accountData: IAccount = res ? res : null
+  const accountData: IAccount = res ? res.data : null
   return { props: { accountData } }
 }
 

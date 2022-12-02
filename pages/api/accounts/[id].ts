@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import AccountInstance from '../axiosInstance/Account'
+import axios from 'axios'
 export default async function AccountHandler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -9,7 +10,7 @@ export default async function AccountHandler(
     body,
     method,
   } = req
-
+  axios.defaults.headers.common['value1'] = 'value'
   switch (method) {
     case 'GET': {
       const response = await AccountInstance.get(`accounts/${id}`)

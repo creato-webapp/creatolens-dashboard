@@ -32,12 +32,17 @@ export const getServerSideProps = async (context: any) => {
   const isCreate = params.id === 'create-account'
   const res =
     !isCreate &&
-    (await FetchWithId.GET(
-      process.env.LOCAL_SERVER_URL + '/api/accounts/',
-      params.id
+    (await axios.get(
+      process.env.LOCAL_SERVER_URL + '/api/accounts/' + params.id,
+      {
+        headers: {
+          Cookie: context.req.headers.cookie,
+        },
+      }
     ))
+
   // Pass data to the page via props
-  const accountData: IAccount = res ? res : null
+  const accountData: IAccount = res ? res.data : null
   return { props: { accountData, isCreate } }
 }
 

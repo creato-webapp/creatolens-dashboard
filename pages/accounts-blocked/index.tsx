@@ -26,13 +26,17 @@ export const getServerSideProps = async (context: any) => {
     }
   }
   // Fetch data from external API
-  const res = await fetch(
-    `${process.env.LOCAL_SERVER_URL}/api/accounts-blocked?filter=username != null`
+  const res = await axios.get(
+    `${process.env.LOCAL_SERVER_URL}/api/accounts-blocked?filter=username != null`,
+    {
+      headers: {
+        Cookie: context.req.headers.cookie,
+      },
+    }
   )
-  const data = await res.json()
 
   // Pass data to the page via props
-  const accountData: IAccount[] = data
+  const accountData: IAccount[] = res.data
   return { props: { accountData } }
 }
 

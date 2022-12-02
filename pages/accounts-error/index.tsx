@@ -24,7 +24,12 @@ export const getServerSideProps = async (context: any) => {
   }
   // Fetch data from next API
   const res = await axios.get(
-    `${process.env.LOCAL_SERVER_URL}/api/accounts-error`
+    `${process.env.LOCAL_SERVER_URL}/api/accounts-error`,
+    {
+      headers: {
+        Cookie: context.req.headers.cookie,
+      },
+    }
   )
   const accountErrorData: IAccountError[] = res.data
 

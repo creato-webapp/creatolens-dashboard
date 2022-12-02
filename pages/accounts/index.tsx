@@ -8,6 +8,7 @@ import Link from 'next/link'
 import { getSession } from 'next-auth/react'
 import moment from 'moment'
 import { Fetcher } from 'services/fetcher'
+import axios from 'axios'
 
 type Props = {
   accountData: IAccount[]
@@ -24,13 +25,17 @@ export const getServerSideProps = async (context: any) => {
     }
   }
   // Fetch data from next API
-  const res = await fetch(
-    `${process.env.LOCAL_SERVER_URL}/api/accounts?filter=username != null`
+  const res = await axios.get(
+    `${process.env.LOCAL_SERVER_URL}/api/accounts?filter=username != null`,
+    {
+      headers: {
+        Cookie: context.req.headers.cookie,
+      },
+    }
   )
-  const data = await res.json()
 
   // Pass data to the page via props
-  const accountData: IAccount[] = data
+  const accountData: IAccount[] = res.data
   return { props: { accountData } }
 }
 

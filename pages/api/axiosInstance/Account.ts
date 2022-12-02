@@ -10,7 +10,6 @@ const AccountInstance = axios.create({
 AccountInstance.interceptors.request.use(
   function (config) {
     // Do something before request is sent
-    console.log({ baseUrl: config.baseURL, url: config.url })
     return config
   },
   function (error) {

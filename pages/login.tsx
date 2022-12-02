@@ -8,20 +8,6 @@ import { setCookie } from 'cookies-next'
 interface loginProps {}
 
 export const getServerSideProps = async (context: any) => {
-  //remove any
-  const session: any = await getSession(context)
-
-  // if (session?.token) {
-  //   setCookie('accessToken', session.token.accessToken, {
-  //     req: context.req,
-  //     res: context.res,
-  //   })
-  //   setCookie('idToken', session.token.idToken, {
-  //     req: context.req,
-  //     res: context.res,
-  //   })
-  // }
-
   return { props: {} }
 }
 
