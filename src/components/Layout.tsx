@@ -50,7 +50,7 @@ export default function Navbar(props: NavbarProps) {
                     className="whitespace-nowrap text-base font-medium text-blue-500 hover:text-blue-700"
                     onClick={() => {
                       deleteCookie('idToken')
-                      signIn()
+                      signOut()
                     }}
                   >
                     Logout

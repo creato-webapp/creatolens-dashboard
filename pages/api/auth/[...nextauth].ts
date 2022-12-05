@@ -68,6 +68,13 @@ const nextAuthOptions: NextAuthOptionsCallback = (req, res) => ({
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+      authorization: {
+        params: {
+          prompt: 'consent',
+          access_type: 'offline',
+          response_type: 'code',
+        },
+      },
     }),
   ],
   adapter: FireStoreAdapterWrapper({
@@ -95,13 +102,6 @@ const nextAuthOptions: NextAuthOptionsCallback = (req, res) => ({
         // Or you can return a URL to redirect to:
         // return '/unauthorized'
       }
-    },
-    async redirect({ url, baseUrl }) {
-      // Allows relative callback URLs
-      if (url.startsWith('/')) return `${baseUrl}${url}`
-      // Allows callback URLs on the same origin
-      else if (new URL(url).origin === baseUrl) return url
-      return baseUrl
     },
     async session({ session, token }) {
       // console.log({ session, token })

@@ -5,6 +5,9 @@ import { Form } from '@components/Form'
 import { Button } from '@components/Button'
 import { Fetcher } from 'services/fetcher'
 import { Spinner } from '../Spinner'
+import { useSession } from 'next-auth/react'
+import { User } from 'next-auth'
+
 interface SessionModalProps {
   account: IAccount
   loading: boolean
@@ -38,7 +41,8 @@ const SessionModal: FC<SessionModalProps> = ({
   refresh,
 }) => {
   const [isLoading, setIsLoading] = useState(false)
-
+  const { data: session, status } = useSession()
+  const user = session?.user as User
   const updateAccountSession = async (account: IAccount) => {
     try {
       setIsLoading(true)
@@ -69,6 +73,7 @@ const SessionModal: FC<SessionModalProps> = ({
       </code>
       <div className="flex justify-start space-y-2">
         <Button.Primary
+          disabled={user?.role !== 'admin'}
           loading={isLoading}
           onClick={() => updateAccountSession(account)}
         >

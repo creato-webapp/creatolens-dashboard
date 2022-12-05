@@ -17,6 +17,10 @@ a {
 button:disabled {
   cursor: not-allowed;
   pointer-events: all !important;
+  background-color: #d1d5db;
+}
+button[disabled]:hover {
+  background: #d1d5db;
 }
 * {
   box-sizing: border-box;
