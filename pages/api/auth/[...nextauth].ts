@@ -4,7 +4,7 @@ import GoogleProvider from 'next-auth/providers/google'
 import { FireStoreAdapterWrapper } from 'services/customAdapter'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { setCookie } from 'cookies-next'
-
+import { JWT } from 'next-auth/jwt/types'
 type NextAuthOptionsCallback = (
   req: NextApiRequest,
   res: NextApiResponse
@@ -15,7 +15,16 @@ type NextAuthOptionsCallback = (
  * `accessToken` and `accessTokenExpires`. If an error occurs,
  * returns the old token and an error property
  */
-async function refreshAccessToken(token) {
+interface AuthToken {
+  user: User
+  accessToken: string
+  accessTokenExpires?: number
+  expires_at?: number
+  refreshToken: string
+  error?: string
+}
+
+async function refreshAccessToken(token: AuthToken) {
   try {
     const url =
       'https://oauth2.googleapis.com/token?' +
