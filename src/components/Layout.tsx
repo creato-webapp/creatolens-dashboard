@@ -20,7 +20,7 @@ export default function Navbar(props: NavbarProps) {
     { title: 'Accounts', href: '/accounts' },
     { title: 'Blocked Accounts', href: '/accounts-blocked' },
     { title: 'Retry Accounts', href: '/accounts-retry' },
-    { title: 'Account Login Error', href: '/accounts-error' },
+    { title: 'Login Error History', href: '/accounts-error' },
   ]
 
   const { data: session, status } = useSession()

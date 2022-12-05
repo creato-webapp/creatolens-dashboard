@@ -9,7 +9,7 @@ import { getSession } from 'next-auth/react'
 import { GetServerSideProps } from 'next'
 import moment from 'moment'
 import { Fetcher } from 'services/fetcher'
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 
 type Props = {
   accountData: IAccount[]
@@ -26,16 +26,20 @@ export const getServerSideProps = async (context: any) => {
     }
   }
   // Fetch data from external API
-  const res = await axios.get(
-    `${process.env.LOCAL_SERVER_URL}/api/accounts-retry?filter=username != null`,
-    {
-      headers: {
-        Cookie: context.req.headers.cookie,
-      },
-    }
-  )
+  const res = await axios
+    .get(
+      `${process.env.LOCAL_SERVER_URL}/api/accounts-retry?filter=username != null`,
+      {
+        headers: {
+          Cookie: context.req.headers.cookie,
+        },
+      }
+    )
+    .catch(function (error: AxiosError) {
+      return
+    })
   // Pass data to the page via props
-  const accountData: IAccount[] = res.data
+  const accountData: IAccount[] = res ? res.data : []
   return { props: { accountData } }
 }
 

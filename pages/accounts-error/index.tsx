@@ -110,7 +110,7 @@ const AccountsErrorPage = ({ accountErrorData }: Props) => {
   ]
 
   return (
-    <Card title="Accounts Login Error">
+    <Card title="Login Error History">
       <Form.BaseInput
         placeholder="Search Account Username 'test@role'"
         className="order-shades-100 block w-full rounded-lg border p-2  text-slate-600 placeholder-slate-400 outline-none focus:border-slate-700 focus:outline-none"

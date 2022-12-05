@@ -74,9 +74,11 @@ const AccountsPage = ({ accountData, isCreate }: Props) => {
 
   const account: IAccount = {
     ...data,
-    last_login_dt: moment(data?.last_login_dt, 'YYYY-MM-DD THH:mm:ss').format(
-      'YYYY-MM-DDTHH:mm'
-    ),
+    last_login_dt: moment(data?.last_login_dt, 'YYYY-MM-DD THH:mm:ss')
+      .utc()
+      .local()
+      .add(8, 'hours')
+      .format('YYYY-MM-DDTHH:mm'),
   }
 
   const fieldsUpdate: IField[] = [
@@ -157,9 +159,11 @@ const AccountsPage = ({ accountData, isCreate }: Props) => {
     const newValues = {
       ...account,
       ...values,
-      last_login_dt: moment(values.last_login_dt, 'YYYY-MM-DDTHH:mm').format(
-        'YYYY-MM-DD THH:mm:ss'
-      ),
+      last_login_dt: moment(values.last_login_dt, 'YYYY-MM-DDTHH:mm')
+        .utc()
+        .local()
+        .add(-8, 'hours')
+        .format('YYYY-MM-DD THH:mm:ss'),
     }
     const res = await Fetcher.PATCH(`/api/accounts/${id}`, newValues)
     return res

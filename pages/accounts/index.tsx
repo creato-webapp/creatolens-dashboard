@@ -8,8 +8,9 @@ import Link from 'next/link'
 import { getSession } from 'next-auth/react'
 import moment from 'moment'
 import { Fetcher } from 'services/fetcher'
-import axios from 'axios'
-
+import axios, { AxiosError } from 'axios'
+import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/solid'
+import { redirect } from 'next/dist/server/api-utils'
 type Props = {
   accountData: IAccount[]
 }
@@ -25,17 +26,21 @@ export const getServerSideProps = async (context: any) => {
     }
   }
   // Fetch data from next API
-  const res = await axios.get(
-    `${process.env.LOCAL_SERVER_URL}/api/accounts?filter=username != null`,
-    {
-      headers: {
-        Cookie: context.req.headers.cookie,
-      },
-    }
-  )
+  const res = await axios
+    .get(
+      `${process.env.LOCAL_SERVER_URL}/api/accounts?filter=username != null`,
+      {
+        headers: {
+          Cookie: context.req.headers.cookie,
+        },
+      }
+    )
+    .catch(function (error: AxiosError) {
+      return
+    })
 
   // Pass data to the page via props
-  const accountData: IAccount[] = res.data
+  const accountData: IAccount[] = res ? res.data : []
   return { props: { accountData } }
 }
 
@@ -80,14 +85,22 @@ const AccountsPage = ({ accountData }: Props) => {
       title: 'is occupied',
       dataIndex: 'is_occupied',
       render: (e: any) => {
-        return <div>{e.toString()}</div>
+        return e ? (
+          <CheckCircleIcon className="h-6 w-6 text-green-500" />
+        ) : (
+          <XCircleIcon className="h-6 w-6 text-red-500" />
+        )
       },
     },
     {
       title: 'is enabled',
       dataIndex: 'enabled',
       render: (e: any) => {
-        return <div>{e.toString()}</div>
+        return e ? (
+          <CheckCircleIcon className="h-6 w-6 text-green-500" />
+        ) : (
+          <XCircleIcon className="h-6 w-6 text-red-500" />
+        )
       },
     },
     {

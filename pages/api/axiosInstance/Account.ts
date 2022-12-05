@@ -35,6 +35,9 @@ AccountInstance.interceptors.response.use(
           console.log('Bad Request')
           return error.response
 
+        case 401:
+          console.log('Session Timed Out')
+          return error.response
         default:
           console.log(error.message)
           return error.response
