@@ -205,7 +205,7 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
     <Card
       title="Accounts Info"
       extra={
-        canRenewSession ? (
+        account.session_cookies || canRenewSession ? (
           <Button.Primary loading={isLoading} onClick={() => setIsShow(true)}>
             Open Session Modal
           </Button.Primary>

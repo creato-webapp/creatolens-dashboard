@@ -80,6 +80,12 @@ const SessionModal: FC<SessionModalProps> = ({
           <div className="flex">Update Session</div>
         </Button.Primary>
       </div>
+      <div>
+        <p>
+          *User can update session model if an error occurred after 24 hours in
+          this account.
+        </p>
+      </div>
     </Modal>
   )
 }
