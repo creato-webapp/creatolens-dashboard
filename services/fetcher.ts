@@ -1,4 +1,4 @@
-import axios, { AxiosError } from 'axios'
+import axios, { AxiosError, AxiosRequestConfig } from 'axios'
 import { getCookie } from 'cookies-next'
 
 const FetcherInstance = axios.create({
@@ -46,7 +46,8 @@ FetcherInstance.interceptors.response.use(
 )
 
 export const Fetcher = {
-  POST: async (url: string, data: any) => await FetcherInstance.post(url, data),
+  POST: async (url: string, data: any, customConfig?: AxiosRequestConfig) =>
+    await FetcherInstance.post(url, data, customConfig),
   GET: async (url: string, params: any) => {
     return await FetcherInstance.get(`${url}`, { params: params }).then(
       (res) => res.data

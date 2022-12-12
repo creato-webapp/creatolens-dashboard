@@ -13,6 +13,9 @@ export default async function accountQueryHandler(
     case 'GET': {
       const response = await AccountInstance.get('/available-accounts/query', {
         params: { filter: 'username != null', isAsc: false },
+        headers: {
+          Cookie: req.headers.cookie,
+        },
       })
       return res.status(response.status).json(response.data)
     }
@@ -33,7 +36,12 @@ export default async function accountQueryHandler(
     case 'POST': {
       const response = await AccountInstance.post(
         '/available-accounts/create',
-        body
+        body,
+        {
+          headers: {
+            Cookie: req.headers.cookie,
+          },
+        }
       )
         .then(function (response) {
           console.log(response)

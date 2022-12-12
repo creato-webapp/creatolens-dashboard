@@ -4,7 +4,7 @@ const ScrapperInstance = axios.create({
   baseURL: process.env.SCRAPPER_SERVICE,
   withCredentials: true,
   headers: { 'Content-Type': 'application/json' },
-  timeout: 20000,
+  timeout: 30000,
 })
 
 ScrapperInstance.interceptors.request.use(

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Card from '@components/Card'
 import { useRouter } from 'next/router'
 import { Form } from '@components/Form'
+import { Alerts } from '@components/Alerts'
 import { IField } from '@components/Form/interface'
 import { IAccountError } from '@components/AccountErrors/interface'
 import { SessionModal, IAccount } from '@components/Account'
@@ -76,7 +77,7 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
   const [isLoading, setIsLoading] = useState(false)
   const [shouldFetch, setShouldFetch] = useState(false)
   const [isShow, setIsShow] = useState(false)
-
+  const [showAlert, setShowAlert] = useState(false)
   const session = getSession()
   const router = useRouter()
   const { id } = router.query
@@ -170,7 +171,7 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
       const res = isCreate
         ? await createAccount(values)
         : await updateAccount(values)
-      router.replace(`/accounts`)
+      setShowAlert(true)
       mutateAccountInfo()
     } catch (error) {
       console.log(error)
@@ -202,51 +203,54 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
   const fields = isCreate ? fieldsCreate : fieldsUpdate
 
   return (
-    <Card
-      title="Accounts Info"
-      extra={
-        account.session_cookies || canRenewSession ? (
-          <Button.Primary loading={isLoading} onClick={() => setIsShow(true)}>
-            Open Session Modal
-          </Button.Primary>
-        ) : null
-      }
-    >
-      <Form.Layout
-        onSubmit={handleSubmit}
-        Header={account.username}
-        loading={isLoading}
-        fields={fields}
+    <>
+      <Alerts.success isShow={showAlert} setIsShow={setShowAlert} />
+      <Card
+        title="Accounts Info"
+        extra={
+          account.session_cookies || canRenewSession ? (
+            <Button.Primary loading={isLoading} onClick={() => setIsShow(true)}>
+              Open Session Modal
+            </Button.Primary>
+          ) : null
+        }
       >
-        {fields.map((e: IField, index) => (
-          <Form.Item
-            label={e.label}
-            key={index}
-            customFormItemProps={e.customFormItemProps}
-          >
-            <Form.CustomItem
-              id={e.name}
-              defaultValue={account[e.name]}
-              type={e.type}
+        <Form.Layout
+          onSubmit={handleSubmit}
+          Header={account.username}
+          loading={isLoading}
+          fields={fields}
+        >
+          {fields.map((e: IField, index) => (
+            <Form.Item
+              label={e.label}
+              key={index}
               customFormItemProps={e.customFormItemProps}
-            />
-          </Form.Item>
-        ))}
-      </Form.Layout>
+            >
+              <Form.CustomItem
+                id={e.name}
+                defaultValue={account[e.name]}
+                type={e.type}
+                customFormItemProps={e.customFormItemProps}
+              />
+            </Form.Item>
+          ))}
+        </Form.Layout>
 
-      <SessionModal
-        isShow={isShow}
-        account={account}
-        loading={!error && !data}
-        closeModal={() => setIsShow(false)}
-        refresh={async () => {
-          if (!shouldFetch) {
-            setShouldFetch(true)
-          }
-          await mutateAccountInfo()
-        }}
-      />
-    </Card>
+        <SessionModal
+          isShow={isShow}
+          account={account}
+          loading={!error && !data}
+          closeModal={() => setIsShow(false)}
+          refresh={async () => {
+            if (!shouldFetch) {
+              setShouldFetch(true)
+            }
+            await mutateAccountInfo()
+          }}
+        />
+      </Card>
+    </>
   )
 }
 

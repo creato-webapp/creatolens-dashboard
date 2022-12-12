@@ -19,10 +19,16 @@ export default async function accountQueryHandler(
             orderby: 'occurred_at',
             isAsc: false,
           },
+          headers: {
+            Cookie: req.headers.cookie,
+          },
         })
       } else {
         response = await AccountInstance.get('/handler/query', {
           params: { orderby: 'occurred_at', isAsc: false },
+          headers: {
+            Cookie: req.headers.cookie,
+          },
         })
       }
       return res.status(response.status).json(response.data)

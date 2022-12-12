@@ -7,6 +7,7 @@ import { Fetcher } from 'services/fetcher'
 import { Spinner } from '../Spinner'
 import { useSession } from 'next-auth/react'
 import { User } from 'next-auth'
+import axios from 'axios'
 
 interface SessionModalProps {
   account: IAccount
@@ -46,9 +47,13 @@ const SessionModal: FC<SessionModalProps> = ({
   const updateAccountSession = async (account: IAccount) => {
     try {
       setIsLoading(true)
-      const res = await Fetcher.POST(`/api/accounts/session/${account.id}`, {
-        username: account.username,
-      })
+      const res = await Fetcher.POST(
+        `/api/accounts/session/${account.id}`,
+        {
+          username: account.username,
+        },
+        { timeout: 30000 }
+      )
       window.alert('sessions uploaded')
       refresh()
       return res
