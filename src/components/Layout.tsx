@@ -21,6 +21,7 @@ export default function Navbar(props: NavbarProps) {
     { title: 'Blocked Accounts', href: '/accounts-blocked' },
     { title: 'Retry Accounts', href: '/accounts-retry' },
     { title: 'Login Error History', href: '/accounts-error' },
+    { title: 'Account Session History', href: '/accounts-session' },
   ]
 
   const { data: session, status } = useSession()
