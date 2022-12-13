@@ -53,6 +53,8 @@ export const getServerSideProps = async (context: any) => {
     const result = moment(lastDay - errDatetime).valueOf()
     console.log(result)
     canRenewSession = result > 86400000 ? true : false
+  } else if (lastErrResList.length == 0) {
+    canRenewSession = true
   } else {
     canRenewSession = false
   }
@@ -208,11 +210,9 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
       <Card
         title="Accounts Info"
         extra={
-          account.session_cookies || canRenewSession ? (
-            <Button.Primary loading={isLoading} onClick={() => setIsShow(true)}>
-              Open Session Modal
-            </Button.Primary>
-          ) : null
+          <Button.Primary loading={isLoading} onClick={() => setIsShow(true)}>
+            Open Session Modal
+          </Button.Primary>
         }
       >
         <Form.Layout
@@ -238,6 +238,7 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
         </Form.Layout>
 
         <SessionModal
+          isDisable={!canRenewSession}
           isShow={isShow}
           account={account}
           loading={!error && !data}

@@ -10,6 +10,7 @@ import { User } from 'next-auth'
 import axios from 'axios'
 
 interface SessionModalProps {
+  isDisable: boolean
   account: IAccount
   loading: boolean
   isShow: boolean
@@ -37,6 +38,7 @@ const dataItemToKeyValues = (item: Cookies[]) => {
 const SessionModal: FC<SessionModalProps> = ({
   account,
   loading,
+  isDisable,
   isShow,
   closeModal,
   refresh,
@@ -78,7 +80,7 @@ const SessionModal: FC<SessionModalProps> = ({
       </code>
       <div className="flex justify-start space-y-2">
         <Button.Primary
-          disabled={user?.role !== 'admin'}
+          disabled={user?.role !== 'admin' || isDisable}
           loading={isLoading}
           onClick={() => updateAccountSession(account)}
         >
