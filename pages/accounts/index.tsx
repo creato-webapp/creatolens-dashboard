@@ -81,6 +81,7 @@ const AccountsPage = ({ accountData }: Props) => {
       },
     },
     { title: 'username', dataIndex: 'username' },
+    { title: 'status', dataIndex: 'status' },
     {
       title: 'is occupied',
       dataIndex: 'is_occupied',
@@ -104,7 +105,7 @@ const AccountsPage = ({ accountData }: Props) => {
       },
     },
     {
-      title: 'is_authenticated',
+      title: 'is_auth',
       dataIndex: 'is_authenticated',
       render: (e: any) => {
         return e ? (
@@ -115,7 +116,7 @@ const AccountsPage = ({ accountData }: Props) => {
       },
     },
     { title: 'login_count', dataIndex: 'login_count' },
-    { title: 'post_scrapped_count', dataIndex: 'post_scrapped_count' },
+    { title: 'post_scrapped', dataIndex: 'post_scrapped_count' },
     {
       title: 'last_login_dt(HK Time)',
       dataIndex: 'last_login_dt',
@@ -141,20 +142,22 @@ const AccountsPage = ({ accountData }: Props) => {
     },
   ]
 
-  const dataSource = accountData
   return (
     <Card title="Accounts Table">
       <Link href="/accounts/create-account">
         <Button.Primary loading={false}>Create New Account</Button.Primary>
       </Link>
+
       <Table.Layout>
         <Table.Header columns={columns} />
+
         <Table.Body>
           {accountData.map((e, index) => (
             <Table.Row columns={columns} rowData={e} key={index} />
           ))}
         </Table.Body>
       </Table.Layout>
+      <p>status: | 'active' | 'blocked' | 'banned' | 'retry' | 'test' |</p>
     </Card>
   )
 }

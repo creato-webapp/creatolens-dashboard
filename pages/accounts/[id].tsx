@@ -254,6 +254,8 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
           </Button.Primary>
         }
       >
+        status: | 'active' | 'blocked' | 'banned' | 'retry' | 'test' |
+        'scrapping' | 'occupied'
         <Form.Layout
           onSubmit={handleSubmit}
           Header={account.username}
@@ -275,7 +277,6 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
             </Form.Item>
           ))}
         </Form.Layout>
-
         <SessionModal
           isDisable={!canRenewSession}
           isShow={isShow}
