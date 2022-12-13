@@ -69,10 +69,10 @@ const AccountsErrorPage = ({ accountSessionData }: Props) => {
   console.log(data)
   const columns = [
     {
-      title: 'document_id',
-      dataIndex: 'document_id',
+      title: 'account_id',
+      dataIndex: 'account_id',
       render: (e: string) => {
-        if (e === 'empty document_id') {
+        if (e === 'empty account_id') {
           return ''
         }
         return (
@@ -84,7 +84,7 @@ const AccountsErrorPage = ({ accountSessionData }: Props) => {
     },
     {
       title: 'account',
-      dataIndex: 'account_id',
+      dataIndex: 'username',
       render: (e: string) => {
         return (
           <Link href="/accounts/[id]" as={`/accounts/${e}`} legacyBehavior>
@@ -105,7 +105,7 @@ const AccountsErrorPage = ({ accountSessionData }: Props) => {
           .format('YYYY-MM-DD HH:mm:ss')
       },
     },
-    { title: 'session_cookies', dataIndex: 'session_cookies' },
+    { title: 'session_cookies', dataIndex: 'session_cookies.sessionid' },
     { title: 'trace_id', dataIndex: 'trace_id' },
   ]
 
