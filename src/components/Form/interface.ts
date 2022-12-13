@@ -7,6 +7,7 @@ export type InputType =
   | 'TimePicker'
   | 'DateTimePicker'
   | 'Checkbox'
+  | 'InputNumber'
 
 export type customFormItemProps = {
   [key: string]: string | number | boolean | any

@@ -21,6 +21,7 @@ export default async function AccountHandler(
         `accounts/update/${id}`,
         body
       )
+
       return res.status(response.status).json(response.data)
     default:
       res.setHeader('Allow', ['GET', 'PATCH', 'PUT'])

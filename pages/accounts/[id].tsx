@@ -140,6 +140,11 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
       name: 'enabled',
     },
     {
+      label: 'is_authenticated',
+      type: 'Checkbox',
+      name: 'is_authenticated',
+    },
+    {
       label: 'is_occupied',
       type: 'Checkbox',
       name: 'is_occupied',
@@ -148,6 +153,24 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
       label: 'last_login_dt',
       type: 'DateTimePicker',
       name: 'last_login_dt',
+    },
+    {
+      label: 'login count',
+      type: 'InputNumber',
+      name: 'login_count',
+      customFormItemProps: { disabled: true },
+    },
+    {
+      label: 'login attempt count',
+      type: 'InputNumber',
+      name: 'login_attempt_count',
+      customFormItemProps: { disabled: true },
+    },
+    {
+      label: 'post_scrapped_count',
+      type: 'InputNumber',
+      name: 'post_scrapped_count',
+      customFormItemProps: { disabled: true },
     },
   ]
 
@@ -170,9 +193,24 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
     try {
       setShouldFetch(true)
       setIsLoading(true)
+      const newValues = {
+        ...values,
+        login_count: parseInt(values.login_count as unknown as string),
+        login_attempt_count: parseInt(
+          values.login_attempt_count as unknown as string
+        ),
+        post_scrapped_count: parseInt(
+          values.post_scrapped_count as unknown as string
+        ),
+      }
+
       const res = isCreate
-        ? await createAccount(values)
-        : await updateAccount(values)
+        ? await createAccount(newValues)
+        : await updateAccount(newValues)
+      if (res.status == 400) {
+        console.log(res.data)
+        throw new Error('Bad Request Updating Accounts')
+      }
       setShowAlert(true)
       mutateAccountInfo()
     } catch (error) {
@@ -198,6 +236,7 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
         .add(-8, 'hours')
         .format('YYYY-MM-DD THH:mm:ss'),
     }
+
     const res = await Fetcher.PATCH(`/api/accounts/${id}`, newValues)
     return res
   }

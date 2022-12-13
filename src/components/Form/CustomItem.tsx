@@ -3,6 +3,7 @@ import { CustomItemProps } from './interface'
 import { DatePicker, TimePicker, DateTimePicker } from './DatetimePicker'
 import Checkbox from './Checkbox'
 import TextInput from './TextInput'
+import InputNumber from './InputNumber'
 import BaseInput from './BaseInput'
 
 const CustomItem: FC<CustomItemProps> = (props: CustomItemProps) => {
@@ -16,6 +17,18 @@ const CustomItem: FC<CustomItemProps> = (props: CustomItemProps) => {
           placeholder={props?.placeholder}
           disabled={props.disabled}
           onChange={props.onChange}
+          {...customFormItemProps}
+        />
+      )
+    case 'InputNumber':
+      return (
+        <InputNumber
+          id={props.id}
+          defaultValue={props.defaultValue as string}
+          placeholder={props?.placeholder}
+          disabled={props.disabled}
+          onChange={props.onChange}
+          type="number"
           {...customFormItemProps}
         />
       )

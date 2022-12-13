@@ -104,6 +104,19 @@ const AccountsPage = ({ accountData }: Props) => {
       },
     },
     {
+      title: 'is_authenticated',
+      dataIndex: 'is_authenticated',
+      render: (e: any) => {
+        return e ? (
+          <CheckCircleIcon className="h-6 w-6 text-green-500" />
+        ) : (
+          <XCircleIcon className="h-6 w-6 text-red-500" />
+        )
+      },
+    },
+    { title: 'login_count', dataIndex: 'login_count' },
+    { title: 'post_scrapped_count', dataIndex: 'post_scrapped_count' },
+    {
       title: 'last_login_dt(HK Time)',
       dataIndex: 'last_login_dt',
       render: (e: any) => {
