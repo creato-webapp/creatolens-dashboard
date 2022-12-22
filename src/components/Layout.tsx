@@ -22,6 +22,7 @@ export default function Navbar(props: NavbarProps) {
     { title: 'Retry Accounts', href: '/accounts-retry' },
     { title: 'Login Error History', href: '/accounts-error' },
     { title: 'Account Session History', href: '/accounts-session' },
+    { title: 'Hashtag', href: '/hashtag' },
   ]
 
   const { data: session, status } = useSession()
