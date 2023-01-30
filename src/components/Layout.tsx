@@ -23,6 +23,7 @@ export default function Navbar(props: NavbarProps) {
     { title: 'Login Error History', href: '/accounts-error' },
     { title: 'Account Session History', href: '/accounts-session' },
     { title: 'Hashtag', href: '/hashtag' },
+    { title: 'Hashet', href: '/hashet' },
   ]
 
   const { data: session, status } = useSession()
@@ -30,7 +31,7 @@ export default function Navbar(props: NavbarProps) {
   return (
     <>
       <Popover className="relative bg-white">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6">
+        <div className="max-w-screen-2xl mx-auto px-4 sm:px-6">
           <div className="flex items-center justify-between border-b-2 border-gray-100 py-6 md:justify-start md:space-x-10">
             <Popover.Group as="nav" className="hidden space-x-8 md:flex">
               {navBarItemList.map((e, index) => (
