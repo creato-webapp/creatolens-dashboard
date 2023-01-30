@@ -10,7 +10,10 @@ import { Fetcher } from 'services/fetcher'
 import { Form } from '@components/Form'
 import { Button } from '@components/Button'
 
-type IHashet = string
+interface IHashet extends Record<string, string | number | boolean> {
+  hashtag: string
+  acc: number
+}
 
 type Props = {
   hashetSessionData: IHashet[]
@@ -72,6 +75,32 @@ const HashetPredictsPage = ({ hashetSessionData }: Props) => {
     console.log(data)
     return <div>Loading...</div>
   }
+
+  const columns = [
+    {
+      title: 'Hashtag',
+      dataIndex: 'hashtag',
+      render: (e: string) => {
+        return (
+          <a
+            style={{ color: '#0070f3' }}
+            target="_blank"
+            href={`https://www.instagram.com/explore/tags/${e.replaceAll(
+              '#',
+              ''
+            )}/`}
+          >
+            {e}
+          </a>
+        )
+      },
+    },
+    {
+      title: 'Accuracy',
+      dataIndex: 'acc',
+    },
+  ]
+
   const hashetData: IHashet[] = data.data
 
   return (
@@ -88,7 +117,15 @@ const HashetPredictsPage = ({ hashetSessionData }: Props) => {
           generate
         </Button.Primary>
       </div>
-      <p>{hashetData}</p>
+      <Table.Layout>
+        <Table.Header columns={columns} />
+
+        <Table.Body>
+          {hashetData.map((e, index) => (
+            <Table.Row columns={columns} rowData={e} key={index} />
+          ))}
+        </Table.Body>
+      </Table.Layout>
     </Card>
   )
 }
