@@ -1,7 +1,7 @@
 import { ReactNode, PropsWithChildren, FC } from 'react'
 import AccountField from './AccountField'
 import Link from 'next/link'
-
+import moment from 'moment'
 export interface rowData {
   [key: string]: any
 }
@@ -41,7 +41,10 @@ const AccountCard: FC<AccountCardProps> = (props: AccountCardProps) => {
         <AccountField
           title="LAST_LOGIN_DT
           (HK TIME)"
-          value={props.rowData?.last_login_dt}
+          value={moment(props.rowData?.last_login_dt, 'YYYY-MM-DD THH:mm:ss')
+            .local()
+            .add(8, 'hours')
+            .format('YYYY-MM-DD HH:mm:ss')}
         />
       </ul>
       <Link
