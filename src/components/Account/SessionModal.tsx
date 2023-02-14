@@ -80,7 +80,7 @@ const SessionModal: FC<SessionModalProps> = ({
       </code>
       <div className="flex justify-start space-y-2">
         <Button.Primary
-          disabled={user?.role !== 'admin' || isDisable}
+          // disabled={user?.role !== 'admin' || isDisable}
           loading={isLoading}
           onClick={() => updateAccountSession(account)}
         >

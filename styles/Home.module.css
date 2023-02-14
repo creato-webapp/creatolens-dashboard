@@ -114,17 +114,3 @@
     flex-direction: column;
   }
 }
-
-@media (prefers-color-scheme: dark) {
-  .card,
-  .footer {
-    border-color: #222;
-  }
-  .code {
-    background: #111;
-    color: #f0f0f0;
-  }
-  .logo img {
-    filter: invert(1);
-  }
-}

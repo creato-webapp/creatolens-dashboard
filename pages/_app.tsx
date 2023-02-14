@@ -1,7 +1,7 @@
 import '../styles/globals.css'
 import { Session } from 'next-auth'
 import type { AppProps } from 'next/app'
-import Navbar from '../src/components/Layout'
+import Navbar from '../src/components/Layout/Layout'
 import { SessionProvider } from 'next-auth/react'
 
 function MyApp({
