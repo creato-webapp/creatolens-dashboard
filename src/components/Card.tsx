@@ -11,9 +11,9 @@ export default function Card(props: CardProps) {
   const { title, children, extra } = props
   return (
     <div className="min-h-72 m-8 rounded-lg border border-gray-200 bg-white shadow-md">
-      <div className="min-h-full min-w-full p-5 ">
+      <div className="min-h-full min-w-full p-5">
         <div className="flex">
-          <h5 className=" mb-2 flex-auto text-2xl font-bold tracking-tight text-gray-900">
+          <h5 className="mb-2 flex-auto text-2xl font-bold tracking-tight text-gray-900">
             {title}
           </h5>
           <div className="flex-none">{extra}</div>

@@ -9,12 +9,12 @@ export interface MenuItemProps {
 
 const MenuItem: FC<MenuItemProps> = ({ title, href, onClose }) => {
   return (
-    <li>
+    <li className="m-2 border-b border-blue-500">
       <Link href={href} key={title} replace>
         <a
           onClick={onClose}
           key={title}
-          className="block rounded py-2 pl-3 pr-4  dark:text-white md:bg-transparent md:p-0 md:text-blue-700"
+          className="block rounded py-2 pl-3 pr-4 text-blue-500"
           aria-current="page"
           href={href}
         >

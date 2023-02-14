@@ -3,6 +3,7 @@ import Card from '@components/Card'
 import { Table } from '@components/Table'
 import { Button } from '@components/Button'
 import { IAccount } from '@components/Account/interface'
+import { AccountCard } from '@components/AccountCard'
 import useSWR from 'swr'
 import Link from 'next/link'
 import { getSession } from 'next-auth/react'
@@ -10,7 +11,6 @@ import moment from 'moment'
 import { Fetcher } from 'services/fetcher'
 import axios, { AxiosError } from 'axios'
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/solid'
-import { redirect } from 'next/dist/server/api-utils'
 type Props = {
   accountData: IAccount[]
 }
@@ -147,16 +147,24 @@ const AccountsPage = ({ accountData }: Props) => {
       <Link href="/accounts/create-account">
         <Button.Primary loading={false}>Create New Account</Button.Primary>
       </Link>
+      {/* desktop */}
+      <div className="hidden  md:flex">
+        <Table.Layout>
+          <Table.Header columns={columns} />
 
-      <Table.Layout>
-        <Table.Header columns={columns} />
-
-        <Table.Body>
-          {accountData.map((e, index) => (
-            <Table.Row columns={columns} rowData={e} key={index} />
-          ))}
-        </Table.Body>
-      </Table.Layout>
+          <Table.Body>
+            {accountData.map((e, index) => (
+              <Table.Row columns={columns} rowData={e} key={index} />
+            ))}
+          </Table.Body>
+        </Table.Layout>
+      </div>
+      {/* Phone */}
+      <div className="hidden flex-col sm:flex">
+        {accountData.map((e, index) => (
+          <AccountCard columns={columns} rowData={e} key={index} />
+        ))}
+      </div>
       <p>status: | 'active' | 'blocked' | 'banned' | 'retry' | 'test' |</p>
     </Card>
   )
