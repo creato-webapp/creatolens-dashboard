@@ -20,7 +20,7 @@ export interface AccountCardProps extends PropsWithChildren {
 
 const AccountCard: FC<AccountCardProps> = (props: AccountCardProps) => {
   return (
-    <div className="w-full max-w-sm rounded-lg border border-gray-200 bg-white p-2 shadow sm:p-8">
+    <div className="w-full max-w-sm rounded-lg border border-gray-200 bg-white p-2 shadow sm:p-8 md:hidden">
       <h5 className="text-l mb-4 font-medium text-gray-500">
         {props.rowData?.id}
       </h5>
