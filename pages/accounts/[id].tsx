@@ -35,29 +35,29 @@ export const getServerSideProps = async (context: any) => {
   const { params } = context
   const isCreate = params.id === 'create-account'
   let canRenewSession = false
-  const lastErrRes = await axios.get(
-    process.env.LOCAL_SERVER_URL + '/api/accounts-error/last',
-    {
-      params: { username: params.id },
-      headers: {
-        Cookie: context.req.headers.cookie,
-      },
-    }
-  )
-  const lastErrResList = lastErrRes.data.map((e: IAccountError) => {
-    return moment(e.occurred_at, 'YYYY-MM-DD THH:mm:ss')
-  })
-  if (lastErrResList.length > 0) {
-    const lastDay = moment().add(-1, 'days').valueOf()
-    const errDatetime = lastErrResList[0].valueOf()
-    const result = moment(lastDay - errDatetime).valueOf()
-    console.log(result)
-    canRenewSession = result > 86400000 ? true : false
-  } else if (lastErrResList.length == 0) {
-    canRenewSession = true
-  } else {
-    canRenewSession = false
-  }
+  // const lastErrRes = await axios.get(
+  //   process.env.LOCAL_SERVER_URL + '/api/accounts-error/last',
+  //   {
+  //     params: { username: params.id },
+  //     headers: {
+  //       Cookie: context.req.headers.cookie,
+  //     },
+  //   }
+  // )
+  // const lastErrResList = lastErrRes.data.map((e: IAccountError) => {
+  //   return moment(e.occurred_at, 'YYYY-MM-DD THH:mm:ss')
+  // })
+  // if (lastErrResList.length > 0) {
+  //   const lastDay = moment().add(-1, 'days').valueOf()
+  //   const errDatetime = lastErrResList[0].valueOf()
+  //   const result = moment(lastDay - errDatetime).valueOf()
+  //   console.log(result)
+  //   canRenewSession = result > 86400000 ? true : false
+  // } else if (lastErrResList.length == 0) {
+  //   canRenewSession = true
+  // } else {
+  //   canRenewSession = false
+  // }
 
   const res =
     !isCreate &&
@@ -107,7 +107,6 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
     last_login_dt: moment(data?.last_login_dt, 'YYYY-MM-DD THH:mm:ss')
       .utc()
       .local()
-      .add(8, 'hours')
       .format('YYYY-MM-DDTHH:mm'),
   }
 
@@ -213,6 +212,7 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
       }
       setShowAlert(true)
       mutateAccountInfo()
+      router.replace(`/accounts`)
     } catch (error) {
       console.log(error)
       window.alert(error)
@@ -233,7 +233,6 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
       last_login_dt: moment(values.last_login_dt, 'YYYY-MM-DDTHH:mm')
         .utc()
         .local()
-        .add(-8, 'hours')
         .format('YYYY-MM-DD THH:mm:ss'),
     }
 

@@ -122,11 +122,7 @@ const AccountsPage = ({ accountData }: Props) => {
       dataIndex: 'last_login_dt',
       render: (e: any) => {
         const date = moment(e, 'YYYY-MM-DD THH:mm:ss')
-        return moment
-          .utc(date)
-          .local()
-          .add(8, 'hours')
-          .format('YYYY-MM-DD HH:mm:ss')
+        return moment.utc(date).local().format('YYYY-MM-DD HH:mm:ss')
       },
     },
     {
