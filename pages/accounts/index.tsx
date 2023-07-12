@@ -87,7 +87,7 @@ const AccountsPage = ({ accountData }: Props) => {
       dataIndex: 'is_occupied',
       render: (e: any) => {
         return e ? (
-          <CheckCircleIcon className="h-6 w-6 text-green-500" />
+          <CheckCircleIcon className="h-6 w-6 text-green-600" />
         ) : (
           <XCircleIcon className="h-6 w-6 text-red-500" />
         )
@@ -98,7 +98,7 @@ const AccountsPage = ({ accountData }: Props) => {
       dataIndex: 'enabled',
       render: (e: any) => {
         return e ? (
-          <CheckCircleIcon className="h-6 w-6 text-green-500" />
+          <CheckCircleIcon className="h-6 w-6 text-green-600" />
         ) : (
           <XCircleIcon className="h-6 w-6 text-red-500" />
         )
@@ -109,7 +109,7 @@ const AccountsPage = ({ accountData }: Props) => {
       dataIndex: 'is_authenticated',
       render: (e: any) => {
         return e ? (
-          <CheckCircleIcon className="h-6 w-6 text-green-500" />
+          <CheckCircleIcon className="h-6 w-6 text-green-600" />
         ) : (
           <XCircleIcon className="h-6 w-6 text-red-500" />
         )
