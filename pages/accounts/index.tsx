@@ -27,14 +27,11 @@ export const getServerSideProps = async (context: any) => {
   }
   // Fetch data from next API
   const res = await axios
-    .get(
-      `${process.env.LOCAL_SERVER_URL}/api/accounts?filter=username != null`,
-      {
-        headers: {
-          Cookie: context.req.headers.cookie,
-        },
-      }
-    )
+    .get(`${process.env.LOCAL_SERVER_URL}/api/accounts?filter=username != null`, {
+      headers: {
+        Cookie: context.req.headers.cookie,
+      },
+    })
     .catch(function (error: AxiosError) {
       return
     })
@@ -51,11 +48,7 @@ const AccountsPage = ({ accountData }: Props) => {
     error,
     mutate: mutateAccList,
     isValidating,
-  } = useSWR(
-    shouldFetch ? ['api/accounts', '?filter=username != null'] : null,
-    Fetcher.GET,
-    { refreshInterval: 0, fallbackData: accountData }
-  )
+  } = useSWR(shouldFetch ? ['api/accounts', '?filter=username != null'] : null, Fetcher.GET, { refreshInterval: 0, fallbackData: accountData })
 
   if (error) {
     console.log(data)
@@ -86,33 +79,21 @@ const AccountsPage = ({ accountData }: Props) => {
       title: 'is occupied',
       dataIndex: 'is_occupied',
       render: (e: any) => {
-        return e ? (
-          <CheckCircleIcon className="h-6 w-6 text-green-600" />
-        ) : (
-          <XCircleIcon className="h-6 w-6 text-red-500" />
-        )
+        return e ? <CheckCircleIcon className="h-6 w-6 text-green-600" /> : <XCircleIcon className="h-6 w-6 text-red-500" />
       },
     },
     {
       title: 'is enabled',
       dataIndex: 'enabled',
       render: (e: any) => {
-        return e ? (
-          <CheckCircleIcon className="h-6 w-6 text-green-600" />
-        ) : (
-          <XCircleIcon className="h-6 w-6 text-red-500" />
-        )
+        return e ? <CheckCircleIcon className="h-6 w-6 text-green-600" /> : <XCircleIcon className="h-6 w-6 text-red-500" />
       },
     },
     {
       title: 'is_auth',
       dataIndex: 'is_authenticated',
       render: (e: any) => {
-        return e ? (
-          <CheckCircleIcon className="h-6 w-6 text-green-600" />
-        ) : (
-          <XCircleIcon className="h-6 w-6 text-red-500" />
-        )
+        return e ? <CheckCircleIcon className="h-6 w-6 text-green-600" /> : <XCircleIcon className="h-6 w-6 text-red-500" />
       },
     },
     { title: 'login_count', dataIndex: 'login_count' },
