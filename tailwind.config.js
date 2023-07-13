@@ -1,8 +1,21 @@
 module.exports = {
   darkMode: 'class',
-  // ...
-  content: ['./pages/**/*.{js,ts,jsx,tsx}', './src/components/**/*.{js,ts,jsx,tsx}'],
+  fonts: [
+    {
+      family: 'Lato',
+      variants: ['300', '400','700','900'],
+    },
+  ],
+  content: [
+    './pages/**/*.{js,ts,jsx,tsx}', 
+    './src/components/**/*.{js,ts,jsx,tsx}'
+  ],
   theme: {
+      fontFamily: {
+        lato: ['Lato', 'system-ui'],
+        // Add more font families if needed
+      },
+
     screens: {
       sm: '400px',
       md: '768px',
