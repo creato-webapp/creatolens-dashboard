@@ -5,7 +5,7 @@ interface ArrowRightIconProps {
   color?: string
 }
 
-const ArrowRightIcon: React.FC<ArrowRightIconProps> = ({ size = 24, color = 'currentColor', margin }) => (
+const ArrowRightIcon: React.FC<ArrowRightIconProps> = ({ size = 24, color = 'currentColor' }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className="m-2">
     <path
       fill-rule="evenodd"

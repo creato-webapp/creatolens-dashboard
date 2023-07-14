@@ -6,6 +6,7 @@ import InputNumber from './InputNumber'
 import Checkbox from './Checkbox'
 import { DatePicker, TimePicker, DateTimePicker } from './DatetimePicker'
 import CustomItem from './CustomItem'
+import Dropdown from './Dropdown'
 
 export const Form = {
   Layout,
@@ -14,6 +15,7 @@ export const Form = {
   BaseInput,
   Checkbox,
   DatePicker,
+  Dropdown,
   TimePicker,
   DateTimePicker,
   CustomItem,
