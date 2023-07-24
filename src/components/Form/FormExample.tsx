@@ -9,14 +9,10 @@ const Layout: FC<FormLayoutProps> = (props: FormLayoutProps) => {
           <div className="py-8">
             <h1 className="text-4xl font-bold">@tailwindcss/forms examples</h1>
             <p className="mt-2 text-lg text-gray-600">
-              An opinionated form reset designed to make form elements easy to
-              style with utility classNames.
+              An opinionated form reset designed to make form elements easy to style with utility classNames.
             </p>
             <div className="mt-4 flex space-x-4">
-              <a
-                className="text-lg underline"
-                href="https://github.com/tailwindlabs/tailwindcss-forms"
-              >
+              <a className="text-lg underline" href="https://github.com/tailwindlabs/tailwindcss-forms">
                 Documentation
               </a>
               <a className="text-lg underline" href="/kitchen-sink.html">
@@ -77,9 +73,7 @@ const Layout: FC<FormLayoutProps> = (props: FormLayoutProps) => {
                   />
                 </label>
                 <label className="block">
-                  <span className="text-gray-700">
-                    What type of event is it?
-                  </span>
+                  <span className="text-gray-700">What type of event is it?</span>
                   <select
                     className="
                 mt-1
@@ -119,21 +113,19 @@ const Layout: FC<FormLayoutProps> = (props: FormLayoutProps) => {
                         <input
                           type="checkbox"
                           className="
-                      rounded
-                      border-gray-300
-                      text-indigo-600
-                      shadow-sm
-                      focus:border-indigo-300
-                      focus:ring
-                      focus:ring-indigo-200
-                      focus:ring-opacity-50
-                      focus:ring-offset-0
-                    "
+                                    rounded
+                                    border-gray-300
+                                    text-indigo-600
+                                    shadow-sm
+                                    focus:border-indigo-300
+                                    focus:ring
+                                    focus:ring-indigo-200
+                                    focus:ring-opacity-50
+                                    focus:ring-offset-0
+                                  "
                           checked
                         />
-                        <span className="ml-2">
-                          Email me news and special offers
-                        </span>
+                        <span className="ml-2">Email me news and special offers</span>
                       </label>
                     </div>
                   </div>
