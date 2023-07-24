@@ -3,10 +3,11 @@ import React from 'react'
 interface ArrowRightIconProps {
   size?: number
   color?: string
+  className?: string
 }
 
-const ArrowRightIcon: React.FC<ArrowRightIconProps> = ({ size = 24, color = 'currentColor' }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className="m-2">
+const ArrowRightIcon: React.FC<ArrowRightIconProps> = ({ size = 24, color = 'currentColor', className }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
     <path
       fill-rule="evenodd"
       clip-rule="evenodd"

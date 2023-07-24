@@ -3,9 +3,10 @@ import React from 'react'
 interface LoaderIconProps {
   size?: number
   color?: string
+  className?: string
 }
 
-const LoaderIcon: React.FC<LoaderIconProps> = ({ size = 24, color = 'currentColor' }) => (
+const LoaderIcon: React.FC<LoaderIconProps> = ({ size = 24, color = 'currentColor', className }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path
       fill-rule="evenodd"

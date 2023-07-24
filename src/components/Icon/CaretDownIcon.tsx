@@ -3,10 +3,11 @@ import React from 'react'
 interface CaretDownIconProps {
   size?: number
   color?: string
+  className?: string
 }
 
-const CaretDownIcon: React.FC<CaretDownIconProps> = ({ size = 24, color = 'currentColor' }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className="m-2">
+const CaretDownIcon: React.FC<CaretDownIconProps> = ({ size = 24, color = 'currentColor', className }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
     <path
       fillRule="evenodd"
       clipRule="evenodd"
