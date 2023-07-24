@@ -31,6 +31,21 @@ module.exports = {
         '4xl': '2rem',
       },
       colors: {
+        bg:{
+          white:'#FDFCFB',
+          dark:'#F5F6F6',
+        },
+        text:{
+          primary: '#1A242A',
+          secondary:'#445F6F',
+          tertiary:'#7697AB',
+          disabled: '#ABAEB0',
+          white: '#FFFFFF',
+          stroke: '#BACBD5',
+        },
+        disabled:'#DDE5EA',
+        interfaceHover:'#E3E9EC',
+        stroke: '#BACBD5',
         orange: {
           100: '#FFE8D4',
           200: '#FFCBAA',
