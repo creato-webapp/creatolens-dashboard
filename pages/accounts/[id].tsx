@@ -13,6 +13,10 @@ import moment from 'moment'
 import { Fetcher, FetchWithId } from 'services/fetcher'
 import axios from 'axios'
 import { serialize } from 'v8'
+import Title from '@components/Typography/Title'
+import Paragraph from '@components/Typography/Paragraph'
+import { Radio } from '@components/Form/Radio'
+import Checkbox from '@components/Form/Checkbox'
 
 type Props = {
   accountData: IAccount
@@ -61,14 +65,11 @@ export const getServerSideProps = async (context: any) => {
 
   const res =
     !isCreate &&
-    (await axios.get(
-      process.env.LOCAL_SERVER_URL + '/api/accounts/' + params.id,
-      {
-        headers: {
-          Cookie: context.req.headers.cookie,
-        },
-      }
-    ))
+    (await axios.get(process.env.LOCAL_SERVER_URL + '/api/accounts/' + params.id, {
+      headers: {
+        Cookie: context.req.headers.cookie,
+      },
+    }))
 
   // Pass data to the page via props
   const accountData: IAccount = res ? res.data : null
@@ -77,6 +78,7 @@ export const getServerSideProps = async (context: any) => {
 
 const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
   const [isLoading, setIsLoading] = useState(false)
+  const [isChecked, setIsChecked] = useState(false)
   const [shouldFetch, setShouldFetch] = useState(false)
   const [isShow, setIsShow] = useState(false)
   const [showAlert, setShowAlert] = useState(false)
@@ -104,10 +106,7 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
 
   const account: IAccount = {
     ...data,
-    last_login_dt: moment(data?.last_login_dt, 'YYYY-MM-DD THH:mm:ss')
-      .utc()
-      .local()
-      .format('YYYY-MM-DDTHH:mm'),
+    last_login_dt: moment(data?.last_login_dt, 'YYYY-MM-DD THH:mm:ss').utc().local().format('YYYY-MM-DDTHH:mm'),
   }
 
   const fieldsUpdate: IField[] = [
@@ -175,16 +174,16 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
 
   const fieldsCreate: IField[] = [
     {
-      label: 'username',
+      label: 'Username',
       type: 'Input',
       name: 'username',
-      customFormItemProps: { required: true },
+      customFormItemProps: { required: true, placeholder: 'Enter username' },
     },
     {
-      label: 'pwd',
+      label: 'Password',
       type: 'Input',
       name: 'pwd',
-      customFormItemProps: { required: true },
+      customFormItemProps: { required: true, placeholder: 'Enter password' },
     },
   ]
 
@@ -195,17 +194,11 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
       const newValues = {
         ...values,
         login_count: parseInt(values.login_count as unknown as string),
-        login_attempt_count: parseInt(
-          values.login_attempt_count as unknown as string
-        ),
-        post_scrapped_count: parseInt(
-          values.post_scrapped_count as unknown as string
-        ),
+        login_attempt_count: parseInt(values.login_attempt_count as unknown as string),
+        post_scrapped_count: parseInt(values.post_scrapped_count as unknown as string),
       }
 
-      const res = isCreate
-        ? await createAccount(newValues)
-        : await updateAccount(newValues)
+      const res = isCreate ? await createAccount(newValues) : await updateAccount(newValues)
       if (res.status == 400) {
         console.log(res.data)
         throw new Error('Bad Request Updating Accounts')
@@ -230,10 +223,7 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
     const newValues = {
       ...account,
       ...values,
-      last_login_dt: moment(values.last_login_dt, 'YYYY-MM-DDTHH:mm')
-        .utc()
-        .local()
-        .format('YYYY-MM-DD THH:mm:ss'),
+      last_login_dt: moment(values.last_login_dt, 'YYYY-MM-DDTHH:mm').utc().local().format('YYYY-MM-DD THH:mm:ss'),
     }
 
     const res = await Fetcher.PATCH(`/api/accounts/${id}`, newValues)
@@ -241,56 +231,70 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
   }
 
   const fields = isCreate ? fieldsCreate : fieldsUpdate
-
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(event.target.checked)
+    setIsChecked(event.target.checked)
+  }
   return (
-    <>
-      <Alerts.success isShow={showAlert} setIsShow={setShowAlert} />
-      <Card
-        title="Accounts Info"
-        extra={
-          <Button.Primary loading={isLoading} onClick={() => setIsShow(true)}>
-            Open Session Modal
-          </Button.Primary>
-        }
-      >
-        status: | 'active' | 'blocked' | 'banned' | 'retry' | 'test' |
-        'scrapping' | 'occupied'
-        <Form.Layout
-          onSubmit={handleSubmit}
-          Header={account.username}
-          loading={isLoading}
-          fields={fields}
+    <div>
+      <div className="block">
+        <div className="mx-48 my-8">
+          <Title level={1} bold>
+            CREATE NEW ACCOUNT
+          </Title>
+          <Paragraph bold> Connect your Instagram account to start scraping</Paragraph>
+        </div>
+
+        <Card
+          className="ml-auto mr-auto md:w-2/5"
+          title={isCreate ? '' : 'Accounts Info'}
+          extra={
+            isCreate ? (
+              <div>
+                <span className="text-lg font-bold leading-loose text-rose-500">* </span>
+                <span className="text-lg font-bold leading-loose text-neutral-800">Required</span>
+              </div>
+            ) : (
+              <Button.Primary loading={isLoading} onClick={() => setIsShow(true)}>
+                Open Session Modal
+              </Button.Primary>
+            )
+          }
         >
-          {fields.map((e: IField, index) => (
-            <Form.Item
-              label={e.label}
-              key={index}
-              customFormItemProps={e.customFormItemProps}
-            >
-              <Form.CustomItem
-                id={e.name}
-                defaultValue={account[e.name]}
-                type={e.type}
-                customFormItemProps={e.customFormItemProps}
-              />
-            </Form.Item>
-          ))}
-        </Form.Layout>
-        <SessionModal
-          isDisable={!canRenewSession}
-          isShow={isShow}
-          account={account}
-          loading={!error && !data}
-          closeModal={() => setIsShow(false)}
-          refresh={async () => {
-            if (!shouldFetch) {
-              setShouldFetch(true)
-            }
-            await mutateAccountInfo()
-          }}
-        />
-      </Card>
-    </>
+          <Form.Layout onSubmit={handleSubmit} Header={account.username} loading={isLoading} fields={fields} allowSubmit={!isChecked}>
+            {fields.map((e: IField, index) => (
+              <Form.Item label={e.label} key={index} customFormItemProps={e.customFormItemProps}>
+                <Form.CustomItem id={e.name} defaultValue={account[e.name]} type={e.type} customFormItemProps={e.customFormItemProps} />
+              </Form.Item>
+            ))}
+            <Paragraph size="sm">
+              By connecting your Instagram account, you agree to our terms and privacy policy. We may access your information for personalized
+              features and analysis. Your data is protected, but not 100% secure. Contact support for questions.
+            </Paragraph>
+
+            <Paragraph size="sm" className="ml-auto mr-auto flex w-1/2" bold>
+              <Checkbox id="acknowledge" className="mr-2" onChange={(event) => handleChange(event)}></Checkbox>I acknowledge and agree to the terms
+              and privacy policy by checking this box.
+            </Paragraph>
+          </Form.Layout>
+          <SessionModal
+            isDisable={!canRenewSession}
+            isShow={isShow}
+            account={account}
+            loading={!error && !data}
+            closeModal={() => setIsShow(false)}
+            refresh={async () => {
+              if (!shouldFetch) {
+                setShouldFetch(true)
+              }
+              await mutateAccountInfo()
+            }}
+          />
+        </Card>
+      </div>
+
+      <Alerts.success isShow={showAlert} setIsShow={setShowAlert} />
+    </div>
   )
 }
 
