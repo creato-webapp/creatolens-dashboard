@@ -1,9 +1,24 @@
 import type { NextPage } from 'next'
+import { useState } from 'react'
 import { getSession } from 'next-auth/react'
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
-
+import Title from '@components/Typography/Title'
+import Paragraph from '@components/Typography/Paragraph'
+import { Button } from '@components/Button'
+import PlusIcon from '@components/Icon/PlusIcon'
+import ArrowRightIcon from '@components/Icon/ArrowRightIcon'
+import Checkbox from '@components/Form/Checkbox'
+import Dropdown from '@components/Form/Dropdown'
+import { Radio } from '@components/Form/Radio'
+import Breadcrumbs from '@components/Breadcrumbs'
+import CrossIcon from '@components/Icon/CrossIcon'
+import Tag from '@components/Tag'
+import Avatar from '@components/Avatar'
+import UserIcon from '@components/Icon/UserIcon'
+import Pagination from '@components/Pagination'
+import { Table } from '@components/Table'
 export const getServerSideProps = async (context: any) => {
   //remove any
   const session: any = await getSession(context)
@@ -18,6 +33,60 @@ export const getServerSideProps = async (context: any) => {
 }
 
 const Home: NextPage = () => {
+  const dropdownOptions = [
+    {
+      label: 'Option abcdefghijklmnop 1',
+      value: 'Option abcdefghijklmnop 1',
+    },
+    {
+      label: 'Option 2',
+      value: 'option2',
+    },
+  ]
+
+  const [page, setPage] = useState(1)
+  const size = 3
+  const totalItems = 20
+
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage)
+    console.log(newPage)
+    // Here you would also fetch the data for the new page
+  }
+
+  const testData = [
+    {
+      id: 1,
+      name: 'test',
+      age: 20,
+      address: 'test',
+    },
+    {
+      id: 2,
+      name: 'test2',
+      age: 220,
+      address: 'test2',
+    },
+  ]
+
+  const columns = [
+    {
+      title: 'Title',
+      dataIndex: 'id',
+    },
+    {
+      title: 'Name',
+      dataIndex: 'name',
+    },
+    {
+      title: 'age',
+      dataIndex: 'AGE',
+    },
+    {
+      title: 'address',
+      dataIndex: 'address',
+    },
+  ]
   return (
     <div className={styles.container}>
       <Head>
@@ -30,9 +99,195 @@ const Home: NextPage = () => {
         <h1 className={styles.title}>
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
+
+        <Title level={1}>Testing 123</Title>
+        <Button.Primary disabled={true} loading={false} onClick={() => console.log('hi')}>
+          <PlusIcon />
+          qndwdnawkjda
+        </Button.Primary>
+        <UserIcon />
+
+        <Button.Primary loading={false} outline>
+          Button
+        </Button.Primary>
+        <Avatar size="small" src="favicon.ico"></Avatar>
+        <Breadcrumbs
+          breadcrumbs={[
+            {
+              label: (
+                <div className="flex items-center">
+                  <PlusIcon />
+                  <span>Section 1</span>
+                </div>
+              ),
+              href: '#section1',
+            },
+            { label: 'Section 2', href: '#section2' },
+            { label: 'Section 3', href: '#section3' },
+          ]}
+        ></Breadcrumbs>
+        <CrossIcon />
+        <div className="inline">
+          <Tag
+            label={
+              <div className="flex items-center">
+                <Avatar src="favicon.ico" size="medium" className="mr-1"></Avatar>
+                <span>Section 1</span>
+              </div>
+            }
+            onClose={() => {
+              console.log('test')
+            }}
+          />
+          <Tag
+            variant="outline"
+            label={
+              <div className="flex items-center">
+                <Avatar src="favicon.ico" size="medium" className="mr-1"></Avatar>
+                <span>Section 1</span>
+              </div>
+            }
+            onClose={() => {
+              console.log('test')
+            }}
+          />
+          <Tag
+            variant="processing"
+            label={
+              <div className="flex items-center">
+                <Avatar src="favicon.ico" size="medium" className="mr-1"></Avatar>
+                <span>Section 1</span>
+              </div>
+            }
+            onClose={() => {
+              console.log('test')
+            }}
+          />
+          <Tag
+            variant="warning"
+            label={
+              <div className="flex items-center">
+                <Avatar src="favicon.ico" size="medium" className="mr-1"></Avatar>
+                <span>Section 1</span>
+              </div>
+            }
+            onClose={() => {
+              console.log('test')
+            }}
+          />
+          <Tag
+            variant="success"
+            label={
+              <div className="flex items-center">
+                <Avatar src="favicon.ico" size="medium" className="mr-1"></Avatar>
+                <span>Section 1</span>
+              </div>
+            }
+            onClose={() => {
+              console.log('test')
+            }}
+          />
+          <Tag
+            variant="fail"
+            label={
+              <div className="flex items-center">
+                <Avatar src="favicon.ico" size="medium" className="mr-1"></Avatar>
+                <span>Section 1</span>
+              </div>
+            }
+            onClose={() => {
+              console.log('test')
+            }}
+          />
+          <Tag
+            variant="grey"
+            label={
+              <div className="flex items-center">
+                <Avatar src="favicon.ico" size="medium" className="mr-1"></Avatar>
+                <span>Section 1</span>
+              </div>
+            }
+            onClose={() => {
+              console.log('test')
+            }}
+          />
+          <Tag
+            variant="default"
+            label={<span>Section 1</span>}
+            onClose={() => {
+              console.log('test')
+            }}
+          />
+        </div>
+        <div>
+          <Table.Layout>
+            <Table.Header columns={columns} />
+            <Table.Body>
+              {testData.map((e, index) => (
+                <Table.Row columns={columns} rowData={e} key={index} />
+              ))}
+            </Table.Body>
+          </Table.Layout>
+          <Pagination
+            page={page}
+            size={size}
+            totalItems={totalItems}
+            hasNext={page * size < totalItems}
+            hasPrev={page > 1}
+            onPageChange={handlePageChange}
+          />
+        </div>
+        <div>
+          <nav>
+            <a href="#section1" className="mr-4">
+              Section 1
+            </a>
+            <a href="#section2" className="mr-4">
+              Section 2
+            </a>
+            <a href="#section3">Section 3</a>
+          </nav>
+
+          <section id="section1" className="mt-8">
+            <h2>Section 1</h2>
+            <p>Some content...</p>
+          </section>
+
+          <section id="section2" className="mt-8">
+            <h2>Section 2</h2>
+            <p>Some content...</p>
+          </section>
+
+          <section id="section3" className="mt-8">
+            <h2>Section 3</h2>
+            <p>Some content...</p>
+          </section>
+        </div>
+        <div className="w-60">
+          <Radio.Group
+            defaultValue="option1"
+            options={[
+              { value: 'option1', label: 'Option 1' },
+              { value: 'option2', label: 'Option 2' },
+
+              // Add more options here...
+            ]}
+            onChange={(value) => console.log(`Selected value: ${value}`)}
+          />
+        </div>
+
+        <label className="inline-flex items-center">
+          <Checkbox name="Choices" id="tedt"></Checkbox>
+
+          <span className="ml-2">Email me news and special offers</span>
+        </label>
+        <label className="inline-flex items-center">
+          <Dropdown options={dropdownOptions} name={'name'} onChange={(value) => console.log(value)}></Dropdown>
+        </label>
+        <h2 className="font-lato text-5xl">Hello World!</h2>
+        <h2 className="font text-5xl">Hello World!</h2>
         <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.tsx</code>
+          Get started by editing <code className={styles.code}>pages/index.tsx</code>
         </p>
 
         <div className={styles.grid}>
@@ -46,10 +301,7 @@ const Home: NextPage = () => {
             <p>Learn about Next.js in an interactive course with quizzes!</p>
           </a>
 
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className={styles.card}
-          >
+          <a href="https://github.com/vercel/next.js/tree/canary/examples" className={styles.card}>
             <h2>Examples &rarr;</h2>
             <p>Discover and deploy boilerplate example Next.js projects.</p>
           </a>
@@ -59,9 +311,7 @@ const Home: NextPage = () => {
             className={styles.card}
           >
             <h2>Deploy &rarr;</h2>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
+            <p>Instantly deploy your Next.js site to a public URL with Vercel.</p>
           </a>
         </div>
       </main>
