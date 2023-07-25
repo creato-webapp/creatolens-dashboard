@@ -1,23 +1,22 @@
-import { title } from 'process'
 import React, { HTMLProps } from 'react'
+import Title from '@components/Typography/Title'
 
 interface CardProps extends HTMLProps<HTMLDivElement> {
   title?: string | undefined
   children: React.ReactNode
   extra?: React.ReactNode
+  className?: string | undefined
 }
 
 export default function Card(props: CardProps) {
-  const { title, children, extra } = props
+  const { title, children, extra, className } = props
   return (
-    <div className="min-h-96 min-w-96 inline-flex flex-col  justify-start gap-6 rounded bg-neutral-50 px-9 py-16 shadow">
-      <div className="flex flex-col items-start justify-start gap-2.5 p-2.5">
-        <div className="flex">
-          <h5 className="mb-2 flex-auto text-2xl font-bold tracking-tight text-gray-900">
-            {title}
-          </h5>
-          <div className="flex-none">{extra}</div>
-        </div>
+    <div className={`min-h-48 min-w-96 relative rounded bg-neutral-50 shadow ${className}`}>
+      <div className="absolute top-0 right-0 px-6 py-6">{extra}</div>
+      <div className="flex-col justify-start gap-6 px-6 py-6">
+        <Title level={1} bold>
+          {title}
+        </Title>
         {children}
       </div>
     </div>
