@@ -9,6 +9,7 @@ body {
   padding: 0;
   margin: 0;
   font-family: lato, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  background-color: white;
 }
 
 a {
@@ -53,34 +54,42 @@ input[required]::after {
 
 @layer components {
   .button-primary {
-    @apply m-2 inline-flex h-12 min-w-fit items-center justify-center gap-2.5 whitespace-nowrap rounded-md border-2 border-transparent
-     bg-orange-500 px-6 py-3 text-white  hover:bg-orange-400;
+    @apply inline-flex min-w-fit items-center justify-center gap-2.5 whitespace-nowrap rounded-md border-2 border-transparent
+     bg-orange-500  text-white  hover:bg-orange-400;
   }
   .button-primary:focus {
-    @apply bg-orange-500 px-6 py-3 outline outline-4 outline-slate-300;
+    @apply bg-orange-500 outline outline-4 outline-slate-300;
   }
   .button-primary:active {
-    @apply inline-flex h-12 items-center justify-center gap-2.5 rounded-md px-6 py-3 outline outline-4  outline-slate-300;
+    @apply inline-flex items-center justify-center gap-2.5 rounded-md outline outline-4  outline-slate-300;
   }
   .button-text:disabled {
     @apply text-text-stroke hover:text-text-stroke;
   }
   .button-outline {
-    @apply m-2 inline-flex h-12 min-w-fit items-center justify-center gap-2.5 rounded-md border-2 border-orange-500 bg-white  px-6 py-3 text-orange-500 hover:bg-orange-500 hover:text-white;
+    @apply inline-flex min-w-fit items-center justify-center gap-2.5 rounded-md border-2 border-orange-500 bg-white   text-orange-500 hover:bg-orange-500 hover:text-white;
   }
   .button-outline:active {
     @apply rounded-md bg-orange-500 text-white outline outline-4  outline-slate-300;
   }
   .button-outline:focus {
-    @apply px-6 py-3 outline outline-4  outline-slate-300;
+    @apply outline outline-4  outline-slate-300;
   }
   .button-text {
-    @apply bg-transparent py-2 px-4 text-blue-700 hover:text-blue-900 hover:underline;
+    @apply bg-transparent text-blue-700 hover:text-blue-900 hover:underline;
   }
   .checkbox {
-    @apply h-6 w-6 rounded border-gray-300 text-orange-500 focus:ring-2 focus:ring-orange-500;
+    @apply h-6 w-6 rounded border-gray-300 text-orange-500 focus:ring-2 focus:ring-slate-300;
   }
   .dropdown .ul {
     @apply bg-bg-white;
+  }
+  .base-input {
+  }
+  .base-input:focus {
+    @apply inline-flex items-center justify-center gap-2.5 rounded-md outline outline-4  outline-slate-300;
+  }
+  .base-input:disabled {
+    @apply inline-flex  items-center justify-start gap-2 rounded-md border border-zinc-200 bg-gray-100;
   }
 }
