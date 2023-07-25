@@ -17,7 +17,7 @@ const CustomItem: FC<CustomItemProps> = (props: CustomItemProps) => {
           placeholder={props?.placeholder}
           disabled={props.disabled}
           onChange={props.onChange}
-          {...customFormItemProps}
+          customFormItemProps={props}
         />
       )
     case 'InputNumber':
@@ -63,14 +63,7 @@ const CustomItem: FC<CustomItemProps> = (props: CustomItemProps) => {
         />
       )
     case 'TimePicker':
-      return (
-        <TimePicker
-          id={props.id}
-          defaultValue={props.defaultValue as string}
-          onChange={props.onChange}
-          {...customFormItemProps}
-        />
-      )
+      return <TimePicker id={props.id} defaultValue={props.defaultValue as string} onChange={props.onChange} {...customFormItemProps} />
     default:
       return (
         <BaseInput

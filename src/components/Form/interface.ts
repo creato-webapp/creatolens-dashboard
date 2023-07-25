@@ -1,13 +1,7 @@
 import React, { InputHTMLAttributes, PropsWithChildren } from 'react'
 import { IAccount } from '../Account/interface'
 
-export type InputType =
-  | 'Input'
-  | 'DatePicker'
-  | 'TimePicker'
-  | 'DateTimePicker'
-  | 'Checkbox'
-  | 'InputNumber'
+export type InputType = 'Input' | 'DatePicker' | 'TimePicker' | 'DateTimePicker' | 'Checkbox' | 'InputNumber'
 
 export type customFormItemProps = {
   [key: string]: string | number | boolean | any
@@ -26,6 +20,7 @@ export interface FormLayoutProps extends PropsWithChildren {
   fields: IField[]
   loading: boolean
   onSubmit: Function
+  allowSubmit?: boolean
 }
 
 export interface ItemProps extends PropsWithChildren {
@@ -46,13 +41,10 @@ export interface CheckBoxProps extends InputHTMLAttributes<HTMLInputElement> {
   defaultChecked?: boolean
   disabled?: boolean
   customFormItemProps?: customFormItemProps
+  className?: string
 }
 
-export interface CustomItemProps
-  extends Record<
-    string,
-    string | boolean | number | undefined | customFormItemProps
-  > {
+export interface CustomItemProps extends Record<string, string | boolean | number | undefined | customFormItemProps> {
   type: InputType
   id: string
   placeholder?: string
