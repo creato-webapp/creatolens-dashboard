@@ -8,17 +8,10 @@ interface TitleProps extends React.HTMLAttributes<HTMLHeadingElement> {
   extraBold?: boolean
   italic?: boolean
   children?: string
+  className?: string
 }
 
-const Title: React.FC<TitleProps> = ({
-  level,
-  style,
-  light,
-  bold,
-  extraBold,
-  italic,
-  children,
-}) => {
+const Title: React.FC<TitleProps> = ({ level, style, light, bold, extraBold, italic, children, className }) => {
   let size = ''
   if (level === 1) {
     size = 'text-4xl'
@@ -38,7 +31,7 @@ const Title: React.FC<TitleProps> = ({
   const headingStyles = `${size} ${bold && 'font-bold'} ${light && 'font-light'}
   ${extraBold ? 'font-extrabold' : ''} ${italic ? 'italic' : ''}`
   return (
-    <HeadingTag className={headingStyles} style={style}>
+    <HeadingTag className={`${headingStyles} ${className}`} style={style}>
       {children}
     </HeadingTag>
   )
