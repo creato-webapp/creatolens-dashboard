@@ -7,14 +7,14 @@ interface ButtonProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLB
   outline?: boolean
 }
 
-const Primary: React.FC<ButtonProps> = ({ children, onClick, disabled = false, loading, outline, ...res }) => {
+const Primary: React.FC<ButtonProps> = ({ children, onClick, disabled = false, loading, outline, type = 'button', ...res }) => {
   let classStyle = 'button-primary'
   if (outline === true) {
     classStyle = 'button-outline'
   }
   return (
-    <button onClick={onClick} disabled={loading || disabled} className={classStyle} {...res}>
-      <div className="flex items-center justify-center text-lg font-medium leading-loose">
+    <button type={type} onClick={onClick} disabled={loading || disabled} {...res} className={`${classStyle} ${res.className}`}>
+      <div className="mx-4 my-2 flex items-center justify-center">
         <Spinner loading={loading} />
         {children}
       </div>
