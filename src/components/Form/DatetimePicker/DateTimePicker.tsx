@@ -3,6 +3,8 @@ import { DateTimePicker } from './interface'
 import BaseInput from '../BaseInput'
 
 const DateTimePicker: FC<DateTimePicker> = (props: DateTimePicker) => {
+  const { customFormItemProps } = props
+  console.log(customFormItemProps)
   return (
     <BaseInput
       id={props.id}
@@ -17,6 +19,7 @@ const DateTimePicker: FC<DateTimePicker> = (props: DateTimePicker) => {
         border-b-2 border-gray-200 px-0.5
         focus:border-black focus:ring-0
       "
+      customFormItemProps={customFormItemProps}
     />
   )
 }
