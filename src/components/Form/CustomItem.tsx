@@ -8,16 +8,18 @@ import BaseInput from './BaseInput'
 
 const CustomItem: FC<CustomItemProps> = (props: CustomItemProps) => {
   const { customFormItemProps } = props
+  console.log(customFormItemProps)
   switch (props.type) {
     case 'Input':
       return (
         <TextInput
+          {...props}
           id={props.id}
           defaultValue={props.defaultValue as string}
           placeholder={props?.placeholder}
           disabled={props.disabled}
           onChange={props.onChange}
-          customFormItemProps={props}
+          customFormItemProps={customFormItemProps}
         />
       )
     case 'InputNumber':
@@ -49,7 +51,7 @@ const CustomItem: FC<CustomItemProps> = (props: CustomItemProps) => {
           defaultValue={props.defaultValue as string}
           disabled={props.disabled}
           onChange={props.onChange}
-          {...customFormItemProps}
+          customFormItemProps={customFormItemProps}
         />
       )
     case 'DatePicker':

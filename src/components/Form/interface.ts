@@ -11,7 +11,10 @@ export interface IField {
   label: string
   name: string
   required?: boolean
-  customFormItemProps?: customFormItemProps
+  customFormItemProps?: {
+    style?: React.CSSProperties
+    [key: string]: any // for any other properties
+  }
 }
 
 export interface FormLayoutProps extends PropsWithChildren {

@@ -37,18 +37,20 @@ const BaseInput: React.FunctionComponent<IBaseInputProps> = ({
   useEffect(() => {
     setState(value || '')
   }, [value])
-
   return (
     <>
-      <div className="relative space-y-2 rounded-md">
+      <div className="relative space-y-2 rounded-md ">
         <input
+          {...customFormItemProps}
+          {...props}
           id={id}
           name={name}
           value={value}
           onChange={onChange}
-          required={required}
-          className={`base-input inline-flex h-9 w-64 rounded-md border border-gray-500 bg-neutral-50 p-2 font-semibold`}
-          {...customFormItemProps}
+          required={customFormItemProps?.required}
+          disabled={disabled}
+          className={`base-input inline-flex h-9 w-64 rounded-md border border-gray-500 bg-neutral-50 p-2 font-semibold `}
+          style={customFormItemProps?.style}
         />
         <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
           {error && <ExclamationCircleIcon className="h-5 w-5 text-red-500" aria-hidden="true" />}
