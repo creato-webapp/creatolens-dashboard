@@ -4,11 +4,10 @@ import UserIcon from '@components/Icon/UserIcon'
 type AvatarSize = 'small' | 'medium' | 'large'
 
 // Define the props for the Avatar component
-type AvatarProps = {
-  src: string
+interface AvatarProps extends React.HTMLAttributes<HTMLDivElement> {
+  src?: string
   alt?: string
   size?: AvatarSize
-  className?: string
 }
 
 // Define the styles for each avatar size
