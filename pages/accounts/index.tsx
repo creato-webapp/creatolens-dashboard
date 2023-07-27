@@ -10,7 +10,10 @@ import { getSession } from 'next-auth/react'
 import moment from 'moment'
 import { Fetcher } from 'services/fetcher'
 import axios, { AxiosError } from 'axios'
+import Tag from '@components/Tag'
+import Avatar from '@components/Avatar'
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/solid'
+import StatusTag from '@lib/StatusTag'
 type Props = {
   accountData: IAccount[]
 }
@@ -59,55 +62,66 @@ const AccountsPage = ({ accountData }: Props) => {
     console.log(data)
     return <div>Loading...</div>
   }
-  const accounts: IAccount[] = data
 
   const columns = [
     {
-      title: 'document_id',
-      dataIndex: 'id',
-      render: (e: string) => {
-        return (
-          <Link href="/accounts/[id]" as={`/accounts/${e}`} legacyBehavior>
-            <a style={{ color: '#0070f3' }}>{e}</a>
-          </Link>
-        )
-      },
-    },
-    { title: 'username', dataIndex: 'username' },
-    { title: 'status', dataIndex: 'status' },
-    {
-      title: 'is occupied',
-      dataIndex: 'is_occupied',
-      render: (e: any) => {
-        return e ? <CheckCircleIcon className="h-6 w-6 text-green-600" /> : <XCircleIcon className="h-6 w-6 text-red-500" />
-      },
-    },
-    {
-      title: 'is enabled',
-      dataIndex: 'enabled',
-      render: (e: any) => {
-        return e ? <CheckCircleIcon className="h-6 w-6 text-green-600" /> : <XCircleIcon className="h-6 w-6 text-red-500" />
-      },
-    },
-    {
-      title: 'is_auth',
-      dataIndex: 'is_authenticated',
-      render: (e: any) => {
-        return e ? <CheckCircleIcon className="h-6 w-6 text-green-600" /> : <XCircleIcon className="h-6 w-6 text-red-500" />
-      },
-    },
-    { title: 'login_count', dataIndex: 'login_count' },
-    { title: 'post_scrapped', dataIndex: 'post_scrapped_count' },
-    {
-      title: 'last_login_dt(HK Time)',
+      title: 'Last Login(HK Time)',
       dataIndex: 'last_login_dt',
       render: (e: any) => {
         const date = moment(e, 'YYYY-MM-DD THH:mm:ss')
         return moment.utc(date).local().format('YYYY-MM-DD HH:mm:ss')
       },
     },
+    { title: 'Post Scrapped', dataIndex: 'post_scrapped_count' },
+    { title: 'Login Count', dataIndex: 'login_count' },
     {
-      title: 'action',
+      title: 'Username',
+      dataIndex: 'username',
+      render: (e: any) => {
+        return (
+          <Tag
+            label={
+              <div className="flex items-center gap-1">
+                <Avatar />
+                {e}
+              </div>
+            }
+            variant="outline"
+          />
+        )
+      },
+    },
+    {
+      title: 'Status',
+      dataIndex: 'status',
+      render: (e: any) => {
+        return <StatusTag status={e} />
+      },
+    },
+    {
+      title: 'Is Occupied',
+      dataIndex: 'is_occupied',
+      render: (e: any) => {
+        return e ? <CheckCircleIcon className="h-6 w-6 text-green-600" /> : <XCircleIcon className="h-6 w-6 text-red-500" />
+      },
+    },
+    {
+      title: 'Is Enabled',
+      dataIndex: 'enabled',
+      render: (e: any) => {
+        return e ? <CheckCircleIcon className="h-6 w-6 text-green-600" /> : <XCircleIcon className="h-6 w-6 text-red-500" />
+      },
+    },
+    {
+      title: 'Is Auth',
+      dataIndex: 'is_authenticated',
+      render: (e: any) => {
+        return e ? <CheckCircleIcon className="h-6 w-6 text-green-600" /> : <XCircleIcon className="h-6 w-6 text-red-500" />
+      },
+    },
+
+    {
+      title: 'Account Info',
       dataIndex: 'id',
       render: (e: any) => (
         <Link href="/accounts/[id]" as={`/accounts/${e}`} legacyBehavior>
