@@ -1,9 +1,9 @@
 import React, { ReactNode } from 'react'
 import CrossIcon from '@components/Icon/CrossIcon'
-type TagVariant = 'default' | 'primary' | 'success' | 'fail' | 'grey' | 'outline' | 'processing' | 'warning'
+export type TagVariant = 'default' | 'primary' | 'success' | 'fail' | 'grey' | 'outline' | 'processing' | 'warning'
 
 // Define the props for the Tag component
-type TagProps = {
+interface TagProps extends React.HTMLAttributes<HTMLDivElement> {
   label: ReactNode
   variant?: TagVariant
   onClose?: () => void
@@ -21,10 +21,11 @@ const variantStyles: Record<TagVariant, string> = {
 }
 
 // Tag component
-const Tag: React.FC<TagProps> = ({ label, onClose, variant = 'primary' }) => {
+const Tag: React.FC<TagProps> = ({ label, onClose, variant = 'primary', ...props }) => {
+  const { className: propsClassName } = props
   const variantStyle = variantStyles[variant]
   return (
-    <div className={`mr-2 mb-2 inline-flex items-center rounded-full px-1 py-1 text-sm ${variantStyle}`}>
+    <div {...props} className={`mr-2 mb-2 inline-flex items-center rounded-full px-1 py-1 text-sm ${variantStyle} ${propsClassName}`}>
       <span>{label}</span>
       {onClose && (
         <button onClick={onClose} className="ml-1 hover:text-gray-500 focus:outline-none">
