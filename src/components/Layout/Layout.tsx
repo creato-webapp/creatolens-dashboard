@@ -29,6 +29,8 @@ export default function Navbar(props: NavbarProps) {
   const navBarPage = [
     { name: 'Home', path: '/' },
     { name: 'Accounts', path: '/accounts' },
+    { name: 'Login Error History', path: '/accounts-error' },
+    { name: 'Account Session History', path: '/accounts-session' },
     { name: 'Hashtag', path: '/hashtag' },
     { name: 'Hashet', path: '/hashet' },
   ]
