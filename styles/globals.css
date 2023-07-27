@@ -92,4 +92,10 @@ input[required]::after {
   .base-input:disabled {
     @apply inline-flex  items-center justify-start gap-2 rounded-md border border-zinc-200 bg-gray-100;
   }
+  .table td {
+    @apply text-black;
+  }
+  .table tr:hover td {
+    @apply bg-gray-100;
+  }
 }
