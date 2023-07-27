@@ -1,23 +1,16 @@
-import React, { useEffect, useState } from 'react'
-import Card from '@components/Card'
+import React, { useState } from 'react'
 import { useRouter } from 'next/router'
-import { Form } from '@components/Form'
 import { Alerts } from '@components/Alerts'
-import { IField } from '@components/Form/interface'
-import { IAccountError } from '@components/AccountErrors/interface'
 import { SessionModal, IAccount } from '@components/Account'
 import useSWR from 'swr'
 import { getSession } from 'next-auth/react'
-import { Button } from '@components/Button'
 import moment from 'moment'
 import { Fetcher, FetchWithId } from 'services/fetcher'
 import axios from 'axios'
-import { serialize } from 'v8'
 import Title from '@components/Typography/Title'
 import Paragraph from '@components/Typography/Paragraph'
-import { Radio } from '@components/Form/Radio'
-import Checkbox from '@components/Form/Checkbox'
-
+import AccountInfoCard from '@lib/Account/AccountInfoCard'
+import AccountCreateCard from '@lib/Account/AccountCreateCard'
 type Props = {
   accountData: IAccount
   isCreate: boolean
@@ -94,7 +87,7 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
     refreshInterval: 0,
     fallbackData: isCreate ? isCreate : accountData,
   })
-
+  console.log(accountData)
   if (error) {
     console.log(error)
     return <div>Failed to load users {id}</div>
@@ -109,91 +102,12 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
     last_login_dt: moment(data?.last_login_dt, 'YYYY-MM-DD THH:mm:ss').utc().local().format('YYYY-MM-DDTHH:mm'),
   }
 
-  const fieldsUpdate: IField[] = [
-    {
-      label: 'document_id',
-      type: 'Input',
-      name: 'id',
-    },
-    {
-      label: 'username',
-      type: 'Input',
-      name: 'username',
-      customFormItemProps: { required: true },
-    },
-    {
-      label: 'pwd',
-      type: 'Input',
-      name: 'pwd',
-      customFormItemProps: { required: true },
-    },
-    {
-      label: 'status',
-      type: 'Input',
-      name: 'status',
-    },
-    {
-      label: 'enabled',
-      type: 'Checkbox',
-      name: 'enabled',
-    },
-    {
-      label: 'is_authenticated',
-      type: 'Checkbox',
-      name: 'is_authenticated',
-    },
-    {
-      label: 'is_occupied',
-      type: 'Checkbox',
-      name: 'is_occupied',
-    },
-    {
-      label: 'last_login_dt',
-      type: 'DateTimePicker',
-      name: 'last_login_dt',
-    },
-    {
-      label: 'login count',
-      type: 'InputNumber',
-      name: 'login_count',
-      customFormItemProps: { disabled: true },
-    },
-    {
-      label: 'login attempt count',
-      type: 'InputNumber',
-      name: 'login_attempt_count',
-      customFormItemProps: { disabled: true },
-    },
-    {
-      label: 'post_scrapped_count',
-      type: 'InputNumber',
-      name: 'post_scrapped_count',
-      customFormItemProps: { disabled: true },
-    },
-  ]
-
-  const fieldsCreate: IField[] = [
-    {
-      label: 'Username',
-      type: 'Input',
-      name: 'username',
-      customFormItemProps: { required: true, placeholder: 'Enter username' },
-    },
-    {
-      label: 'Password',
-      type: 'Input',
-      name: 'pwd',
-      customFormItemProps: { required: true, placeholder: 'Enter password' },
-    },
-  ]
-
   const handleSubmit = async (values: IAccount) => {
     try {
       setShouldFetch(true)
       setIsLoading(true)
       const newValues = {
         ...values,
-        login_count: parseInt(values.login_count as unknown as string),
         login_attempt_count: parseInt(values.login_attempt_count as unknown as string),
         post_scrapped_count: parseInt(values.post_scrapped_count as unknown as string),
       }
@@ -230,67 +144,49 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
     return res
   }
 
-  const fields = isCreate ? fieldsCreate : fieldsUpdate
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     console.log(event.target.checked)
     setIsChecked(event.target.checked)
   }
   return (
     <div>
-      <div className="block">
+      {isCreate ? (
         <div className="mx-48 my-8">
           <Title level={1} bold>
             CREATE NEW ACCOUNT
           </Title>
           <Paragraph bold> Connect your Instagram account to start scraping</Paragraph>
         </div>
+      ) : (
+        <div className="mx-48 my-8">
+          <Title level={1} bold>
+            ACCOUNT INFO
+          </Title>
+        </div>
+      )}
 
-        <Card
-          className="ml-auto mr-auto md:w-2/5"
-          title={isCreate ? '' : 'Accounts Info'}
-          extra={
-            isCreate ? (
-              <div>
-                <span className="text-lg font-bold leading-loose text-rose-500">* </span>
-                <span className="text-lg font-bold leading-loose text-neutral-800">Required</span>
-              </div>
-            ) : (
-              <Button.Primary loading={isLoading} onClick={() => setIsShow(true)}>
-                Open Session Modal
-              </Button.Primary>
-            )
-          }
-        >
-          <Form.Layout onSubmit={handleSubmit} Header={account.username} loading={isLoading} fields={fields} allowSubmit={!isChecked}>
-            {fields.map((e: IField, index) => (
-              <Form.Item label={e.label} key={index} customFormItemProps={e.customFormItemProps}>
-                <Form.CustomItem id={e.name} defaultValue={account[e.name]} type={e.type} customFormItemProps={e.customFormItemProps} />
-              </Form.Item>
-            ))}
-            <Paragraph size="sm">
-              By connecting your Instagram account, you agree to our terms and privacy policy. We may access your information for personalized
-              features and analysis. Your data is protected, but not 100% secure. Contact support for questions.
-            </Paragraph>
-
-            <Paragraph size="sm" className="ml-auto mr-auto flex w-1/2" bold>
-              <Checkbox id="acknowledge" className="mr-2" onChange={(event) => handleChange(event)}></Checkbox>I acknowledge and agree to the terms
-              and privacy policy by checking this box.
-            </Paragraph>
-          </Form.Layout>
-          <SessionModal
-            isDisable={!canRenewSession}
-            isShow={isShow}
+      <div className="flex justify-center">
+        {isCreate ? (
+          <AccountCreateCard
+            isLoading={isLoading}
+            isCreate={isCreate}
             account={account}
-            loading={!error && !data}
-            closeModal={() => setIsShow(false)}
-            refresh={async () => {
-              if (!shouldFetch) {
-                setShouldFetch(true)
-              }
-              await mutateAccountInfo()
-            }}
+            handleSubmit={handleSubmit}
+            setIsShow={setIsShow}
+            isChecked={isChecked}
+            handleChange={handleChange}
           />
-        </Card>
+        ) : (
+          <AccountInfoCard
+            isLoading={isLoading}
+            isCreate={isCreate}
+            account={account}
+            handleSubmit={handleSubmit}
+            setIsShow={setIsShow}
+            isChecked={isChecked}
+            handleChange={handleChange}
+          />
+        )}
       </div>
 
       <Alerts.success isShow={showAlert} setIsShow={setShowAlert} />
