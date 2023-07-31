@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Card from '@components/Card'
 import { Table } from '@components/Table'
 import { Button } from '@components/Button'
 import { IAccount } from '@components/Account/interface'
 import { AccountCard } from '@components/AccountCard'
-import useSWR from 'swr'
+import useSWR, { mutate } from 'swr'
 import Link from 'next/link'
 import { getSession } from 'next-auth/react'
 import moment from 'moment'
@@ -14,8 +14,29 @@ import Tag from '@components/Tag'
 import Avatar from '@components/Avatar'
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/solid'
 import StatusTag from '@lib/StatusTag'
+import Pagination from '@components/Pagination'
+
 type Props = {
   accountData: IAccount[]
+  paginationData: PaginationData
+}
+interface PaginationMetadata {
+  has_next: boolean
+  has_prev: boolean
+  page: number
+  size: number
+  total_items: number
+}
+interface APIResponse extends PaginationMetadata {
+  data: IAccount[]
+}
+interface PaginationData {
+  hasNext: boolean
+  hasPrev: boolean
+  page: number
+  size: number
+  totalItems: number
+  onPageChange: (page: number) => void
 }
 
 //TODO getServerSideProps: GetServerSideProps; cannot set GetServerSideProps type.
@@ -30,7 +51,7 @@ export const getServerSideProps = async (context: any) => {
   }
   // Fetch data from next API
   const res = await axios
-    .get(`${process.env.LOCAL_SERVER_URL}/api/accounts?filter=username != null`, {
+    .get(`${process.env.LOCAL_SERVER_URL}/api/accounts?pageNumber=1&pageSize=3&orderBy=username&isAsc=false`, {
       headers: {
         Cookie: context.req.headers.cookie,
       },
@@ -40,26 +61,58 @@ export const getServerSideProps = async (context: any) => {
     })
 
   // Pass data to the page via props
-  const accountData: IAccount[] = res ? res.data : []
-  return { props: { accountData } }
+  const accountData: IAccount[] = res ? res.data.data : []
+  const paginationData: PaginationMetadata = {
+    has_next: res ? res.data.has_next : false,
+    has_prev: res ? res.data.has_prev : false,
+    page: res ? res.data.page : 1,
+    size: res ? res.data.size : 0,
+    total_items: res ? res.data.total_items : 0,
+  }
+  return { props: { accountData, paginationData } }
 }
 
-const AccountsPage = ({ accountData }: Props) => {
-  const [shouldFetch, setShouldFetch] = useState(false)
-  const {
-    data,
-    error,
-    mutate: mutateAccList,
-    isValidating,
-  } = useSWR(shouldFetch ? ['api/accounts', '?filter=username != null'] : null, Fetcher.GET, { refreshInterval: 0, fallbackData: accountData })
+const AccountsPage = ({ accountData, paginationData }: Props) => {
+  const [pageParams, setPageParams] = useState({
+    pageNumber: 1,
+    pageSize: 3,
+    orderBy: 'username',
+    isAsc: false,
+  })
+  const { data: responseData, error } = useSWR<APIResponse>([`api/accounts`, pageParams], Fetcher.GET, {
+    refreshInterval: 0,
+    fallbackData: {
+      data: accountData,
+      has_next: paginationData.hasNext,
+      has_prev: paginationData.hasPrev,
+      page: paginationData.page,
+      size: paginationData.size,
+      total_items: paginationData.totalItems,
+    },
+  })
+
+  const accounts = responseData?.data
+  const isLoading = !responseData && !error
+  const onPageChange = (newPage: number) => {
+    setPageParams((prevParams) => ({
+      ...prevParams,
+      pageNumber: newPage,
+    }))
+  }
+
+  useEffect(() => {
+    if (pageParams.pageNumber !== 1) {
+      mutate(`api/accounts`)
+    }
+  }, [pageParams])
 
   if (error) {
-    console.log(data)
+    console.log(responseData)
     console.log(error)
     return <div>Failed to load users</div>
   }
-  if (!data) {
-    console.log(data)
+  if (!responseData) {
+    console.log(responseData)
     return <div>Loading...</div>
   }
 
@@ -144,15 +197,24 @@ const AccountsPage = ({ accountData }: Props) => {
           <Table.Header columns={columns} />
 
           <Table.Body>
-            {accountData.map((e, index) => (
+            {accounts?.map((e, index) => (
               <Table.Row columns={columns} rowData={e} key={index} />
             ))}
           </Table.Body>
         </Table.Layout>
       </div>
-      {/* Phone */}
+      <Pagination
+        isLoading={isLoading}
+        page={responseData.page}
+        size={responseData.size}
+        totalItems={responseData.total_items}
+        hasNext={responseData.has_next}
+        hasPrev={responseData.has_prev}
+        onPageChange={onPageChange}
+      />
+
       <div className="hidden flex-col sm:flex">
-        {accountData.map((e, index) => (
+        {accounts?.map((e, index) => (
           <AccountCard columns={columns} rowData={e} key={index} />
         ))}
       </div>

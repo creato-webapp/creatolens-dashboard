@@ -23,14 +23,11 @@ export const getServerSideProps = async (context: any) => {
     }
   }
   // Fetch data from next API
-  const res = await axios.get(
-    `${process.env.LOCAL_SERVER_URL}/api/accounts-session`,
-    {
-      headers: {
-        Cookie: context.req.headers.cookie,
-      },
-    }
-  )
+  const res = await axios.get(`${process.env.LOCAL_SERVER_URL}/api/accounts-session`, {
+    headers: {
+      Cookie: context.req.headers.cookie,
+    },
+  })
   const accountSessionData: IAccountSession[] = res.data
 
   return { props: { accountSessionData } }
@@ -50,11 +47,10 @@ const AccountsErrorPage = ({ accountSessionData }: Props) => {
     error,
     mutate: mutateAccSesList,
     isValidating,
-  } = useSWR(
-    shouldFetch ? ['api/accounts-session', { username: username }] : null,
-    Fetcher.GET,
-    { refreshInterval: 0, fallbackData: accountSessionData }
-  )
+  } = useSWR(shouldFetch ? ['api/accounts-session', { username: username }] : null, Fetcher.GET, {
+    refreshInterval: 0,
+    fallbackData: accountSessionData,
+  })
 
   if (error) {
     console.log(data)
@@ -98,11 +94,7 @@ const AccountsErrorPage = ({ accountSessionData }: Props) => {
       dataIndex: 'created_at',
       render: (e: any) => {
         const date = moment(e, 'YYYY-MM-DD THH:mm:ss')
-        return moment
-          .utc(date)
-          .local()
-          .add(8, 'hours')
-          .format('YYYY-MM-DD HH:mm:ss')
+        return moment.utc(date).local().add(8, 'hours').format('YYYY-MM-DD HH:mm:ss')
       },
     },
     { title: 'session_cookies', dataIndex: 'session_cookies.sessionid' },
