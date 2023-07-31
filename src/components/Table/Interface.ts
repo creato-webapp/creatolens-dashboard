@@ -21,5 +21,3 @@ export interface RowProps extends PropsWithChildren {
 }
 
 export interface BodyProps extends PropsWithChildren {}
-
-export interface TableProps extends PropsWithChildren {}

@@ -4,7 +4,7 @@ import Tag, { TagVariant } from '@components/Tag'
 type Status = 'active' | 'retry' | 'blocked'
 
 interface StatusTagProps extends React.HTMLAttributes<HTMLDivElement> {
-  status: Status | string
+  status: Status
   onClose?: () => void
 }
 

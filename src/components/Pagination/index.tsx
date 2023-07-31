@@ -3,6 +3,7 @@ import CaretRightIcon from '@components/Icon/CaretRightIcon'
 import React from 'react'
 import { Button } from '@components/Button'
 interface PaginationProps {
+  isLoading: boolean
   page: number
   size: number
   totalItems: number
@@ -11,9 +12,11 @@ interface PaginationProps {
   onPageChange: (page: number) => void
 }
 
-const Pagination: React.FC<PaginationProps> = ({ page, size, totalItems, hasNext, hasPrev, onPageChange }) => {
-  const totalPages = Math.ceil(totalItems / size)
-
+const Pagination: React.FC<PaginationProps> = ({ isLoading, page, size, totalItems, hasNext, hasPrev, onPageChange }) => {
+  const totalPages = size ? Math.ceil(totalItems / size) : 1
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
   return (
     <>
       <div className="flex items-center justify-center">

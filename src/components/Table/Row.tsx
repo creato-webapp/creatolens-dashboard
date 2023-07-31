@@ -1,10 +1,24 @@
-import { RowProps } from './Interface'
+import { Column, rowData } from './Interface'
+export interface RowProps extends React.TableHTMLAttributes<HTMLTableElement> {
+  key: number
+  columns: Column[]
+  rowData: rowData
+  rowProps?: React.HTMLAttributes<HTMLTableRowElement>
+  cellProps?: React.HTMLAttributes<HTMLTableCellElement>
+}
 
 const Row: React.FC<RowProps> = (props: RowProps) => {
+  const { rowProps, cellProps } = props
+  const { className: rowClassName, ...rowRest } = rowProps || {}
+  const { className: cellClassName, ...cellRest } = cellProps || {}
   return (
-    <tr key={props.key} className="border-b">
+    <tr key={props.key} {...rowRest} className={`border-b ${rowClassName}`}>
       {props.columns.map(({ title, dataIndex, render }, index) => (
-        <td key={index} className="min-w-32 h-12 items-center justify-start border border-slate-300 bg-neutral-50 p-2 ">
+        <td
+          key={index}
+          {...cellRest}
+          className={`min-w-32 h-12 items-center justify-start border border-slate-300 bg-neutral-50 p-2 ${cellClassName}`}
+        >
           {render ? render(props.rowData[dataIndex]) : props.rowData[dataIndex]}
         </td>
       ))}
