@@ -49,7 +49,9 @@ const BaseInput: React.FunctionComponent<IBaseInputProps> = ({
           onChange={onChange}
           required={customFormItemProps?.required}
           disabled={disabled}
-          className={`base-input inline-flex h-9 w-64 rounded-md border border-gray-500 bg-neutral-50 p-2 font-semibold `}
+          className={`base-input min-w-64 inline-flex h-9 rounded-md border border-gray-500 bg-neutral-50 p-2 font-semibold ${
+            className ? className : ''
+          }`}
           style={customFormItemProps?.style}
         />
         <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">

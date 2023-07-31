@@ -2,15 +2,8 @@ import React, { FC, useEffect, useState } from 'react'
 import { InputProps } from './interface'
 import BaseInput from './BaseInput'
 
-const TextInput: FC<InputProps> = (props: InputProps) => {
-  const {
-    id,
-    placeholder,
-    defaultValue,
-    customFormItemProps,
-    onChange: onNewChange,
-    value,
-  } = props
+const InputNumber: FC<InputProps> = (props: InputProps) => {
+  const { id, placeholder, defaultValue, customFormItemProps, onChange: onNewChange, value } = props
   const [state, setState] = useState<InputProps['value']>()
   const onChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     const target = e.target as HTMLInputElement
@@ -27,9 +20,9 @@ const TextInput: FC<InputProps> = (props: InputProps) => {
       type="number"
       name={id}
       className="
+      min-w-64
       mt-0
       block
-      w-full
       border-0
       border-b-2 border-gray-200 px-0.5
       focus:border-black focus:ring-0
@@ -43,4 +36,4 @@ const TextInput: FC<InputProps> = (props: InputProps) => {
     />
   )
 }
-export default TextInput
+export default InputNumber
