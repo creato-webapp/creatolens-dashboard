@@ -229,6 +229,7 @@ const Home: NextPage = () => {
             </Table.Body>
           </Table.Layout>
           <Pagination
+            isLoading={false}
             page={page}
             size={size}
             totalItems={totalItems}

@@ -11,13 +11,6 @@ export interface IAccount extends Record<string, string | number | boolean> {
   post_scrapped_count: number
   pwd: string
   session_cookies?: any
-  status:
-    | 'active'
-    | 'blocked'
-    | 'banned'
-    | 'retry'
-    | 'test'
-    | 'scrapping'
-    | 'occupied'
+  status: 'active' | 'blocked' | 'banned' | 'retry' | 'test' | 'scrapping' | 'occupied'
   updated_at: string
 }

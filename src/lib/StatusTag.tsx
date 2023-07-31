@@ -1,7 +1,7 @@
 import React from 'react'
 import Tag, { TagVariant } from '@components/Tag'
 
-type Status = 'active' | 'retry' | 'blocked'
+type Status = 'active' | 'blocked' | 'banned' | 'retry' | 'test' | 'scrapping' | 'occupied'
 
 interface StatusTagProps extends React.HTMLAttributes<HTMLDivElement> {
   status: Status
@@ -12,6 +12,10 @@ const statusToVariantMap: Record<Status, TagVariant> = {
   active: 'success',
   retry: 'warning',
   blocked: 'fail',
+  banned: 'fail',
+  test: 'processing',
+  scrapping: 'processing',
+  occupied: 'processing',
 }
 
 const StatusTag: React.FC<StatusTagProps> = ({ status, onClose, ...props }) => {
