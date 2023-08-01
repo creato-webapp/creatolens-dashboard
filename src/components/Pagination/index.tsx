@@ -19,7 +19,7 @@ const Pagination: React.FC<PaginationProps> = ({ isLoading, page, size, totalIte
   }
   return (
     <>
-      <div className="flex items-center justify-center">
+      <div className="flex items-center justify-center gap-3">
         <Button.Text
           className={'flex text-text-primary hover:text-text-secondary hover:no-underline'}
           loading={false}

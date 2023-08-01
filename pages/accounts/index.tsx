@@ -75,7 +75,7 @@ export const getServerSideProps = async (context: any) => {
 const AccountsPage = ({ accountData, paginationData }: Props) => {
   const [pageParams, setPageParams] = useState({
     pageNumber: 1,
-    pageSize: 3,
+    pageSize: 10,
     orderBy: 'username',
     isAsc: false,
   })

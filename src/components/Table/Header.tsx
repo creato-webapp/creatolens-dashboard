@@ -10,7 +10,7 @@ const Header: React.FC<HeaderProps> = (props: HeaderProps) => {
       <tr>
         {props.columns.map((e, index) => (
           <th scope="col" className="border border-slate-300 py-2 px-4" key={index}>
-            <div className="flex items-center">{e.title}</div>
+            <div>{e.title}</div>
             {children}
           </th>
         ))}

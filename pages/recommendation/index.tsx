@@ -45,7 +45,7 @@ export const getServerSideProps = async (context: any) => {
   return { props: { hashetSessionData } }
 }
 
-const HashetPredictsPage = ({ hashetSessionData }: Props) => {
+const RecommendationPage = ({ hashetSessionData }: Props) => {
   const [shouldFetch, setShouldFetch] = useState(false)
   const [inputString, setInputString] = useState('')
 
@@ -83,6 +83,9 @@ const HashetPredictsPage = ({ hashetSessionData }: Props) => {
     {
       title: 'Rank',
       dataIndex: 'index',
+      render: (e: string) => {
+        return <div className="flex justify-center">{e}</div>
+      },
     },
     {
       title: 'Hashtag',
@@ -143,8 +146,8 @@ const HashetPredictsPage = ({ hashetSessionData }: Props) => {
         </div>
       </div>
       <div className="flex flex-col items-center justify-center">
-        <Table.Layout className="">
-          <Table.Header columns={columns} className="font-bold text-text-primary" />
+        <Table.Layout className="text-lg font-bold">
+          <Table.Header columns={columns} className="text-center  text-text-primary" />
 
           <Table.Body>
             {currentItems.map((e, index) => (
@@ -249,4 +252,4 @@ const HashetPredictsPage = ({ hashetSessionData }: Props) => {
     </Card>
   )
 }
-export default HashetPredictsPage
+export default RecommendationPage

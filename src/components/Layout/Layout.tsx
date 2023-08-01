@@ -23,7 +23,7 @@ export default function Navbar(props: NavbarProps) {
     { title: 'Login Error History', href: '/accounts-error' },
     { title: 'Account Session History', href: '/accounts-session' },
     { title: 'Hashtag', href: '/hashtag' },
-    { title: 'Hashet', href: '/hashet' },
+    { title: 'recommendation', href: '/recommendation' },
   ]
 
   const navBarPage = [
@@ -31,8 +31,7 @@ export default function Navbar(props: NavbarProps) {
     { name: 'Accounts', path: '/accounts' },
     { name: 'Login Error History', path: '/accounts-error' },
     { name: 'Account Session History', path: '/accounts-session' },
-    { name: 'Hashtag', path: '/hashtag' },
-    { name: 'Hashet', path: '/hashet' },
+    { name: 'Recommendation', path: '/recommendation' },
   ]
 
   const { data: session, status } = useSession()
