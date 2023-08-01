@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import { useRouter } from 'next/router'
 import { Alerts } from '@components/Alerts'
-import { SessionModal, IAccount } from '@components/Account'
+import { IAccount } from '@lib/Account/Account/interface'
+import SessionModal from '@lib/Account/Account/SessionModal'
 import useSWR from 'swr'
 import { getSession } from 'next-auth/react'
 import { Fetcher, FetchWithId } from 'services/fetcher'
@@ -192,6 +193,19 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
           />
         )}
       </div>
+      <SessionModal
+        isDisable={!canRenewSession}
+        isShow={isShow}
+        account={account}
+        loading={!error && !data}
+        closeModal={() => setIsShow(false)}
+        refresh={async () => {
+          if (!shouldFetch) {
+            setShouldFetch(true)
+          }
+          await mutateAccountInfo()
+        }}
+      />
 
       <Alerts.success isShow={showAlert} setIsShow={setShowAlert} />
     </div>

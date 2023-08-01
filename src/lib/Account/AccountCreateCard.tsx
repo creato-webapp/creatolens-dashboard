@@ -3,7 +3,7 @@ import Card from '@components/Card'
 import { Button } from '@components/Button'
 import { Form } from '@components/Form'
 import { IField } from '@components/Form/interface'
-import { IAccount } from '@components/Account'
+import { IAccount } from '@lib/Account/Account'
 import Paragraph from '@components/Typography/Paragraph'
 import Checkbox from '@components/Form/Checkbox'
 
@@ -43,9 +43,7 @@ const AccountCreateCard: React.FC<AccountCreateCardProps> = ({ isLoading, isCrea
             <span className="text-lg font-bold leading-loose text-neutral-800">Required</span>
           </div>
         ) : (
-          <Button.Primary loading={isLoading} onClick={() => setIsShow(true)}>
-            Open Session Modal
-          </Button.Primary>
+          <></>
         )
       }
     >

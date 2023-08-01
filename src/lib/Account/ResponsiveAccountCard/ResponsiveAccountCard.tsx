@@ -16,13 +16,13 @@ export interface Column {
   render?: Function
 }
 
-export interface AccountCardProps extends PropsWithChildren {
+export interface ResponsiveAccountCardProps extends PropsWithChildren {
   key: number
   columns: Column[]
   rowData: rowData
 }
 
-const AccountCard: FC<AccountCardProps> = (props: AccountCardProps) => {
+const ResponsiveAccountCard: FC<ResponsiveAccountCardProps> = (props: ResponsiveAccountCardProps) => {
   return (
     <div className="w-full max-w-sm rounded-lg border border-gray-200 bg-white p-2 shadow sm:p-8 md:hidden">
       <h5 className="text-l mb-4 font-medium text-gray-500">{props.rowData?.id}</h5>
@@ -54,4 +54,4 @@ const AccountCard: FC<AccountCardProps> = (props: AccountCardProps) => {
     </div>
   )
 }
-export default AccountCard
+export default ResponsiveAccountCard

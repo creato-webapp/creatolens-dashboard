@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react'
 import Card from '@components/Card'
 import { Table } from '@components/Table'
 import { Button } from '@components/Button'
-import { IAccount } from '@components/Account/interface'
-import { AccountCard } from '@components/AccountCard'
+import { IAccount } from '@lib/Account/Account/interface'
+import { ResponsiveAccountCard } from '@lib/Account/ResponsiveAccountCard'
 import useSWR, { mutate } from 'swr'
 import Link from 'next/link'
 import { getSession } from 'next-auth/react'
@@ -218,7 +218,7 @@ const AccountsPage = ({ accountData, paginationData }: Props) => {
 
       <div className="hidden flex-col sm:flex">
         {accounts?.map((e, index) => (
-          <AccountCard columns={columns} rowData={e} key={index} />
+          <ResponsiveAccountCard columns={columns} rowData={e} key={index} />
         ))}
       </div>
       <p>status: | 'active' | 'blocked' | 'banned' | 'retry' | 'test' |</p>

@@ -283,7 +283,7 @@ const Home: NextPage = () => {
           <span className="ml-2">Email me news and special offers</span>
         </label>
         <label className="inline-flex items-center">
-          <Dropdown options={dropdownOptions} name={'name'} onChange={(value) => console.log(value)}></Dropdown>
+          <Dropdown options={dropdownOptions} name={'name'} onValueChange={(value) => console.log(value)}></Dropdown>
         </label>
         <h2 className="font-lato text-5xl">Hello World!</h2>
         <h2 className="font text-5xl">Hello World!</h2>

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Card from '@components/Card'
 import { Table } from '@components/Table'
-import { IAccountSession } from '@components/AccountSession/interface'
+import { IAccountSession } from '@lib/Account/AccountSession/interface'
 import useSWR from 'swr'
 import { getSession } from 'next-auth/react'
 import Link from 'next/link'

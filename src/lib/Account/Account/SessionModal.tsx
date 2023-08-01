@@ -1,13 +1,10 @@
 import { FC, useState } from 'react'
 import { IAccount } from './interface'
 import { Modal } from '@components/Modal'
-import { Form } from '@components/Form'
 import { Button } from '@components/Button'
 import { Fetcher } from 'services/fetcher'
-import { Spinner } from '../Spinner'
 import { useSession } from 'next-auth/react'
 import { User } from 'next-auth'
-import axios from 'axios'
 
 interface SessionModalProps {
   isDisable: boolean
@@ -35,14 +32,7 @@ const dataItemToKeyValues = (item: Cookies[]) => {
   return <ul className="list-none">{listItems}</ul>
 }
 
-const SessionModal: FC<SessionModalProps> = ({
-  account,
-  loading,
-  isDisable,
-  isShow,
-  closeModal,
-  refresh,
-}) => {
+const SessionModal: FC<SessionModalProps> = ({ account, loading, isDisable, isShow, closeModal, refresh }) => {
   const [isLoading, setIsLoading] = useState(false)
   const { data: session, status } = useSession()
   const user = session?.user as User
@@ -67,16 +57,9 @@ const SessionModal: FC<SessionModalProps> = ({
   }
 
   return (
-    <Modal
-      isLoading={isLoading}
-      isShow={isShow}
-      onCancel={closeModal}
-      title="SessionModal"
-    >
+    <Modal isLoading={isLoading} isShow={isShow} onCancel={closeModal} title="SessionModal">
       <code className="prose-code:text-blue-600">
-        <div className="flex flex-wrap">
-          {dataItemToKeyValues(account.session_cookies)}
-        </div>
+        <div className="flex flex-wrap">{dataItemToKeyValues(account.session_cookies)}</div>
       </code>
       <div className="flex justify-start space-y-2">
         <Button.Primary
@@ -88,10 +71,7 @@ const SessionModal: FC<SessionModalProps> = ({
         </Button.Primary>
       </div>
       <div>
-        <p>
-          *User can update session model if an error occurred after 24 hours in
-          this account.
-        </p>
+        <p>*User can update session model if an error occurred after 24 hours in this account.</p>
       </div>
     </Modal>
   )

@@ -1,5 +1,5 @@
 import React, { InputHTMLAttributes, PropsWithChildren } from 'react'
-import { IAccount } from '../Account/interface'
+import { IAccount } from '@lib/Account/Account/interface'
 
 export type InputType = 'Input' | 'DatePicker' | 'TimePicker' | 'DateTimePicker' | 'Checkbox' | 'InputNumber'
 
