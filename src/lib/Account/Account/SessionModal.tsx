@@ -1,11 +1,11 @@
 import { FC, useState } from 'react'
 import { IAccount } from './interface'
-import { Modal } from '@components/Modal'
+import Modal from '@components/Modal'
 import { Button } from '@components/Button'
 import { Fetcher } from 'services/fetcher'
 import { useSession } from 'next-auth/react'
 import { User } from 'next-auth'
-import { ModalProps } from '@components/Modal/Modal'
+import { ModalProps } from '@components/Modal'
 
 interface SessionModalProps extends ModalProps {
   isDisable: boolean

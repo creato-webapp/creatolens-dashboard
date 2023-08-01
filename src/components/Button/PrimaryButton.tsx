@@ -1,5 +1,5 @@
 import React from 'react'
-import { Spinner } from '../Spinner'
+import Spinner from '../Spinner'
 interface ButtonProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLButtonElement>, HTMLButtonElement> {
   disabled?: boolean
   loading?: boolean
