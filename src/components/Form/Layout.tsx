@@ -12,7 +12,7 @@ const Layout: FC<FormLayoutProps> = (props: FormLayoutProps) => {
     const target = event.target as typeof event.target & {
       [key: string]: { [key: string]: string }
     }
-    var values: { [key: string]: string | number | boolean } = {}
+    const values: { [key: string]: string | number | boolean } = {}
     fields.map((e) =>
       e.type == 'Checkbox'
         ? (values[e.name] = target[e.name].checked)

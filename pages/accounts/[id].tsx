@@ -36,7 +36,7 @@ export const getServerSideProps = async (context: any) => {
 
   const { params } = context
   const isCreate = params.id === 'create-account'
-  let canRenewSession = false
+  const canRenewSession = false
   // const lastErrRes = await axios.get(
   //   process.env.LOCAL_SERVER_URL + '/api/accounts-error/last',
   //   {

@@ -3,7 +3,6 @@ import Title from '@components/Typography/Title'
 
 interface CardProps extends HTMLProps<HTMLDivElement> {
   title?: string | undefined
-  children: React.ReactNode
   extra?: React.ReactNode
   className?: string | undefined
 }

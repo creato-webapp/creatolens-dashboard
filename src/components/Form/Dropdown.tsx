@@ -17,7 +17,7 @@ interface DropdownProps extends HTMLProps<HTMLSelectElement> {
 
 const Dropdown: React.FC<DropdownProps> = ({ name = '', options, defaultValue, disabled, onValueChange }) => {
   const [selectedValue, setSelectedValue] = useState(defaultValue || name)
-  const [isOpen, setIsOpen] = useState(true)
+  const [isOpen, setIsOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
   const handleOptionSelect = (value: string) => {

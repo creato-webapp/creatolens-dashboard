@@ -105,9 +105,7 @@ const AccountsPage = ({ accountData }: Props) => {
       dataIndex: 'id',
       render: (e: any) => (
         <Link href="/accounts-blocked/[id]" as={`/accounts/${e}`} legacyBehavior>
-          <Button.Text loading={isLoading} onClick={() => console.log(e)}>
-            Edit
-          </Button.Text>
+          <Button.Text loading={isLoading}>Edit</Button.Text>
         </Link>
       ),
     },
