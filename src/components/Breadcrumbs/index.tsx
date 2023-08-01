@@ -1,13 +1,13 @@
-import React, { ReactNode } from 'react'
+import React, { ReactNode, AnchorHTMLAttributes } from 'react'
 
-// Define the type for the breadcrumb
-type Breadcrumb = {
+// Define the interface for the breadcrumb
+interface Breadcrumb {
   label: ReactNode
   href?: string
 }
 
 // Define the props for the Breadcrumbs component
-type BreadcrumbsProps = {
+interface BreadcrumbsProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
   breadcrumbs: Breadcrumb[]
 }
 

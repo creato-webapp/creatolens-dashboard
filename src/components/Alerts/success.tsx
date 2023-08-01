@@ -1,6 +1,5 @@
-import { FC, useState, useEffect } from 'react'
-import * as ReactDOM from 'react-dom'
-interface AlertsProps {
+import { FC, useState, useEffect, HTMLAttributes } from 'react'
+interface AlertsProps extends HTMLAttributes<HTMLDivElement> {
   isShow: boolean
   setIsShow: Function
 }
@@ -21,9 +20,7 @@ const Alerts: FC<AlertsProps> = ({ isShow = true, setIsShow }) => {
 
   return isShow ? (
     <div
-      className={`z-50 origin-top transition-transform  delay-100 duration-1000 ease-in-out ${
-        isHide ? `fixed inset-0 z-10 -translate-y-full` : ''
-      }`}
+      className={`z-50 origin-top transition-transform  delay-100 duration-1000 ease-in-out ${isHide ? `fixed inset-0 z-10 -translate-y-full` : ''}`}
     >
       <div
         className={`${

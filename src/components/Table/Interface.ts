@@ -1,5 +1,3 @@
-import { ReactNode, PropsWithChildren, FC } from 'react'
-
 export interface rowData {
   [key: string]: any
 }
@@ -10,14 +8,8 @@ export interface Column {
   render?: Function
 }
 
-export interface HeaderProps extends PropsWithChildren {
+export interface HeaderProps extends React.HTMLAttributes<HTMLTableSectionElement> {
   columns: Column[]
 }
 
-export interface RowProps extends PropsWithChildren {
-  key: number
-  columns: Column[]
-  rowData: rowData
-}
-
-export interface BodyProps extends PropsWithChildren {}
+export interface BodyProps extends React.HTMLAttributes<HTMLTableSectionElement> {}

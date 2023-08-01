@@ -3,7 +3,6 @@ import { Popover } from '@headlessui/react'
 import { useSession, signIn, signOut, getSession } from 'next-auth/react'
 import { deleteCookie } from 'cookies-next'
 import NavBar from './Navbar'
-import { useRouter } from 'next/router'
 
 interface NavbarProps {
   children: React.ReactNode

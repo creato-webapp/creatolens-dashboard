@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 
-type IReactInputProps = React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>
-
-export interface IBaseInputProps extends IReactInputProps {
+export interface IBaseInputProps extends React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
   label?: string
   error?: boolean
   message?: string

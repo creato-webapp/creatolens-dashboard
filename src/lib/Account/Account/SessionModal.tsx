@@ -5,13 +5,14 @@ import { Button } from '@components/Button'
 import { Fetcher } from 'services/fetcher'
 import { useSession } from 'next-auth/react'
 import { User } from 'next-auth'
+import { ModalProps } from '@components/Modal/Modal'
 
-interface SessionModalProps {
+interface SessionModalProps extends ModalProps {
   isDisable: boolean
   account: IAccount
-  loading: boolean
+  isLoading: boolean
   isShow: boolean
-  closeModal: React.ChangeEventHandler
+  onCancel: () => void
   refresh: Function
 }
 
@@ -32,7 +33,7 @@ const dataItemToKeyValues = (item: Cookies[]) => {
   return <ul className="list-none">{listItems}</ul>
 }
 
-const SessionModal: FC<SessionModalProps> = ({ account, loading, isDisable, isShow, closeModal, refresh }) => {
+const SessionModal: FC<SessionModalProps> = ({ account, isLoading: loading, isDisable, isShow, onCancel, refresh }) => {
   const [isLoading, setIsLoading] = useState(false)
   const { data: session, status } = useSession()
   const user = session?.user as User
@@ -57,7 +58,7 @@ const SessionModal: FC<SessionModalProps> = ({ account, loading, isDisable, isSh
   }
 
   return (
-    <Modal isLoading={isLoading} isShow={isShow} onCancel={closeModal} title="SessionModal">
+    <Modal isLoading={isLoading} isShow={isShow} onCancel={onCancel} title="SessionModal">
       <code className="prose-code:text-blue-600">
         <div className="flex flex-wrap">{dataItemToKeyValues(account.session_cookies)}</div>
       </code>

@@ -266,6 +266,7 @@ const Home: NextPage = () => {
         </div>
         <div className="w-60">
           <Radio.Group
+            onValueChange={(value) => console.log(value)}
             defaultValue="option1"
             options={[
               { value: 'option1', label: 'Option 1' },

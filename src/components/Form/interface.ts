@@ -1,6 +1,4 @@
-import React, { InputHTMLAttributes, PropsWithChildren } from 'react'
-import { IAccount } from '@lib/Account/Account/interface'
-
+import React, { InputHTMLAttributes, PropsWithChildren, FormHTMLAttributes, DetailedHTMLProps, LabelHTMLAttributes } from 'react'
 export type InputType = 'Input' | 'DatePicker' | 'TimePicker' | 'DateTimePicker' | 'Checkbox' | 'InputNumber'
 
 export type customFormItemProps = {
@@ -17,16 +15,16 @@ export interface IField {
   }
 }
 
-export interface FormLayoutProps extends PropsWithChildren {
+export interface FormLayoutProps extends Omit<FormHTMLAttributes<HTMLFormElement>, 'onSubmit'> {
   Header?: string
   subHeader?: string
   fields: IField[]
   loading: boolean
-  onSubmit: Function
   allowSubmit?: boolean
+  onSubmit: (values: any) => void | Promise<void>
 }
 
-export interface ItemProps extends PropsWithChildren {
+export interface ItemProps extends DetailedHTMLProps<LabelHTMLAttributes<HTMLLabelElement>, HTMLLabelElement> {
   label: string
   key: number
   customFormItemProps?: customFormItemProps

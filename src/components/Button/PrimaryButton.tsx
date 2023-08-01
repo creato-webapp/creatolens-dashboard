@@ -2,7 +2,7 @@ import React from 'react'
 import { Spinner } from '../Spinner'
 interface ButtonProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLButtonElement>, HTMLButtonElement> {
   disabled?: boolean
-  loading: boolean
+  loading?: boolean
   type?: 'button' | 'submit' | 'reset' | undefined
   outline?: boolean
 }

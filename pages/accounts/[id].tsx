@@ -197,8 +197,8 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
         isDisable={!canRenewSession}
         isShow={isShow}
         account={account}
-        loading={!error && !data}
-        closeModal={() => setIsShow(false)}
+        isLoading={!error && !data}
+        onCancel={() => setIsShow(false)}
         refresh={async () => {
           if (!shouldFetch) {
             setShouldFetch(true)

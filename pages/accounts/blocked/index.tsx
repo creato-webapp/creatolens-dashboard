@@ -10,6 +10,10 @@ import { GetServerSideProps } from 'next'
 import { Fetcher } from 'services/fetcher'
 import axios, { AxiosError } from 'axios'
 
+const dayjs = require('dayjs')
+const utc = require('dayjs/plugin/utc')
+dayjs.extend(utc)
+
 type Props = {
   accountData: IAccount[]
 }

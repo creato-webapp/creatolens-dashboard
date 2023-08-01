@@ -1,9 +1,6 @@
-import React, { ChangeEvent, useState } from 'react'
+import React, { ChangeEvent, InputHTMLAttributes } from 'react'
 
-// Define the type for the option
-
-// Define the props for the Radio component
-interface RadioProps {
+interface RadioProps extends InputHTMLAttributes<HTMLInputElement> {
   value?: string
   checked?: boolean
   label?: string
@@ -11,7 +8,6 @@ interface RadioProps {
   className?: string
 }
 
-// Radio component
 export const Radio: React.FC<RadioProps> = ({ value, checked, label, onChange, className }) => {
   return (
     <label className="radio-label mx-2 flex flex-row items-center text-text-primary">
