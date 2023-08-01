@@ -7,9 +7,12 @@ import useSWR from 'swr'
 import Link from 'next/link'
 import { getSession } from 'next-auth/react'
 import { GetServerSideProps } from 'next'
-import moment from 'moment'
 import { Fetcher } from 'services/fetcher'
 import axios, { AxiosError } from 'axios'
+
+const dayjs = require('dayjs')
+const utc = require('dayjs/plugin/utc')
+dayjs.extend(utc)
 
 type Props = {
   accountData: IAccount[]
@@ -27,14 +30,11 @@ export const getServerSideProps = async (context: any) => {
   }
   // Fetch data from external API
   const res = await axios
-    .get(
-      `${process.env.LOCAL_SERVER_URL}/api/accounts-retry?filter=username != null`,
-      {
-        headers: {
-          Cookie: context.req.headers.cookie,
-        },
-      }
-    )
+    .get(`${process.env.LOCAL_SERVER_URL}/api/accounts-retry?filter=username != null`, {
+      headers: {
+        Cookie: context.req.headers.cookie,
+      },
+    })
     .catch(function (error: AxiosError) {
       return
     })
@@ -51,11 +51,7 @@ const AccountsPage = ({ accountData }: Props) => {
     error,
     mutate: mutateAccList,
     isValidating,
-  } = useSWR(
-    shouldFetch ? ['api/accounts', '?filter=username != null'] : null,
-    Fetcher.GET,
-    { refreshInterval: 0, fallbackData: accountData }
-  )
+  } = useSWR(shouldFetch ? ['api/accounts', '?filter=username != null'] : null, Fetcher.GET, { refreshInterval: 0, fallbackData: accountData })
 
   if (error) {
     console.log(data)
@@ -74,11 +70,7 @@ const AccountsPage = ({ accountData }: Props) => {
       dataIndex: 'id',
       render: (e: string) => {
         return (
-          <Link
-            href="/accounts-retry/[id]"
-            as={`/accounts-retry/${e}`}
-            legacyBehavior
-          >
+          <Link href="/accounts-retry/[id]" as={`/accounts-retry/${e}`} legacyBehavior>
             <a style={{ color: '#0070f3' }}>{e}</a>
           </Link>
         )
@@ -103,23 +95,15 @@ const AccountsPage = ({ accountData }: Props) => {
       title: 'last_login_dt(HK Time)',
       dataIndex: 'last_login_dt',
       render: (e: any) => {
-        const date = moment(e, 'YYYY-MM-DD THH:mm:ss')
-        return moment
-          .utc(date)
-          .local()
-          .add(8, 'hours')
-          .format('YYYY-MM-DD HH:mm:ss')
+        const date = dayjs(e, 'YYYY-MM-DD THH:mm:ss')
+        return dayjs.utc(date).local().add(8, 'hours').format('YYYY-MM-DD HH:mm:ss')
       },
     },
     {
       title: 'action',
       dataIndex: 'id',
       render: (e: any) => (
-        <Link
-          href="/accounts-retry/[id]"
-          as={`/accounts-retry/${e}`}
-          legacyBehavior
-        >
+        <Link href="/accounts-retry/[id]" as={`/accounts-retry/${e}`} legacyBehavior>
           <Button.Text loading={isLoading} onClick={() => console.log(e)}>
             Edit
           </Button.Text>
@@ -133,9 +117,7 @@ const AccountsPage = ({ accountData }: Props) => {
   return (
     <Card title="Retry Accounts Table">
       <Link href="/accounts/create-account">
-        <Button.Primary loading={false}>
-          Create New Retry Account
-        </Button.Primary>
+        <Button.Primary loading={false}>Create New Retry Account</Button.Primary>
       </Link>
       <Table.Layout>
         <Table.Header columns={columns} />

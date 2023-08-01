@@ -6,12 +6,15 @@ import useSWR from 'swr'
 import { getSession } from 'next-auth/react'
 import Link from 'next/link'
 import axios from 'axios'
-import moment from 'moment'
 import { Fetcher } from 'services/fetcher'
 import { Form } from '@components/Form'
 type Props = {
   accountSessionData: IAccountSession[]
 }
+
+const dayjs = require('dayjs')
+const utc = require('dayjs/plugin/utc')
+dayjs.extend(utc)
 
 export const getServerSideProps = async (context: any) => {
   const session = await getSession(context)
@@ -93,8 +96,8 @@ const AccountsErrorPage = ({ accountSessionData }: Props) => {
       title: 'created_at(HK Time)',
       dataIndex: 'created_at',
       render: (e: any) => {
-        const date = moment(e, 'YYYY-MM-DD THH:mm:ss')
-        return moment.utc(date).local().add(8, 'hours').format('YYYY-MM-DD HH:mm:ss')
+        const date = dayjs(e, 'YYYY-MM-DD THH:mm:ss')
+        return dayjs.utc(date).local().add(8, 'hours').format('YYYY-MM-DD HH:mm:ss')
       },
     },
     { title: 'session_cookies', dataIndex: 'session_cookies.sessionid' },

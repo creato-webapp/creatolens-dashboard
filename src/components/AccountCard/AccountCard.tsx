@@ -1,7 +1,11 @@
-import { ReactNode, PropsWithChildren, FC } from 'react'
+import { PropsWithChildren, FC } from 'react'
 import AccountField from './AccountField'
 import Link from 'next/link'
-import moment from 'moment'
+
+const dayjs = require('dayjs')
+const utc = require('dayjs/plugin/utc')
+dayjs.extend(utc)
+
 export interface rowData {
   [key: string]: any
 }
@@ -21,9 +25,7 @@ export interface AccountCardProps extends PropsWithChildren {
 const AccountCard: FC<AccountCardProps> = (props: AccountCardProps) => {
   return (
     <div className="w-full max-w-sm rounded-lg border border-gray-200 bg-white p-2 shadow sm:p-8 md:hidden">
-      <h5 className="text-l mb-4 font-medium text-gray-500">
-        {props.rowData?.id}
-      </h5>
+      <h5 className="text-l mb-4 font-medium text-gray-500">{props.rowData?.id}</h5>
       <div className="flex text-gray-900">
         <span className="text-l font-semibold">{props.rowData?.username}</span>
       </div>
@@ -34,24 +36,14 @@ const AccountCard: FC<AccountCardProps> = (props: AccountCardProps) => {
         <AccountField title="IS ENABLED" value={props.rowData?.enabled} />
         <AccountField title="IS_AUTH" value={props.rowData?.is_authenticated} />
         <AccountField title="LOGIN_COUNT" value={props.rowData?.login_count} />
-        <AccountField
-          title="POST_SCRAPPED"
-          value={props.rowData?.post_scrapped_count}
-        />
+        <AccountField title="POST_SCRAPPED" value={props.rowData?.post_scrapped_count} />
         <AccountField
           title="LAST_LOGIN_DT
           (HK TIME)"
-          value={moment(props.rowData?.last_login_dt, 'YYYY-MM-DD THH:mm:ss')
-            .local()
-            .add(8, 'hours')
-            .format('YYYY-MM-DD HH:mm:ss')}
+          value={dayjs(props.rowData?.last_login_dt, 'YYYY-MM-DD THH:mm:ss').local().add(8, 'hours').format('YYYY-MM-DD HH:mm:ss')}
         />
       </ul>
-      <Link
-        href="/accounts/[id]"
-        as={`/accounts/${props.rowData?.id}`}
-        legacyBehavior
-      >
+      <Link href="/accounts/[id]" as={`/accounts/${props.rowData?.id}`} legacyBehavior>
         <button
           type="button"
           className="inline-flex w-full justify-center rounded-lg bg-blue-500 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200"

@@ -6,7 +6,6 @@ import { IField } from '@components/Form/interface'
 import { IAccount } from '@components/Account/interface'
 import useSWR, { useSWRConfig } from 'swr'
 import { getSession } from 'next-auth/react'
-import moment from 'moment'
 import { GetServerSideProps } from 'next'
 import { Fetcher, FetchWithId } from 'services/fetcher'
 import axios from 'axios'
@@ -14,6 +13,10 @@ import axios from 'axios'
 type Props = {
   accountData: IAccount
 }
+
+const dayjs = require('dayjs')
+const utc = require('dayjs/plugin/utc')
+dayjs.extend(utc)
 
 //TODO remove type any in context:any
 export const getServerSideProps = async (context: any) => {
@@ -28,14 +31,11 @@ export const getServerSideProps = async (context: any) => {
     }
   }
   const { params } = context
-  const res = await axios.get(
-    process.env.LOCAL_SERVER_URL + '/api/accounts-blocked/' + params.id,
-    {
-      headers: {
-        Cookie: context.req.headers.cookie,
-      },
-    }
-  )
+  const res = await axios.get(process.env.LOCAL_SERVER_URL + '/api/accounts-blocked/' + params.id, {
+    headers: {
+      Cookie: context.req.headers.cookie,
+    },
+  })
 
   // Pass data to the page via props
   const accountData: IAccount = res ? res.data : null
@@ -55,14 +55,10 @@ const AccountsBlockedPage = ({ accountData }: Props) => {
     error,
     mutate: mutateAccountInfo,
     isValidating,
-  } = useSWR(
-    shouldFetch ? ['/api/accounts-blocked/', id] : null,
-    FetchWithId.GET,
-    {
-      refreshInterval: 0,
-      fallbackData: accountData,
-    }
-  )
+  } = useSWR(shouldFetch ? ['/api/accounts-blocked/', id] : null, FetchWithId.GET, {
+    refreshInterval: 0,
+    fallbackData: accountData,
+  })
 
   if (error) {
     console.log(data)
@@ -76,9 +72,7 @@ const AccountsBlockedPage = ({ accountData }: Props) => {
 
   const account: IAccount = {
     ...data,
-    last_login_dt: moment(data?.last_login_dt, 'YYYY-MM-DD THH:mm:ss').format(
-      'YYYY-MM-DDTHH:mm'
-    ),
+    last_login_dt: dayjs(data?.last_login_dt, 'YYYY-MM-DD THH:mm:ss').format('YYYY-MM-DDTHH:mm'),
   }
 
   const fieldsUpdate: IField[] = [
@@ -139,9 +133,7 @@ const AccountsBlockedPage = ({ accountData }: Props) => {
   const handleSubmit = async (values: IAccount) => {
     try {
       setShouldFetch(true)
-      const res = isCreate
-        ? await createAccount(values)
-        : await updateAccount(values)
+      const res = isCreate ? await createAccount(values) : await updateAccount(values)
       router.replace(`/accounts-blocked`)
       mutateAccountInfo()
     } catch (error) {
@@ -158,9 +150,7 @@ const AccountsBlockedPage = ({ accountData }: Props) => {
     const newValues = {
       ...account,
       ...values,
-      last_login_dt: moment(values.last_login_dt, 'YYYY-MM-DDTHH:mm').format(
-        'YYYY-MM-DD THH:mm:ss'
-      ),
+      last_login_dt: dayjs(values.last_login_dt, 'YYYY-MM-DDTHH:mm').format('YYYY-MM-DD THH:mm:ss'),
     }
     const res = await Fetcher.PATCH(`/api/accounts-blocked/${id}`, newValues)
     return res
@@ -169,24 +159,10 @@ const AccountsBlockedPage = ({ accountData }: Props) => {
   const fields = isCreate ? fieldsCreate : fieldsUpdate
   return (
     <Card title="Accounts Info">
-      <Form.Layout
-        onSubmit={handleSubmit}
-        Header={account.username}
-        loading={!error && !data}
-        fields={fields}
-      >
+      <Form.Layout onSubmit={handleSubmit} Header={account.username} loading={!error && !data} fields={fields}>
         {fields.map((e: IField, index) => (
-          <Form.Item
-            label={e.label}
-            key={index}
-            customFormItemProps={e.customFormItemProps}
-          >
-            <Form.CustomItem
-              id={e.name}
-              defaultValue={account[e.name]}
-              type={e.type}
-              customFormItemProps={e.customFormItemProps}
-            />
+          <Form.Item label={e.label} key={index} customFormItemProps={e.customFormItemProps}>
+            <Form.CustomItem id={e.name} defaultValue={account[e.name]} type={e.type} customFormItemProps={e.customFormItemProps} />
           </Form.Item>
         ))}
       </Form.Layout>

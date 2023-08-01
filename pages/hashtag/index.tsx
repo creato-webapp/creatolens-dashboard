@@ -3,12 +3,14 @@ import Card from '@components/Card'
 import { Table } from '@components/Table'
 import useSWR from 'swr'
 import { getSession } from 'next-auth/react'
-import Link from 'next/link'
 import axios from 'axios'
-import moment from 'moment'
 import { Fetcher } from 'services/fetcher'
 import { Form } from '@components/Form'
 import { Button } from '@components/Button'
+
+const dayjs = require('dayjs')
+const utc = require('dayjs/plugin/utc')
+dayjs.extend(utc)
 
 type IHashtag = string
 
@@ -56,11 +58,7 @@ const AccountsErrorPage = ({ hashtagSessionData }: Props) => {
     error,
     mutate: mutateHashtag,
     isValidating,
-  } = useSWR(
-    shouldFetch ? ['api/hashtag', { recommend: inputString }] : null,
-    Fetcher.GET,
-    { refreshInterval: 0, fallbackData: hashtagSessionData }
-  )
+  } = useSWR(shouldFetch ? ['api/hashtag', { recommend: inputString }] : null, Fetcher.GET, { refreshInterval: 0, fallbackData: hashtagSessionData })
 
   if (error) {
     console.log(data)

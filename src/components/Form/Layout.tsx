@@ -1,7 +1,9 @@
 import React, { FC } from 'react'
 import { Button } from '../Button'
 import { FormLayoutProps } from './interface'
-import moment from 'moment'
+const dayjs = require('dayjs')
+const utc = require('dayjs/plugin/utc')
+dayjs.extend(utc)
 
 const Layout: FC<FormLayoutProps> = (props: FormLayoutProps) => {
   const { Header, subHeader, loading, onSubmit, fields, allowSubmit } = props
@@ -15,7 +17,7 @@ const Layout: FC<FormLayoutProps> = (props: FormLayoutProps) => {
       e.type == 'Checkbox'
         ? (values[e.name] = target[e.name].checked)
         : e.type == 'DateTimePicker'
-        ? (values[e.name] = moment(target[e.name].value).format('YYYY-MM-DD THH:mm:ss'))
+        ? (values[e.name] = dayjs(target[e.name].value).format('YYYY-MM-DD THH:mm:ss'))
         : (values[e.name] = target[e.name].value)
     )
     onSubmit(values)

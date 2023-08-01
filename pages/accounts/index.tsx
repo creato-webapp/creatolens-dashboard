@@ -7,7 +7,6 @@ import { AccountCard } from '@components/AccountCard'
 import useSWR, { mutate } from 'swr'
 import Link from 'next/link'
 import { getSession } from 'next-auth/react'
-import moment from 'moment'
 import { Fetcher } from 'services/fetcher'
 import axios, { AxiosError } from 'axios'
 import Tag from '@components/Tag'
@@ -15,6 +14,10 @@ import Avatar from '@components/Avatar'
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/solid'
 import StatusTag from '@lib/StatusTag'
 import Pagination from '@components/Pagination'
+
+const dayjs = require('dayjs')
+const utc = require('dayjs/plugin/utc')
+dayjs.extend(utc)
 
 type Props = {
   accountData: IAccount[]
@@ -121,8 +124,8 @@ const AccountsPage = ({ accountData, paginationData }: Props) => {
       title: 'Last Login(HK Time)',
       dataIndex: 'last_login_dt',
       render: (e: any) => {
-        const date = moment(e, 'YYYY-MM-DD THH:mm:ss')
-        return moment.utc(date).local().format('YYYY-MM-DD HH:mm:ss')
+        const date = dayjs(e, 'YYYY-MM-DD THH:mm:ss')
+        return dayjs.utc(date).local().format('YYYY-MM-DD HH:mm:ss')
       },
     },
     { title: 'Post Scrapped', dataIndex: 'post_scrapped_count' },

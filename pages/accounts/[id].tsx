@@ -4,13 +4,17 @@ import { Alerts } from '@components/Alerts'
 import { SessionModal, IAccount } from '@components/Account'
 import useSWR from 'swr'
 import { getSession } from 'next-auth/react'
-import moment from 'moment'
 import { Fetcher, FetchWithId } from 'services/fetcher'
 import axios from 'axios'
 import Title from '@components/Typography/Title'
 import Paragraph from '@components/Typography/Paragraph'
 import AccountInfoCard from '@lib/Account/AccountInfoCard'
 import AccountCreateCard from '@lib/Account/AccountCreateCard'
+
+const dayjs = require('dayjs')
+const utc = require('dayjs/plugin/utc')
+dayjs.extend(utc)
+
 type Props = {
   accountData: IAccount
   isCreate: boolean
@@ -42,12 +46,12 @@ export const getServerSideProps = async (context: any) => {
   //   }
   // )
   // const lastErrResList = lastErrRes.data.map((e: IAccountError) => {
-  //   return moment(e.occurred_at, 'YYYY-MM-DD THH:mm:ss')
+  //   return dayjs(e.occurred_at, 'YYYY-MM-DD THH:mm:ss')
   // })
   // if (lastErrResList.length > 0) {
-  //   const lastDay = moment().add(-1, 'days').valueOf()
+  //   const lastDay = dayjs().add(-1, 'days').valueOf()
   //   const errDatetime = lastErrResList[0].valueOf()
-  //   const result = moment(lastDay - errDatetime).valueOf()
+  //   const result = dayjs(lastDay - errDatetime).valueOf()
   //   console.log(result)
   //   canRenewSession = result > 86400000 ? true : false
   // } else if (lastErrResList.length == 0) {
@@ -99,7 +103,7 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
 
   const account: IAccount = {
     ...data,
-    last_login_dt: moment(data?.last_login_dt, 'YYYY-MM-DD THH:mm:ss').utc().local().format('YYYY-MM-DDTHH:mm'),
+    last_login_dt: dayjs(data?.last_login_dt, 'YYYY-MM-DD THH:mm:ss').utc().local().format('YYYY-MM-DDTHH:mm'),
   }
 
   const handleSubmit = async (values: IAccount) => {
@@ -137,7 +141,7 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
     const newValues = {
       ...account,
       ...values,
-      last_login_dt: moment(values.last_login_dt, 'YYYY-MM-DDTHH:mm').utc().local().format('YYYY-MM-DD THH:mm:ss'),
+      last_login_dt: dayjs(values.last_login_dt, 'YYYY-MM-DDTHH:mm').utc().local().format('YYYY-MM-DD THH:mm:ss'),
     }
 
     const res = await Fetcher.PATCH(`/api/accounts/${id}`, newValues)

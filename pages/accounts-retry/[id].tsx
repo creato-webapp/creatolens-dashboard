@@ -6,10 +6,13 @@ import { IField } from '@components/Form/interface'
 import { IAccount } from '@components/Account/interface'
 import useSWR, { useSWRConfig } from 'swr'
 import { getSession } from 'next-auth/react'
-import moment from 'moment'
 import { GetServerSideProps } from 'next'
 import { Fetcher, FetchWithId } from 'services/fetcher'
 import axios from 'axios'
+
+const dayjs = require('dayjs')
+const utc = require('dayjs/plugin/utc')
+dayjs.extend(utc)
 
 type Props = {
   accountData: IAccount
@@ -28,14 +31,11 @@ export const getServerSideProps = async (context: any) => {
     }
   }
   const { params } = context
-  const res = await axios.get(
-    process.env.LOCAL_SERVER_URL + '/api/accounts-retry/' + params.id,
-    {
-      headers: {
-        Cookie: context.req.headers.cookie,
-      },
-    }
-  )
+  const res = await axios.get(process.env.LOCAL_SERVER_URL + '/api/accounts-retry/' + params.id, {
+    headers: {
+      Cookie: context.req.headers.cookie,
+    },
+  })
   // Pass data to the page via props
   const accountData: IAccount = res ? res.data : null
   return { props: { accountData } }
@@ -54,14 +54,10 @@ const AccountsRetryPage = ({ accountData }: Props) => {
     error,
     mutate: mutateAccountInfo,
     isValidating,
-  } = useSWR(
-    shouldFetch ? ['/api/accounts-retry/', id] : null,
-    FetchWithId.GET,
-    {
-      refreshInterval: 0,
-      fallbackData: accountData,
-    }
-  )
+  } = useSWR(shouldFetch ? ['/api/accounts-retry/', id] : null, FetchWithId.GET, {
+    refreshInterval: 0,
+    fallbackData: accountData,
+  })
 
   if (error) {
     console.log(data)
@@ -75,9 +71,7 @@ const AccountsRetryPage = ({ accountData }: Props) => {
 
   const account: IAccount = {
     ...data,
-    last_login_dt: moment(data?.last_login_dt, 'YYYY-MM-DD THH:mm:ss').format(
-      'YYYY-MM-DDTHH:mm'
-    ),
+    last_login_dt: dayjs(data?.last_login_dt, 'YYYY-MM-DD THH:mm:ss').format('YYYY-MM-DDTHH:mm'),
   }
 
   const fieldsUpdate: IField[] = [
@@ -138,9 +132,7 @@ const AccountsRetryPage = ({ accountData }: Props) => {
   const handleSubmit = async (values: IAccount) => {
     try {
       setShouldFetch(true)
-      const res = isCreate
-        ? await createAccount(values)
-        : await updateAccount(values)
+      const res = isCreate ? await createAccount(values) : await updateAccount(values)
       mutateAccountInfo()
       router.replace(`/accounts-retry`)
     } catch (error) {
@@ -157,9 +149,7 @@ const AccountsRetryPage = ({ accountData }: Props) => {
     const newValues = {
       ...account,
       ...values,
-      last_login_dt: moment(values.last_login_dt, 'YYYY-MM-DDTHH:mm').format(
-        'YYYY-MM-DD THH:mm:ss'
-      ),
+      last_login_dt: dayjs(values.last_login_dt, 'YYYY-MM-DDTHH:mm').format('YYYY-MM-DD THH:mm:ss'),
     }
     const res = await Fetcher.PATCH(`/api/accounts-retry/${id}`, newValues)
     return res
@@ -168,24 +158,10 @@ const AccountsRetryPage = ({ accountData }: Props) => {
   const fields = isCreate ? fieldsCreate : fieldsUpdate
   return (
     <Card title="Accounts Info">
-      <Form.Layout
-        onSubmit={handleSubmit}
-        Header={account.username}
-        loading={!error && !data}
-        fields={fields}
-      >
+      <Form.Layout onSubmit={handleSubmit} Header={account.username} loading={!error && !data} fields={fields}>
         {fields.map((e: IField, index) => (
-          <Form.Item
-            label={e.label}
-            key={index}
-            customFormItemProps={e.customFormItemProps}
-          >
-            <Form.CustomItem
-              id={e.name}
-              defaultValue={account[e.name]}
-              type={e.type}
-              customFormItemProps={e.customFormItemProps}
-            />
+          <Form.Item label={e.label} key={index} customFormItemProps={e.customFormItemProps}>
+            <Form.CustomItem id={e.name} defaultValue={account[e.name]} type={e.type} customFormItemProps={e.customFormItemProps} />
           </Form.Item>
         ))}
       </Form.Layout>
