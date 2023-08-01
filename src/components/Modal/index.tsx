@@ -9,7 +9,7 @@ export interface ModalProps extends Omit<React.HTMLAttributes<HTMLDivElement>, '
 }
 
 const Modal: FC<ModalProps> = ({ title, isShow, children, onCancel, isLoading }) => {
-  const ModalComponent = (
+  return isShow ? (
     <div className="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
       <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
       <div className="fixed inset-0 z-10 overflow-x-auto overflow-y-auto">
@@ -36,7 +36,6 @@ const Modal: FC<ModalProps> = ({ title, isShow, children, onCancel, isLoading })
         </div>
       </div>
     </div>
-  )
-  return isShow ? ModalComponent : null
+  ) : null
 }
 export default Modal
