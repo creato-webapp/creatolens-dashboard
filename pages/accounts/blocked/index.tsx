@@ -113,9 +113,6 @@ const AccountsPage = ({ accountData }: Props) => {
 
   return (
     <Card title="Blocked Accounts Table">
-      <Link href="/accounts/create-account">
-        <Button.Primary loading={false}>Create New Blocked Account</Button.Primary>
-      </Link>
       <Table.Layout>
         <Table.Header columns={columns} />
         <Table.Body>
