@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, HTMLProps } from 'react'
+import React, { useEffect, useState, useRef, HTMLProps, useCallback } from 'react'
 import { Button } from '../Button'
 import { CaretDownIcon, CaretUpIcon } from '@components/Icon'
 
@@ -20,13 +20,16 @@ const Dropdown: React.FC<DropdownProps> = ({ name = '', options, defaultValue, d
   const [isOpen, setIsOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
-  const handleOptionSelect = (value: string) => {
-    setSelectedValue(value)
-    setIsOpen(false)
-    if (onValueChange) {
-      onValueChange(value)
-    }
-  }
+  const handleOptionSelect = useCallback(
+    (value: string) => {
+      setSelectedValue(value)
+      setIsOpen(false)
+      if (onValueChange) {
+        onValueChange(value)
+      }
+    },
+    [onValueChange]
+  )
 
   const handleToggleMenu = () => {
     setIsOpen(!isOpen)

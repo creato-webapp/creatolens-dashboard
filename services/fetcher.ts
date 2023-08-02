@@ -1,7 +1,7 @@
 import axios, { AxiosError, AxiosRequestConfig } from 'axios'
 import { getCookie } from 'cookies-next'
 
-const FetcherInstance = axios.create({
+export const FetcherInstance = axios.create({
   withCredentials: true,
   timeout: 5000,
 })
@@ -45,16 +45,13 @@ FetcherInstance.interceptors.response.use(
   }
 )
 
+//TODO: delete below fetch and replace with commonRequest(in account.ts)
 export const Fetcher = {
-  POST: async (url: string, data: any, customConfig?: AxiosRequestConfig) =>
-    await FetcherInstance.post(url, data, customConfig),
+  POST: async (url: string, data: any, customConfig?: AxiosRequestConfig) => await FetcherInstance.post(url, data, customConfig),
   GET: async (url: string, params: any) => {
-    return await FetcherInstance.get(`${url}`, { params: params }).then(
-      (res) => res.data
-    )
+    return await FetcherInstance.get(`${url}`, { params: params }).then((res) => res.data)
   },
-  PATCH: async (url: string, data: any) =>
-    await FetcherInstance.patch(url, data),
+  PATCH: async (url: string, data: any) => await FetcherInstance.patch(url, data),
   DELETE: async (url: string) => await FetcherInstance.delete(url),
 }
 export const FetchWithId = {

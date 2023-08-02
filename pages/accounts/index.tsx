@@ -14,24 +14,14 @@ import Avatar from '@components/Avatar'
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/solid'
 import StatusTag from '@lib/StatusTag'
 import Pagination from '@components/Pagination'
-
+import { useAccountsPagination, PaginationParams, PaginationMetadata } from 'hooks/accounts'
 const dayjs = require('dayjs')
 const utc = require('dayjs/plugin/utc')
 dayjs.extend(utc)
 
 type Props = {
   accountData: IAccount[]
-  paginationData: PaginationData
-}
-interface PaginationMetadata {
-  has_next: boolean
-  has_prev: boolean
-  page: number
-  size: number
-  total_items: number
-}
-interface APIResponse extends PaginationMetadata {
-  data: IAccount[]
+  paginationData: PaginationMetadata
 }
 interface PaginationData {
   hasNext: boolean
@@ -66,6 +56,7 @@ export const getServerSideProps = async (context: any) => {
   // Pass data to the page via props
   const accountData: IAccount[] = res ? res.data.data : []
   const paginationData: PaginationMetadata = {
+    data: accountData,
     has_next: res ? res.data.has_next : false,
     has_prev: res ? res.data.has_prev : false,
     page: res ? res.data.page : 1,
@@ -82,19 +73,9 @@ const AccountsPage = ({ accountData, paginationData }: Props) => {
     orderBy: 'username',
     isAsc: false,
   })
-  const { data: responseData, error } = useSWR<APIResponse>([`api/accounts`, pageParams], Fetcher.GET, {
-    refreshInterval: 0,
-    fallbackData: {
-      data: accountData,
-      has_next: paginationData.hasNext,
-      has_prev: paginationData.hasPrev,
-      page: paginationData.page,
-      size: paginationData.size,
-      total_items: paginationData.totalItems,
-    },
-  })
+  const { accounts: responseData, error } = useAccountsPagination(`api/accounts`, pageParams, paginationData)
 
-  const accounts = responseData?.data
+  const accounts: IAccount[] = responseData?.data
   const isLoading = !responseData && !error
   const onPageChange = (newPage: number) => {
     setPageParams((prevParams) => ({
