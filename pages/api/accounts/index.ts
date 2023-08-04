@@ -13,8 +13,6 @@ export default async function accountQueryHandler(req: NextApiRequest, res: Next
           Cookie: req.headers.cookie,
         },
       })
-      console.log(`/accounts?page_number=${pageNumber}&page_size=${pageSize}&orderby=${orderBy}&isAsc=${isAsc}`)
-      console.log(response.data)
       return res.status(response.status).json(response.data)
     }
 
@@ -24,10 +22,7 @@ export default async function accountQueryHandler(req: NextApiRequest, res: Next
           Cookie: req.headers.cookie,
         },
       })
-        .then(function (response) {
-          return res.status(response.status).json(response.data)
-        })
-        .catch(function (error) {})
+      return res.status(response.status).json(response.data)
     }
   }
 }

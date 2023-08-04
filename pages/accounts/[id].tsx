@@ -5,13 +5,13 @@ import { IAccount } from '@lib/Account/Account/interface'
 import SessionModal from '@lib/Account/Account/SessionModal'
 import useSWR from 'swr'
 import { getSession } from 'next-auth/react'
-import { Fetcher, FetchWithId } from 'services/fetcher'
+import { AccountFetcher } from 'services/AccountFetcher'
 import axios from 'axios'
 import Title from '@components/Typography/Title'
 import Paragraph from '@components/Typography/Paragraph'
 import AccountInfoCard from '@lib/Account/AccountInfoCard'
 import AccountCreateCard from '@lib/Account/AccountCreateCard'
-
+import { useAccount } from 'hooks/account'
 const dayjs = require('dayjs')
 const utc = require('dayjs/plugin/utc')
 dayjs.extend(utc)
@@ -85,14 +85,11 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
   const { id } = router.query
   const {
     data,
+    isLoading: loading,
     error,
     mutate: mutateAccountInfo,
-    isValidating,
-  } = useSWR(shouldFetch ? ['/api/accounts/', id] : null, FetchWithId.GET, {
-    refreshInterval: 0,
-    fallbackData: isCreate ? isCreate : accountData,
-  })
-  console.log(accountData)
+    updateAccount: useUpdateAccount,
+  } = useAccount('/api/accounts', id as string, shouldFetch, isCreate ? isCreate : accountData)
   if (error) {
     console.log(error)
     return <div>Failed to load users {id}</div>
@@ -107,7 +104,31 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
     last_login_dt: dayjs(data?.last_login_dt, 'YYYY-MM-DD THH:mm:ss').utc().local().format('YYYY-MM-DDTHH:mm'),
   }
 
-  const handleSubmit = async (values: IAccount) => {
+  const handleCreateSubmit = async (values: IAccount) => {
+    try {
+      setShouldFetch(false)
+      setIsLoading(true)
+      const newValues = {
+        ...values,
+        login_attempt_count: parseInt(values.login_attempt_count as unknown as string),
+        post_scrapped_count: parseInt(values.post_scrapped_count as unknown as string),
+      }
+
+      const res = await createAccount(newValues)
+      if (res?.status == 400) {
+        throw new Error('Bad Request Creating Account')
+      }
+      setShowAlert(true)
+      // You can navigate to another page if needed
+    } catch (error) {
+      console.log(error)
+      window.alert(error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  const handleUpdateSubmit = async (values: IAccount) => {
     try {
       setShouldFetch(true)
       setIsLoading(true)
@@ -117,14 +138,8 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
         post_scrapped_count: parseInt(values.post_scrapped_count as unknown as string),
       }
 
-      const res = isCreate ? await createAccount(newValues) : await updateAccount(newValues)
-      if (res.status == 400) {
-        console.log(res.data)
-        throw new Error('Bad Request Updating Accounts')
-      }
+      await updateAccount(newValues)
       setShowAlert(true)
-      mutateAccountInfo()
-      router.replace(`/accounts`)
     } catch (error) {
       console.log(error)
       window.alert(error)
@@ -134,7 +149,7 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
   }
 
   const createAccount = async (values: IAccount) => {
-    const res = await axios.post(`/api/accounts`, values)
+    const res = await AccountFetcher.POST(`/api/accounts`, values)
     return res
   }
 
@@ -144,13 +159,11 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
       ...values,
       last_login_dt: dayjs(values.last_login_dt, 'YYYY-MM-DDTHH:mm').utc().local().format('YYYY-MM-DD THH:mm:ss'),
     }
-
-    const res = await Fetcher.PATCH(`/api/accounts/${id}`, newValues)
-    return res
+    console.log({ newValues })
+    await useUpdateAccount(newValues)
   }
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.checked)
     setIsChecked(event.target.checked)
   }
   return (
@@ -176,7 +189,7 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
             isLoading={isLoading}
             isCreate={isCreate}
             account={account}
-            handleSubmit={handleSubmit}
+            handleSubmit={handleCreateSubmit}
             setIsShow={setIsShow}
             isChecked={isChecked}
             handleChange={handleChange}
@@ -186,7 +199,7 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
             isLoading={isLoading}
             isCreate={isCreate}
             account={account}
-            handleSubmit={handleSubmit}
+            handleSubmit={handleUpdateSubmit}
             setIsShow={setIsShow}
             isChecked={isChecked}
             handleChange={handleChange}

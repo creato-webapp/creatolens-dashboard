@@ -4,7 +4,6 @@ import { Table } from '@components/Table'
 import { Button } from '@components/Button'
 import { IAccount } from '@lib/Account/Account/interface'
 import { ResponsiveAccountCard } from '@lib/Account/ResponsiveAccountCard'
-import useSWR, { mutate } from 'swr'
 import Link from 'next/link'
 import { getSession } from 'next-auth/react'
 import { Fetcher } from 'services/fetcher'
@@ -14,22 +13,14 @@ import Avatar from '@components/Avatar'
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/solid'
 import StatusTag from '@lib/StatusTag'
 import Pagination from '@components/Pagination'
-import { useAccountsPagination, PaginationParams, PaginationMetadata } from 'hooks/accounts'
+import { useGetAccountsPagination, PaginationParams, PaginationMetadata } from 'hooks/account'
+import { AccountFetcher } from 'services/AccountFetcher'
 const dayjs = require('dayjs')
 const utc = require('dayjs/plugin/utc')
 dayjs.extend(utc)
 
 type Props = {
-  accountData: IAccount[]
   paginationData: PaginationMetadata
-}
-interface PaginationData {
-  hasNext: boolean
-  hasPrev: boolean
-  page: number
-  size: number
-  totalItems: number
-  onPageChange: (page: number) => void
 }
 
 //TODO getServerSideProps: GetServerSideProps; cannot set GetServerSideProps type.
@@ -42,38 +33,34 @@ export const getServerSideProps = async (context: any) => {
       },
     }
   }
-  // Fetch data from next API
-  const res = await axios
-    .get(`${process.env.LOCAL_SERVER_URL}/api/accounts?pageNumber=1&pageSize=3&orderBy=username&isAsc=false`, {
-      headers: {
-        Cookie: context.req.headers.cookie,
-      },
-    })
-    .catch(function (error: AxiosError) {
-      return
-    })
-
+  const response = await AccountFetcher.GET(`${process.env.LOCAL_SERVER_URL}/api/accounts`, {
+    pageNumber: 1,
+    pageSize: 10,
+    orderBy: 'username',
+    isAsc: false,
+  })
   // Pass data to the page via props
-  const accountData: IAccount[] = res ? res.data.data : []
+  const accountData: IAccount[] = response ? response.data : []
+
   const paginationData: PaginationMetadata = {
     data: accountData,
-    has_next: res ? res.data.has_next : false,
-    has_prev: res ? res.data.has_prev : false,
-    page: res ? res.data.page : 1,
-    size: res ? res.data.size : 0,
-    total_items: res ? res.data.total_items : 0,
+    has_next: response ? response.has_next : false,
+    has_prev: response ? response.has_prev : false,
+    page: response ? response.page : 1,
+    size: response ? response.size : 0,
+    total_items: response ? response.total_items : 0,
   }
-  return { props: { accountData, paginationData } }
+  return { props: { paginationData } }
 }
 
-const AccountsPage = ({ accountData, paginationData }: Props) => {
+const AccountsPage = ({ paginationData }: Props) => {
   const [pageParams, setPageParams] = useState({
     pageNumber: 1,
     pageSize: 10,
     orderBy: 'username',
     isAsc: false,
   })
-  const { accounts: responseData, error } = useAccountsPagination(`api/accounts`, pageParams, paginationData)
+  const { accounts: responseData, error, mutate } = useGetAccountsPagination(`api/accounts`, pageParams, paginationData)
 
   const accounts: IAccount[] = responseData?.data
   const isLoading = !responseData && !error
@@ -172,9 +159,35 @@ const AccountsPage = ({ accountData, paginationData }: Props) => {
 
   return (
     <Card title="Accounts Table">
-      <Link href="/accounts/create-account">
-        <Button.Primary loading={false}>Create New Account</Button.Primary>
-      </Link>
+      <div className="flex gap-3">
+        <Link href="/accounts/create-account">
+          <Button.Primary loading={false}>Create New Account</Button.Primary>
+        </Link>
+        <Button.Primary
+          onClick={() => {
+            setPageParams({
+              pageNumber: 1,
+              pageSize: 10,
+              orderBy: 'username',
+              isAsc: true,
+            })
+          }}
+        >
+          Change order
+        </Button.Primary>
+        <Button.Primary
+          onClick={() => {
+            setPageParams({
+              pageNumber: 1,
+              pageSize: 10,
+              orderBy: 'username',
+              isAsc: false,
+            })
+          }}
+        >
+          Reset Params
+        </Button.Primary>
+      </div>
       {/* desktop */}
       <div className="hidden  md:flex">
         <Table.Layout>
@@ -202,7 +215,6 @@ const AccountsPage = ({ accountData, paginationData }: Props) => {
           <ResponsiveAccountCard columns={columns} rowData={e} key={index} />
         ))}
       </div>
-      <p>status: | 'active' | 'blocked' | 'banned' | 'retry' | 'test' |</p>
     </Card>
   )
 }

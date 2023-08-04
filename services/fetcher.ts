@@ -29,11 +29,11 @@ FetcherInstance.interceptors.response.use(
     if (error.response) {
       switch (error.response.status) {
         case 404:
-          console.log('Not Found')
+          console.log(error.message)
           return error.response
 
         case 400:
-          console.log('Bad Request')
+          console.log(error.message)
           return error.response
 
         default:
@@ -45,18 +45,19 @@ FetcherInstance.interceptors.response.use(
   }
 )
 
-//TODO: delete below fetch and replace with commonRequest(in account.ts)
-export const Fetcher = {
-  POST: async (url: string, data: any, customConfig?: AxiosRequestConfig) => await FetcherInstance.post(url, data, customConfig),
-  GET: async (url: string, params: any) => {
-    return await FetcherInstance.get(`${url}`, { params: params }).then((res) => res.data)
-  },
-  PATCH: async (url: string, data: any) => await FetcherInstance.patch(url, data),
-  DELETE: async (url: string) => await FetcherInstance.delete(url),
-}
-export const FetchWithId = {
-  GET: async (url: string, id: string) => {
-    const newUrl = `${url}${id}`
-    return await Fetcher.GET(newUrl, { id: id }).then((res) => res)
-  },
+export const Fetcher = async (
+  method: 'GET' | 'POST' | 'PATCH' | 'DELETE',
+  url: string,
+  data?: any,
+  params?: any,
+  customConfig?: AxiosRequestConfig
+) => {
+  const config: AxiosRequestConfig = {
+    method,
+    url,
+    data,
+    params,
+    ...customConfig,
+  }
+  return await FetcherInstance(config).then((res) => res.data)
 }
