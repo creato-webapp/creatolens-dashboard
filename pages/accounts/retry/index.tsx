@@ -53,7 +53,7 @@ export const getServerSideProps = async (context: any) => {
   return { props: { paginationData } }
 }
 
-const AccountsPage = ({ paginationData }: Props) => {
+const RetryAccountsPage = ({ paginationData }: Props) => {
   const [pageParams, setPageParams] = useState({
     pageNumber: 1,
     pageSize: 10,
@@ -219,4 +219,4 @@ const AccountsPage = ({ paginationData }: Props) => {
   )
 }
 
-export default AccountsPage
+export default RetryAccountsPage

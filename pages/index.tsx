@@ -35,12 +35,12 @@ export const getServerSideProps = async (context: any) => {
 const Home: NextPage = () => {
   const dropdownOptions = [
     {
-      label: 'Option abcdefghijklmnop 1',
-      value: 'Option abcdefghijklmnop 1',
+      label: 'Option a',
+      value: 'Option a',
     },
     {
-      label: 'Option 2',
-      value: 'option2',
+      label: 'Option b',
+      value: 'option b',
     },
   ]
 

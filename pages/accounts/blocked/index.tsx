@@ -6,8 +6,6 @@ import { IAccount } from '@lib/Account/Account/interface'
 import { ResponsiveAccountCard } from '@lib/Account/ResponsiveAccountCard'
 import Link from 'next/link'
 import { getSession } from 'next-auth/react'
-import { Fetcher } from 'services/fetcher'
-import axios, { AxiosError } from 'axios'
 import Tag from '@components/Tag'
 import Avatar from '@components/Avatar'
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/solid'
@@ -53,14 +51,14 @@ export const getServerSideProps = async (context: any) => {
   return { props: { paginationData } }
 }
 
-const AccountsPage = ({ paginationData }: Props) => {
+const BlockedAccountsPage = ({ paginationData }: Props) => {
   const [pageParams, setPageParams] = useState({
     pageNumber: 1,
     pageSize: 10,
     orderBy: 'username',
     isAsc: false,
   })
-  const { accounts: responseData, error, mutate } = useGetAccountsPagination(`/api/accounts`, pageParams, paginationData)
+  const { accounts: responseData, error, mutate } = useGetAccountsPagination(`/api/accounts-blocked`, pageParams, paginationData)
 
   const accounts: IAccount[] = responseData?.data
   const isLoading = !responseData && !error
@@ -219,4 +217,4 @@ const AccountsPage = ({ paginationData }: Props) => {
   )
 }
 
-export default AccountsPage
+export default BlockedAccountsPage
