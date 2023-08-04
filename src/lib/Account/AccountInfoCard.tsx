@@ -90,7 +90,13 @@ const AccountInfoCard: React.FC<AccountInfoCardProps> = ({ isLoading, isCreate, 
         </Button.Primary>
       }
     >
-      <Form.Layout onSubmit={handleSubmit} Header={account.username} loading={isLoading} fields={fields} allowSubmit={!!isLoading}>
+      <Form.Layout
+        onSubmit={handleSubmit}
+        Header={account.username}
+        loading={isLoading}
+        fields={[...fields, ...checkBoxField]}
+        allowSubmit={!!isLoading}
+      >
         <div className="flex flex-grow justify-between">
           <div className="">
             <Paragraph key={'0'} size={'lg'} bold className="font-bold">

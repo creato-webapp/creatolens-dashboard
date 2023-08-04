@@ -1,8 +1,8 @@
 import type { FC } from 'react'
 import { CheckBoxProps } from './interface'
 
-const Checkbox: FC<CheckBoxProps> = ({ ...res }: CheckBoxProps) => {
-  const { className } = res
-  return <input type="checkbox" {...res} className={`checkbox block ${className}`} />
+const Checkbox: FC<CheckBoxProps> = (props: CheckBoxProps) => {
+  const { className, id, name, ...res } = props
+  return <input {...res} id={props.id} name={props.id} type="checkbox" className={`checkbox block ${className ? className : ''}`} />
 }
 export default Checkbox

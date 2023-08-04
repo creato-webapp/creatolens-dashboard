@@ -46,7 +46,7 @@ export default function Navbar(props: NavbarProps) {
       <Popover className="relative bg-white">
         <div className="max-w-screen-2xl mx-auto">
           <NavBar
-            logo="small-logo.svg"
+            logo="/small-logo.svg"
             pages={navBarPage}
             isLoggedIn={!!session}
             onLogin={() => signIn()}
