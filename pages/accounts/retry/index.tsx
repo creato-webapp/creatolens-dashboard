@@ -1,21 +1,26 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Card from '@components/Card'
 import { Table } from '@components/Table'
 import { Button } from '@components/Button'
 import { IAccount } from '@lib/Account/Account/interface'
-import useSWR from 'swr'
+import { ResponsiveAccountCard } from '@lib/Account/ResponsiveAccountCard'
 import Link from 'next/link'
 import { getSession } from 'next-auth/react'
-import { GetServerSideProps } from 'next'
 import { Fetcher } from 'services/fetcher'
 import axios, { AxiosError } from 'axios'
-
+import Tag from '@components/Tag'
+import Avatar from '@components/Avatar'
+import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/solid'
+import StatusTag from '@lib/StatusTag'
+import Pagination from '@components/Pagination'
+import { useGetAccountsPagination, PaginationParams, PaginationMetadata } from 'hooks/useAccount'
+import { AccountFetcher } from 'services/AccountFetcher'
 const dayjs = require('dayjs')
 const utc = require('dayjs/plugin/utc')
 dayjs.extend(utc)
 
 type Props = {
-  accountData: IAccount[]
+  paginationData: PaginationMetadata
 }
 
 //TODO getServerSideProps: GetServerSideProps; cannot set GetServerSideProps type.
@@ -28,83 +33,123 @@ export const getServerSideProps = async (context: any) => {
       },
     }
   }
-  // Fetch data from external API
-  const res = await axios
-    .get(`${process.env.LOCAL_SERVER_URL}/api/accounts-retry?filter=username != null`, {
-      headers: {
-        Cookie: context.req.headers.cookie,
-      },
-    })
-    .catch(function (error: AxiosError) {
-      return
-    })
+  const response = await AccountFetcher.GET(`${process.env.LOCAL_SERVER_URL}/api/accounts-retry`, {
+    pageNumber: 1,
+    pageSize: 10,
+    orderBy: 'username',
+    isAsc: false,
+  })
   // Pass data to the page via props
-  const accountData: IAccount[] = res ? res.data : []
-  return { props: { accountData } }
+  const accountData: IAccount[] = response ? response.data : []
+
+  const paginationData: PaginationMetadata = {
+    data: accountData,
+    has_next: response ? response.has_next : false,
+    has_prev: response ? response.has_prev : false,
+    page: response ? response.page : 1,
+    size: response ? response.size : 0,
+    total_items: response ? response.total_items : 0,
+  }
+  return { props: { paginationData } }
 }
 
-const AccountsPage = ({ accountData }: Props) => {
-  const [isLoading, setIsLoading] = useState(false)
-  const [shouldFetch, setShouldFetch] = useState(false)
-  const {
-    data,
-    error,
-    mutate: mutateAccList,
-    isValidating,
-  } = useSWR(shouldFetch ? ['api/accounts', '?filter=username != null'] : null, Fetcher.GET, { refreshInterval: 0, fallbackData: accountData })
+const AccountsPage = ({ paginationData }: Props) => {
+  const [pageParams, setPageParams] = useState({
+    pageNumber: 1,
+    pageSize: 10,
+    orderBy: 'username',
+    isAsc: false,
+  })
+  const { accounts: responseData, error, mutate } = useGetAccountsPagination(`/api/accounts-retry`, pageParams, paginationData)
+
+  const accounts: IAccount[] = responseData?.data
+  const isLoading = !responseData && !error
+  const onPageChange = (newPage: number) => {
+    setPageParams((prevParams) => ({
+      ...prevParams,
+      pageNumber: newPage,
+    }))
+  }
+
+  useEffect(() => {
+    if (pageParams.pageNumber !== 1) {
+      mutate(`api/accounts-retry`)
+    }
+  }, [pageParams])
 
   if (error) {
-    console.log(data)
+    console.log(responseData)
     console.log(error)
     return <div>Failed to load users</div>
   }
-  if (!data) {
-    console.log(data)
+  if (!responseData) {
+    console.log(responseData)
     return <div>Loading...</div>
   }
-  const accounts: IAccount[] = data
 
   const columns = [
     {
-      title: 'document_id',
-      dataIndex: 'id',
-      render: (e: string) => {
-        return (
-          <Link href="/accounts-retry/[id]" as={`/accounts-retry/${e}`} legacyBehavior>
-            <a style={{ color: '#0070f3' }}>{e}</a>
-          </Link>
-        )
-      },
-    },
-    { title: 'username', dataIndex: 'username' },
-    {
-      title: 'is occupied',
-      dataIndex: 'is_occupied',
-      render: (e: any) => {
-        return <div>{e.toString()}</div>
-      },
-    },
-    {
-      title: 'is enabled',
-      dataIndex: 'enabled',
-      render: (e: any) => {
-        return <div>{e.toString()}</div>
-      },
-    },
-    {
-      title: 'last_login_dt(HK Time)',
+      title: 'Last Login(HK Time)',
       dataIndex: 'last_login_dt',
       render: (e: any) => {
         const date = dayjs(e, 'YYYY-MM-DD THH:mm:ss')
-        return dayjs.utc(date).local().add(8, 'hours').format('YYYY-MM-DD HH:mm:ss')
+        return dayjs.utc(date).local().format('YYYY-MM-DD HH:mm:ss')
+      },
+    },
+    { title: 'Post Scrapped', dataIndex: 'post_scrapped_count' },
+    { title: 'Login Count', dataIndex: 'login_count' },
+    {
+      title: 'Username',
+      dataIndex: 'username',
+      render: (e: any) => {
+        return (
+          <Tag
+            label={
+              <div className="flex items-center gap-1">
+                <Avatar />
+                {e}
+              </div>
+            }
+            variant="outline"
+          />
+        )
       },
     },
     {
-      title: 'action',
+      title: 'Status',
+      dataIndex: 'status',
+      render: (e: any) => {
+        return <StatusTag status={e} />
+      },
+    },
+    {
+      title: 'Is Occupied',
+      dataIndex: 'is_occupied',
+      render: (e: any) => {
+        return e ? <CheckCircleIcon className="h-6 w-6 text-green-600" /> : <XCircleIcon className="h-6 w-6 text-red-500" />
+      },
+    },
+    {
+      title: 'Is Enabled',
+      dataIndex: 'enabled',
+      render: (e: any) => {
+        return e ? <CheckCircleIcon className="h-6 w-6 text-green-600" /> : <XCircleIcon className="h-6 w-6 text-red-500" />
+      },
+    },
+    {
+      title: 'Is Auth',
+      dataIndex: 'is_authenticated',
+      render: (e: any) => {
+        return e ? <CheckCircleIcon className="h-6 w-6 text-green-600" /> : <XCircleIcon className="h-6 w-6 text-red-500" />
+      },
+    },
+
+    {
+      title: 'Account Info',
       dataIndex: 'id',
       render: (e: any) => (
-        <Link href="/accounts-retry/[id]" as={`/accounts-retry/${e}`} legacyBehavior>
-          <Button.Text loading={isLoading} onClick={() => console.log(e)}>
+        <Link href="/accounts/[id]" as={`/accounts/${e}`} legacyBehavior>
+          <Button.Text loading={false} onClick={() => console.log(e)}>
             Edit
           </Button.Text>
         </Link>
@@ -112,21 +157,64 @@ const AccountsPage = ({ accountData }: Props) => {
     },
   ]
 
-  const dataSource = accountData
-
   return (
-    <Card title="Retry Accounts Table">
-      <Link href="/accounts/create-account">
-        <Button.Primary loading={false}>Create New Retry Account</Button.Primary>
-      </Link>
-      <Table.Layout>
-        <Table.Header columns={columns} />
-        <Table.Body>
-          {accountData.map((e, index) => (
-            <Table.Row columns={columns} rowData={e} key={index} />
-          ))}
-        </Table.Body>
-      </Table.Layout>
+    <Card title="Accounts Table">
+      <div className="flex gap-3">
+        <Link href="/accounts/create-account">
+          <Button.Primary loading={false}>Create New Retry Account</Button.Primary>
+        </Link>
+        <Button.Primary
+          onClick={() => {
+            setPageParams({
+              pageNumber: 1,
+              pageSize: 10,
+              orderBy: 'username',
+              isAsc: true,
+            })
+          }}
+        >
+          Change order
+        </Button.Primary>
+        <Button.Primary
+          onClick={() => {
+            setPageParams({
+              pageNumber: 1,
+              pageSize: 10,
+              orderBy: 'username',
+              isAsc: false,
+            })
+          }}
+        >
+          Reset Params
+        </Button.Primary>
+      </div>
+      {/* desktop */}
+      <div className="hidden  md:flex">
+        <Table.Layout>
+          <Table.Header columns={columns} />
+
+          <Table.Body>
+            {accounts?.map((e, index) => (
+              <Table.Row columns={columns} rowData={e} key={index} />
+            ))}
+          </Table.Body>
+        </Table.Layout>
+      </div>
+      <Pagination
+        isLoading={isLoading}
+        page={responseData.page}
+        size={responseData.size}
+        totalItems={responseData.total_items}
+        hasNext={responseData.has_next}
+        hasPrev={responseData.has_prev}
+        onPageChange={onPageChange}
+      />
+
+      <div className="hidden flex-col sm:flex">
+        {accounts?.map((e, index) => (
+          <ResponsiveAccountCard columns={columns} rowData={e} key={index} />
+        ))}
+      </div>
     </Card>
   )
 }

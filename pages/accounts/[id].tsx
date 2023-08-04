@@ -11,7 +11,7 @@ import Title from '@components/Typography/Title'
 import Paragraph from '@components/Typography/Paragraph'
 import AccountInfoCard from '@lib/Account/AccountInfoCard'
 import AccountCreateCard from '@lib/Account/AccountCreateCard'
-import { useAccount } from 'hooks/account'
+import { useAccount } from 'hooks/useAccount'
 const dayjs = require('dayjs')
 const utc = require('dayjs/plugin/utc')
 dayjs.extend(utc)
@@ -89,6 +89,7 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
     error,
     mutate: mutateAccountInfo,
     updateAccount: useUpdateAccount,
+    updateSession,
   } = useAccount('/api/accounts', id as string, shouldFetch, isCreate ? isCreate : accountData)
   if (error) {
     console.log(error)
@@ -212,12 +213,7 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
         account={account}
         isLoading={!error && !data}
         onCancel={() => setIsShow(false)}
-        refresh={async () => {
-          if (!shouldFetch) {
-            setShouldFetch(true)
-          }
-          await mutateAccountInfo()
-        }}
+        updateSession={updateSession}
       />
 
       <Alerts.success isShow={showAlert} setIsShow={setShowAlert} />

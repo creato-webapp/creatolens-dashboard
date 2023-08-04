@@ -24,10 +24,15 @@ export const useAccount = (url: string, id: string, shouldFetch: boolean = true,
     fallbackData: fallbackData,
   })
   const updateAccount = async (updatedAccount: IAccount) => {
-    console.log({ updatedAccount })
-    console.log(`${url}/${updatedAccount.id}`, { updatedAccount })
     await AccountFetcher.PATCH(`${url}/${id}`, updatedAccount, { params: { id: updatedAccount.id } })
     mutate()
+  }
+
+  const updateSession = async (updatedAccount: IAccount) => {
+    console.log(`${url}/session/${id}`, { username: updatedAccount.username })
+    const res = await AccountFetcher.POST(`${url}/session/${id}`, { username: updatedAccount.username })
+    mutate()
+    return res
   }
 
   return {
@@ -35,6 +40,7 @@ export const useAccount = (url: string, id: string, shouldFetch: boolean = true,
     isLoading: !error && !data,
     error: error,
     updateAccount,
+    updateSession,
     mutate,
     ...swr,
   }

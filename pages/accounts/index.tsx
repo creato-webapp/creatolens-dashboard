@@ -13,7 +13,7 @@ import Avatar from '@components/Avatar'
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/solid'
 import StatusTag from '@lib/StatusTag'
 import Pagination from '@components/Pagination'
-import { useGetAccountsPagination, PaginationParams, PaginationMetadata } from 'hooks/account'
+import { useGetAccountsPagination, PaginationParams, PaginationMetadata } from 'hooks/useAccount'
 import { AccountFetcher } from 'services/AccountFetcher'
 const dayjs = require('dayjs')
 const utc = require('dayjs/plugin/utc')
@@ -60,7 +60,7 @@ const AccountsPage = ({ paginationData }: Props) => {
     orderBy: 'username',
     isAsc: false,
   })
-  const { accounts: responseData, error, mutate } = useGetAccountsPagination(`api/accounts`, pageParams, paginationData)
+  const { accounts: responseData, error, mutate } = useGetAccountsPagination(`/api/accounts`, pageParams, paginationData)
 
   const accounts: IAccount[] = responseData?.data
   const isLoading = !responseData && !error

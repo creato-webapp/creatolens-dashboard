@@ -2,7 +2,7 @@ import { FC, useState } from 'react'
 import { IAccount } from './interface'
 import Modal from '@components/Modal'
 import { Button } from '@components/Button'
-import { Fetcher } from 'services/fetcher'
+import { AccountFetcher } from 'services/AccountFetcher'
 import { useSession } from 'next-auth/react'
 import { User } from 'next-auth'
 import { ModalProps } from '@components/Modal'
@@ -12,8 +12,8 @@ interface SessionModalProps extends ModalProps {
   account: IAccount
   isLoading: boolean
   isShow: boolean
+  updateSession: Function
   onCancel: () => void
-  refresh: Function
 }
 
 interface Cookies {
@@ -33,23 +33,13 @@ const dataItemToKeyValues = (item: Cookies[]) => {
   return <ul className="list-none">{listItems}</ul>
 }
 
-const SessionModal: FC<SessionModalProps> = ({ account, isLoading: loading, isDisable, isShow, onCancel, refresh }) => {
+const SessionModal: FC<SessionModalProps> = ({ account, isLoading: loading, isDisable, isShow, updateSession, onCancel, refresh }) => {
   const [isLoading, setIsLoading] = useState(false)
-  const { data: session, status } = useSession()
-  const user = session?.user as User
   const updateAccountSession = async (account: IAccount) => {
     try {
       setIsLoading(true)
-      const res = await Fetcher.POST(
-        `/api/accounts/session/${account.id}`,
-        {
-          username: account.username,
-        },
-        { timeout: 30000 }
-      )
-      window.alert('sessions uploaded')
-      refresh()
-      return res
+      const res = await updateSession(account)
+      window.alert(res.message)
     } catch (err) {
       window.alert(err)
     } finally {
