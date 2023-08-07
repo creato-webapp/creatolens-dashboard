@@ -30,7 +30,7 @@ export const getServerSideProps = async (context: any) => {
       },
     }
   }
-  // Fetch data from next API
+
   const response = await ScrapperFetcher.GET(`${process.env.LOCAL_SERVER_URL}/api/accounts-error`, {
     username: null,
     pageNumber: 1,
