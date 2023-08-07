@@ -33,7 +33,7 @@ const dataItemToKeyValues = (item: Cookies[]) => {
   return <ul className="list-none">{listItems}</ul>
 }
 
-const SessionModal: FC<SessionModalProps> = ({ account, isLoading: loading, isDisable, isShow, updateSession, onCancel, refresh }) => {
+const SessionModal: FC<SessionModalProps> = ({ account, isLoading: loading, isDisable, isShow, updateSession, onCancel }) => {
   const [isLoading, setIsLoading] = useState(false)
   const updateAccountSession = async (account: IAccount) => {
     try {

@@ -4,12 +4,12 @@ import { Table } from '@components/Table'
 import useSWR from 'swr'
 import { getSession } from 'next-auth/react'
 import axios from 'axios'
-import { Fetcher } from 'services/fetcher'
 import { Form } from '@components/Form'
 import Pagination from '@components/Pagination'
 import Title from '@components/Typography/Title'
 import MagnifyingGlassIcon from '@components/Icon/MagnifyingGlassIcon'
 import LoaderIcon from '@components/Icon/LoaderIcon'
+import { HashtagFetcher } from 'services/HashtagFetcher'
 interface IHashet extends Record<string, string | number | boolean> {
   hashtag: string
   acc: number
@@ -63,7 +63,10 @@ const RecommendationPage = ({ hashetSessionData }: Props) => {
     error,
     mutate: mutateHashet,
     isValidating,
-  } = useSWR(shouldFetch ? ['api/hashet', { recommend: inputString }] : null, Fetcher.GET, { refreshInterval: 0, fallbackData: hashetSessionData })
+  } = useSWR(shouldFetch ? ['api/hashet', { recommend: inputString }] : null, HashtagFetcher.GET, {
+    refreshInterval: 0,
+    fallbackData: hashetSessionData,
+  })
 
   if (error) {
     console.log(data)
