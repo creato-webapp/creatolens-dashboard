@@ -53,7 +53,6 @@ export const getServerSideProps = async (context: any) => {
 }
 
 const AccountsErrorPage = ({ paginationData }: Props) => {
-  const [shouldFetch, setShouldFetch] = useState(false)
   const [pageParams, setPageParams] = useState<AccountErrorPaginationParams>({
     username: null,
     pageNumber: 1,
@@ -77,10 +76,9 @@ const AccountsErrorPage = ({ paginationData }: Props) => {
       isAsc: false,
       username: e.target.value,
     }))
-    if (!shouldFetch) setShouldFetch(true)
   }, [])
 
-  const { accountErrors: responseData, isLoading, error } = useGetErrorPagination(`/api/accounts-error`, pageParams, shouldFetch, paginationData)
+  const { accountErrors: responseData, isLoading, error } = useGetErrorPagination(`/api/accounts-error`, pageParams, true, paginationData)
   const accountError: IAccountError[] = responseData?.data ? responseData.data : []
   if (error) {
     console.log(responseData)

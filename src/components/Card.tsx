@@ -9,7 +9,6 @@ interface CardProps extends HTMLProps<HTMLDivElement> {
 
 export default function Card(props: CardProps) {
   const { title, children, extra, className } = props
-  console.log(props)
   return (
     <div className={`min-h-48 min-w-96 relative mb-6 rounded bg-neutral-50 shadow-lg ${className}`}>
       <div className="absolute top-0 right-0 px-6 py-6">{extra}</div>
