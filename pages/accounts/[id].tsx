@@ -12,6 +12,7 @@ import Paragraph from '@components/Typography/Paragraph'
 import AccountInfoCard from '@lib/Account/AccountInfoCard'
 import AccountCreateCard from '@lib/Account/AccountCreateCard'
 import { useAccount } from 'hooks/useAccount'
+
 const dayjs = require('dayjs')
 const utc = require('dayjs/plugin/utc')
 dayjs.extend(utc)
@@ -63,14 +64,14 @@ export const getServerSideProps = async (context: any) => {
 
   const res =
     !isCreate &&
-    (await axios.get(process.env.LOCAL_SERVER_URL + '/api/accounts/' + params.id, {
+    (await AccountFetcher.GET(process.env.LOCAL_SERVER_URL + '/api/accounts/' + params.id, {
       headers: {
         Cookie: context.req.headers.cookie,
       },
     }))
 
   // Pass data to the page via props
-  const accountData: IAccount = res ? res.data : null
+  const accountData: IAccount = res
   return { props: { accountData, isCreate, canRenewSession } }
 }
 
@@ -87,7 +88,6 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
     data,
     isLoading: loading,
     error,
-    mutate: mutateAccountInfo,
     updateAccount: useUpdateAccount,
     updateSession,
   } = useAccount('/api/accounts', id as string, shouldFetch, isCreate ? isCreate : accountData)

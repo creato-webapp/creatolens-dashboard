@@ -6,9 +6,8 @@ import { IField } from '@components/Form/interface'
 import { IAccount } from '@lib/Account/Account/interface'
 import useSWR, { useSWRConfig } from 'swr'
 import { getSession } from 'next-auth/react'
-import { GetServerSideProps } from 'next'
-import { Fetcher, FetchWithId } from 'services/fetcher'
-import axios from 'axios'
+import { useAccount } from 'hooks/useAccount'
+import { AccountFetcher } from 'services/AccountFetcher'
 
 const dayjs = require('dayjs')
 const utc = require('dayjs/plugin/utc')
@@ -31,33 +30,30 @@ export const getServerSideProps = async (context: any) => {
     }
   }
   const { params } = context
-  const res = await axios.get(process.env.LOCAL_SERVER_URL + '/api/accounts-retry/' + params.id, {
+  const res = await AccountFetcher.GET(process.env.LOCAL_SERVER_URL + '/api/accounts-retry/' + params.id, {
     headers: {
       Cookie: context.req.headers.cookie,
     },
   })
   // Pass data to the page via props
-  const accountData: IAccount = res ? res.data : null
+  const accountData: IAccount = res ? res : null
   return { props: { accountData } }
 }
 
 const AccountsRetryPage = ({ accountData }: Props) => {
-  const { mutate } = useSWRConfig()
+  const [isLoading, setIsLoading] = useState(false)
+  const [showAlert, setShowAlert] = useState(false)
   const [shouldFetch, setShouldFetch] = useState(false)
-  const session = getSession()
   const router = useRouter()
   const { id } = router.query
   const isCreate = id === 'create-account'
 
   const {
     data,
+    isLoading: loading,
     error,
-    mutate: mutateAccountInfo,
-    isValidating,
-  } = useSWR(shouldFetch ? ['/api/accounts-retry/', id] : null, FetchWithId.GET, {
-    refreshInterval: 0,
-    fallbackData: accountData,
-  })
+    updateAccount: useUpdateAccount,
+  } = useAccount('/api/accounts-retry', id as string, shouldFetch, isCreate ? isCreate : accountData)
 
   if (error) {
     console.log(data)
@@ -71,10 +67,10 @@ const AccountsRetryPage = ({ accountData }: Props) => {
 
   const account: IAccount = {
     ...data,
-    last_login_dt: dayjs(data?.last_login_dt, 'YYYY-MM-DD THH:mm:ss').format('YYYY-MM-DDTHH:mm'),
+    wait_until: dayjs(data?.wait_until, 'YYYY-MM-DD THH:mm:ss').format('YYYY-MM-DDTHH:mm'),
   }
 
-  const fieldsUpdate: IField[] = [
+  const fields: IField[] = [
     {
       label: 'document_id',
       type: 'Input',
@@ -108,57 +104,38 @@ const AccountsRetryPage = ({ accountData }: Props) => {
       name: 'is_occupied',
     },
     {
-      label: 'last_login_dt',
+      label: 'wait_until',
       type: 'DateTimePicker',
-      name: 'last_login_dt',
-    },
-  ]
-
-  const fieldsCreate: IField[] = [
-    {
-      label: 'username',
-      type: 'Input',
-      name: 'username',
-      customFormItemProps: { required: true },
-    },
-    {
-      label: 'pwd',
-      type: 'Input',
-      name: 'pwd',
-      customFormItemProps: { required: true },
+      name: 'wait_until',
     },
   ]
 
   const handleSubmit = async (values: IAccount) => {
     try {
       setShouldFetch(true)
-      const res = isCreate ? await createAccount(values) : await updateAccount(values)
-      mutateAccountInfo()
-      router.replace(`/accounts-retry`)
+      setIsLoading(true)
+      await updateAccount(values)
+      setShowAlert(true)
     } catch (error) {
+      console.log(error)
       window.alert(error)
+    } finally {
+      setIsLoading(false)
     }
-  }
-
-  const createAccount = async (values: IAccount) => {
-    const res = await axios.post(`/api/accounts-retry`, values)
-    return res
   }
 
   const updateAccount = async (values: IAccount) => {
     const newValues = {
       ...account,
       ...values,
-      last_login_dt: dayjs(values.last_login_dt, 'YYYY-MM-DDTHH:mm').format('YYYY-MM-DD THH:mm:ss'),
+      wait_until: dayjs(values.wait_until, 'YYYY-MM-DDTHH:mm').format('YYYY-MM-DD THH:mm:ss'),
     }
-    const res = await Fetcher.PATCH(`/api/accounts-retry/${id}`, newValues)
-    return res
+    await useUpdateAccount(newValues)
   }
 
-  const fields = isCreate ? fieldsCreate : fieldsUpdate
   return (
     <Card title="Accounts Info">
-      <Form.Layout onSubmit={handleSubmit} Header={account.username} loading={!error && !data} fields={fields}>
+      <Form.Layout onSubmit={handleSubmit} Header={account.username} loading={isLoading} fields={fields}>
         {fields.map((e: IField, index) => (
           <Form.Item label={e.label} key={index} customFormItemProps={e.customFormItemProps}>
             <Form.CustomItem id={e.name} defaultValue={account[e.name]} type={e.type} customFormItemProps={e.customFormItemProps} />

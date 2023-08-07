@@ -89,8 +89,8 @@ const RetryAccountsPage = ({ paginationData }: Props) => {
 
   const columns = [
     {
-      title: 'Last Login(HK Time)',
-      dataIndex: 'last_login_dt',
+      title: 'Wait Until(HK Time)',
+      dataIndex: 'wait_until',
       render: (e: any) => {
         const date = dayjs(e, 'YYYY-MM-DD THH:mm:ss')
         return dayjs.utc(date).local().format('YYYY-MM-DD HH:mm:ss')
@@ -148,7 +148,7 @@ const RetryAccountsPage = ({ paginationData }: Props) => {
       title: 'Account Info',
       dataIndex: 'id',
       render: (e: any) => (
-        <Link href="/accounts/[id]" as={`/accounts/${e}`} legacyBehavior>
+        <Link href="/accounts/retry/[id]" as={`/accounts/retry/${e}`} legacyBehavior>
           <Button.Text loading={false} onClick={() => console.log(e)}>
             Edit
           </Button.Text>

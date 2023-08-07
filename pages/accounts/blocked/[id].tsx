@@ -7,8 +7,9 @@ import { IAccount } from '@lib/Account/Account/interface'
 import useSWR, { useSWRConfig } from 'swr'
 import { getSession } from 'next-auth/react'
 import { GetServerSideProps } from 'next'
-import { Fetcher, FetchWithId } from 'services/fetcher'
+import { useAccount } from 'hooks/useAccount'
 import axios from 'axios'
+import { AccountFetcher } from 'services/AccountFetcher'
 
 type Props = {
   accountData: IAccount
@@ -31,34 +32,31 @@ export const getServerSideProps = async (context: any) => {
     }
   }
   const { params } = context
-  const res = await axios.get(process.env.LOCAL_SERVER_URL + '/api/accounts-blocked/' + params.id, {
+  const res = await AccountFetcher.GET(process.env.LOCAL_SERVER_URL + '/api/accounts-blocked/' + params.id, {
     headers: {
       Cookie: context.req.headers.cookie,
     },
   })
 
   // Pass data to the page via props
-  const accountData: IAccount = res ? res.data : null
+  const accountData: IAccount = res ? res : null
   return { props: { accountData } }
 }
 
 const AccountsBlockedPage = ({ accountData }: Props) => {
-  const { mutate } = useSWRConfig()
+  const [isLoading, setIsLoading] = useState(false)
+  const [showAlert, setShowAlert] = useState(false)
   const [shouldFetch, setShouldFetch] = useState(false)
-  const session = getSession()
   const router = useRouter()
   const { id } = router.query
   const isCreate = id === 'create-account'
 
   const {
     data,
+    isLoading: loading,
     error,
-    mutate: mutateAccountInfo,
-    isValidating,
-  } = useSWR(shouldFetch ? ['/api/accounts-blocked/', id] : null, FetchWithId.GET, {
-    refreshInterval: 0,
-    fallbackData: accountData,
-  })
+    updateAccount: useUpdateAccount,
+  } = useAccount('/api/accounts-blocked', id as string, shouldFetch, isCreate ? isCreate : accountData)
 
   if (error) {
     console.log(data)
@@ -75,7 +73,7 @@ const AccountsBlockedPage = ({ accountData }: Props) => {
     last_login_dt: dayjs(data?.last_login_dt, 'YYYY-MM-DD THH:mm:ss').format('YYYY-MM-DDTHH:mm'),
   }
 
-  const fieldsUpdate: IField[] = [
+  const fields: IField[] = [
     {
       label: 'document_id',
       type: 'Input',
@@ -115,51 +113,32 @@ const AccountsBlockedPage = ({ accountData }: Props) => {
     },
   ]
 
-  const fieldsCreate: IField[] = [
-    {
-      label: 'username',
-      type: 'Input',
-      name: 'username',
-      customFormItemProps: { required: true },
-    },
-    {
-      label: 'pwd',
-      type: 'Input',
-      name: 'pwd',
-      customFormItemProps: { required: true },
-    },
-  ]
-
   const handleSubmit = async (values: IAccount) => {
     try {
       setShouldFetch(true)
-      const res = isCreate ? await createAccount(values) : await updateAccount(values)
-      router.replace(`/accounts-blocked`)
-      mutateAccountInfo()
+      setIsLoading(true)
+      await updateAccount(values)
+      setShowAlert(true)
     } catch (error) {
+      console.log(error)
       window.alert(error)
+    } finally {
+      setIsLoading(false)
     }
-  }
-
-  const createAccount = async (values: IAccount) => {
-    const res = await axios.post(`/api/accounts-blocked`, values)
-    return res
   }
 
   const updateAccount = async (values: IAccount) => {
     const newValues = {
       ...account,
       ...values,
-      last_login_dt: dayjs(values.last_login_dt, 'YYYY-MM-DDTHH:mm').format('YYYY-MM-DD THH:mm:ss'),
+      last_login_dt: dayjs(values.last_login_dt, 'YYYY-MM-DDTHH:mm').utc().local().format('YYYY-MM-DD THH:mm:ss'),
     }
-    const res = await Fetcher.PATCH(`/api/accounts-blocked/${id}`, newValues)
-    return res
+    await useUpdateAccount(newValues)
   }
 
-  const fields = isCreate ? fieldsCreate : fieldsUpdate
   return (
     <Card title="Accounts Info">
-      <Form.Layout onSubmit={handleSubmit} Header={account.username} loading={!error && !data} fields={fields}>
+      <Form.Layout onSubmit={handleSubmit} Header={account.username} loading={isLoading} fields={fields}>
         {fields.map((e: IField, index) => (
           <Form.Item label={e.label} key={index} customFormItemProps={e.customFormItemProps}>
             <Form.CustomItem id={e.name} defaultValue={account[e.name]} type={e.type} customFormItemProps={e.customFormItemProps} />
