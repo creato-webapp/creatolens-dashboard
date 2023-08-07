@@ -11,7 +11,8 @@ import Avatar from '@components/Avatar'
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/solid'
 import StatusTag from '@lib/StatusTag'
 import Pagination from '@components/Pagination'
-import { useGetAccountsPagination, PaginationParams, PaginationMetadata } from 'hooks/useAccount'
+import { useGetAccountsPagination } from 'hooks/useAccount'
+import { PaginationParams, PaginationMetadata } from 'hooks/usePagination'
 import { AccountFetcher } from 'services/AccountFetcher'
 const dayjs = require('dayjs')
 const utc = require('dayjs/plugin/utc')
@@ -37,7 +38,7 @@ export const getServerSideProps = async (context: any) => {
     orderBy: 'username',
     isAsc: false,
   })
-  // Pass data to the page via props
+
   const accountData: IAccount[] = response ? response.data : []
 
   const paginationData: PaginationMetadata = {
@@ -58,7 +59,7 @@ const BlockedAccountsPage = ({ paginationData }: Props) => {
     orderBy: 'username',
     isAsc: false,
   })
-  const { accounts: responseData, error, mutate } = useGetAccountsPagination(`/api/accounts-blocked`, pageParams, paginationData)
+  const { accounts: responseData, error, mutate } = useGetAccountsPagination(`/api/accounts-blocked`, pageParams, true, paginationData)
 
   const accounts: IAccount[] = responseData?.data
   const isLoading = !responseData && !error

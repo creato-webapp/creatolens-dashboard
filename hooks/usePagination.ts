@@ -17,9 +17,9 @@ export interface PaginationMetadata {
   total_items: number
 }
 
-export const useGetPagination = (url: string, paginationParams: PaginationParams, fallbackData?: PaginationMetadata) => {
+export const useGetPagination = (url: string, paginationParams: PaginationParams, shouldFetch: boolean = true, fallbackData?: PaginationMetadata) => {
   const { data, error, mutate, ...swr } = useSWR(
-    [url, paginationParams],
+    shouldFetch ? [url, paginationParams] : null,
     (url, paginationParams) => Fetcher('GET', url, undefined, paginationParams, undefined),
     {
       refreshInterval: 0,

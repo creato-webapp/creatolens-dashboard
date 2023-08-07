@@ -1,15 +1,20 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import Card from '@components/Card'
 import { Table } from '@components/Table'
 import { IAccountError } from '@lib/Account/AccountErrors/interface'
-import useSWR from 'swr'
 import { getSession } from 'next-auth/react'
 import Link from 'next/link'
-import axios from 'axios'
-import { Fetcher } from 'services/fetcher'
 import { Form } from '@components/Form'
+import { ScrapperFetcher } from 'services/ScrapperFetcher'
+import { useGetErrorPagination } from 'hooks/useLoginError'
+import { PaginationParams, PaginationMetadata } from 'hooks/usePagination'
+import Pagination from '@components/Pagination'
 type Props = {
-  accountErrorData: IAccountError[]
+  paginationData: PaginationMetadata
+}
+
+interface AccountErrorPaginationParams extends PaginationParams {
+  username?: string | null
 }
 
 const dayjs = require('dayjs')
@@ -26,43 +31,67 @@ export const getServerSideProps = async (context: any) => {
     }
   }
   // Fetch data from next API
-  const res = await axios.get(`${process.env.LOCAL_SERVER_URL}/api/accounts-error`, {
-    headers: {
-      Cookie: context.req.headers.cookie,
-    },
+  const response = await ScrapperFetcher.GET(`${process.env.LOCAL_SERVER_URL}/api/accounts-error`, {
+    username: null,
+    pageNumber: 1,
+    pageSize: 10,
+    orderBy: 'occurred_at',
+    isAsc: false,
   })
-  const accountErrorData: IAccountError[] = res.data
 
-  return { props: { accountErrorData } }
+  const accountData: IAccountError[] = response ? response.data : []
+
+  const paginationData: PaginationMetadata = {
+    data: accountData,
+    has_next: response ? response.has_next : false,
+    has_prev: response ? response.has_prev : false,
+    page: response ? response.page : 1,
+    size: response ? response.size : 0,
+    total_items: response ? response.total_items : 0,
+  }
+  return { props: { paginationData } }
 }
 
-const AccountsErrorPage = ({ accountErrorData }: Props) => {
+const AccountsErrorPage = ({ paginationData }: Props) => {
   const [shouldFetch, setShouldFetch] = useState(false)
-  const [username, setUsername] = useState('')
+  const [pageParams, setPageParams] = useState<AccountErrorPaginationParams>({
+    username: null,
+    pageNumber: 1,
+    pageSize: 10,
+    orderBy: 'occurred_at',
+    isAsc: false,
+  })
 
-  const onChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-    setUsername(e.target.value)
-    if (!shouldFetch) setShouldFetch(true)
+  const onPageChange = (newPage: number) => {
+    setPageParams((prevParams) => ({
+      ...prevParams,
+      pageNumber: newPage,
+    }))
   }
 
-  const {
-    data,
-    error,
-    mutate: mutateAccErrList,
-    isValidating,
-  } = useSWR(shouldFetch ? ['api/accounts-error', { username: username }] : null, Fetcher.GET, { refreshInterval: 0, fallbackData: accountErrorData })
+  const onChange: React.ChangeEventHandler<HTMLInputElement> = useCallback((e) => {
+    setPageParams(() => ({
+      pageNumber: 1,
+      pageSize: 10,
+      orderBy: 'occurred_at',
+      isAsc: false,
+      username: e.target.value,
+    }))
+    if (!shouldFetch) setShouldFetch(true)
+  }, [])
 
+  const { accountErrors: responseData, isLoading, error } = useGetErrorPagination(`/api/accounts-error`, pageParams, shouldFetch, paginationData)
+  const accountError: IAccountError[] = responseData?.data ? responseData.data : []
   if (error) {
-    console.log(data)
+    console.log(responseData)
     console.log(error)
     return <div>Failed to load account error data</div>
   }
-  if (!data) {
-    console.log(data)
+  if (!responseData) {
+    console.log(responseData)
     return <div>Loading...</div>
   }
-  const accountError: IAccountError[] = data
-  console.log(data)
+
   const columns = [
     {
       title: 'document_id',
@@ -94,7 +123,7 @@ const AccountsErrorPage = ({ accountErrorData }: Props) => {
       dataIndex: 'occurred_at',
       render: (e: any) => {
         const date = dayjs(e, 'YYYY-MM-DD THH:mm:ss')
-        return dayjs.utc(date).local().add(8, 'hours').format('YYYY-MM-DD HH:mm:ss')
+        return dayjs.utc(date).local().format('YYYY-MM-DD HH:mm:ss')
       },
     },
     { title: 'exception', dataIndex: 'exception' },
@@ -108,14 +137,25 @@ const AccountsErrorPage = ({ accountErrorData }: Props) => {
         className="order-shades-100 block w-full rounded-lg border p-2  text-slate-600 placeholder-slate-400 outline-none focus:border-slate-700 focus:outline-none"
         onChange={(e) => onChange(e)}
       ></Form.BaseInput>
-      <Table.Layout>
-        <Table.Header columns={columns} />
-        <Table.Body>
-          {accountError.map((e, index) => (
-            <Table.Row columns={columns} rowData={e} key={index} />
-          ))}
-        </Table.Body>
-      </Table.Layout>
+      <div className="flex gap-3">
+        <Table.Layout>
+          <Table.Header columns={columns} />
+          <Table.Body>
+            {accountError.map((e, index) => (
+              <Table.Row columns={columns} rowData={e} key={index} />
+            ))}
+          </Table.Body>
+        </Table.Layout>
+      </div>
+      <Pagination
+        isLoading={isLoading}
+        page={responseData.page}
+        size={responseData.size}
+        totalItems={responseData.total_items}
+        hasNext={responseData.has_next}
+        hasPrev={responseData.has_prev}
+        onPageChange={onPageChange}
+      />
     </Card>
   )
 }
