@@ -1,5 +1,5 @@
 import NextAuth from 'next-auth/next'
-import { User, NextAuthOptions } from 'next-auth'
+import { User, NextAuthOptions, Profile } from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
 import { FireStoreAdapterWrapper } from 'services/customAdapter'
 import { NextApiRequest, NextApiResponse } from 'next'
@@ -25,6 +25,10 @@ interface AuthToken {
 
 interface CombinedUser extends User {
   emailVerified: boolean
+}
+
+interface CombinedProfile extends Profile {
+  email_verified: boolean
 }
 
 async function refreshAccessToken(token: AuthToken) {
@@ -98,16 +102,18 @@ const nextAuthOptions: NextAuthOptionsCallback = (req, res) => ({
     async signIn({ user, account, profile, email, credentials }) {
       const app = initializeApp(firebaseConfig)
       const db = getFirestore(app)
-      const combinedUser = user as CombinedUser
-      const isNew = await isNewUser(db, user.email)
+      const CombinedProfile = profile as CombinedProfile
+      const isExist = await isExistUser(db, user.email)
 
       console.log({ user, account, profile, email, credentials })
-
-      if (isNew) {
-        const res = createUserInDatabase(db, user)
-        console.log(res)
-        return false
-      } else if (combinedUser.emailVerified !== true) {
+      if (isExist) {
+        if (CombinedProfile.email_verified !== true) {
+          return false
+        }
+      } else {
+        const resUsr = await createUserInDatabase(db, user)
+        const resAcc = await createAccountsInDatabase(db, account, user)
+        console.log(resUsr, resAcc)
         return false
       }
       if (account?.id_token) {
@@ -169,7 +175,33 @@ async function createUserInDatabase(db: any, user: any) {
   }
 }
 
-async function isNewUser(db: any, userEmail: any) {
+async function createAccountsInDatabase(db: any, account: any, user: any) {
+  try {
+    const userId = await isExistUser(db, user.email)
+    const accountData = {
+      access_token: account.access_token,
+      expires_at: account.expires_at,
+      id_token: account.id_token,
+      provider: account.provider,
+      providerAccountId: account.providerAccountId,
+      refresh_token: account.refresh_token,
+      scope: account.scope,
+      token_type: account.token_type,
+      type: account.type,
+      userId: userId,
+    }
+    const accountCollection = collection(db, 'accounts')
+    const newAccRef = await addDoc(accountCollection, accountData)
+
+    console.log('Account created with ID:', newAccRef.id)
+    return true // Return true to indicate success
+  } catch (error) {
+    console.error('Error creating acc:', error)
+    return false // Return false to indicate failure
+  }
+}
+
+async function isExistUser(db: any, userEmail: any) {
   try {
     // Create a query to check if the user's email exists in the "users" collection
     const usersCollection = collection(db, 'users')
@@ -177,11 +209,17 @@ async function isNewUser(db: any, userEmail: any) {
 
     // Execute the query and check the results
     const querySnapshot = await getDocs(emailQuery)
-    const userExists = !querySnapshot.empty
 
-    return !userExists // Return true if the user is new, false if they already exist
+    if (!querySnapshot.empty) {
+      // User exists, return the document ID
+      const userDoc = querySnapshot.docs[0]
+      return userDoc.id
+    } else {
+      // User does not exist, return null
+      return null
+    }
   } catch (error) {
     console.error('Error checking user existence:', error)
-    return false // Return false in case of an error
+    return null // Return null in case of an error
   }
 }
