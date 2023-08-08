@@ -4,11 +4,10 @@ import GoogleProvider from 'next-auth/providers/google'
 import { FireStoreAdapterWrapper } from 'services/customAdapter'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { setCookie } from 'cookies-next'
-import { JWT } from 'next-auth/jwt/types'
-type NextAuthOptionsCallback = (
-  req: NextApiRequest,
-  res: NextApiResponse
-) => NextAuthOptions
+import { initializeApp } from 'firebase/app'
+import { getFirestore, collection, getDocs, addDoc, query, where } from 'firebase/firestore/lite'
+
+type NextAuthOptionsCallback = (req: NextApiRequest, res: NextApiResponse) => NextAuthOptions
 
 /**
  * Takes a token, and returns a new token with updated
@@ -22,6 +21,10 @@ interface AuthToken {
   expires_at?: number
   refreshToken: string
   error?: string
+}
+
+interface CombinedUser extends User {
+  emailVerified: boolean
 }
 
 async function refreshAccessToken(token: AuthToken) {
@@ -63,6 +66,16 @@ async function refreshAccessToken(token: AuthToken) {
   }
 }
 
+const firebaseConfig = {
+  apiKey: process.env.FIREBASE_API_KEY,
+  appId: process.env.FIREBASE_APP_ID,
+  authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+  databaseURL: process.env.FIREBASE_DATABASE_URL,
+  projectId: process.env.FIREBASE_PROJECT_ID,
+  storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
+}
+
 const nextAuthOptions: NextAuthOptionsCallback = (req, res) => ({
   providers: [
     GoogleProvider({
@@ -73,23 +86,30 @@ const nextAuthOptions: NextAuthOptionsCallback = (req, res) => ({
           prompt: 'consent',
           access_type: 'offline',
           response_type: 'code',
+          scope: 'openid email profile',
         },
       },
     }),
   ],
-  adapter: FireStoreAdapterWrapper({
-    apiKey: process.env.FIREBASE_API_KEY,
-    appId: process.env.FIREBASE_APP_ID,
-    authDomain: process.env.FIREBASE_AUTH_DOMAIN,
-    databaseURL: process.env.FIREBASE_DATABASE_URL,
-    projectId: process.env.FIREBASE_PROJECT_ID,
-    storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
-    messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
-  }),
+  adapter: FireStoreAdapterWrapper(firebaseConfig),
   secret: process.env.JWT_SECRET,
   session: { strategy: 'jwt' },
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
+      const app = initializeApp(firebaseConfig)
+      const db = getFirestore(app)
+      const combinedUser = user as CombinedUser
+      const isNew = await isNewUser(db, user.email)
+
+      console.log({ user, account, profile, email, credentials })
+
+      if (isNew) {
+        const res = createUserInDatabase(db, user)
+        console.log(res)
+        return false
+      } else if (combinedUser.emailVerified !== true) {
+        return false
+      }
       if (account?.id_token) {
         setCookie('idToken', account.id_token, {
           req: req,
@@ -124,4 +144,44 @@ const nextAuthOptions: NextAuthOptionsCallback = (req, res) => ({
 
 export default (req: NextApiRequest, res: NextApiResponse) => {
   return NextAuth(req, res, nextAuthOptions(req, res))
+}
+
+async function createUserInDatabase(db: any, user: any) {
+  try {
+    // Define the data you want to store for the new user
+    const userData = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      image: user.image,
+      emailVerified: false,
+    }
+
+    // Add the user data to the "users" collection
+    const usersCollection = collection(db, 'users')
+    const newUserRef = await addDoc(usersCollection, userData)
+
+    console.log('User created with ID:', newUserRef.id)
+    return true // Return true to indicate success
+  } catch (error) {
+    console.error('Error creating user:', error)
+    return false // Return false to indicate failure
+  }
+}
+
+async function isNewUser(db: any, userEmail: any) {
+  try {
+    // Create a query to check if the user's email exists in the "users" collection
+    const usersCollection = collection(db, 'users')
+    const emailQuery = query(usersCollection, where('email', '==', userEmail))
+
+    // Execute the query and check the results
+    const querySnapshot = await getDocs(emailQuery)
+    const userExists = !querySnapshot.empty
+
+    return !userExists // Return true if the user is new, false if they already exist
+  } catch (error) {
+    console.error('Error checking user existence:', error)
+    return false // Return false in case of an error
+  }
 }
