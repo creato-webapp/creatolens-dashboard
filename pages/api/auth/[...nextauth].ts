@@ -1,12 +1,11 @@
 import NextAuth from 'next-auth/next'
-import { User, NextAuthOptions, Profile } from 'next-auth'
+import { User, NextAuthOptions } from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
 import { FireStoreAdapterWrapper } from 'services/customAdapter'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { setCookie } from 'cookies-next'
-import { initializeApp } from 'firebase/app'
-import { getFirestore, collection, getDocs, addDoc, query, where } from 'firebase/firestore/lite'
 
+import axios from 'axios'
 type NextAuthOptionsCallback = (req: NextApiRequest, res: NextApiResponse) => NextAuthOptions
 
 /**
@@ -23,12 +22,9 @@ interface AuthToken {
   error?: string
 }
 
-interface CombinedUser extends User {
+export interface CombinedUser extends User {
   emailVerified: boolean
-}
-
-interface CombinedProfile extends Profile {
-  email_verified: boolean
+  roles: string[]
 }
 
 async function refreshAccessToken(token: AuthToken) {
@@ -95,27 +91,14 @@ const nextAuthOptions: NextAuthOptionsCallback = (req, res) => ({
       },
     }),
   ],
+  pages: {
+    signIn: '/auth/login',
+  },
   adapter: FireStoreAdapterWrapper(firebaseConfig),
   secret: process.env.JWT_SECRET,
   session: { strategy: 'jwt' },
   callbacks: {
     async signIn({ user, account, profile, email, credentials }) {
-      const app = initializeApp(firebaseConfig)
-      const db = getFirestore(app)
-      const CombinedProfile = profile as CombinedProfile
-      const isExist = await isExistUser(db, user.email)
-
-      console.log({ user, account, profile, email, credentials })
-      if (isExist) {
-        if (CombinedProfile.email_verified !== true) {
-          return false
-        }
-      } else {
-        const resUsr = await createUserInDatabase(db, user)
-        const resAcc = await createAccountsInDatabase(db, account, user)
-        console.log(resUsr, resAcc)
-        return false
-      }
       if (account?.id_token) {
         setCookie('idToken', account.id_token, {
           req: req,
@@ -150,76 +133,4 @@ const nextAuthOptions: NextAuthOptionsCallback = (req, res) => ({
 
 export default (req: NextApiRequest, res: NextApiResponse) => {
   return NextAuth(req, res, nextAuthOptions(req, res))
-}
-
-async function createUserInDatabase(db: any, user: any) {
-  try {
-    // Define the data you want to store for the new user
-    const userData = {
-      id: user.id,
-      name: user.name,
-      email: user.email,
-      image: user.image,
-      emailVerified: false,
-    }
-
-    // Add the user data to the "users" collection
-    const usersCollection = collection(db, 'users')
-    const newUserRef = await addDoc(usersCollection, userData)
-
-    console.log('User created with ID:', newUserRef.id)
-    return true // Return true to indicate success
-  } catch (error) {
-    console.error('Error creating user:', error)
-    return false // Return false to indicate failure
-  }
-}
-
-async function createAccountsInDatabase(db: any, account: any, user: any) {
-  try {
-    const userId = await isExistUser(db, user.email)
-    const accountData = {
-      access_token: account.access_token,
-      expires_at: account.expires_at,
-      id_token: account.id_token,
-      provider: account.provider,
-      providerAccountId: account.providerAccountId,
-      refresh_token: account.refresh_token,
-      scope: account.scope,
-      token_type: account.token_type,
-      type: account.type,
-      userId: userId,
-    }
-    const accountCollection = collection(db, 'accounts')
-    const newAccRef = await addDoc(accountCollection, accountData)
-
-    console.log('Account created with ID:', newAccRef.id)
-    return true // Return true to indicate success
-  } catch (error) {
-    console.error('Error creating acc:', error)
-    return false // Return false to indicate failure
-  }
-}
-
-async function isExistUser(db: any, userEmail: any) {
-  try {
-    // Create a query to check if the user's email exists in the "users" collection
-    const usersCollection = collection(db, 'users')
-    const emailQuery = query(usersCollection, where('email', '==', userEmail))
-
-    // Execute the query and check the results
-    const querySnapshot = await getDocs(emailQuery)
-
-    if (!querySnapshot.empty) {
-      // User exists, return the document ID
-      const userDoc = querySnapshot.docs[0]
-      return userDoc.id
-    } else {
-      // User does not exist, return null
-      return null
-    }
-  } catch (error) {
-    console.error('Error checking user existence:', error)
-    return null // Return null in case of an error
-  }
 }
