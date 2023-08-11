@@ -1,5 +1,5 @@
 import React, { InputHTMLAttributes, PropsWithChildren, FormHTMLAttributes, DetailedHTMLProps, LabelHTMLAttributes } from 'react'
-export type InputType = 'Input' | 'DatePicker' | 'TimePicker' | 'DateTimePicker' | 'Checkbox' | 'InputNumber'
+export type InputType = 'Input' | 'DatePicker' | 'TimePicker' | 'DateTimePicker' | 'Checkbox' | 'InputNumber' | 'InputPassword'
 
 export type customFormItemProps = {
   [key: string]: string | number | boolean | any

@@ -2,17 +2,17 @@ import React, { useEffect, useState, useRef, HTMLProps, useCallback } from 'reac
 import { Button } from '../Button'
 import { CaretDownIcon, CaretUpIcon } from '@components/Icon'
 
-interface DropdownOption {
+export interface DropdownOption {
   label: string
-  value: string
+  value: string | number
 }
 
 interface DropdownProps extends HTMLProps<HTMLSelectElement> {
   name?: string
   options: DropdownOption[]
-  defaultValue?: string
+  defaultValue?: string | number
   disabled?: boolean // Add the disabled prop
-  onValueChange?: (value: string) => void // Add the onChange prop
+  onValueChange?: (value: string | number) => void // Add the onChange prop
 }
 
 const Dropdown: React.FC<DropdownProps> = ({ name = '', options, defaultValue, disabled, onValueChange }) => {
@@ -21,7 +21,7 @@ const Dropdown: React.FC<DropdownProps> = ({ name = '', options, defaultValue, d
   const dropdownRef = useRef<HTMLDivElement>(null)
 
   const handleOptionSelect = useCallback(
-    (value: string) => {
+    (value: string | number) => {
       setSelectedValue(value)
       setIsOpen(false)
       if (onValueChange) {

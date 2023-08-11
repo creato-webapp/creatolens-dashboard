@@ -5,6 +5,7 @@ import Checkbox from './Checkbox'
 import TextInput from './TextInput'
 import InputNumber from './InputNumber'
 import BaseInput from './BaseInput'
+import InputPassword from './InputPassword'
 
 const CustomItem: FC<CustomItemProps> = (props: CustomItemProps) => {
   const { customFormItemProps } = props
@@ -20,6 +21,18 @@ const CustomItem: FC<CustomItemProps> = (props: CustomItemProps) => {
           disabled={props.disabled}
           onChange={props.onChange}
           customFormItemProps={customFormItemProps}
+        />
+      )
+    case 'InputPassword':
+      return (
+        <InputPassword
+          id={props.id}
+          defaultValue={props.defaultValue as string}
+          placeholder={props?.placeholder}
+          disabled={props.disabled}
+          onChange={props.onChange}
+          type="number"
+          {...customFormItemProps}
         />
       )
     case 'InputNumber':

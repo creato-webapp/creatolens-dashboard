@@ -37,7 +37,7 @@ const BaseInput: React.FunctionComponent<IBaseInputProps> = ({
   }, [value])
   return (
     <>
-      <div className="relative space-y-2 rounded-md ">
+      <div className="relative flex w-full items-center rounded-md">
         <input
           {...customFormItemProps}
           {...props}
@@ -52,9 +52,9 @@ const BaseInput: React.FunctionComponent<IBaseInputProps> = ({
           }`}
           style={customFormItemProps?.style}
         />
+        {children}
         <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
           {error && <ExclamationCircleIcon className="h-5 w-5 text-red-500" aria-hidden="true" />}
-          {children}
         </div>
       </div>
       {message && (
