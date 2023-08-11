@@ -27,7 +27,7 @@ const AccountCreateCard: React.FC<AccountCreateCardProps> = ({ isLoading, isCrea
     },
     {
       label: 'Password',
-      type: 'Input',
+      type: 'InputPassword',
       name: 'pwd',
       customFormItemProps: { required: true, placeholder: 'Enter password' },
     },
