@@ -20,6 +20,9 @@ export async function fetchWhitelist(fileName: string, bucket: string) {
 export async function getRoles(userEmail: string) {
   const fileName = 'users.json'
   const bucket = process.env.CLOUD_BUCKET as string
+  if (bucket === undefined) {
+    window.alert('CLOUD_BUCKET is undefined')
+  }
 
   const whitelist: CombinedUser[] = await fetchWhitelist(fileName, bucket)
   console.log({ whitelist })
