@@ -19,7 +19,7 @@ export async function fetchWhitelist(fileName: string, bucket: string) {
 
 export async function getRoles(userEmail: string) {
   const fileName = 'users.json'
-  const bucket = 'firebase-creatolens-whitelist'
+  const bucket = process.env.CLOUD_BUCKET as string
 
   const whitelist: CombinedUser[] = await fetchWhitelist(fileName, bucket)
   console.log({ whitelist })
