@@ -3,6 +3,7 @@ import { Popover } from '@headlessui/react'
 import { useSession, signIn, signOut, getSession } from 'next-auth/react'
 import { deleteCookie } from 'cookies-next'
 import NavBar from './Navbar'
+import { useRouter } from 'next/router'
 
 interface NavbarProps extends PropsWithChildren {}
 
@@ -26,12 +27,13 @@ export default function Navbar(props: NavbarProps) {
   const navBarPage = [
     { name: 'Home', path: '/' },
     { name: 'Accounts', path: '/accounts' },
-    { name: 'Login Error History', path: '/accounts-error' },
-    { name: 'Account Session History', path: '/accounts-session' },
+    // { name: 'Login Error History', path: '/accounts-error' },
+    // { name: 'Account Session History', path: '/accounts-session' },
     { name: 'Recommendation', path: '/recommendation' },
   ]
 
   const { data: session, status } = useSession()
+  const router = useRouter()
   const [isShowMenu, setIsShowMenu] = useState(false)
   const handleMenuButtonClick = () => {
     console.log(isShowMenu)

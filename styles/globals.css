@@ -45,6 +45,9 @@ input[required]::after {
   content: '*';
   color: red;
 }
+svg {
+  pointer-events: none;
+}
 
 @layer base {
   body {

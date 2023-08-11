@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback } from 'react'
 import Card from '@components/Card'
 import { Table } from '@components/Table'
 import useSWR from 'swr'
@@ -10,6 +10,9 @@ import Title from '@components/Typography/Title'
 import MagnifyingGlassIcon from '@components/Icon/MagnifyingGlassIcon'
 import LoaderIcon from '@components/Icon/LoaderIcon'
 import { HashtagFetcher } from 'services/HashtagFetcher'
+import TopRelatedHashtagCard from '@lib/Hashet/TopRelatedHashtagCard'
+import TopAccHashtagCard from '@lib/Hashet/TopAccHashtagCard'
+import { Button } from '@components/Button'
 interface IHashet extends Record<string, string | number | boolean> {
   hashtag: string
   acc: number
@@ -24,7 +27,7 @@ export const getServerSideProps = async (context: any) => {
   if (!session) {
     return {
       redirect: {
-        destination: '/login',
+        destination: '/auth/login',
       },
     }
   }
@@ -53,10 +56,10 @@ const RecommendationPage = ({ hashetSessionData }: Props) => {
     setInputString(e.target.value)
   }
 
-  const onSubmit = async () => {
+  const onSubmit = useCallback(async () => {
     if (!shouldFetch) setShouldFetch(true)
-    mutateHashet(inputString)
-  }
+    await mutateHashet(inputString)
+  }, [inputString])
 
   const {
     data,
@@ -105,10 +108,6 @@ const RecommendationPage = ({ hashetSessionData }: Props) => {
 
   const hashetData: IHashet[] = data?.data ? data.data : []
 
-  const newHashtagData = hashetData.map((e, k) => ({ index: k + 1, ...e }))
-
-  const currentItems = newHashtagData.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage)
-
   const handleKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (e) => {
     if (e.key === 'Enter') {
       onSubmit && onSubmit()
@@ -120,133 +119,34 @@ const RecommendationPage = ({ hashetSessionData }: Props) => {
   }
 
   return (
-    <Card className="px-48 ">
+    <Card className="px-48">
       <div>
         <Title level={1} bold>
           RECOMMENDATION
         </Title>
       </div>
-      <div className="my-2 flex">
-        <div className="grow">
-          <div className="flex w-full items-center rounded-3xl bg-neutral-100 px-2 py-1.5 hover:rounded-3xl hover:outline-none focus:rounded-3xl focus:outline-none focus:ring-opacity-50 active:rounded-3xl">
-            {isValidating ? <LoaderIcon className="animate-spin" /> : <MagnifyingGlassIcon />}
+      <div className="my-2 flex w-full gap-2">
+        <div className="flex w-full items-center rounded-3xl bg-neutral-100 px-2 py-2 hover:rounded-3xl hover:outline-none focus:rounded-3xl focus:outline-none focus:ring-opacity-50 active:rounded-3xl">
+          {isValidating ? <LoaderIcon className="animate-spin" /> : <MagnifyingGlassIcon />}
 
-            <Form.BaseInput
-              hidden
-              disabled={isValidating}
-              onKeyDown={handleKeyDown}
-              placeholder="e.g. Thank you Elon Musk!"
-              className={` rounded-3xl border-none bg-neutral-100 px-2 py-1.5 hover:rounded-3xl hover:outline-none focus:rounded-3xl focus:outline-none focus:ring-opacity-50 active:rounded-3xl  ${
-                isValidating ? 'text-gray-400' : ''
-              } w-full`}
-              onChange={(e) => onChange(e)}
-            ></Form.BaseInput>
-          </div>
+          <Form.BaseInput
+            hidden
+            disabled={isValidating}
+            onKeyDown={handleKeyDown}
+            placeholder="e.g. Thank you Elon Musk!"
+            className={` rounded-3xl border-none bg-neutral-100 px-2 py-1.5 hover:rounded-3xl hover:outline-none focus:rounded-3xl focus:outline-none focus:ring-opacity-50 active:rounded-3xl  ${
+              isValidating ? 'text-gray-400' : ''
+            } w-full`}
+            onChange={(e) => onChange(e)}
+          ></Form.BaseInput>
         </div>
+        <Button.Primary className="px-3" onClick={() => onSubmit()}>
+          Search
+        </Button.Primary>
       </div>
-      <div className="flex flex-col items-center justify-center">
-        <Table.Layout className="text-lg font-bold">
-          <Table.Header columns={columns} className="text-center  text-text-primary" />
-
-          <Table.Body>
-            {currentItems.map((e, index) => (
-              <Table.Row
-                columns={columns}
-                rowData={e}
-                key={index}
-                cellProps={{ className: 'color-red-400 w-72  items-center justify-center border border-slate-300 bg-neutral-50' }}
-              />
-            ))}
-          </Table.Body>
-        </Table.Layout>
-        <Pagination
-          isLoading={false}
-          page={currentPage}
-          size={itemsPerPage}
-          totalItems={hashetData.length}
-          hasNext={currentPage * itemsPerPage < hashetData.length}
-          hasPrev={currentPage > 1}
-          onPageChange={handlePageChange}
-        />
-
-        <div className="mt-40 inline-flex h-96 w-96 flex-col items-start justify-start">
-          TEsting
-          <div className="inline-flex items-center justify-start">
-            <div className="inline-flex w-24 flex-col items-center justify-center border border-slate-300 bg-neutral-100">
-              <div className="inline-flex w-28 items-start justify-start px-3 py-2.5">
-                <div className="shrink grow basis-0 text-center text-lg font-semibold leading-loose text-black">Rank</div>
-              </div>
-            </div>
-            <div className="inline-flex w-72 flex-col items-center justify-center border border-slate-300 bg-neutral-100">
-              <div className="inline-flex w-28 items-start justify-start px-3 py-2.5">
-                <div className="shrink grow basis-0 text-center text-lg font-semibold leading-loose text-black">#Hashtag </div>
-              </div>
-            </div>
-            <div className="inline-flex w-72 flex-col items-center justify-center border border-slate-300 bg-neutral-100">
-              <div className="inline-flex w-28 items-start justify-start px-3 py-2.5">
-                <div className="shrink grow basis-0 text-center text-lg font-semibold leading-loose text-black">Accuracy</div>
-              </div>
-            </div>
-          </div>
-          <div className="inline-flex items-center justify-start">
-            <div className="inline-flex w-24 flex-col items-center justify-center border border-slate-300 bg-neutral-50">
-              <div className="inline-flex w-28 items-start justify-start px-3 py-2.5">
-                <div className="shrink grow basis-0 text-center text-lg font-semibold leading-loose text-black">1</div>
-              </div>
-            </div>
-            <div className="inline-flex w-72 flex-col items-center justify-center border border-slate-300 bg-neutral-50">
-              <div className="inline-flex items-center justify-start self-stretch py-2.5 pl-6 pr-3">
-                <div className="shrink grow basis-0 text-lg font-medium leading-loose text-blue-700 underline">#teslamodel</div>
-              </div>
-            </div>
-            <div className="inline-flex w-72 flex-col items-center justify-center border border-slate-300 bg-neutral-50">
-              <div className="inline-flex w-fit items-start justify-start px-3 py-2.5">
-                <div className="shrink grow basis-0 text-center text-lg font-semibold leading-loose text-black">98.304%</div>
-              </div>
-            </div>
-            <div className="flex items-center justify-start gap-2 px-4 py-1">
-              <div className="rounded border border-slate-300 p-1" />
-            </div>
-          </div>
-          <div className="inline-flex items-center justify-start">
-            <div className="inline-flex w-24 flex-col items-center justify-center border border-slate-300 bg-neutral-50">
-              <div className="inline-flex w-28 items-start justify-start px-3 py-2.5">
-                <div className="shrink grow basis-0 text-center text-lg font-semibold leading-loose text-black">2</div>
-              </div>
-            </div>
-            <div className="inline-flex w-72 flex-col items-center justify-center border border-slate-300 bg-neutral-50">
-              <div className="inline-flex items-center justify-start self-stretch py-2.5 pl-6 pr-3">
-                <div className="text-center text-lg font-medium leading-loose text-blue-700 underline">#teslamodely</div>
-              </div>
-            </div>
-            <div className="inline-flex w-72 flex-col items-center justify-center border border-slate-300 bg-neutral-50">
-              <div className="inline-flex w-28 items-start justify-start px-3 py-2.5">
-                <div className="shrink grow basis-0 text-center text-lg font-semibold leading-loose text-black">98.265%</div>
-              </div>
-            </div>
-            <div className="flex items-center justify-start gap-2 px-4 py-1">
-              <div className="rounded border border-slate-300 p-1" />
-            </div>
-            <div className="inline-flex w-24 flex-col items-center justify-center border border-slate-300 bg-neutral-50">
-              <div className="inline-flex w-28 items-start justify-start px-3 py-2.5">
-                <div className="shrink grow basis-0 text-center text-lg font-semibold leading-loose text-black">10</div>
-              </div>
-            </div>
-            <div className="inline-flex w-72 flex-col items-center justify-center border border-slate-300 bg-neutral-50">
-              <div className="inline-flex items-center justify-start self-stretch py-2.5 pl-6 pr-3">
-                <div className="text-center text-lg font-medium leading-loose text-blue-700 underline">#teslalife</div>
-              </div>
-            </div>
-            <div className="inline-flex w-72 flex-col items-center justify-center border border-slate-300 bg-neutral-50">
-              <div className="inline-flex w-28 items-start justify-start px-3 py-2.5">
-                <div className="shrink grow basis-0 text-center text-lg font-semibold leading-loose text-black">98.225%</div>
-              </div>
-            </div>
-            <div className="flex items-center justify-start gap-2 px-4 py-1">
-              <div className="rounded border border-slate-300 p-1" />
-            </div>
-          </div>
-        </div>
+      <div className="flex gap-4">
+        <TopRelatedHashtagCard hashtags={hashetData} />
+        <TopAccHashtagCard hashtags={hashetData} />
       </div>
     </Card>
   )
