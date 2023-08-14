@@ -13,6 +13,8 @@ import { HashtagFetcher } from 'services/HashtagFetcher'
 import TopRelatedHashtagCard from '@lib/Hashet/TopRelatedHashtagCard'
 import TopAccHashtagCard from '@lib/Hashet/TopAccHashtagCard'
 import { Button } from '@components/Button'
+import Tab from '@components/Tab'
+import CustomizeHashtagCard from '@lib/Hashet/CustomizeHashtagCard'
 interface IHashet extends Record<string, string | number | boolean> {
   hashtag: string
   acc: number
@@ -118,6 +120,28 @@ const RecommendationPage = ({ hashetSessionData }: Props) => {
     setCurrentPage(page)
   }
 
+  const tabItems = [
+    {
+      key: '1',
+      title: 'Categories',
+      content: (
+        <div className="flex gap-4">
+          <TopRelatedHashtagCard hashtags={hashetData} />
+          <TopAccHashtagCard hashtags={hashetData} />
+        </div>
+      ),
+    },
+    {
+      key: '2',
+      title: 'Customize',
+      content: (
+        <div className="flex gap-4">
+          <CustomizeHashtagCard hashtags={hashetData} />
+        </div>
+      ),
+    },
+  ]
+
   return (
     <Card className="px-48">
       <div>
@@ -140,14 +164,11 @@ const RecommendationPage = ({ hashetSessionData }: Props) => {
             onChange={(e) => onChange(e)}
           ></Form.BaseInput>
         </div>
-        <Button.Primary className="px-3" onClick={() => onSubmit()}>
+        <Button.Primary className="px-3" onClick={() => onSubmit()} loading={isValidating}>
           Search
         </Button.Primary>
       </div>
-      <div className="flex gap-4">
-        <TopRelatedHashtagCard hashtags={hashetData} />
-        <TopAccHashtagCard hashtags={hashetData} />
-      </div>
+      <Tab items={tabItems} defaultActiveKey="1" scrollable={false} />
     </Card>
   )
 }

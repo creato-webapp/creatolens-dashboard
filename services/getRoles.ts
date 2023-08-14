@@ -19,7 +19,7 @@ export async function fetchWhitelist(fileName: string, bucket: string) {
 
 export async function getRoles(userEmail: string) {
   const fileName = 'users.json'
-  const bucket = process.env.CLOUD_BUCKET as string
+  const bucket = 'firebase-creatolens-whitelist'
   if (bucket === undefined) {
     window.alert('CLOUD_BUCKET is undefined')
   }
@@ -28,4 +28,10 @@ export async function getRoles(userEmail: string) {
   console.log({ whitelist })
   const userEntry = whitelist.find((entry) => entry.email === userEmail)
   return userEntry ? userEntry.roles : []
+}
+
+export function isExpired(expires: string): boolean {
+  const expiresDate = new Date(expires)
+  const currentTimestamp = Date.now()
+  return expiresDate.getTime() <= currentTimestamp
 }

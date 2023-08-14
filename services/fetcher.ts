@@ -3,7 +3,7 @@ import { getCookie } from 'cookies-next'
 
 export const FetcherInstance = axios.create({
   withCredentials: true,
-  timeout: 5000,
+  timeout: 10000,
 })
 
 FetcherInstance.interceptors.request.use(

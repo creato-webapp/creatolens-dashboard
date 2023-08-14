@@ -7,7 +7,7 @@ export interface TabItemType {
   content: React.ReactNode
 }
 
-interface TabProps {
+interface TabProps extends React.HTMLAttributes<HTMLDivElement> {
   activeKey?: string
   centered?: boolean
   defaultActiveKey?: string
@@ -16,11 +16,11 @@ interface TabProps {
   scrollable?: boolean
   tabBarExtraContent?: React.ReactNode
   tabBarStyle?: React.CSSProperties
-  onChange?: (activeKey: string) => void
+  onKeyChange?: (activeKey: string) => void
   onEdit?: (targetKey: string, action: 'add' | 'remove') => void
 }
 
-const TabComponent: React.FC<TabProps> = ({
+const Tab: React.FC<TabProps> = ({
   activeKey,
   centered,
   defaultActiveKey,
@@ -29,16 +29,17 @@ const TabComponent: React.FC<TabProps> = ({
   scrollable = true,
   tabBarExtraContent,
   tabBarStyle,
-  onChange,
+  onKeyChange,
   onEdit,
+  className,
 }) => {
   const [currentActiveKey, setCurrentActiveKey] = useState<string | undefined>(defaultActiveKey)
 
   const handleChange = (key: string) => {
     console.log(key, items)
     setCurrentActiveKey(key)
-    if (onChange) {
-      onChange(key)
+    if (onKeyChange) {
+      onKeyChange(key)
     }
   }
 
@@ -49,10 +50,13 @@ const TabComponent: React.FC<TabProps> = ({
   }
 
   return (
-    <div className="tabs inline-block min-h-full min-w-full p-4">
+    <div className={`tabs inline-block min-h-0 min-w-full p-4 ${className ? className : ''}`}>
       <div className={`tabs-bar${centered ? ' centered' : ''}  inline-flex`} style={tabBarStyle}>
         {items.map((item) => (
-          <button className={`px-6 py-2 ${currentActiveKey == item.key ? 'bg-orange-500 text-text-white' : 'bg-bg-white text-text-primary'}`}>
+          <button
+            type="button"
+            className={`px-6 py-2 ${currentActiveKey == item.key ? 'bg-orange-500 text-text-white' : 'bg-bg-white text-text-primary'}`}
+          >
             <div
               key={item.key}
               className={`tab${currentActiveKey === item.key ? ' active' : ''} ${size || ''} p-2 `}
@@ -64,7 +68,7 @@ const TabComponent: React.FC<TabProps> = ({
         ))}
         {tabBarExtraContent}
       </div>
-      <div className={`tab-content bg-bg-white p-4 ${scrollable ? 'h-64 overflow-auto' : 'h-48'}`}>
+      <div className={`tab-content bg-bg-white p-4 ${scrollable ? 'overflow-auto' : ''}`}>
         {items.map((item) =>
           currentActiveKey === item.key ? (
             <div
@@ -80,4 +84,4 @@ const TabComponent: React.FC<TabProps> = ({
   )
 }
 
-export default TabComponent
+export default Tab
