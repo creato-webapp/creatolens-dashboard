@@ -1,8 +1,8 @@
 import React, { HTMLProps } from 'react'
 import Title from '@components/Typography/Title'
 
-interface CardProps extends HTMLProps<HTMLDivElement> {
-  title?: string | undefined
+interface CardProps extends Omit<HTMLProps<HTMLDivElement>, 'title'> {
+  title?: React.ReactNode | undefined
   extra?: React.ReactNode
   className?: string | undefined
 }

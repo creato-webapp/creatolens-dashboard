@@ -7,7 +7,6 @@ interface TitleProps extends React.HTMLAttributes<HTMLHeadingElement> {
   bold?: boolean
   extraBold?: boolean
   italic?: boolean
-  children?: string
   className?: string
 }
 

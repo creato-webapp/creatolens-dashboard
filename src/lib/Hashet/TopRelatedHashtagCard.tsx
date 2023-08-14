@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react'
 import Card from '@components/Card'
 import Dropdown from '@components/Form/Dropdown'
 import { Button } from '@components/Button'
+import Title from '@components/Typography/Title'
 interface Hashtag {
   acc: number
   hashtag: string
@@ -40,7 +41,11 @@ const TopRelatedHashtagCard: React.FC<Props> = ({ hashtags }) => {
 
   return (
     <Card
-      title={`Top ${numberOfHashes} Related Hashtag`}
+      title={
+        <div className="flex flex-wrap gap-2">
+          Top<Title level={1} className="text-orange-500">{`${numberOfHashes}`}</Title>Related
+        </div>
+      }
       className="min-w-96 w-1/2 justify-start gap-6 bg-neutral-50 px-6 py-9 shadow"
       extra={
         <Dropdown

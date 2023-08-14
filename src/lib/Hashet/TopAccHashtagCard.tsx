@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react'
 import Card from '@components/Card'
 import Dropdown from '@components/Form/Dropdown'
 import { Button } from '@components/Button'
+import Title from '@components/Typography/Title'
 
 interface Hashtag {
   acc: number
@@ -35,22 +36,30 @@ const TopAccHashtagCard: React.FC<Props> = ({ hashtags }) => {
 
   const DropdownOptions = [
     {
-      label: '> 95%',
-      value: 98,
+      label: '≥ 95%',
+      value: 95,
     },
     {
-      label: '> 90%',
+      label: '≥ 90%',
       value: 90,
     },
     {
-      label: '> 85%',
+      label: '≥ 85%',
       value: 85,
+    },
+    {
+      label: '≥ 80%',
+      value: 80,
     },
   ]
 
   return (
     <Card
-      title={`≥ ${selectedAccuracy}% Related Hashtag`}
+      title={
+        <div className="flex flex-wrap gap-2">
+          <Title level={1} className="text-orange-500">{`≥${selectedAccuracy}% `}</Title>Related Hashtag
+        </div>
+      }
       className="min-w-96 w-1/2 justify-start gap-6 bg-neutral-50 px-6 py-9 shadow"
       extra={
         <Dropdown

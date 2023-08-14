@@ -4,6 +4,7 @@ import Dropdown from '@components/Form/Dropdown'
 import { Button } from '@components/Button'
 import Paragraph from '@components/Typography/Paragraph'
 import Checkbox from '@components/Form/Checkbox'
+import Title from '@components/Typography/Title'
 
 interface Hashtag {
   acc: number
@@ -55,9 +56,9 @@ const CustomizeHashtagCard: React.FC<Props> = ({ hashtags }) => {
     <Card className=" w-full gap-6 px-6 py-9 shadow">
       <div className="flex gap-4">
         <div className="w-1/4">
-          <Paragraph bold size="lg" className="ml-auto mr-0 text-right">
+          <Title bold level={3} className="ml-auto mr-0 mb-4 text-right">
             Customize
-          </Paragraph>
+          </Title>
           <Paragraph className="ml-auto mr-0 text-right">Select all hashtag you wish to put under your post and click “Copy Selected”</Paragraph>
         </div>
         <div className=" w-3/4">
@@ -91,7 +92,7 @@ const CustomizeHashtagCard: React.FC<Props> = ({ hashtags }) => {
             ))}
           </div>
           <div className=" flex justify-end gap-3">
-            <Button.Primary onClick={copyToClipboard}>Copy</Button.Primary>
+            <Button.Primary onClick={copyToClipboard}>Copy Selected</Button.Primary>
             <Button.Primary onClick={clearAll}>Clear All</Button.Primary>
             <Button.Primary onClick={selectAll}>Select All</Button.Primary>
           </div>
