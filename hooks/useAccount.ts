@@ -1,22 +1,21 @@
-import useSWR, { mutate } from 'swr'
-import { AccountFetcher } from 'services/AccountFetcher'
+import useSWR from 'swr'
 import { IAccount } from '@lib/Account/Account'
-import { useGetPagination } from './usePagination'
-import { PaginationParams, PaginationMetadata } from './usePagination'
+import AccountsHelper, { PaginationParams, PaginationMetadata } from '../services/Account'
 
-export const useAccount = (url: string, id: string, shouldFetch: boolean = true, fallbackData?: any) => {
-  const { data, error, mutate, ...swr } = useSWR(shouldFetch ? [url, id] : null, (url, id) => AccountFetcher.GET(`${url}/${id}`), {
+export const useAccount = (id: string, shouldFetch: boolean = true, fallbackData?: any) => {
+  const { data, error, mutate, ...swr } = useSWR(shouldFetch ? [id] : null, (id) => AccountsHelper.GetAccount(id), {
     refreshInterval: 0,
     fallbackData: fallbackData,
   })
+
   const updateAccount = async (updatedAccount: IAccount) => {
-    await AccountFetcher.PATCH(`${url}/${id}`, updatedAccount, { params: { id: updatedAccount.id } })
+    const res = await AccountsHelper.UpdateAccount(id, updatedAccount)
     mutate()
+    return res
   }
 
   const updateSession = async (updatedAccount: IAccount) => {
-    console.log(`${url}/session/${id}`, { username: updatedAccount.username })
-    const res = await AccountFetcher.POST(`${url}/session/${id}`, { username: updatedAccount.username })
+    const res = await AccountsHelper.UpdateSession(id, updatedAccount)
     mutate()
     return res
   }
@@ -32,9 +31,11 @@ export const useAccount = (url: string, id: string, shouldFetch: boolean = true,
   }
 }
 
-export const useGetAccountsPagination = (url: string, paginationParams: PaginationParams, shouldFetch?: true, fallbackData?: PaginationMetadata) => {
-  const { data, error, mutate, ...swr } = useGetPagination(url, paginationParams, shouldFetch, fallbackData)
-
+export const useGetAccountsPagination = (params: any, paginationParams: PaginationParams, shouldFetch?: true, fallbackData?: PaginationMetadata) => {
+  const { data, error, mutate, ...swr } = useSWR(shouldFetch ? [paginationParams, params] : null, AccountsHelper.GetAccountsPagination, {
+    refreshInterval: 0,
+    fallbackData: fallbackData,
+  })
   return {
     accounts: data,
     isLoading: !error && !data,
