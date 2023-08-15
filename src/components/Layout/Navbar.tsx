@@ -28,8 +28,8 @@ const NavBar: React.FC<NavBarProps> = ({ logo, pages, isLoggedIn, onLogin, onLog
       </div>
 
       <div className="flex space-x-10 justify-self-center">
-        {pages.map((page) => (
-          <div className="inline-flex flex-col items-center justify-start gap-8 pb-9">
+        {pages.map((page, index) => (
+          <div id={`${page.name}-${index}`} className="inline-flex flex-col items-center justify-start gap-8 pb-9">
             <div className={`${router.pathname === page.path ? 'h-1 self-stretch bg-orange-500' : 'h-1 self-stretch bg-red-500 opacity-0'}`} />
             <a key={page.name} href={page.path}>
               <Title bold level={3} className={` ${router.pathname === page.path ? ' text-orange-500' : ''}`}>
