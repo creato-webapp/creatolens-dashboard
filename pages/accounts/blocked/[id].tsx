@@ -1,18 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import Card from '@components/Card'
 import { useRouter } from 'next/router'
 import { Form } from '@components/Form'
 import { IField } from '@components/Form/interface'
-import { IAccount } from '@lib/Account/Account/interface'
-import useSWR, { useSWRConfig } from 'swr'
+import { IBlockedAccount } from '@lib/Account/Account/interface'
 import { getSession } from 'next-auth/react'
-import { GetServerSideProps } from 'next'
-import { useAccount } from 'hooks/useAccount'
-import axios from 'axios'
-import { AccountFetcher } from 'services/AccountFetcher'
+import { GetBlockedAccount } from 'services/BlockAccount'
+import { useBlockAccount } from 'hooks/useBlockedAccount'
 
 type Props = {
-  accountData: IAccount
+  accountData: IBlockedAccount
 }
 
 const dayjs = require('dayjs')
@@ -32,14 +29,14 @@ export const getServerSideProps = async (context: any) => {
     }
   }
   const { params } = context
-  const res = await AccountFetcher.GET(process.env.LOCAL_SERVER_URL + '/api/accounts-blocked/' + params.id, {
+  const res = await GetBlockedAccount(params.id, {
     headers: {
       Cookie: context.req.headers.cookie,
     },
   })
 
   // Pass data to the page via props
-  const accountData: IAccount = res ? res : null
+  const accountData = res as IBlockedAccount
   return { props: { accountData } }
 }
 
@@ -55,8 +52,8 @@ const AccountsBlockedPage = ({ accountData }: Props) => {
     data,
     isLoading: loading,
     error,
-    updateAccount: useUpdateAccount,
-  } = useAccount('/api/accounts-blocked', id as string, shouldFetch, isCreate ? isCreate : accountData)
+    updateBlockAccount: useUpdateAccount,
+  } = useBlockAccount(id as string, shouldFetch, isCreate ? isCreate : accountData)
 
   if (error) {
     console.log(data)
@@ -68,7 +65,7 @@ const AccountsBlockedPage = ({ accountData }: Props) => {
     return <div>Loading...</div>
   }
 
-  const account: IAccount = {
+  const account: IBlockedAccount = {
     ...data,
     last_login_dt: dayjs(data?.last_login_dt, 'YYYY-MM-DD THH:mm:ss').format('YYYY-MM-DDTHH:mm'),
   }
@@ -113,7 +110,7 @@ const AccountsBlockedPage = ({ accountData }: Props) => {
     },
   ]
 
-  const handleSubmit = async (values: IAccount) => {
+  const handleSubmit = async (values: IBlockedAccount) => {
     try {
       setShouldFetch(true)
       setIsLoading(true)
@@ -127,7 +124,7 @@ const AccountsBlockedPage = ({ accountData }: Props) => {
     }
   }
 
-  const updateAccount = async (values: IAccount) => {
+  const updateAccount = async (values: IBlockedAccount) => {
     const newValues = {
       ...account,
       ...values,

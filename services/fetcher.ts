@@ -2,6 +2,7 @@ import axios, { AxiosError, AxiosRequestConfig } from 'axios'
 import { getCookie } from 'cookies-next'
 
 export const FetcherInstance = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_LOCAL_SERVER_URL,
   withCredentials: true,
   timeout: 10000,
 })
@@ -34,6 +35,11 @@ FetcherInstance.interceptors.response.use(
 
         case 400:
           console.log(error.message)
+          return error.response
+
+        case 401:
+          console.log(error.message)
+          window.alert('Your session has expired. Please login again.')
           return error.response
 
         default:

@@ -6,16 +6,13 @@ import { IAccount } from '@lib/Account/Account/interface'
 import { ResponsiveAccountCard } from '@lib/Account/ResponsiveAccountCard'
 import Link from 'next/link'
 import { getSession } from 'next-auth/react'
-import { Fetcher } from 'services/fetcher'
-import axios, { AxiosError } from 'axios'
 import Tag from '@components/Tag'
 import Avatar from '@components/Avatar'
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/solid'
 import StatusTag from '@lib/StatusTag'
 import Pagination from '@components/Pagination'
 import { useGetAccountsPagination } from 'hooks/useAccount'
-import { PaginationParams, PaginationMetadata } from 'hooks/usePagination'
-import { AccountFetcher } from 'services/AccountFetcher'
+import { GetAccountsPagination, PaginationMetadata } from 'services/Account'
 const dayjs = require('dayjs')
 const utc = require('dayjs/plugin/utc')
 dayjs.extend(utc)
@@ -34,14 +31,16 @@ export const getServerSideProps = async (context: any) => {
       },
     }
   }
-  const response = await AccountFetcher.GET(`${process.env.LOCAL_SERVER_URL}/api/accounts`, {
+  const paginationProps = {
     pageNumber: 1,
     pageSize: 10,
     orderBy: 'username',
     isAsc: false,
-  })
+  }
+
+  const response = await GetAccountsPagination(paginationProps)
   // Pass data to the page via props
-  const accountData: IAccount[] = response ? response.data : []
+  const accountData: IAccount[] = response ? response?.data : []
 
   const paginationData: PaginationMetadata = {
     data: accountData,
@@ -61,9 +60,9 @@ const AccountsPage = ({ paginationData }: Props) => {
     orderBy: 'username',
     isAsc: false,
   })
-  const { accounts: responseData, error, mutate } = useGetAccountsPagination(`/api/accounts`, pageParams, true, paginationData)
+  const { accounts: responseData, error, mutate } = useGetAccountsPagination(pageParams, true, paginationData)
 
-  const accounts: IAccount[] = responseData?.data
+  const accounts: IAccount[] = responseData?.data || []
   const isLoading = !responseData && !error
   const onPageChange = (newPage: number) => {
     setPageParams((prevParams) => ({
@@ -74,7 +73,7 @@ const AccountsPage = ({ paginationData }: Props) => {
 
   useEffect(() => {
     if (pageParams.pageNumber !== 1) {
-      mutate(`api/accounts`)
+      mutate()
     }
   }, [pageParams])
 

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Card from '@components/Card'
 import { Table } from '@components/Table'
 import { Button } from '@components/Button'
-import { IAccount } from '@lib/Account/Account/interface'
+import { IBlockedAccount } from '@lib/Account/Account/interface'
 import { ResponsiveAccountCard } from '@lib/Account/ResponsiveAccountCard'
 import Link from 'next/link'
 import { getSession } from 'next-auth/react'
@@ -11,9 +11,8 @@ import Avatar from '@components/Avatar'
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/solid'
 import StatusTag from '@lib/StatusTag'
 import Pagination from '@components/Pagination'
-import { useGetAccountsPagination } from 'hooks/useAccount'
-import { PaginationParams, PaginationMetadata } from 'hooks/usePagination'
-import { AccountFetcher } from 'services/AccountFetcher'
+import { useGetBlockAccountsPagination } from 'hooks/useBlockedAccount'
+import { GetBlockedAccountsPagination, PaginationParams, PaginationMetadata } from 'services/BlockAccount'
 const dayjs = require('dayjs')
 const utc = require('dayjs/plugin/utc')
 dayjs.extend(utc)
@@ -32,14 +31,15 @@ export const getServerSideProps = async (context: any) => {
       },
     }
   }
-  const response = await AccountFetcher.GET(`${process.env.LOCAL_SERVER_URL}/api/accounts-blocked`, {
+  const paginationProps = {
     pageNumber: 1,
     pageSize: 10,
     orderBy: 'username',
     isAsc: false,
-  })
-
-  const accountData: IAccount[] = response ? response.data : []
+  }
+  const response = await GetBlockedAccountsPagination(paginationProps)
+  console.log(response.data)
+  const accountData: IBlockedAccount[] = response ? response.data : []
 
   const paginationData: PaginationMetadata = {
     data: accountData,
@@ -59,9 +59,8 @@ const BlockedAccountsPage = ({ paginationData }: Props) => {
     orderBy: 'username',
     isAsc: false,
   })
-  const { accounts: responseData, error, mutate } = useGetAccountsPagination(`/api/accounts-blocked`, pageParams, true, paginationData)
-
-  const accounts: IAccount[] = responseData?.data
+  const { accounts: responseData, error, mutate } = useGetBlockAccountsPagination(pageParams, true, paginationData)
+  const accounts: IBlockedAccount[] = responseData?.data || []
   const isLoading = !responseData && !error
   const onPageChange = (newPage: number) => {
     setPageParams((prevParams) => ({
@@ -72,7 +71,7 @@ const BlockedAccountsPage = ({ paginationData }: Props) => {
 
   useEffect(() => {
     if (pageParams.pageNumber !== 1) {
-      mutate(`api/accounts`)
+      mutate()
     }
   }, [pageParams])
 
@@ -88,8 +87,8 @@ const BlockedAccountsPage = ({ paginationData }: Props) => {
 
   const columns = [
     {
-      title: 'Last Login(HK Time)',
-      dataIndex: 'last_login_dt',
+      title: 'Blocked At(HK Time)',
+      dataIndex: 'blocked_at',
       render: (e: any) => {
         const date = dayjs(e, 'YYYY-MM-DD THH:mm:ss')
         return dayjs.utc(date).local().format('YYYY-MM-DD HH:mm:ss')
@@ -159,9 +158,6 @@ const BlockedAccountsPage = ({ paginationData }: Props) => {
   return (
     <Card title="Accounts Table">
       <div className="flex gap-3">
-        <Link href="/accounts/create-account">
-          <Button.Primary loading={false}>Create New Account</Button.Primary>
-        </Link>
         <Button.Primary
           onClick={() => {
             setPageParams({
@@ -188,7 +184,7 @@ const BlockedAccountsPage = ({ paginationData }: Props) => {
         </Button.Primary>
       </div>
       {/* desktop */}
-      <div className="hidden  md:flex">
+      <div className="flex">
         <Table.Layout>
           <Table.Header columns={columns} />
 
@@ -208,12 +204,6 @@ const BlockedAccountsPage = ({ paginationData }: Props) => {
         hasPrev={responseData.has_prev}
         onPageChange={onPageChange}
       />
-
-      <div className="hidden flex-col sm:flex">
-        {accounts?.map((e, index) => (
-          <ResponsiveAccountCard columns={columns} rowData={e} key={index} />
-        ))}
-      </div>
     </Card>
   )
 }

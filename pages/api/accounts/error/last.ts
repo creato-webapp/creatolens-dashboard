@@ -1,9 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import AccountInstance from '../axiosInstance/Account'
-export default async function accountQueryHandler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+import AccountInstance from '../../axiosInstance/Account'
+export default async function accountQueryHandler(req: NextApiRequest, res: NextApiResponse) {
   const {
     query: { username },
     body,

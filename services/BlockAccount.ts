@@ -1,7 +1,7 @@
 //TODO write Get, Gets, Update,
 import { AxiosRequestConfig } from 'axios'
 import { Fetcher } from './fetcher'
-import { IAccount } from '@lib/Account/Account'
+import { IBlockedAccount } from '@lib/Account/Account/interface'
 
 export interface PaginationParams {
   pageNumber: number
@@ -11,7 +11,7 @@ export interface PaginationParams {
 }
 
 export interface PaginationMetadata {
-  data: IAccount[]
+  data: IBlockedAccount[]
   has_next: boolean
   has_prev: boolean
   page: number
@@ -23,6 +23,10 @@ type PartialAccount = Partial<{
   id: string
   username: string
   created_at: string
+  banned_at: string
+  blocked_at: string
+  blocked_count: number
+  blocked_reason: string
   enabled: boolean
   is_authenticated: boolean
   is_occupied: boolean
@@ -31,12 +35,12 @@ type PartialAccount = Partial<{
   login_count: number
   post_scrapped_count: number
   pwd: string
-  session_cookies: any
+  session_cookies?: any
   status: 'active' | 'blocked' | 'banned' | 'retry' | 'test' | 'scrapping' | 'occupied'
   updated_at: string
 }>
 
-export function generateAccountFilter(account: PartialAccount): string {
+export function generateBlockedAccountFilter(account: PartialAccount): string {
   const filters = []
 
   if (account.id) {
@@ -81,31 +85,26 @@ export function generateAccountFilter(account: PartialAccount): string {
   return filters.join(' && ')
 }
 
-export async function CreateAccount(account: IAccount, customConfig?: AxiosRequestConfig): Promise<IAccount> {
-  const response = await Fetcher.POST(`/api/accounts`, account, customConfig)
+export async function GetBlockedAccount(id: string, customConfig?: AxiosRequestConfig): Promise<IBlockedAccount> {
+  const response = await Fetcher.GET(`/api/accounts/blocked/${id}`, customConfig)
   return response
 }
 
-export async function GetAccount(id: string, customConfig?: AxiosRequestConfig): Promise<IAccount> {
-  const response = await Fetcher.GET(`/api/accounts/${id}`, customConfig)
-  return response
-}
-
-export async function GetAccounts(
-  account?: Partial<IAccount>,
+export async function GetBlockedAccounts(
+  account?: Partial<IBlockedAccount>,
   orderBy?: string,
   isAsc?: boolean,
   customConfig?: AxiosRequestConfig
-): Promise<IAccount[]> {
-  const response = await Fetcher.GET(`/api/accounts/query`, {
-    params: { filter: account ? generateAccountFilter(account) : null, orderby: orderBy, isAsc: isAsc },
+): Promise<IBlockedAccount[]> {
+  const response = await Fetcher.GET(`/api/accounts/blocked/query`, {
+    params: { filter: account ? generateBlockedAccountFilter(account) : null, orderby: orderBy, isAsc: isAsc },
   })
   return response
 }
 
-export async function GetAccountsPagination(params: PaginationParams, customConfig?: AxiosRequestConfig): Promise<PaginationMetadata> {
+export async function GetBlockedAccountsPagination(params: PaginationParams, customConfig?: AxiosRequestConfig): Promise<PaginationMetadata> {
   const response = await Fetcher.GET(
-    `/api/accounts`,
+    `/api/accounts/blocked`,
     {
       pageNumber: params.pageNumber,
       pageSize: params.pageSize,
@@ -117,12 +116,7 @@ export async function GetAccountsPagination(params: PaginationParams, customConf
   return response
 }
 
-export async function UpdateAccount(id: string, updatedAccount: IAccount, customConfig?: AxiosRequestConfig): Promise<IAccount> {
-  const res = await Fetcher.PATCH(`/api/accounts/${id}`, updatedAccount, { ...customConfig, params: { id: updatedAccount.id } })
-  return res
-}
-
-export async function UpdateSession(id: string, updatedAccount: IAccount, customConfig?: AxiosRequestConfig): Promise<any> {
-  const res = await Fetcher.POST(`/api/accounts/session/${id}`, { ...customConfig, username: updatedAccount.username })
+export async function UpdateBlockedAccount(id: string, updatedAccount: IBlockedAccount, customConfig?: AxiosRequestConfig): Promise<IBlockedAccount> {
+  const res = await Fetcher.PATCH(`/api/accounts/blocked/${id}`, updatedAccount, { ...customConfig, params: { id: updatedAccount.id } })
   return res
 }

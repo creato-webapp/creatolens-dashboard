@@ -3,15 +3,13 @@ import { useRouter } from 'next/router'
 import { Alerts } from '@components/Alerts'
 import { IAccount } from '@lib/Account/Account/interface'
 import SessionModal from '@lib/Account/Account/SessionModal'
-import useSWR from 'swr'
 import { getSession } from 'next-auth/react'
-import { AccountFetcher } from 'services/AccountFetcher'
-import axios from 'axios'
 import Title from '@components/Typography/Title'
 import Paragraph from '@components/Typography/Paragraph'
 import AccountInfoCard from '@lib/Account/AccountInfoCard'
 import AccountCreateCard from '@lib/Account/AccountCreateCard'
 import { useAccount } from 'hooks/useAccount'
+import { GetAccount, CreateAccount } from 'services/Account'
 
 const dayjs = require('dayjs')
 const utc = require('dayjs/plugin/utc')
@@ -38,40 +36,15 @@ export const getServerSideProps = async (context: any) => {
   const { params } = context
   const isCreate = params.id === 'create-account'
   const canRenewSession = false
-  // const lastErrRes = await axios.get(
-  //   process.env.LOCAL_SERVER_URL + '/api/accounts-error/last',
-  //   {
-  //     params: { username: params.id },
-  //     headers: {
-  //       Cookie: context.req.headers.cookie,
-  //     },
-  //   }
-  // )
-  // const lastErrResList = lastErrRes.data.map((e: IAccountError) => {
-  //   return dayjs(e.occurred_at, 'YYYY-MM-DD THH:mm:ss')
-  // })
-  // if (lastErrResList.length > 0) {
-  //   const lastDay = dayjs().add(-1, 'days').valueOf()
-  //   const errDatetime = lastErrResList[0].valueOf()
-  //   const result = dayjs(lastDay - errDatetime).valueOf()
-  //   console.log(result)
-  //   canRenewSession = result > 86400000 ? true : false
-  // } else if (lastErrResList.length == 0) {
-  //   canRenewSession = true
-  // } else {
-  //   canRenewSession = false
-  // }
 
   const res =
     !isCreate &&
-    (await AccountFetcher.GET(process.env.LOCAL_SERVER_URL + '/api/accounts/' + params.id, {
+    (await GetAccount(params.id, {
       headers: {
         Cookie: context.req.headers.cookie,
       },
     }))
-
-  // Pass data to the page via props
-  const accountData: IAccount = res
+  const accountData = res as IAccount
   return { props: { accountData, isCreate, canRenewSession } }
 }
 
@@ -90,7 +63,7 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
     error,
     updateAccount: useUpdateAccount,
     updateSession,
-  } = useAccount('/api/accounts', id as string, shouldFetch, isCreate ? isCreate : accountData)
+  } = useAccount(id as string, shouldFetch, isCreate ? isCreate : accountData)
   if (error) {
     console.log(error)
     return <div>Failed to load users {id}</div>
@@ -115,11 +88,8 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
         post_scrapped_count: parseInt(values.post_scrapped_count as unknown as string),
       }
 
-      const res = await createAccount(newValues)
-      if (res?.status == 400) {
-        throw new Error('Bad Request Creating Account')
-      }
-      setShowAlert(true)
+      const res = await CreateAccount(newValues)
+      window.alert(res)
       // You can navigate to another page if needed
     } catch (error) {
       console.log(error)
@@ -147,11 +117,6 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
     } finally {
       setIsLoading(false)
     }
-  }
-
-  const createAccount = async (values: IAccount) => {
-    const res = await AccountFetcher.POST(`/api/accounts`, values)
-    return res
   }
 
   const updateAccount = async (values: IAccount) => {
