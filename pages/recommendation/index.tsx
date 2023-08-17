@@ -11,7 +11,9 @@ import TopRelatedHashtagCard from '@lib/Hashet/TopRelatedHashtagCard'
 import TopAccHashtagCard from '@lib/Hashet/TopAccHashtagCard'
 import { Button } from '@components/Button'
 import Tab from '@components/Tab'
+import { GetHashtag } from 'services/HashtagHelper'
 import CustomizeHashtagCard from '@lib/Hashet/CustomizeHashtagCard'
+import { useGetHashtag } from 'hooks/useHashtag'
 interface IHashet extends Record<string, string | number | boolean> {
   hashtag: string
   acc: number
@@ -30,22 +32,19 @@ export const getServerSideProps = async (context: any) => {
       },
     }
   }
-  // Fetch data from next API
-  const res = await axios.get(`${process.env.LOCAL_SERVER_URL}/api/hashet`, {
-    params: { recommend: 'Thank you Elon Musk!' },
+  const res = await GetHashtag('Thank you Elon Musk!', {
     headers: {
       Cookie: context.req.headers.cookie,
     },
   })
   const hashetSessionData: IHashet[] = res.data
   console.log(hashetSessionData)
-
   return { props: { hashetSessionData } }
 }
 
 const RecommendationPage = ({ hashetSessionData }: Props) => {
   const [shouldFetch, setShouldFetch] = useState(false)
-  const [inputString, setInputString] = useState('')
+  const [inputString, setInputString] = useState('Thank you Elon Musk!')
 
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 10
@@ -60,16 +59,7 @@ const RecommendationPage = ({ hashetSessionData }: Props) => {
     await mutateHashet(inputString)
   }, [inputString])
 
-  const {
-    data,
-    error,
-    mutate: mutateHashet,
-    isValidating,
-  } = useSWR(shouldFetch ? ['api/hashet', { recommend: inputString }] : null, HashtagFetcher.GET, {
-    refreshInterval: 0,
-    fallbackData: hashetSessionData,
-  })
-
+  const { data, error, mutate: mutateHashet, isValidating } = useGetHashtag(inputString, shouldFetch, hashetSessionData)
   if (error) {
     console.log(data)
     console.log(error)
@@ -80,41 +70,12 @@ const RecommendationPage = ({ hashetSessionData }: Props) => {
     return <div>Loading...</div>
   }
 
-  const columns = [
-    {
-      title: 'Rank',
-      dataIndex: 'index',
-      render: (e: string) => {
-        return <div className="flex justify-center">{e}</div>
-      },
-    },
-    {
-      title: 'Hashtag',
-      dataIndex: 'hashtag',
-      render: (e: string) => {
-        return (
-          <a style={{ color: '#0070f3' }} target="_blank" href={`https://www.instagram.com/explore/tags/${e.replaceAll('#', '')}/`}>
-            {e}
-          </a>
-        )
-      },
-    },
-    {
-      title: 'Accuracy',
-      dataIndex: 'acc',
-    },
-  ]
-
-  const hashetData: IHashet[] = data?.data ? data.data : []
+  const hashetData = data as IHashet[]
 
   const handleKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (e) => {
     if (e.key === 'Enter') {
       onSubmit && onSubmit()
     }
-  }
-  // Handle page change
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page)
   }
 
   const tabItems = [

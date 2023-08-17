@@ -5,16 +5,11 @@ import { IAccountError } from '@lib/Account/AccountErrors/interface'
 import { getSession } from 'next-auth/react'
 import Link from 'next/link'
 import { Form } from '@components/Form'
-import { ScrapperFetcher } from 'services/ScrapperFetcher'
-import { useGetErrorPagination } from 'hooks/useLoginError'
-import { PaginationParams, PaginationMetadata } from 'hooks/usePagination'
+import { useAccountErrorPagination } from 'hooks/useAccountErrors'
+import { GetErrorPagination, PaginationParams, PaginationMetadata } from 'services/Account/AccountErros'
 import Pagination from '@components/Pagination'
 type Props = {
   paginationData: PaginationMetadata
-}
-
-interface AccountErrorPaginationParams extends PaginationParams {
-  username?: string | null
 }
 
 const dayjs = require('dayjs')
@@ -31,13 +26,15 @@ export const getServerSideProps = async (context: any) => {
     }
   }
 
-  const response = await ScrapperFetcher.GET(`${process.env.LOCAL_SERVER_URL}/api/accounts-error`, {
+  const paginationProps = {
     username: null,
     pageNumber: 1,
     pageSize: 10,
     orderBy: 'occurred_at',
     isAsc: false,
-  })
+  }
+
+  const response = await GetErrorPagination(paginationProps)
 
   const accountData: IAccountError[] = response ? response.data : []
 
@@ -53,7 +50,7 @@ export const getServerSideProps = async (context: any) => {
 }
 
 const AccountsErrorPage = ({ paginationData }: Props) => {
-  const [pageParams, setPageParams] = useState<AccountErrorPaginationParams>({
+  const [pageParams, setPageParams] = useState<PaginationParams>({
     username: null,
     pageNumber: 1,
     pageSize: 10,
@@ -68,17 +65,20 @@ const AccountsErrorPage = ({ paginationData }: Props) => {
     }))
   }
 
-  const onChange: React.ChangeEventHandler<HTMLInputElement> = useCallback((e) => {
-    setPageParams(() => ({
-      pageNumber: 1,
-      pageSize: 10,
-      orderBy: 'occurred_at',
-      isAsc: false,
-      username: e.target.value,
-    }))
-  }, [])
+  const onChange: React.ChangeEventHandler<HTMLInputElement> = useCallback(
+    (e) =>
+      setPageParams((prevParams) => ({
+        ...prevParams,
+        pageNumber: 1,
+        pageSize: 10,
+        orderBy: 'occurred_at',
+        isAsc: false,
+        username: e.target.value,
+      })),
+    []
+  )
 
-  const { accountErrors: responseData, isLoading, error } = useGetErrorPagination(`/api/accounts-error`, pageParams, true, paginationData)
+  const { errors: responseData, isLoading, error } = useAccountErrorPagination(pageParams, true, paginationData)
   const accountError: IAccountError[] = responseData?.data ? responseData.data : []
   if (error) {
     console.log(responseData)
