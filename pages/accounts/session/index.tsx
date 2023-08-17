@@ -1,12 +1,10 @@
 import React, { useState, useCallback } from 'react'
 import Card from '@components/Card'
 import { Table } from '@components/Table'
-import { IAccountSession } from '@lib/Account/AccountSession/interface'
 import { getSession } from 'next-auth/react'
 import Link from 'next/link'
-import { AccountFetcher } from 'services/AccountFetcher'
 import { useAccountSessionPagination } from 'hooks/useAccountSession'
-import { PaginationParams, PaginationMetadata } from 'hooks/usePagination'
+import { GetSessionPagination, PaginationParams, PaginationMetadata } from 'services/Session'
 import { Form } from '@components/Form'
 import Pagination from '@components/Pagination'
 type Props = {
@@ -31,18 +29,16 @@ export const getServerSideProps = async (context: any) => {
     }
   }
 
-  const response = await AccountFetcher.GET(`${process.env.LOCAL_SERVER_URL}/api/accounts-session`, {
+  const paginationProps = {
     username: null,
     pageNumber: 1,
     pageSize: 10,
     orderBy: 'created_at',
     isAsc: false,
-  })
-
-  const accountSessionData: IAccountSession[] = response ? response.data : []
-
+  }
+  const response = await GetSessionPagination(paginationProps)
   const paginationData: PaginationMetadata = {
-    data: accountSessionData,
+    data: response ? response?.data : [],
     has_next: response ? response.has_next : false,
     has_prev: response ? response.has_prev : false,
     page: response ? response.page : 1,
@@ -52,7 +48,7 @@ export const getServerSideProps = async (context: any) => {
   return { props: { paginationData } }
 }
 
-const AccountsErrorPage = ({ paginationData }: Props) => {
+const AccountsSessionPage = ({ paginationData }: Props) => {
   const [pageParams, setPageParams] = useState<AccountSessionPaginationParams>({
     username: null,
     pageNumber: 1,
@@ -78,7 +74,7 @@ const AccountsErrorPage = ({ paginationData }: Props) => {
     }))
   }, [])
 
-  const { accountErrors: responseData, isLoading, error } = useAccountSessionPagination(`/api/accounts-session`, pageParams, true, paginationData)
+  const { sessions: responseData, isLoading, error } = useAccountSessionPagination(pageParams, true, paginationData)
   const accountSession: PaginationMetadata[] = responseData?.data ? responseData.data : []
   if (error) {
     console.log(responseData)
@@ -156,4 +152,4 @@ const AccountsErrorPage = ({ paginationData }: Props) => {
     </Card>
   )
 }
-export default AccountsErrorPage
+export default AccountsSessionPage

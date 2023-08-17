@@ -38,7 +38,6 @@ export const getServerSideProps = async (context: any) => {
     isAsc: false,
   }
   const response = await GetBlockedAccountsPagination(paginationProps)
-  console.log(response.data)
   const accountData: IBlockedAccount[] = response ? response.data : []
 
   const paginationData: PaginationMetadata = {

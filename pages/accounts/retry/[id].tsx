@@ -3,18 +3,18 @@ import Card from '@components/Card'
 import { useRouter } from 'next/router'
 import { Form } from '@components/Form'
 import { IField } from '@components/Form/interface'
-import { IAccount } from '@lib/Account/Account/interface'
+import { IAccount, IRetryAccount } from '@lib/Account/Account/interface'
 import { getSession } from 'next-auth/react'
-import { useAccount } from 'hooks/useAccount'
-import { AccountFetcher } from 'services/AccountFetcher'
+import { GetRetryAccount } from 'services/RetryAccount'
+import { useRetryAccount } from 'hooks/useRetryAccount'
+
+type Props = {
+  accountData: IRetryAccount
+}
 
 const dayjs = require('dayjs')
 const utc = require('dayjs/plugin/utc')
 dayjs.extend(utc)
-
-type Props = {
-  accountData: IAccount
-}
 
 //TODO remove type any in context:any
 export const getServerSideProps = async (context: any) => {
@@ -29,19 +29,18 @@ export const getServerSideProps = async (context: any) => {
     }
   }
   const { params } = context
-  const res = await AccountFetcher.GET(process.env.LOCAL_SERVER_URL + '/api/accounts-retry/' + params.id, {
+  const res = await GetRetryAccount(params.id, {
     headers: {
       Cookie: context.req.headers.cookie,
     },
   })
   // Pass data to the page via props
-  const accountData: IAccount = res ? res : null
+  const accountData: IAccount = res as IRetryAccount
   return { props: { accountData } }
 }
 
 const AccountsRetryPage = ({ accountData }: Props) => {
   const [isLoading, setIsLoading] = useState(false)
-  const [showAlert, setShowAlert] = useState(false)
   const [shouldFetch, setShouldFetch] = useState(false)
   const router = useRouter()
   const { id } = router.query
@@ -51,8 +50,8 @@ const AccountsRetryPage = ({ accountData }: Props) => {
     data,
     isLoading: loading,
     error,
-    updateAccount: useUpdateAccount,
-  } = useAccount('/api/accounts-retry', id as string, shouldFetch, isCreate ? isCreate : accountData)
+    updateRetryAccount: useUpdateAccount,
+  } = useRetryAccount(id as string, shouldFetch, isCreate ? isCreate : accountData)
 
   if (error) {
     console.log(data)
@@ -109,12 +108,12 @@ const AccountsRetryPage = ({ accountData }: Props) => {
     },
   ]
 
-  const handleSubmit = async (values: IAccount) => {
+  const handleSubmit = async (values: IRetryAccount) => {
     try {
       setShouldFetch(true)
       setIsLoading(true)
-      await updateAccount(values)
-      setShowAlert(true)
+      const res = await updateAccount(values)
+      window.alert(res)
     } catch (error) {
       console.log(error)
       window.alert(error)
@@ -123,7 +122,7 @@ const AccountsRetryPage = ({ accountData }: Props) => {
     }
   }
 
-  const updateAccount = async (values: IAccount) => {
+  const updateAccount = async (values: IRetryAccount) => {
     const newValues = {
       ...account,
       ...values,

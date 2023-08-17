@@ -1,16 +1,15 @@
+import useSWR from 'swr'
+import { GetSessionPagination } from 'services/Session'
 import { PaginationParams, PaginationMetadata } from './usePagination'
-import { useGetPagination } from './usePagination'
 
-export const useAccountSessionPagination = (
-  url: string,
-  paginationParams: PaginationParams,
-  shouldFetch: boolean = true,
-  fallbackData?: PaginationMetadata
-) => {
-  const { data, error, mutate, ...swr } = useGetPagination(url, paginationParams, shouldFetch, fallbackData)
+export const useAccountSessionPagination = (paginationParams: PaginationParams, shouldFetch: boolean = true, fallbackData?: PaginationMetadata) => {
+  const { data, error, mutate, ...swr } = useSWR(shouldFetch ? [paginationParams] : null, GetSessionPagination, {
+    refreshInterval: 0,
+    fallbackData: fallbackData,
+  })
 
   return {
-    accountErrors: data,
+    sessions: data,
     isLoading: !error && !data,
     error: error,
     mutate,

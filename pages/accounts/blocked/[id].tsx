@@ -42,7 +42,6 @@ export const getServerSideProps = async (context: any) => {
 
 const AccountsBlockedPage = ({ accountData }: Props) => {
   const [isLoading, setIsLoading] = useState(false)
-  const [showAlert, setShowAlert] = useState(false)
   const [shouldFetch, setShouldFetch] = useState(false)
   const router = useRouter()
   const { id } = router.query
@@ -114,8 +113,8 @@ const AccountsBlockedPage = ({ accountData }: Props) => {
     try {
       setShouldFetch(true)
       setIsLoading(true)
-      await updateAccount(values)
-      setShowAlert(true)
+      const res = await updateAccount(values)
+      window.alert(res)
     } catch (error) {
       console.log(error)
       window.alert(error)

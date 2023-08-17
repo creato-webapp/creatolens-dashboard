@@ -1,9 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import AccountInstance from '../axiosInstance/Account'
-export default async function AccountHandler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+import AccountInstance from '../../axiosInstance/Account'
+export default async function AccountHandler(req: NextApiRequest, res: NextApiResponse) {
   const {
     query: { id, name },
     body,
@@ -16,10 +13,7 @@ export default async function AccountHandler(
     }
 
     case 'PATCH':
-      const response = await AccountInstance.patch(
-        `available-accounts/update/${id}`,
-        body
-      )
+      const response = await AccountInstance.patch(`available-accounts/update/${id}`, body)
       return res.status(response.status).end()
 
     default:
