@@ -2,9 +2,6 @@ import { FC, useState } from 'react'
 import { IAccount } from './interface'
 import Modal from '@components/Modal'
 import { Button } from '@components/Button'
-import { AccountFetcher } from 'services/AccountFetcher'
-import { useSession } from 'next-auth/react'
-import { User } from 'next-auth'
 import { ModalProps } from '@components/Modal'
 
 interface SessionModalProps extends ModalProps {
