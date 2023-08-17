@@ -1,6 +1,6 @@
 //TODO write Get, Gets, Update,
 import { AxiosRequestConfig } from 'axios'
-import { Fetcher } from './fetcher'
+import { Fetcher } from '../fetcher'
 import { IAccount } from '@lib/Account/Account'
 
 export interface PaginationParams {

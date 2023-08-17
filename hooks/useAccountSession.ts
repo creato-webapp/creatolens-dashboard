@@ -1,5 +1,5 @@
 import useSWR from 'swr'
-import { GetSessionPagination } from 'services/Session'
+import { GetSessionPagination } from 'services/Account/Session'
 import { PaginationParams, PaginationMetadata } from './usePagination'
 
 export const useAccountSessionPagination = (paginationParams: PaginationParams, shouldFetch: boolean = true, fallbackData?: PaginationMetadata) => {

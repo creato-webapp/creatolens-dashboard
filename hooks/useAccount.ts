@@ -1,6 +1,6 @@
 import useSWR from 'swr'
 import { IAccount } from '@lib/Account/Account'
-import { GetAccountsPagination, GetAccount, UpdateSession, UpdateAccount, PaginationParams, PaginationMetadata } from '../services/Account'
+import { GetAccountsPagination, GetAccount, UpdateSession, UpdateAccount, PaginationParams, PaginationMetadata } from '../services/Account/Account'
 
 export const useAccount = (id: string, shouldFetch: boolean = true, fallbackData?: any) => {
   const { data, error, mutate, ...swr } = useSWR(shouldFetch ? [id] : null, (id) => GetAccount(id), {

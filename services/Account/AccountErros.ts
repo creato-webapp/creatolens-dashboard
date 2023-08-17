@@ -1,6 +1,6 @@
 //TODO write Get, Gets, Update,
 import { AxiosRequestConfig } from 'axios'
-import { Fetcher } from './fetcher'
+import { Fetcher } from '../fetcher'
 
 export interface PaginationParams {
   pageNumber: number
@@ -18,9 +18,9 @@ export interface PaginationMetadata {
   total_items: number
 }
 
-export async function GetSessionPagination(params: PaginationParams, customConfig?: AxiosRequestConfig): Promise<PaginationMetadata> {
+export async function GetErrorPagination(params: PaginationParams, customConfig?: AxiosRequestConfig): Promise<PaginationMetadata> {
   const response = await Fetcher.GET(
-    `/api/accounts/session`,
+    `/api/accounts/error`,
     {
       pageNumber: params.pageNumber,
       pageSize: params.pageSize,

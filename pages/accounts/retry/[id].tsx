@@ -5,7 +5,7 @@ import { Form } from '@components/Form'
 import { IField } from '@components/Form/interface'
 import { IAccount, IRetryAccount } from '@lib/Account/Account/interface'
 import { getSession } from 'next-auth/react'
-import { GetRetryAccount } from 'services/RetryAccount'
+import { GetRetryAccount } from 'services/Account/RetryAccount'
 import { useRetryAccount } from 'hooks/useRetryAccount'
 
 type Props = {
