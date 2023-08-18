@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react'
 import Card from '@components/Card'
 import Dropdown from '@components/Form/Dropdown'
 import { Button } from '@components/Button'
-import Title from '@components/Typography/Title'
+import { Title } from '@components/Typography'
 interface Hashtag {
   acc: number
   hashtag: string

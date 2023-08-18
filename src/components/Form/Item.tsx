@@ -1,6 +1,6 @@
 import type { FC } from 'react'
 import { ItemProps } from './interface'
-import Paragraph from '../Typography/Paragraph'
+import { Paragraph } from '../Typography'
 const Item: FC<ItemProps> = (props: ItemProps) => {
   const { customFormItemProps } = props
   return (

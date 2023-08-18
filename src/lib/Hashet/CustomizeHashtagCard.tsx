@@ -2,9 +2,8 @@ import React, { useState, useCallback } from 'react'
 import Card from '@components/Card'
 import Dropdown from '@components/Form/Dropdown'
 import { Button } from '@components/Button'
-import Paragraph from '@components/Typography/Paragraph'
+import { Paragraph, Title } from '@components/Typography'
 import Checkbox from '@components/Form/Checkbox'
-import Title from '@components/Typography/Title'
 
 interface Hashtag {
   acc: number

@@ -3,7 +3,7 @@ import Card from '@components/Card'
 import { Form } from '@components/Form'
 import { IField } from '@components/Form/interface'
 import { IAccount } from '@lib/Account/Account'
-import Paragraph from '@components/Typography/Paragraph'
+import { Paragraph } from '@components/Typography'
 import Checkbox from '@components/Form/Checkbox'
 
 interface AccountCreateCardProps {

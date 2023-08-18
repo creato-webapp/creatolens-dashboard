@@ -1,5 +1,5 @@
 import React, { HTMLAttributes } from 'react'
-import Title from '@components/Typography/Title'
+import { Title } from '@components/Typography'
 
 interface CardProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'> {
   title?: React.ReactNode | undefined

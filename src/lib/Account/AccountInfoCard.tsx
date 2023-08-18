@@ -4,7 +4,7 @@ import { Button } from '@components/Button'
 import { Form } from '@components/Form'
 import { IField } from '@components/Form/interface'
 import { IAccount } from '@lib/Account/Account/interface'
-import Paragraph from '@components/Typography/Paragraph'
+import { Paragraph } from '@components/Typography'
 import StatusTag from '@lib/StatusTag'
 interface AccountInfoCardProps {
   isLoading: boolean

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Button } from '..'
-import Title from '@components/Typography/Title'
+import { Title } from '@components/Typography'
 import { useRouter } from 'next/router'
 interface Page {
   name: string
