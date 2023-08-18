@@ -1,34 +1,19 @@
 import React from 'react'
 import Link from 'next/link'
+import { Paragraph, Title } from '@components/Typography'
+import { Button } from '@components/Button'
 
 const NotFound = () => {
   return (
-    <div className="lg:px-24 lg:py-24 md:py-20 md:px-44 px-4 py-24 items-center flex justify-center flex-col-reverse lg:flex-row md:gap-28 gap-16">
-      <div className="xl:pt-24 w-full xl:w-1/2 relative pb-12 lg:pb-0">
-        <div className="relative">
-          <div className="absolute">
-            <div className="">
-              <h1 className="my-2 text-gray-800 font-bold text-2xl">
-                Looks like you've found the doorway to the great nothing
-              </h1>
-              <p className="my-2 text-gray-800">
-                Sorry about that! Please visit our hompage to get where you need
-                to go.
-              </p>
-              <Link href="/">
-                <button className="sm:w-full lg:w-auto my-2 border rounded md py-4 px-8 text-center bg-indigo-600 text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-700 focus:ring-opacity-50">
-                  Take me there!
-                </button>
-              </Link>
-            </div>
-          </div>
-          <div>
-            <img src="https://i.ibb.co/G9DC8S0/404-2.png" />
-          </div>
-        </div>
+    <div className="ml-48 flex flex-col-reverse ">
+      <div className="my-36 flex flex-col gap-5">
+        <Title className="inline-block text-9xl font-extrabold text-orange-500">ERROR 404</Title>
+        <Title className="inline-block text-5xl font-extrabold text-text-primary">PAGE NOT FOUND</Title>
+        <Paragraph>We are working on fixing the problem. Be back soon</Paragraph>
+        <Button.Primary className="mt-10 w-fit">Go Back</Button.Primary>
       </div>
-      <div>
-        <img src="https://i.ibb.co/ck1SGFJ/Group.png" />
+      <div className="relative">
+        <img className="absolute -right-28 overflow-hidden" src="/404.svg" />
       </div>
     </div>
   )
