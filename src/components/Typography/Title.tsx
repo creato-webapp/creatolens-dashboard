@@ -1,7 +1,7 @@
 import React from 'react'
 
 interface TitleProps extends React.HTMLAttributes<HTMLHeadingElement> {
-  level: 1 | 2 | 3 | 4 | 5 | 6
+  level?: 1 | 2 | 3 | 4 | 5 | 6
   style?: React.CSSProperties
   light?: boolean
   bold?: boolean
@@ -30,7 +30,7 @@ const Title: React.FC<TitleProps> = ({ level, style, light, bold, extraBold, ita
   const headingStyles = `${size} ${bold && 'font-bold'} ${light && 'font-light'}
   ${extraBold ? 'font-extrabold' : ''} ${italic ? 'italic' : ''}`
   return (
-    <HeadingTag className={`${headingStyles} ${className}`} style={style}>
+    <HeadingTag className={`${headingStyles ? headingStyles : ''} ${className ? className : ''}`} style={style}>
       {children}
     </HeadingTag>
   )
