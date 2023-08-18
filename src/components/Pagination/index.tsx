@@ -1,6 +1,6 @@
 import CaretLeftIcon from '@components/Icon/CaretLeftIcon'
 import CaretRightIcon from '@components/Icon/CaretRightIcon'
-import React from 'react'
+import React, { useCallback } from 'react'
 import { Button } from '@components/Button'
 interface PaginationProps {
   isLoading: boolean
@@ -17,6 +17,17 @@ const Pagination: React.FC<PaginationProps> = ({ isLoading, page, size, totalIte
   if (isLoading) {
     return <div>Loading...</div>
   }
+  const handlePrevClick = useCallback(() => {
+    if (hasPrev) {
+      onPageChange(page - 1)
+    }
+  }, [hasPrev, onPageChange, page])
+
+  const handleNextClick = useCallback(() => {
+    if (hasNext) {
+      onPageChange(page + 1)
+    }
+  }, [hasNext, onPageChange, page])
   return (
     <>
       <div className="flex items-center justify-center gap-3">
@@ -24,7 +35,7 @@ const Pagination: React.FC<PaginationProps> = ({ isLoading, page, size, totalIte
           className={'flex text-text-primary hover:text-text-secondary hover:no-underline'}
           loading={false}
           disabled={!hasPrev}
-          onClick={() => onPageChange(page - 1)}
+          onClick={handlePrevClick}
         >
           <CaretLeftIcon />
           Previous
@@ -36,7 +47,7 @@ const Pagination: React.FC<PaginationProps> = ({ isLoading, page, size, totalIte
           className={'flex text-text-primary hover:text-text-secondary hover:no-underline'}
           loading={false}
           disabled={!hasNext}
-          onClick={() => onPageChange(page + 1)}
+          onClick={handleNextClick}
         >
           Next
           <CaretRightIcon />

@@ -1,4 +1,4 @@
-import React, { InputHTMLAttributes, PropsWithChildren, FormHTMLAttributes, DetailedHTMLProps, LabelHTMLAttributes } from 'react'
+import React, { InputHTMLAttributes, FormHTMLAttributes, DetailedHTMLProps, LabelHTMLAttributes } from 'react'
 export type InputType = 'Input' | 'DatePicker' | 'TimePicker' | 'DateTimePicker' | 'Checkbox' | 'InputNumber' | 'InputPassword'
 
 export type customFormItemProps = {

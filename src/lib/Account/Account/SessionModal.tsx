@@ -1,4 +1,4 @@
-import { FC, useState } from 'react'
+import { FC, useState, useCallback } from 'react'
 import { IAccount } from './interface'
 import Modal from '@components/Modal'
 import { Button } from '@components/Button'
@@ -32,7 +32,7 @@ const dataItemToKeyValues = (item: Cookies[]) => {
 
 const SessionModal: FC<SessionModalProps> = ({ account, isLoading: loading, isDisable, isShow, updateSession, onCancel }) => {
   const [isLoading, setIsLoading] = useState(false)
-  const updateAccountSession = async (account: IAccount) => {
+  const updateAccountSession = useCallback(async (account: IAccount) => {
     try {
       setIsLoading(true)
       const res = await updateSession(account)
@@ -42,7 +42,7 @@ const SessionModal: FC<SessionModalProps> = ({ account, isLoading: loading, isDi
     } finally {
       setIsLoading(false)
     }
-  }
+  }, [])
 
   return (
     <Modal isLoading={isLoading} isShow={isShow} onCancel={onCancel} title="SessionModal">
@@ -53,7 +53,7 @@ const SessionModal: FC<SessionModalProps> = ({ account, isLoading: loading, isDi
         <Button.Primary
           // disabled={user?.role !== 'admin' || isDisable}
           loading={isLoading}
-          onClick={() => updateAccountSession(account)}
+          onClick={updateAccountSession}
         >
           <div className="flex">Update Session</div>
         </Button.Primary>

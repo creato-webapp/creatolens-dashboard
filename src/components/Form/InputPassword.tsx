@@ -24,7 +24,7 @@ const InputPassword: React.FC<IInputPasswordProps> = ({ showToggle = true, ...pr
       disabled={props.disabled}
       customFormItemProps={customFormItemProps}
     >
-      <button type="button" onClick={() => toggleShowPassword()} className="p-2 first-letter:text-gray-500 hover:text-gray-700">
+      <button type="button" onClick={toggleShowPassword} className="p-2 first-letter:text-gray-500 hover:text-gray-700">
         {showPassword ? <EyeIcon className="pointer-events-auto h-5 w-5" /> : <EyeOffIcon className="pointer-events-auto h-5 w-5" />}
       </button>
     </BaseInput>

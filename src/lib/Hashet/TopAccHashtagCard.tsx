@@ -76,7 +76,7 @@ const TopAccHashtagCard: React.FC<Props> = ({ hashtags }) => {
         ))}
       </div>
       <div className="flex justify-center">
-        <Button.Primary onClick={() => copyToClipboard()}>Copy</Button.Primary>
+        <Button.Primary onClick={copyToClipboard}>Copy</Button.Primary>
       </div>
     </Card>
   )

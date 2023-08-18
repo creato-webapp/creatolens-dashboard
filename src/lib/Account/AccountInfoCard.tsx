@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import Card from '@components/Card'
 import { Button } from '@components/Button'
 import { Form } from '@components/Form'
@@ -81,11 +81,14 @@ const AccountInfoCard: React.FC<AccountInfoCardProps> = ({ isLoading, isCreate, 
       customFormItemProps: { required: true },
     },
   ]
+  const handleClick = useCallback(() => {
+    setIsShow(true)
+  }, [])
   return (
     <Card
       className="ml-auto mr-auto mb-8 mt-0 w-full bg-bg-white"
       extra={
-        <Button.Primary loading={isLoading} onClick={() => setIsShow(true)}>
+        <Button.Primary loading={isLoading} onClick={handleClick}>
           Open Session Modal
         </Button.Primary>
       }
