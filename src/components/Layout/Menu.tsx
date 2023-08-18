@@ -1,7 +1,7 @@
-import type { FC } from 'react'
+import type { FC, HTMLAttributes } from 'react'
 import { navBarItem } from './Layout'
 import MenuItem from './MenuItem'
-interface MenuProps {
+interface MenuProps extends HTMLAttributes<HTMLDivElement> {
   isShow: boolean
   items: Array<navBarItem>
   onClose?: () => void

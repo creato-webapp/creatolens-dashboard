@@ -1,7 +1,7 @@
-import type { FC } from 'react'
+import type { FC, HTMLAttributes } from 'react'
 import Link from 'next/link'
 
-export interface MenuItemProps {
+export interface MenuItemProps extends HTMLAttributes<HTMLDivElement> {
   title: string
   href: string
   onClose?: () => void

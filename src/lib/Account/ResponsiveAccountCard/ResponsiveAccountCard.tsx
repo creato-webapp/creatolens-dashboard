@@ -1,4 +1,4 @@
-import { PropsWithChildren, FC } from 'react'
+import { HTMLAttributes, FC } from 'react'
 import AccountField from './AccountField'
 import Link from 'next/link'
 
@@ -16,7 +16,7 @@ export interface Column {
   render?: Function
 }
 
-export interface ResponsiveAccountCardProps extends PropsWithChildren {
+export interface ResponsiveAccountCardProps extends HTMLAttributes<HTMLDivElement> {
   key: number
   columns: Column[]
   rowData: rowData

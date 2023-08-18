@@ -1,11 +1,11 @@
-import React, { useState, PropsWithChildren } from 'react'
+import React, { useState, PropsWithChildren, HTMLAttributes } from 'react'
 import { Popover } from '@headlessui/react'
 import { useSession, signIn, signOut, getSession } from 'next-auth/react'
 import { deleteCookie } from 'cookies-next'
 import NavBar from './Navbar'
 import { useRouter } from 'next/router'
 
-interface NavbarProps extends PropsWithChildren {}
+interface NavbarProps extends HTMLAttributes<HTMLDivElement> {}
 
 export interface navBarItem {
   title: string

@@ -8,8 +8,8 @@ export interface Column {
   render?: Function
 }
 
-export interface HeaderProps extends React.HTMLAttributes<HTMLTableSectionElement> {
+export interface HeaderProps extends React.HTMLAttributes<HTMLHeadElement> {
   columns: Column[]
 }
 
-export interface BodyProps extends React.HTMLAttributes<HTMLTableSectionElement> {}
+export interface BodyProps extends React.HTMLAttributes<HTMLBodyElement> {}
