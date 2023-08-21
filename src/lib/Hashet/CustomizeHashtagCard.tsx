@@ -15,7 +15,7 @@ interface Props {
 }
 
 const CustomizeHashtagCard: React.FC<Props> = ({ hashtags }) => {
-  const [selectedHashtags, setSelectedHashtags] = useState<string[]>(hashtags.map((tag) => tag.hashtag))
+  const [selectedHashtags, setSelectedHashtags] = useState<string[]>([])
   const toggleCheckbox = useCallback(
     (hashtag: string) => {
       setSelectedHashtags((prevSelected) =>
@@ -67,19 +67,14 @@ const CustomizeHashtagCard: React.FC<Props> = ({ hashtags }) => {
                 <Paragraph size="lg" bold>
                   {range.label}
                 </Paragraph>
-                <ul className="flex flex-wrap">
+                <ul className="flex flex-wrap space-y-4">
                   {hashtags.map((item) => {
                     const accuracyPercentage = Math.floor(item.acc * 100)
                     const accuracyRange = getAccuracyRange(accuracyPercentage)
                     if (accuracyRange === range.label) {
                       return (
-                        <li className="flex w-1/4 items-center p-2" key={item.hashtag}>
-                          <Checkbox
-                            onChange={() => toggleCheckbox(item.hashtag)}
-                            id={`checkbox-${item.hashtag}`}
-                            className="mr-1.5"
-                            checked={selectedHashtags.includes(item.hashtag)}
-                          />
+                        <li className="pointer-events-none flex w-1/4 items-center" key={item.hashtag} onClick={() => toggleCheckbox(item.hashtag)}>
+                          <Checkbox id={`checkbox-${item.hashtag}`} className="mr-1.5" checked={selectedHashtags.includes(item.hashtag)} />
                           {item.hashtag}
                         </li>
                       )

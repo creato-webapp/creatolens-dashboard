@@ -1,4 +1,5 @@
 import axios, { AxiosError, AxiosRequestConfig } from 'axios'
+import { useSession, signIn, signOut, getProviders } from 'next-auth/react'
 import { getCookie } from 'cookies-next'
 
 export const FetcherInstance = axios.create({
@@ -39,6 +40,7 @@ FetcherInstance.interceptors.response.use(
 
         case 401:
           console.log(error.message)
+          signOut()
           window.alert('Your session has expired. Please login again.')
           return error.response
 
