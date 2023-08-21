@@ -192,7 +192,7 @@ const RetryAccountsPage = ({ paginationData }: Props) => {
 
           <Table.Body>
             {accounts?.map((e, index) => (
-              <Table.Row columns={columns} rowData={e} key={index} />
+              <Table.Row columns={columns} rowData={e} rowKey={index} />
             ))}
           </Table.Body>
         </Table.Layout>

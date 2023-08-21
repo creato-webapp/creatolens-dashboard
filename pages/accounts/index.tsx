@@ -143,15 +143,14 @@ const AccountsPage = ({ paginationData }: Props) => {
         return e ? <CheckCircleIcon className="h-6 w-6 text-green-600" /> : <XCircleIcon className="h-6 w-6 text-red-500" />
       },
     },
-
     {
       title: 'Account Info',
       dataIndex: 'id',
       render: (e: any) => (
         <Link href="/accounts/[id]" as={`/accounts/${e}`} legacyBehavior>
-          <Button.Text loading={false} onClick={() => console.log(e)}>
-            Edit
-          </Button.Text>
+          <>
+            <Button.Text onClick={() => {}}>Edit</Button.Text>
+          </>
         </Link>
       ),
     },
@@ -161,7 +160,9 @@ const AccountsPage = ({ paginationData }: Props) => {
     <Card title="Accounts Table">
       <div className="flex gap-3">
         <Link href="/accounts/create-account">
-          <Button.Primary loading={false}>Create New Account</Button.Primary>
+          <>
+            <Button.Primary onClick={() => {}}>Create New Account</Button.Primary>
+          </>
         </Link>
         <Button.Primary
           onClick={() => {
@@ -195,7 +196,7 @@ const AccountsPage = ({ paginationData }: Props) => {
 
           <Table.Body>
             {accounts?.map((e, index) => (
-              <Table.Row columns={columns} rowData={e} key={index} />
+              <Table.Row columns={columns} rowData={e} rowKey={index} />
             ))}
           </Table.Body>
         </Table.Layout>

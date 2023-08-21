@@ -1,6 +1,6 @@
 import { Column, rowData } from './Interface'
 export interface RowProps extends React.TableHTMLAttributes<HTMLTableRowElement> {
-  key: number
+  rowKey: number
   columns: Column[]
   rowData: rowData
   rowProps?: React.HTMLAttributes<HTMLTableRowElement>
@@ -12,7 +12,7 @@ const Row: React.FC<RowProps> = (props: RowProps) => {
   const { className: rowClassName, ...rowRest } = rowProps || {}
   const { className: cellClassName, ...cellRest } = cellProps || {}
   return (
-    <tr key={props.key} {...rowRest} className={`border-b ${rowClassName}`}>
+    <tr key={props.rowKey} {...rowRest} className={`border-b ${rowClassName}`}>
       {props.columns.map(({ dataIndex, render }, index) => (
         <td
           key={index}
