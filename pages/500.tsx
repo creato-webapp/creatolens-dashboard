@@ -21,7 +21,7 @@ const UnexpectedError = () => {
         </Button.Primary>
       </div>
       <div className="relative">
-        <img className="absolute right-20 -top-20 z-auto h-[900px] overflow-hidden" src="/500.svg" />
+        <img className="absolute right-20 -top-20 -z-10 h-[800px] overflow-hidden" src="/500.svg" />
       </div>
     </div>
   )
