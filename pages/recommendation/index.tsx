@@ -37,8 +37,7 @@ export const getServerSideProps = async (context: any) => {
       Cookie: context.req.headers.cookie,
     },
   })
-  const hashetSessionData: IHashet[] = res.data
-  console.log(hashetSessionData)
+  const hashetSessionData: IHashet[] = res ? res : { data: [] }
   return { props: { hashetSessionData } }
 }
 
@@ -70,8 +69,8 @@ const RecommendationPage = ({ hashetSessionData }: Props) => {
     return <div>Loading...</div>
   }
 
-  const hashetData = data as IHashet[]
-
+  const hashetData = data?.data as IHashet[]
+  console.log(hashetData)
   const handleKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (e) => {
     if (e.key === 'Enter') {
       onSubmit && onSubmit()
