@@ -20,7 +20,7 @@ const NavBar: React.FC<NavBarProps> = ({ logo, pages, isLoggedIn, onLogin, onLog
   const router = useRouter()
   console.log(router.pathname)
   return (
-    <nav className="flex h-1/4 items-center justify-between bg-bg-dark">
+    <nav className="relative z-50 flex h-1/4 items-center justify-between bg-bg-dark">
       <div className="ml-6">
         <a href="/">
           <img src={logo} alt="Logo" className="h-24 w-auto" />
