@@ -6,17 +6,21 @@ import styles from '../styles/Home.module.css'
 import { Paragraph, Title } from '@components/Typography'
 import { Button } from '@components/Button'
 import ArrowRightIcon from '@components/Icon/ArrowRightIcon'
+import { useRouter } from 'next/router'
 import { signIn } from 'next-auth/react'
 
 export const getServerSideProps = async (context: any) => {
-  //remove any
-  const session: any = await getSession(context)
   return { props: {} }
 }
 
 const Home: NextPage = () => {
+  const router = useRouter()
   const onLogin = useCallback(() => {
     signIn()
+  }, [])
+
+  const GetStarted = useCallback(() => {
+    router.push(process.env.NEXT_PUBLIC_REGISTER_URL as string)
   }, [])
 
   return (
@@ -33,7 +37,7 @@ const Home: NextPage = () => {
               <Button.Primary className="mt-4 w-fit p-2" onClick={onLogin}>
                 Sign In
               </Button.Primary>
-              <Button.Primary className="mt-4 w-fit bg-text-white p-2 text-text-primary">
+              <Button.Primary className="mt-4 w-fit bg-text-white p-2 text-text-primary" onClick={GetStarted}>
                 Get Started <ArrowRightIcon className="ml-2 h-4 w-4" />
               </Button.Primary>
             </div>

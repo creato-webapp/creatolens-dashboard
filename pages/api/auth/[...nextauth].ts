@@ -93,6 +93,7 @@ const nextAuthOptions: NextAuthOptionsCallback = (req, res) => ({
   ],
   pages: {
     signIn: '/auth/login',
+    newUser: '/guide',
   },
   adapter: FireStoreAdapterWrapper(firebaseConfig),
   secret: process.env.JWT_SECRET,
