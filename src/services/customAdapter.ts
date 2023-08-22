@@ -13,13 +13,15 @@ interface CombinedUser extends AdapterUser {
   roles: string[]
 }
 
-export const FireStoreAdapterWrapper: typeof FirestoreAdapter = (options) => {
+export const FireStoreAdapterWrapper = (options: any) => {
   const adapter = FirestoreAdapter(options)
   adapter.createUser = async (user) => {
     const roles = await getRoles(user.email)
-    console.log({ roles })
     const combinedUser = { ...(user as CombinedUser), roles: roles }
-    return adapter.createUser?.(combinedUser) as Awaitable<AdapterUser>
+    if (FirestoreAdapter(options).createUser) {
+      return FirestoreAdapter(options).createUser?.(combinedUser) as Awaitable<AdapterUser>
+    }
+    return combinedUser
   }
   return adapter
 }

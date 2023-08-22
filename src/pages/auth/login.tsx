@@ -4,7 +4,7 @@ import { useSession, signIn, signOut, getProviders } from 'next-auth/react'
 import Card from '@components/Card'
 import Link from 'next/link'
 import { deleteCookie } from 'cookies-next'
-import { setCookie } from 'cookies-next'
+import { ErrorCodes } from 'src/enums/ErrorCodeEnums'
 import { Button } from '@components/Button'
 interface loginProps {
   providers: Providers
@@ -27,41 +27,21 @@ export async function getServerSideProps() {
 const login: FC<loginProps> = ({ providers }) => {
   const { data: session, status } = useSession()
   const router = useRouter()
-  const errorCode = router.query.error
-
-  let errorMessage = 'An error occurred during sign-in.'
-
-  switch (errorCode) {
-    case 'OAuthSignin':
-      errorMessage = 'Error in constructing an authorization URL.'
-      break
-    case 'OAuthCallback':
-      errorMessage = 'Error in handling the response from the OAuth provider.'
-      break
-    case 'OAuthCreateAccount':
-      errorMessage = 'User not in white list. Please Contact'
-      break
-    case 'EmailCreateAccount':
-      errorMessage = 'Could not create email provider user in the database.'
-      break
-    case 'Callback':
-      errorMessage = 'Error in the OAuth callback handler route.'
-      break
-    case 'OAuthAccountNotLinked':
-      errorMessage = 'The email on the account is already linked, but not with this OAuth account.'
-      break
-    case 'EmailSignin':
-      errorMessage = 'Sending the email with the verification token failed.'
-      break
-    case 'CredentialsSignin':
-      errorMessage = 'An error occurred during sign-in.'
-      break
-    case 'SessionRequired':
-      errorMessage = 'This page requires you to be signed in at all times.'
-      break
-    default:
-      errorMessage = 'An error occurred during sign-in.'
+  const errorCode = router.query.error as ErrorCodes
+  const errorMessages: Record<ErrorCodes, string> = {
+    [ErrorCodes.OAuthSignin]: 'Error in constructing an authorization URL.',
+    [ErrorCodes.OAuthCallback]: 'Error in handling the response from the OAuth provider.',
+    [ErrorCodes.OAuthCreateAccount]: 'User not in white list. Please Contact',
+    [ErrorCodes.EmailCreateAccount]: 'Could not create email provider user in the database.',
+    [ErrorCodes.Callback]: 'Error in the OAuth callback handler route.',
+    [ErrorCodes.OAuthAccountNotLinked]: 'The email on the account is already linked, but not with this OAuth account.',
+    [ErrorCodes.EmailSignin]: 'Sending the email with the verification token failed.',
+    [ErrorCodes.CredentialsSignin]: 'An error occurred during sign-in.',
+    [ErrorCodes.SessionRequired]: 'This page requires you to be signed in at all times.',
+    [ErrorCodes.Default]: 'An error occurred during sign-in.',
   }
+
+  const OAuthErrorMessage = errorMessages[errorCode]
 
   return (
     <Card title="Login Page">
@@ -88,7 +68,7 @@ const login: FC<loginProps> = ({ providers }) => {
         ) : (
           <div>
             <p>You are not signed in.</p>
-            {errorCode && <div className="error-message">{errorMessage}</div>}
+            {errorCode && <div className="error-message">{OAuthErrorMessage}</div>}
             {Object.values(providers).map((provider) => (
               <div key={provider.name} className="flex justify-center">
                 {provider.name === 'Google' && (
@@ -103,20 +83,5 @@ const login: FC<loginProps> = ({ providers }) => {
       </div>
     </Card>
   )
-  // if (session) {
-  //   return (
-  //     <div>
-  //       <p>Welcome, {session.user?.email}</p>
-  //       <button onClick={() => signOut()}>Logout</button>
-  //     </div>
-  //   )
-  // } else {
-  //   return (
-  //     <div>
-  //       <p>You are not signed in.</p>
-  //       <button onClick={() => signIn()}>Login </button>
-  //     </div>
-  //   )
-  // }
 }
 export default login
