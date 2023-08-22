@@ -1,7 +1,7 @@
 import NextAuth from 'next-auth/next'
 import { User, NextAuthOptions } from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
-import { FireStoreAdapterWrapper } from 'src/services/customAdapter'
+import { FireStoreAdapterWrapper } from '@services/customAdapter'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { setCookie } from 'cookies-next'
 

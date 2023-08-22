@@ -4,7 +4,7 @@ import { Table } from '@components/Table'
 import { getSession } from 'next-auth/react'
 import Link from 'next/link'
 import { useAccountSessionPagination } from 'src/hooks/useAccountSession'
-import { GetSessionPagination, PaginationParams, PaginationMetadata } from 'src/services/Account/Session'
+import { GetSessionPagination, PaginationParams, PaginationMetadata } from '@services/Account/Session'
 import { Form } from '@components/Form'
 import Pagination from '@components/Pagination'
 type Props = {

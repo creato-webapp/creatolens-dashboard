@@ -5,7 +5,7 @@ import { Form } from '@components/Form'
 import { IField } from '@components/Form/interface'
 import { IBlockedAccount } from '@lib/Account/Account/interface'
 import { getSession } from 'next-auth/react'
-import { GetBlockedAccount } from 'src/services/Account/BlockAccount'
+import { GetBlockedAccount } from '@services/Account/BlockAccount'
 import { useBlockAccount } from 'src/hooks/useBlockedAccount'
 
 type Props = {

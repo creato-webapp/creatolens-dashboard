@@ -1,5 +1,5 @@
 import { FirestoreAdapter } from '@next-auth/firebase-adapter'
-import { getRoles } from 'src/services/util'
+import { getRoles } from '@services/util'
 import { AdapterUser } from 'next-auth/adapters'
 export interface FirestoreAdapterOptions {
   emulator?: {

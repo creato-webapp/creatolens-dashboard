@@ -11,7 +11,7 @@ import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/solid'
 import StatusTag from '@lib/StatusTag'
 import Pagination from '@components/Pagination'
 import { useGetRetryAccountsPagination } from 'src/hooks/useRetryAccount'
-import { GetRetryAccountsPagination, PaginationMetadata } from 'src/services/Account/RetryAccount'
+import { GetRetryAccountsPagination, PaginationMetadata } from 'services/Account/RetryAccount'
 
 const dayjs = require('dayjs')
 const utc = require('dayjs/plugin/utc')
