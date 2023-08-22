@@ -1,5 +1,5 @@
 import useSWR from 'swr'
-import { GetErrorPagination, PaginationParams, PaginationMetadata } from 'services/Account/AccountErros'
+import { GetErrorPagination, PaginationParams, PaginationMetadata } from 'src/services/Account/AccountErros'
 
 export const useAccountErrorPagination = (paginationParams: PaginationParams, shouldFetch: boolean = true, fallbackData?: PaginationMetadata) => {
   const { data, error, mutate, ...swr } = useSWR(shouldFetch ? [paginationParams] : null, GetErrorPagination, {

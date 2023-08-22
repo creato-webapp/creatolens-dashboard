@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Card from '@components/Card'
 import { Table } from '@components/Table'
 import { Button } from '@components/Button'
-import { IAccount } from '@lib/Account/Account/interface'
-import { ResponsiveAccountCard } from '@lib/Account/ResponsiveAccountCard'
+import { IRetryAccount } from '@lib/Account/Account/interface'
 import Link from 'next/link'
 import { getSession } from 'next-auth/react'
 import Tag from '@components/Tag'
@@ -11,8 +10,9 @@ import Avatar from '@components/Avatar'
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/solid'
 import StatusTag from '@lib/StatusTag'
 import Pagination from '@components/Pagination'
-import { useGetAccountsPagination } from 'hooks/useAccount'
-import { GetAccountsPagination, PaginationMetadata } from 'services/Account/Account'
+import { useGetRetryAccountsPagination } from 'src/hooks/useRetryAccount'
+import { GetRetryAccountsPagination, PaginationMetadata } from 'src/services/Account/RetryAccount'
+
 const dayjs = require('dayjs')
 const utc = require('dayjs/plugin/utc')
 dayjs.extend(utc)
@@ -37,10 +37,8 @@ export const getServerSideProps = async (context: any) => {
     orderBy: 'username',
     isAsc: false,
   }
-
-  const response = await GetAccountsPagination(paginationProps)
-  // Pass data to the page via props
-  const accountData: IAccount[] = response ? response?.data : []
+  const response = await GetRetryAccountsPagination(paginationProps)
+  const accountData: IRetryAccount[] = response ? response.data : []
 
   const paginationData: PaginationMetadata = {
     data: accountData,
@@ -53,16 +51,16 @@ export const getServerSideProps = async (context: any) => {
   return { props: { paginationData } }
 }
 
-const AccountsPage = ({ paginationData }: Props) => {
+const RetryAccountsPage = ({ paginationData }: Props) => {
   const [pageParams, setPageParams] = useState({
     pageNumber: 1,
     pageSize: 10,
     orderBy: 'username',
     isAsc: false,
   })
-  const { accounts: responseData, error, mutate } = useGetAccountsPagination(pageParams, true, paginationData)
+  const { accounts: responseData, error, mutate } = useGetRetryAccountsPagination(pageParams, true, paginationData)
 
-  const accounts: IAccount[] = responseData?.data || []
+  const accounts: IRetryAccount[] = responseData?.data || []
   const isLoading = !responseData && !error
   const onPageChange = (newPage: number) => {
     setPageParams((prevParams) => ({
@@ -89,8 +87,8 @@ const AccountsPage = ({ paginationData }: Props) => {
 
   const columns = [
     {
-      title: 'Last Login(HK Time)',
-      dataIndex: 'last_login_dt',
+      title: 'Wait Until(HK Time)',
+      dataIndex: 'wait_until',
       render: (e: any) => {
         const date = dayjs(e, 'YYYY-MM-DD THH:mm:ss')
         return dayjs.utc(date).local().format('YYYY-MM-DD HH:mm:ss')
@@ -143,14 +141,15 @@ const AccountsPage = ({ paginationData }: Props) => {
         return e ? <CheckCircleIcon className="h-6 w-6 text-green-600" /> : <XCircleIcon className="h-6 w-6 text-red-500" />
       },
     },
+
     {
       title: 'Account Info',
       dataIndex: 'id',
       render: (e: any) => (
-        <Link href="/accounts/[id]" as={`/accounts/${e}`} legacyBehavior>
-          <>
-            <Button.Text onClick={() => {}}>Edit</Button.Text>
-          </>
+        <Link href="/accounts/retry/[id]" as={`/accounts/retry/${e}`} legacyBehavior>
+          <Button.Text loading={false} onClick={() => console.log(e)}>
+            Edit
+          </Button.Text>
         </Link>
       ),
     },
@@ -160,9 +159,7 @@ const AccountsPage = ({ paginationData }: Props) => {
     <Card title="Accounts Table">
       <div className="flex gap-3">
         <Link href="/accounts/create-account">
-          <>
-            <Button.Primary onClick={() => {}}>Create New Account</Button.Primary>
-          </>
+          <Button.Primary loading={false}>Create New Retry Account</Button.Primary>
         </Link>
         <Button.Primary
           onClick={() => {
@@ -189,7 +186,6 @@ const AccountsPage = ({ paginationData }: Props) => {
           Reset Params
         </Button.Primary>
       </div>
-      {/* desktop */}
       <div className="hidden  md:flex">
         <Table.Layout>
           <Table.Header columns={columns} />
@@ -210,14 +206,8 @@ const AccountsPage = ({ paginationData }: Props) => {
         hasPrev={responseData.has_prev}
         onPageChange={onPageChange}
       />
-
-      <div className="hidden flex-col sm:flex">
-        {accounts?.map((e, index) => (
-          <ResponsiveAccountCard columns={columns} rowData={e} key={index} />
-        ))}
-      </div>
     </Card>
   )
 }
 
-export default AccountsPage
+export default RetryAccountsPage

@@ -5,8 +5,8 @@ import { IAccountError } from '@lib/Account/AccountErrors/interface'
 import { getSession } from 'next-auth/react'
 import Link from 'next/link'
 import { Form } from '@components/Form'
-import { useAccountErrorPagination } from 'hooks/useAccountErrors'
-import { GetErrorPagination, PaginationParams, PaginationMetadata } from 'services/Account/AccountErros'
+import { useAccountErrorPagination } from 'src/hooks/useAccountErrors'
+import { GetErrorPagination, PaginationParams, PaginationMetadata } from 'src/services/Account/AccountErros'
 import Pagination from '@components/Pagination'
 type Props = {
   paginationData: PaginationMetadata

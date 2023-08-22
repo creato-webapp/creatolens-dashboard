@@ -8,8 +8,8 @@ import Title from '@components/Typography/Title'
 import Paragraph from '@components/Typography/Paragraph'
 import AccountInfoCard from '@lib/Account/AccountInfoCard'
 import AccountCreateCard from '@lib/Account/AccountCreateCard'
-import { useAccount } from 'hooks/useAccount'
-import { GetAccount, CreateAccount } from 'services/Account/Account'
+import { useAccount } from 'src/hooks/useAccount'
+import { GetAccount, CreateAccount } from 'src/services/Account/Account'
 
 const dayjs = require('dayjs')
 const utc = require('dayjs/plugin/utc')

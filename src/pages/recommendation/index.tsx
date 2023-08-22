@@ -11,9 +11,9 @@ import TopRelatedHashtagCard from '@lib/Hashet/TopRelatedHashtagCard'
 import TopAccHashtagCard from '@lib/Hashet/TopAccHashtagCard'
 import { Button } from '@components/Button'
 import Tab from '@components/Tab'
-import { GetHashtag } from 'services/HashtagHelper'
+import { GetHashtag } from 'src/services/HashtagHelper'
 import CustomizeHashtagCard from '@lib/Hashet/CustomizeHashtagCard'
-import { useGetHashtag } from 'hooks/useHashtag'
+import { useGetHashtag } from 'src/hooks/useHashtag'
 interface IHashet extends Record<string, string | number | boolean> {
   hashtag: string
   acc: number
