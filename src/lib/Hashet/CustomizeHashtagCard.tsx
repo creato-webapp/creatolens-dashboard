@@ -73,7 +73,11 @@ const CustomizeHashtagCard: React.FC<Props> = ({ hashtags }) => {
                     const accuracyRange = getAccuracyRange(accuracyPercentage)
                     if (accuracyRange === range.label) {
                       return (
-                        <li className="pointer-events-none flex w-1/4 items-center" key={item.hashtag} onClick={() => toggleCheckbox(item.hashtag)}>
+                        <li
+                          className="flex w-1/4 cursor-pointer items-center hover:text-gray-400"
+                          key={item.hashtag}
+                          onClick={() => toggleCheckbox(item.hashtag)}
+                        >
                           <Checkbox id={`checkbox-${item.hashtag}`} className="mr-1.5" checked={selectedHashtags.includes(item.hashtag)} />
                           {item.hashtag}
                         </li>
