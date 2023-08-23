@@ -18,7 +18,7 @@ export default async function AccountHandler(req: NextApiRequest, res: NextApiRe
 
       return res.status(response.status).json(response.data)
     default:
-      res.setHeader('Allow', ['GET', 'PATCH', 'PUT'])
+      res.setHeader('Allow', ['GET', 'PATCH'])
       res.status(405).end(`Method ${method} Not Allowed`)
   }
 }

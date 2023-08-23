@@ -24,5 +24,8 @@ export default async function accountQueryHandler(req: NextApiRequest, res: Next
       })
       return res.status(response.status).json(response.data)
     }
+    default:
+      res.setHeader('Allow', ['GET', 'POST'])
+      res.status(405).end(`Method ${method} Not Allowed`)
   }
 }

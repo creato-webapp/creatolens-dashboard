@@ -33,5 +33,8 @@ export default async function accountQueryHandler(req: NextApiRequest, res: Next
           console.log(error)
         })
     }
+    default:
+      res.setHeader('Allow', ['GET', 'POST'])
+      res.status(405).end(`Method ${method} Not Allowed`)
   }
 }
