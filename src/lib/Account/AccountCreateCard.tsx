@@ -17,6 +17,25 @@ interface AccountCreateCardProps {
 }
 
 const AccountCreateCard: React.FC<AccountCreateCardProps> = ({ isLoading, isCreate, account, handleSubmit, setIsShow, isChecked, handleChange }) => {
+  const onSubmit = (values: IAccount) => {
+    let valid = true
+    const newErrors = { username: '', pwd: '' }
+    if (values.username) {
+      if (values.username.includes(' ')) {
+        newErrors.username = 'Username cannot contain spaces.'
+        valid = false
+      }
+    }
+    if (values.pwd) {
+      if (values.pwd.includes(' ')) {
+        newErrors.pwd = 'Password cannot contain spaces.'
+        valid = false
+      }
+    }
+    console.log(values)
+    valid ? handleSubmit(values) : alert(newErrors.username + '\n' + newErrors.pwd)
+  }
+
   const fields: IField[] = [
     {
       label: 'Username',
@@ -46,7 +65,7 @@ const AccountCreateCard: React.FC<AccountCreateCardProps> = ({ isLoading, isCrea
         )
       }
     >
-      <Form.Layout onSubmit={handleSubmit} Header={account.username} loading={isLoading} fields={fields} allowSubmit={!isChecked}>
+      <Form.Layout onSubmit={onSubmit} Header={account.username} loading={isLoading} fields={fields} allowSubmit={!isChecked}>
         {fields.map((e: IField, index) => (
           <Form.Item label={e.label} key={index} customFormItemProps={e.customFormItemProps}>
             <Form.CustomItem id={e.name} defaultValue={account[e.name]} type={e.type} customFormItemProps={e.customFormItemProps} />

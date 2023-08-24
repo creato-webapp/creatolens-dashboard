@@ -89,7 +89,13 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
       }
 
       const res = await CreateAccount(newValues)
-      window.alert(res)
+      if (res.id) {
+        window.alert(`Account ${res.username} created successfully`)
+        router.push(`/accounts`)
+      } else {
+        window.alert(res)
+      }
+
       // You can navigate to another page if needed
     } catch (error) {
       console.log(error)
@@ -109,8 +115,13 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
         post_scrapped_count: parseInt(values.post_scrapped_count as unknown as string),
       }
 
-      await updateAccount(newValues)
-      setShowAlert(true)
+      const res = await updateAccount(newValues)
+      if (res.id) {
+        window.alert(`Account ${res.username} updated successfully`)
+        router.push(`/accounts`)
+      } else {
+        window.alert(res)
+      }
     } catch (error) {
       console.log(error)
       window.alert(error)
@@ -126,7 +137,8 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
       last_login_dt: dayjs(values.last_login_dt, 'YYYY-MM-DDTHH:mm').utc().local().format('YYYY-MM-DD THH:mm:ss'),
     }
     console.log({ newValues })
-    await useUpdateAccount(newValues)
+    const res = await useUpdateAccount(newValues)
+    return res
   }
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {

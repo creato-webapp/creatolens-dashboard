@@ -31,8 +31,7 @@ const CustomItem: FC<CustomItemProps> = (props: CustomItemProps) => {
           placeholder={props?.placeholder}
           disabled={props.disabled}
           onChange={props.onChange}
-          type="number"
-          {...customFormItemProps}
+          customFormItemProps={customFormItemProps}
         />
       )
     case 'InputNumber':

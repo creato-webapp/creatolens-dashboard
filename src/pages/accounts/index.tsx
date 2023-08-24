@@ -148,9 +148,9 @@ const AccountsPage = ({ paginationData }: Props) => {
       dataIndex: 'id',
       render: (e: any) => (
         <Link href="/accounts/[id]" as={`/accounts/${e}`} legacyBehavior>
-          <>
-            <Button.Text onClick={() => {}}>Edit</Button.Text>
-          </>
+          <a>
+            <Button.Text>Edit</Button.Text>
+          </a>
         </Link>
       ),
     },
@@ -160,9 +160,9 @@ const AccountsPage = ({ paginationData }: Props) => {
     <Card title="Accounts Table">
       <div className="flex gap-3">
         <Link href="/accounts/create-account">
-          <>
-            <Button.Primary onClick={() => {}}>Create New Account</Button.Primary>
-          </>
+          <a>
+            <Button.Primary>Create New Account</Button.Primary>
+          </a>
         </Link>
         <Button.Primary
           onClick={() => {
