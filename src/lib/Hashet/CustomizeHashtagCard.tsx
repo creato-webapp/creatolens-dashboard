@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import Card from '@components/Card'
 import Dropdown from '@components/Form/Dropdown'
 import { Button } from '@components/Button'
@@ -50,6 +50,10 @@ const CustomizeHashtagCard: React.FC<Props> = ({ hashtags }) => {
     const range = accuracyRanges.find((range) => accuracy >= range.min && accuracy < range.max)
     return range ? range.label : 'Below 85%'
   }
+
+  useEffect(() => {
+    clearAll()
+  }, [hashtags])
 
   return (
     <Card className=" w-full gap-6 px-6 py-9 shadow">
