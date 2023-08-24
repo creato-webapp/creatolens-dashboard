@@ -111,6 +111,7 @@ const RecommendationPage = ({ hashetSessionData }: Props) => {
           {isValidating ? <LoaderIcon className="animate-spin" /> : <MagnifyingGlassIcon />}
 
           <Form.BaseInput
+            allowSpace
             hidden
             disabled={isValidating}
             onKeyDown={handleKeyDown}
