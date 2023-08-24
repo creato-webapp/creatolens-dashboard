@@ -25,7 +25,7 @@ const Home: NextPage = () => {
 
   return (
     <div className={styles.container}>
-      <div className="relative w-screen overflow-hidden">
+      <div className="relative h-screen w-screen overflow-hidden">
         <img src="/landing_page.svg" alt="Background" className="relative h-full w-full object-cover" />
         <div className="absolute top-1/4 left-[100px] text-white ">
           <div className="float-left flex flex-col justify-center">
@@ -40,27 +40,6 @@ const Home: NextPage = () => {
               <Button.Primary className="mt-4 w-fit bg-text-white p-2 text-text-primary" onClick={GetStarted}>
                 Get Started <ArrowRightIcon className="ml-2 h-4 w-4" />
               </Button.Primary>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="inline-flex w-screen flex-col items-center justify-center gap-10 bg-blue-900 px-20">
-        <div className="w-96 text-center text-4xl font-extrabold leading-10 tracking-wide text-neutral-50">Why Creato Lens?</div>
-        <div className="inline-flex items-center justify-start gap-44">
-          <div className="inline-flex flex-col items-start justify-start gap-2.5 p-2.5">
-            <div className="flex flex-col items-start justify-start gap-12">
-              <div className="self-stretch text-3xl font-bold leading-10 text-neutral-50 underline">Why choose Creato Lens for Instagram?</div>
-              <div className="w-96 text-xl font-medium leading-loose text-neutral-50">
-                Differing from other platforms, Creato LENS offers personalized hashtag suggestions based on your provided account. Elevate social
-                media engagement in your chosen areas of interest!
-              </div>
-            </div>
-          </div>
-          <div className="inline-flex flex-col items-start justify-start gap-12">
-            <div className="w-96 text-3xl font-bold leading-10 text-neutral-50 underline">Unlimited Account!</div>
-            <div className="w-96 text-xl font-medium leading-loose text-neutral-50">
-              We encourage users to add a multiple of accounts to Creato LENS, spanning diverse areas of interest. Your input fuels the expansion of
-              our library and reinforce the result accuracy!
             </div>
           </div>
         </div>
