@@ -9,7 +9,6 @@ import InputPassword from './InputPassword'
 
 const CustomItem: FC<CustomItemProps> = (props: CustomItemProps) => {
   const { customFormItemProps } = props
-  console.log(customFormItemProps)
   switch (props.type) {
     case 'Input':
       return (
