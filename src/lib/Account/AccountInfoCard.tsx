@@ -29,6 +29,18 @@ const AccountInfoCard: React.FC<AccountInfoCardProps> = ({ isLoading, isCreate, 
       type: 'Input',
       name: 'id',
     },
+    {
+      label: 'created by',
+      type: 'Input',
+      name: 'created_by',
+      customFormItemProps: { disabled: true },
+    },
+    {
+      label: 'updated by',
+      type: 'Input',
+      name: 'updated_by',
+      customFormItemProps: { disabled: true },
+    },
   ]
   const checkBoxField: IField[] = [
     {
@@ -73,7 +85,6 @@ const AccountInfoCard: React.FC<AccountInfoCardProps> = ({ isLoading, isCreate, 
       name: 'post_scrapped_count',
       customFormItemProps: { disabled: true },
     },
-
     {
       label: 'last_login_dt',
       type: 'DateTimePicker',

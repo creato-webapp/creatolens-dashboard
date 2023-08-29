@@ -34,7 +34,7 @@ export const getServerSideProps = async (context: any) => {
   const paginationProps = {
     pageNumber: 1,
     pageSize: 10,
-    orderBy: 'username',
+    orderBy: 'created_at',
     isAsc: false,
   }
 
@@ -89,8 +89,8 @@ const AccountsPage = ({ paginationData }: Props) => {
 
   const columns = [
     {
-      title: 'Last Login(HK Time)',
-      dataIndex: 'last_login_dt',
+      title: 'Created At(HK Time)',
+      dataIndex: 'created_at',
       render: (e: any) => {
         const date = dayjs(e, 'YYYY-MM-DD THH:mm:ss')
         return dayjs.utc(date).local().format('YYYY-MM-DD HH:mm:ss')
@@ -181,7 +181,7 @@ const AccountsPage = ({ paginationData }: Props) => {
             setPageParams({
               pageNumber: 1,
               pageSize: 10,
-              orderBy: 'username',
+              orderBy: 'created_at',
               isAsc: false,
             })
           }}

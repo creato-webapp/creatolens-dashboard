@@ -10,11 +10,19 @@ export default async function AccountHandler(req: NextApiRequest, res: NextApiRe
   axios.defaults.headers.common['value1'] = 'value'
   switch (method) {
     case 'GET': {
-      const response = await AccountInstance.get(`accounts/${id}`)
+      const response = await AccountInstance.get(`accounts/${id}`, {
+        headers: {
+          Cookie: req.headers.cookie,
+        },
+      })
       return res.status(response.status).json(response.data)
     }
     case 'PATCH':
-      const response = await AccountInstance.patch(`accounts/update/${id}`, body)
+      const response = await AccountInstance.patch(`accounts/update/${id}`, body, {
+        headers: {
+          Cookie: req.headers.cookie,
+        },
+      })
 
       return res.status(response.status).json(response.data)
     default:
