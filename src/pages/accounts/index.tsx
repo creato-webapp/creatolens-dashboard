@@ -148,6 +148,10 @@ const AccountsPage = ({ paginationData }: Props) => {
       },
     },
     {
+      title: 'Created By',
+      dataIndex: 'created_by',
+    },
+    {
       title: 'Account Info',
       dataIndex: 'id',
       render: (e: any) => (
