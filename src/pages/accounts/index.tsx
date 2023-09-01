@@ -37,11 +37,15 @@ export const getServerSideProps = async (context: any) => {
     orderBy: 'created_at',
     isAsc: false,
   }
-
-  const response = await GetAccountsPagination(paginationProps)
+  const cookies = context.req.headers.cookie
+  const response = await GetAccountsPagination(paginationProps, {
+    headers: {
+      Cookie: cookies, // Forward the cookies to the server-side request
+    },
+  })
   // Pass data to the page via props
   const accountData: IAccount[] = response ? response?.data : []
-
+  console.log(response)
   const paginationData: PaginationMetadata = {
     data: accountData,
     has_next: response ? response.has_next : false,
@@ -57,7 +61,7 @@ const AccountsPage = ({ paginationData }: Props) => {
   const [pageParams, setPageParams] = useState({
     pageNumber: 1,
     pageSize: 10,
-    orderBy: 'username',
+    orderBy: 'created_at',
     isAsc: false,
   })
   const { accounts: responseData, error, mutate } = useGetAccountsPagination(pageParams, true, paginationData)
