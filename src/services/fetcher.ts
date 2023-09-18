@@ -41,8 +41,10 @@ FetcherInstance.interceptors.response.use(
         case 401:
           console.log(error.message)
           signOut()
-          window.alert('Your session has expired. Please login again.')
-          return error.response
+          if (typeof window !== 'undefined') {
+            window.alert('Your session has expired. Please login again.')
+          }
+          return error
 
         default:
           console.log(error.message)

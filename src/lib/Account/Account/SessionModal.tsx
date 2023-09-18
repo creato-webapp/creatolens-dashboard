@@ -53,7 +53,7 @@ const SessionModal: FC<SessionModalProps> = ({ account, isLoading: loading, isDi
         <Button.Primary
           // disabled={user?.role !== 'admin' || isDisable}
           loading={isLoading}
-          onClick={() => updateAccountSession}
+          onClick={() => updateAccountSession(account)}
         >
           <div className="flex">Update Session</div>
         </Button.Primary>

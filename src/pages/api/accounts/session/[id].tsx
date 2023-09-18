@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import ScrapperInstance from '../../axiosInstance/Scrapper'
+import AccountInstance from '../../axiosInstance/Account'
 
 export default function AccountHandler(req: NextApiRequest, res: NextApiResponse) {
   const {
@@ -27,8 +27,8 @@ export default function AccountHandler(req: NextApiRequest, res: NextApiResponse
 
 async function processInBackground(id: string, body: any) {
   // Perform the long-running task here
-  const response = await ScrapperInstance.post(`/instaloader/upload_session/${id}`, body)
-
+  const response = await AccountInstance.post(`account-session/renewal/${id}`, body)
+  return response.data
   // You can handle the response here, such as storing it in a database or sending a notification
   // ...
 }

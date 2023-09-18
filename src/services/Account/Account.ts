@@ -123,6 +123,10 @@ export async function UpdateAccount(id: string, updatedAccount: IAccount, custom
 }
 
 export async function UpdateSession(id: string, updatedAccount: IAccount, customConfig?: AxiosRequestConfig): Promise<any> {
-  const res = await Fetcher.POST(`/api/accounts/session/${id}`, { ...customConfig, username: updatedAccount.username })
+  const res = await Fetcher.POST(`/api/accounts/session/${id}`, {
+    ...customConfig,
+    username: updatedAccount.username,
+    password: updatedAccount.password,
+  })
   return res
 }
