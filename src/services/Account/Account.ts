@@ -127,7 +127,8 @@ export async function UpdateSession(id: string, updatedAccount: IAccount, custom
     `/api/accounts/session/${id}`,
     {
       username: updatedAccount.username,
-      password: updatedAccount.password,
+      password: updatedAccount.pwd,
+      account_id: updatedAccount.id,
     },
     { ...customConfig }
   )
