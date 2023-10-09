@@ -44,7 +44,7 @@ export default function Navbar(props: NavbarProps) {
     <>
       <Popover className="relative bg-white">
         <div className="max-w-screen-2xl mx-auto">
-          <NavBar logo="/small-logo.svg" pages={navBarPage} isLoggedIn={!!session} onLogin={onLogin} onLogout={onLogout}></NavBar>
+          <NavBar logo="/logo_orange.png" pages={navBarPage} isLoggedIn={!!session} onLogin={onLogin} onLogout={onLogout}></NavBar>
         </div>
       </Popover>
       {props.children}

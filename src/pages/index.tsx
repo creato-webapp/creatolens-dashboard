@@ -26,8 +26,8 @@ const Home: NextPage = () => {
   return (
     <div className={styles.container}>
       <div className="relative h-screen w-screen overflow-hidden">
-        <img src="/landing_page.svg" alt="Background" className="relative h-full w-full object-cover" />
-        <div className="absolute top-1/4 left-[100px] text-white ">
+        <img src="/landing-page.svg" alt="Background" className="relative h-full w-full object-cover" />
+        <div className="absolute top-[8rem] ml-32 text-white ">
           <div className="float-left flex flex-col justify-center">
             <h1 className="text-6xl font-extrabold tracking-wide text-orange-500">CREATO</h1>
             <h1 className="text-[10rem] font-black tracking-wide text-white">LENS</h1>
