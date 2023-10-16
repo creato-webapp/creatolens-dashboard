@@ -5,9 +5,11 @@ import { Form } from '@components/Form'
 import Title from '@components/Typography/Title'
 import MagnifyingGlassIcon from '@components/Icon/MagnifyingGlassIcon'
 import LoaderIcon from '@components/Icon/LoaderIcon'
+import LightBulbIcon from '@components/Icon/LightBulbIcon'
 import TopRelatedHashtagCard from '@lib/Hashet/TopRelatedHashtagCard'
 import TopAccHashtagCard from '@lib/Hashet/TopAccHashtagCard'
 import { Button } from '@components/Button'
+import Popover from '@components/Popover'
 import Tab from '@components/Tab'
 import CustomizeHashtagCard from '@lib/Hashet/CustomizeHashtagCard'
 import { useGetHashtag } from 'src/hooks/useHashtag'
@@ -88,10 +90,30 @@ const RecommendationPage = ({ hashetSessionData }: Props) => {
 
   return (
     <Card className="px-48">
-      <div>
+      <div className="flex items-center">
         <Title level={1} bold>
           RECOMMENDATION
         </Title>
+        <Popover
+          className="ml-auto"
+          trigger={<LightBulbIcon />}
+          content={
+            <>
+              <div className="rounded-t-lg border-b border-gray-200  px-3 py-2">
+                <h3 className="font-semibold text-gray-900 ">💡Input prompt</h3>
+              </div>
+              <div className="px-3 py-2">
+                <ul>
+                  <li>• You can type everything related to your next IG post</li>
+                  <li>• No punctuation is needed</li>
+                  <li>• Short phrase/ vocabulary applicable</li>
+                </ul>
+                <p>e.g. Hong Kong Food Cute makeup tutorial</p>
+              </div>
+              <div data-popper-arrow></div>
+            </>
+          }
+        />
       </div>
       <div className="my-2 flex w-full gap-2">
         <div className="flex w-full items-center rounded-3xl bg-neutral-100 px-2 py-2 hover:rounded-3xl hover:outline-none focus:rounded-3xl focus:outline-none focus:ring-opacity-50 active:rounded-3xl">
