@@ -15,7 +15,7 @@ interface Props {
 const TopRelatedHashtagCard: React.FC<Props> = ({ hashtags }) => {
   const [numberOfHashes, setNumberOfHashes] = useState<string | number>(30)
 
-  const slicedHashtags = hashtags.slice(0, numberOfHashes as number)
+  const slicedHashtags = hashtags.length > 0 ? hashtags.slice(0, numberOfHashes as number) : []
 
   const copyToClipboard = useCallback(async () => {
     console.log(slicedHashtags)

@@ -1,8 +1,6 @@
 import React, { useState, useCallback } from 'react'
 import Card from '@components/Card'
-import useSWR from 'swr'
 import { getSession } from 'next-auth/react'
-import axios from 'axios'
 import { Form } from '@components/Form'
 import Title from '@components/Typography/Title'
 import MagnifyingGlassIcon from '@components/Icon/MagnifyingGlassIcon'
@@ -11,7 +9,6 @@ import TopRelatedHashtagCard from '@lib/Hashet/TopRelatedHashtagCard'
 import TopAccHashtagCard from '@lib/Hashet/TopAccHashtagCard'
 import { Button } from '@components/Button'
 import Tab from '@components/Tab'
-import { GetHashtag } from '@services/HashtagHelper'
 import CustomizeHashtagCard from '@lib/Hashet/CustomizeHashtagCard'
 import { useGetHashtag } from 'src/hooks/useHashtag'
 interface IHashet extends Record<string, string | number | boolean> {
@@ -32,33 +29,24 @@ export const getServerSideProps = async (context: any) => {
       },
     }
   }
-  const res = await GetHashtag('Thank you Elon Musk!', {
-    headers: {
-      Cookie: context.req.headers.cookie,
-    },
-  })
-  const hashetSessionData: IHashet[] = res ? res : { data: [] }
+  const hashetSessionData = { data: [] }
   return { props: { hashetSessionData } }
 }
 
 const RecommendationPage = ({ hashetSessionData }: Props) => {
-  const [shouldFetch, setShouldFetch] = useState(false)
-  const [inputString, setInputString] = useState('Thank you Elon Musk!')
-
-  const [currentPage, setCurrentPage] = useState(1)
-  const itemsPerPage = 10
-
+  //find better way to write fetch logic
+  const [inputString, setInputString] = useState('')
+  const [stringToSubmit, setStringToSubmit] = useState('')
   const onChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-    setShouldFetch(false)
     setInputString(e.target.value)
   }
 
   const onSubmit = useCallback(async () => {
-    if (!shouldFetch) setShouldFetch(true)
-    await mutateHashet(inputString)
+    setStringToSubmit(inputString)
+    await mutateHashet()
   }, [inputString])
 
-  const { data, error, mutate: mutateHashet, isValidating } = useGetHashtag(inputString, shouldFetch, hashetSessionData)
+  const { data, error, mutate: mutateHashet, isValidating } = useGetHashtag(stringToSubmit, stringToSubmit ? true : false, hashetSessionData)
   if (error) {
     console.log(data)
     console.log(error)
@@ -69,8 +57,7 @@ const RecommendationPage = ({ hashetSessionData }: Props) => {
     return <div>Loading...</div>
   }
 
-  const hashetData = data?.data as IHashet[]
-  console.log(hashetData)
+  const hashetData: IHashet[] = data?.data ? data.data : []
   const handleKeyDown: React.KeyboardEventHandler<HTMLInputElement> = (e) => {
     if (e.key === 'Enter') {
       onSubmit && onSubmit()
@@ -115,7 +102,7 @@ const RecommendationPage = ({ hashetSessionData }: Props) => {
             hidden
             disabled={isValidating}
             onKeyDown={handleKeyDown}
-            placeholder="e.g. Thank you Elon Musk!"
+            placeholder="Type Your Input Here."
             className={` rounded-3xl border-none bg-neutral-100 px-2 py-1.5 hover:rounded-3xl hover:outline-none focus:rounded-3xl focus:outline-none focus:ring-opacity-50 active:rounded-3xl  ${
               isValidating ? 'text-gray-400' : ''
             } w-full`}
