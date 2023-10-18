@@ -35,3 +35,24 @@ export function isExpired(expires: string): boolean {
   const currentTimestamp = Date.now()
   return expiresDate.getTime() <= currentTimestamp
 }
+
+export const imageToBase64 = (file: File): Promise<string | null> => {
+  return new Promise<string | null>((resolve, reject) => {
+    const reader = new FileReader()
+
+    reader.onload = () => {
+      const base64String = reader.result as string
+      resolve(base64String) // Extract base64 data
+    }
+
+    reader.onerror = (error) => {
+      reject(error)
+    }
+
+    if (file) {
+      reader.readAsDataURL(file)
+    } else {
+      resolve(null)
+    }
+  })
+}
