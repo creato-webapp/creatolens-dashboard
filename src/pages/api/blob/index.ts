@@ -1,6 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import BlobInstance from '../axiosInstance/Blob'
-
+import axios from 'axios'
+const FormData = require('form-data')
+const fs = require('fs')
+import LabelInstance from '../axiosInstance/Labels'
 export const config = {
   api: {
     bodyParser: {
@@ -34,7 +37,14 @@ export default async function accountQueryHandler(req: NextApiRequest, res: Next
         },
       })
       console.log(response.data)
-      return res.status(response.status).json(response.data)
+      const labels = response.data.map((e: any) => e.description)
+      var bodyFormData = new FormData()
+      bodyFormData.append('labels', labels.join(', '))
+      bodyFormData.append('top_n', '10')
+      bodyFormData.append('model', 'glove')
+      console.log(bodyFormData)
+      const labelResponse = await LabelInstance.post('/get_similar_records', bodyFormData)
+      return res.status(labelResponse.status).json(labelResponse.data)
     }
     default:
       res.setHeader('Allow', ['GET', 'POST'])
