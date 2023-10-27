@@ -40,17 +40,19 @@ const ImageUpload: React.FC = () => {
       <h1>Image Upload</h1>
       <input type="file" onChange={handleFileChange} accept="image/*" />
       <button onClick={handleUpload}>Upload</button>
+      {file ? <img width="200" height="200" src={URL.createObjectURL(file)}></img> : null}
       <div className="flex">
-        {labels.map((e) => (
+        {labels.map((e, index) => (
           <div className="flex-row">
             {/* <div>
               {e.labels.map((e) => (
                 <div className="ml-4">{e}</div>
               ))}
             </div> */}
-            <div>
+            <div className="ml-4">
+              {index}
               {e.target.map((e) => (
-                <div className="ml-4">{e}</div>
+                <div>{e}</div>
               ))}
             </div>
           </div>
