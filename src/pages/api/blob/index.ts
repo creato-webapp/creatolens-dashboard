@@ -36,7 +36,6 @@ export default async function accountQueryHandler(req: NextApiRequest, res: Next
           Cookie: req.headers.cookie,
         },
       })
-      console.log(response.data)
       const labels = response.data.map((e: any) => e.description)
       var bodyFormData = new FormData()
       bodyFormData.append('labels', labels.join(', '))
@@ -44,7 +43,7 @@ export default async function accountQueryHandler(req: NextApiRequest, res: Next
       bodyFormData.append('model', 'glove')
       console.log(bodyFormData)
       const labelResponse = await LabelInstance.post('/get_similar_records', bodyFormData)
-      return res.status(labelResponse.status).json(labelResponse.data)
+      return res.status(labelResponse.status).json({ labels: response.data, data: labelResponse.data })
     }
     default:
       res.setHeader('Allow', ['GET', 'POST'])

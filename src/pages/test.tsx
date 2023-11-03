@@ -1,9 +1,9 @@
 import React, { useState, ChangeEvent } from 'react'
-import { uploadImage, Labels, ImageRecord } from '@services/Object/ImageBlob'
+import { uploadImage, Labels, ImageRecord, ImageResponse } from '@services/Object/ImageBlob'
 
 const ImageUpload: React.FC = () => {
   const [file, setFile] = useState<File | null>(null)
-  const [labels, setLabels] = useState<Array<ImageRecord>>([])
+  const [imageRes, setImageRes] = useState<ImageResponse>({ labels: [], data: [] })
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const selectedFile = e.target.files?.[0]
@@ -28,7 +28,8 @@ const ImageUpload: React.FC = () => {
         maxBodyLength: 8000,
         maxContentLength: 8000,
       })
-      setLabels(res)
+      console.log(res)
+      setImageRes(res)
       return res
     } catch (e) {
       console.error(e)
@@ -41,8 +42,13 @@ const ImageUpload: React.FC = () => {
       <input type="file" onChange={handleFileChange} accept="image/*" />
       <button onClick={handleUpload}>Upload</button>
       {file ? <img width="200" height="200" src={URL.createObjectURL(file)}></img> : null}
+      <div className="flex flex-row">
+        {imageRes.labels.map((e) => (
+          <>{e.description} &#8203; </>
+        ))}
+      </div>
       <div className="flex">
-        {labels.map((e, index) => (
+        {imageRes.data.map((e, index) => (
           <div className="flex-row">
             {/* <div>
               {e.labels.map((e) => (

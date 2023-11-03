@@ -7,12 +7,17 @@ export type Labels = {
   score: number
 }
 
+export type ImageResponse = {
+  labels: Array<Labels>
+  data: Array<ImageRecord>
+}
+
 export type ImageRecord = {
   labels: Array<string>
   target: Array<string>
 }
 
-export async function uploadImage(file: File, customConfig?: AxiosRequestConfig): Promise<Array<ImageRecord>> {
+export async function uploadImage(file: File, customConfig?: AxiosRequestConfig): Promise<ImageResponse> {
   try {
     const imageString = await imageToBase64(file)
     const response = await Fetcher.POST(
