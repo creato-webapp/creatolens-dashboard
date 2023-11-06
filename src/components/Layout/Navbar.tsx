@@ -5,6 +5,7 @@ import { useRouter } from 'next/router'
 import MenuIcon from '@components/Icon/MenuIcon'
 import LogoutIcon from '@components/Icon/LogOutIcon'
 import CrossIcon from '@components/Icon/CrossIcon'
+import LoginIcon from '@components/Icon/LoginIcon'
 
 interface Page {
   name: string
@@ -35,7 +36,7 @@ const NavBar: React.FC<NavBarProps> = ({ logo, pages, isLoggedIn, onLogin, onLog
           <MenuIcon></MenuIcon>
         </Button.Text>
       </div>
-      <a href="/" className="mx-8 my-auto shrink-0 md:mx-20">
+      <a href="/" className="mx-8 my-auto shrink-0 md:mx-16">
         <img src={logo} alt="Logo" className="h-16" />
       </a>
       <div className="hidden space-x-10 justify-self-center md:flex">
@@ -55,16 +56,17 @@ const NavBar: React.FC<NavBarProps> = ({ logo, pages, isLoggedIn, onLogin, onLog
       </div>
       <div className="m-6 my-auto hidden md:flex">
         {isLoggedIn ? (
-          <Button.Text loading={isLoading} onClick={onLogout} className="flex rounded">
+          <Button.Text loading={isLoading} onClick={onLogout} className="flex h-auto items-center rounded">
             <LogoutIcon className="mr-1"></LogoutIcon>
             <Title level={3} bold>
               Logout
             </Title>
           </Button.Text>
         ) : (
-          <Button.Text loading={isLoading} onClick={onLogin} className="text-text-primary">
+          <Button.Text loading={isLoading} onClick={onLogin} className="flex h-auto items-center rounded">
+            <LoginIcon className="mr-1"></LoginIcon>
             <Title level={3} bold>
-              Login
+              Sign In
             </Title>
           </Button.Text>
         )}
