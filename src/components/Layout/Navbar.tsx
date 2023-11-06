@@ -52,7 +52,15 @@ const NavBar: React.FC<NavBarProps> = ({ logo, pages, isLoggedIn, onLogin, onLog
         ))}
       </div>
       <div className="m-8 md:hidden">
-        <LogoutIcon></LogoutIcon>
+        {isLoggedIn ? (
+          <Button.Text onClick={onLogout} className="text-text-primary">
+            <LogoutIcon />
+          </Button.Text>
+        ) : (
+          <Button.Text onClick={onLogin} className="text-text-primary">
+            <LoginIcon />
+          </Button.Text>
+        )}
       </div>
       <div className="m-6 my-auto hidden md:flex">
         {isLoggedIn ? (
