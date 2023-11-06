@@ -1,15 +1,22 @@
 import type { NextPage } from 'next'
 import { useCallback } from 'react'
-import { getSession } from 'next-auth/react'
+import { useSession, signIn, signOut, getSession } from 'next-auth/react'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 import { Paragraph, Title } from '@components/Typography'
 import { Button } from '@components/Button'
 import ArrowRightIcon from '@components/Icon/ArrowRightIcon'
 import { useRouter } from 'next/router'
-import { signIn } from 'next-auth/react'
 
 export const getServerSideProps = async (context: any) => {
+  const session = await getSession(context)
+  if (session) {
+    return {
+      redirect: {
+        destination: '/guide',
+      },
+    }
+  }
   return { props: {} }
 }
 

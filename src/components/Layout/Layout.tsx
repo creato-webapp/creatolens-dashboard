@@ -13,6 +13,8 @@ export interface navBarItem {
 }
 
 export default function Navbar(props: NavbarProps) {
+  const { data: session, status } = useSession()
+
   const navBarItemList: Array<navBarItem> = [
     { title: 'Home', href: '/' },
     { title: 'Accounts', href: '/accounts' },
@@ -25,12 +27,11 @@ export default function Navbar(props: NavbarProps) {
   ]
 
   const navBarPage = [
-    { name: 'Home', path: '/' },
+    { name: !!session ? 'Guide' : 'Home', path: '/' },
     { name: 'Accounts', path: '/accounts' },
     { name: 'Recommendation', path: '/recommendation' },
   ]
 
-  const { data: session, status } = useSession()
   const onLogin = useCallback(() => {
     signIn()
   }, [])
