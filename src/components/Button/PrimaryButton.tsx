@@ -13,7 +13,7 @@ const Primary: React.FC<ButtonProps> = ({ children, onClick, disabled = false, l
     classStyle = 'button-outline'
   }
   return (
-    <button type={type} onClick={onClick} disabled={loading || disabled} {...res} className={`${classStyle} ${res.className}`}>
+    <button type={type} onClick={onClick} disabled={loading || disabled} {...res} className={`w-full md:w-auto ${classStyle} ${res.className}`}>
       <div className="mx-4 my-2 flex items-center justify-center">
         <Spinner loading={loading} />
         {children}
