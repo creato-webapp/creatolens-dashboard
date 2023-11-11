@@ -55,7 +55,7 @@ const Tab: React.FC<TabProps> = ({
         {items.map((item) => (
           <button
             type="button"
-            className={`px-6 py-2 ${currentActiveKey == item.key ? 'bg-orange-500 text-text-white' : 'bg-bg-white text-text-primary'}`}
+            className={`px-6 py-2 ${currentActiveKey == item.key ? 'bg-accent1-500 text-text-white' : 'bg-bg-white text-text-primary'}`}
           >
             <div
               key={item.key}

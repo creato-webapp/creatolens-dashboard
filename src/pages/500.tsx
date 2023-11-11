@@ -13,7 +13,7 @@ const UnexpectedError = () => {
   return (
     <div className="ml-48 flex flex-col-reverse ">
       <div className="my-36 flex flex-col gap-5">
-        <Title className="inline-block text-9xl font-extrabold text-orange-500">ERROR 500</Title>
+        <Title className="inline-block text-9xl font-extrabold text-accent1-500">ERROR 500</Title>
         <Title className="inline-block text-5xl font-extrabold text-text-primary">SORRY, UNEXPECTED ERROR</Title>
         <Paragraph>We are working on fixing the problem. Be back soon</Paragraph>
         <Button.Primary className="mt-10 w-fit" onClick={goBack}>

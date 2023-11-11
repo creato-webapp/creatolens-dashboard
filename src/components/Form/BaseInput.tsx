@@ -57,13 +57,13 @@ const BaseInput: React.FunctionComponent<IBaseInputProps> = ({
           required={customFormItemProps?.required}
           disabled={disabled}
           className={`base-input min-w-64 inline-flex h-9 rounded-md border border-gray-500 bg-neutral-50 p-2 font-semibold ${
-            errorMessage ? 'focus:border-0 focus:border-none focus:outline-red-600' : ''
+            errorMessage ? 'focus:border-0 focus:border-none focus:outline-error-600' : ''
           } ${className ? className : ''}`}
           style={customFormItemProps?.style}
         />
         {children}
         <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
-          {errorMessage && <ExclamationCircleIcon className="h-5 w-5 text-red-500" aria-hidden="true" />}
+          {errorMessage && <ExclamationCircleIcon className="h-5 w-5 text-error-500" aria-hidden="true" />}
         </div>
       </div>
       {errorMessage && (

@@ -53,22 +53,23 @@ module.exports = {
           white: '#FFFFFF',
           stroke: '#BACBD5',
         },
-        disabled:'#DDE5EA',
-        interfaceHover:'#E3E9EC',
+        dividers: '#DDE5EA',
+        "interface-hover":"#E3E9EC",
+        disabled: '#DDE5EA',
         stroke: '#BACBD5',
-        orange: {
-          100: '#FFE8D4',
-          200: '#FFCBAA',
-          300: '#FFA780',
-          400: '#FF8560',
-          500: '#FF4C2C',
-          600: '#DB2E20',
-          700: '#B71616',
-          800: '#930E18',
-          900: '#7A081A',
+        accent1: {
           1000: '#570421',
+          900: '#7A081A',
+          800: '#930E18',
+          700: '#B71616',
+          600: '#DB2E20',
+          500: '#FF4C2C',
+          400: '#FF8560',
+          300: '#FFA780',
+          200: '#FFCBAA',
+          100: '#FFE8D4',
         },
-        indigo: {
+        accent2: {
           1000: '#030A4A',
           900: '#071268',
           800: '#0B1B7D',
@@ -80,7 +81,7 @@ module.exports = {
           200: '#A7BDFB',
           100: '#D3DFFD',
         },
-        green: {
+        successful: {
           1000: '#013E4A',
           900: '#026765',
           800: '#047D6E',
@@ -91,8 +92,8 @@ module.exports = {
           300: '#6BF39F',
           200: '#9DFBB8',
           100: '#CDFDD6',
-        },  
-        red: {
+        },
+        error: {
           1000: '#56063A',
           900: '#780D3D',
           800: '#921642',
@@ -104,7 +105,7 @@ module.exports = {
           200: '#FEC3B5',
           100: '#FEE4DA',
         },
-        yellow: {
+        warning: {
           1000: '#573F03',
           900: '#7A5F07',
           800: '#93760C',

@@ -124,21 +124,21 @@ const RetryAccountsPage = ({ paginationData }: Props) => {
       title: 'Is Occupied',
       dataIndex: 'is_occupied',
       render: (e: any) => {
-        return e ? <CheckCircleIcon className="h-6 w-6 text-green-600" /> : <XCircleIcon className="h-6 w-6 text-red-500" />
+        return e ? <CheckCircleIcon className="h-6 w-6 text-successful-600" /> : <XCircleIcon className="h-6 w-6 text-error-500" />
       },
     },
     {
       title: 'Is Enabled',
       dataIndex: 'enabled',
       render: (e: any) => {
-        return e ? <CheckCircleIcon className="h-6 w-6 text-green-600" /> : <XCircleIcon className="h-6 w-6 text-red-500" />
+        return e ? <CheckCircleIcon className="h-6 w-6 text-successful-600" /> : <XCircleIcon className="h-6 w-6 text-error-500" />
       },
     },
     {
       title: 'Is Auth',
       dataIndex: 'is_authenticated',
       render: (e: any) => {
-        return e ? <CheckCircleIcon className="h-6 w-6 text-green-600" /> : <XCircleIcon className="h-6 w-6 text-red-500" />
+        return e ? <CheckCircleIcon className="h-6 w-6 text-successful-600" /> : <XCircleIcon className="h-6 w-6 text-error-500" />
       },
     },
 

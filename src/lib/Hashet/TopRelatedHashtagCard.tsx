@@ -43,7 +43,7 @@ const TopRelatedHashtagCard: React.FC<Props> = ({ hashtags }) => {
     <Card
       title={
         <div className="flex flex-wrap gap-2">
-          Top<Title level={1} className="text-orange-500">{`${numberOfHashes}`}</Title>Related
+          Top<Title level={1} className="text-accent1-500">{`${numberOfHashes}`}</Title>Related
         </div>
       }
       className="min-w-96 w-1/2 justify-start gap-6 bg-neutral-50 px-6 py-9 shadow"

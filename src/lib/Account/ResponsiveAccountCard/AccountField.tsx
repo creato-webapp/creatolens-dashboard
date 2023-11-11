@@ -16,7 +16,7 @@ const AccountField: FC<AccountFieldProps> = (props: AccountFieldProps) => {
               {/* <!-- Icon --> */}
               <svg
                 aria-hidden="true"
-                className={`h-5 w-5 ${props.value ? ' text-green-500 ' : ' text-red-600 '}`}
+                className={`h-5 w-5 ${props.value ? ' text-successful-500 ' : ' text-error-600 '}`}
                 fill="currentColor"
                 viewBox="0 0 20 20"
                 xmlns="http://www.w3.org/2000/svg"

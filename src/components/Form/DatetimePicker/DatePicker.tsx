@@ -17,7 +17,7 @@ const DatePicker: FC<DatePickerProps> = (props: DatePickerProps) => {
         rounded-md
         border-gray-300
         shadow-sm
-        focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50
+        focus:border-accent2-300 focus:ring focus:ring-accent2-200 focus:ring-opacity-50
         "
       />
     </div>

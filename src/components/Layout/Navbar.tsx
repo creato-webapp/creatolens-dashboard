@@ -42,9 +42,9 @@ const NavBar: React.FC<NavBarProps> = ({ logo, pages, isLoggedIn, onLogin, onLog
       <div className="hidden space-x-10 justify-self-center md:flex">
         {pages.map((page, index) => (
           <div key={`${page.name}-${index}`} className="inline-flex flex-col items-center justify-start gap-8 pb-9">
-            <div className={`${router.pathname === page.path ? 'h-1 self-stretch bg-orange-500' : 'h-1 self-stretch bg-red-500 opacity-0'}`} />
+            <div className={`${router.pathname === page.path ? 'h-1 self-stretch bg-accent1-500' : 'h-1 self-stretch bg-error-500 opacity-0'}`} />
             <a href={page.path}>
-              <Title bold level={3} className={`${router.pathname === page.path ? ' text-orange-500' : ''}`}>
+              <Title bold level={3} className={`${router.pathname === page.path ? ' text-accent1-500' : ''}`}>
                 {page.name}
               </Title>
             </a>
@@ -92,9 +92,9 @@ const NavBar: React.FC<NavBarProps> = ({ logo, pages, isLoggedIn, onLogin, onLog
           <ul className="mx-auto flex-row space-y-16">
             {pages.map((page, index) => (
               <li key={`${page.name}-${index}`} className="text-center">
-                <div className={`${router.pathname === page.path ? 'h-1 self-stretch bg-orange-500' : 'h-1 self-stretch bg-red-500 opacity-0'}`} />
+                <div className={`${router.pathname === page.path ? 'h-1 self-stretch bg-accent1-500' : 'h-1 self-stretch bg-error-500 opacity-0'}`} />
                 <a href={page.path}>
-                  <Title bold level={3} className={`${router.pathname === page.path ? ' text-orange-500' : ''}`}>
+                  <Title bold level={3} className={`${router.pathname === page.path ? ' text-accent1-500' : ''}`}>
                     {page.name}
                   </Title>
                 </a>

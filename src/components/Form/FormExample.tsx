@@ -36,7 +36,7 @@ const Layout: FC<FormLayoutProps> = (props: FormLayoutProps) => {
                     rounded-md
                     border-gray-300
                     shadow-sm
-                    focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50
+                    focus:border-accent2-300 focus:ring focus:ring-accent2-200 focus:ring-opacity-50
                     "
                     placeholder=""
                   />
@@ -52,7 +52,7 @@ const Layout: FC<FormLayoutProps> = (props: FormLayoutProps) => {
                 rounded-md
                 border-gray-300
                 shadow-sm
-                focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50
+                focus:border-accent2-300 focus:ring focus:ring-accent2-200 focus:ring-opacity-50
               "
                     placeholder="john@example.com"
                   />
@@ -68,7 +68,7 @@ const Layout: FC<FormLayoutProps> = (props: FormLayoutProps) => {
                 rounded-md
                 border-gray-300
                 shadow-sm
-                focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50
+                focus:border-accent2-300 focus:ring focus:ring-accent2-200 focus:ring-opacity-50
               "
                   />
                 </label>
@@ -82,7 +82,7 @@ const Layout: FC<FormLayoutProps> = (props: FormLayoutProps) => {
                 rounded-md
                 border-gray-300
                 shadow-sm
-                focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50
+                focus:border-accent2-300 focus:ring focus:ring-accent2-200 focus:ring-opacity-50
               "
                   >
                     <option>Corporate event</option>
@@ -101,7 +101,7 @@ const Layout: FC<FormLayoutProps> = (props: FormLayoutProps) => {
                 rounded-md
                 border-gray-300
                 shadow-sm
-                focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50
+                focus:border-accent2-300 focus:ring focus:ring-accent2-200 focus:ring-opacity-50
               "
                     rows={3}
                   ></textarea>
@@ -115,11 +115,11 @@ const Layout: FC<FormLayoutProps> = (props: FormLayoutProps) => {
                           className="
                                     rounded
                                     border-gray-300
-                                    text-indigo-600
+                                    text-accent2-600
                                     shadow-sm
-                                    focus:border-indigo-300
+                                    focus:border-accent2-300
                                     focus:ring
-                                    focus:ring-indigo-200
+                                    focus:ring-accent2-200
                                     focus:ring-opacity-50
                                     focus:ring-offset-0
                                   "
