@@ -101,4 +101,7 @@ svg {
   .table tr:hover td {
     @apply bg-gray-100;
   }
+  .capitalize-first-letter::first-letter {
+    text-transform: capitalize;
+  }
 }

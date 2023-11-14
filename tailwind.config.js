@@ -19,7 +19,7 @@ module.exports = {
         // Add more font families if needed
       },        
     screens: {
-      sm: '400px',
+      sm: '425px',
       md: '768px',
       lg: '976px',
       xl: '1440px',

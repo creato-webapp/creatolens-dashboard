@@ -4,6 +4,10 @@ import Tag, { TagVariant } from '@components/Tag'
 type Status = 'active' | 'blocked' | 'banned' | 'retry' | 'test' | 'scrapping' | 'occupied'
 
 interface StatusTagProps extends React.HTMLAttributes<HTMLDivElement> {
+  children?: React.ReactNode
+  isOutline?: boolean
+  clickable?: boolean
+  removable?: boolean
   status: Status
   onClose?: () => void
 }
