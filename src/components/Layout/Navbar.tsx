@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { JSXElementConstructor, useState } from 'react'
 import { Button } from '..'
 import { Title } from '@components/Typography'
 import { useRouter } from 'next/router'
@@ -12,7 +12,7 @@ interface Page {
   path: string
 }
 
-interface NavBarProps {
+interface NavBarProps extends JSX.IntrinsicAttributes {
   logo: string
   pages: Page[]
   isLoggedIn: boolean
@@ -30,7 +30,7 @@ const NavBar: React.FC<NavBarProps> = ({ logo, pages, isLoggedIn, onLogin, onLog
     setIsMenuCollapse((prev) => !prev)
   }
   return (
-    <nav className="relative z-50 flex h-auto justify-between bg-bg-dark">
+    <nav className="relative flex h-auto justify-between bg-bg-dark">
       <div className="mx-8 my-auto md:hidden">
         <Button.Text className="text-text-primary" onClick={toggleMenu}>
           <MenuIcon></MenuIcon>
@@ -81,7 +81,7 @@ const NavBar: React.FC<NavBarProps> = ({ logo, pages, isLoggedIn, onLogin, onLog
       </div>
       <aside
         id="default-sidebar"
-        className={`fixed z-40 h-screen w-screen -translate-x-full transition-transform sm:translate-x-0 ${isMenuCollapse ? 'hidden' : 'block'}`}
+        className={`fixed h-screen w-screen -translate-x-full transition-transform sm:translate-x-0 ${isMenuCollapse ? 'hidden' : 'block'}`}
         aria-label="Sidebar"
       >
         <div className="flex h-full flex-col overflow-y-auto bg-gray-50 dark:bg-gray-800">

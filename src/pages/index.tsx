@@ -37,7 +37,7 @@ const Home: NextPage = () => {
         <div className="absolute top-[8rem] ml-32 text-white ">
           <div className="float-left flex flex-col justify-center">
             <h1 className="text-6xl font-extrabold tracking-wide text-accent1-500">CREATO</h1>
-            <h1 className="text-[10rem] font-black tracking-wide text-white">LENS</h1>
+            <h1 className="font-black tracking-wide text-white md:text-[10rem] md:leading-[10rem]">LENS</h1>
             <Paragraph className="text-lg">Introducing data-backed AI tool - Creato Lens.</Paragraph>
             <Paragraph className="text-lg">Creators are empowered to make informed decisions in creating content.</Paragraph>
             <div className="mt-24 flex gap-8">

@@ -26,12 +26,16 @@ module.exports = {
     },
     extend: {
       fontSize: {
-            'desktop-heading': ['2.125rem', '3.125rem'],
-            'desktop-heading-2': ['1.875rem', '2.75rem'],
-            'desktop-heading-3': ['1.325rem', '1.825rem'],
-            'desktop-heading-4': ['1.125rem', '1.825rem'],
-            'desktop-paragraph': ['0.875rem', '1.125rem'],
-            'desktop-caption': ['0.75rem', '0.875rem'],
+        xs: '0.75rem',
+        sm: '0.875rem',
+        base: '1rem',
+        md: '1.125rem',
+        lg: '1.25rem',
+        xl: '1.375rem',
+        '2xl': '1.5rem',
+        '3xl': '1.75rem',
+        '4xl': '1.875rem',
+        '5xl': '2.125rem',
       },
       spacing: {
         '128': '32rem',
@@ -124,143 +128,5 @@ module.exports = {
     require('@tailwindcss/forms'),
     require('prettier-plugin-tailwindcss'),
     require('@tailwindcss/typography'),
-    plugin(function ({ addBase, addComponents, addUtilities, theme }) {
-      addUtilities({
-        /* Mobile H1 Headings Medium */
-        '.font-h1-medium': {
-          fontSize: '1.75rem',
-          lineHeight: '2.125rem',
-          letterSpacing: '0',
-          fontWeight: '500',
-        },
-        '.font-h1-semibold': {
-          fontSize: '1.75rem',
-          lineHeight: '2.125rem',
-          letterSpacing: '0',
-          fontWeight: '600',
-        },
-        '.font-h1-bold': {
-          fontSize: '1.75rem',
-          lineHeight: '2.125rem',
-          letterSpacing: '0',
-          fontWeight: '700',
-        },
-        '.font-h1-extrabold': {
-          fontSize: '1.75rem',
-          lineHeight: '2.125rem',
-          letterSpacing: '0',
-          fontWeight: '800',
-        },
-        '.font-h2-medium': {
-          fontSize: '1.5rem',
-          lineHeight: '1.75rem',
-          letterSpacing: '0',
-          fontWeight: '500',
-        },
-        '.font-h2-semibold': {
-          fontSize: '1.5rem',
-          lineHeight: '1.75rem',
-          letterSpacing: '0',
-          fontWeight: '600',
-        },
-        '.font-h2-bold': {
-          fontSize: '1.5rem',
-          lineHeight: '1.75rem',
-          letterSpacing: '0',
-          fontWeight: '700',
-        },
-        '.font-h2-extrabold': {
-          fontSize: '1.5rem',
-          lineHeight: '1.75rem',
-          letterSpacing: '0.48em',
-          fontWeight: '800',
-        },      
-        '.font-h3-medium': {
-          fontSize: '1.25rem',
-          lineHeight: '1.5rem',
-          letterSpacing: '0',
-          fontWeight: '500',
-        },
-        '.font-h3-semibold': {
-          fontSize: '1.25rem',
-          lineHeight: '1.5rem',
-          letterSpacing: '0',
-          fontWeight: '600',
-        },
-        '.font-h3-bold': {
-          fontSize: '1.25rem',
-          lineHeight: '1.5rem',
-          letterSpacing: '0',
-          fontWeight: '700',
-        },
-        '.font-h3-extrabold': {
-          fontSize: '1.25rem',
-          lineHeight: '1.5rem',
-          letterSpacing: '0.40em',
-          fontWeight: '800',
-        },
-        '.font-h4-medium': {
-          fontSize: '1rem',
-          lineHeight: '1.25rem',
-          letterSpacing: '0',
-          fontWeight: '500',
-        },
-        '.font-h4-semibold': {
-          fontSize: '1rem',
-          lineHeight: '1.25rem',
-          letterSpacing: '0',
-          fontWeight: '600',
-        },
-        '.font-h4-bold': {
-          fontSize: '1rem',
-          lineHeight: '1.25rem',
-          letterSpacing: '0',
-          fontWeight: '700',
-        },
-        '.font-h4-extrabold': {
-          fontSize: '1rem',
-          lineHeight: '1.25rem',
-          letterSpacing: '0',
-          fontWeight: '800',
-        },
-        '.font-paragraph-extralight': {
-          fontSize: '0.875rem',
-          lineHeight: '1.125rem',
-          fontWeight: '275',
-        },
-        '.font-paragraph-light': {
-          fontSize: '0.875rem',
-          lineHeight: '1.125rem',
-          fontWeight: '300',
-        },
-        '.font-paragraph-regular': {
-          fontSize: '0.875rem',
-          lineHeight: '1.125rem',
-          fontWeight: '400',
-        },
-        '.font-paragraph-semibold': {
-          fontSize: '0.875rem',
-          lineHeight: '1.125rem',
-          fontWeight: '600',
-        },
-        '.font-caption-light': {
-          fontSize: '0.75rem',
-          lineHeight: '0.875rem',
-          fontWeight: '300',
-        },
-        /* Mobile Extra Small Regular */
-        '.font-caption-regular': {
-          fontSize: '0.75rem',
-          lineHeight: '0.875rem',
-          fontWeight: '400',
-        },
-        /* Mobile Extra Small Semi Bold */
-        '.font-caption-semibold': {
-          fontSize: '0.75rem',
-          lineHeight: '0.875rem',
-          fontWeight: '600',
-        },
-      })
-    })
   ]
 }
