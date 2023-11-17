@@ -49,45 +49,13 @@
   h6 {
     @apply text-sm font-semibold leading-[1.125rem] md:text-[16px] md:leading-[1.125rem];
   }
+  button {
+    @apply text-sm font-semibold leading-5  md:text-md md:leading-6;
+  }
 }
 
 .do-not-do-this {
   display: hidden;
-}
-@layer components {
-  .btn {
-    @apply focus:ring-primary-300 transform rounded-md px-4 py-2 font-medium capitalize tracking-wide text-white transition-colors duration-200 focus:outline-none focus:ring focus:ring-opacity-80 disabled:bg-neutral-100 disabled:text-neutral-500;
-  }
-  .btn-rounded {
-    @apply rounded-lg;
-  }
-  .btn-pill {
-    @apply rounded-full;
-  }
-  .btn-primary {
-    @apply bg-primary-500 border-primary-500 hover:bg-primary-300 active:bg-primary-500;
-  }
-  .btn-secondary {
-    @apply bg-secondary-500 border-secondary-500 hover:bg-secondary-300 active:bg-secondary-500;
-  }
-  .btn-fill {
-    @apply border-0;
-  }
-  .btn-outline {
-    @apply border bg-white;
-  }
-  .btn-outline.btn-primary {
-    @apply text-primary-500 outline-primary-500 border;
-  }
-  .btn-outline.btn-secondary {
-    @apply text-secondary-500 outline-secondary-500 border;
-  }
-  .btn-empty {
-    @apply border-none bg-transparent text-black hover:bg-transparent;
-  }
-  .avatar {
-    @apply inline-block rounded-full;
-  }
 }
 
 form {
@@ -126,4 +94,37 @@ img.avatar {
   -webkit-box-orient: vertical;
 
   @apply overflow-hidden overflow-ellipsis;
+} */
+
+/* @layer components {
+  .btn {
+    @apply transform rounded-md px-4 py-2 font-medium capitalize tracking-wide text-white transition-colors duration-200 focus:outline-none focus:ring focus:ring-accent1-300 focus:ring-opacity-80 disabled:bg-neutral-100 disabled:text-neutral-500;
+  }
+  .btn-rounded {
+    @apply rounded-lg;
+  }
+  .btn-pill {
+    @apply rounded-full;
+  }
+  .btn-accent1 {
+    @apply border-accent1-500 bg-accent1-500 hover:bg-accent1-300 active:bg-accent1-500;
+  }
+  .btn-fill {
+    @apply border-0;
+  }
+  .btn-outline {
+    @apply border bg-white;
+  }
+  .btn-outline.btn-accent1 {
+    @apply border text-accent1-500 outline-accent1-500;
+  }
+  .btn-outline {
+    @apply text-secondary-500 outline-secondary-500 border;
+  }
+  .btn-empty {
+    @apply border-none bg-transparent text-black hover:bg-transparent;
+  }
+  .avatar {
+    @apply inline-block rounded-full;
+  }
 } */
