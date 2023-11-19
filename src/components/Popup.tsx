@@ -69,10 +69,13 @@ const Popup: React.FC<PopupProps> = ({
 
   return isShow ? (
     <div className="fixed inset-0 h-full w-full overflow-y-auto bg-gray-600 bg-opacity-50">
-      <div className="relative top-20 z-40 mx-auto w-96 rounded-md border bg-white p-5 shadow-lg" ref={popupRef}>
+      <div
+        className="absolute top-1/2 left-1/2 mx-auto w-96 -translate-x-1/2 -translate-y-1/2 transform rounded-md border bg-white p-5 shadow-lg"
+        ref={popupRef}
+      >
         <div className="flex flex-col justify-center space-y-3  ">
           <div className="flex items-center justify-between">
-            {title && <h3 className="font-h3-bold">{title}</h3>}
+            {title ? <h3 className="font-h3-bold">{title}</h3> : <div className="w-auto"></div>}
             {withCloseButton && (
               <div>
                 <Button.Text className="text-text-primary" onClick={handleClose}>
@@ -81,13 +84,13 @@ const Popup: React.FC<PopupProps> = ({
               </div>
             )}
           </div>
-          <hr></hr>
+          {title && <hr></hr>}
           <div>{children}</div>
           <div className="flex justify-center gap-6 self-center px-2 py-2">
             {withCancelButton && (
-              <Button.Primary className="max-w-fit self-center" outline>
+              <Button.Outline className="max-w-fit self-center" onClick={handleClose}>
                 Cancel
-              </Button.Primary>
+              </Button.Outline>
             )}
             {withConfirmButton && <Button.Primary className="max-w-fit self-center">Confirm</Button.Primary>}
           </div>
