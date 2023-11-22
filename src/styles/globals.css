@@ -6,7 +6,7 @@
 
 @layer base {
   body {
-    @apply content-center bg-white p-0 font-lato antialiased;
+    @apply content-center bg-white font-lato antialiased;
   }
 
   a {
@@ -14,7 +14,7 @@
   }
 
   main {
-    @apply container min-h-screen overflow-hidden pt-6;
+    @apply container min-h-screen content-center overflow-hidden px-2;
   }
 
   p {

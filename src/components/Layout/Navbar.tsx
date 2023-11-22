@@ -81,7 +81,7 @@ const NavBar: React.FC<NavBarProps> = ({ logo, pages, isLoggedIn, onLogin, onLog
       </div>
       <aside
         id="default-sidebar"
-        className={`fixed h-screen w-screen -translate-x-full transition-transform sm:translate-x-0 ${isMenuCollapse ? 'hidden' : 'block'}`}
+        className={`fixed z-50 h-screen w-screen -translate-x-full transition-transform sm:translate-x-0 ${isMenuCollapse ? 'hidden' : 'block'}`}
         aria-label="Sidebar"
       >
         <div className="flex h-full flex-col overflow-y-auto bg-gray-50 dark:bg-gray-800">
