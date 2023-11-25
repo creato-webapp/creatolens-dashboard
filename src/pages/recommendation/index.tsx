@@ -13,6 +13,7 @@ import Popover from '@components/Popover'
 import Tab from '@components/Tab'
 import CustomizeHashtagCard from '@lib/Hashet/CustomizeHashtagCard'
 import { useGetHashtag } from 'src/hooks/useHashtag'
+import Hero from '@components/Hero'
 interface IHashet extends Record<string, string | number | boolean> {
   hashtag: string
   acc: number
@@ -89,17 +90,12 @@ const RecommendationPage = ({ hashetSessionData }: Props) => {
   ]
 
   return (
-    <div className="flex justify-center">
-      <Card
-        customTitle={
-          <div className="flex">
-            <h1>RECOMMENDATION</h1>
-          </div>
-        }
-        className="w-screen rounded-none border-none bg-transparent p-8 shadow-none"
-        extra={
+    <div className="flex-col justify-center">
+      <Hero backgroundImage="/recommendationHero.svg">
+        <div className="flex flex-row">
+          <h1>RECOMMENDATION</h1>
           <Popover
-            className="shrink-0 rounded-full bg-accent1-500 p-2 text-white"
+            className="ml-auto shrink-0 rounded-full bg-accent1-500 p-2 text-white"
             trigger={<LightBulbIcon size={32} />}
             content={
               <>
@@ -118,10 +114,9 @@ const RecommendationPage = ({ hashetSessionData }: Props) => {
               </>
             }
           />
-        }
-      >
+        </div>
         <div className="my-2 flex w-full gap-2">
-          <div className="flex w-full items-center rounded-3xl  px-2 py-2 hover:rounded-3xl hover:outline-none focus:rounded-3xl focus:outline-none focus:ring-opacity-50 active:rounded-3xl">
+          <div className="flex w-full items-center rounded-3xl  bg-bg-white px-2 py-2 text-text-primary hover:rounded-3xl hover:outline-none focus:rounded-3xl focus:outline-none focus:ring-opacity-50 active:rounded-3xl">
             {isValidating ? <LoaderIcon className="animate-spin" /> : <MagnifyingGlassIcon />}
 
             <Form.BaseInput
@@ -140,6 +135,8 @@ const RecommendationPage = ({ hashetSessionData }: Props) => {
             Search
           </Button.Primary>
         </div>
+      </Hero>
+      <Card className="w-screen rounded-none border-none bg-transparent p-8 shadow-none">
         <Tab items={tabItems} defaultActiveKey="1" scrollable={false} />
       </Card>
     </div>

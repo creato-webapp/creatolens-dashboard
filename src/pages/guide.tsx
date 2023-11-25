@@ -19,7 +19,7 @@ const Guide: NextPage = () => {
   return (
     <>
       <div className=" flex-col justify-start  ">
-        <Hero backgroundImage="recommendationBackdrop.svg" className="border-2 border-b-accent1-500">
+        <Hero backgroundImage="guideHero.svg">
           <h1> User Guide</h1>
           <h4>2 Easy Steps to Kick Start</h4>
         </Hero>
@@ -27,7 +27,7 @@ const Guide: NextPage = () => {
           <Card
             className="mx-6 h-full w-auto rounded-none bg-neutral-50 shadow-lg md:mx-0 md:h-auto md:w-[30%] "
             customTitle={
-              <div className="text-center text-accent1-500">
+              <div className="w-full text-center text-accent1-500">
                 <h2>01</h2>
                 <h2>CREATE INSTANT BOT</h2>
               </div>
@@ -46,9 +46,9 @@ const Guide: NextPage = () => {
             <footer> We value your privacy, so please refrain from using your active account as the Instagram bot.</footer>
           </Card>
           <Card
-            className="mx-6 h-full w-full rounded-none bg-neutral-50 shadow-lg md:mx-0 md:h-auto md:w-[30%] "
+            className="mx-6 h-full w-auto rounded-none bg-neutral-50 shadow-lg md:mx-0 md:h-auto md:w-[30%]"
             customTitle={
-              <div className="text-center text-accent1-500">
+              <div className="w-full text-center text-accent1-500">
                 <h2>02</h2>
                 <h2>HASHTAG EXPLORATION</h2>
               </div>
@@ -67,7 +67,7 @@ const Guide: NextPage = () => {
           <Card
             className="mx-6 h-full w-auto rounded-none bg-neutral-50 shadow-lg md:mx-0 md:h-auto md:w-[30%]"
             customTitle={
-              <div className="text-center text-accent1-500">
+              <div className="w-full text-center text-accent1-500">
                 <h2>03</h2>
                 <h2>APPLY HASHTAG</h2>
               </div>

@@ -60,7 +60,7 @@ const Dropdown: React.FC<DropdownProps> = ({ name = '', options, defaultValue, d
           {options.map((option) => (
             <li
               key={option.value}
-              className="cursor-pointer whitespace-nowrap px-4 py-2 hover:bg-gray-100"
+              className="cursor-pointer list-none whitespace-nowrap px-4 py-2 hover:bg-gray-100"
               onClick={() => handleOptionSelect(option.value)}
             >
               {option.label}

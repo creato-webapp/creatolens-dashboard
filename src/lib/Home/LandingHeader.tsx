@@ -4,10 +4,15 @@ import TextInput from '@components/Form/TextInput'
 
 import React from 'react'
 import LandingImageLogo from './LandingImageLogo'
+import { useRouter } from 'next/router'
 
 interface LandingHeaderProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export default function LandingHeader(props: LandingHeaderProps) {
+  const router = useRouter()
+  const handleClick = () => {
+    router.replace('https://www.creatogether.app/zh/creatolens')
+  }
   return (
     <div className={`flex w-auto flex-col items-center space-y-8 ${props.className}`}>
       <>
@@ -21,8 +26,7 @@ export default function LandingHeader(props: LandingHeaderProps) {
         </span>
       </>
       <h3 className="w-72 text-center font-medium">Elevate your content's visibility with 100% personalised hashtag trend recommendations.</h3>
-      <BaseInput id="contact-email" placeholder="Enter your email" className="mx-auto h-12 w-80"></BaseInput>
-      <Button.Primary>Free Trial {'>>'}</Button.Primary>
+      <Button.Primary onClick={handleClick}>Free Trial {'>>'}</Button.Primary>
       <LandingImageLogo className="mb-10 h-auto w-96"></LandingImageLogo>
     </div>
   )
