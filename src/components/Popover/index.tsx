@@ -1,19 +1,17 @@
 import React, { useState, ReactNode } from 'react'
 
 interface PopoverProps {
-  trigger: ReactNode // The element that triggers the popover
-  content: ReactNode // The content to display in the popover
-  className: string // The class
+  trigger: ReactNode
+  content: ReactNode
+  className: string
 }
 
 const Popover: React.FC<PopoverProps> = ({ trigger, content, className }) => {
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <div className={`relative inline-block ${className}`}>
-      <div onClick={() => setIsOpen(!isOpen)} className="cursor-pointer">
-        {trigger}
-      </div>
+    <div onClick={() => setIsOpen(!isOpen)} className={`relative inline-block cursor-pointer ${className}`}>
+      <div>{trigger}</div>
       {isOpen && (
         <div
           className={`absolute z-50 w-64 rounded-lg border border-gray-200 bg-white p-2 text-sm text-gray-500 shadow-sm `}

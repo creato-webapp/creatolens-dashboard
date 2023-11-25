@@ -1,4 +1,4 @@
-import React, { JSXElementConstructor, useState } from 'react'
+import React, { JSXElementConstructor, useEffect, useState } from 'react'
 import { Button } from '..'
 import { Title } from '@components/Typography'
 import { useRouter } from 'next/router'
@@ -6,7 +6,7 @@ import MenuIcon from '@components/Icon/MenuIcon'
 import LogoutIcon from '@components/Icon/LogOutIcon'
 import CrossIcon from '@components/Icon/CrossIcon'
 import LoginIcon from '@components/Icon/LoginIcon'
-
+import { useSession, signIn, signOut, getProviders } from 'next-auth/react'
 interface Page {
   name: string
   path: string
@@ -31,8 +31,8 @@ const NavBar: React.FC<NavBarProps> = ({ logo, pages, isLoggedIn, onLogin, onLog
   }
   return (
     <nav className="relative flex h-auto justify-between bg-bg-dark">
-      <div className="mx-8 my-auto md:hidden">
-        <Button.Text className="text-text-primary" onClick={toggleMenu}>
+      <div className="mx-8 my-auto md:hidden" onClick={toggleMenu}>
+        <Button.Text className="text-text-primary">
           <MenuIcon></MenuIcon>
         </Button.Text>
       </div>
@@ -81,10 +81,10 @@ const NavBar: React.FC<NavBarProps> = ({ logo, pages, isLoggedIn, onLogin, onLog
       </div>
       <aside
         id="default-sidebar"
-        className={`fixed z-50 h-screen w-screen -translate-x-full transition-transform sm:translate-x-0 ${isMenuCollapse ? 'hidden' : 'block'}`}
+        className={`fixed z-50 h-screen w-screen translate-x-0 transition-transform ${isMenuCollapse ? 'hidden' : 'block'}`}
         aria-label="Sidebar"
       >
-        <div className="flex h-full flex-col overflow-y-auto bg-gray-50 dark:bg-gray-800">
+        <div className="flex h-[100vh] flex-col overflow-y-auto bg-gray-50 dark:bg-gray-800">
           <Button.Text className="m-8 ml-auto text-text-primary" onClick={() => setIsMenuCollapse(true)}>
             <CrossIcon className=""></CrossIcon>
           </Button.Text>
