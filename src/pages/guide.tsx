@@ -5,6 +5,9 @@ import Paragraph from '@components/Typography/Paragraph'
 import { Title } from '@components/Typography'
 import { Button } from '@components/Button'
 import PlusIcon from '@components/Icon/PlusIcon'
+import Card from '@components/Card'
+import { ListItem, UnorderedList } from '@components/Typography/ListItem'
+import Hero from '@components/Hero'
 
 const Guide: NextPage = () => {
   const router = useRouter()
@@ -15,38 +18,69 @@ const Guide: NextPage = () => {
   }
   return (
     <>
-      <div className="ml-6 flex-col justify-start gap-6 py-6">
-        <Title level={1} bold>
-          How To Start
-        </Title>
-        <Paragraph>2 Easy Steps to Kick Start</Paragraph>
-      </div>
-      <div className="flex w-full justify-center gap-4">
-        <div className="mr-32 h-128 space-y-4 rounded bg-neutral-50 shadow-lg">
-          <div className="w-96 bg-white">
-            <div className="inline-flex h-14 w-14 flex-col items-center justify-center gap-2.5 rounded-br-lg bg-violet-200 p-2.5">
-              <div className="text-center text-3xl font-semibold text-blue-700">1</div>
-            </div>
-            <img className="" src="/NewAccountFrame.svg"></img>
-          </div>
-          <div className="w-96 px-4 text-center text-3xl font-bold text-neutral-800">Add new Instagram account in Creato LENS</div>
-          <div className="flex justify-center">
-            <Button.Primary className="mb-4" onClick={handleNewAccountClick}>
+      <div className=" flex-col justify-start  ">
+        <Hero backgroundImage="recommendationBackdrop.svg" className="border-2 border-b-accent1-500">
+          <h1> User Guide</h1>
+          <h4>2 Easy Steps to Kick Start</h4>
+        </Hero>
+        <div className="flex w-full flex-col items-center justify-start gap-6 md:flex-row md:flex-wrap md:items-stretch md:justify-center md:gap-12 md:p-12">
+          <Card
+            className="mx-6 h-full w-auto rounded-none bg-neutral-50 shadow-lg md:mx-0 md:h-auto md:w-[30%] "
+            customTitle={
+              <div className="text-center text-accent1-500">
+                <h2>01</h2>
+                <h2>CREATE INSTANT BOT</h2>
+              </div>
+            }
+          >
+            {<img className="h-auto w-full rounded-xl md:shrink-0 " src={'/NewAccountFrame.svg'} />}
+            <h2>Connect an empty IG account to LENS</h2>
+            <ul className="list-outside list-disc ">
+              <li className="mx-2 text-lg">Use the account to follow about 10 creators in your niche or area.</li>
+              <li className="mx-2 text-lg">Add this account as an Insta-bot in “Accounts”</li>
+            </ul>
+            <Button.Primary onClick={handleNewAccountClick}>
               <PlusIcon className="mr-2" />
               New Account
             </Button.Primary>
-          </div>
-        </div>
-        <div className="mr-12 h-128 w-96 rounded bg-neutral-50 shadow-lg">
-          <div className="w-96 bg-white">
-            <div className="left-0 top-0 inline-flex h-14 w-14 flex-col items-center justify-center gap-2.5 rounded-br-lg bg-violet-200 p-2.5">
-              <div className="text-center text-3xl font-semibold leading-10 text-blue-700">2</div>
-            </div>
-          </div>
-          <img className="" src="/GetHashtagFrame.svg"></img>
-          <div className="w-96 p-4 text-center text-3xl font-bold leading-10 text-neutral-800">
-            Go to Recommendation search for hashtag recommendation
-          </div>
+            <footer> We value your privacy, so please refrain from using your active account as the Instagram bot.</footer>
+          </Card>
+          <Card
+            className="mx-6 h-full w-full rounded-none bg-neutral-50 shadow-lg md:mx-0 md:h-auto md:w-[30%] "
+            customTitle={
+              <div className="text-center text-accent1-500">
+                <h2>02</h2>
+                <h2>HASHTAG EXPLORATION</h2>
+              </div>
+            }
+          >
+            {<img className="h-auto w-full rounded-xl md:shrink-0 " src={'/GetHashtagFrame.svg'} />}
+            <h2>Input a 5-8 word-prompt</h2>
+            <ul className="list-outside list-disc">
+              <li className="mx-2 text-lg">In a few words, tell us in text what your content is about. </li>
+              <li className="mx-2 text-lg">AI companion will analyze and customize the most relevant hashtag trends for your consideration. </li>
+            </ul>
+
+            <footer>Tell us again in another few words and let us work for you again if results are not satisfied.</footer>
+          </Card>
+
+          <Card
+            className="mx-6 h-full w-auto rounded-none bg-neutral-50 shadow-lg md:mx-0 md:h-auto md:w-[30%]"
+            customTitle={
+              <div className="text-center text-accent1-500">
+                <h2>03</h2>
+                <h2>APPLY HASHTAG</h2>
+              </div>
+            }
+          >
+            {<img className="h-auto w-full rounded-xl md:shrink-0 " src={'/applyHashtagFrame.svg'} />}
+            <h2>Generate Trending Hashtag</h2>
+            <ul className="list-outside list-disc ">
+              <li className="mx-2 text-lg"> Save or choose hashtag trends based on relevance i.e. 80%, 90%, 95% etc. visibility.</li>
+              <li className="mx-2 text-lg"> Ready to use for your social media content to elevate</li>
+            </ul>
+            <footer>We value your privacy, so please refrain from using your active account as the Instagram bot.</footer>
+          </Card>
         </div>
       </div>
     </>

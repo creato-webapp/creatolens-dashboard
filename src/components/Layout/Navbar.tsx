@@ -25,17 +25,20 @@ const NavBar: React.FC<NavBarProps> = ({ logo, pages, isLoggedIn, onLogin, onLog
   const [isLoading, setIsLoading] = useState(false)
   const [isMenuCollapse, setIsMenuCollapse] = useState(isCollapse)
   const router = useRouter()
-
+  const { data: session } = useSession()
   const toggleMenu = () => {
     setIsMenuCollapse((prev) => !prev)
   }
   return (
     <nav className="relative flex h-auto justify-between bg-bg-dark">
-      <div className="mx-8 my-auto md:hidden" onClick={toggleMenu}>
-        <Button.Text className="text-text-primary">
-          <MenuIcon></MenuIcon>
-        </Button.Text>
-      </div>
+      {session ? (
+        <div className={'mx-8 my-auto md:hidden'} onClick={toggleMenu}>
+          <Button.Text className="text-text-primary">
+            <MenuIcon></MenuIcon>
+          </Button.Text>
+        </div>
+      ) : null}
+
       <a href="/" className="mx-8 my-auto shrink-0 md:mx-16">
         <img src={logo} alt="Logo" className="h-16" />
       </a>
