@@ -34,9 +34,8 @@ const Home: NextPage = () => {
   }, [])
 
   return (
-    <div className="px-2">
+    <div className="px-2 pb-6">
       <LandingHeader className="mb-5" />
-
       <HowItWorks />
     </div>
   )
