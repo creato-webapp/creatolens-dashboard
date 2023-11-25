@@ -19,7 +19,7 @@ const Guide: NextPage = () => {
   return (
     <>
       <div className=" flex-col justify-start  ">
-        <Hero backgroundImage="guideHero.svg">
+        <Hero backgroundImage="./GuideHero.svg">
           <h1> User Guide</h1>
           <h4>2 Easy Steps to Kick Start</h4>
         </Hero>

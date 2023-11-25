@@ -91,7 +91,7 @@ const RecommendationPage = ({ hashetSessionData }: Props) => {
 
   return (
     <div className="flex-col justify-center">
-      <Hero backgroundImage="/recommendationHero.svg">
+      <Hero backgroundImage="./RecommendationHero.svg">
         <div className="flex flex-row">
           <h1>RECOMMENDATION</h1>
           <Popover
