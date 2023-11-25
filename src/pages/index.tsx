@@ -25,13 +25,6 @@ export const getServerSideProps = async (context: any) => {
 
 const Home: NextPage = () => {
   const router = useRouter()
-  const onLogin = useCallback(() => {
-    signIn()
-  }, [])
-
-  const GetStarted = useCallback(() => {
-    router.push(process.env.NEXT_PUBLIC_REGISTER_URL as string)
-  }, [])
 
   return (
     <div className="px-2 pb-6">

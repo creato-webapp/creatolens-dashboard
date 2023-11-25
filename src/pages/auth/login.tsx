@@ -24,6 +24,7 @@ export async function getServerSideProps() {
     props: { providers },
   }
 }
+
 const login: FC<loginProps> = ({ providers }) => {
   const { data: session, status } = useSession()
   const router = useRouter()

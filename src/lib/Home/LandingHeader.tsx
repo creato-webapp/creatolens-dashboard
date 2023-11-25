@@ -5,6 +5,7 @@ import TextInput from '@components/Form/TextInput'
 import React from 'react'
 import LandingImageLogo from './LandingImageLogo'
 import { useRouter } from 'next/router'
+import { signIn } from 'next-auth/react'
 
 interface LandingHeaderProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -24,11 +25,17 @@ export default function LandingHeader(props: LandingHeaderProps) {
             <span className="text-6xl font-extrabold text-accent1-500">Seen</span>
           </h1>
         </span>
-
         <h3 className="w-72 text-center font-medium md:w-auto md:text-left">
           Elevate your content's visibility with 100% personalised hashtag trend recommendations.
         </h3>
-        <Button.Primary onClick={handleClick}>Free Trial {'>>'}</Button.Primary>
+        <div className="flex flex-row justify-center gap-6">
+          <Button.Outline className="m-2 w-auto" onClick={() => signIn('google', { callbackUrl: '/' })}>
+            Sign In
+          </Button.Outline>
+          <Button.Primary className="m-2 w-auto" onClick={handleClick}>
+            Free Trial {'>>'}
+          </Button.Primary>
+        </div>
       </div>
       <LandingImageLogo className="mb-10 h-auto w-96 md:w-auto"></LandingImageLogo>
     </div>

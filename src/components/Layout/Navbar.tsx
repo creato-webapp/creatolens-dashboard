@@ -1,4 +1,4 @@
-import React, { JSXElementConstructor, useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { Button } from '..'
 import { Title } from '@components/Typography'
 import { useRouter } from 'next/router'
@@ -6,7 +6,7 @@ import MenuIcon from '@components/Icon/MenuIcon'
 import LogoutIcon from '@components/Icon/LogOutIcon'
 import CrossIcon from '@components/Icon/CrossIcon'
 import LoginIcon from '@components/Icon/LoginIcon'
-import { useSession, signIn, signOut, getProviders } from 'next-auth/react'
+import { useSession, signIn, signOut } from 'next-auth/react'
 interface Page {
   name: string
   path: string
@@ -67,14 +67,14 @@ const NavBar: React.FC<NavBarProps> = ({ logo, pages, isLoggedIn, onLogin, onLog
       </div>
       <div className="m-6 my-auto hidden md:flex">
         {isLoggedIn ? (
-          <Button.Text loading={isLoading} onClick={onLogout} className="flex h-auto items-center rounded">
+          <Button.Text loading={isLoading} onClick={() => signOut({ callbackUrl: '/' })} className="flex h-auto items-center rounded">
             <LogoutIcon className="mr-1"></LogoutIcon>
             <Title level={3} bold>
               Logout
             </Title>
           </Button.Text>
         ) : (
-          <Button.Text loading={isLoading} onClick={onLogin} className="flex h-auto items-center rounded">
+          <Button.Text loading={isLoading} onClick={() => signIn('google', { callbackUrl: '/' })} className="flex h-auto items-center rounded">
             <LoginIcon className="mr-1"></LoginIcon>
             <Title level={3} bold>
               Sign In
