@@ -16,13 +16,16 @@ interface CardProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'> {
 export default function Card({ title, children, customTitle, extra, className, coverImage, subExtra, description, onClick }: CardProps) {
   // const { title, children, extra, className, coverImage, subExtra, description, onClick } = props
   return (
-    <div className={`flex h-fit w-auto flex-col gap-6 rounded-xl border border-slate-300 p-6 shadow-lg md:w-96 ${className}`}>
+    <div className={`flex h-fit w-full flex-col gap-6 rounded-xl border border-slate-300 p-6 shadow-lg ${className}`}>
       {/* <div className="absolute top-0 right-0 px-6 py-6">{extra}</div> */}
       {coverImage ? <img className="h-auto w-auto rounded-xl md:shrink-0 " src={coverImage} /> : null}
       {subExtra ? <div className="h-auto w-auto">{subExtra}</div> : null}
       <div>
         {customTitle ? (
-          customTitle
+          <div className="flex">
+            {customTitle}
+            <div className="ml-auto w-auto">{extra}</div>
+          </div>
         ) : (
           <Title level={1} bold>
             {title}

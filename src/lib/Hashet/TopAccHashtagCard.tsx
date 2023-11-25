@@ -55,12 +55,14 @@ const TopAccHashtagCard: React.FC<Props> = ({ hashtags }) => {
 
   return (
     <Card
-      title={
-        <div className="flex flex-wrap gap-2">
-          <Title level={1} className="text-accent1-500">{`≥${selectedAccuracy}% `}</Title>Related Hashtag
-        </div>
+      customTitle={
+        <h1 className="flex items-center gap-2">
+          <span className="text-accent1-500">{`≥${selectedAccuracy}% `}</span>
+          <span className="text-text-primary">Related</span>
+        </h1>
       }
-      className="min-w-96 w-1/2 justify-start gap-6 bg-neutral-50 px-6 py-9 shadow"
+      className="min-w-96 mb-2 w-full whitespace-normal rounded-none md:h-auto md:w-1/2"
+      // className="min-w-96 w-auto justify-start gap-6 bg-neutral-50 px-6 py-9 shadow"
       extra={
         <Dropdown
           name="numberOfHashes"
@@ -70,7 +72,8 @@ const TopAccHashtagCard: React.FC<Props> = ({ hashtags }) => {
         ></Dropdown>
       }
     >
-      <div className="h-80 font-bold leading-loose text-slate-600">
+      <hr></hr>
+      <div className="h-full font-bold leading-loose text-slate-600">
         {slicedHashtags.map((tag) => (
           <span key={tag.hashtag}>{tag.hashtag} </span>
         ))}

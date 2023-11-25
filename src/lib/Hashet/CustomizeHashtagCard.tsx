@@ -4,6 +4,7 @@ import Dropdown from '@components/Form/Dropdown'
 import { Button } from '@components/Button'
 import { Paragraph, Title } from '@components/Typography'
 import Checkbox from '@components/Form/Checkbox'
+import Collapse from '@components/Collapse'
 
 interface Hashtag {
   acc: number
@@ -30,12 +31,17 @@ const CustomizeHashtagCard: React.FC<Props> = ({ hashtags }) => {
     window.alert('Copied to clipboard!')
   }, [selectedHashtags])
 
+  type ranges = {
+    min: number
+    max: number
+    label: string
+  }
+
   const accuracyRanges = [
     { min: 90, max: 100, label: 'Larger than 90% related' },
     { min: 80, max: 89, label: '80-89% related' },
     { min: 70, max: 79, label: '70-79% related' },
     { min: 1, max: 70, label: 'Less than 70% related' },
-    // Add more accuracy ranges if needed
   ]
 
   const clearAll = useCallback(() => {
@@ -56,41 +62,71 @@ const CustomizeHashtagCard: React.FC<Props> = ({ hashtags }) => {
   }, [hashtags])
 
   return (
-    <Card className=" w-full gap-6 px-6 py-9 shadow">
-      <div className="flex gap-4">
-        <div className="w-1/4">
-          <Title bold level={3} className="ml-auto mr-0 mb-4 text-right">
+    <Card className="w-auto gap-6 px-6 py-9 shadow md:border-none">
+      <div className="flex-col gap-4 md:flex md:flex-row">
+        <div className="md:w-1/4">
+          <Title bold level={3} className="ml-auto mr-0 mb-4">
             Customize
           </Title>
-          <Paragraph className="ml-auto mr-0 text-right">Select all hashtag you wish to put under your post and click “Copy Selected”</Paragraph>
+          <Paragraph className="ml-auto mr-0">Select all hashtag you wish to put under your post and click “Copy Selected”</Paragraph>
         </div>
-        <div className=" w-3/4">
-          <div className="leading-loos max-h-144 space-y-5 overflow-y-scroll font-bold">
+        <div className="w-full">
+          <div className="leading-loos max-h-144 space-y-2 overflow-y-scroll font-bold">
             {accuracyRanges.map((range) => (
-              <div key={range.label} className="flex-col items-start justify-start gap-4 border border-slate-300 bg-neutral-50 p-4">
-                <Paragraph size="lg" bold>
-                  {range.label}
-                </Paragraph>
-                <ul className="flex flex-wrap space-y-4">
-                  {hashtags.map((item) => {
-                    const accuracyPercentage = Math.floor(item.acc * 100)
-                    const accuracyRange = getAccuracyRange(accuracyPercentage)
-                    if (accuracyRange === range.label) {
-                      return (
-                        <li
-                          className="flex w-1/4 cursor-pointer items-center hover:text-gray-400"
-                          key={item.hashtag}
-                          onClick={() => toggleCheckbox(item.hashtag)}
-                        >
-                          <Checkbox id={`checkbox-${item.hashtag}`} className="mr-1.5" checked={selectedHashtags.includes(item.hashtag)} />
-                          {item.hashtag}
-                        </li>
-                      )
-                    }
-                    return null
-                  })}
-                </ul>
-              </div>
+              <>
+                <Collapse
+                  className="my-2 md:hidden"
+                  parent={
+                    <div>
+                      <h4 className="font-medium">{range.label}</h4>
+                    </div>
+                  }
+                >
+                  <div key={range.label} className="block flex-col items-center justify-start border border-slate-300 bg-neutral-50">
+                    <ul className="flex flex-wrap">
+                      {hashtags.map((item) => {
+                        const accuracyPercentage = Math.floor(item.acc * 100)
+                        const accuracyRange = getAccuracyRange(accuracyPercentage)
+                        if (accuracyRange === range.label) {
+                          return (
+                            <li
+                              className="mx-2 mt-4 flex w-fit cursor-pointer items-center hover:text-gray-400 md:w-1/4 "
+                              key={item.hashtag}
+                              onClick={() => toggleCheckbox(item.hashtag)}
+                            >
+                              <Checkbox id={`checkbox-${item.hashtag}`} className="mr-1.5" checked={selectedHashtags.includes(item.hashtag)} />
+                              {item.hashtag}
+                            </li>
+                          )
+                        }
+                        return null
+                      })}
+                    </ul>
+                  </div>
+                </Collapse>
+
+                <div key={range.label} className="hidden flex-col items-center justify-start border border-slate-300 bg-neutral-50 p-4 md:block">
+                  <ul className="flex flex-wrap">
+                    {hashtags.map((item) => {
+                      const accuracyPercentage = Math.floor(item.acc * 100)
+                      const accuracyRange = getAccuracyRange(accuracyPercentage)
+                      if (accuracyRange === range.label) {
+                        return (
+                          <li
+                            className="mt-4 flex w-fit cursor-pointer items-center hover:text-gray-400 md:w-1/4"
+                            key={item.hashtag}
+                            onClick={() => toggleCheckbox(item.hashtag)}
+                          >
+                            <Checkbox id={`checkbox-${item.hashtag}`} className="mr-1.5" checked={selectedHashtags.includes(item.hashtag)} />
+                            {item.hashtag}
+                          </li>
+                        )
+                      }
+                      return null
+                    })}
+                  </ul>
+                </div>
+              </>
             ))}
           </div>
           <div className=" flex justify-end gap-3">
