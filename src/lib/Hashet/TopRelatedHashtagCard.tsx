@@ -61,7 +61,7 @@ const TopRelatedHashtagCard: React.FC<Props> = ({ hashtags }) => {
       <hr></hr>
       <div className="h-full font-bold leading-loose text-slate-600">
         {slicedHashtags.map((tag) => (
-          <span key={tag.hashtag}>{tag.hashtag}</span>
+          <span key={tag.hashtag}>{tag.hashtag} </span>
         ))}
       </div>
       <div className="flex justify-center">

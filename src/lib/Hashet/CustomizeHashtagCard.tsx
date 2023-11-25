@@ -62,7 +62,7 @@ const CustomizeHashtagCard: React.FC<Props> = ({ hashtags }) => {
   }, [hashtags])
 
   return (
-    <Card className="w-auto gap-6 px-6 py-9 shadow md:border-none">
+    <Card className="w-auto gap-6 px-6 py-9 shadow md:border-none md:shadow-none">
       <div className="flex-col gap-4 md:flex md:flex-row">
         <div className="md:w-1/4">
           <Title bold level={3} className="ml-auto mr-0 mb-4">
@@ -129,7 +129,7 @@ const CustomizeHashtagCard: React.FC<Props> = ({ hashtags }) => {
               </>
             ))}
           </div>
-          <div className=" flex justify-end gap-3">
+          <div className=" my-4 flex justify-end gap-3">
             <Button.Primary onClick={copyToClipboard}>Copy Selected</Button.Primary>
             <Button.Primary onClick={clearAll}>Clear All</Button.Primary>
             <Button.Primary onClick={selectAll}>Select All</Button.Primary>

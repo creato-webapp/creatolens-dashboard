@@ -81,7 +81,7 @@ const RecommendationPage = ({ hashetSessionData }: Props) => {
       key: '2',
       title: 'Customize',
       children: (
-        <div className="flex-wrap gap-2 shadow-2xl md:flex md:flex-nowrap">
+        <div className="w-full flex-wrap gap-2 shadow-2xl md:flex md:flex-nowrap md:justify-center md:py-12">
           <CustomizeHashtagCard hashtags={hashetData} />
         </div>
       ),
