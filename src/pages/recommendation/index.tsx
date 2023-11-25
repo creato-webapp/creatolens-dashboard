@@ -104,9 +104,9 @@ const RecommendationPage = ({ hashetSessionData }: Props) => {
                 </div>
                 <div className="px-3 py-2">
                   <ul>
-                    <li>• You can type everything related to your next IG post</li>
-                    <li>• No punctuation is needed</li>
-                    <li>• Short phrase/ vocabulary applicable</li>
+                    <li>You can type everything related to your next IG post</li>
+                    <li>No punctuation is needed</li>
+                    <li>Short phrase/ vocabulary applicable</li>
                   </ul>
                   <p>e.g. Hong Kong Food Cute makeup tutorial</p>
                 </div>
