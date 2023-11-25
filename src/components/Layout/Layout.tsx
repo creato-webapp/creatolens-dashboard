@@ -33,12 +33,12 @@ export default function Navbar(props: NavbarProps) {
   ]
 
   const onLogin = useCallback(() => {
-    signIn()
+    signIn('google', { callbackUrl: '/' })
   }, [])
 
   const onLogout = useCallback(() => {
     deleteCookie('idToken')
-    signOut()
+    signOut({ callbackUrl: '/' })
   }, [])
 
   return (
