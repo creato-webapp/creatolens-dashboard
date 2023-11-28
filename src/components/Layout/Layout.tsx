@@ -26,11 +26,13 @@ export default function Navbar(props: NavbarProps) {
     { title: 'recommendation', href: '/recommendation' },
   ]
 
-  const navBarPage = [
-    { name: !!session ? 'Guide' : 'Home', path: '/' },
-    { name: 'Accounts', path: '/accounts' },
-    { name: 'Recommendation', path: '/recommendation' },
-  ]
+  const navBarPage = !!session
+    ? [
+        { name: 'Guide', path: '/guide' },
+        { name: 'Accounts', path: '/accounts' },
+        { name: 'Recommendation', path: '/recommendation' },
+      ]
+    : []
 
   const onLogin = useCallback(() => {
     signIn('google', { callbackUrl: '/' })
