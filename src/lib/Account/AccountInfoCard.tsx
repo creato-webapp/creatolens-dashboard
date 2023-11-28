@@ -98,6 +98,7 @@ const AccountInfoCard: React.FC<AccountInfoCardProps> = ({ isLoading, isCreate, 
   return (
     <Card
       className="ml-auto mr-auto mb-8 mt-0 w-full bg-bg-white"
+      customTitle={<h3 className="mr-auto w-auto pt-2 text-text-secondary">Account Info</h3>}
       extra={
         <Button.Primary loading={isLoading} onClick={handleClick}>
           Open Session Modal
