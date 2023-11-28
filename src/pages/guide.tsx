@@ -50,7 +50,7 @@ const Guide: NextPage = () => {
             customTitle={
               <div className="w-full text-center text-accent1-500">
                 <h2>02</h2>
-                <h2>HASHTAG EXPLORATION</h2>
+                <h2>TEXT-TO-HASHTAG</h2>
               </div>
             }
           >
