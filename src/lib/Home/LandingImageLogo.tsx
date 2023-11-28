@@ -12,7 +12,7 @@ export default function LandingImageLogo({ className }: LandingImageLogoProps) {
         style={{ borderRadius: ' 83% 17% 46% 54% / 34% 30% 70% 66%' }}
       >
         <img src="image-left.svg" alt="Front" className="front-image h-auto w-36 overflow-x-hidden md:w-[12rem] md:shrink-0" />
-        <img src="image-right.png" alt="Front" className="front-image mb-4 h-auto w-72 overflow-x-hidden md:w-[30rem] md:shrink-0" />
+        <img src="image-right.png" alt="Front" className="front-image mb-4 h-auto w-72 overflow-x-hidden md:w-[28rem] md:shrink-0" />
       </div>
     </div>
   )

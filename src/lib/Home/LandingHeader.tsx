@@ -16,7 +16,7 @@ export default function LandingHeader(props: LandingHeaderProps) {
   }
   return (
     <div className={`flex w-auto flex-col items-center space-y-8 ${props.className} md:flex-row`}>
-      <div className="ml-12 flex flex-col md:w-1/2">
+      <div className="flex flex-col md:ml-12 md:w-1/2">
         <span className="text-center md:text-left">
           <h1 className="mt-12 text-accent1-500">Creato Lens</h1>
           <h1 className=" text-6xl font-extrabold text-text-secondary">
@@ -25,16 +25,16 @@ export default function LandingHeader(props: LandingHeaderProps) {
             <span className="text-6xl font-extrabold text-accent1-500">Seen</span>
           </h1>
         </span>
-        <h3 className="w-72 text-center font-medium md:w-auto md:text-left">
+        <h3 className="mx-auto mt-14 w-72 text-center font-medium md:mt-9 md:w-auto md:text-left">
           Elevate your content's visibility with 100% personalised hashtag trend recommendations.
         </h3>
-        <div className="flex flex-row justify-center gap-6">
-          <Button.Outline className="m-2 w-auto" onClick={() => signIn('google', { callbackUrl: '/' })}>
-            Sign In
-          </Button.Outline>
-          <Button.Primary className="m-2 w-auto" onClick={handleClick}>
+        <div className="mt-14 flex flex-row justify-center gap-8 md:mt-9 md:justify-start md:gap-3">
+          <Button.Primary className=" w-auto" onClick={handleClick}>
             Free Trial {'>>'}
           </Button.Primary>
+          <Button.Outline className=" w-auto" onClick={() => signIn('google', { callbackUrl: '/' })}>
+            Sign In
+          </Button.Outline>
         </div>
       </div>
       <LandingImageLogo className="mb-10 h-auto w-96 md:w-auto"></LandingImageLogo>
