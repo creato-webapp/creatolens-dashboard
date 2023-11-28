@@ -21,7 +21,7 @@ const Guide: NextPage = () => {
       <div className=" flex-col justify-start  ">
         <Hero backgroundImage="./GuideHero.svg">
           <h1> User Guide</h1>
-          <h4>2 Easy Steps to Kick Start</h4>
+          <h4>3 Steps to Kickstart</h4>
         </Hero>
         <div className="flex w-full flex-col items-center justify-start gap-6 md:flex-row md:flex-wrap md:items-stretch md:justify-center md:gap-12 md:p-12">
           <Card
