@@ -74,7 +74,7 @@ const Guide: NextPage = () => {
             }
           >
             {<img className="h-auto w-full rounded-xl md:shrink-0 " src={'/applyHashtagFrame.svg'} />}
-            <h2>Generate Trending Hashtag</h2>
+            <h2>Ready to use to grow more impressions and reaches</h2>
             <ul className="list-outside list-disc ">
               <li className="mx-2 text-lg"> Save or choose hashtag trends based on relevance i.e. 80%, 90%, 95% etc. visibility.</li>
               <li className="mx-2 text-lg"> Ready to use for your social media content to elevate</li>
