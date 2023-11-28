@@ -153,13 +153,7 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
           </Title>
           <Paragraph bold> Connect your Instagram account to start scraping</Paragraph>
         </div>
-      ) : (
-        <div className="mx-48 my-8">
-          <Title level={1} bold>
-            ACCOUNT INFO
-          </Title>
-        </div>
-      )}
+      ) : null}
 
       <div className="flex justify-center">
         {isCreate ? (
