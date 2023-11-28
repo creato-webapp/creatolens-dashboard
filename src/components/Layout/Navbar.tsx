@@ -92,10 +92,9 @@ const NavBar: React.FC<NavBarProps> = ({ logo, pages, isLoggedIn, onLogin, onLog
             <CrossIcon className=""></CrossIcon>
           </Button.Text>
 
-          <ul className="mx-auto list-none flex-row space-y-16">
+          <ul className="mx-auto my-auto list-none flex-row space-y-16">
             {pages.map((page, index) => (
               <li key={`${page.name}-${index}`} className="text-center">
-                <div className={`${router.pathname === page.path ? 'h-1 self-stretch bg-accent1-500' : 'h-1 self-stretch bg-error-500 opacity-0'}`} />
                 <a href={page.path}>
                   <Title bold level={3} className={`${router.pathname === page.path ? ' text-accent1-500' : ''}`}>
                     {page.name}

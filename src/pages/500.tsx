@@ -1,9 +1,10 @@
+// ErrorPage.tsx
+
 import React from 'react'
 import { useRouter } from 'next/router'
-import { Paragraph, Title } from '@components/Typography'
 import { Button } from '@components/Button'
 
-const UnexpectedError = () => {
+const ErrorPage: React.FC = () => {
   const router = useRouter()
 
   const goBack = () => {
@@ -11,20 +12,23 @@ const UnexpectedError = () => {
   }
 
   return (
-    <div className="ml-48 flex flex-col-reverse ">
-      <div className="my-36 flex flex-col gap-5">
-        <Title className="inline-block text-9xl font-extrabold text-accent1-500">ERROR 500</Title>
-        <Title className="inline-block text-5xl font-extrabold text-text-primary">SORRY, UNEXPECTED ERROR</Title>
-        <Paragraph>We are working on fixing the problem. Be back soon</Paragraph>
-        <Button.Primary className="mt-10 w-fit" onClick={goBack}>
-          Go Back
-        </Button.Primary>
-      </div>
-      <div className="relative">
-        <img className="absolute right-20 -top-20 -z-10 h-[800px] overflow-hidden" src="/500.svg" />
+    <div className="md:h-[80%]">
+      <Button.Text onClick={goBack} className="place-self-start p-4 text-accent2-500 md:hidden md:overflow-hidden">
+        {'< Back'}
+      </Button.Text>
+      <div className="relative flex h-screen flex-col items-center justify-center overflow-hidden text-center md:items-start md:pl-32 md:text-left">
+        <div className="">
+          <div className="flex flex-col gap-12 md:items-start">
+            <h1 className="text-7xl font-extrabold text-accent1-500">ERROR 500</h1>
+            <h1 className="text-5xl font-extrabold">PAGE NOT FOUND</h1>
+            <h4 className="font-semibold">We are working on fixing the problem. Be back soon.</h4>
+            <Button.Primary onClick={goBack}>Go Back</Button.Primary>
+          </div>
+          <img className="absolute -right-36 -z-50 hidden w-1/2 shrink-0 md:-top-36 md:block" src={'./500.svg'} alt="500 Image" />
+        </div>
       </div>
     </div>
   )
 }
 
-export default UnexpectedError
+export default ErrorPage

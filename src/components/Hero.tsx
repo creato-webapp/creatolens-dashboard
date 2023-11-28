@@ -6,7 +6,7 @@ interface HeroProps {
   className?: string
 }
 
-const Hero: React.FC<HeroProps> = ({ backgroundImage, children, className }) => {
+const Hero: React.FC<HeroProps> = ({ backgroundImage, children, className }: HeroProps) => {
   return (
     <div
       className={`relative bg-cover bg-center bg-no-repeat md:border-2 md:border-b-accent1-500 md:pb-0 ${className}`}
