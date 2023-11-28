@@ -5,9 +5,9 @@ interface HowItWorksProps extends HTMLAttributes<HTMLDivElement> {}
 
 const HowItWorks = (props: HowItWorksProps) => {
   const stepList = [
-    { title: 'Connect an empty IG account as bot', description: 'Create Insta-bot with several topics/ interests you care about' },
-    { title: 'Type in keywords for searches', description: 'Input a 5-8 words about your content for our AI model' },
-    { title: 'Hashtag suggestions', description: 'Generate hashtag trends to use in social media' },
+    { title: 'Connect Insta-bot with us', description: 'Create Insta-bot with several topics/ interests you care about' },
+    { title: 'Text-to-hashtags', description: 'Enter a 5-8 word prompt for hashtag trend recommendations' },
+    { title: 'Hashtag trends at your fingertip', description: 'Use AI-backed hashtag trends to grow impression and reach' },
   ]
 
   return (
@@ -18,7 +18,7 @@ const HowItWorks = (props: HowItWorksProps) => {
         {stepList.map((e, index) => (
           <Card
             className="w-[24rem] md:h-[12rem] md:w-auto md:max-w-[26rem]"
-            customTitle={<h3 className="pt-2 text-center text-text-secondary">{e.title}</h3>}
+            customTitle={<h3 className="mx-auto w-auto pt-2 text-center text-text-secondary">{e.title}</h3>}
           >
             <div
               className={`absolute flex h-10 w-10 -translate-y-11 rotate-45 transform flex-col items-center justify-center gap-1.5 self-center rounded ${
