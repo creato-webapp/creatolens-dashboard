@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import LandingHeader from '@lib/Home/LandingHeader'
 import HowItWorks from '@lib/Home/HowItWorks'
 import WhyCreatoLens from '@lib/Home/WhyCreatoLens'
+import Testimonial from '@lib/Home/Testimonial'
 
 export const getServerSideProps = async (context: any) => {
   const session = await getSession(context)
@@ -24,6 +25,7 @@ const Home: NextPage = () => {
         <LandingHeader className="mb-5" />
         <HowItWorks />
       </div>
+      <Testimonial />
       <WhyCreatoLens />
     </>
   )
