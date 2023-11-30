@@ -15,19 +15,22 @@ interface TestimonialCardsProps {
 
 const testimonial = [
   {
-    author: 'John',
+    author: 'Avenna',
     text: 'I was able to get 5,000+ organic impressions based on the hashtags used by Creato lens! Will use it more often in the future.',
     title: 'Videographer',
+    img: '/userAvenna.jpeg',
   },
   {
     author: 'Jacky',
     text: 'Tried it for 3 posts in a row, and my impression rates grew more than 20% from the hashtag category. Great tool to get more exposure.',
     title: 'Wedding Photographer',
+    img: './userJacky.jpeg',
   },
   {
     author: 'Jessica',
     text: 'A great tool for us to get more viewers for our video content on social media. Digital marketer should definitely consider trying it!',
     title: 'Content manager',
+    img: '/userJessica.jpeg',
   },
 ]
 
@@ -53,9 +56,9 @@ const TestimonialCards: React.FC<TestimonialCardsProps> = ({ comments = testimon
               <>
                 {comment.img ? (
                   <img
-                    src="/path-to-your-default-avatar.jpg" // Replace with your path to a default avatar image
+                    src={comment.img} // Replace with your path to a default avatar image
                     alt={comment.author}
-                    className="h-6 w-6 rounded-full"
+                    className="h-10 w-10 shrink-0 rounded-full object-cover object-center"
                   />
                 ) : (
                   <div className="relative h-6 w-6 overflow-hidden rounded-full bg-gray-100 dark:bg-gray-600 md:h-10 md:w-10">
