@@ -4,9 +4,10 @@ import type { FC } from 'react'
 interface Comment {
   img?: string
   author: string
-  text: string
+  text: string[]
   title: string
   subtitle?: string
+  orangeText?: string
 }
 
 interface TestimonialCardsProps {
@@ -16,21 +17,24 @@ interface TestimonialCardsProps {
 const testimonial = [
   {
     author: 'Avenna',
-    text: 'I was able to get 5,000+ organic impressions based on the hashtags used by Creato lens! Will use it more often in the future.',
+    text: ['I was able to ', ' based on the hashtags used by Creato lens! Will use it more often in the future.'],
     title: 'Videographer',
     img: '/userAvenna.jpeg',
+    orangeText: 'get 5,000+ organic impressions',
   },
   {
     author: 'Jacky',
-    text: 'Tried it for 3 posts in a row, and my impression rates grew more than 20% from the hashtag category. Great tool to get more exposure.',
+    text: ['Tried it for 3 posts in a row, and my impression rates ', '. Great tool to get more exposure.'],
     title: 'Wedding Photographer',
     img: './userJacky.jpeg',
+    orangeText: 'grew more than 20% from the hashtag category',
   },
   {
     author: 'Jessica',
-    text: 'A great tool for us to get more viewers for our video content on social media. Digital marketer should definitely consider trying it!',
+    text: ['A great tool for us to ', ' for our video content on social media. Digital marketer should definitely consider trying it!'],
     title: 'Content manager',
     img: '/userJessica.jpeg',
+    orangeText: 'get more viewers',
   },
 ]
 
@@ -51,7 +55,11 @@ const TestimonialCards: React.FC<TestimonialCardsProps> = ({ comments = testimon
         {comments?.map((comment, index) => (
           <div key={index} className="m-4 rounded-lg border border-slate-300 bg-white p-4 text-center shadow-lg">
             <div className="flex items-center space-x-3"></div>
-            <h4 className="m-2 font-medium">{comment.text}</h4>
+            <h4 className="m-2 font-medium">
+              <span>{comment.text[0]}</span>
+              <span className="font-extrabold text-accent1-500">{comment.orangeText}</span>
+              <span>{comment.text[1]}</span>
+            </h4>
             <div className="mx-4 flex flex-row items-center gap-4">
               <>
                 {comment.img ? (
@@ -76,7 +84,7 @@ const TestimonialCards: React.FC<TestimonialCardsProps> = ({ comments = testimon
                 <h3 className="font-extrabold">{comment.author}</h3>
               </>
 
-              <h4 className="ml-auto w-auto font-medium">{comment.title}</h4>
+              <h4 className="ml-auto w-auto font-medium text-text-secondary">{comment.title}</h4>
             </div>
           </div>
         ))}
