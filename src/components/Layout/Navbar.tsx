@@ -66,15 +66,15 @@ const NavBar: React.FC<NavBarProps> = ({ logo, pages, isLoggedIn, onLogin, onLog
       <div className="m-6 my-auto hidden md:flex">
         {isLoggedIn ? (
           <Button.Text loading={isLoading} onClick={onLogout} className="flex h-auto items-center rounded">
-            <LogoutIcon className="mr-1"></LogoutIcon>
-            <Title level={3} bold>
+            <LogoutIcon className="mr-1" fillColor="fill-accent2-500"></LogoutIcon>
+            <Title level={3} bold className="text-accent2-500">
               Logout
             </Title>
           </Button.Text>
         ) : (
           <Button.Text loading={isLoading} onClick={onLogin} className="flex h-auto items-center rounded">
-            <LoginIcon className="mr-1"></LoginIcon>
-            <Title level={3} bold>
+            <LoginIcon className="mr-1" fillColor="fill-accent2-500"></LoginIcon>
+            <Title level={3} bold className="text-accent2-500">
               Sign In
             </Title>
           </Button.Text>
