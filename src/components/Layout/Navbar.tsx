@@ -40,7 +40,7 @@ const NavBar: React.FC<NavBarProps> = ({ logo, pages, isLoggedIn, onLogin, onLog
       ) : null}
 
       <a href="/" className="mx-8 my-auto shrink-0 md:mx-16">
-        <img src={logo} alt="Logo" className="h-16" />
+        <img src={logo} alt="Logo" className="h-12 md:h-16" />
       </a>
       <div className="hidden space-x-10 justify-self-center md:flex md:min-h-[6rem] md:items-center">
         {pages.map((page, index) => (
@@ -52,7 +52,7 @@ const NavBar: React.FC<NavBarProps> = ({ logo, pages, isLoggedIn, onLogin, onLog
           </div>
         ))}
       </div>
-      <div className="m-8 md:hidden">
+      <div className="mx-8 flex md:hidden">
         {isLoggedIn ? (
           <Button.Text onClick={onLogout} className="text-text-primary">
             <LogoutIcon />
@@ -66,14 +66,14 @@ const NavBar: React.FC<NavBarProps> = ({ logo, pages, isLoggedIn, onLogin, onLog
       <div className="m-6 my-auto hidden md:flex">
         {isLoggedIn ? (
           <Button.Text loading={isLoading} onClick={onLogout} className="flex h-auto items-center rounded">
-            <LogoutIcon className="mr-1" fillColor="fill-accent2-500"></LogoutIcon>
+            <LogoutIcon className="mr-1" size={24} fillColor="fill-accent2-500"></LogoutIcon>
             <Title level={3} bold className="text-accent2-500">
               Logout
             </Title>
           </Button.Text>
         ) : (
           <Button.Text loading={isLoading} onClick={onLogin} className="flex h-auto items-center rounded">
-            <LoginIcon className="mr-1" fillColor="fill-accent2-500"></LoginIcon>
+            <LoginIcon className="mr-1" size={24} fillColor="fill-accent2-500"></LoginIcon>
             <Title level={3} bold className="text-accent2-500">
               Sign In
             </Title>
