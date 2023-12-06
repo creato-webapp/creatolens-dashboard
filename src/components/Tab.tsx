@@ -51,10 +51,10 @@ const Tab: React.FC<TabProps> = ({
 
   return (
     <div className={`tabs flex h-auto w-auto min-w-full flex-col items-center md:items-start ${className ? className : ''}`}>
-      <div className={`tabs-bar${centered ? ' centered' : ''} inline-flex `} style={tabBarStyle}>
+      <div className={`tabs-bar${centered ? ' centered' : ''} inline-flex w-full`} style={tabBarStyle}>
         {items.map((item) => (
           <button
-            className={`disabled:text-text-disable h-8 w-auto min-w-[12.5rem] hover:bg-accent1-300 hover:text-text-white focus:bg-accent1-500 active:bg-accent1-500 disabled:bg-disabled md:h-12 ${
+            className={`disabled:text-text-disable h-8 w-full hover:bg-accent1-300 hover:text-text-white focus:bg-accent1-500 active:bg-accent1-500 disabled:bg-disabled md:h-12 md:w-auto md:min-w-[12.5rem] ${
               currentActiveKey == item.key ? 'bg-accent1-500 text-text-white' : 'bg-bg-white text-text-primary'
             }`}
             onClick={handleChange}
