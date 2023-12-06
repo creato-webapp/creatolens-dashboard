@@ -54,7 +54,7 @@ const Tab: React.FC<TabProps> = ({
       <div className={`tabs-bar${centered ? ' centered' : ''} inline-flex w-full`} style={tabBarStyle}>
         {items.map((item) => (
           <button
-            className={`disabled:text-text-disable h-8 w-full hover:bg-accent1-300 hover:text-text-white focus:bg-accent1-500 active:bg-accent1-500 disabled:bg-disabled md:h-12 md:w-auto md:min-w-[12.5rem] ${
+            className={`disabled:text-text-disable h-8 w-full hover:bg-accent1-300 hover:text-text-white hover:underline hover:underline-offset-2 focus:bg-accent1-500 active:bg-accent1-500 disabled:bg-disabled md:h-12 md:w-auto md:min-w-[12.5rem] ${
               currentActiveKey == item.key ? 'bg-accent1-500 text-text-white' : 'bg-bg-white text-text-primary'
             }`}
             onClick={handleChange}
