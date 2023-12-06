@@ -72,7 +72,7 @@ const RecommendationPage = ({ hashetSessionData }: Props) => {
       key: '1',
       title: 'Categories',
       children: (
-        <div className="flex-wrap gap-2 shadow-2xl md:flex  md:flex-nowrap md:py-24 md:px-14">
+        <div className="flex flex-wrap gap-4 md:flex md:flex-nowrap md:py-24 md:px-14">
           <TopRelatedHashtagCard hashtags={hashetData} />
           <TopAccHashtagCard hashtags={hashetData} />
         </div>
@@ -92,51 +92,53 @@ const RecommendationPage = ({ hashetSessionData }: Props) => {
   return (
     <div className="flex-col justify-center">
       <Hero backgroundImage="./RecommendationHero.svg">
-        <div className="flex flex-row items-center">
-          <h1>RECOMMENDATION</h1>
-          <Popover
-            className="ml-auto shrink-0 rounded-full bg-accent1-500 p-2 text-white"
-            trigger={<LightBulbIcon size={32} />}
-            content={
-              <>
-                <div className="rounded-t-lg border-b border-gray-200  px-3 py-2">
-                  <h3 className="font-semibold text-gray-900 ">💡Input prompt</h3>
-                </div>
-                <div className="px-3 py-2">
-                  <ul>
-                    <li>You can type everything related to your next IG post</li>
-                    <li>No punctuation is needed</li>
-                    <li>Short phrase/ vocabulary applicable</li>
-                  </ul>
-                  <p>e.g. Hong Kong Food Cute makeup tutorial</p>
-                </div>
-                <div data-popper-arrow></div>
-              </>
-            }
-          />
-        </div>
-        <div className="my-2 flex w-full gap-2">
-          <div className="flex w-full items-center rounded-3xl  bg-bg-white px-2 py-2 text-text-primary hover:rounded-3xl hover:outline-none focus:rounded-3xl focus:outline-none focus:ring-opacity-50 active:rounded-3xl">
-            {isValidating ? <LoaderIcon className="animate-spin" /> : <MagnifyingGlassIcon />}
-
-            <Form.BaseInput
-              allowSpace
-              hidden
-              disabled={isValidating}
-              onKeyDown={handleKeyDown}
-              placeholder="Type Your Input Here."
-              className={` w-full rounded-3xl border-none  px-2 py-1.5 hover:rounded-3xl hover:outline-none focus:rounded-3xl focus:outline-none focus:ring-opacity-50 active:rounded-3xl ${
-                isValidating ? 'text-gray-400' : ''
-              } w-full`}
-              onChange={(e) => onChange(e)}
-            ></Form.BaseInput>
+        <div className="flex flex-col items-center gap-4">
+          <div className="flex flex-row items-center">
+            <h1>RECOMMENDATION</h1>
+            <Popover
+              className="ml-auto shrink-0 rounded-full bg-accent1-500 p-2 text-white"
+              trigger={<LightBulbIcon size={32} />}
+              content={
+                <>
+                  <div className="rounded-t-lg border-b border-gray-200  px-3 py-2">
+                    <h3 className="font-semibold text-gray-900 ">💡Input prompt</h3>
+                  </div>
+                  <div className="px-3 py-2">
+                    <ul>
+                      <li>You can type everything related to your next IG post</li>
+                      <li>No punctuation is needed</li>
+                      <li>Short phrase/ vocabulary applicable</li>
+                    </ul>
+                    <p>e.g. Hong Kong Food Cute makeup tutorial</p>
+                  </div>
+                  <div data-popper-arrow></div>
+                </>
+              }
+            />
           </div>
-          <Button.Primary className="w-auto" onClick={() => onSubmit()} loading={isValidating}>
-            Search
-          </Button.Primary>
+          <div className="flex w-full gap-2">
+            <div className="flex w-full items-center rounded-3xl  bg-bg-white text-text-primary hover:rounded-3xl hover:outline-none focus:rounded-3xl focus:outline-none focus:ring-opacity-50 active:rounded-3xl">
+              {isValidating ? <LoaderIcon className="animate-spin" /> : <MagnifyingGlassIcon />}
+
+              <Form.BaseInput
+                allowSpace
+                hidden
+                disabled={isValidating}
+                onKeyDown={handleKeyDown}
+                placeholder="Type Your Input Here."
+                className={` w-full rounded-3xl border-none  px-2 py-1.5 hover:rounded-3xl hover:outline-none focus:rounded-3xl focus:outline-none focus:ring-opacity-50 active:rounded-3xl ${
+                  isValidating ? 'text-gray-400' : ''
+                } w-full`}
+                onChange={(e) => onChange(e)}
+              ></Form.BaseInput>
+            </div>
+            <Button.Primary className="w-auto" onClick={() => onSubmit()} loading={isValidating}>
+              Search
+            </Button.Primary>
+          </div>
         </div>
       </Hero>
-      <Card className="w-screen rounded-none border-none bg-transparent p-8 shadow-none">
+      <Card className="w-screen rounded-none border-none bg-transparent px-4 py-0 shadow-none md:p-8">
         <Tab items={tabItems} defaultActiveKey="1" scrollable={false} />
       </Card>
     </div>
