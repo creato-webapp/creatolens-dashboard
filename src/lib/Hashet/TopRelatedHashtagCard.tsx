@@ -42,13 +42,13 @@ const TopRelatedHashtagCard: React.FC<Props> = ({ hashtags }) => {
   return (
     <Card
       customTitle={
-        <h1 className="flex items-center gap-2">
+        <h1 className="flex items-center gap-2 font-extrabold tracking-tighter">
           <span>Top</span>
           <span className="text-accent1-500">{`${numberOfHashes}`}</span>
           <span>Related</span>
         </h1>
       }
-      className="min-w-96 mb-2 w-full whitespace-normal rounded-none md:h-auto md:w-1/2"
+      className="min-w-96 w-full whitespace-normal !rounded-none md:h-auto md:w-1/2"
       extra={
         <Dropdown
           name="numberOfHashes"
