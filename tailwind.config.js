@@ -17,7 +17,10 @@ module.exports = {
       fontFamily: {
         lato: ['Lato', 'system-ui'],
         // Add more font families if needed
-      },        
+      },
+    minWidth: {
+      '8': '2rem',
+    },        
     screens: {
       sm: '425px',
       md: '768px',

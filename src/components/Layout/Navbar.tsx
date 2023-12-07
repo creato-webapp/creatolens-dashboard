@@ -30,17 +30,19 @@ const NavBar: React.FC<NavBarProps> = ({ logo, pages, isLoggedIn, onLogin, onLog
     setIsMenuCollapse((prev) => !prev)
   }
   return (
-    <nav className="relative flex h-auto justify-between bg-bg-dark">
-      {session ? (
-        <div className={'mx-8 my-auto md:hidden'} onClick={toggleMenu}>
-          <Button.Text className="text-text-primary">
-            <MenuIcon></MenuIcon>
-          </Button.Text>
-        </div>
-      ) : null}
+    <nav className="relative flex h-auto justify-between bg-bg-dark px-4 md:px-6">
+      <div className="flex min-w-8 md:hidden">
+        {session && (
+          <div className={'my-auto flex w-full md:hidden'} onClick={toggleMenu}>
+            <Button.Text className="text-text-primary">
+              <MenuIcon></MenuIcon>
+            </Button.Text>
+          </div>
+        )}
+      </div>
 
       <a href="/" className="mx-8 my-auto shrink-0 md:mx-16">
-        <img src={logo} alt="Logo" className="h-16" />
+        <img src={logo} alt="Logo" className="h-12 md:h-16" />
       </a>
       <div className="hidden space-x-10 justify-self-center md:flex md:min-h-[6rem] md:items-center">
         {pages.map((page, index) => (
@@ -52,7 +54,7 @@ const NavBar: React.FC<NavBarProps> = ({ logo, pages, isLoggedIn, onLogin, onLog
           </div>
         ))}
       </div>
-      <div className="m-8 md:hidden">
+      <div className="flex w-8 md:hidden">
         {isLoggedIn ? (
           <Button.Text onClick={onLogout} className="text-text-primary">
             <LogoutIcon />
@@ -63,18 +65,18 @@ const NavBar: React.FC<NavBarProps> = ({ logo, pages, isLoggedIn, onLogin, onLog
           </Button.Text>
         )}
       </div>
-      <div className="m-6 my-auto hidden md:flex">
+      <div className="my-auto hidden md:flex">
         {isLoggedIn ? (
           <Button.Text loading={isLoading} onClick={onLogout} className="flex h-auto items-center rounded">
-            <LogoutIcon className="mr-1"></LogoutIcon>
-            <Title level={3} bold>
+            <LogoutIcon className="mr-1" size={24} fillColor="fill-accent2-500"></LogoutIcon>
+            <Title level={3} bold className="text-accent2-500">
               Logout
             </Title>
           </Button.Text>
         ) : (
           <Button.Text loading={isLoading} onClick={onLogin} className="flex h-auto items-center rounded">
-            <LoginIcon className="mr-1"></LoginIcon>
-            <Title level={3} bold>
+            <LoginIcon className="mr-1" size={24} fillColor="fill-accent2-500"></LoginIcon>
+            <Title level={3} bold className="text-accent2-500">
               Sign In
             </Title>
           </Button.Text>
@@ -82,7 +84,7 @@ const NavBar: React.FC<NavBarProps> = ({ logo, pages, isLoggedIn, onLogin, onLog
       </div>
       <aside
         id="default-sidebar"
-        className={`fixed z-50 h-screen w-screen translate-x-0 transition-transform ${isMenuCollapse ? 'hidden' : 'block'}`}
+        className={`fixed z-50 h-screen w-screen -translate-x-4 transition-transform ${isMenuCollapse ? 'hidden' : 'block'}`}
         aria-label="Sidebar"
       >
         <div className="flex h-[100vh] flex-col overflow-y-auto bg-gray-50 dark:bg-gray-800">
