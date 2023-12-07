@@ -21,7 +21,7 @@ export const getServerSideProps = async (context: any) => {
 const Home: NextPage = () => {
   return (
     <>
-      <div className="px-2 pb-6">
+      <div className="pb-6">
         <LandingHeader className="mb-5" />
         <HowItWorks />
       </div>

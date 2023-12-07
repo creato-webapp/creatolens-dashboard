@@ -15,7 +15,9 @@ export default function LandingHeader(props: LandingHeaderProps) {
     router.replace('https://www.creatogether.app/zh/creatolens')
   }
   return (
-    <div className={`flex w-auto flex-col items-center space-y-8 ${props.className} md:flex-row`}>
+    <div
+      className={`flex w-auto flex-col items-center space-y-8 ${props.className} bg-[url('/landing-background.png')]  bg-cover bg-bottom bg-no-repeat px-2 pb-10 md:flex-row md:justify-between`}
+    >
       <div className="flex flex-col md:ml-12 md:w-1/2">
         <span className="text-center md:text-left">
           <h1 className="mt-12 text-accent1-500">Creato Lens</h1>
@@ -37,7 +39,7 @@ export default function LandingHeader(props: LandingHeaderProps) {
           </Button.Outline>
         </div>
       </div>
-      <LandingImageLogo className="mb-10 h-auto w-96 md:w-auto"></LandingImageLogo>
+      <LandingImageLogo className="mb-10 h-auto w-full md:w-full"></LandingImageLogo>
     </div>
   )
 }
