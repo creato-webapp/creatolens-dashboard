@@ -48,7 +48,7 @@ const TopRelatedHashtagCard: React.FC<Props> = ({ hashtags }) => {
           <span>Related</span>
         </h1>
       }
-      className="min-w-96 w-full whitespace-normal !rounded-none md:h-auto md:w-1/2"
+      className="min-w-96 w-full whitespace-normal !rounded-none py-4 md:h-auto md:w-1/2"
       extra={
         <Dropdown
           name="numberOfHashes"

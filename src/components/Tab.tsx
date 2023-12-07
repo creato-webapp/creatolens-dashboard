@@ -50,7 +50,7 @@ const Tab: React.FC<TabProps> = ({
   }
 
   return (
-    <div className={`tabs flex h-auto w-auto min-w-full flex-col items-center md:items-start ${className ? className : ''}`}>
+    <div className={`tabs flex h-auto w-auto min-w-full flex-col items-center gap-4 md:items-start ${className ? className : ''}`}>
       <div className={`tabs-bar${centered ? ' centered' : ''} inline-flex w-full`} style={tabBarStyle}>
         {items.map((item) => (
           <button
@@ -67,7 +67,7 @@ const Tab: React.FC<TabProps> = ({
         ))}
         {tabBarExtraContent}
       </div>
-      <div className={`tab-content flex w-fit justify-center bg-bg-white py-2 md:w-full ${scrollable ? 'overflow-auto' : ''}`}>
+      <div className={`tab-content flex w-fit justify-center bg-bg-white md:w-full ${scrollable ? 'overflow-auto' : ''}`}>
         {items.map((item) =>
           currentActiveKey === item.key ? (
             <div
