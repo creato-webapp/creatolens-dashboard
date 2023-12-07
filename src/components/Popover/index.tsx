@@ -8,9 +8,12 @@ interface PopoverProps {
 
 const Popover: React.FC<PopoverProps> = ({ trigger, content, className }) => {
   const [isOpen, setIsOpen] = useState(false)
+  const togglePopover = () => {
+    setIsOpen((prev) => !prev)
+  }
 
   return (
-    <div onClick={() => setIsOpen(!isOpen)} className={`relative inline-block cursor-pointer ${className}`}>
+    <div onClick={togglePopover} className={`relative inline-block cursor-pointer ${className}`}>
       <div>{trigger}</div>
       {isOpen && (
         <div
@@ -20,7 +23,7 @@ const Popover: React.FC<PopoverProps> = ({ trigger, content, className }) => {
             right: '-5%',
           }}
         >
-          <button className="absolute top-0 right-0 cursor-pointer p-1" onClick={() => setIsOpen(!isOpen)}>
+          <button className="absolute top-0 right-0 cursor-pointer p-1" onClick={togglePopover}>
             {/* You can replace 'x' with your preferred close icon */}
             <span className="pr-2 text-xl text-gray-500">×</span>
           </button>

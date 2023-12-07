@@ -10,9 +10,13 @@ interface CollapseProps extends React.HTMLAttributes<HTMLDivElement> {
 const Collapse: React.FC<CollapseProps> = ({ defaultOpen, parent, children, className }: CollapseProps) => {
   const [isOpen, setIsOpen] = useState(defaultOpen)
 
+  const toggleMenu = () => {
+    setIsOpen((prev) => !prev)
+  }
+
   return (
     <div className={`border shadow ${className}`}>
-      <button className="flex w-full bg-bg-dark  px-4 py-4 text-left" onClick={() => setIsOpen(!isOpen)}>
+      <button className="flex w-full bg-bg-dark  px-4 py-4 text-left" onClick={toggleMenu}>
         {parent}
         <div className="ml-auto w-auto"> {isOpen ? <CaretUpIcon /> : <CaretDownIcon />}</div>
       </button>
