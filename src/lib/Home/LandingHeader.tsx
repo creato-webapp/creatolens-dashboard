@@ -16,15 +16,15 @@ export default function LandingHeader(props: LandingHeaderProps) {
   }
   return (
     <div
-      className={`flex w-auto flex-col items-center space-y-8 ${props.className} bg-[url('/landing-background.png')]  bg-cover bg-bottom bg-no-repeat px-2 pb-10 md:flex-row md:justify-between`}
+      className={`flex w-auto flex-col items-center space-y-8 pt-12 ${props.className} bg-[url('/landing-background.png')]  bg-cover bg-bottom bg-no-repeat px-2 pb-10 md:flex-row md:justify-between`}
     >
       <div className="flex flex-col md:ml-12 md:w-1/2">
         <span className="text-center md:text-left">
-          <h1 className="mt-12 text-accent1-500">Creato Lens</h1>
-          <h1 className=" text-6xl font-extrabold text-text-secondary">
+          <h1 className=" text-4xl text-accent1-500">Creato Lens</h1>
+          <h1 className="text-m-landing-title font-extrabold text-text-secondary md:text-d-landing-title">
             Get Your <br />
-            <span className="text-6xl font-extrabold text-text-secondary">Content&nbsp;</span>
-            <span className="text-6xl font-extrabold text-accent1-500">Seen</span>
+            <span className="text-m-landing-title font-extrabold text-text-secondary md:text-d-landing-title">Content&nbsp;</span>
+            <span className="text-m-landing-title font-extrabold text-accent1-500 md:text-d-landing-title">Seen</span>
           </h1>
         </span>
         <h3 className="mx-auto mt-14 w-72 text-center font-medium md:mt-9 md:w-auto md:text-left">

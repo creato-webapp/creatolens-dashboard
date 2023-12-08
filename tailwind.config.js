@@ -39,6 +39,11 @@ module.exports = {
         '3xl': '1.75rem',
         '4xl': '1.875rem',
         '5xl': '2.125rem',
+        'm-landing-title': ['3.125rem', '3.2rem'],
+        'd-landing-title': ['4.125rem', '4.5rem'],
+      },
+      backgroundImage: {
+        'hero-background': "url('/landing-background.png')",
       },
       spacing: {
         '128': '32rem',
