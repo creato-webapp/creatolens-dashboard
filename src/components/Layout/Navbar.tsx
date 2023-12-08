@@ -46,9 +46,13 @@ const NavBar: React.FC<NavBarProps> = ({ logo, pages, isLoggedIn, onLogin, onLog
       </a>
       <div className="hidden space-x-10 justify-self-center md:flex md:min-h-[6rem] md:items-center">
         {pages.map((page, index) => (
-          <div key={`${page.name}-${index}`} className="inline-flex flex-col items-center justify-start gap-8 pb-9">
-            <div className={`${router.pathname === page.path ? 'h-1 self-stretch bg-accent1-500' : 'h-1 self-stretch bg-error-500 opacity-0'}`} />
-            <a href={page.path}>
+          <div key={`${page.name}-${index}`} className={`flex h-full flex-col items-center justify-center`}>
+            <a
+              href={page.path}
+              className={`${
+                router.pathname === page.path ? 'border-t-4 pb-1' : 'py-1'
+              } box-border flex h-full items-center  border-accent1-500 text-center`}
+            >
               <h3 className={`${router.pathname === page.path ? ' text-accent1-500' : ''} font-extrabold`}>{page.name}</h3>
             </a>
           </div>
