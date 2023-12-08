@@ -44,7 +44,7 @@ const NavBar: React.FC<NavBarProps> = ({ logo, pages, isLoggedIn, onLogin, onLog
       <a href="/" className="mx-8 my-auto shrink-0 md:mx-16">
         <img src={logo} alt="Logo" className="h-12 md:h-16" />
       </a>
-      <div className="hidden space-x-10 justify-self-center md:flex md:min-h-[6rem] md:items-center">
+      <div className="hidden space-x-10 justify-self-center md:flex md:min-h-[4rem] md:items-center">
         {pages.map((page, index) => (
           <div key={`${page.name}-${index}`} className={`flex h-full flex-col items-center justify-center`}>
             <a
