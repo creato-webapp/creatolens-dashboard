@@ -6,7 +6,8 @@ import React from 'react'
 import LandingImageLogo from './LandingImageLogo'
 import { useRouter } from 'next/router'
 import { signIn } from 'next-auth/react'
-
+import Image from 'next/image'
+import arrow_right from '../../assets/icons/arrow-right.svg'
 interface LandingHeaderProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export default function LandingHeader(props: LandingHeaderProps) {
@@ -31,11 +32,12 @@ export default function LandingHeader(props: LandingHeaderProps) {
           Elevate your content's visibility with 100% personalised hashtag trend recommendations.
         </h3>
         <div className="mt-14 flex flex-row justify-center gap-8 md:mt-9 md:justify-start md:gap-3">
-          <Button.Primary className=" w-auto" onClick={handleClick}>
-            Free Trial {'>>'}
+          <Button.Primary className=" w-auto" styleClassName="py-3 md:py-3" onClick={handleClick}>
+            <h4>Free Trial</h4>
+            <Image src={arrow_right} alt="arrow_right" width={20} height={20} className="ml-2"></Image>
           </Button.Primary>
-          <Button.Outline className=" w-auto" onClick={() => signIn('google', { callbackUrl: '/' })}>
-            Sign In
+          <Button.Outline className=" w-auto" styleClassName="py-3 md:py-3" onClick={() => signIn('google', { callbackUrl: '/' })}>
+            <h4>Sign In</h4>
           </Button.Outline>
         </div>
       </div>
