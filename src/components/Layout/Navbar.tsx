@@ -49,7 +49,7 @@ const NavBar: React.FC<NavBarProps> = ({ logo, pages, isLoggedIn, onLogin, onLog
           <div key={`${page.name}-${index}`} className="inline-flex flex-col items-center justify-start gap-8 pb-9">
             <div className={`${router.pathname === page.path ? 'h-1 self-stretch bg-accent1-500' : 'h-1 self-stretch bg-error-500 opacity-0'}`} />
             <a href={page.path}>
-              <h3 className={`${router.pathname === page.path ? ' text-accent1-500' : ''} font-bold`}>{page.name}</h3>
+              <h3 className={`${router.pathname === page.path ? ' text-accent1-500' : ''} font-extrabold`}>{page.name}</h3>
             </a>
           </div>
         ))}
