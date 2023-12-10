@@ -4,6 +4,7 @@ import LinkedinLogo from '../../assets/social-media-icons/LinkedinLogo.svg'
 import SpotifyLogo from '../../assets/social-media-icons/SpotifyLogo.svg'
 import YoutubeLogo from '../../assets/social-media-icons/YoutubeLogo.svg'
 import Image from 'next/image'
+import Link from 'next/link'
 
 interface FooterItem {
   title: string
@@ -68,18 +69,22 @@ function Footer() {
     {
       alt: 'Instagram',
       src: InstagramLogo,
+      link: 'https://www.instagram.com/creatogether.app/',
     },
     {
       alt: 'Linkedin',
       src: LinkedinLogo,
+      link: 'https://www.linkedin.com/company/creato-edu/',
     },
     {
       alt: 'Spotify',
       src: SpotifyLogo,
+      link: 'https://open.spotify.com/show/1nOYgPbId7Cq8fQoqXuxf5?si=dceab17fa4c04db5&nd=1&dlsi=9c44e2be6f314145',
     },
     {
       alt: 'Youtube',
       src: YoutubeLogo,
+      link: 'https://www.youtube.com/@Creatopodcast',
     },
   ]
 
@@ -112,12 +117,14 @@ function Footer() {
       <div>
         <div className="flex flex-row justify-center gap-8">
           {footerIcon.map((icon) => (
-            <Image src={icon.src} alt={icon.alt} />
+            <Link href={icon.link} className="">
+              <Image src={icon.src} alt={icon.alt} className="cursor-pointer" />
+            </Link>
           ))}
         </div>
       </div>
       <div className="inline-flex w-full flex-col items-center justify-start">
-        <div className="text-xs font-semibold leading-none text-slate-600">©2023 ESSAA Limited All Rights Reserved</div>
+        <div className="text-xs font-semibold leading-none text-slate-600">©2024 ESSAA Limited All Rights Reserved</div>
       </div>
     </footer>
   )
