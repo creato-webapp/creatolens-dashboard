@@ -90,7 +90,6 @@ function Footer() {
 
   const FooterItem = (props: { item: FooterItem }) => {
     const { item } = props
-    console.log(item)
     return (
       <div className="flex flex-col items-center gap-6 py-3 md:items-start">
         <div className="text-lg font-bold leading-loose text-zinc-400">{item.title}</div>
