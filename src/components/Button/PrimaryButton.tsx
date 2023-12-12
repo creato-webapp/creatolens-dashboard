@@ -1,11 +1,6 @@
 import React from 'react'
 import Spinner from '../Spinner'
-interface ButtonProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLButtonElement>, HTMLButtonElement> {
-  disabled?: boolean
-  loading?: boolean
-  type?: 'button' | 'submit' | 'reset' | undefined
-  styleClassName?: string
-}
+import { ButtonProps } from './interface'
 
 const Primary: React.FC<ButtonProps> = ({ children, onClick, disabled = false, loading, type = 'button', styleClassName, ...res }) => {
   const isDisabled = disabled || loading

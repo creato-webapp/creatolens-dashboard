@@ -2,4 +2,5 @@ export interface ButtonProps extends React.DetailedHTMLProps<React.HTMLAttribute
   disabled?: boolean
   loading?: boolean
   type?: 'button' | 'submit' | 'reset' | undefined
+  styleClassName?: string
 }
