@@ -7,7 +7,7 @@ import LabelInstance from '../axiosInstance/Labels'
 export const config = {
   api: {
     bodyParser: {
-      sizeLimit: '2mb',
+      sizeLimit: '4mb',
     },
   },
   // Specifies the maximum allowed duration for this function to execute (in seconds)
@@ -31,19 +31,53 @@ export default async function accountQueryHandler(req: NextApiRequest, res: Next
     // }
 
     case 'POST': {
-      const response = await BlobInstance.post('/cloud-vision', body, {
-        headers: {
-          Cookie: req.headers.cookie,
-        },
-      })
-      const labels = response.data.map((e: any) => e.description)
-      var bodyFormData = new FormData()
-      bodyFormData.append('labels', labels.join(', '))
-      bodyFormData.append('top_n', '10')
-      bodyFormData.append('model', 'glove')
-      console.log(bodyFormData)
-      const labelResponse = await LabelInstance.post('/get_similar_records', bodyFormData)
-      return res.status(labelResponse.status).json({ labels: response.data, data: labelResponse.data })
+      try {
+        if (!req.headers.cookie) {
+          return res.status(401).json({ message: 'Unauthorized' })
+        }
+        if (!req.body) {
+          return res.status(400).json({ message: 'Invalid request' })
+        }
+
+        const response = await BlobInstance.post('/cloud-vision', body, {
+          headers: {
+            Cookie: req.headers.cookie,
+          },
+        })
+        if (response.status !== 200) {
+          return res.status(response.status).json({ message: 'Something went wrong' })
+        }
+        if (!response.data) {
+          return res.status(400).json({ message: 'Invalid request' })
+        }
+        const labels = response.data.map((e: any) => e.description)
+        console.log(labels.join(', '))
+        const hashtagRes = Promise.allSettled([
+          axios.get(`http://34.135.31.83:5000/model`, {
+            params: { input: labels.join(', ') },
+          }),
+          axios.get(`http://34.31.93.245:5000/model`, {
+            params: { input: labels.join(', ') },
+          }),
+          axios.get(`http://34.136.129.125:5000/model`, {
+            params: { input: labels.join(', ') },
+          }),
+        ])
+          .then((results) => {
+            const data1 = results[0].status === 'fulfilled' ? results[0].value.data.data : null
+            const data2 = results[1].status === 'fulfilled' ? results[1].value.data.data : null
+            const data3 = results[2].status === 'fulfilled' ? results[2].value.data.data : null
+
+            const error = results.find((result) => result.status === 'rejected')?.status || null
+
+            return res.status(response.status).json({ labels: response.data, firstTwo: data1, middleTwo: data2, lastTwo: data3, error: error })
+          })
+          .catch((error) => {
+            console.log(error)
+            return res.status(response.status).json({ labels: response.data, error: error })
+          })
+        return hashtagRes
+      } catch (error) {}
     }
     default:
       res.setHeader('Allow', ['GET', 'POST'])
