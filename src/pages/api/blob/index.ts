@@ -78,9 +78,9 @@ export default async function accountQueryHandler(req: NextApiRequest, res: Next
             console.log(error)
             return res.status(response.status).json({ labels: response.data, error: error })
           })
-        return hashtagRes
+        return res
       } catch (error) {
-        return res.status(400).json({ message: 'Something went wrong in labeling stage' })
+        return res.status(400).json({ message: 'Something went wrong in labeling stage', error: error })
       }
     }
     default:
