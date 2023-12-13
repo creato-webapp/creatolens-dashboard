@@ -20,6 +20,7 @@ export default async function accountQueryHandler(req: NextApiRequest, res: Next
     body,
     method,
   } = req
+  console.log(req)
   switch (method) {
     // case 'GET': {
     //   const response = await BlobInstance.get(`/accounts?page_number=${pageNumber}&page_size=${pageSize}&orderby=${orderBy}&isAsc=${isAsc}`, {
@@ -44,6 +45,7 @@ export default async function accountQueryHandler(req: NextApiRequest, res: Next
             Cookie: req.headers.cookie,
           },
         })
+        console.log(response)
         if (response.status !== 200) {
           return res.status(response.status).json({ message: 'Something went wrong' })
         }
