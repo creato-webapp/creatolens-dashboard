@@ -53,13 +53,13 @@ export default async function accountQueryHandler(req: NextApiRequest, res: Next
         const labels = response.data.map((e: any) => e.description)
         console.log(labels.join(', '))
         const hashtagRes = Promise.allSettled([
-          axios.get(`http://34.135.31.83:5000/model`, {
+          axios.get(process.env.IMAGE_HASHTAG_1 as string, {
             params: { input: labels.join(', ') },
           }),
-          axios.get(`http://34.31.93.245:5000/model`, {
+          axios.get(process.env.IMAGE_HASHTAG_2 as string, {
             params: { input: labels.join(', ') },
           }),
-          axios.get(`http://34.136.129.125:5000/model`, {
+          axios.get(process.env.IMAGE_HASHTAG_3 as string, {
             params: { input: labels.join(', ') },
           }),
         ])

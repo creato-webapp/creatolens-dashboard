@@ -71,6 +71,7 @@ const ImageUpload: React.FC = () => {
         {imageRes?.labels?.map((e) => (
           <>{e.description} &#8203; </>
         ))}
+        {imageRes?.labels?.length === 0 && <p>No labels detected</p>}
       </div>
       <div className="flex flex-row">
         <div className="m-4 flex flex-col">
