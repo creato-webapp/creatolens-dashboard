@@ -26,19 +26,24 @@ export type ImageRecord = {
   target: Array<string>
 }
 
-function validateImage(file: File, maxSize: number, validTypes: string[]): void {
+function validateImage(file: File, maxSize: number, validTypes: string[]): boolean {
   if (file.size > maxSize) {
     window.alert(`File size should not exceed ${maxSize / 1024 / 1024} MB`)
+    return false
   }
 
   if (!validTypes.includes(file.type)) {
     window.alert(`Invalid file type. The following types are supported: ${validTypes.join(', ')}`)
+    return false
   }
+  return true
 }
 
 export async function uploadImage(file: File, customConfig?: AxiosRequestConfig): Promise<ImageResponse> {
   try {
-    validateImage(file, 2 * 1024 * 1024, ['image/jpeg', 'image/png', 'image/gif'])
+    if (!validateImage(file, 8 * 1024 * 1024, ['image/jpeg', 'image/png', 'image/gif'])) {
+      throw new Error('Invalid image')
+    }
 
     const imageString = await imageToBase64(file)
     const response = await Fetcher.POST(
@@ -50,6 +55,8 @@ export async function uploadImage(file: File, customConfig?: AxiosRequestConfig)
         size: file.size,
       }),
       {
+        maxBodyLength: 8 * 1024 * 1024,
+        maxContentLength: 8 * 1024 * 1024,
         ...customConfig,
       }
     )

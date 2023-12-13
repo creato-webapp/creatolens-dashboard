@@ -7,11 +7,10 @@ import LabelInstance from '../axiosInstance/Labels'
 export const config = {
   api: {
     bodyParser: {
-      sizeLimit: '4mb',
+      sizeLimit: '8mb',
     },
   },
-  // Specifies the maximum allowed duration for this function to execute (in seconds)
-  maxDuration: 5,
+  maxDuration: 10,
 }
 
 export default async function accountQueryHandler(req: NextApiRequest, res: NextApiResponse) {
@@ -72,13 +71,18 @@ export default async function accountQueryHandler(req: NextApiRequest, res: Next
 
             const error = results.find((result) => result.status === 'rejected')?.status || null
 
-            return res.status(response.status).json({ labels: response.data, firstTwo: data1, middleTwo: data2, lastTwo: data3, error: error })
+            return [data1, data2, data3, error]
           })
           .catch((error) => {
             console.log(error)
             return res.status(response.status).json({ labels: response.data, error: error })
           })
-        return res
+        if (hashtagRes) {
+          return res
+            .status(response.status)
+            .json({ labels: response.data, firstTwo: hashtagRes[0], middleTwo: hashtagRes[1], lastTwo: hashtagRes[2] })
+        }
+        return res.status(response.status).json({ labels: response.data, error: hashtagRes?.[3] })
       } catch (error) {
         return res.status(400).json({ message: 'Something went wrong in labeling stage', error: error })
       }
