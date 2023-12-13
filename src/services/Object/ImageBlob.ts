@@ -63,6 +63,7 @@ export async function uploadImage(file: File, customConfig?: AxiosRequestConfig)
 
     return response
   } catch (error: any) {
+    window.alert('Image upload failed: ' + error.message)
     throw new Error('Image upload failed: ' + error.message)
   }
 }

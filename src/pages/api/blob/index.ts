@@ -14,22 +14,8 @@ export const config = {
 }
 
 export default async function accountQueryHandler(req: NextApiRequest, res: NextApiResponse) {
-  const {
-    query: { id, name, pageNumber, pageSize, orderBy, isAsc },
-    body,
-    method,
-  } = req
-  console.log(req)
+  const { body, method } = req
   switch (method) {
-    // case 'GET': {
-    //   const response = await BlobInstance.get(`/accounts?page_number=${pageNumber}&page_size=${pageSize}&orderby=${orderBy}&isAsc=${isAsc}`, {
-    //     headers: {
-    //       Cookie: req.headers.cookie,
-    //     },
-    //   })
-    //   return res.status(response.status).json(response.data)
-    // }
-
     case 'POST': {
       try {
         if (!req.headers.cookie) {
@@ -44,7 +30,6 @@ export default async function accountQueryHandler(req: NextApiRequest, res: Next
             Cookie: req.headers.cookie,
           },
         })
-        console.log(response)
         if (response.status !== 200) {
           return res.status(response.status).json({ message: 'Something went wrong' })
         }
@@ -52,7 +37,6 @@ export default async function accountQueryHandler(req: NextApiRequest, res: Next
           return res.status(400).json({ message: 'Invalid request' })
         }
         const labels = response.data.map((e: any) => e.description)
-        console.log(labels.join(', '))
         const hashtagRes = await Promise.allSettled([
           axios.get(process.env.IMAGE_HASHTAG_1 as string, {
             params: { input: labels.join(', ') },
