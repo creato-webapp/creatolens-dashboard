@@ -17,7 +17,6 @@ const Button: React.FC<ButtonProps> = ({ children, onClick, disabled = false, lo
 
   const generatePadding = (sizes: string[]) => {
     let padding = ''
-    console.log('gen', sizes)
     if (!sizes) {
       return 'px-2 py-1 md:px-3 md:py-2 lg:py-3 lg:px-3 '
     }
