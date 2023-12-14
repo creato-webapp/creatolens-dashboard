@@ -5,8 +5,8 @@ const Item: FC<ItemProps> = (props: ItemProps) => {
   const { customFormItemProps } = props
   return (
     <div key={props.key}>
-      <label className="mb-2 inline-flex items-start">
-        <Paragraph size="lg" bold>
+      <label className="inline-flex items-start">
+        <Paragraph className="font-semibold" font="h4">
           {props.label}
         </Paragraph>
         {customFormItemProps?.required ? <span className="text-lg font-bold text-rose-500">{' *'}</span> : null}{' '}

@@ -22,7 +22,7 @@ export default function Card({ title, children, customTitle, extra, className, c
       {subExtra ? <div className="h-auto w-auto">{subExtra}</div> : null}
       {customTitle || description || extra ? (
         <div className="flex">
-          {customTitle ? (
+          {customTitle || extra ? (
             <>
               {customTitle}
               {extra ? <div className="ml-auto w-auto">{extra}</div> : null}

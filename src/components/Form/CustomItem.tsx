@@ -25,6 +25,7 @@ const CustomItem: FC<CustomItemProps> = (props: CustomItemProps) => {
     case 'InputPassword':
       return (
         <InputPassword
+          {...props}
           id={props.id}
           defaultValue={props.defaultValue as string}
           placeholder={props?.placeholder}

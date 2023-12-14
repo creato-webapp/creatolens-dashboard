@@ -38,13 +38,13 @@ const AccountCreateCard: React.FC<AccountCreateCardProps> = ({ isLoading, isCrea
 
   const fields: IField[] = [
     {
-      label: 'Username',
+      label: 'Instagram account',
       type: 'Input',
       name: 'username',
       customFormItemProps: { required: true, placeholder: 'Enter username' },
     },
     {
-      label: 'Password',
+      label: 'Account password',
       type: 'InputPassword',
       name: 'pwd',
       customFormItemProps: { required: true, placeholder: 'Enter password' },
@@ -52,11 +52,11 @@ const AccountCreateCard: React.FC<AccountCreateCardProps> = ({ isLoading, isCrea
   ]
   return (
     <Card
-      className="ml-auto mr-auto mb-8 w-2/5"
+      className="ml-auto gap-1 !rounded-none border-none bg-white !p-4 shadow-none"
       title={isCreate ? '' : 'Accounts Info'}
       extra={
         isCreate ? (
-          <div>
+          <div className=" py-2">
             <span className="text-lg font-bold leading-loose text-rose-500">* </span>
             <span className="text-lg font-bold leading-loose text-neutral-800">Required</span>
           </div>
@@ -65,10 +65,27 @@ const AccountCreateCard: React.FC<AccountCreateCardProps> = ({ isLoading, isCrea
         )
       }
     >
-      <Form.Layout onSubmit={onSubmit} Header={account.username} loading={isLoading} fields={fields} allowSubmit={!isChecked}>
+      <Form.Layout
+        onSubmit={onSubmit}
+        Header={account.username}
+        loading={isLoading}
+        fields={fields}
+        allowSubmit={!isChecked}
+        formStyles=""
+        formInnerStyles="py-px px-0"
+        buttonStyles="w-full"
+        buttonText="Create"
+        buttonSizes={['m', 'm', 'm']}
+      >
         {fields.map((e: IField, index) => (
           <Form.Item label={e.label} key={index} customFormItemProps={e.customFormItemProps}>
-            <Form.CustomItem id={e.name} defaultValue={account[e.name]} type={e.type} customFormItemProps={e.customFormItemProps} />
+            <Form.CustomItem
+              id={e.name}
+              defaultValue={account[e.name]}
+              type={e.type}
+              customFormItemProps={e.customFormItemProps}
+              className={`${isCreate ? 'w-full' : ''}`}
+            />
           </Form.Item>
         ))}
         <Paragraph size="sm">
@@ -76,7 +93,7 @@ const AccountCreateCard: React.FC<AccountCreateCardProps> = ({ isLoading, isCrea
           and analysis. Your data is protected, but not 100% secure. Contact support for questions.
         </Paragraph>
 
-        <Paragraph size="sm" className="ml-auto mr-auto flex w-1/2" bold>
+        <Paragraph size="sm" className="flex w-full md:ml-auto md:mr-auto" bold>
           <Checkbox id="acknowledge" className="mr-2" onChange={(event) => handleChange(event)}></Checkbox>I acknowledge and agree to the terms and
           privacy policy by checking this box.
         </Paragraph>
