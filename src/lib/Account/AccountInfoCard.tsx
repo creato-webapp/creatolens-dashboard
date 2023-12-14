@@ -12,11 +12,9 @@ interface AccountInfoCardProps {
   account: IAccount
   handleSubmit: (values: IAccount) => void
   setIsShow: (show: boolean) => void
-  isChecked: boolean
-  handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 
-const AccountInfoCard: React.FC<AccountInfoCardProps> = ({ isLoading, isCreate, account, handleSubmit, setIsShow, isChecked, handleChange }) => {
+const AccountInfoCard: React.FC<AccountInfoCardProps> = ({ isLoading, isCreate, account, handleSubmit, setIsShow }) => {
   const accountInfoField: IField[] = [
     {
       label: 'login count',
@@ -97,7 +95,7 @@ const AccountInfoCard: React.FC<AccountInfoCardProps> = ({ isLoading, isCreate, 
   }, [])
   return (
     <Card
-      className="ml-auto mr-auto mb-8 mt-0 w-full bg-bg-white"
+      className="ml-auto mr-auto mb-8 mt-0 w-full bg-bg-white border-none shadow-none"
       customTitle={<h3 className="mr-auto w-auto pt-2 text-4xl text-text-primary">Account Info</h3>}
       extra={
         <Button.Primary loading={isLoading} onClick={handleClick}>

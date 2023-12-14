@@ -1,4 +1,5 @@
 import React, { InputHTMLAttributes, FormHTMLAttributes, DetailedHTMLProps, LabelHTMLAttributes } from 'react'
+import { ButtonProps } from '@components/Button/interface'
 export type InputType = 'Input' | 'DatePicker' | 'TimePicker' | 'DateTimePicker' | 'Checkbox' | 'InputNumber' | 'InputPassword'
 
 export type customFormItemProps = {
@@ -15,6 +16,8 @@ export interface IField {
   }
 }
 
+type ButtonSize = 's' | 'm' | 'l'
+
 export interface FormLayoutProps extends Omit<FormHTMLAttributes<HTMLFormElement>, 'onSubmit'> {
   Header?: string
   subHeader?: string
@@ -22,6 +25,11 @@ export interface FormLayoutProps extends Omit<FormHTMLAttributes<HTMLFormElement
   loading: boolean
   allowSubmit?: boolean
   onSubmit: (values: any) => void | Promise<void>
+  formStyles?: string
+  formInnerStyles?: string
+  buttonStyles?: string
+  buttonText?: string
+  buttonSizes?: ButtonProps['sizes']
 }
 
 export interface ItemProps extends DetailedHTMLProps<LabelHTMLAttributes<HTMLLabelElement>, HTMLLabelElement> {
