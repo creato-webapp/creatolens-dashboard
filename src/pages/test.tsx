@@ -19,6 +19,10 @@ const ImageUpload: React.FC = () => {
   }
 
   const handleUpload = async () => {
+    if (file === null) {
+      window.alert('No file selected.')
+      return
+    }
     try {
       setLoading(true)
       if (!file) {
@@ -32,8 +36,8 @@ const ImageUpload: React.FC = () => {
           'Content-Type': false,
           cache: false,
         },
-        maxBodyLength: 8000,
-        maxContentLength: 8000,
+        maxBodyLength: 8 * 1024 * 1024,
+        maxContentLength: 8 * 1024 * 1024,
       })
       setImageRes(res)
       if (res.error) {
@@ -62,7 +66,6 @@ const ImageUpload: React.FC = () => {
           <Dropzone onChange={handleFileChange} classNames="w-full" />
         )}
       </div>
-      {/* <input type="file" onChange={handleFileChange} accept="image/*" /> */}
       <Button.Primary onClick={handleUpload} loading={loading}>
         Upload
       </Button.Primary>
