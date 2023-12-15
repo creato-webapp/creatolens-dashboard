@@ -1,22 +1,30 @@
 import React, { useState, ChangeEvent } from 'react'
 import { uploadImage, Labels, ImageRecord, ImageResponse } from '@services/Object/ImageBlob'
-import Card from '@components/Card'
+import { Button } from '@components/Button'
+import Dropzone from '@components/Dropzone'
 import CrossIcon from '@components/Icon/CrossIcon'
-import Tag from '@components/Tag'
+
+type hashtag = {
+  acc: number
+  hashtag: string
+}
 
 const ImageUpload: React.FC = () => {
+  const [loading, setLoading] = useState(false)
   const [file, setFile] = useState<File | null>(null)
-  const [imageRes, setImageRes] = useState<ImageResponse>({ labels: [], data: [] })
+  const [imageRes, setImageRes] = useState<ImageResponse>({ labels: [], data: [], firstTwo: [], middleTwo: [], lastTwo: [], error: null })
 
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = e.target.files?.[0]
-    if (selectedFile) {
-      setFile(selectedFile)
-    }
+  const handleFileChange = (file: File | null) => {
+    setFile(file)
   }
 
   const handleUpload = async () => {
+    if (file === null) {
+      window.alert('No file selected.')
+      return
+    }
     try {
+      setLoading(true)
       if (!file) {
         console.error('No file selected.')
         return
@@ -28,94 +36,65 @@ const ImageUpload: React.FC = () => {
           'Content-Type': false,
           cache: false,
         },
-        maxBodyLength: 8000,
-        maxContentLength: 8000,
+        maxBodyLength: 8 * 1024 * 1024,
+        maxContentLength: 8 * 1024 * 1024,
       })
-      console.log(res)
       setImageRes(res)
+      if (res.error) {
+        window.alert(res.error.message)
+      }
       return res
     } catch (e) {
       console.error(e)
+    } finally {
+      setLoading(false)
     }
   }
 
   return (
-    <div>
+    <div className="flex flex-col items-center justify-center p-4">
       <h1>Image Upload</h1>
-      <input type="file" onChange={handleFileChange} accept="image/*" />
-      <button onClick={handleUpload}>Upload</button>
-      {file ? <img width="200" height="200" src={URL.createObjectURL(file)}></img> : null}
-      <div className="flex flex-row">
-        {imageRes.labels.map((e) => (
+      <div className="flex h-64 w-full justify-center ">
+        {file ? (
+          <div className="relative flex h-full w-auto justify-center bg-bg-dark">
+            <img src={URL.createObjectURL(file)} alt="Dropped Image" className="object-fit h-auto rounded-lg" />
+            <button className="absolute top-2 right-2 rounded-full bg-accent1-500 p-1 text-white" onClick={() => setFile(null)}>
+              <CrossIcon />
+            </button>
+          </div>
+        ) : (
+          <Dropzone onChange={handleFileChange} classNames="w-full" />
+        )}
+      </div>
+      <Button.Primary onClick={handleUpload} loading={loading}>
+        Upload
+      </Button.Primary>
+      <div className="mb-4 flex flex-col">
+        <h4>Labels detected</h4>
+        {imageRes?.labels?.map((e) => (
           <>{e.description} &#8203; </>
         ))}
+        {imageRes?.labels?.length === 0 && <p>No labels detected</p>}
       </div>
-      <div className="m-6 flex flex-wrap gap-6">
-        <Card
-          className="mr-6 "
-          title={'New Title'}
-          coverImage="/landing-page.svg"
-          subExtra={<Tag label="active"></Tag>}
-          description="Doodle characters doing some online shopping! An illustration system based on all things eCommerce."
-          onClick={() => console.log('clicked')}
-        ></Card>
-        <Card
-          className="mr-6 "
-          title={'New Title 2'}
-          coverImage="/landing-page.svg"
-          description="Doodle characters doing some online shopping! An illustration system based on all things eCommerce."
-          onClick={() => console.log('clicked')}
-        ></Card>
-        <Card
-          className="mr-6 "
-          title={'New Title'}
-          extra={<CrossIcon />}
-          coverImage="/landing-page.svg"
-          description="Doodle characters doing some online shopping! An illustration system based on all things eCommerce."
-        ></Card>
-        <Card
-          className="mr-6 "
-          title={'New Title'}
-          extra={<CrossIcon />}
-          description="Doodle characters doing some online shopping! An illustration system based on all things eCommerce."
-          onClick={() => console.log('clicked')}
-        ></Card>
-        <Card
-          className="mr-6 "
-          title={'New Title'}
-          subExtra={<Tag label="active"></Tag>}
-          description="Doodle characters doing some online shopping! An illustration system based on all things eCommerce."
-          onClick={() => console.log('clicked')}
-        ></Card>
-        <p className={`font-paragraph-extralight md:text-desktop-paragraph`}>Mobile Extra Small Light 12</p>
-        <p className="font-paragraph-regular">Mobile Extra Small Regular 12</p>
-        <p className="font-paragraph-semibold">Mobile Extra Small SemiBold 12</p>
-        <br></br>
-        <h1 className="font-heading-01 md:text-desktop-heading">Desktop H1 Headings Regular 34</h1>
-        <h1 className="text-4xl font-semibold">Desktop H1 Headings SemiBold 34</h1>
-        <h1 className="text-4xl font-bold">Desktop H1 Headings Bold 34</h1>
-        <h1 className="text-4xl font-extrabold">Desktop H1 Headings Extra Bold 34</h1>
-        {/* <h1>Desktop H3 Headings Bold 34</h1>
-        <h1>Desktop H4 Headings Extra Bold 34</h1> */}
-
-        {/* <b className="text-xs-light">Mobile Extra Small Light 12</b>
-        <b className="text-xs-regular">Mobile Extra Small Regular 12</b>
-        <b className="text-xs-bold">Mobile Extra Small SemiBold 12</b> */}
-        {imageRes.data.map((e, index) => (
-          <div className="flex-row">
-            {/* <div>
-              {e.labels.map((e) => (
-                <div className="ml-4">{e}</div>
-              ))}
-            </div> */}
-            <div className="ml-4">
-              {index}
-              {e.target.map((e) => (
-                <div>{e}</div>
-              ))}
-            </div>
-          </div>
-        ))}
+      <div className="flex flex-row">
+        <div className="m-4 flex flex-col">
+          <h4>Hashet Model with First Two Labels</h4>
+          {imageRes?.firstTwo?.map((e: hashtag, index) => (
+            <li key={e.hashtag + index}>{e.hashtag} &#8203; </li>
+          ))}
+        </div>
+        <div className="m-4 flex flex-col">
+          <h4>Hashet Model with Middle Two Labels</h4>
+          {imageRes?.middleTwo?.map((e: hashtag, index) => (
+            <li key={e.hashtag + index}>{e.hashtag} &#8203; </li>
+          ))}
+        </div>
+        <div className="m-4 flex flex-col">
+          <h4>Hashet Model with Last Two Labels</h4>
+          {imageRes?.lastTwo?.map((e: hashtag, index) => (
+            <li key={e.hashtag + index}>{e.hashtag} &#8203; </li>
+          ))}
+        </div>
       </div>
     </div>
   )

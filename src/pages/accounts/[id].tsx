@@ -10,6 +10,7 @@ import AccountInfoCard from '@lib/Account/AccountInfoCard'
 import AccountCreateCard from '@lib/Account/AccountCreateCard'
 import { useAccount } from 'src/hooks/useAccount'
 import { GetAccount, CreateAccount } from '@services/Account/Account'
+import Image from 'next/image'
 
 const dayjs = require('dayjs')
 const utc = require('dayjs/plugin/utc')
@@ -144,40 +145,52 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIsChecked(event.target.checked)
   }
+
+  const goBack = () => {
+    router.push(`/accounts`)
+  }
   return (
     <div>
       {isCreate ? (
-        <div className="mx-48 my-8">
-          <Title level={1} bold>
-            CREATE NEW ACCOUNT
-          </Title>
-          <Paragraph bold> Connect your Instagram account to start scraping</Paragraph>
+        <div className="h-full bg-bg-white bg-cover bg-center bg-no-repeat pb-12 md:static md:bg-[url('/create-account/background.svg')] md:px-12">
+          <div className="flex w-full flex-col px-4 pt-4 md:w-1/2">
+            <div className="flex flex-col pb-8">
+              <div className="pb-4 pt-3">
+                <div className="flex cursor-pointer flex-row gap-2 font-semibold text-accent2-500" onClick={goBack}>
+                  <Image src="/create-account/back.svg" width={20} height={20} />
+                  <div>{`Back`}</div>
+                </div>
+              </div>
+              <div className="flex flex-col px-2 md:gap-6 md:px-12">
+                <Title level={1} bold>
+                  CREATE NEW ACCOUNT
+                </Title>
+                <Paragraph size="md" className=" text-lg" bold>
+                  Connect your Instagram account
+                </Paragraph>
+              </div>
+            </div>
+            <div className="flex w-full justify-center shadow-lg md:ml-12 md:max-w-sm ">
+              <AccountCreateCard
+                isLoading={isLoading}
+                isCreate={isCreate}
+                account={account}
+                handleSubmit={handleCreateSubmit}
+                setIsShow={setIsShow}
+                isChecked={isChecked}
+                handleChange={handleChange}
+              />
+            </div>
+          </div>
         </div>
-      ) : null}
+      ) : (
+        <div className="h-full bg-cover bg-center bg-no-repeat md:px-12 ">
+          <div className="flex justify-center">
+            <AccountInfoCard isLoading={isLoading} isCreate={isCreate} account={account} handleSubmit={handleUpdateSubmit} setIsShow={setIsShow} />
+          </div>
+        </div>
+      )}
 
-      <div className="flex justify-center">
-        {isCreate ? (
-          <AccountCreateCard
-            isLoading={isLoading}
-            isCreate={isCreate}
-            account={account}
-            handleSubmit={handleCreateSubmit}
-            setIsShow={setIsShow}
-            isChecked={isChecked}
-            handleChange={handleChange}
-          />
-        ) : (
-          <AccountInfoCard
-            isLoading={isLoading}
-            isCreate={isCreate}
-            account={account}
-            handleSubmit={handleUpdateSubmit}
-            setIsShow={setIsShow}
-            isChecked={isChecked}
-            handleChange={handleChange}
-          />
-        )}
-      </div>
       <SessionModal
         isDisable={!canRenewSession}
         isShow={isShow}

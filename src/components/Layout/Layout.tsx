@@ -28,7 +28,7 @@ export default function Navbar(props: NavbarProps) {
 
   const navBarPage = !!session
     ? [
-        { name: 'Guide', path: '/guide' },
+        { name: 'User Guide', path: '/guide' },
         { name: 'Accounts', path: '/accounts' },
         { name: 'Recommendation', path: '/recommendation' },
       ]

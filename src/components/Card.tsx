@@ -20,20 +20,21 @@ export default function Card({ title, children, customTitle, extra, className, c
       {/* <div className="absolute top-0 right-0 px-6 py-6">{extra}</div> */}
       {coverImage ? <img className="h-auto w-auto rounded-xl md:shrink-0" src={coverImage} /> : null}
       {subExtra ? <div className="h-auto w-auto">{subExtra}</div> : null}
-      <div>
-        {customTitle ? (
-          <div className="flex">
-            {customTitle}
-            {extra ? <div className="ml-auto w-auto">{extra}</div> : null}
-          </div>
-        ) : (
-          <Title level={1} bold>
-            {title}
-          </Title>
-        )}
-
-        {description ? <div>{description}</div> : null}
-      </div>
+      {customTitle || description || extra ? (
+        <div className="flex">
+          {customTitle || extra ? (
+            <>
+              {customTitle}
+              {extra ? <div className="ml-auto w-auto">{extra}</div> : null}
+            </>
+          ) : (
+            <Title level={1} bold>
+              {title}
+            </Title>
+          )}
+          {description ? <div>{description}</div> : null}
+        </div>
+      ) : null}
       {onClick ? <Button.Primary className="h-auto self-center">text</Button.Primary> : null}
       {children}
     </div>

@@ -8,6 +8,7 @@ export interface IBaseInputProps extends React.DetailedHTMLProps<React.InputHTML
   iconClassName?: string
   customFormItemProps?: any
   allowSpace?: boolean
+  childrenPosition?: 'left' | 'right'
 }
 
 const BaseInput: React.FunctionComponent<IBaseInputProps> = ({
@@ -25,6 +26,7 @@ const BaseInput: React.FunctionComponent<IBaseInputProps> = ({
   allowSpace,
   children,
   customFormItemProps,
+  childrenPosition = 'right',
   ...props
 }) => {
   const [state, setState] = useState<IBaseInputProps['value']>()
@@ -47,6 +49,7 @@ const BaseInput: React.FunctionComponent<IBaseInputProps> = ({
   return (
     <>
       <div className="relative flex w-full items-center rounded-md">
+        {childrenPosition === 'left' && children}
         <input
           {...customFormItemProps}
           {...props}
@@ -56,12 +59,13 @@ const BaseInput: React.FunctionComponent<IBaseInputProps> = ({
           onChange={onChange}
           required={customFormItemProps?.required}
           disabled={disabled}
-          className={`base-input min-w-64 inline-flex h-9 rounded-md border border-gray-500 bg-neutral-50 p-2 font-semibold ${
+          className={`base-input min-w-64 inline-flex rounded-md border border-gray-500 bg-neutral-50 p-2 font-semibold ${
             errorMessage ? 'focus:border-0 focus:border-none focus:outline-error-600' : ''
           } ${className ? className : ''}`}
           style={customFormItemProps?.style}
         />
-        {children}
+        {childrenPosition === 'right' && children}
+
         <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
           {errorMessage && <ExclamationCircleIcon className="h-5 w-5 text-error-500" aria-hidden="true" />}
         </div>
