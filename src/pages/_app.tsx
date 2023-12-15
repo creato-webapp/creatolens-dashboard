@@ -14,7 +14,9 @@ function MyApp({
 }>) {
   return (
     <SessionProvider session={pageProps.session}>
-      <Head>{/* <link key="icon" rel="icon" href="./favicon.ico" /> */}</Head>
+      <Head>
+        <link key="icon" rel="icon" href="./favicon.ico" />
+      </Head>
       <Navbar>
         <Component {...pageProps} />
       </Navbar>
