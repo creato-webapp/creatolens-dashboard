@@ -8,9 +8,17 @@ const Button: React.FC<ButtonProps> = ({ children, onClick, disabled = false, lo
     if (index === 0) {
       return classes
     } else if (index === 1) {
-      return `md:${classes}`
+      const mdClasses = classes
+        .split(' ')
+        .map((c) => `md:${c}`)
+        .join(' ')
+      return `${mdClasses}`
     } else if (index === 2) {
-      return `lg:${classes}`
+      const lgClasses = classes
+        .split(' ')
+        .map((c) => `lg:${c}`)
+        .join(' ')
+      return lgClasses
     }
     return index === 0 ? classes : `md:${classes} lg:${classes}`
   }
@@ -23,13 +31,13 @@ const Button: React.FC<ButtonProps> = ({ children, onClick, disabled = false, lo
     sizes.forEach((size: string, index: number) => {
       switch (size) {
         case 's':
-          padding += `${getPaddingClasses(index, 'px-4 py-2')}`
+          padding += ` ${getPaddingClasses(index, 'px-4 py-2')} `
           break
         case 'm':
-          padding += `${getPaddingClasses(index, 'px-6 py-2')}`
+          padding += ` ${getPaddingClasses(index, 'px-6 py-2')} `
           break
         case 'l':
-          padding += `${getPaddingClasses(index, 'px-6 py-3')}`
+          padding += ` ${getPaddingClasses(index, 'px-6 py-3')} `
           break
         default:
           padding = 'px-2 py-1 md:px-3 md:py-2 lg:py-3 lg:px-3 '
@@ -39,11 +47,12 @@ const Button: React.FC<ButtonProps> = ({ children, onClick, disabled = false, lo
     return padding
   }
 
-
   return (
     <button type={type} onClick={onClick} disabled={loading || disabled} {...res} className={`w-full rounded-lg md:w-auto ${res.className}`}>
       <div
-        className={`inline-flex min-w-fit items-center justify-center gap-2.5 whitespace-nowrap rounded-md border-2 hover:shadow-sm ${styleClassName} ${generatePadding(sizes!)}`}
+        className={`inline-flex min-w-fit items-center justify-center gap-2.5 whitespace-nowrap rounded-md border-2 hover:shadow-sm ${styleClassName} ${generatePadding(
+          sizes!
+        )}`}
       >
         <Spinner loading={loading} />
         {children}

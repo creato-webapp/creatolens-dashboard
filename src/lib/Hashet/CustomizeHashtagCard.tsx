@@ -62,50 +62,23 @@ const CustomizeHashtagCard: React.FC<Props> = ({ hashtags }) => {
   }, [hashtags])
 
   return (
-    <Card className="w-auto gap-6 px-6 py-9 shadow md:border-none md:shadow-none">
-      <div className="flex-col gap-4 md:flex md:flex-row">
-        <div className="md:w-1/4">
-          <Title bold level={3} className="ml-auto mr-0 mb-4">
-            Customize
-          </Title>
-          <Paragraph className="ml-auto mr-0">Select all hashtag you wish to put under your post and click “Copy Selected”</Paragraph>
-        </div>
-        <div className="w-full">
-          <div className="leading-loos max-h-144 space-y-2 overflow-y-scroll font-bold">
-            {accuracyRanges.map((range) => (
-              <>
-                <Collapse
-                  className="my-2 md:hidden"
-                  parent={
-                    <div>
-                      <h4 className="font-medium">{range.label}</h4>
-                    </div>
-                  }
-                >
-                  <div key={range.label} className="block flex-col items-center justify-start border border-slate-300 bg-neutral-50">
-                    <ul className="flex flex-wrap">
-                      {hashtags.map((item) => {
-                        const accuracyPercentage = Math.floor(item.acc * 100)
-                        const accuracyRange = getAccuracyRange(accuracyPercentage)
-                        if (accuracyRange === range.label) {
-                          return (
-                            <li
-                              className="mx-2 mt-4 flex w-fit cursor-pointer items-center hover:text-gray-400 md:w-1/4 "
-                              key={item.hashtag}
-                              onClick={() => toggleCheckbox(item.hashtag)}
-                            >
-                              <Checkbox id={`checkbox-${item.hashtag}`} className="mr-1.5" checked={selectedHashtags.includes(item.hashtag)} />
-                              {item.hashtag}
-                            </li>
-                          )
-                        }
-                        return null
-                      })}
-                    </ul>
+    <div className="flex-col gap-4 md:flex md:flex-row">
+      <div className="md:w-1/4">
+        <Paragraph className="ml-auto mr-0">Select all hashtag you wish to put under your post and click “Copy Selected”</Paragraph>
+      </div>
+      <div className="w-full pt-4">
+        <div className="leading-loos flex max-h-144 flex-col gap-6 space-y-2 overflow-y-scroll font-bold">
+          {accuracyRanges.map((range) => (
+            <div className="bg-bg-dark">
+              <Collapse
+                className="shadow-none md:hidden"
+                parent={
+                  <div>
+                    <h4 className="font-medium text-text-secondary">{range.label}</h4>
                   </div>
-                </Collapse>
-
-                <div key={range.label} className="hidden flex-col items-center justify-start border border-slate-300 bg-neutral-50 p-4 md:block">
+                }
+              >
+                <div key={range.label} className="block flex-col items-center justify-start border border-slate-300 bg-neutral-50">
                   <ul className="flex flex-wrap">
                     {hashtags.map((item) => {
                       const accuracyPercentage = Math.floor(item.acc * 100)
@@ -113,7 +86,7 @@ const CustomizeHashtagCard: React.FC<Props> = ({ hashtags }) => {
                       if (accuracyRange === range.label) {
                         return (
                           <li
-                            className="mt-4 flex w-fit cursor-pointer items-center hover:text-gray-400 md:w-1/4"
+                            className="mx-2 mt-4 flex w-fit cursor-pointer items-center hover:text-gray-400 md:w-1/4 "
                             key={item.hashtag}
                             onClick={() => toggleCheckbox(item.hashtag)}
                           >
@@ -126,17 +99,45 @@ const CustomizeHashtagCard: React.FC<Props> = ({ hashtags }) => {
                     })}
                   </ul>
                 </div>
-              </>
-            ))}
-          </div>
-          <div className=" my-4 flex justify-end gap-3">
-            <Button.Primary onClick={copyToClipboard}>Copy Selected</Button.Primary>
-            <Button.Primary onClick={clearAll}>Clear All</Button.Primary>
-            <Button.Primary onClick={selectAll}>Select All</Button.Primary>
-          </div>
+              </Collapse>
+
+              <div key={range.label} className="hidden flex-col items-center justify-start border border-slate-300 bg-neutral-50 p-4 md:block">
+                <ul className="flex flex-wrap">
+                  {hashtags.map((item) => {
+                    const accuracyPercentage = Math.floor(item.acc * 100)
+                    const accuracyRange = getAccuracyRange(accuracyPercentage)
+                    if (accuracyRange === range.label) {
+                      return (
+                        <li
+                          className="mt-4 flex w-fit cursor-pointer items-center hover:text-gray-400 md:w-1/4"
+                          key={item.hashtag}
+                          onClick={() => toggleCheckbox(item.hashtag)}
+                        >
+                          <Checkbox id={`checkbox-${item.hashtag}`} className="mr-1.5" checked={selectedHashtags.includes(item.hashtag)} />
+                          {item.hashtag}
+                        </li>
+                      )
+                    }
+                    return null
+                  })}
+                </ul>
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="my-6 flex flex-row gap-2">
+          <Button.Outline sizes={['s', 'l', 'l']} className="w-fit" onClick={clearAll}>
+            Clear All
+          </Button.Outline>
+          <Button.Primary sizes={['s', 'l', 'l']} className="w-fit" onClick={copyToClipboard}>
+            Copy Selected
+          </Button.Primary>
+          <Button.Primary sizes={['s', 'l', 'l']} className="w-fit" onClick={selectAll}>
+            Select All
+          </Button.Primary>
         </div>
       </div>
-    </Card>
+    </div>
   )
 }
 

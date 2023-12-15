@@ -82,7 +82,7 @@ const RecommendationPage = ({ hashetSessionData }: Props) => {
       key: '2',
       title: 'Customize',
       children: (
-        <div className="w-full flex-wrap gap-2 shadow-2xl md:flex md:flex-nowrap md:justify-center md:py-12">
+        <div className="w-full flex-wrap gap-2 md:flex md:flex-nowrap md:justify-center md:py-12 md:shadow-lg">
           <CustomizeHashtagCard hashtags={hashetData} />
         </div>
       ),
@@ -91,7 +91,7 @@ const RecommendationPage = ({ hashetSessionData }: Props) => {
 
   return (
     <div className="flex-col justify-center">
-      <Hero backgroundImage="./RecommendationHero.svg">
+      <Hero backgroundImage="./RecommendationHero.svg" childrenStyle="pb-4">
         <div className="flex flex-col items-center gap-4">
           <div className="flex w-full flex-row items-center">
             <h1>RECOMMENDATION</h1>
@@ -117,20 +117,21 @@ const RecommendationPage = ({ hashetSessionData }: Props) => {
             />
           </div>
           <div className="flex w-full gap-2">
-            <div className="flex w-full items-center rounded-3xl  bg-bg-white text-text-primary hover:rounded-3xl hover:outline-none focus:rounded-3xl focus:outline-none focus:ring-opacity-50 active:rounded-3xl">
-              {isValidating ? <LoaderIcon className="animate-spin" /> : <MagnifyingGlassIcon />}
-
+            <div className="flex w-full items-center rounded-3xl bg-bg-dark px-2 text-text-primary hover:rounded-3xl hover:outline-none focus:rounded-3xl focus:outline-none focus:ring-opacity-50 active:rounded-3xl">
               <Form.BaseInput
                 allowSpace
                 hidden
                 disabled={isValidating}
                 onKeyDown={handleKeyDown}
-                placeholder="Type Your Input Here."
-                className={` w-full rounded-3xl border-none  px-2 py-1.5 hover:rounded-3xl hover:outline-none focus:rounded-3xl focus:outline-none focus:ring-opacity-50 active:rounded-3xl ${
+                placeholder="Searching for new idea"
+                className={` w-full rounded-3xl border-none py-1.5 hover:rounded-3xl hover:outline-none focus:rounded-3xl focus:outline-none focus:ring-opacity-50 active:rounded-3xl ${
                   isValidating ? 'text-gray-400' : ''
                 } w-full`}
                 onChange={(e) => onChange(e)}
-              ></Form.BaseInput>
+                childrenPosition="left"
+              >
+                {isValidating ? <LoaderIcon className="animate-spin" /> : <MagnifyingGlassIcon />}
+              </Form.BaseInput>
             </div>
             <Button.Primary className="w-auto" onClick={() => onSubmit()} loading={isValidating}>
               Search
@@ -138,7 +139,7 @@ const RecommendationPage = ({ hashetSessionData }: Props) => {
           </div>
         </div>
       </Hero>
-      <Card className="w-screen rounded-none border-none bg-transparent px-4 py-0 shadow-none md:p-8">
+      <Card className="w-full rounded-none border-none bg-transparent px-4 py-0 shadow-none md:p-8">
         <Tab items={tabItems} defaultActiveKey="1" scrollable={false} />
       </Card>
     </div>
