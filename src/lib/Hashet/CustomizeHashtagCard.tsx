@@ -125,7 +125,7 @@ const CustomizeHashtagCard: React.FC<Props> = ({ hashtags }) => {
             </div>
           ))}
         </div>
-        <div className="my-6 flex flex-row gap-2">
+        <div className="my-6 flex flex-row gap-2 md:hidden md:flex-row-reverse">
           <Button.Outline sizes={['s', 'l', 'l']} className="w-fit" onClick={clearAll}>
             Clear All
           </Button.Outline>
