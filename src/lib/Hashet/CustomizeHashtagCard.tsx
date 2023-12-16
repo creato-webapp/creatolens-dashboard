@@ -136,6 +136,17 @@ const CustomizeHashtagCard: React.FC<Props> = ({ hashtags }) => {
             Select All
           </Button.Primary>
         </div>
+        <div className="my-6 hidden flex-row gap-2 md:flex md:flex-row-reverse">
+          <Button.Outline sizes={['s', 'l', 'l']} className="w-fit" onClick={clearAll}>
+            Clear All
+          </Button.Outline>
+          <Button.Primary sizes={['s', 'l', 'l']} className="w-fit" onClick={selectAll}>
+            Select All
+          </Button.Primary>
+          <Button.Primary sizes={['s', 'l', 'l']} className="w-fit" onClick={copyToClipboard}>
+            Copy Selected
+          </Button.Primary>
+        </div>
       </div>
     </div>
   )
