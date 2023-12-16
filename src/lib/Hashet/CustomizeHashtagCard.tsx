@@ -62,11 +62,14 @@ const CustomizeHashtagCard: React.FC<Props> = ({ hashtags }) => {
   }, [hashtags])
 
   return (
-    <div className="flex-col gap-4 md:flex md:flex-row">
-      <div className="md:w-1/4">
+    <div className="flex-col md:flex md:flex-row md:gap-16 md:px-4">
+      <div className="md:flex md:w-1/4 md:flex-col md:text-end">
+        <Title bold level={3} className="ml-auto mr-0 mb-4 hidden md:flex ">
+          Customize
+        </Title>
         <Paragraph className="ml-auto mr-0">Select all hashtag you wish to put under your post and click “Copy Selected”</Paragraph>
       </div>
-      <div className="w-full pt-4">
+      <div className="w-full pt-4 md:pt-0">
         <div className="leading-loos flex max-h-144 flex-col gap-6 space-y-2 overflow-y-scroll font-bold">
           {accuracyRanges.map((range) => (
             <div className="bg-bg-dark">
@@ -78,15 +81,15 @@ const CustomizeHashtagCard: React.FC<Props> = ({ hashtags }) => {
                   </div>
                 }
               >
-                <div key={range.label} className="block flex-col items-center justify-start border border-slate-300 bg-neutral-50">
-                  <ul className="flex flex-wrap">
+                <div key={range.label} className="block flex-col items-center justify-start border p-4">
+                  <ul className="flex flex-wrap gap-y-4">
                     {hashtags.map((item) => {
                       const accuracyPercentage = Math.floor(item.acc * 100)
                       const accuracyRange = getAccuracyRange(accuracyPercentage)
                       if (accuracyRange === range.label) {
                         return (
                           <li
-                            className="mx-2 mt-4 flex w-fit cursor-pointer items-center hover:text-gray-400 md:w-1/4 "
+                            className="mx-2 flex w-fit cursor-pointer items-center hover:text-gray-400 md:w-1/4 "
                             key={item.hashtag}
                             onClick={() => toggleCheckbox(item.hashtag)}
                           >
@@ -100,27 +103,31 @@ const CustomizeHashtagCard: React.FC<Props> = ({ hashtags }) => {
                   </ul>
                 </div>
               </Collapse>
-
-              <div key={range.label} className="hidden flex-col items-center justify-start border border-slate-300 bg-neutral-50 p-4 md:block">
-                <ul className="flex flex-wrap">
-                  {hashtags.map((item) => {
-                    const accuracyPercentage = Math.floor(item.acc * 100)
-                    const accuracyRange = getAccuracyRange(accuracyPercentage)
-                    if (accuracyRange === range.label) {
-                      return (
-                        <li
-                          className="mt-4 flex w-fit cursor-pointer items-center hover:text-gray-400 md:w-1/4"
-                          key={item.hashtag}
-                          onClick={() => toggleCheckbox(item.hashtag)}
-                        >
-                          <Checkbox id={`checkbox-${item.hashtag}`} className="mr-1.5" checked={selectedHashtags.includes(item.hashtag)} />
-                          {item.hashtag}
-                        </li>
-                      )
-                    }
-                    return null
-                  })}
-                </ul>
+              <div className="hidden bg-white md:block">
+                <div>
+                  <h4 className="font-extrabold">{range.label}</h4>
+                </div>
+                <div key={range.label} className="mt-2 flex-col items-center justify-start border p-4">
+                  <ul className="flex flex-wrap gap-y-4">
+                    {hashtags.map((item) => {
+                      const accuracyPercentage = Math.floor(item.acc * 100)
+                      const accuracyRange = getAccuracyRange(accuracyPercentage)
+                      if (accuracyRange === range.label) {
+                        return (
+                          <li
+                            className="flex w-fit cursor-pointer items-center hover:text-gray-400 md:w-1/4"
+                            key={item.hashtag}
+                            onClick={() => toggleCheckbox(item.hashtag)}
+                          >
+                            <Checkbox id={`checkbox-${item.hashtag}`} className="mr-1.5" checked={selectedHashtags.includes(item.hashtag)} />
+                            {item.hashtag}
+                          </li>
+                        )
+                      }
+                      return null
+                    })}
+                  </ul>
+                </div>
               </div>
             </div>
           ))}
