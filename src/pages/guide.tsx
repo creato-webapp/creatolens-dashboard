@@ -24,7 +24,6 @@ const Guide: NextPage = () => {
           <h1 className="uppercase md:font-extrabold"> User Guide</h1>
           <h3 className="md:font-medium">3 Easy Steps to Kick-start</h3>
         </Hero>
-        <div className="hidden md:flex h-3 w-full bg-accent1-500"></div>
         <div className="flex w-full flex-col items-center justify-start gap-6 md:flex-row md:flex-wrap md:items-stretch md:justify-center md:gap-12 md:p-12">
           <Card
             className="mx-6 h-full w-auto rounded-none bg-neutral-50 shadow-lg md:mx-0 md:h-auto md:w-[30%] "
