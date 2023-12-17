@@ -50,11 +50,11 @@ const Dropdown: React.FC<DropdownProps> = ({ name = '', options, defaultValue, d
   }, [])
 
   return (
-    <div ref={dropdownRef} className="dropdown relative">
-      <Button.Primary loading={false} onClick={handleToggleMenu} disabled={disabled}>
+    <div ref={dropdownRef} className="dropdown relative w-full">
+      <Button.DropdownButton sizes={['l', 'l', 'l']} isOpened={isOpen} loading={false} onClick={() => handleToggleMenu()} disabled={disabled}>
         {selectedValue}
-        <div onClick={handleToggleMenu}>{isOpen ? <CaretUpIcon /> : <CaretDownIcon />}</div>
-      </Button.Primary>
+        {isOpen ? <CaretUpIcon className="pointer-events-none" /> : <CaretDownIcon className="pointer-events-none" color="black" />}
+      </Button.DropdownButton>
       {isOpen && (
         <ul className="absolute top-full left-0 z-10 mt-2 w-fit rounded-md border border-gray-200 bg-white shadow-lg">
           {options.map((option) => (
