@@ -56,7 +56,7 @@ const Dropdown: React.FC<DropdownProps> = ({ name = '', options, defaultValue, d
         {isOpen ? <CaretUpIcon className="pointer-events-none" /> : <CaretDownIcon className="pointer-events-none" color="black" />}
       </Button.DropdownButton>
       {isOpen && (
-        <ul className="absolute top-full left-0 z-10 mt-2 w-fit rounded-md border border-gray-200 bg-white shadow-lg">
+        <ul className="absolute top-full left-0 z-10 mt-2 w-full rounded-md border border-gray-200 bg-white shadow-lg">
           {options.map((option) => (
             <li
               key={option.value}
