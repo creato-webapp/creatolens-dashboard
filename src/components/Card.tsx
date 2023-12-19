@@ -11,9 +11,21 @@ interface CardProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'> {
   className?: string | undefined
   coverImage?: string
   description?: string
+  isDropdown?: boolean
 }
 
-export default function Card({ title, children, customTitle, extra, className, coverImage, subExtra, description, onClick }: CardProps) {
+export default function Card({
+  title,
+  children,
+  customTitle,
+  extra,
+  className,
+  coverImage,
+  subExtra,
+  description,
+  onClick,
+  isDropdown = false,
+}: CardProps) {
   // const { title, children, extra, className, coverImage, subExtra, description, onClick } = props
   return (
     <div className={`flex h-fit w-full flex-col gap-6 rounded-xl border border-slate-300 p-6 shadow-lg ${className}`}>
@@ -25,7 +37,13 @@ export default function Card({ title, children, customTitle, extra, className, c
           {customTitle || extra ? (
             <>
               {customTitle}
-              {extra ? <div className="ml-auto w-auto">{extra}</div> : null}
+              {extra ? (
+                isDropdown ? (
+                  <div className="ml-2 flex w-full justify-end">{extra}</div>
+                ) : (
+                  <div className="ml-auto w-auto">{extra}</div>
+                )
+              ) : null}
             </>
           ) : (
             <Title level={1} bold>
