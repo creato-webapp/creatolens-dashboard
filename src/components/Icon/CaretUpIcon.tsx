@@ -7,7 +7,7 @@ interface CaretUpIconProps {
 }
 
 const CaretUpIcon: React.FC<CaretUpIconProps> = ({ size = 24, color = 'currentColor', className }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={`${className}`}>
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
     <path
       fillRule="evenodd"
       clipRule="evenodd"
