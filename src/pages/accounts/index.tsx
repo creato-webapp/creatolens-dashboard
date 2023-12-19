@@ -13,6 +13,7 @@ import StatusTag from '@lib/StatusTag'
 import Pagination from '@components/Pagination'
 import { useGetAccountsPagination } from 'src/hooks/useAccount'
 import { GetAccountsPagination, PaginationMetadata } from '@services/Account/Account'
+import Image from 'next/image'
 const dayjs = require('dayjs')
 const utc = require('dayjs/plugin/utc')
 dayjs.extend(utc)
@@ -93,15 +94,17 @@ const AccountsPage = ({ paginationData }: Props) => {
 
   const columns = [
     {
-      title: 'Created At(HK Time)',
-      dataIndex: 'created_at',
-      render: (e: any) => {
-        const date = dayjs(e, 'YYYY-MM-DD THH:mm:ss')
-        return dayjs.utc(date).local().format('YYYY-MM-DD HH:mm:ss')
-      },
+      title: 'Profile',
+      dataIndex: 'id',
+      render: (e: any) => (
+        <Link href="/accounts/[id]" as={`/accounts/${e}`} legacyBehavior>
+          <a className="flex w-full flex-row items-center justify-center gap-2">
+            <Image src="/account/edit.svg" width={16} height={16} alt="edit" className="pointer-events-none"></Image>
+            <div className="font-semibold text-accent2-500">Edit</div>
+          </a>
+        </Link>
+      ),
     },
-    { title: 'Post Scrapped', dataIndex: 'post_scrapped_count' },
-    { title: 'Login Count', dataIndex: 'login_count' },
     {
       title: 'Username',
       dataIndex: 'username',
@@ -114,11 +117,20 @@ const AccountsPage = ({ paginationData }: Props) => {
                 {e}
               </div>
             }
-            variant="outline"
           />
         )
       },
     },
+    {
+      title: 'Created At(HK Time)',
+      dataIndex: 'created_at',
+      render: (e: any) => {
+        const date = dayjs(e, 'YYYY-MM-DD THH:mm:ss')
+        return dayjs.utc(date).local().format('YYYY-MM-DD HH:mm:ss')
+      },
+    },
+    { title: 'Post Scrapped', dataIndex: 'post_scrapped_count' },
+    { title: 'Login Count', dataIndex: 'login_count' },
     {
       title: 'Status',
       dataIndex: 'status',
@@ -151,17 +163,17 @@ const AccountsPage = ({ paginationData }: Props) => {
       title: 'Created By',
       dataIndex: 'created_by',
     },
-    {
-      title: 'Account Info',
-      dataIndex: 'id',
-      render: (e: any) => (
-        <Link href="/accounts/[id]" as={`/accounts/${e}`} legacyBehavior>
-          <a>
-            <Button.Text>Edit</Button.Text>
-          </a>
-        </Link>
-      ),
-    },
+    // {
+    //   title: 'Account Info',
+    //   dataIndex: 'id',
+    //   render: (e: any) => (
+    //     <Link href="/accounts/[id]" as={`/accounts/${e}`} legacyBehavior>
+    //       <a>
+    //         <Button.Text>Edit</Button.Text>
+    //       </a>
+    //     </Link>
+    //   ),
+    // },
   ]
 
   return (
@@ -202,9 +214,9 @@ const AccountsPage = ({ paginationData }: Props) => {
         <Table.Layout>
           <Table.Header columns={columns} />
 
-          <Table.Body>
+          <Table.Body className="text-sm font-normal leading-5">
             {accounts?.map((e, index) => (
-              <Table.Row columns={columns} rowData={e} rowKey={index} />
+              <Table.Row columns={columns} className="text-sm" rowData={e} rowKey={index} />
             ))}
           </Table.Body>
         </Table.Layout>
