@@ -94,6 +94,17 @@ const AccountsPage = ({ paginationData }: Props) => {
     return <div>Loading...</div>
   }
 
+  const IconRender = (e: boolean) => {
+    return (
+      <div className="flex items-center justify-center">
+        {e ? (
+          <Image src="/account/check.svg" width={24} height={24} alt="check" className="pointer-events-none"></Image>
+        ) : (
+          <Image src="/account/cross.svg" width={24} height={24} alt="x" className="pointer-events-none"></Image>
+        )}
+      </div>
+    )
+  }
   const columns = [
     {
       title: 'Profile',
@@ -159,38 +170,23 @@ const AccountsPage = ({ paginationData }: Props) => {
       title: 'Is Occupied',
       dataIndex: 'is_occupied',
       render: (e: any) => {
-        return e ? <CheckCircleIcon className="h-6 w-6 text-successful-600" /> : <XCircleIcon className="h-6 w-6 text-error-500" />
+        return IconRender(e)
       },
     },
     {
       title: 'Is Enabled',
       dataIndex: 'enabled',
       render: (e: any) => {
-        return e ? <CheckCircleIcon className="h-6 w-6 text-successful-600" /> : <XCircleIcon className="h-6 w-6 text-error-500" />
+        return IconRender(e)
       },
     },
     {
       title: 'Is Auth',
       dataIndex: 'is_authenticated',
       render: (e: any) => {
-        return e ? <CheckCircleIcon className="h-6 w-6 text-successful-600" /> : <XCircleIcon className="h-6 w-6 text-error-500" />
+        return IconRender(e)
       },
     },
-    {
-      title: 'Created By',
-      dataIndex: 'created_by',
-    },
-    // {
-    //   title: 'Account Info',
-    //   dataIndex: 'id',
-    //   render: (e: any) => (
-    //     <Link href="/accounts/[id]" as={`/accounts/${e}`} legacyBehavior>
-    //       <a>
-    //         <Button.Text>Edit</Button.Text>
-    //       </a>
-    //     </Link>
-    //   ),
-    // },
   ]
 
   return (
