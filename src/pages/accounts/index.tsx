@@ -119,6 +119,7 @@ const AccountsPage = ({ paginationData }: Props) => {
       ),
     },
     {
+      headerIcon: <Image src="/account/InstagramLogo.svg" className="w-full" width={24} height={24}></Image>,
       title: 'Username',
       dataIndex: 'username',
       render: (e: any) => {
