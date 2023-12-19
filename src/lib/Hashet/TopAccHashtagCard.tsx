@@ -70,7 +70,7 @@ const TopAccHashtagCard: React.FC<Props> = ({ hashtags }) => {
           options={DropdownOptions}
           defaultValue={selectedAccuracy}
           onValueChange={(value) => setSelectedAccuracy(value as number)}
-          sizes={['s', 'm', 'm']}
+          dropDownSizes={['s', 'm', 'm']}
         ></Dropdown>
       }
     >

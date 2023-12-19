@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react'
+import React, { useEffect, useState, useRef, useCallback, useMemo, HTMLProps } from 'react'
 import { CaretUpIcon } from '@components/Icon'
 
 export interface DropdownOption {
@@ -7,13 +7,13 @@ export interface DropdownOption {
 }
 
 type DropdownSize = 's' | 'm' | 'l'
-interface DropdownProps {
+interface DropdownProps extends HTMLProps<HTMLSelectElement> {
   name?: string
   options: DropdownOption[]
   defaultValue?: string | number
-  disabled?: boolean // Add the disabled prop
-  onValueChange?: (value: string | number) => void // Add the onChange prop
-  sizes?: [DropdownSize, DropdownSize, DropdownSize]
+  disabled?: boolean
+  onValueChange?: (value: string | number) => void
+  dropDownSizes?: [DropdownSize, DropdownSize, DropdownSize]
   icon?: React.ReactNode
 }
 

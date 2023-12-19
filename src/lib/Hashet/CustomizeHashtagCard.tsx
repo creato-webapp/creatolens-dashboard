@@ -1,6 +1,4 @@
 import React, { useState, useCallback, useEffect } from 'react'
-import Card from '@components/Card'
-import Dropdown from '@components/Form/Dropdown'
 import { Button } from '@components/Button'
 import { Paragraph, Title } from '@components/Typography'
 import Checkbox from '@components/Form/Checkbox'
