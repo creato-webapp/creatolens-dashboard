@@ -14,7 +14,7 @@ const Header: React.FC<HeaderProps> = ({ className, children, columns, headerIco
           <th scope="col" className={`border border-slate-300 py-2 px-2  ${thClassName}`} key={index}>
             <div className="flex w-full flex-row items-center gap-2">
               {e.headerIcon && <div className="flex w-fit">{e.headerIcon}</div>}
-            <div>{e.title}</div>
+              <div>{e.title}</div>
             </div>
             {children}
           </th>

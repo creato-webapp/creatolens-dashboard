@@ -6,10 +6,6 @@ import { IAccount } from '@lib/Account/Account/interface'
 import { ResponsiveAccountCard } from '@lib/Account/ResponsiveAccountCard'
 import Link from 'next/link'
 import { getSession } from 'next-auth/react'
-import Tag from '@components/Tag'
-import Avatar from '@components/Avatar'
-import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/solid'
-import StatusTag from '@lib/StatusTag'
 import Pagination from '@components/Pagination'
 import { useGetAccountsPagination } from 'src/hooks/useAccount'
 import { GetAccountsPagination, PaginationMetadata } from '@services/Account/Account'
@@ -123,25 +119,28 @@ const AccountsPage = ({ paginationData }: Props) => {
       title: 'Username',
       dataIndex: 'username',
       render: (e: any) => {
-        return (
-          <Tag
-            label={
-              <div className="flex items-center gap-1">
-                <Avatar />
-                {e}
-              </div>
-            }
-          />
-        )
+        return <div className="flex items-center text-accent1-600">{e}</div>
       },
     },
     {
-      title: 'Created At(HK Time)',
+      title: 'Created On',
       dataIndex: 'created_at',
       render: (e: any) => {
         const date = dayjs(e, 'YYYY-MM-DD THH:mm:ss')
-        return dayjs.utc(date).local().format('YYYY-MM-DD HH:mm:ss')
+        return date.local().format('DD MMM YYYY')
       },
+    },
+    {
+      title: 'Created Time',
+      dataIndex: 'created_at',
+      render: (e: any) => {
+        const date = dayjs(e, 'THH:mm:ss')
+        return date.local().format('hh:mm:ss')
+      },
+    },
+    {
+      title: 'Created By',
+      dataIndex: 'created_by',
     },
     { title: 'Post Scrapped', dataIndex: 'post_scrapped_count' },
     { title: 'Login Count', dataIndex: 'login_count' },
