@@ -226,9 +226,8 @@ const AccountsPage = ({ paginationData }: Props) => {
       {/* desktop */}
       <div className="hidden  md:flex">
         <Table.Layout>
-          <Table.Header columns={columns} />
-
-          <Table.Body className="text-sm font-normal leading-5">
+          <Table.Header columns={columns} thClassName={'text-sm font-normal text-text-primary items-center justify-center'} className="capitalize" />
+          <Table.Body className="text-sm font-normal leading-5 text-black">
             {accounts?.map((e, index) => (
               <Table.Row columns={columns} className="text-sm" rowData={e} rowKey={index} />
             ))}
