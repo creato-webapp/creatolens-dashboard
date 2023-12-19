@@ -1,7 +1,5 @@
-import React, { useEffect, useState, useRef, HTMLProps, useCallback, useMemo } from 'react'
-import { Button } from '../Button'
-import { CaretDownIcon, CaretUpIcon } from '@components/Icon'
-import { getClasses } from 'src/utils/generator'
+import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react'
+import { CaretUpIcon } from '@components/Icon'
 
 export interface DropdownOption {
   label: string
@@ -76,23 +74,23 @@ const Dropdown: React.FC<DropdownProps> = ({ name = '', options, defaultValue, d
         sizes.forEach((size: string, index: number) => {
           switch (size) {
             case 's':
-              padding += `${getClasses(index, 'px-4 py-2')}`
-              maxWidth += `${getClasses(index, 'max-w-[6rem]')}`
-              caretSize += `${getClasses(index, 'w-3 h-3')}`
+              padding += ` px-4 py-2`
+              maxWidth += ` max-w-[6rem]`
+              caretSize += ` w-3 h-3`
               break
             case 'm':
-              padding += `${getClasses(index, 'px-6 py-2')}`
-              maxWidth += `${getClasses(index, 'max-w-[11rem]')}`
-              caretSize += `${getClasses(index, 'w-6 h-6')}`
+              padding += ` md:px-6 md:py-2`
+              maxWidth += ` md:max-w-[11rem]`
+              caretSize += ` md:w-6 md:h-6`
               break
             case 'l':
-              padding += `${getClasses(index, 'px-6 py-3')}`
-              maxWidth += `${getClasses(index, 'max-w-[20rem]')}`
-              caretSize += `${getClasses(index, 'w-6 h-6')}`
+              padding += ` lg:px-6 lg:py-3`
+              maxWidth += ` lg:max-w-[20rem]`
+              caretSize += ` lg:w-6 lg:h-6`
               break
             default:
               padding = 'px-2 py-1 md:px-3 md:py-2 lg:py-3 lg:px-3 '
-              // caretSize = 'w-6 h-6'
+              caretSize = 'w-6 h-6'
               break
           }
         })
