@@ -3,7 +3,7 @@ import Tag, { TagVariant } from '@components/Tag'
 import CrossIcon from './Icon/CrossIcon'
 import { stat } from 'fs'
 import XCircleIcon from './Icon/XCircleIcon'
-type Status = 'primary' | 'secondary' | 'text-primary' | 'text-secondary' | 'disabled' | 'success' | 'warning' | 'error'
+export type Status = 'primary' | 'secondary' | 'text-primary' | 'text-secondary' | 'disabled' | 'success' | 'warning' | 'error'
 
 interface BadgesProps extends React.HTMLAttributes<HTMLDivElement> {
   size?: 'lg' | 'sm'

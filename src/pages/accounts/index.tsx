@@ -14,6 +14,8 @@ import Pagination from '@components/Pagination'
 import { useGetAccountsPagination } from 'src/hooks/useAccount'
 import { GetAccountsPagination, PaginationMetadata } from '@services/Account/Account'
 import Image from 'next/image'
+import Badges, { Status } from '@components/Badges'
+
 const dayjs = require('dayjs')
 const utc = require('dayjs/plugin/utc')
 dayjs.extend(utc)
@@ -134,8 +136,23 @@ const AccountsPage = ({ paginationData }: Props) => {
     {
       title: 'Status',
       dataIndex: 'status',
-      render: (e: any) => {
-        return <StatusTag status={e} />
+      render: (e: string) => {
+        const statusToVariantMap: Record<string, Status> = {
+          active: 'success',
+          retry: 'warning',
+          blocked: 'error',
+          disabled: 'disabled',
+          test: 'secondary',
+        }
+        // const status: Status = statusToVariantMap[e]
+        const status: Status = statusToVariantMap[e]
+        return (
+          <div className="flex items-center justify-center">
+            <Badges size={'sm'} status={status} className="capitalize" rounded>
+              {e}
+            </Badges>
+          </div>
+        )
       },
     },
     {
