@@ -101,6 +101,7 @@ const AccountsPage = ({ paginationData }: Props) => {
       </div>
     )
   }
+
   const columns = [
     {
       title: 'Profile',
@@ -125,6 +126,7 @@ const AccountsPage = ({ paginationData }: Props) => {
     {
       title: 'Created On',
       dataIndex: 'created_at',
+      sortAvailable: true,
       render: (e: any) => {
         const date = dayjs(e, 'YYYY-MM-DD THH:mm:ss')
         return date.local().format('DD MMM YYYY')
