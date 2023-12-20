@@ -4,25 +4,6 @@ import Spinner from '../Spinner'
 const Button: React.FC<ButtonProps> = ({ children, onClick, disabled = false, loading, type = 'button', styleClassName, sizes, ...res }) => {
   const isDisabled = disabled || loading
 
-  const getPaddingClasses = (index: number, classes: string) => {
-    if (index === 0) {
-      return classes
-    } else if (index === 1) {
-      const mdClasses = classes
-        .split(' ')
-        .map((c) => `md:${c}`)
-        .join(' ')
-      return `${mdClasses}`
-    } else if (index === 2) {
-      const lgClasses = classes
-        .split(' ')
-        .map((c) => `lg:${c}`)
-        .join(' ')
-      return lgClasses
-    }
-    return index === 0 ? classes : `md:${classes} lg:${classes}`
-  }
-
   const generatePadding = (sizes: string[]) => {
     let padding = ''
     if (!sizes) {
@@ -31,13 +12,13 @@ const Button: React.FC<ButtonProps> = ({ children, onClick, disabled = false, lo
     sizes.forEach((size: string, index: number) => {
       switch (size) {
         case 's':
-          padding += ` ${getPaddingClasses(index, 'px-4 py-2')} `
+          padding += 'px-4 py-2 '
           break
         case 'm':
-          padding += ` ${getPaddingClasses(index, 'px-6 py-2')} `
+          padding += 'md:px-6 md:py-2 '
           break
         case 'l':
-          padding += ` ${getPaddingClasses(index, 'px-6 py-3')} `
+          padding += 'lg:px-6 lg:py-3 '
           break
         default:
           padding = 'px-2 py-1 md:px-3 md:py-2 lg:py-3 lg:px-3 '
