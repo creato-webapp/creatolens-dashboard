@@ -49,12 +49,14 @@ const TopRelatedHashtagCard: React.FC<Props> = ({ hashtags }) => {
         </h1>
       }
       className="min-w-96 w-full whitespace-normal !rounded-none py-4 md:h-auto md:w-1/2"
+      isDropdown={true}
       extra={
         <Dropdown
           name="numberOfHashes"
           options={DropdownOptions}
           defaultValue={numberOfHashes}
           onValueChange={(value) => setNumberOfHashes(value)}
+          dropDownSizes={['s', 'm', 'm']}
         ></Dropdown>
       }
     >

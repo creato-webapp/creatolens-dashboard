@@ -61,14 +61,16 @@ const TopAccHashtagCard: React.FC<Props> = ({ hashtags }) => {
           <span className="text-text-primary">Related</span>
         </h1>
       }
-      className="min-w-96 w-full whitespace-normal !rounded-none md:h-auto md:w-1/2"
+      className="min-w-96 w-full whitespace-normal !rounded-none py-4 md:h-auto md:w-1/2"
       // className="min-w-96 w-auto justify-start gap-6 bg-neutral-50 px-6 py-9 shadow"
+      isDropdown={true}
       extra={
         <Dropdown
           name="numberOfHashes"
           options={DropdownOptions}
           defaultValue={selectedAccuracy}
           onValueChange={(value) => setSelectedAccuracy(value as number)}
+          dropDownSizes={['s', 'm', 'm']}
         ></Dropdown>
       }
     >

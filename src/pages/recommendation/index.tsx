@@ -94,7 +94,7 @@ const RecommendationPage = ({ hashetSessionData }: Props) => {
       <Hero backgroundImage="./RecommendationHero.svg" childrenStyle="pb-4 md:py-16">
         <div className="flex flex-col items-center gap-4">
           <div className="flex w-full flex-row items-center">
-            <h1>RECOMMENDATION</h1>
+            <h1 className="text-black md:text-white">RECOMMENDATION</h1>
             <Popover
               className="ml-auto shrink-0 rounded-full bg-accent1-500 p-2 text-white"
               trigger={<LightBulbIcon size={32} />}
@@ -133,14 +133,14 @@ const RecommendationPage = ({ hashetSessionData }: Props) => {
                 {isValidating ? <LoaderIcon className="animate-spin" /> : <MagnifyingGlassIcon />}
               </Form.BaseInput>
             </div>
-            <Button.Primary className="w-auto" onClick={() => onSubmit()} loading={isValidating}>
+            <Button.Primary className="w-auto" sizes={['s', 'm', 'm']} onClick={() => onSubmit()} loading={isValidating}>
               Search
             </Button.Primary>
           </div>
         </div>
       </Hero>
-      <Card className="w-full rounded-none border-none bg-transparent px-4 py-0 shadow-none md:p-8">
-        <Tab items={tabItems} defaultActiveKey="1" scrollable={false} />
+      <Card className="min-h-full w-full rounded-none border-none bg-transparent px-4 py-0 shadow-none md:px-20 md:pb-28">
+        <Tab items={tabItems} defaultActiveKey="1" scrollable={false} className="shadow-none md:shadow-xl md:px-0" />
       </Card>
     </div>
   )
