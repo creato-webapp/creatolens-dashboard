@@ -11,6 +11,8 @@ import { useGetAccountsPagination } from 'src/hooks/useAccount'
 import { GetAccountsPagination, PaginationMetadata } from '@services/Account/Account'
 import Image from 'next/image'
 import Badges, { Status } from '@components/Badges'
+import Hero from '@components/Hero'
+import { PlusIcon } from '@heroicons/react/24/solid'
 
 const dayjs = require('dayjs')
 const utc = require('dayjs/plugin/utc')
@@ -192,65 +194,60 @@ const AccountsPage = ({ paginationData }: Props) => {
   ]
 
   return (
-    <Card title="Accounts Table">
-      <div className="flex gap-3">
-        <Link href="/accounts/create-account">
-          <a>
-            <Button.Primary>Create New Account</Button.Primary>
-          </a>
-        </Link>
-        <Button.Primary
-          onClick={() => {
-            setPageParams({
-              pageNumber: 1,
-              pageSize: 10,
-              orderBy: 'username',
-              isAsc: true,
-            })
-          }}
-        >
-          Change order
-        </Button.Primary>
-        <Button.Primary
-          onClick={() => {
-            setPageParams({
-              pageNumber: 1,
-              pageSize: 10,
-              orderBy: 'created_at',
-              isAsc: false,
-            })
-          }}
-        >
-          Reset Params
-        </Button.Primary>
-      </div>
-      {/* desktop */}
-      <div className="hidden  md:flex">
-        <Table.Layout>
-          <Table.Header columns={columns} thClassName={'text-sm font-normal text-text-primary items-center justify-center'} className="capitalize" />
-          <Table.Body className="text-sm font-normal leading-5 text-black">
-            {accounts?.map((e, index) => (
-              <Table.Row columns={columns} className="text-sm" rowData={e} rowKey={index} />
-            ))}
-          </Table.Body>
-        </Table.Layout>
-      </div>
-      <Pagination
-        isLoading={isLoading}
-        page={responseData.page}
-        size={responseData.size}
-        totalItems={responseData.total_items}
-        hasNext={responseData.has_next}
-        hasPrev={responseData.has_prev}
-        onPageChange={onPageChange}
-      />
+    <div>
+      <Hero
+        backgroundImage="./GuideHero.svg"
+        className="flex h-full flex-col justify-between md:h-52"
+        childrenStyle="h-full md:gap-3 flex-col flex md:py-10 md:pl-24 "
+      >
+        <div className="flex h-full flex-col justify-between">
+          <div>
+            <h1 className="text-black md:text-white">ACCOUNTS</h1>
+          </div>
+          <Link href="/accounts/create-account">
+            <a>
+              <Button.Primary sizes={['s', 'l', 'l']}>
+                <div className="flex flex-row gap-2">
+                  <PlusIcon className="h-6 w-6" />
+                  Create New Account
+                </div>
+              </Button.Primary>
+            </a>
+          </Link>
+        </div>
+      </Hero>
+      <Card title="Accounts Table">
+        <div className="hidden md:flex">
+          <Table.Layout>
+            <Table.Header
+              columns={columns}
+              thClassName={'text-sm font-normal text-text-primary items-center justify-center'}
+              className="capitalize"
+            />
+            <Table.Body className="text-sm font-normal leading-5 text-black">
+              {accounts?.map((e, index) => (
+                <Table.Row columns={columns} className="text-sm" rowData={e} rowKey={index} />
+              ))}
+            </Table.Body>
+          </Table.Layout>
+        </div>
+        <Pagination
+          isLoading={isLoading}
+          page={responseData.page}
+          size={responseData.size}
+          totalItems={responseData.total_items}
+          hasNext={responseData.has_next}
+          hasPrev={responseData.has_prev}
+          onPageChange={onPageChange}
+        />
 
-      <div className="hidden flex-col sm:flex">
-        {accounts?.map((e, index) => (
-          <ResponsiveAccountCard columns={columns} rowData={e} key={index} />
-        ))}
-      </div>
-    </Card>
+        <div className=" flex w-full flex-col md:hidden">
+          {accounts?.map((e, index) => (
+            <ResponsiveAccountCard columns={columns} rowData={e} key={index} />
+          ))}
+        </div>
+      </Card>
+    </div>
   )
 }
 
