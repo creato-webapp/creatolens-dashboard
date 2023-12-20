@@ -17,7 +17,7 @@ interface DropdownProps extends HTMLProps<HTMLSelectElement> {
   icon?: React.ReactNode
 }
 
-const Dropdown: React.FC<DropdownProps> = ({ name = '', options, defaultValue, disabled, onValueChange, sizes, icon }) => {
+const Dropdown: React.FC<DropdownProps> = ({ name = '', options, defaultValue, disabled, onValueChange, dropDownSizes, icon }) => {
   const [selectedValue, setSelectedValue] = useState(defaultValue || name)
   const [isDropdownNotSelected, setIsDropdownNotSelected] = useState(true)
   const [isOpen, setIsOpen] = useState(false)
@@ -55,11 +55,12 @@ const Dropdown: React.FC<DropdownProps> = ({ name = '', options, defaultValue, d
 
   const hoverStyle = ' hover:bg-interface-hover '
   const activeStyle = isOpen && ' !bg-accent1-500 !text-white'
+  const focusStyle = !isOpen && 'focus:ring-2 focus:ring-stroke focus:ring-opacity-50'
 
   const generatePadding = useMemo(
     () =>
       (
-        sizes: string[]
+        dropDownSizes: string[]
       ): {
         padding: string
         caretSize: string
@@ -68,10 +69,10 @@ const Dropdown: React.FC<DropdownProps> = ({ name = '', options, defaultValue, d
         let padding = ''
         let maxWidth = ''
         let caretSize = ''
-        if (!sizes) {
+        if (!dropDownSizes) {
           return { padding: 'px-2 py-1 md:px-3 md:py-2 lg:py-3 lg:px-3', caretSize: 'w-6 h-6', maxWidth: '' }
         }
-        sizes.forEach((size: string, index: number) => {
+        dropDownSizes.forEach((size: string, index: number) => {
           switch (size) {
             case 's':
               padding += ` px-4 py-2`
@@ -107,12 +108,12 @@ const Dropdown: React.FC<DropdownProps> = ({ name = '', options, defaultValue, d
     }
   }, [isDropdownNotSelected])
 
-  const { padding, caretSize, maxWidth } = generatePadding(sizes!)
+  const { padding, caretSize, maxWidth } = generatePadding(dropDownSizes!)
 
   return (
     <div ref={dropdownRef} className={`dropdown relative flex w-full justify-end ${maxWidth}`}>
       <button
-        className={`drowpdown-button w-full rounded-lg border-none ${color} ${padding} ${hoverStyle} ${activeStyle}`}
+        className={`drowpdown-button w-full rounded-lg border-none  ${color} ${padding} ${focusStyle} ${hoverStyle} ${activeStyle}`}
         onClick={handleToggleMenu}
       >
         <div className={`inline-flex w-full min-w-fit items-center justify-between gap-2.5 whitespace-nowrap rounded-md hover:shadow-sm`}>
