@@ -20,7 +20,6 @@ const variantStyles: Record<TagVariant, string> = {
   grey: 'outline outline-1 outline-gray-700 bg-gray-200 text-gray-900',
 }
 
-// Tag component
 const Tag: React.FC<TagProps> = ({ label, onClose, variant = 'primary', ...props }) => {
   const { className: propsClassName } = props
   const variantStyle = variantStyles[variant]

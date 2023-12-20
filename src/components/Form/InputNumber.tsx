@@ -4,16 +4,9 @@ import BaseInput from './BaseInput'
 
 const InputNumber: FC<InputProps> = (props: InputProps) => {
   const { id, placeholder, defaultValue, customFormItemProps, onChange: onNewChange, value } = props
-  const [state, setState] = useState<InputProps['value']>()
   const onChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-    const target = e.target as HTMLInputElement
-    setState(target.value)
     onNewChange && onNewChange(e)
   }
-
-  useEffect(() => {
-    setState(value || 0)
-  }, [value])
 
   return (
     <BaseInput

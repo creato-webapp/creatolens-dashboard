@@ -29,12 +29,6 @@ const CustomizeHashtagCard: React.FC<Props> = ({ hashtags }) => {
     window.alert('Copied to clipboard!')
   }, [selectedHashtags])
 
-  type ranges = {
-    min: number
-    max: number
-    label: string
-  }
-
   const accuracyRanges = [
     { min: 90, max: 100, label: 'Larger than 90% related' },
     { min: 80, max: 89, label: '80-89% related' },
@@ -131,7 +125,7 @@ const CustomizeHashtagCard: React.FC<Props> = ({ hashtags }) => {
           ))}
         </div>
         <div className="my-6 flex flex-row gap-2 md:hidden md:flex-row-reverse">
-          <Button.Outline sizes={['s', 'l', 'l']} className="w-fit" onClick={clearAll}>
+          <Button.Outline id={"test'"} sizes={['s', 'l', 'l']} className="w-fit" onClick={clearAll}>
             Clear All
           </Button.Outline>
           <Button.Primary sizes={['s', 'l', 'l']} className="w-fit" onClick={copyToClipboard}>

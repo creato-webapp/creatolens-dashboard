@@ -43,15 +43,9 @@ const Tab: React.FC<TabProps> = ({
     }
   }
 
-  const handleEdit = (targetKey: string, action: 'add' | 'remove') => {
-    if (onEdit) {
-      onEdit(targetKey, action)
-    }
-  }
-
   return (
-    <div className={`tabs relative flex h-auto w-auto min-w-full flex-col items-center gap-4 md:items-start shadow-lg md:px-3 ${className ? className : ''}`}>
-      <div className={`tabs-bar${centered ? ' centered' : ''} -top-12 flex w-full md:absolute `} style={tabBarStyle}>
+    <div className={`tabs relative flex h-auto w-auto min-w-full flex-col items-center gap-4 shadow-lg md:items-start md:px-3 ${className ?? ''}`}>
+      <div className={`tabs-bar ${centered ? 'centered' : ''} -top-12 flex w-full md:absolute `} style={tabBarStyle}>
         {items.map((item) => (
           <button
             className={`disabled:text-text-disable h-8 w-full hover:bg-accent1-300 hover:text-text-white hover:underline hover:underline-offset-2 focus:bg-accent1-500 active:bg-accent1-500 disabled:bg-disabled md:h-12 md:w-auto md:min-w-[12.5rem] ${
@@ -60,7 +54,7 @@ const Tab: React.FC<TabProps> = ({
             onClick={handleChange}
             data-key={item.key}
           >
-            <div key={item.key} className={`tab${currentActiveKey === item.key ? ' active' : ''} ${size || ''} d flex items-center justify-center `}>
+            <div key={item.key} className={`tab ${currentActiveKey === item.key ? 'active' : ''} ${size ?? ''} flex items-center justify-center`}>
               <h4>{item.title}</h4>
             </div>
           </button>
@@ -72,7 +66,7 @@ const Tab: React.FC<TabProps> = ({
           currentActiveKey === item.key ? (
             <div
               key={item.key}
-              className={`tab-pane ${currentActiveKey === item.key ? ' active' : ''}  inline-block min-w-full flex-col justify-center`}
+              className={`tab-pane ${currentActiveKey === item.key ? 'active' : ''}  inline-block min-w-full flex-col justify-center`}
             >
               {item.children}
             </div>

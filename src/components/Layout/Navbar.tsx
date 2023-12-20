@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { Button } from '..'
 import { Title } from '@components/Typography'
 import { useRouter } from 'next/router'
@@ -22,13 +22,18 @@ interface NavBarProps extends JSX.IntrinsicAttributes {
 }
 
 const NavBar: React.FC<NavBarProps> = ({ logo, pages, isLoggedIn, onLogin, onLogout, isCollapse = true }) => {
-  const [isLoading, setIsLoading] = useState(false)
   const [isMenuCollapse, setIsMenuCollapse] = useState(isCollapse)
   const router = useRouter()
   const { data: session } = useSession()
-  const toggleMenu = () => {
+
+  const toggleMenu = useCallback(() => {
     setIsMenuCollapse((prev) => !prev)
-  }
+  }, [])
+
+  const collapseMenu = useCallback(() => {
+    setIsMenuCollapse(true)
+  }, [])
+
   return (
     <nav className="relative flex h-auto justify-between bg-bg-dark px-4 md:px-6">
       <div className="flex min-w-8 md:hidden">
@@ -71,14 +76,14 @@ const NavBar: React.FC<NavBarProps> = ({ logo, pages, isLoggedIn, onLogin, onLog
       </div>
       <div className="my-auto hidden md:flex">
         {isLoggedIn ? (
-          <Button.Text loading={isLoading} onClick={onLogout} className="flex h-auto items-center rounded">
+          <Button.Text onClick={onLogout} className="flex h-auto items-center rounded">
             <LogoutIcon className="mr-1" size={24} fillColor="fill-accent2-500"></LogoutIcon>
             <Title level={3} bold className="text-accent2-500">
               Logout
             </Title>
           </Button.Text>
         ) : (
-          <Button.Text loading={isLoading} onClick={onLogin} className="flex h-auto items-center rounded">
+          <Button.Text onClick={onLogin} className="flex h-auto items-center rounded">
             <LoginIcon className="mr-1" size={24} fillColor="fill-accent2-500"></LoginIcon>
             <Title level={3} bold className="text-accent2-500">
               Sign In
@@ -92,8 +97,8 @@ const NavBar: React.FC<NavBarProps> = ({ logo, pages, isLoggedIn, onLogin, onLog
         aria-label="Sidebar"
       >
         <div className="flex h-[100vh] flex-col overflow-y-auto bg-gray-50 dark:bg-gray-800">
-          <Button.Text className="m-8 ml-auto text-text-primary" onClick={() => setIsMenuCollapse(true)}>
-            <CrossIcon className=""></CrossIcon>
+          <Button.Text className="m-8 ml-auto text-text-primary" onClick={collapseMenu}>
+            <CrossIcon></CrossIcon>
           </Button.Text>
 
           <ul className="mx-auto my-auto list-none flex-row space-y-16">

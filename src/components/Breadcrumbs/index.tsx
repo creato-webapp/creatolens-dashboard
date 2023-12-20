@@ -7,7 +7,6 @@ interface BreadcrumbsProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
   breadcrumbs: Breadcrumb[]
 }
 
-// Breadcrumbs component
 const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ breadcrumbs }) => {
   return (
     <nav className="flex flex-wrap items-center justify-center text-gray-500">

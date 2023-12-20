@@ -36,7 +36,7 @@ const Dropdown: React.FC<DropdownProps> = ({ name = '', options, defaultValue, d
   )
 
   const handleToggleMenu = () => {
-    setIsOpen(!isOpen)
+    setIsOpen((prev) => !prev)
   }
 
   const handleClickOutside = (event: MouseEvent) => {
@@ -45,7 +45,6 @@ const Dropdown: React.FC<DropdownProps> = ({ name = '', options, defaultValue, d
     }
   }
 
-  // Attach click event listener to handle outside clicks
   useEffect(() => {
     document.addEventListener('click', handleClickOutside)
     return () => {
@@ -55,50 +54,40 @@ const Dropdown: React.FC<DropdownProps> = ({ name = '', options, defaultValue, d
 
   const hoverStyle = ' hover:bg-interface-hover '
   const activeStyle = isOpen && ' !bg-accent1-500 !text-white'
-  const focusStyle = !isOpen && 'focus:ring-2 focus:ring-stroke focus:ring-opacity-50'
+  const focusStyle = !isOpen && ' focus:ring-2 focus:ring-stroke focus:ring-opacity-50'
 
-  const generatePadding = useMemo(
-    () =>
-      (
-        dropDownSizes: string[]
-      ): {
-        padding: string
-        caretSize: string
-        maxWidth: string
-      } => {
-        let padding = ''
-        let maxWidth = ''
-        let caretSize = ''
-        if (!dropDownSizes) {
-          return { padding: 'px-2 py-1 md:px-3 md:py-2 lg:py-3 lg:px-3', caretSize: 'w-6 h-6', maxWidth: '' }
-        }
-        dropDownSizes.forEach((size: string, index: number) => {
-          switch (size) {
-            case 's':
-              padding += ` px-4 py-2`
-              maxWidth += ` max-w-[6rem]`
-              caretSize += ` w-3 h-3`
-              break
-            case 'm':
-              padding += ` md:px-6 md:py-2`
-              maxWidth += ` md:max-w-[11rem]`
-              caretSize += ` md:w-6 md:h-6`
-              break
-            case 'l':
-              padding += ` lg:px-6 lg:py-3`
-              maxWidth += ` lg:max-w-[20rem]`
-              caretSize += ` lg:w-6 lg:h-6`
-              break
-            default:
-              padding = 'px-2 py-1 md:px-3 md:py-2 lg:py-3 lg:px-3 '
-              caretSize = 'w-6 h-6'
-              break
-          }
-        })
-        return { padding: padding, caretSize: caretSize, maxWidth: maxWidth }
-      },
-    []
-  )
+  const generatePadding = useCallback((dropDownSizes: string[]): { padding: string; caretSize: string; maxWidth: string } => {
+    let padding = ''
+    let maxWidth = ''
+    let caretSize = ''
+    if (!dropDownSizes) {
+      return { padding: 'px-2 py-1 md:px-3 md:py-2 lg:py-3 lg:px-3', caretSize: 'w-6 h-6', maxWidth: '' }
+    }
+    dropDownSizes.forEach((size: string) => {
+      switch (size) {
+        case 's':
+          padding += ` px-4 py-2`
+          maxWidth += ` max-w-[6rem]`
+          caretSize += ` w-3 h-3`
+          break
+        case 'm':
+          padding += ` md:px-6 md:py-2`
+          maxWidth += ` md:max-w-[11rem]`
+          caretSize += ` md:w-6 md:h-6`
+          break
+        case 'l':
+          padding += ` lg:px-6 lg:py-3`
+          maxWidth += ` lg:max-w-[20rem]`
+          caretSize += ` lg:w-6 lg:h-6`
+          break
+        default:
+          padding = 'px-2 py-1 md:px-3 md:py-2 lg:py-3 lg:px-3'
+          caretSize = 'w-6 h-6'
+          break
+      }
+    })
+    return { padding, caretSize, maxWidth }
+  }, [])
 
   const color = useMemo(() => {
     if (isDropdownNotSelected) {
@@ -112,10 +101,7 @@ const Dropdown: React.FC<DropdownProps> = ({ name = '', options, defaultValue, d
 
   return (
     <div ref={dropdownRef} className={`dropdown relative flex w-full justify-end ${maxWidth}`}>
-      <button
-        className={`drowpdown-button w-full rounded-lg border-none  ${color} ${padding} ${focusStyle} ${hoverStyle} ${activeStyle}`}
-        onClick={handleToggleMenu}
-      >
+      <button className={`w-full rounded-lg border-none  ${color} ${padding} ${focusStyle} ${hoverStyle} ${activeStyle}`} onClick={handleToggleMenu}>
         <div className={`inline-flex w-full min-w-fit items-center justify-between gap-2.5 whitespace-nowrap rounded-md hover:shadow-sm`}>
           {selectedValue}
           <CaretUpIcon

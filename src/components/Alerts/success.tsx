@@ -7,11 +7,6 @@ interface AlertsProps extends HTMLAttributes<HTMLDivElement> {
 const Alerts: FC<AlertsProps> = ({ isShow = true, setIsShow }) => {
   const [isHide, setIsHide] = useState(false)
 
-  // useEffect(() => {
-  //   setTimeout(setIsShow(false), 3000)
-  //   console.log('isHide', isShow)
-  // }, [isHide])
-
   useEffect(() => {
     if (isShow) {
       setTimeout(() => setIsHide(true), 2500)

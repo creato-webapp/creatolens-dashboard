@@ -37,17 +37,21 @@ const Layout: FC<FormLayoutProps> = (props: FormLayoutProps) => {
 
   return (
     <div className={`${formStyles} form-container`}>
-      <form
-        onSubmit={(e) => SubmitHandler(e)}
-        className={`w-fi mx-auto max-w-xl py-9 px-4 text-gray-900 antialiased md:max-w-4xl ${formInnerStyles}`}
-      >
+      <form onSubmit={SubmitHandler} className={`mx-auto max-w-xl py-9 px-4 text-gray-900 antialiased md:max-w-4xl ${formInnerStyles}`}>
         <h1 className="text-4xl font-bold">{Header}</h1>
         <h2 className="text-2xl font-bold">{subHeader}</h2>
         <div className="">
           <div className="grid grid-cols-1 gap-8">
             {props.children}
             <div className={`flex justify-end pb-4 `}>
-              <Button.Primary sizes={buttonSizes} styleClassName={buttonStyles} className="md:w-full" disabled={allowSubmit} type="submit" loading={loading}>
+              <Button.Primary
+                sizes={buttonSizes}
+                styleClassName={buttonStyles}
+                className="md:w-full"
+                disabled={allowSubmit}
+                type="submit"
+                loading={loading}
+              >
                 <h4 className="font-medium">{buttonText}</h4>
               </Button.Primary>
             </div>

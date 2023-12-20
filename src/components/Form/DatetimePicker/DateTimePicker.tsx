@@ -4,7 +4,6 @@ import BaseInput from '../BaseInput'
 
 const DateTimePicker: FC<DateTimePicker> = (props: DateTimePicker) => {
   const { customFormItemProps } = props
-  console.log(customFormItemProps)
   return (
     <BaseInput
       id={props.id}

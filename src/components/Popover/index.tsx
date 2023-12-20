@@ -1,4 +1,4 @@
-import React, { useState, ReactNode } from 'react'
+import React, { useState, ReactNode, useCallback } from 'react'
 
 interface PopoverProps {
   trigger: ReactNode
@@ -8,9 +8,9 @@ interface PopoverProps {
 
 const Popover: React.FC<PopoverProps> = ({ trigger, content, className }) => {
   const [isOpen, setIsOpen] = useState(false)
-  const togglePopover = () => {
+  const togglePopover = useCallback(() => {
     setIsOpen((prev) => !prev)
-  }
+  }, [])
 
   return (
     <div onClick={togglePopover} className={`relative inline-block cursor-pointer ${className}`}>
@@ -24,7 +24,6 @@ const Popover: React.FC<PopoverProps> = ({ trigger, content, className }) => {
           }}
         >
           <button className="absolute top-0 right-0 cursor-pointer p-1" onClick={togglePopover}>
-            {/* You can replace 'x' with your preferred close icon */}
             <span className="pr-2 text-xl text-gray-500">×</span>
           </button>
           {content}

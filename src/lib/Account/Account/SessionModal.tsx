@@ -32,7 +32,7 @@ const dataItemToKeyValues = (item: Cookies[]) => {
 
 const SessionModal: FC<SessionModalProps> = ({ account, isLoading: loading, isDisable, isShow, updateSession, onCancel }) => {
   const [isLoading, setIsLoading] = useState(false)
-  const updateAccountSession = useCallback(async (account: IAccount) => {
+  const updateAccountSession = useCallback(async () => {
     try {
       setIsLoading(true)
       const res = await updateSession(account)
@@ -42,7 +42,7 @@ const SessionModal: FC<SessionModalProps> = ({ account, isLoading: loading, isDi
     } finally {
       setIsLoading(false)
     }
-  }, [])
+  }, [account])
 
   return (
     <Modal isLoading={isLoading} isShow={isShow} onCancel={onCancel} title="SessionModal">
@@ -53,7 +53,7 @@ const SessionModal: FC<SessionModalProps> = ({ account, isLoading: loading, isDi
         <Button.Primary
           // disabled={user?.role !== 'admin' || isDisable}
           loading={isLoading}
-          onClick={() => updateAccountSession(account)}
+          onClick={updateAccountSession}
         >
           <div className="flex">Update Session</div>
         </Button.Primary>

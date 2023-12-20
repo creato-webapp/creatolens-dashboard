@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, useState, useCallback, DragEvent } from 'react'
 
 interface DropzoneProps {
   classNames?: string
@@ -40,12 +40,12 @@ const Dropzone: React.FC<DropzoneProps> = ({ classNames, onChange }) => {
     }
   }
 
+  const dropZonePreventDefault = useCallback((event: DragEvent<HTMLDivElement>) => {
+    event.preventDefault()
+  }, [])
+
   return (
-    <div
-      className={`rounded-lg border-2 border-dashed hover:bg-bg-dark ${classNames}`}
-      onDrop={handleDrop}
-      onDragOver={(event) => event.preventDefault()}
-    >
+    <div className={`rounded-lg border-2 border-dashed hover:bg-bg-dark ${classNames}`} onDrop={handleDrop} onDragOver={dropZonePreventDefault}>
       <label htmlFor="dropzone-file" className="flex h-full cursor-pointer flex-col items-center justify-center">
         {!isValidImage && <p className="text-red-500">Please upload a valid image file.</p>}
         <div className="text-center">

@@ -33,13 +33,12 @@ const BaseInput: React.FunctionComponent<IBaseInputProps> = ({
   const [errorMessage, setErrorMessage] = useState<string>('')
   const onChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     if (allowSpace || e.target.value.indexOf(' ') === -1) {
-      // Check if space input is allowed or if space is not present
       const target = e.target as HTMLInputElement
       setState(target.value)
       onNewChange && onNewChange(e)
       setErrorMessage('')
     } else {
-      setErrorMessage('Space input is not allowed!') // Alert the user that space input is not allowed
+      setErrorMessage('Space input is not allowed!')
     }
   }
 
