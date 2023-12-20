@@ -198,18 +198,18 @@ const AccountsPage = ({ paginationData }: Props) => {
       <Hero
         backgroundImage="./GuideHero.svg"
         className="flex h-full flex-col justify-between md:h-52"
-        childrenStyle="h-full md:gap-3 flex-col flex md:py-10 md:pl-24 "
+        childrenStyle="h-full md:gap-3 flex-col flex  md:pl-24 md:py-10"
       >
-        <div className="flex h-full flex-col justify-between">
+        <div className="flex h-full flex-row justify-between px-4 md:flex-col">
           <div>
-            <h1 className="text-black md:text-white">ACCOUNTS</h1>
+            <h1 className="font-extrabold text-white">ACCOUNTS</h1>
           </div>
           <Link href="/accounts/create-account">
             <a>
-              <Button.Primary sizes={['s', 'l', 'l']}>
-                <div className="flex flex-row gap-2">
+              <Button.Primary sizes={['s', 'l', 'l']} styleClassName="px-2">
+                <div className="flex flex-row items-center gap-2">
                   <PlusIcon className="h-6 w-6" />
-                  Create New Account
+                  <div className="hidden md:flex">Create New Account</div>
                 </div>
               </Button.Primary>
             </a>
@@ -231,6 +231,17 @@ const AccountsPage = ({ paginationData }: Props) => {
             </Table.Body>
           </Table.Layout>
         </div>
+
+        <div className="mt-9">
+          <h4>Create Date: {dayjs(responseData?.data[0].created_at).format('DD MMM YYYY')}</h4>
+          <div></div>
+        </div>
+
+        <div className=" flex w-full flex-col md:hidden">
+          {accounts?.map((e, index) => (
+            <ResponsiveAccountCard columns={columns} rowData={e} key={index} />
+          ))}
+        </div>
         <Pagination
           isLoading={isLoading}
           page={responseData.page}
@@ -240,12 +251,6 @@ const AccountsPage = ({ paginationData }: Props) => {
           hasPrev={responseData.has_prev}
           onPageChange={onPageChange}
         />
-
-        <div className=" flex w-full flex-col md:hidden">
-          {accounts?.map((e, index) => (
-            <ResponsiveAccountCard columns={columns} rowData={e} key={index} />
-          ))}
-        </div>
       </Card>
     </div>
   )
