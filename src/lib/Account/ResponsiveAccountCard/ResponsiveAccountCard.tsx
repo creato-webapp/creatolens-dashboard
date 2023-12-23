@@ -5,6 +5,7 @@ import Badges, { Status } from '@components/Badges'
 import Image from 'next/image'
 import XCircleIcon from '@components/Icon/XCircleIcon'
 import CheckIcon from '@components/Icon/CheckIcon'
+import EditIcon from '@components/Icon/EditIcon'
 
 const dayjs = require('dayjs')
 const utc = require('dayjs/plugin/utc')
@@ -68,7 +69,7 @@ const ResponsiveAccountCard: FC<ResponsiveAccountCardProps> = (props: Responsive
         </div>
         <Link href="/accounts/[id]" as={`/accounts/${props.rowData?.id}`} legacyBehavior>
           <a className="flex w-full flex-row items-center justify-center gap-2">
-            <Image src="/account/edit.svg" width={16} height={16} alt="edit" className="pointer-events-none"></Image>
+            <EditIcon size={16} className="fill-accent2-500" />
             <div className="font-semibold text-accent2-500">Edit</div>
           </a>
         </Link>

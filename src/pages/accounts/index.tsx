@@ -13,6 +13,7 @@ import Image from 'next/image'
 import Badges, { Status } from '@components/Badges'
 import Hero from '@components/Hero'
 import { PlusIcon } from '@heroicons/react/24/solid'
+import EditIcon from '@components/Icon/EditIcon'
 
 const dayjs = require('dayjs')
 const utc = require('dayjs/plugin/utc')
@@ -111,7 +112,7 @@ const AccountsPage = ({ paginationData }: Props) => {
       render: (e: any) => (
         <Link href="/accounts/[id]" as={`/accounts/${e}`} legacyBehavior>
           <a className="flex w-full flex-row items-center justify-center gap-2">
-            <Image src="/account/edit.svg" width={16} height={16} alt="edit" className="pointer-events-none"></Image>
+            <EditIcon size={16} className="fill-accent2-500" />
             <div className="font-semibold text-accent2-500">Edit</div>
           </a>
         </Link>
