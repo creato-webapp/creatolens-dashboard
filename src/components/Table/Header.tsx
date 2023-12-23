@@ -1,5 +1,4 @@
 import { Column } from './Interface'
-import Image from 'next/image'
 import SortingIcon from '../Icon/SortingIcon'
 export interface HeaderProps extends React.TableHTMLAttributes<HTMLTableSectionElement> {
   columns: Column[]
@@ -7,9 +6,16 @@ export interface HeaderProps extends React.TableHTMLAttributes<HTMLTableSectionE
   trClassName?: string
   thClassName?: string
   sort?: 'asc' | 'desc'
+  pageParams?: {
+    pageNumber: number
+    pageSize: number
+    orderBy: string
+    isAsc: boolean
+  }
+  updateSorting?: (orderBy: string, isAsc: boolean) => React.MouseEventHandler<HTMLDivElement>
 }
 
-const Header: React.FC<HeaderProps> = ({ className, children, columns, headerIcon, trClassName, thClassName, sort = 'asc', ...res }) => {
+const Header: React.FC<HeaderProps> = ({ className, children, columns, headerIcon, trClassName, thClassName, pageParams, updateSorting, ...res }) => {
   return (
     <thead className={`bg-neutral-100 uppercase ${className}`} {...res}>
       <tr className={trClassName}>
@@ -18,10 +24,31 @@ const Header: React.FC<HeaderProps> = ({ className, children, columns, headerIco
             <div className="flex w-full flex-row items-center gap-2">
               {e.headerIcon && <div className="flex w-fit">{e.headerIcon}</div>}
               <div>{e.title}</div>
-              {e.sortAvailable && (
+              {e.sortAvailable && updateSorting && (
                 <div className="flex flex-col gap-1">
-                  <SortingIcon fillColor={`${sort === 'asc' ? 'fill-accent1-500' : 'fill-interface-hover'}`} />
-                  <SortingIcon fillColor={`${sort === 'desc' ? 'fill-accent1-500' : 'fill-interface-hover'}`} className="rotate-180" />
+                  <div onClick={updateSorting(e.dataIndex, true)} className="cursor-pointer">
+                    <SortingIcon
+                      fillColor={`${
+                        pageParams?.orderBy === e.dataIndex
+                          ? pageParams.isAsc === true
+                            ? 'fill-accent1-500'
+                            : 'fill-interface-hover'
+                          : 'fill-interface-hover'
+                      }`}
+                    />
+                  </div>
+                  <div onClick={updateSorting(e.dataIndex, false)} className="cursor-pointer">
+                    <SortingIcon
+                      fillColor={`${
+                        pageParams?.orderBy === e.dataIndex
+                          ? pageParams.isAsc === false
+                            ? 'fill-accent1-500'
+                            : 'fill-interface-hover'
+                          : 'fill-interface-hover'
+                      }`}
+                      className="rotate-180"
+                    />
+                  </div>
                 </div>
               )}
             </div>
