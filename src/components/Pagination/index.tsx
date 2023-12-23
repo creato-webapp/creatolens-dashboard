@@ -48,18 +48,27 @@ const Pagination: React.FC<PaginationProps> = ({ isLoading, page, size, totalIte
 
   const pageNumbers = generatePageNumbers()
 
-  const renderPageButton = (pageNumber: number) => (
-    <button
-      key={pageNumber}
-      className={`${pageNumber === page ? 'bg-accent1-500 text-white ' : 'bg-bg-dark text-text-primary'} aspect-square h-10 w-10 rounded-lg `}
-      onClick={handlePageClick(pageNumber)}
-    >
-      <div>{pageNumber}</div>
-    </button>
+  const renderPageButton = (pageNumber: number) => {
+    return (
+      <button
+        key={pageNumber}
+        className={`${pageNumber === page ? 'bg-accent1-500 text-white ' : 'bg-bg-dark text-text-primary'} aspect-square h-10 w-10 rounded-lg `}
+        onClick={handlePageClick(pageNumber)}
+      >
+        <h4>{pageNumber}</h4>
+      </button>
+    )
+  }
+
+  console.log(
+    pageNumbers.slice(
+      Math.max(1, Math.min(page - Math.floor(pagesToShow / 2), totalPages - pagesToShow)),
+      Math.min(page + Math.floor(pagesToShow / 2), totalPages - 1)
+    )
   )
 
   return (
-    <div className="hidden w-full items-center justify-center gap-3 md:flex">
+    <div className="mt-4 md:mt-0 flex w-full items-center justify-center gap-3">
       <div className="flex flex-row gap-2">
         <button className={`${page <= 1 && ''} h-10 w-10 rounded-lg bg-bg-dark text-text-primary`} onClick={handlePrevClick} disabled={page <= 1}>
           {'<'}
@@ -72,6 +81,7 @@ const Pagination: React.FC<PaginationProps> = ({ isLoading, page, size, totalIte
               Math.min(page + Math.floor(pagesToShow / 2), totalPages - 1)
             )
             .map((pageNumber) => renderPageButton(pageNumber))}
+
           {renderPageButton(totalPages)}
         </div>
 

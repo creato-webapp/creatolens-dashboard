@@ -43,7 +43,7 @@ const ResponsiveAccountCard: FC<ResponsiveAccountCardProps> = (props: Responsive
   }
 
   return (
-    <div className="w-full rounded-lg border border-gray-200 p-8 shadow-2xl md:hidden">
+    <div className="w-full g rounded-lg border border-gray-200 p-8 shadow-2xl md:hidden">
       <div className="flex flex-col gap-2 font-semibold">
         <div className="flex gap-2">
           <Badges size={'sm'} status={status} className="capitalize" rounded>
