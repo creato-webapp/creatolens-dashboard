@@ -234,9 +234,28 @@ const AccountsPage = ({ paginationData }: Props) => {
           </Table.Layout>
         </div>
 
-        <div className="mt-9">
-          <h4>Create Date: {dayjs(responseData?.data[0].created_at).format('DD MMM YYYY')}</h4>
-          <div></div>
+        <div className="flex items-center gap-4 md:hidden">
+          <h4>Create Date: </h4>
+          <div>
+            <Dropdown
+              name="CreateDateOrder"
+              defaultValue={createDateOrder}
+              options={[
+                { label: 'Earliest', value: 'asc' },
+                { label: 'Latest', value: 'desc' },
+              ]}
+              onValueChange={(value) => {
+                setCreateDateOrder(value)
+                setPageParams((prevParams) => ({
+                  ...prevParams,
+                  orderBy: 'created_at',
+                  isAsc: value === 'asc' ? true : false,
+                }))
+                onPageChange(1)
+              }}
+              dropDownSizes={['m', 'm', 'm']}
+            />
+          </div>
         </div>
 
         <div className=" flex w-full flex-col md:hidden">
