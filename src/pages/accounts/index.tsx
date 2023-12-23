@@ -200,6 +200,7 @@ const AccountsPage = ({ paginationData }: Props) => {
         backgroundImage="./GuideHero.svg"
         className="flex h-full flex-col justify-between md:h-52"
         childrenStyle="h-full md:gap-3 flex-col flex  md:pl-24 md:py-10"
+        mobileBackgroundImage
       >
         <div className="flex h-full flex-row justify-between px-4 md:flex-col">
           <div>
