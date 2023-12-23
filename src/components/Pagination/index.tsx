@@ -1,6 +1,6 @@
 import CaretLeftIcon from '@components/Icon/CaretLeftIcon'
 import CaretRightIcon from '@components/Icon/CaretRightIcon'
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import { Button } from '@components/Button'
 interface PaginationProps {
   isLoading: boolean
@@ -13,7 +13,17 @@ interface PaginationProps {
 }
 
 const Pagination: React.FC<PaginationProps> = ({ isLoading, page, size, totalItems, hasNext, hasPrev, onPageChange }) => {
-  const totalPages = size ? Math.ceil(totalItems / size) : 1
+  const totalPages = size ? Math.ceil(totalItems / size) : 0
+  const pagesToShow = 4
+
+  const generatePageNumbers = useCallback(() => {
+    const pageNumbers = []
+    for (let i = 1; i <= totalPages; i++) {
+      pageNumbers.push(i)
+    }
+    return pageNumbers
+  }, [totalPages])
+
   if (isLoading) {
     return <div>Loading...</div>
   }
@@ -28,32 +38,48 @@ const Pagination: React.FC<PaginationProps> = ({ isLoading, page, size, totalIte
       onPageChange(page + 1)
     }
   }, [hasNext, onPageChange, page])
+
+  const handlePageClick = useCallback(
+    (page: number) => (event: React.MouseEvent<HTMLButtonElement>) => {
+      onPageChange(page)
+    },
+    []
+  )
+
+  const pageNumbers = generatePageNumbers()
+
+  const renderPageButton = (pageNumber: number) => (
+    <button
+      key={pageNumber}
+      className={`${pageNumber === page ? 'bg-accent1-500 text-white ' : 'bg-bg-dark text-text-primary'} aspect-square h-10 w-10 rounded-lg `}
+      onClick={handlePageClick(pageNumber)}
+    >
+      <div>{pageNumber}</div>
+    </button>
+  )
+
   return (
-    <>
-      <div className="flex items-center justify-center gap-3">
-        <Button.Text
-          className={'flex text-text-primary hover:text-text-secondary hover:no-underline'}
-          loading={false}
-          disabled={!hasPrev}
-          onClick={handlePrevClick}
-        >
-          <CaretLeftIcon />
-          Previous
-        </Button.Text>
-        <div>
-          {page} / {totalPages}
+    <div className="hidden w-full items-center justify-center gap-3 md:flex">
+      <div className="flex flex-row gap-2">
+        <button className={`${page <= 1 && ''} h-10 w-10 rounded-lg bg-bg-dark text-text-primary`} onClick={handlePrevClick} disabled={page <= 1}>
+          {'<'}
+        </button>
+        <div className="flex flex-row gap-2">
+          {renderPageButton(1)}
+          {pageNumbers
+            .slice(
+              Math.max(1, Math.min(page - Math.floor(pagesToShow / 2), totalPages - pagesToShow - 1)),
+              Math.min(page + Math.floor(pagesToShow / 2), totalPages - 1)
+            )
+            .map((pageNumber) => renderPageButton(pageNumber))}
+          {renderPageButton(totalPages)}
         </div>
-        <Button.Text
-          className={'flex text-text-primary hover:text-text-secondary hover:no-underline'}
-          loading={false}
-          disabled={!hasNext}
-          onClick={handleNextClick}
-        >
-          Next
-          <CaretRightIcon />
-        </Button.Text>
+
+        <button className="h-10 w-10 rounded-lg bg-bg-dark text-text-primary" onClick={handleNextClick} disabled={page >= totalPages}>
+          {'>'}
+        </button>
       </div>
-    </>
+    </div>
   )
 }
 
