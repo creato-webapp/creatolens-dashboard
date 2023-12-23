@@ -222,6 +222,7 @@ const AccountsPage = ({ paginationData }: Props) => {
           blocked: 'error',
           disabled: 'disabled',
           test: 'secondary',
+          banned: 'error',
         }
         // const status: Status = statusToVariantMap[e]
         const status: Status = statusToVariantMap[e]

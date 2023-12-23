@@ -34,6 +34,7 @@ const ResponsiveAccountCard: FC<ResponsiveAccountCardProps> = (props: Responsive
     blocked: 'error',
     disabled: 'disabled',
     test: 'secondary',
+    banned: 'error',
   }
 
   const status: Status = statusToVariantMap[props.rowData?.status]
