@@ -22,7 +22,7 @@ export interface Column {
 }
 
 export interface ResponsiveAccountCardProps extends HTMLAttributes<HTMLDivElement> {
-  key: number
+  key: string
   columns: Column[]
   rowData: rowData
 }
@@ -42,8 +42,7 @@ const ResponsiveAccountCard: FC<ResponsiveAccountCardProps> = (props: Responsive
   }
 
   return (
-    <div className="w-full rounded-lg border border-gray-200 bg-white p-2 shadow sm:p-8 md:hidden">
-      {/* <h5 className="text-l mb-4 font-medium text-gray-500">{props.rowData?.id}</h5> */}
+    <div className="w-full rounded-lg border border-gray-200 p-8 shadow-2xl md:hidden">
       <div className="flex flex-col gap-2 font-semibold">
         <div className="flex gap-2">
           <Badges size={'sm'} status={status} className="capitalize" rounded>
@@ -56,11 +55,11 @@ const ResponsiveAccountCard: FC<ResponsiveAccountCardProps> = (props: Responsive
             </div>
           </Badges>
         </div>
-        <div className="flex text-gray-900">
-          <Image src="/account/InstagramLogo.svg" className="w-full" width={24} height={24}></Image>
+        <div className="flex gap-2 text-gray-900">
+          <Image src="/account/InstagramLogo.svg" className="" width={24} height={24}></Image>
           <h3 className="text-l font-extrabold">{props.rowData?.username}</h3>
         </div>
-        <div className="flex flex-row">
+        <div className="flex flex-row font-semibold">
           <span>Created On:</span>
           <span className="ml-2 ">{dayjs(props.rowData?.created_at, 'YYYY-MM-DD THH:mm:ss').local().format('DD MMM YYYY')}</span>
         </div>
