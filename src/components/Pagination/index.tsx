@@ -52,7 +52,9 @@ const Pagination: React.FC<PaginationProps> = ({ isLoading, page, size, totalIte
     return (
       <button
         key={pageNumber}
-        className={`${pageNumber === page ? 'bg-accent1-500 text-white ' : 'bg-bg-dark text-text-primary'} aspect-square h-10 w-10 rounded-lg `}
+        className={`${
+          pageNumber === page ? 'bg-accent1-500 text-white ' : 'bg-bg-dark text-text-primary'
+        } aspect-square h-10 w-10 rounded-lg  hover:bg-interface-hover hover:text-text-secondary`}
         onClick={handlePageClick(pageNumber)}
       >
         <h4>{pageNumber}</h4>
@@ -68,9 +70,13 @@ const Pagination: React.FC<PaginationProps> = ({ isLoading, page, size, totalIte
   )
 
   return (
-    <div className="mt-4 md:mt-0 flex w-full items-center justify-center gap-3">
+    <div className="mt-4 flex w-full items-center justify-center gap-3 md:mt-0">
       <div className="flex flex-row gap-2">
-        <button className={`${page <= 1 && ''} h-10 w-10 rounded-lg bg-bg-dark text-text-primary`} onClick={handlePrevClick} disabled={page <= 1}>
+        <button
+          className={` h-10 w-10 rounded-lg bg-bg-dark text-text-primary disabled:bg-bg-disabled disabled:text-disabled `}
+          onClick={handlePrevClick}
+          disabled={page <= 1}
+        >
           {'<'}
         </button>
         <div className="flex flex-row gap-2">
@@ -85,7 +91,11 @@ const Pagination: React.FC<PaginationProps> = ({ isLoading, page, size, totalIte
           {renderPageButton(totalPages)}
         </div>
 
-        <button className="h-10 w-10 rounded-lg bg-bg-dark text-text-primary" onClick={handleNextClick} disabled={page >= totalPages}>
+        <button
+          className={`disabled:text-disabled h-10 w-10 rounded-lg bg-bg-dark text-text-primary disabled:bg-bg-disabled `}
+          onClick={handleNextClick}
+          disabled={page >= totalPages}
+        >
           {'>'}
         </button>
       </div>
