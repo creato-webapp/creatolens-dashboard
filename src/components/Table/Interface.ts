@@ -6,6 +6,8 @@ export interface Column {
   title: string
   dataIndex: string
   render?: Function
+  headerIcon?: React.ReactNode
+  sortAvailable?: boolean
 }
 
 export interface HeaderProps extends React.HTMLAttributes<HTMLTableSectionElement> {

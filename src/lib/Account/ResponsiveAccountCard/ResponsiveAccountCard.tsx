@@ -1,6 +1,11 @@
 import { HTMLAttributes, FC } from 'react'
 import AccountField from './AccountField'
 import Link from 'next/link'
+import Badges, { Status } from '@components/Badges'
+import Image from 'next/image'
+import XCircleIcon from '@components/Icon/XCircleIcon'
+import CheckIcon from '@components/Icon/CheckIcon'
+import EditIcon from '@components/Icon/EditIcon'
 
 const dayjs = require('dayjs')
 const utc = require('dayjs/plugin/utc')
@@ -17,40 +22,58 @@ export interface Column {
 }
 
 export interface ResponsiveAccountCardProps extends HTMLAttributes<HTMLDivElement> {
-  key: number
+  key: string
   columns: Column[]
   rowData: rowData
 }
 
 const ResponsiveAccountCard: FC<ResponsiveAccountCardProps> = (props: ResponsiveAccountCardProps) => {
+  const statusToVariantMap: Record<string, Status> = {
+    active: 'success',
+    retry: 'warning',
+    blocked: 'error',
+    disabled: 'disabled',
+    test: 'secondary',
+    banned: 'error',
+  }
+
+  const status: Status = statusToVariantMap[props.rowData?.status]
+  const IconRender = (e: boolean) => {
+    return <div className="flex items-center justify-center">{e ? <CheckIcon color="white" /> : <XCircleIcon color="white" />}</div>
+  }
+
   return (
-    <div className="w-full max-w-sm rounded-lg border border-gray-200 bg-white p-2 shadow sm:p-8 md:hidden">
-      <h5 className="text-l mb-4 font-medium text-gray-500">{props.rowData?.id}</h5>
-      <div className="flex text-gray-900">
-        <span className="text-l font-semibold">{props.rowData?.username}</span>
+    <div className="w-full g rounded-lg border border-gray-200 p-8 shadow-2xl md:hidden">
+      <div className="flex flex-col gap-2 font-semibold">
+        <div className="flex gap-2">
+          <Badges size={'sm'} status={status} className="capitalize" rounded>
+            {props.rowData?.status}
+          </Badges>
+          <Badges size={'sm'} status={props.rowData?.enabled ? 'success' : 'error'} className="flex flex-row capitalize" rounded>
+            <div className="flex gap-2">
+              {IconRender(props.rowData?.enabled)}
+              {props.rowData?.enabled ? 'enabled' : 'disabled'}
+            </div>
+          </Badges>
+        </div>
+        <div className="flex gap-2 text-gray-900">
+          <Image src="/account/InstagramLogo.svg" className="" width={24} height={24}></Image>
+          <h3 className="text-l font-extrabold">{props.rowData?.username}</h3>
+        </div>
+        <div className="flex flex-row font-semibold">
+          <span>Created On:</span>
+          <span className="ml-2 ">{dayjs(props.rowData?.created_at, 'YYYY-MM-DD THH:mm:ss').local().format('DD MMM YYYY')}</span>
+        </div>
+        <div className="my-2 flex flex-row">
+          <h3 className="font-normal">Post Scrapped: {props.rowData?.post_scrapped_count}</h3>
+        </div>
+        <Link href="/accounts/[id]" as={`/accounts/${props.rowData?.id}`} legacyBehavior>
+          <a className="flex w-full flex-row items-center justify-center gap-2">
+            <EditIcon size={16} className="fill-accent2-500" />
+            <div className="font-semibold text-accent2-500">Edit</div>
+          </a>
+        </Link>
       </div>
-      {/* <!-- List --> */}
-      <ul role="list" className="space-5 my-7 flex-wrap">
-        <AccountField title="status" value={props.rowData?.status} />
-        <AccountField title="IS OCCUPIED" value={props.rowData?.is_occupied} />
-        <AccountField title="IS ENABLED" value={props.rowData?.enabled} />
-        <AccountField title="IS_AUTH" value={props.rowData?.is_authenticated} />
-        <AccountField title="LOGIN_COUNT" value={props.rowData?.login_count} />
-        <AccountField title="POST_SCRAPPED" value={props.rowData?.post_scrapped_count} />
-        <AccountField
-          title="LAST_LOGIN_DT
-          (HK TIME)"
-          value={dayjs(props.rowData?.last_login_dt, 'YYYY-MM-DD THH:mm:ss').local().add(8, 'hours').format('YYYY-MM-DD HH:mm:ss')}
-        />
-      </ul>
-      <Link href="/accounts/[id]" as={`/accounts/${props.rowData?.id}`} legacyBehavior>
-        <button
-          type="button"
-          className="inline-flex w-full justify-center rounded-lg bg-blue-500 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-200"
-        >
-          Edit
-        </button>
-      </Link>
     </div>
   )
 }
