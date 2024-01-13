@@ -113,6 +113,7 @@ const Dropdown: React.FC<DropdownProps> = ({ name = '', options, defaultValue, d
       {isOpen && (
         <ul className="absolute top-full left-0 z-10 mt-2 w-full rounded-md border border-gray-200 bg-white shadow-lg">
           {options.map((option) => (
+            /* refractor the onClick function below */
             <li
               key={option.value}
               className="flex cursor-pointer list-none items-center gap-2 whitespace-nowrap px-4 py-2 hover:bg-gray-100"

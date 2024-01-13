@@ -6,9 +6,9 @@ interface CombinedUser extends User {
   roles: string[]
 }
 
-export async function fetchWhitelist(fileName: string, bucket: string) {
+async function fetchWhitelist(): Promise<CombinedUser[]> {
   try {
-    const response = await axios.get(`${process.env.LOCAL_SERVER_URL}/api/storage?fileName=${fileName}&bucket=${bucket}`)
+    const response = await axios.get<CombinedUser[]>(`${process.env.LOCAL_SERVER_URL}/api/whitelist`)
     console.log('Fetched whitelist:', response.data)
     return response.data
   } catch (error) {
@@ -24,10 +24,10 @@ export async function getRoles(userEmail: string) {
     window.alert('CLOUD_BUCKET is undefined')
   }
 
-  const whitelist: CombinedUser[] = await fetchWhitelist(fileName, bucket)
+  const whitelist = await fetchWhitelist()
   console.log({ whitelist })
   const userEntry = whitelist.find((entry) => entry.email === userEmail)
-  return userEntry ? userEntry.roles : []
+  return userEntry ? userEntry.role : []
 }
 
 export function isExpired(expires: string): boolean {
