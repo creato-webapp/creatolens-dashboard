@@ -21,7 +21,7 @@ function Footer() {
       content: [
         {
           title: 'Our Story',
-          link: 'https://live.creatogether.app/pages/about-us',
+          link: 'https://www.creatogether.app/',
         },
         {
           title: 'Blog',
@@ -38,15 +38,15 @@ function Footer() {
         },
         {
           title: 'Terms & Conditions',
-          link: 'https://live.creatogether.app/pages/privacy-terms',
+          link: 'https://hickory-fight-55b.notion.site/Creato-Terms-Conditions-62e6fbb474394483bda8f81cd73b0a2a',
         },
         {
           title: 'Privacy Policy',
-          link: 'https://live.creatogether.app/pages/privacy-policy',
+          link: 'https://hickory-fight-55b.notion.site/Creato-Privacy-Policy-3e9a90f983d74fed8b4734c0775d897e',
         },
         {
           title: 'Contact Us',
-          link: 'https://live.creatogether.app/pages/contact',
+          link: 'https://www.creatogether.app/contact-us',
         },
       ],
     },
@@ -55,11 +55,11 @@ function Footer() {
       content: [
         {
           title: 'Join As Creator',
-          link: 'https://live.creatogether.app/pages/join-as-creator',
+          link: 'https://room591.notion.site/room591/Creato-Is-Hiring-100d3ca4ef8e42f889aa1c577596d308',
         },
         {
           title: 'School Resources',
-          link: 'https://live.creatogether.app/pages/ole-%E5%85%B6%E4%BB%96%E5%AD%B8%E7%BF%92%E7%B6%93%E6%AD%B7',
+          link: 'https://www.creatogether.app/creato-academy',
         },
       ],
     },
@@ -95,7 +95,7 @@ function Footer() {
         <div className="text-lg font-bold leading-loose text-zinc-400">{item.title}</div>
         <div className="flex flex-col items-center gap-6 md:items-start">
           {item.content.map((i: FooterItemContent) => (
-            <a href={i.link}>
+            <a href={i.link} key={`footer-${i.link}`}>
               <div className="inline-flex items-start justify-start self-stretch">
                 <div className="text-sm font-normal leading-none tracking-tight text-slate-600">{i.title}</div>
               </div>
@@ -110,13 +110,13 @@ function Footer() {
     <footer className={`flex w-full flex-col gap-6 bg-neutral-100 py-14 px-12 md:gap-14 `}>
       <div className="flex flex-col justify-center gap-6 md:flex-row md:justify-around">
         {footerItems.map((item: FooterItem) => (
-          <FooterItem item={item} />
+          <FooterItem item={item} key={item.title} />
         ))}
       </div>
       <div>
         <div className="flex flex-row justify-center gap-8">
           {footerIcon.map((icon) => (
-            <Link href={icon.link} className="">
+            <Link href={icon.link} className="" key={icon.alt}>
               <Image src={icon.src} alt={icon.alt} className="cursor-pointer" />
             </Link>
           ))}
