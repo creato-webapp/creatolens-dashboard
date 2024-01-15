@@ -90,13 +90,12 @@ function Footer() {
 
   const FooterItem = (props: { item: FooterItem }) => {
     const { item } = props
-    console.log(item)
     return (
       <div className="flex flex-col items-center gap-6 py-3 md:items-start">
         <div className="text-lg font-bold leading-loose text-zinc-400">{item.title}</div>
         <div className="flex flex-col items-center gap-6 md:items-start">
           {item.content.map((i: FooterItemContent) => (
-            <a href={i.link}>
+            <a href={i.link} key={`footer-${i.link}`}>
               <div className="inline-flex items-start justify-start self-stretch">
                 <div className="text-sm font-normal leading-none tracking-tight text-slate-600">{i.title}</div>
               </div>
@@ -111,13 +110,13 @@ function Footer() {
     <footer className={`flex w-full flex-col gap-6 bg-neutral-100 py-14 px-12 md:gap-14 `}>
       <div className="flex flex-col justify-center gap-6 md:flex-row md:justify-around">
         {footerItems.map((item: FooterItem) => (
-          <FooterItem item={item} />
+          <FooterItem item={item} key={item.title} />
         ))}
       </div>
       <div>
         <div className="flex flex-row justify-center gap-8">
           {footerIcon.map((icon) => (
-            <Link href={icon.link} className="">
+            <Link href={icon.link} className="" key={icon.alt}>
               <Image src={icon.src} alt={icon.alt} className="cursor-pointer" />
             </Link>
           ))}
