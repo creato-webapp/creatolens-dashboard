@@ -44,16 +44,6 @@ const login: FC<loginProps> = ({ providers }) => {
 
   const OAuthErrorMessage = errorMessages[errorCode]
 
-  useEffect(() => {
-    if (status === 'unauthenticated' && errorCode === undefined) {
-      console.log('No JWT')
-      console.log(status)
-      void signIn('google', { callbackUrl: '/' })
-    } else if (status === 'authenticated') {
-      void router.push('/')
-    }
-  }, [status])
-
   return (
     <Card title="Login Page">
       <div className="flex justify-center">
