@@ -21,7 +21,7 @@ function Footer() {
       content: [
         {
           title: 'Our Story',
-          link: 'https://live.creatogether.app/pages/about-us',
+          link: 'https://www.creatogether.app/',
         },
         {
           title: 'Blog',
@@ -38,15 +38,15 @@ function Footer() {
         },
         {
           title: 'Terms & Conditions',
-          link: 'https://live.creatogether.app/pages/privacy-terms',
+          link: 'https://hickory-fight-55b.notion.site/Creato-Terms-Conditions-62e6fbb474394483bda8f81cd73b0a2a',
         },
         {
           title: 'Privacy Policy',
-          link: 'https://live.creatogether.app/pages/privacy-policy',
+          link: 'https://hickory-fight-55b.notion.site/Creato-Privacy-Policy-3e9a90f983d74fed8b4734c0775d897e',
         },
         {
           title: 'Contact Us',
-          link: 'https://live.creatogether.app/pages/contact',
+          link: 'https://www.creatogether.app/contact-us',
         },
       ],
     },
@@ -55,11 +55,11 @@ function Footer() {
       content: [
         {
           title: 'Join As Creator',
-          link: 'https://live.creatogether.app/pages/join-as-creator',
+          link: 'https://room591.notion.site/room591/Creato-Is-Hiring-100d3ca4ef8e42f889aa1c577596d308',
         },
         {
           title: 'School Resources',
-          link: 'https://live.creatogether.app/pages/ole-%E5%85%B6%E4%BB%96%E5%AD%B8%E7%BF%92%E7%B6%93%E6%AD%B7',
+          link: 'https://www.creatogether.app/creato-academy',
         },
       ],
     },
