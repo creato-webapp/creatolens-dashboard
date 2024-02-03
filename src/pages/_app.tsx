@@ -16,6 +16,7 @@ function MyApp({
     <SessionProvider session={pageProps.session}>
       <Head>
         <link key="icon" rel="icon" href="./favicon.ico" />
+        <title>Creato Lens | AI Hashtag Maker</title>
       </Head>
       <Navbar>
         <Component {...pageProps} />
