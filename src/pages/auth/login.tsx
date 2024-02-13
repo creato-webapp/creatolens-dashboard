@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react'
+import { FC } from 'react'
 import { useRouter } from 'next/router'
 import { useSession, signIn, signOut, getProviders } from 'next-auth/react'
 import Card from '@components/Card'
@@ -25,8 +25,8 @@ export async function getServerSideProps() {
   }
 }
 
-const login: FC<loginProps> = ({ providers }) => {
-  const { data: session, status } = useSession()
+const Login: FC<loginProps> = ({ providers }) => {
+  const { data: session } = useSession()
   const router = useRouter()
   const errorCode = router.query.error as ErrorCodes
   const errorMessages: Record<ErrorCodes, string> = {
@@ -85,4 +85,4 @@ const login: FC<loginProps> = ({ providers }) => {
     </Card>
   )
 }
-export default login
+export default Login

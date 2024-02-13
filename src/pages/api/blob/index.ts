@@ -1,9 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import BlobInstance from '../axiosInstance/Blob'
 import axios from 'axios'
-const FormData = require('form-data')
-const fs = require('fs')
-import LabelInstance from '../axiosInstance/Labels'
 export const config = {
   api: {
     bodyParser: {
@@ -36,7 +33,7 @@ export default async function accountQueryHandler(req: NextApiRequest, res: Next
         if (!response.data) {
           return res.status(400).json({ message: 'Invalid request' })
         }
-        const labels = response.data.map((e: any) => e.description)
+        const labels = response.data.map((e: { description: string }) => e.description)
         const hashtagRes = await Promise.allSettled([
           axios.get(process.env.IMAGE_HASHTAG_1 as string, {
             params: { input: labels.join(', ') },

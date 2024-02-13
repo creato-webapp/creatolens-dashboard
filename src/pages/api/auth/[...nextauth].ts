@@ -5,7 +5,6 @@ import { FireStoreAdapterWrapper } from '@services/customAdapter'
 import { NextApiRequest, NextApiResponse } from 'next'
 import { setCookie } from 'cookies-next'
 
-import axios from 'axios'
 type NextAuthOptionsCallback = (req: NextApiRequest, res: NextApiResponse) => NextAuthOptions
 
 /**
@@ -13,58 +12,58 @@ type NextAuthOptionsCallback = (req: NextApiRequest, res: NextApiResponse) => Ne
  * `accessToken` and `accessTokenExpires`. If an error occurs,
  * returns the old token and an error property
  */
-interface AuthToken {
-  user: User
-  accessToken: string
-  accessTokenExpires?: number
-  expires_at?: number
-  refreshToken: string
-  error?: string
-}
+// interface AuthToken {
+//   user: User
+//   accessToken: string
+//   accessTokenExpires?: number
+//   expires_at?: number
+//   refreshToken: string
+//   error?: string
+// }
 
 export interface CombinedUser extends User {
   emailVerified: boolean
   roles: string[]
 }
 
-async function refreshAccessToken(token: AuthToken) {
-  try {
-    const url =
-      'https://oauth2.googleapis.com/token?' +
-      new URLSearchParams({
-        client_id: process.env.GOOGLE_CLIENT_ID as string,
-        client_secret: process.env.GOOGLE_CLIENT_SECRET as string,
-        grant_type: 'refresh_token',
-        refresh_token: token.refreshToken,
-      })
+// async function refreshAccessToken(token: AuthToken) {
+//   try {
+//     const url =
+//       'https://oauth2.googleapis.com/token?' +
+//       new URLSearchParams({
+//         client_id: process.env.GOOGLE_CLIENT_ID as string,
+//         client_secret: process.env.GOOGLE_CLIENT_SECRET as string,
+//         grant_type: 'refresh_token',
+//         refresh_token: token.refreshToken,
+//       })
 
-    const response = await fetch(url, {
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-      },
-      method: 'POST',
-    })
-    const refreshedTokens = await response.json()
+//     const response = await fetch(url, {
+//       headers: {
+//         'Content-Type': 'application/x-www-form-urlencoded',
+//       },
+//       method: 'POST',
+//     })
+//     const refreshedTokens = await response.json()
 
-    if (!response.ok) {
-      throw refreshedTokens
-    }
+//     if (!response.ok) {
+//       throw refreshedTokens
+//     }
 
-    return {
-      ...token,
-      accessToken: refreshedTokens.access_token,
-      accessTokenExpires: Date.now() + refreshedTokens.expires_at * 1000,
-      refreshToken: refreshedTokens.refresh_token ?? token.refreshToken, // Fall back to old refresh token
-    }
-  } catch (error) {
-    console.log(error)
+//     return {
+//       ...token,
+//       accessToken: refreshedTokens.access_token,
+//       accessTokenExpires: Date.now() + refreshedTokens.expires_at * 1000,
+//       refreshToken: refreshedTokens.refresh_token ?? token.refreshToken, // Fall back to old refresh token
+//     }
+//   } catch (error) {
+//     console.log(error)
 
-    return {
-      ...token,
-      error: 'RefreshAccessTokenError',
-    }
-  }
-}
+//     return {
+//       ...token,
+//       error: 'RefreshAccessTokenError',
+//     }
+//   }
+// }
 
 const firebaseConfig = {
   apiKey: process.env.FIREBASE_API_KEY,
@@ -98,7 +97,7 @@ const nextAuthOptions: NextAuthOptionsCallback = (req, res) => ({
   secret: process.env.JWT_SECRET,
   session: { strategy: 'jwt' },
   callbacks: {
-    async signIn({ user, account, profile, email, credentials }) {
+    async signIn({ account }) {
       if (account?.id_token) {
         setCookie('idToken', account.id_token, {
           req: req,
@@ -116,7 +115,7 @@ const nextAuthOptions: NextAuthOptionsCallback = (req, res) => ({
       // console.log({ session, token })
       return { ...session, token: token, user: token.user as User } // The return type will match the one returned in `useSession()`
     },
-    async jwt({ token, user, account, profile }) {
+    async jwt({ token, user, account }) {
       // console.log({ token, user, account, profile })
       // Persist the OAuth access_token and or the user id to the token right after signin
       if (account && user) {
@@ -131,6 +130,8 @@ const nextAuthOptions: NextAuthOptionsCallback = (req, res) => ({
   },
 })
 
-export default (req: NextApiRequest, res: NextApiResponse) => {
+const authHandler = (req: NextApiRequest, res: NextApiResponse) => {
   return NextAuth(req, res, nextAuthOptions(req, res))
 }
+
+export default authHandler

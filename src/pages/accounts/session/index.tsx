@@ -135,7 +135,7 @@ const AccountsSessionPage = ({ paginationData }: Props) => {
           <Table.Header columns={columns} />
           <Table.Body>
             {accountSession.map((e, index) => (
-              <Table.Row columns={columns} rowData={e} rowKey={index} />
+              <Table.Row key={`accountSession-table-row-${index}`} columns={columns} rowData={e} rowKey={index} />
             ))}
           </Table.Body>
         </Table.Layout>

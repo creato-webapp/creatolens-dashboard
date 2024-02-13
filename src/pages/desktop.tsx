@@ -1,6 +1,4 @@
 import React from 'react'
-import styles from '../styles/Desktop.module.css'
-import Card from '@components/Card'
 import type { NextPage } from 'next'
 
 const Desktop: NextPage = () => {

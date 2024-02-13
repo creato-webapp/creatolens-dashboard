@@ -1,12 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import HashetInstance from '../axiosInstance/Hashet'
-export default async function hashtagQueryHandler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+export default async function hashtagQueryHandler(req: NextApiRequest, res: NextApiResponse) {
   const {
     query: { recommend },
-    method,
   } = req
   const response = await HashetInstance.get('/model', {
     params: { input: recommend },

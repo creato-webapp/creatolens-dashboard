@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig, AxiosError } from 'axios'
+import axios, { AxiosError } from 'axios'
 
 const AccountInstance = axios.create({
   baseURL: process.env.ACCOUNT_SERVICE + '/',

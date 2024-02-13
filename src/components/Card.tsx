@@ -1,6 +1,5 @@
 import React, { HTMLAttributes } from 'react'
 import { Title } from '@components/Typography'
-import Tag from './Tag'
 import { Button } from './Button'
 
 interface CardProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'> {

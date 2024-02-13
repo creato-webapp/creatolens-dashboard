@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig, AxiosError } from 'axios'
+import axios, { AxiosError } from 'axios'
 
 const ScrapperInstance = axios.create({
   baseURL: process.env.SCRAPPER_SERVICE,

@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig, AxiosError } from 'axios'
+import axios, { AxiosError } from 'axios'
 
 const HashetInstance = axios.create({
   baseURL: process.env.HASHET_SERVICE,

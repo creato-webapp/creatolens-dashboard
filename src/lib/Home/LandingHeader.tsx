@@ -32,11 +32,16 @@ export default function LandingHeader(props: LandingHeaderProps) {
           Elevate your content's visibility with 100% personalised hashtag trend recommendations.
         </h3>
         <div className="mt-14 flex flex-row justify-center gap-8 md:mt-9 md:justify-start md:gap-3 ">
-          <Button.Primary className=" w-auto"  sizes={['m','l','l']} onClick={handleClick}>
+          <Button.Primary className=" w-auto" sizes={['m', 'l', 'l']} onClick={handleClick}>
             <h4>Free Trial</h4>
             <Image src={arrow_right} alt="arrow_right" width={20} height={20} className="ml-2"></Image>
           </Button.Primary>
-          <Button.Outline className=" w-auto" sizes={['m','l','l']} styleClassName="!py-3 !px-6" onClick={() => signIn('google', { callbackUrl: '/' })}>
+          <Button.Outline
+            className=" w-auto"
+            sizes={['m', 'l', 'l']}
+            styleClassName="!py-3 !px-6"
+            onClick={() => signIn('google', { callbackUrl: '/' })}
+          >
             <h4>Sign In</h4>
           </Button.Outline>
         </div>

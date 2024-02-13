@@ -1,5 +1,5 @@
 import axios, { AxiosError, AxiosRequestConfig } from 'axios'
-import { useSession, signIn, signOut, getProviders } from 'next-auth/react'
+import { signOut } from 'next-auth/react'
 import { getCookie } from 'cookies-next'
 
 export const FetcherInstance = axios.create({

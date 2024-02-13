@@ -1,5 +1,5 @@
-import React, { useState, ChangeEvent } from 'react'
-import { uploadImage, Labels, ImageRecord, ImageResponse } from '@services/Object/ImageBlob'
+import React, { useState } from 'react'
+import { uploadImage, ImageResponse } from '@services/Object/ImageBlob'
 import { Button } from '@components/Button'
 import Dropzone from '@components/Dropzone'
 import CrossIcon from '@components/Icon/CrossIcon'
@@ -71,29 +71,21 @@ const ImageUpload: React.FC = () => {
       </Button.Primary>
       <div className="mb-4 flex flex-col">
         <h4>Labels detected</h4>
-        {imageRes?.labels?.map((e) => (
-          <>{e.description} &#8203; </>
-        ))}
+        {imageRes?.labels?.map((e) => <>{e.description} &#8203; </>)}
         {imageRes?.labels?.length === 0 && <p>No labels detected</p>}
       </div>
       <div className="flex flex-row">
         <div className="m-4 flex flex-col">
           <h4>Hashet Model with First Two Labels</h4>
-          {imageRes?.firstTwo?.map((e: hashtag, index) => (
-            <li key={e.hashtag + index}>{e.hashtag} &#8203; </li>
-          ))}
+          {imageRes?.firstTwo?.map((e: hashtag, index) => <li key={e.hashtag + index}>{e.hashtag} &#8203; </li>)}
         </div>
         <div className="m-4 flex flex-col">
           <h4>Hashet Model with Middle Two Labels</h4>
-          {imageRes?.middleTwo?.map((e: hashtag, index) => (
-            <li key={e.hashtag + index}>{e.hashtag} &#8203; </li>
-          ))}
+          {imageRes?.middleTwo?.map((e: hashtag, index) => <li key={e.hashtag + index}>{e.hashtag} &#8203; </li>)}
         </div>
         <div className="m-4 flex flex-col">
           <h4>Hashet Model with Last Two Labels</h4>
-          {imageRes?.lastTwo?.map((e: hashtag, index) => (
-            <li key={e.hashtag + index}>{e.hashtag} &#8203; </li>
-          ))}
+          {imageRes?.lastTwo?.map((e: hashtag, index) => <li key={e.hashtag + index}>{e.hashtag} &#8203; </li>)}
         </div>
       </div>
     </div>

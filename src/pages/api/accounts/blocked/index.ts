@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import AccountInstance from '../../axiosInstance/Account'
 export default async function accountQueryHandler(req: NextApiRequest, res: NextApiResponse) {
   const {
-    query: { id, name, pageNumber, pageSize, orderBy, isAsc },
+    query: { pageNumber, pageSize, orderBy, isAsc },
     body,
     method,
   } = req
@@ -20,18 +20,21 @@ export default async function accountQueryHandler(req: NextApiRequest, res: Next
       return res.status(response.status).json(response.data)
     }
     case 'POST': {
-      const response = await AccountInstance.post('/forbidden-accounts/create', body, {
-        headers: {
-          Cookie: req.headers.cookie,
-        },
-      })
-        .then(function (response) {
-          console.log(response)
-          return res.status(response.status).json(response.data)
+      try {
+        const response = await AccountInstance.post('/forbidden-accounts/create', body, {
+          headers: {
+            Cookie: req.headers.cookie,
+          },
         })
-        .catch(function (error) {
-          console.log(error)
-        })
+        console.log(response)
+        return res.status(response.status).json(response.data)
+      } catch (error) {
+        console.log(error)
+        // If you want to send a response on error, you should do it here.
+        // Make sure to return after sending a response to avoid trying to send
+        // another response which would cause an error.
+        return res.status(500).json({ error: 'Internal Server Error' })
+      }
     }
     default:
       res.setHeader('Allow', ['GET', 'POST'])

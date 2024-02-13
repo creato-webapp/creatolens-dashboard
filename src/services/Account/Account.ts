@@ -91,12 +91,7 @@ export async function GetAccount(id: string, customConfig?: AxiosRequestConfig):
   return response
 }
 
-export async function GetAccounts(
-  account?: Partial<IAccount>,
-  orderBy?: string,
-  isAsc?: boolean,
-  customConfig?: AxiosRequestConfig
-): Promise<IAccount[]> {
+export async function GetAccounts(account?: Partial<IAccount>, orderBy?: string, isAsc?: boolean): Promise<IAccount[]> {
   const response = await Fetcher.GET(`/api/accounts/query`, {
     params: { filter: account ? generateAccountFilter(account) : null, orderby: orderBy, isAsc: isAsc },
   })

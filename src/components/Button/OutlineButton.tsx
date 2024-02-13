@@ -3,7 +3,7 @@ import Spinner from '../Spinner'
 import { ButtonProps } from './interface'
 import Button from './Button'
 
-const Outline: React.FC<ButtonProps> = ({ children, onClick, disabled = false, loading, type = 'button', styleClassName, sizes, ...res }) => {
+const Outline: React.FC<ButtonProps> = ({ children, onClick, disabled = false, loading, type = 'button', sizes, ...res }) => {
   const isDisabled = disabled || loading
   return (
     <Button

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useCallback } from 'react'
 import Card from '@components/Card'
 import { Table } from '@components/Table'
 import { Button } from '@components/Button'
@@ -15,7 +15,6 @@ import Hero from '@components/Hero'
 import { PlusIcon } from '@heroicons/react/24/solid'
 import Dropdown from '@components/Form/Dropdown'
 import EditIcon from '@components/Icon/EditIcon'
-import { useInView } from 'react-intersection-observer'
 
 const dayjs = require('dayjs')
 const utc = require('dayjs/plugin/utc')
@@ -293,9 +292,7 @@ const AccountsPage = ({ paginationData }: Props) => {
               updateSorting={updateSorting}
             />
             <Table.Body className="text-sm font-normal leading-5 text-black">
-              {accounts?.map((e, index) => (
-                <Table.Row columns={columns} className="text-sm" rowData={e} rowKey={index} />
-              ))}
+              {accounts?.map((e, index) => <Table.Row columns={columns} className="text-sm" rowData={e} rowKey={index} />)}
             </Table.Body>
           </Table.Layout>
         </div>
@@ -338,9 +335,7 @@ const AccountsPage = ({ paginationData }: Props) => {
         </div> */}
 
         <div className="flex w-full flex-col justify-center gap-16 bg-none md:hidden">
-          {accounts?.map((e, index) => (
-            <ResponsiveAccountCard columns={columns} rowData={e} key={`account_data_${index}`} />
-          ))}
+          {accounts?.map((e, index) => <ResponsiveAccountCard columns={columns} rowData={e} key={`account_data_${index}`} />)}
         </div>
         {/* <div ref={ref} className="flex justify-center md:hidden">
           {fetching && <div>Loading...</div>}

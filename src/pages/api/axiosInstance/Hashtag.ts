@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig, AxiosError } from 'axios'
+import axios, { AxiosError } from 'axios'
 
 const HashtagInstance = axios.create({
   baseURL: process.env.HASHTAG_SERVICE,
