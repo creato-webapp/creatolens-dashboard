@@ -1,6 +1,4 @@
 // TestimonialCards.tsx
-import type { FC } from 'react'
-
 interface Comment {
   img?: string
   author: string

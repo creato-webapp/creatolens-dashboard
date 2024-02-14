@@ -89,12 +89,7 @@ export async function GetRetryAccount(id: string, customConfig?: AxiosRequestCon
   return response
 }
 
-export async function GetRetryAccounts(
-  account?: Partial<IRetryAccount>,
-  orderBy?: string,
-  isAsc?: boolean,
-  customConfig?: AxiosRequestConfig
-): Promise<IRetryAccount[]> {
+export async function GetRetryAccounts(account?: Partial<IRetryAccount>, orderBy?: string, isAsc?: boolean): Promise<IRetryAccount[]> {
   const response = await Fetcher.GET(`/api/accounts/retry/query`, {
     params: { filter: account ? generateRetryAccountFilter(account) : null, orderby: orderBy, isAsc: isAsc },
   })

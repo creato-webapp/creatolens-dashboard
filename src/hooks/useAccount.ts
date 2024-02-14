@@ -32,7 +32,7 @@ export const useAccount = (id: string, shouldFetch: boolean = true, fallbackData
   }
 }
 
-export const useGetAccountsPagination = (paginationParams: PaginationParams, shouldFetch?: true, fallbackData?: PaginationMetadata) => {
+export const useGetAccountsPagination = (paginationParams: PaginationParams, shouldFetch?: true) => {
   const mutableRef = useRef<PaginationMetadata>()
   const { data, error, mutate, ...swr } = useSWR(shouldFetch ? [paginationParams] : null, GetAccountsPagination, {
     refreshInterval: 0,

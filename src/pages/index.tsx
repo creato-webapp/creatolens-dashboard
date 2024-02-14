@@ -1,6 +1,5 @@
 import type { NextPage } from 'next'
-import { useSession, signIn, signOut, getSession } from 'next-auth/react'
-import { useRouter } from 'next/router'
+import { getSession } from 'next-auth/react'
 import LandingHeader from '@lib/Home/LandingHeader'
 import HowItWorks from '@lib/Home/HowItWorks'
 import WhyCreatoLens from '@lib/Home/WhyCreatoLens'

@@ -1,6 +1,4 @@
 import { Button } from '@components/Button'
-import BaseInput from '@components/Form/BaseInput'
-import TextInput from '@components/Form/TextInput'
 
 import React from 'react'
 import LandingImageLogo from './LandingImageLogo'
@@ -29,7 +27,7 @@ export default function LandingHeader(props: LandingHeaderProps) {
           </div>
         </span>
         <h3 className="mx-auto mt-14 w-72 text-center font-medium md:mt-9 md:w-auto md:text-left">
-          Elevate your content's visibility with 100% personalised hashtag trend recommendations.
+          Elevate your content&apos;s visibility with 100% personalised hashtag trend recommendations.
         </h3>
         <div className="mt-14 flex flex-row justify-center gap-8 md:mt-9 md:justify-start md:gap-3 ">
           <Button.Primary className=" w-auto" sizes={['m', 'l', 'l']} onClick={handleClick}>

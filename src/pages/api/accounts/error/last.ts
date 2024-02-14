@@ -3,7 +3,6 @@ import AccountInstance from '../../axiosInstance/Account'
 export default async function accountQueryHandler(req: NextApiRequest, res: NextApiResponse) {
   const {
     query: { username },
-    body,
     method,
   } = req
   switch (method) {

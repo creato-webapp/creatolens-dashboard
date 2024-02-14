@@ -6,7 +6,7 @@ interface IInputPasswordProps extends IBaseInputProps {
   showToggle?: boolean
 }
 
-const InputPassword: React.FC<IInputPasswordProps> = ({ showToggle = true, ...props }) => {
+const InputPassword: React.FC<IInputPasswordProps> = ({ ...props }) => {
   const { id, placeholder, defaultValue, customFormItemProps } = props
   const [showPassword, setShowPassword] = useState(false)
 

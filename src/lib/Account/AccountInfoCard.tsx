@@ -14,7 +14,7 @@ interface AccountInfoCardProps {
   setIsShow: (show: boolean) => void
 }
 
-const AccountInfoCard: React.FC<AccountInfoCardProps> = ({ isLoading, isCreate, account, handleSubmit, setIsShow }) => {
+const AccountInfoCard: React.FC<AccountInfoCardProps> = ({ isLoading, account, handleSubmit, setIsShow }) => {
   const accountInfoField: IField[] = [
     {
       label: 'login count',
@@ -119,7 +119,7 @@ const AccountInfoCard: React.FC<AccountInfoCardProps> = ({ isLoading, isCreate, 
               <StatusTag status={account['status']}></StatusTag>
             </Paragraph>
           </div>
-          {accountInfoField.map((e: IField, index) => (
+          {accountInfoField.map((e: IField) => (
             <div>
               <Paragraph key={e.label} size={'lg'} bold className="font-bold">
                 {e.label}

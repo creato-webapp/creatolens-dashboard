@@ -12,14 +12,9 @@ export interface IBaseInputProps extends React.DetailedHTMLProps<React.InputHTML
 }
 
 const BaseInput: React.FunctionComponent<IBaseInputProps> = ({
-  label,
-  error,
-  message,
-  iconClassName,
   id,
   name,
   value,
-  required,
   disabled,
   className,
   onChange: onNewChange,

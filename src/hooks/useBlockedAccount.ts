@@ -3,7 +3,6 @@ import { IBlockedAccount } from '@lib/Account/Account/interface'
 import {
   GetBlockedAccountsPagination,
   GetBlockedAccount,
-  GetBlockedAccounts,
   UpdateBlockedAccount,
   PaginationParams,
   PaginationMetadata,

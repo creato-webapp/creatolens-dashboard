@@ -3,7 +3,6 @@ import Card from '@components/Card'
 import { Table } from '@components/Table'
 import { Button } from '@components/Button'
 import { IBlockedAccount } from '@lib/Account/Account/interface'
-import { ResponsiveAccountCard } from '@lib/Account/ResponsiveAccountCard'
 import Link from 'next/link'
 import { getSession } from 'next-auth/react'
 import Tag from '@components/Tag'
@@ -12,7 +11,7 @@ import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/solid'
 import StatusTag from '@lib/StatusTag'
 import Pagination from '@components/Pagination'
 import { useGetBlockAccountsPagination } from 'src/hooks/useBlockedAccount'
-import { GetBlockedAccountsPagination, PaginationParams, PaginationMetadata } from '@services/Account/BlockAccount'
+import { GetBlockedAccountsPagination, PaginationMetadata } from '@services/Account/BlockAccount'
 const dayjs = require('dayjs')
 const utc = require('dayjs/plugin/utc')
 dayjs.extend(utc)

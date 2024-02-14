@@ -16,7 +16,7 @@ interface AccountCreateCardProps {
   handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 
-const AccountCreateCard: React.FC<AccountCreateCardProps> = ({ isLoading, isCreate, account, handleSubmit, setIsShow, isChecked, handleChange }) => {
+const AccountCreateCard: React.FC<AccountCreateCardProps> = ({ isLoading, isCreate, account, handleSubmit, isChecked, handleChange }) => {
   const onSubmit = (values: IAccount) => {
     let valid = true
     const newErrors = { username: '', pwd: '' }

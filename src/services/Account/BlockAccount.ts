@@ -94,7 +94,6 @@ export async function GetBlockedAccounts(
   account?: Partial<IBlockedAccount>,
   orderBy?: string,
   isAsc?: boolean,
-  customConfig?: AxiosRequestConfig
 ): Promise<IBlockedAccount[]> {
   const response = await Fetcher.GET(`/api/accounts/blocked/query`, {
     params: { filter: account ? generateBlockedAccountFilter(account) : null, orderby: orderBy, isAsc: isAsc },

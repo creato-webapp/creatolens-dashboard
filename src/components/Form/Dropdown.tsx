@@ -17,7 +17,7 @@ interface DropdownProps extends HTMLProps<HTMLSelectElement> {
   icon?: React.ReactNode
 }
 
-const Dropdown: React.FC<DropdownProps> = ({ name = '', options, defaultValue, disabled, onValueChange, dropDownSizes, icon }) => {
+const Dropdown: React.FC<DropdownProps> = ({ name = '', options, defaultValue, onValueChange, dropDownSizes, icon }) => {
   const [selectedValue, setSelectedValue] = useState(defaultValue || name)
   const [isDropdownNotSelected, setIsDropdownNotSelected] = useState(true)
   const [isOpen, setIsOpen] = useState(false)
@@ -29,7 +29,7 @@ const Dropdown: React.FC<DropdownProps> = ({ name = '', options, defaultValue, d
   }, [selectedValue])
 
   const handleOptionSelect = useCallback(
-    (value: string | number) => (event: React.MouseEvent<HTMLLIElement>) => {
+    (value: string | number) => () => {
       setSelectedValue(value)
       setIsOpen(false)
       setIsDropdownNotSelected(false)
@@ -121,7 +121,7 @@ const Dropdown: React.FC<DropdownProps> = ({ name = '', options, defaultValue, d
         </div>
       </button>
       {isOpen && (
-        <ul className="absolute top-full left-0 z-10 mt-2 w-full rounded-md border border-gray-200 bg-white shadow-lg">
+        <ul className="absolute left-0 top-full z-10 mt-2 w-full rounded-md border border-gray-200 bg-white shadow-lg">
           {options.map((option) => (
             /* refractor the onClick function below */
             <li

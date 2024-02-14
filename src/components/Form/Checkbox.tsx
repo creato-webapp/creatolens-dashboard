@@ -2,7 +2,7 @@ import type { FC } from 'react'
 import { CheckBoxProps } from './interface'
 
 const Checkbox: FC<CheckBoxProps> = (props: CheckBoxProps) => {
-  const { className, id, name, ...res } = props
+  const { className, ...res } = props
   return (
     <input
       {...res}

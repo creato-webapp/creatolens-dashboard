@@ -1,6 +1,7 @@
 {
   "parser": "@typescript-eslint/parser",
   "plugins": ["@typescript-eslint/eslint-plugin"],
+  "extends": "next",
   "parserOptions": {
     "ecmaFeatures": {
       "jsx": true

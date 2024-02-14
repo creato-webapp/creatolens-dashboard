@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import AccountInstance from '../../axiosInstance/Account'
 export default async function accountQueryHandler(req: NextApiRequest, res: NextApiResponse) {
   const {
-    query: { id, name, pageNumber, pageSize, orderBy, isAsc },
+    query: { pageNumber, pageSize, orderBy, isAsc },
     body,
     method,
   } = req
@@ -21,18 +21,20 @@ export default async function accountQueryHandler(req: NextApiRequest, res: Next
     }
 
     case 'POST': {
-      const response = await AccountInstance.post('/available-accounts/create', body, {
-        headers: {
-          Cookie: req.headers.cookie,
-        },
-      })
-        .then(function (response) {
-          console.log(response)
-          return res.status(response.status).json(response.data)
+      try {
+        const response = await AccountInstance.post('/available-accounts/create', body, {
+          headers: {
+            Cookie: req.headers.cookie,
+          },
         })
-        .catch(function (error) {
-          console.log(error)
-        })
+        console.log(response)
+        return res.status(response.status).json(response.data)
+      } catch (error) {
+        console.log(error)
+        // Handle the error appropriately
+        // For example, return an HTTP 500 status code
+        return res.status(500).json({ message: 'Internal Server Error' })
+      }
     }
     default:
       res.setHeader('Allow', ['GET', 'POST'])

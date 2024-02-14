@@ -69,7 +69,7 @@ const AccountsPage = ({ paginationData }: Props) => {
   })
   const [createDateOrder, setCreateDateOrder] = useState<string | number>('desc')
   // const [fetching, setFetching] = useState(false)
-  const { accounts: responseData, error, mutate } = useGetAccountsPagination(pageParams, true, paginationData)
+  const { accounts: responseData, error } = useGetAccountsPagination(pageParams, true, paginationData)
   // const [accountData, setAccountData] = useState<
   //   {
   //     page: number
@@ -135,7 +135,7 @@ const AccountsPage = ({ paginationData }: Props) => {
 
   const updateSorting = useCallback(
     (orderBy: string, isAsc: boolean): React.MouseEventHandler<HTMLDivElement> =>
-      (e) => {
+      () => {
         setPageParams((prevParams) => ({
           ...prevParams,
           orderBy: orderBy,
@@ -292,7 +292,9 @@ const AccountsPage = ({ paginationData }: Props) => {
               updateSorting={updateSorting}
             />
             <Table.Body className="text-sm font-normal leading-5 text-black">
-              {accounts?.map((e, index) => <Table.Row columns={columns} className="text-sm" rowData={e} rowKey={index} />)}
+              {accounts?.map((e, index) => (
+                <Table.Row columns={columns} className="text-sm" rowData={e} rowKey={index} />
+              ))}
             </Table.Body>
           </Table.Layout>
         </div>
@@ -335,7 +337,9 @@ const AccountsPage = ({ paginationData }: Props) => {
         </div> */}
 
         <div className="flex w-full flex-col justify-center gap-16 bg-none md:hidden">
-          {accounts?.map((e, index) => <ResponsiveAccountCard columns={columns} rowData={e} key={`account_data_${index}`} />)}
+          {accounts?.map((e, index) => (
+            <ResponsiveAccountCard columns={columns} rowData={e} key={`account_data_${index}`} />
+          ))}
         </div>
         {/* <div ref={ref} className="flex justify-center md:hidden">
           {fetching && <div>Loading...</div>}

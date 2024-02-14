@@ -6,7 +6,7 @@ import MenuIcon from '@components/Icon/MenuIcon'
 import LogoutIcon from '@components/Icon/LogOutIcon'
 import CrossIcon from '@components/Icon/CrossIcon'
 import LoginIcon from '@components/Icon/LoginIcon'
-import { useSession, signIn, signOut } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
 interface Page {
   name: string
   path: string

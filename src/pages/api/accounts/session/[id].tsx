@@ -3,7 +3,7 @@ import AccountInstance from '../../axiosInstance/Account'
 
 export default function AccountHandler(req: NextApiRequest, res: NextApiResponse) {
   const {
-    query: { id, name },
+    query: { id },
     body,
     method,
   } = req

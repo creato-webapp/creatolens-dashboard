@@ -16,8 +16,6 @@ export interface IField {
   }
 }
 
-type ButtonSize = 's' | 'm' | 'l'
-
 export interface FormLayoutProps extends Omit<FormHTMLAttributes<HTMLFormElement>, 'onSubmit'> {
   Header?: string
   subHeader?: string

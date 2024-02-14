@@ -48,7 +48,6 @@ const AccountsRetryPage = ({ accountData }: Props) => {
 
   const {
     data,
-    isLoading: loading,
     error,
     updateRetryAccount: useUpdateAccount,
   } = useRetryAccount(id as string, shouldFetch, isCreate ? isCreate : accountData)

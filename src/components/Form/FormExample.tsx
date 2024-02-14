@@ -1,7 +1,7 @@
 import React, { FC } from 'react'
 import { FormLayoutProps } from './interface'
 
-const Layout: FC<FormLayoutProps> = (props: FormLayoutProps) => {
+const Layout: FC<FormLayoutProps> = () => {
   return (
     <div className="form-container">
       <div className="px-6 text-gray-900 antialiased">

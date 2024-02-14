@@ -20,7 +20,6 @@ interface TabProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const Tab: React.FC<TabProps> = ({
-  activeKey,
   centered,
   defaultActiveKey,
   items,
@@ -29,7 +28,6 @@ const Tab: React.FC<TabProps> = ({
   tabBarExtraContent,
   tabBarStyle,
   onKeyChange,
-  onEdit,
   className,
 }) => {
   const [currentActiveKey, setCurrentActiveKey] = useState<string | undefined>(defaultActiveKey)

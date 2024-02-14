@@ -49,7 +49,6 @@ const AccountsBlockedPage = ({ accountData }: Props) => {
 
   const {
     data,
-    isLoading: loading,
     error,
     updateBlockAccount: useUpdateAccount,
   } = useBlockAccount(id as string, shouldFetch, isCreate ? isCreate : accountData)
