@@ -63,8 +63,8 @@ const CustomizeHashtagCard: React.FC<Props> = ({ hashtags }) => {
       </div>
       <div className="w-full pt-4 md:pt-0">
         <div className="leading-loos flex max-h-144 flex-col gap-6 space-y-2 overflow-y-scroll font-bold">
-          {accuracyRanges.map((range) => (
-            <div className="bg-bg-dark">
+          {accuracyRanges.map((range, index) => (
+            <div className="bg-bg-dark" key={`accuracy-range-${index}`}>
               <Collapse
                 className="shadow-none md:hidden"
                 parent={

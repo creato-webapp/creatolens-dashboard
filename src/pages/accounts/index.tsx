@@ -293,7 +293,7 @@ const AccountsPage = ({ paginationData }: Props) => {
             />
             <Table.Body className="text-sm font-normal leading-5 text-black">
               {accounts?.map((e, index) => (
-                <Table.Row columns={columns} className="text-sm" rowData={e} rowKey={index} />
+                <Table.Row key={`accounts-table-${index}`} columns={columns} className="text-sm" rowData={e} rowKey={index} />
               ))}
             </Table.Body>
           </Table.Layout>

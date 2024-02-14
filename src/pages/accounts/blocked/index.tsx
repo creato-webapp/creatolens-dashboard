@@ -186,7 +186,7 @@ const BlockedAccountsPage = ({ paginationData }: Props) => {
         <Table.Layout>
           <Table.Header columns={columns} />
 
-          <Table.Body>{accounts?.map((e, index) => <Table.Row columns={columns} rowData={e} rowKey={index} />)}</Table.Body>
+          <Table.Body>{accounts?.map((e, index) => <Table.Row key={`accounts-row-${index}`} columns={columns} rowData={e} rowKey={index} />)}</Table.Body>
         </Table.Layout>
       </div>
       <Pagination

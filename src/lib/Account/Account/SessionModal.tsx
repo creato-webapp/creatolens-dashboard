@@ -21,8 +21,8 @@ const dataItemToKeyValues = (item: Cookies[]) => {
   if (!item) return <></>
   const entries = Object.entries(item)
   const listItems = entries.map(([key, value], index) => (
-    <div>
-      <li key={index}>
+    <div key={index}>
+      <li>
         <p className="break-all">{`${key}: ${value}`}</p>
       </li>
     </div>

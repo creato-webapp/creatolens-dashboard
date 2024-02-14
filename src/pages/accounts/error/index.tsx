@@ -140,7 +140,7 @@ const AccountsErrorPage = ({ paginationData }: Props) => {
           <Table.Header columns={columns} />
           <Table.Body>
             {accountError.map((e, index) => (
-              <Table.Row columns={columns} rowData={e} rowKey={index} />
+              <Table.Row key={`account-error-${index}`} columns={columns} rowData={e} rowKey={index} />
             ))}
           </Table.Body>
         </Table.Layout>

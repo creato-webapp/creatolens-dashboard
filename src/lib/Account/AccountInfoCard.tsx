@@ -120,8 +120,8 @@ const AccountInfoCard: React.FC<AccountInfoCardProps> = ({ isLoading, account, h
             </Paragraph>
           </div>
           {accountInfoField.map((e: IField) => (
-            <div>
-              <Paragraph key={e.label} size={'lg'} bold className="font-bold">
+            <div key={e.label}>
+              <Paragraph size={'lg'} bold className="font-bold">
                 {e.label}
               </Paragraph>
               <Paragraph key={e.name}>{account[e.name]}</Paragraph>
