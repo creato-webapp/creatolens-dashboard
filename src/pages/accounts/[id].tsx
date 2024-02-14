@@ -150,7 +150,7 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
             <div className="flex flex-col pb-8">
               <div className="pb-4 pt-3">
                 <div className="flex cursor-pointer flex-row gap-2 font-semibold text-accent2-500" onClick={goBack}>
-                  <Image src="/create-account/back.svg" width={20} height={20} />
+                  <Image alt="back" src="/create-account/back.svg" width={20} height={20} />
                   <div>{`Back`}</div>
                 </div>
               </div>

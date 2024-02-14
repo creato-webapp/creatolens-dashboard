@@ -56,7 +56,7 @@ const ResponsiveAccountCard: FC<ResponsiveAccountCardProps> = (props: Responsive
           </Badges>
         </div>
         <div className="flex gap-2 text-gray-900">
-          <Image src="/account/InstagramLogo.svg" className="" width={24} height={24}></Image>
+          <Image alt="instagram" src="/account/InstagramLogo.svg" className="" width={24} height={24}></Image>
           <h3 className="text-l font-extrabold">{props.rowData?.username}</h3>
         </div>
         <div className="flex flex-row font-semibold">
