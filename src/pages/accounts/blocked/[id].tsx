@@ -47,11 +47,7 @@ const AccountsBlockedPage = ({ accountData }: Props) => {
   const { id } = router.query
   const isCreate = id === 'create-account'
 
-  const {
-    data,
-    error,
-    updateBlockAccount: useUpdateAccount,
-  } = useBlockAccount(id as string, shouldFetch, isCreate ? isCreate : accountData)
+  const { data, error, updateBlockAccount: callUpdateAccount } = useBlockAccount(id as string, shouldFetch, isCreate ? isCreate : accountData)
 
   if (error) {
     console.log(data)
@@ -128,7 +124,7 @@ const AccountsBlockedPage = ({ accountData }: Props) => {
       ...values,
       last_login_dt: dayjs(values.last_login_dt, 'YYYY-MM-DDTHH:mm').utc().local().format('YYYY-MM-DD THH:mm:ss'),
     }
-    await useUpdateAccount(newValues)
+    await callUpdateAccount(newValues)
   }
 
   return (

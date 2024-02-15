@@ -21,9 +21,6 @@ const Pagination: React.FC<PaginationProps> = ({ isLoading, page, size, totalIte
     return pageNumbers
   }, [totalPages])
 
-  if (isLoading) {
-    return <div>Loading...</div>
-  }
   const handlePrevClick = useCallback(() => {
     if (hasPrev) {
       onPageChange(page - 1)
@@ -44,6 +41,10 @@ const Pagination: React.FC<PaginationProps> = ({ isLoading, page, size, totalIte
   )
 
   const pageNumbers = generatePageNumbers()
+
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
 
   const renderPageButton = (pageNumber: number) => {
     return (
