@@ -146,12 +146,9 @@ const AccountsPage = ({ paginationData }: Props) => {
   )
 
   if (error) {
-    console.log(responseData)
-    console.log(error)
     return <div>Failed to load users</div>
   }
   if (!responseData) {
-    console.log(responseData)
     return <div>Loading...</div>
   }
 
