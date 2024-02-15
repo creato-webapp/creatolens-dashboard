@@ -49,7 +49,7 @@ const AccountsRetryPage = ({ accountData }: Props) => {
   const {
     data,
     error,
-    updateRetryAccount: useUpdateAccount,
+    updateRetryAccount: callUpdateAccount,
   } = useRetryAccount(id as string, shouldFetch, isCreate ? isCreate : accountData)
 
   if (error) {
@@ -127,7 +127,7 @@ const AccountsRetryPage = ({ accountData }: Props) => {
       ...values,
       wait_until: dayjs(values.wait_until, 'YYYY-MM-DDTHH:mm').format('YYYY-MM-DD THH:mm:ss'),
     }
-    await useUpdateAccount(newValues)
+    await callUpdateAccount(newValues)
   }
 
   return (
