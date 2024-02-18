@@ -1,19 +1,14 @@
 import Image from 'next/image'
-import { useMemo } from 'react'
-
-export enum Status {
-  FAILED = 'FAILED',
-  SUCCESS = 'SUCCESS',
-  WARNING = 'WARNING',
-}
+import { Status, useDialogues } from 'src/context/DialogueContext'
 
 interface DialogueIconProps {
   status: Status
 }
 
-interface DialogueInterface {
+export interface DialogueInterface {
   status: Status
   message: string
+  id: number
 }
 
 const DialogueIcon: React.FC<DialogueIconProps> = ({ status }) => {
@@ -27,10 +22,10 @@ const DialogueIcon: React.FC<DialogueIconProps> = ({ status }) => {
   return null
 }
 
-const Dialogue = (props: DialogueInterface) => {
-  const { status, message } = props
+const Dialogue = () => {
+  const { dialogues } = useDialogues()
 
-  const color = useMemo(() => {
+  const color = (status: Status) => {
     if (status === Status.FAILED) {
       return {
         border: 'error-500',
@@ -49,18 +44,34 @@ const Dialogue = (props: DialogueInterface) => {
         text: 'warning-700',
       }
     }
-  }, [status])
+    return {
+      border: 'warning-500',
+      text: 'warning-700',
+    }
+  }
   return (
-    <div className={`w-full rounded border-l-8 border-${color?.border} py-4 shadow-md md:w-2/3`}>
-      <div className="flex flex-row px-2">
-        <DialogueIcon status={status} />
-        <div className="flex flex-col px-4 justify-between">
-          <h4 id="dialogue-header" className={`text-${color?.text} font-medium`}>
-            {status}
-          </h4>
-          <div className="text-sm text-text-secondary">{message}</div>
-        </div>
-      </div>
+    <div className="fixed bottom-5 z-10 flex w-full flex-col gap-2 md:right-5 md:w-2/3">
+      {dialogues.map((dialogue, index) => {
+        const { border, text } = color(dialogue.status)
+        return (
+          <div
+            key={index}
+            className={`relative rounded border-l-8 bg-white border-${border} mw-full animate-fadeIn py-2 shadow-md md:animate-slideInFromRight`}
+          >
+            <div className=" flex flex-row px-2">
+              <DialogueIcon status={dialogue.status} />
+              <div className="flex flex-col justify-between px-4">
+                <h4 id="dialogue-header" className={`text-${text} font-medium`}>
+                  {dialogue.status}
+                </h4>
+                <div className="flex flex-wrap whitespace-normal">
+                  <p className="flex flex-wrap text-text-secondary">{dialogue.message}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        )
+      })}
     </div>
   )
 }
