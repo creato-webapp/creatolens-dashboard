@@ -5,19 +5,23 @@ module.exports = {
   fonts: [
     {
       family: 'Lato',
-      variants: ['300', '400','700','900'],
+      variants: ['300', '400', '700', '900'],
     },
   ],
-  content: [
-    './src/pages/**/*.{js,ts,jsx,tsx}', 
-    './src/components/**/*.{js,ts,jsx,tsx}',
-    './src/lib/**/*.{js,ts,jsx,tsx}'
+  content: ['./src/pages/**/*.{js,ts,jsx,tsx}', './src/components/**/*.{js,ts,jsx,tsx}', './src/lib/**/*.{js,ts,jsx,tsx}'],
+  safelist: [
+    {
+      pattern: /border-(error|warning|successful)-(500|600|700)/,
+    },
+    {
+      pattern: /text-(error|warning|successful)-(500|600|700)/,
+    },
   ],
   theme: {
-      fontFamily: {
-        lato: ['Lato', 'system-ui'],
-        // Add more font families if needed
-      },     
+    fontFamily: {
+      lato: ['Lato', 'system-ui'],
+      // Add more font families if needed
+    },
     screens: {
       sm: '425px',
       md: '768px',
@@ -26,8 +30,8 @@ module.exports = {
     },
     extend: {
       minWidth: {
-        '8': '2rem',
-      },   
+        8: '2rem',
+      },
       fontSize: {
         xs: '0.75rem',
         sm: '0.875rem',
@@ -46,29 +50,29 @@ module.exports = {
         'hero-background': "url('/landing-background.png')",
       },
       spacing: {
-        '128': '32rem',
-        '144': '36rem',
+        128: '32rem',
+        144: '36rem',
       },
       borderRadius: {
         '4xl': '2rem',
       },
       colors: {
-        bg:{
-          white:'#FDFCFB',
-          dark:'#F5F6F6',
+        bg: {
+          white: '#FDFCFB',
+          dark: '#F5F6F6',
         },
-        text:{
+        text: {
           primary: '#1A242A',
-          secondary:'#445F6F',
-          tertiary:'#7697AB',
+          secondary: '#445F6F',
+          tertiary: '#7697AB',
           disabled: '#ABAEB0',
           white: '#FFFFFF',
           stroke: '#BACBD5',
         },
         dividers: '#DDE5EA',
-        "interface-hover":"#E3E9EC",
+        'interface-hover': '#E3E9EC',
         disabled: '#DDE5EA',
-        "bg-disabled":'#FF1F2F4',
+        'bg-disabled': '#FF1F2F4',
         stroke: '#BACBD5',
         accent1: {
           1000: '#570421',
@@ -131,11 +135,12 @@ module.exports = {
           100: '#FFFAD3',
         },
       },
+      animation: {
+        slideInFromRight: 'slideInFromRight 0.7s ease-out forwards',
+        fadeOut: 'fadeOut 0.5s ease-out forwards', // If you want to use the fade-out animation
+        fadeIn: 'fadeIn 0.5s ease-out forwards', // Add this line for fade-in animation
+      },
     },
   },
-  plugins: [
-    require('@tailwindcss/forms'),
-    require('prettier-plugin-tailwindcss'),
-    require('@tailwindcss/typography'),
-  ]
+  plugins: [require('@tailwindcss/forms'), require('prettier-plugin-tailwindcss'), require('@tailwindcss/typography')],
 }
