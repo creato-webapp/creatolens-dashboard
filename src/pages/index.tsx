@@ -22,15 +22,8 @@ export const getServerSideProps = async (context: any) => {
 const Home: NextPage = () => {
   return (
     <>
-      <div className="pb-6 gap-2 flex flex-col w-full">
-        <Checkbox hasError indeterminate />
-        <Checkbox inactive/>
-        <Checkbox hasError/>
-        <Checkbox hasError/>
-
-        <Checkbox indeterminate />
-        <LandingHeader className="mb-5" />
-        <HowItWorks />
+      <div className="pb-6">
+        <LandingHeader className="mb-5" /> <HowItWorks />
       </div>
       <Testimonial />
       <WhyCreatoLens />
