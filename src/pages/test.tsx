@@ -36,6 +36,7 @@ const ImageUpload: React.FC = () => {
           'Content-Type': false,
           cache: false,
         },
+        timeout: 30000,
         maxBodyLength: 8 * 1024 * 1024,
         maxContentLength: 8 * 1024 * 1024,
       })
