@@ -1,9 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import BlobInstance from '../axiosInstance/Blob'
 import axios from 'axios'
-const FormData = require('form-data')
-const fs = require('fs')
-import LabelInstance from '../axiosInstance/Labels'
+
 export const config = {
   api: {
     bodyParser: {
@@ -29,6 +27,7 @@ export default async function accountQueryHandler(req: NextApiRequest, res: Next
           headers: {
             Cookie: req.headers.cookie,
           },
+          timeout: 30000,
         })
         if (response.status !== 200) {
           return res.status(response.status).json({ message: 'Something went wrong' })
@@ -41,30 +40,19 @@ export default async function accountQueryHandler(req: NextApiRequest, res: Next
           axios.get(process.env.IMAGE_HASHTAG_1 as string, {
             params: { input: labels.join(', ') },
           }),
-          axios.get(process.env.IMAGE_HASHTAG_2 as string, {
-            params: { input: labels.join(', ') },
-          }),
-          axios.get(process.env.IMAGE_HASHTAG_3 as string, {
-            params: { input: labels.join(', ') },
-          }),
         ])
           .then((results) => {
             const data1 = results[0].status === 'fulfilled' ? results[0].value.data.data : null
-            const data2 = results[1].status === 'fulfilled' ? results[1].value.data.data : null
-            const data3 = results[2].status === 'fulfilled' ? results[2].value.data.data : null
-
             const error = results.find((result) => result.status === 'rejected')?.status || null
 
-            return [data1, data2, data3, error]
+            return [data1, error]
           })
           .catch((error) => {
             console.log(error)
             return res.status(response.status).json({ labels: response.data, error: error })
           })
         if (hashtagRes) {
-          return res
-            .status(response.status)
-            .json({ labels: response.data, firstTwo: hashtagRes[0], middleTwo: hashtagRes[1], lastTwo: hashtagRes[2] })
+          return res.status(response.status).json({ labels: response.data, firstTwo: hashtagRes[0] })
         }
         return res.status(response.status).json({ labels: response.data, error: hashtagRes?.[3] })
       } catch (error) {

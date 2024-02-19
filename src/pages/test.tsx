@@ -79,21 +79,11 @@ const ImageUpload: React.FC = () => {
       <div className="flex flex-row">
         <div className="m-4 flex flex-col">
           <h4>Hashet Model with First Two Labels</h4>
-          {imageRes?.firstTwo?.map((e: hashtag, index) => (
-            <li key={e.hashtag + index}>{e.hashtag} &#8203; </li>
-          ))}
-        </div>
-        <div className="m-4 flex flex-col">
-          <h4>Hashet Model with Middle Two Labels</h4>
-          {imageRes?.middleTwo?.map((e: hashtag, index) => (
-            <li key={e.hashtag + index}>{e.hashtag} &#8203; </li>
-          ))}
-        </div>
-        <div className="m-4 flex flex-col">
-          <h4>Hashet Model with Last Two Labels</h4>
-          {imageRes?.lastTwo?.map((e: hashtag, index) => (
-            <li key={e.hashtag + index}>{e.hashtag} &#8203; </li>
-          ))}
+          <div className="grid  grid-cols-4 gap-4">
+            {imageRes?.firstTwo?.map((e: hashtag, index) => (
+              <li key={e.hashtag + index}>{e.hashtag} &#8203; </li>
+            ))}
+          </div>
         </div>
       </div>
     </div>
