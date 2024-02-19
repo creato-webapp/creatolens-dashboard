@@ -5,6 +5,7 @@ import LandingHeader from '@lib/Home/LandingHeader'
 import HowItWorks from '@lib/Home/HowItWorks'
 import WhyCreatoLens from '@lib/Home/WhyCreatoLens'
 import Testimonial from '@lib/Home/Testimonial'
+import Checkbox from '@components/Checkbox'
 
 export const getServerSideProps = async (context: any) => {
   const session = await getSession(context)
@@ -21,7 +22,13 @@ export const getServerSideProps = async (context: any) => {
 const Home: NextPage = () => {
   return (
     <>
-      <div className="pb-6">
+      <div className="pb-6 gap-2 flex flex-col w-full">
+        <Checkbox hasError indeterminate />
+        <Checkbox inactive/>
+        <Checkbox hasError/>
+        <Checkbox hasError/>
+
+        <Checkbox indeterminate />
         <LandingHeader className="mb-5" />
         <HowItWorks />
       </div>
