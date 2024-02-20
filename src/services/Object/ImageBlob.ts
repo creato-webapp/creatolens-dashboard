@@ -12,18 +12,8 @@ export type Labels = {
   score: number
 }
 
-export type ImageResponse = {
-  labels: Array<Labels>
-  data: Array<ImageRecord>
-  firstTwo: Array<hashtag>
-  middleTwo: Array<hashtag>
-  lastTwo: Array<hashtag>
-  error?: any
-}
-
-export type ImageRecord = {
-  labels: Array<string>
-  target: Array<string>
+export type ModelResult = {
+  data: hashtag[]
 }
 
 function validateImage(file: File, maxSize: number, validTypes: string[]): boolean {
@@ -39,7 +29,7 @@ function validateImage(file: File, maxSize: number, validTypes: string[]): boole
   return true
 }
 
-export async function uploadImage(file: File, customConfig?: AxiosRequestConfig): Promise<ImageResponse> {
+export async function uploadImage(file: File, customConfig?: AxiosRequestConfig): Promise<Labels[]> {
   try {
     if (!validateImage(file, 8 * 1024 * 1024, ['image/jpeg', 'image/png', 'image/gif'])) {
       throw new Error('Invalid image')
