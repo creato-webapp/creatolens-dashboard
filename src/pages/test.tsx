@@ -46,6 +46,7 @@ const ImageUpload: React.FC = () => {
     setFile(null)
     setLabels([])
     setImageRes({ data: [] })
+    setSelectedHashtags([])
   }, [])
 
   const getHashtag = useCallback(async (input: string): Promise<ModelResult> => {
