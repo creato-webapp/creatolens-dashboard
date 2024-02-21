@@ -153,7 +153,6 @@ const ImageUpload: React.FC = () => {
             {selectedHashtags.length}/{imageRes?.data?.length} Selected Hashtag
           </h4>
           <div className="flex flex-row gap-4">
-            {' '}
             <Button.Outline sizes={['s', 'l', 'l']} className="w-fit" onClick={clearAll}>
               Clear All
             </Button.Outline>
@@ -164,7 +163,6 @@ const ImageUpload: React.FC = () => {
               Copy Selected
             </Button.Primary>
           </div>
-          <div className="my-6 flex-row gap-2 md:flex md:flex-row-reverse"></div>
           <div className="grid  grid-cols-4 gap-4">
             {imageRes?.data?.map((e: hashtag, index: number) => (
               <li key={e.hashtag + index} className="flex items-center" onClick={() => toggleCheckbox(e.hashtag)}>
