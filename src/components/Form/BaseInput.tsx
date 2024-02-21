@@ -6,7 +6,7 @@ export interface IBaseInputProps extends React.DetailedHTMLProps<React.InputHTML
   error?: boolean
   message?: string
   iconClassName?: string
-  customFormItemProps?: any
+  customFormItemProps?: React.InputHTMLAttributes<HTMLInputElement>
   allowSpace?: boolean
   childrenPosition?: 'left' | 'right'
 }
@@ -53,10 +53,9 @@ const BaseInput: React.FunctionComponent<IBaseInputProps> = ({
           onChange={onChange}
           required={customFormItemProps?.required}
           disabled={disabled}
-          className={`base-input min-w-64 inline-flex rounded-md border border-gray-500 bg-neutral-50 p-2 font-semibold ${
+          className={`base-input inline-flex min-w-64 rounded-md border border-gray-500 bg-neutral-50 p-2 font-semibold ${
             errorMessage ? 'focus:border-0 focus:border-none focus:outline-error-600' : ''
           } ${className ? className : ''}`}
-          style={customFormItemProps?.style}
         />
         {childrenPosition === 'right' && children}
 

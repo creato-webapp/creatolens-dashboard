@@ -1,17 +1,16 @@
 import { InputHTMLAttributes } from 'react'
-import { customFormItemProps } from '../interface'
 export interface DatePickerProps extends InputHTMLAttributes<HTMLInputElement> {
   id: string
   defaultValue?: string
   disabled?: boolean
-  customFormItemProps?: customFormItemProps
+  customFormItemProps?: React.InputHTMLAttributes<HTMLInputElement>
 }
 
 export interface TimePickerProps extends InputHTMLAttributes<HTMLInputElement> {
   id: string
   defaultValue?: string
   disabled?: boolean
-  customFormItemProps?: customFormItemProps
+  customFormItemProps?: React.InputHTMLAttributes<HTMLInputElement>
 }
 
 export interface DateTimePicker extends TimePickerProps, DatePickerProps {}

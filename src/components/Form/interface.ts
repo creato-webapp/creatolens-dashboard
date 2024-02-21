@@ -10,10 +10,7 @@ export interface IField {
   label: string
   name: string
   required?: boolean
-  customFormItemProps?: {
-    style?: React.CSSProperties
-    [key: string]: any // for any other properties
-  }
+  customFormItemProps?: React.InputHTMLAttributes<HTMLInputElement>
 }
 
 export interface FormLayoutProps extends Omit<FormHTMLAttributes<HTMLFormElement>, 'onSubmit'> {
@@ -33,14 +30,14 @@ export interface FormLayoutProps extends Omit<FormHTMLAttributes<HTMLFormElement
 export interface ItemProps extends DetailedHTMLProps<LabelHTMLAttributes<HTMLLabelElement>, HTMLLabelElement> {
   label: string
   key: number
-  customFormItemProps?: customFormItemProps
+  customFormItemProps?: React.InputHTMLAttributes<HTMLInputElement>
 }
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   id: string
   placeholder?: string
   defaultValue?: string | undefined
-  customFormItemProps?: customFormItemProps
+  customFormItemProps?: React.InputHTMLAttributes<HTMLInputElement>
 }
 
 export interface CheckBoxProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -51,12 +48,13 @@ export interface CheckBoxProps extends InputHTMLAttributes<HTMLInputElement> {
   className?: string
 }
 
-export interface CustomItemProps extends Record<string, string | boolean | number | undefined | customFormItemProps> {
-  type: InputType
+export interface CustomItemProps {
+  type: InputType // Assuming InputType is defined elsewhere
   id: string
   placeholder?: string
   defaultValue?: string | boolean | number | undefined
+  className?: string
   disabled?: boolean
-  customFormItemProps?: customFormItemProps
-  onChange?: React.ChangeEventHandler
+  customFormItemProps?: any // Ensure this is defined correctly, or replace 'any' with the actual type
+  onChange?: React.ChangeEventHandler<HTMLInputElement> // Specified for HTMLInputElement
 }
