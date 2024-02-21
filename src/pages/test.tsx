@@ -103,14 +103,16 @@ const ImageUpload: React.FC = () => {
         maxBodyLength: 8 * 1024 * 1024,
         maxContentLength: 8 * 1024 * 1024,
       })
-      if (labelRes.length === 0) {
+      if (labelRes.length === 0 || labelRes.length === undefined) {
         window.alert('No labels detected.')
+        setLabels([])
         return
       }
       setLabels(labelRes)
     } catch (error) {
       console.error('Error in upload or fetching hashtags:', error)
       window.alert(error)
+      setLabels([])
     } finally {
       setLoading(false)
     }
