@@ -146,7 +146,12 @@ const ImageUpload: React.FC = () => {
         ))}
         {labels?.length === 0 && <p>No labels detected</p>}
       </div>
-      <div className="flex flex-row">
+      <div className="flex flex-col items-center md:flex-row">
+        {file && (
+          <div className="relative hidden h-72 w-auto justify-center bg-bg-dark md:flex">
+            <img src={URL.createObjectURL(file)} alt="Dropped Image" className="object-fit h-auto rounded-lg" />
+          </div>
+        )}
         <div className="m-4 flex flex-col gap-4">
           <h4>Image-Keywords Model (mvp for internal use only)</h4>
           <h4>
@@ -163,11 +168,11 @@ const ImageUpload: React.FC = () => {
               Copy Selected
             </Button.Primary>
           </div>
-          <div className="grid  grid-cols-4 gap-4">
+          <div className="grid grid-cols-3 gap-1 md:grid-cols-4 md:gap-4">
             {imageRes?.data?.map((e: hashtag, index: number) => (
               <li key={e.hashtag + index} className="flex items-center" onClick={() => toggleCheckbox(e.hashtag)}>
-                <Checkbox id={index + `checkbox-${e.hashtag}`} className="m-1" checked={selectedHashtags.includes(e.hashtag)} />
-                {e.hashtag} &#8203;{' '}
+                <Checkbox id={index + `checkbox-${e.hashtag}`} checked={selectedHashtags.includes(e.hashtag)} />
+                <div className="block">{e.hashtag} &#8203;</div>
               </li>
             ))}
           </div>
