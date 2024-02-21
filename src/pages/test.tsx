@@ -3,6 +3,7 @@ import { uploadImage, Labels, ModelResult } from '@services/Object/ImageBlob'
 import { Button } from '@components/Button'
 import Dropzone from '@components/Dropzone'
 import CrossIcon from '@components/Icon/CrossIcon'
+import Checkbox from '@components/Form/Checkbox'
 import axios from 'axios'
 type hashtag = {
   acc: number
@@ -14,9 +15,32 @@ const ImageUpload: React.FC = () => {
   const [file, setFile] = useState<File | null>(null)
   const [imageRes, setImageRes] = useState<ModelResult>({ data: [] })
   const [labels, setLabels] = useState<Labels[]>([])
+  const [selectedHashtags, setSelectedHashtags] = useState<string[]>([])
+  const toggleCheckbox = useCallback(
+    (hashtag: string) => {
+      setSelectedHashtags((prevSelected) =>
+        prevSelected.includes(hashtag) ? prevSelected.filter((tag) => tag !== hashtag) : [...prevSelected, hashtag]
+      )
+    },
+    [setSelectedHashtags]
+  )
   const handleFileChange = (file: File | null) => {
     setFile(file)
   }
+
+  const clearAll = useCallback(() => {
+    setSelectedHashtags([])
+  }, [])
+
+  const selectAll = useCallback(() => {
+    setSelectedHashtags(imageRes?.data?.map((tag) => tag.hashtag))
+  }, [imageRes])
+
+  const copyToClipboard = useCallback(async () => {
+    const copiedHashtags = selectedHashtags.join(' ')
+    await navigator.clipboard.writeText(copiedHashtags)
+    window.alert('Copied to clipboard!')
+  }, [selectedHashtags])
 
   const handleClose = useCallback(() => {
     setFile(null)
@@ -123,13 +147,33 @@ const ImageUpload: React.FC = () => {
         {labels?.length === 0 && <p>No labels detected</p>}
       </div>
       <div className="flex flex-row">
-        <div className="m-4 flex flex-col">
+        <div className="m-4 flex flex-col gap-4">
           <h4>Image-Keywords Model (mvp for internal use only)</h4>
+          <h4>
+            {selectedHashtags.length}/{imageRes?.data?.length} Selected Hashtag
+          </h4>
+          <div className="flex flex-row gap-4">
+            {' '}
+            <Button.Outline sizes={['s', 'l', 'l']} className="w-fit" onClick={clearAll}>
+              Clear All
+            </Button.Outline>
+            <Button.Primary sizes={['s', 'l', 'l']} className="w-fit" onClick={selectAll}>
+              Select All
+            </Button.Primary>
+            <Button.Primary sizes={['s', 'l', 'l']} className="w-fit" onClick={copyToClipboard}>
+              Copy Selected
+            </Button.Primary>
+          </div>
+          <div className="my-6 flex-row gap-2 md:flex md:flex-row-reverse"></div>
           <div className="grid  grid-cols-4 gap-4">
             {imageRes?.data?.map((e: hashtag, index: number) => (
-              <li key={e.hashtag + index}>{e.hashtag} &#8203; </li>
+              <li key={e.hashtag + index} className="flex items-center" onClick={() => toggleCheckbox(e.hashtag)}>
+                <Checkbox id={index + `checkbox-${e.hashtag}`} className="m-1" checked={selectedHashtags.includes(e.hashtag)} />
+                {e.hashtag} &#8203;{' '}
+              </li>
             ))}
           </div>
+          <textarea className="min-h-48 w-full" placeholder={imageRes?.data?.map((e) => e.hashtag).join(' ')}></textarea>
         </div>
       </div>
     </div>
