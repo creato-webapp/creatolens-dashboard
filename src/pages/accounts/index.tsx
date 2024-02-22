@@ -15,6 +15,7 @@ import Hero from '@components/Hero'
 import { PlusIcon } from '@heroicons/react/24/solid'
 import Dropdown from '@components/Form/Dropdown'
 import EditIcon from '@components/Icon/EditIcon'
+import { FieldValue, Timestamp } from 'firebase/firestore'
 
 const dayjs = require('dayjs')
 const utc = require('dayjs/plugin/utc')
@@ -189,7 +190,7 @@ const AccountsPage = ({ paginationData }: Props) => {
       title: 'Created On',
       dataIndex: 'created_at',
       sortAvailable: true,
-      render: (e: any) => {
+      render: (e: Timestamp) => {
         const date = dayjs(e, 'YYYY-MM-DD THH:mm:ss')
         return date.local().format('DD MMM YYYY')
       },
@@ -197,7 +198,7 @@ const AccountsPage = ({ paginationData }: Props) => {
     {
       title: 'Created Time',
       dataIndex: 'created_at',
-      render: (e: any) => {
+      render: (e: Timestamp) => {
         const date = dayjs(e, 'THH:mm:ss')
         return date.local().format('hh:mm:ss')
       },
