@@ -168,7 +168,7 @@ const AccountsPage = ({ paginationData }: Props) => {
     {
       title: 'Profile',
       dataIndex: 'id',
-      render: (e: any) => (
+      render: (e: string) => (
         <Link href="/accounts/[id]" as={`/accounts/${e}`} legacyBehavior>
           <a className="flex w-full flex-row items-center justify-center gap-2">
             <EditIcon size={16} className="fill-accent2-500" />
@@ -181,7 +181,7 @@ const AccountsPage = ({ paginationData }: Props) => {
       headerIcon: <Image alt="instagram" src="/account/InstagramLogo.svg" className="w-full" width={24} height={24}></Image>,
       title: 'Username',
       dataIndex: 'username',
-      render: (e: any) => {
+      render: (e: string) => {
         return <div className="flex items-center text-accent1-600">{e}</div>
       },
     },
