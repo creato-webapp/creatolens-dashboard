@@ -44,7 +44,7 @@ export interface CheckBoxProps extends InputHTMLAttributes<HTMLInputElement> {
   id: string
   defaultChecked?: boolean
   disabled?: boolean
-  customFormItemProps?: customFormItemProps
+  customFormItemProps?: React.InputHTMLAttributes<HTMLInputElement>
   className?: string
 }
 
