@@ -1,4 +1,8 @@
-export interface IAccount extends Record<string, string | number | boolean> {
+export interface Cookies {
+  [key: string]: string
+}
+
+export interface IAccount {
   id: string
   username: string
   created_at: string
@@ -10,12 +14,12 @@ export interface IAccount extends Record<string, string | number | boolean> {
   login_count: number
   post_scrapped_count: number
   pwd: string
-  session_cookies?: any
+  session_cookies?: Cookies
   status: 'active' | 'blocked' | 'banned' | 'retry' | 'test' | 'scrapping' | 'occupied'
   updated_at: string
 }
 
-export interface IBlockedAccount extends Record<string, string | number | boolean> {
+export interface IBlockedAccount {
   id: string
   username: string
   created_at: string
@@ -31,12 +35,12 @@ export interface IBlockedAccount extends Record<string, string | number | boolea
   login_count: number
   post_scrapped_count: number
   pwd: string
-  session_cookies?: any
+  session_cookies?: Cookies
   status: 'active' | 'blocked' | 'banned' | 'retry' | 'test' | 'scrapping' | 'occupied'
   updated_at: string
 }
 
-export interface IRetryAccount extends Record<string, string | number | boolean> {
+export interface IRetryAccount {
   id: string
   username: string
   created_at: string
@@ -48,7 +52,7 @@ export interface IRetryAccount extends Record<string, string | number | boolean>
   login_count: number
   post_scrapped_count: number
   pwd: string
-  session_cookies?: any
+  session_cookies?: Cookies
   status: 'active' | 'blocked' | 'banned' | 'retry' | 'test' | 'scrapping' | 'occupied'
   updated_at: string
   wait_until: string

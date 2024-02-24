@@ -1,5 +1,5 @@
 import { FC, useState, useCallback } from 'react'
-import { IAccount } from './interface'
+import { IAccount, Cookies } from './interface'
 import Modal from '@components/Modal'
 import { Button } from '@components/Button'
 import { ModalProps } from '@components/Modal'
@@ -10,14 +10,10 @@ interface SessionModalProps extends ModalProps {
   isLoading: boolean
   isShow: boolean
   updateSession: Function
-  onCancel: () => void
+  onCancel: () => void  
 }
 
-interface Cookies {
-  [key: string]: string
-}
-
-const dataItemToKeyValues = (item: Cookies[]) => {
+const dataItemToKeyValues = (item: Cookies) => {
   if (!item) return <></>
   const entries = Object.entries(item)
   const listItems = entries.map(([key, value], index) => (
@@ -47,7 +43,7 @@ const SessionModal: FC<SessionModalProps> = ({ account, isShow, updateSession, o
   return (
     <Modal isLoading={isLoading} isShow={isShow} onCancel={onCancel} title="SessionModal">
       <code className="prose-code:text-blue-600">
-        <div className="flex flex-wrap">{dataItemToKeyValues(account.session_cookies)}</div>
+        <div className="flex flex-wrap">{account.session_cookies && dataItemToKeyValues(account.session_cookies)}</div>
       </code>
       <div className="flex justify-start space-y-2">
         <Button.Primary
