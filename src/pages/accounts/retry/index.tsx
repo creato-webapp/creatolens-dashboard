@@ -8,7 +8,7 @@ import { getSession } from 'next-auth/react'
 import Tag from '@components/Tag'
 import Avatar from '@components/Avatar'
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/solid'
-import StatusTag from '@lib/StatusTag'
+import StatusTag, { Status } from '@lib/StatusTag'
 import Pagination from '@components/Pagination'
 import { useGetRetryAccountsPagination } from 'src/hooks/useRetryAccount'
 import { GetRetryAccountsPagination, PaginationMetadata } from '@services/Account/RetryAccount'
@@ -89,7 +89,7 @@ const RetryAccountsPage = ({ paginationData }: Props) => {
     {
       title: 'Wait Until(HK Time)',
       dataIndex: 'wait_until',
-      render: (e: any) => {
+      render: (e: string) => {
         const date = dayjs(e, 'YYYY-MM-DD THH:mm:ss')
         return dayjs.utc(date).local().format('YYYY-MM-DD HH:mm:ss')
       },
@@ -99,7 +99,7 @@ const RetryAccountsPage = ({ paginationData }: Props) => {
     {
       title: 'Username',
       dataIndex: 'username',
-      render: (e: any) => {
+      render: (e: string) => {
         return (
           <Tag
             label={
@@ -116,28 +116,28 @@ const RetryAccountsPage = ({ paginationData }: Props) => {
     {
       title: 'Status',
       dataIndex: 'status',
-      render: (e: any) => {
+      render: (e: Status) => {
         return <StatusTag status={e} />
       },
     },
     {
       title: 'Is Occupied',
       dataIndex: 'is_occupied',
-      render: (e: any) => {
+      render: (e: boolean) => {
         return e ? <CheckCircleIcon className="h-6 w-6 text-successful-600" /> : <XCircleIcon className="h-6 w-6 text-error-500" />
       },
     },
     {
       title: 'Is Enabled',
       dataIndex: 'enabled',
-      render: (e: any) => {
+      render: (e: boolean) => {
         return e ? <CheckCircleIcon className="h-6 w-6 text-successful-600" /> : <XCircleIcon className="h-6 w-6 text-error-500" />
       },
     },
     {
       title: 'Is Auth',
       dataIndex: 'is_authenticated',
-      render: (e: any) => {
+      render: (e: boolean) => {
         return e ? <CheckCircleIcon className="h-6 w-6 text-successful-600" /> : <XCircleIcon className="h-6 w-6 text-error-500" />
       },
     },
@@ -145,7 +145,7 @@ const RetryAccountsPage = ({ paginationData }: Props) => {
     {
       title: 'Account Info',
       dataIndex: 'id',
-      render: (e: any) => (
+      render: (e: string) => (
         <Link href="/accounts/retry/[id]" as={`/accounts/retry/${e}`} legacyBehavior>
           <Button.Text loading={false} onClick={() => console.log(e)}>
             Edit
