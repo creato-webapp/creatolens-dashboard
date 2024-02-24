@@ -235,21 +235,21 @@ const AccountsPage = ({ paginationData }: Props) => {
     {
       title: 'Is Occupied',
       dataIndex: 'is_occupied',
-      render: (e: any) => {
+      render: (e: boolean) => {
         return IconRender(e)
       },
     },
     {
       title: 'Is Enabled',
       dataIndex: 'enabled',
-      render: (e: any) => {
+      render: (e: boolean) => {
         return IconRender(e)
       },
     },
     {
       title: 'Is Auth',
       dataIndex: 'is_authenticated',
-      render: (e: any) => {
+      render: (e: boolean) => {
         return IconRender(e)
       },
     },
