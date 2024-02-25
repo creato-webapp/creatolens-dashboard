@@ -2,7 +2,7 @@
 import { AxiosRequestConfig } from 'axios'
 import { Fetcher } from '../fetcher'
 import { IBlockedAccount } from '@lib/Account/Account/interface'
-
+import { Cookies } from '@lib/Account/Account/interface'
 export interface PaginationParams {
   pageNumber: number
   pageSize: number
@@ -35,7 +35,7 @@ type PartialAccount = Partial<{
   login_count: number
   post_scrapped_count: number
   pwd: string
-  session_cookies?: any
+  session_cookies?: Cookies
   status: 'active' | 'blocked' | 'banned' | 'retry' | 'test' | 'scrapping' | 'occupied'
   updated_at: string
 }>

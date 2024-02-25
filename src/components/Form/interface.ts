@@ -2,9 +2,6 @@ import React, { InputHTMLAttributes, FormHTMLAttributes, DetailedHTMLProps, Labe
 import { ButtonProps } from '@components/Button/interface'
 export type InputType = 'Input' | 'DatePicker' | 'TimePicker' | 'DateTimePicker' | 'Checkbox' | 'InputNumber' | 'InputPassword'
 
-export type customFormItemProps = {
-  [key: string]: string | number | boolean | any
-}
 export interface IField {
   type: InputType
   label: string
@@ -55,6 +52,6 @@ export interface CustomItemProps {
   defaultValue?: string | boolean | number | undefined
   className?: string
   disabled?: boolean
-  customFormItemProps?: any // Ensure this is defined correctly, or replace 'any' with the actual type
+  customFormItemProps?: React.InputHTMLAttributes<HTMLInputElement> // Ensure this is defined correctly, or replace 'any' with the actual type
   onChange?: React.ChangeEventHandler<HTMLInputElement> // Specified for HTMLInputElement
 }
