@@ -12,23 +12,19 @@ type hashtag = {
 const ImageUpload: React.FC = () => {
   const [loading, setLoading] = useState(false)
   const [file, setFile] = useState<File | null>(null)
-  const [imageRes, setImageRes] = useState<ImageResponse>({ labels: [], data: [], firstTwo: [], middleTwo: [], lastTwo: [], error: null })
+  const [imageRes, setImageRes] = useState<ImageResponse>({ labels: [], data: [], firstTwo: [], middleTwo: [], lastTwo: [], error: undefined })
 
   const handleFileChange = (file: File | null) => {
     setFile(file)
   }
 
   const handleUpload = async () => {
-    if (file === null) {
-      window.alert('No file selected.')
-      return
-    }
     try {
-      setLoading(true)
       if (!file) {
-        console.error('No file selected.')
-        return
+        window.alert('No file selected.')
+        throw new Error('No file selected')
       }
+      setLoading(true)
 
       const res = await uploadImage(file, {
         headers: {
