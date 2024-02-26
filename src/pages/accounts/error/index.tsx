@@ -8,6 +8,8 @@ import { Form } from '@components/Form'
 import { useAccountErrorPagination } from 'src/hooks/useAccountErrors'
 import { GetErrorPagination, PaginationParams, PaginationMetadata } from '@services/Account/AccountErros'
 import Pagination from '@components/Pagination'
+import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
+
 type Props = {
   paginationData: PaginationMetadata
 }
@@ -16,12 +18,13 @@ const dayjs = require('dayjs')
 const utc = require('dayjs/plugin/utc')
 dayjs.extend(utc)
 
-export const getServerSideProps = async (context: any) => {
+export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext): Promise<GetServerSidePropsResult<{}>> => {
   const session = await getSession(context)
   if (!session) {
     return {
       redirect: {
         destination: '/auth/login',
+        permanent: false,
       },
     }
   }

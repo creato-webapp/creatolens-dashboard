@@ -13,6 +13,8 @@ import Tab from '@components/Tab'
 import CustomizeHashtagCard from '@lib/Hashet/CustomizeHashtagCard'
 import { useGetHashtag } from 'src/hooks/useHashtag'
 import Hero from '@components/Hero'
+import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
+
 interface IHashet extends Record<string, string | number | boolean> {
   hashtag: string
   acc: number
@@ -22,12 +24,13 @@ export type HashetProps = {
   hashetSessionData: IHashet[]
 }
 
-export const getServerSideProps = async (context: any) => {
+export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext): Promise<GetServerSidePropsResult<{}>> => {
   const session = await getSession(context)
   if (!session) {
     return {
       redirect: {
         destination: '/auth/login',
+        permanent: false,
       },
     }
   }

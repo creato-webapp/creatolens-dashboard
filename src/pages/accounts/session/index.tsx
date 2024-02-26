@@ -7,6 +7,8 @@ import { useAccountSessionPagination } from 'src/hooks/useAccountSession'
 import { GetSessionPagination, PaginationParams, PaginationMetadata } from '@services/Account/Session'
 import { Form } from '@components/Form'
 import Pagination from '@components/Pagination'
+import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
+
 type Props = {
   paginationData: PaginationMetadata
 }
@@ -19,12 +21,17 @@ const dayjs = require('dayjs')
 const utc = require('dayjs/plugin/utc')
 dayjs.extend(utc)
 
-export const getServerSideProps = async (context: any) => {
+export const getServerSideProps: GetServerSideProps = async (
+  context: GetServerSidePropsContext
+): Promise<GetServerSidePropsResult<{ paginationData?: PaginationMetadata }>> => {
   const session = await getSession(context)
+
   if (!session) {
     return {
       redirect: {
-        destination: '/auth/login',
+        destination: '/some-destination',
+        // Optionally, set the status code (e.g., temporary: 307 or permanent: 308)
+        permanent: false,
       },
     }
   }

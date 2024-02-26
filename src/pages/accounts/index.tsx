@@ -15,23 +15,26 @@ import Hero from '@components/Hero'
 import { PlusIcon } from '@heroicons/react/24/solid'
 import Dropdown from '@components/Form/Dropdown'
 import EditIcon from '@components/Icon/EditIcon'
-import { FieldValue, Timestamp } from 'firebase/firestore'
+import { Timestamp } from 'firebase/firestore'
+import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 
 const dayjs = require('dayjs')
 const utc = require('dayjs/plugin/utc')
 dayjs.extend(utc)
 
-type Props = {
+export type PaginationMetaProps = {
   paginationData: PaginationMetadata
 }
 
-//TODO getServerSideProps: GetServerSideProps; cannot set GetServerSideProps type.
-export const getServerSideProps = async (context: any) => {
+export const getServerSideProps: GetServerSideProps = async (
+  context: GetServerSidePropsContext
+): Promise<GetServerSidePropsResult<{ paginationData: PaginationMetadata }>> => {
   const session = await getSession(context)
   if (!session) {
     return {
       redirect: {
         destination: '/auth/login',
+        permanent: false,
       },
     }
   }

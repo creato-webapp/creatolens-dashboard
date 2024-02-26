@@ -11,6 +11,7 @@ import AccountCreateCard from '@lib/Account/AccountCreateCard'
 import { useAccount } from 'src/hooks/useAccount'
 import { GetAccount, CreateAccount } from '@services/Account/Account'
 import Image from 'next/image'
+import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 
 const dayjs = require('dayjs')
 const utc = require('dayjs/plugin/utc')
@@ -23,18 +24,23 @@ type Props = {
 }
 
 //TODO remove type any in context:any
-export const getServerSideProps = async (context: any) => {
+export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext): Promise<GetServerSidePropsResult<Props>> => {
   //remove any
-  const session: any = await getSession(context)
+  const session = await getSession(context)
   if (!session) {
     return {
       redirect: {
         destination: '/404',
+        permanent: false,
       },
     }
   }
 
   const { params } = context
+  if (!params || typeof params.id !== 'string') {
+    // Check if params.id exists and is a string
+    return { redirect: { destination: '/404', permanent: false } }
+  }
   const isCreate = params.id === 'create-account'
   const canRenewSession = false
 

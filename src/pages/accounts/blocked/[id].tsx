@@ -7,6 +7,7 @@ import { IBlockedAccount } from '@lib/Account/Account/interface'
 import { getSession } from 'next-auth/react'
 import { GetBlockedAccount } from '@services/Account/BlockAccount'
 import { useBlockAccount } from 'src/hooks/useBlockedAccount'
+import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 
 type Props = {
   accountData: IBlockedAccount
@@ -17,18 +18,29 @@ const utc = require('dayjs/plugin/utc')
 dayjs.extend(utc)
 
 //TODO remove type any in context:any
-export const getServerSideProps = async (context: any) => {
+export const getServerSideProps: GetServerSideProps = async (
+  context: GetServerSidePropsContext
+): Promise<
+  GetServerSidePropsResult<{
+    accountData: IBlockedAccount
+  }>
+> => {
   //remove any
 
-  const session: any = await getSession(context)
+  const session = await getSession(context)
   if (!session) {
     return {
       redirect: {
         destination: '/404',
+        permanent: false,
       },
     }
   }
   const { params } = context
+  if (!params || typeof params.id !== 'string') {
+    // Check if params.id exists and is a string
+    return { redirect: { destination: '/404', permanent: false } }
+  }
   const res = await GetBlockedAccount(params.id, {
     headers: {
       Cookie: context.req.headers.cookie,

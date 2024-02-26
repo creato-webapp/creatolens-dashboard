@@ -7,6 +7,7 @@ import { IAccount, IRetryAccount } from '@lib/Account/Account/interface'
 import { getSession } from 'next-auth/react'
 import { GetRetryAccount } from '@services/Account/RetryAccount'
 import { useRetryAccount } from 'src/hooks/useRetryAccount'
+import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 
 type Props = {
   accountData: IRetryAccount
@@ -16,19 +17,27 @@ const dayjs = require('dayjs')
 const utc = require('dayjs/plugin/utc')
 dayjs.extend(utc)
 
-//TODO remove type any in context:any
-export const getServerSideProps = async (context: any) => {
-  //remove any
-
-  const session: any = await getSession(context)
+export const getServerSideProps: GetServerSideProps = async (
+  context: GetServerSidePropsContext
+): Promise<
+  GetServerSidePropsResult<{
+    accountData: IAccount
+  }>
+> => {
+  const session = await getSession(context)
   if (!session) {
     return {
       redirect: {
         destination: '/404',
+        permanent: false,
       },
     }
   }
   const { params } = context
+  if (!params || typeof params.id !== 'string') {
+    // Check if params.id exists and is a string
+    return { redirect: { destination: '/404', permanent: false } }
+  }
   const res = await GetRetryAccount(params.id, {
     headers: {
       Cookie: context.req.headers.cookie,

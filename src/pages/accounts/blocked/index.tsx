@@ -12,6 +12,8 @@ import StatusTag, { Status } from '@lib/StatusTag'
 import Pagination from '@components/Pagination'
 import { useGetBlockAccountsPagination } from 'src/hooks/useBlockedAccount'
 import { GetBlockedAccountsPagination, PaginationMetadata } from '@services/Account/BlockAccount'
+import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
+
 const dayjs = require('dayjs')
 const utc = require('dayjs/plugin/utc')
 dayjs.extend(utc)
@@ -21,12 +23,13 @@ type Props = {
 }
 
 //TODO getServerSideProps: GetServerSideProps; cannot set GetServerSideProps type.
-export const getServerSideProps = async (context: any) => {
+export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext): Promise<GetServerSidePropsResult<{}>> => {
   const session = await getSession(context)
   if (!session) {
     return {
       redirect: {
         destination: '/auth/login',
+        permanent: false,
       },
     }
   }
