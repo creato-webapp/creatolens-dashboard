@@ -8,7 +8,7 @@ import {
   PaginationMetadata,
 } from '@services/Account/BlockAccount'
 
-export const useBlockAccount = (id: string, shouldFetch: boolean = true, fallbackData?: any) => {
+export const useBlockAccount = (id: string, shouldFetch: boolean = true, fallbackData?: IBlockedAccount) => {
   const { data, error, mutate, ...swr } = useSWR(shouldFetch ? [id] : null, (id) => GetBlockedAccount(id), {
     refreshInterval: 0,
     fallbackData: fallbackData,

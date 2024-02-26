@@ -47,7 +47,7 @@ const AccountsBlockedPage = ({ accountData }: Props) => {
   const { id } = router.query
   const isCreate = id === 'create-account'
 
-  const { data, error, updateBlockAccount: callUpdateAccount } = useBlockAccount(id as string, shouldFetch, isCreate ? isCreate : accountData)
+  const { data, error, updateBlockAccount: callUpdateAccount } = useBlockAccount(id as string, shouldFetch, isCreate ? undefined : accountData)
 
   if (error) {
     console.log(data)
