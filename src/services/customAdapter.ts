@@ -13,7 +13,17 @@ interface CombinedUser extends AdapterUser {
   roles: string[]
 }
 
-export const FireStoreAdapterWrapper = (options: any) => {
+interface FirebaseConfig {
+  apiKey: string
+  appId: string
+  authDomain: string
+  databaseURL: string
+  projectId: string
+  storageBucket: string
+  messagingSenderId: string
+}
+
+export const FireStoreAdapterWrapper = (options: FirebaseConfig) => {
   const adapter = FirestoreAdapter(options)
   adapter.createUser = async (user) => {
     const roles = await getRoles(user.email)
