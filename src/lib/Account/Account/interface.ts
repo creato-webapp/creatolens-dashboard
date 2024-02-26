@@ -14,6 +14,7 @@ export interface IAccount {
   login_count: number
   post_scrapped_count: number
   pwd: string
+  wait_until: string
   session_cookies?: Cookies
   status: 'active' | 'blocked' | 'banned' | 'retry' | 'test' | 'scrapping' | 'occupied'
   updated_at: string
