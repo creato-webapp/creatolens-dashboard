@@ -3,7 +3,7 @@ import { IAccount } from '@lib/Account/Account'
 import { GetAccountsPagination, GetAccount, UpdateSession, UpdateAccount, PaginationParams, PaginationMetadata } from '@services/Account/Account'
 import { useRef } from 'react'
 
-export const useAccount = (id: string, shouldFetch: boolean = true, fallbackData?: any) => {
+export const useAccount = (id: string, shouldFetch: boolean = true, fallbackData?: IAccount) => {
   const { data, error, mutate, ...swr } = useSWR(shouldFetch ? [id] : null, (id) => GetAccount(id), {
     refreshInterval: 0,
     fallbackData: fallbackData,
