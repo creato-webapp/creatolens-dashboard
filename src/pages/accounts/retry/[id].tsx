@@ -138,11 +138,14 @@ const AccountsRetryPage = ({ accountData }: Props) => {
   return (
     <Card title="Accounts Info">
       <Form.Layout onSubmit={handleSubmit} Header={account.username} loading={isLoading} fields={fields}>
-        {fields.map((e: IField, index) => (
-          <Form.Item label={e.label} key={index} customFormItemProps={e.customFormItemProps}>
-            <Form.CustomItem id={e.name} defaultValue={account[e.name]} type={e.type} customFormItemProps={e.customFormItemProps} />
-          </Form.Item>
-        ))}
+        {fields.map((e: IField, index) => {
+          const value = account[e.name as keyof Omit<IAccount, 'session_cookies'>]
+          return (
+            <Form.Item label={e.label} key={index} customFormItemProps={e.customFormItemProps}>
+              <Form.CustomItem id={e.name} defaultValue={value} type={e.type} customFormItemProps={e.customFormItemProps} />
+            </Form.Item>
+          )
+        })}
       </Form.Layout>
     </Card>
   )

@@ -95,7 +95,7 @@ const AccountInfoCard: React.FC<AccountInfoCardProps> = ({ isLoading, account, h
   }, [])
   return (
     <Card
-      className="ml-auto mr-auto mb-8 mt-0 w-full bg-bg-white border-none shadow-none"
+      className="mb-8 ml-auto mr-auto mt-0 w-full border-none bg-bg-white shadow-none"
       customTitle={<h3 className="mr-auto w-auto pt-2 text-4xl text-text-primary">Account Info</h3>}
       extra={
         <Button.Primary loading={isLoading} onClick={handleClick}>
@@ -119,28 +119,37 @@ const AccountInfoCard: React.FC<AccountInfoCardProps> = ({ isLoading, account, h
               <StatusTag status={account['status']}></StatusTag>
             </Paragraph>
           </div>
-          {accountInfoField.map((e: IField) => (
-            <div key={e.label}>
-              <Paragraph size={'lg'} bold className="font-bold">
-                {e.label}
-              </Paragraph>
-              <Paragraph key={e.name}>{account[e.name]}</Paragraph>
-            </div>
-          ))}
+          {accountInfoField.map((e: IField) => {
+            const value = account[e.name as keyof Omit<IAccount, 'session_cookies'>]
+            return (
+              <div key={e.label}>
+                <Paragraph size={'lg'} bold className="font-bold">
+                  {e.label}
+                </Paragraph>
+                <Paragraph key={e.name}>{value}</Paragraph>
+              </div>
+            )
+          })}
         </div>
         <div className="flex flex-wrap gap-8 ">
-          {checkBoxField.map((e: IField, index) => (
-            <Form.Item label={e.label} key={index} customFormItemProps={e.customFormItemProps}>
-              <Form.CustomItem id={e.name} defaultValue={account[e.name]} type={e.type} customFormItemProps={e.customFormItemProps} />
-            </Form.Item>
-          ))}
+          {checkBoxField.map((e: IField, index) => {
+            const value = account[e.name as keyof Omit<IAccount, 'session_cookies'>]
+            return (
+              <Form.Item label={e.label} key={index} customFormItemProps={e.customFormItemProps}>
+                <Form.CustomItem id={e.name} defaultValue={value} type={e.type} customFormItemProps={e.customFormItemProps} />
+              </Form.Item>
+            )
+          })}
         </div>
 
-        {fields.map((e: IField, index) => (
-          <Form.Item label={e.label} key={index} customFormItemProps={e.customFormItemProps}>
-            <Form.CustomItem id={e.name} defaultValue={account[e.name]} type={e.type} customFormItemProps={e.customFormItemProps} />
-          </Form.Item>
-        ))}
+        {fields.map((e: IField, index) => {
+          const value = account[e.name as keyof Omit<IAccount, 'session_cookies'>]
+          return (
+            <Form.Item label={e.label} key={index} customFormItemProps={e.customFormItemProps}>
+              <Form.CustomItem id={e.name} defaultValue={value} type={e.type} customFormItemProps={e.customFormItemProps} />
+            </Form.Item>
+          )
+        })}
       </Form.Layout>
     </Card>
   )
