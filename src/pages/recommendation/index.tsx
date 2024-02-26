@@ -18,7 +18,7 @@ interface IHashet extends Record<string, string | number | boolean> {
   acc: number
 }
 
-type Props = {
+export type HashetProps = {
   hashetSessionData: IHashet[]
 }
 
@@ -35,7 +35,7 @@ export const getServerSideProps = async (context: any) => {
   return { props: { hashetSessionData } }
 }
 
-const RecommendationPage = ({ hashetSessionData }: Props) => {
+const RecommendationPage = ({ hashetSessionData }: HashetProps) => {
   //find better way to write fetch logic
   const [inputString, setInputString] = useState('')
   const [stringToSubmit, setStringToSubmit] = useState('')
