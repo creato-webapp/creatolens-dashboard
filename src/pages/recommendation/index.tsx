@@ -38,7 +38,7 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
   return { props: { hashetSessionData } }
 }
 
-const RecommendationPage = ({ hashetSessionData }: HashetProps) => {
+const RecommendationPage = (hashetSessionData: HashetProps) => {
   //find better way to write fetch logic
   const [inputString, setInputString] = useState('')
   const [stringToSubmit, setStringToSubmit] = useState('')
