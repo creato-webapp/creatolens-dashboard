@@ -23,7 +23,6 @@ BlobInstance.interceptors.request.use(
 BlobInstance.interceptors.response.use(
   function (response) {
     // Do something with response data
-    response.data = response.data.data
     return response
   },
   function (error: AxiosError) {

@@ -1,6 +1,5 @@
-import { AxiosRequestConfig } from 'axios'
+import { AxiosRequestConfig, AxiosResponse } from 'axios'
 import { Fetcher } from '../fetcher'
-import { imageToBase64 } from '../util'
 
 type hashtag = {
   acc: number
@@ -14,6 +13,16 @@ export type Labels = {
 
 export type ModelResult = {
   data: hashtag[]
+}
+
+interface LabelImageRequest {
+  imageUrl: string
+  isGcsUri: boolean
+}
+
+export interface LabelImageResponse {
+  status_code: number
+  data: Labels[]
 }
 
 function validateImage(file: File, maxSize: number, validTypes: string[]): boolean {
@@ -35,25 +44,36 @@ export async function uploadImage(file: File, customConfig?: AxiosRequestConfig)
       throw new Error('Invalid image')
     }
 
-    const imageString = await imageToBase64(file)
-    const response = await Fetcher.POST(
-      '/api/blob',
-      JSON.stringify({
-        filename: file.name,
-        body: imageString,
-        format: 'JPEG',
-        size: file.size,
-      }),
-      {
-        maxBodyLength: 8 * 1024 * 1024,
-        maxContentLength: 8 * 1024 * 1024,
-        ...customConfig,
-      }
-    )
+    const formData = new FormData()
+    formData.append('file', file)
+
+    const config = {
+      maxBodyLength: 8 * 1024 * 1024,
+      maxContentLength: 8 * 1024 * 1024,
+      ...customConfig,
+    }
+
+    const response = await Fetcher.POST('/api/blob', formData, config)
+    window.alert('Image upload ended')
 
     return response
   } catch (error: any) {
     window.alert('Image upload failed: ' + error.message)
     throw new Error('Image upload failed: ' + error.message)
+  }
+}
+
+export async function labelImage(imageUrl: string, isGcsUri: boolean): Promise<LabelImageResponse> {
+  const payload: LabelImageRequest = {
+    imageUrl,
+    isGcsUri,
+  }
+
+  try {
+    const response: LabelImageResponse = await Fetcher.POST('/api/blob/withUrl', payload)
+    return response
+  } catch (error: any) {
+    console.error('Error labeling image:', error.response?.data || error.message)
+    throw error
   }
 }

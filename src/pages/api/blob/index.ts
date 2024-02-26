@@ -1,11 +1,11 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
+import { type NextRequest } from 'next/server'
 import BlobInstance from '../axiosInstance/Blob'
+import { LabelImageResponse, Labels } from '@services/Object/ImageBlob'
 import axios from 'axios'
 export const config = {
   api: {
-    bodyParser: {
-      sizeLimit: '8mb',
-    },
+    bodyParser: false,
   },
 }
 
@@ -36,24 +36,22 @@ export default async function GeminiAnnotations(req: NextApiRequest, res: NextAp
         if (!req.headers.cookie) {
           return res.status(401).json({ message: 'Unauthorized' })
         }
-        if (!req.body) {
-          return res.status(400).json({ message: 'Invalid request' })
-        }
-
-        const response = await BlobInstance.post('/cloud-vision', body, {
+        const response = await BlobInstance.post<LabelImageResponse>(`/cloud-vision`, req, {
           headers: {
-            Cookie: req.headers.cookie,
+            'Content-Type': req.headers['content-type'],
           },
-          timeout: 30000,
         })
-        if (response.status !== 200) {
-          return res.status(response.status).json({ message: 'Gemini Cannot Label the image' })
+        const labelRes = response.data
+
+        if (labelRes.status_code !== 200) {
+          return res.status(labelRes.status_code).json({ message: 'Gemini Cannot Label the image' })
         }
-        if (!response.data) {
+        if (!labelRes.data) {
           return res.status(400).json({ message: 'Invalid request' })
         }
-        return res.status(200).json(response.data)
+        return res.status(200).json(labelRes.data)
       } catch (error) {
+        console.log(error)
         return res.status(500).json({ message: 'Something went wrong in labeling stage', error: error })
       }
     default:

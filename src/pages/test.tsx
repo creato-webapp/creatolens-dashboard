@@ -1,10 +1,11 @@
 import React, { useState, useCallback } from 'react'
-import { uploadImage, Labels, ModelResult } from '@services/Object/ImageBlob'
+import { uploadImage, Labels, ModelResult, labelImage } from '@services/Object/ImageBlob'
 import { Button } from '@components/Button'
 import Dropzone from '@components/Dropzone'
 import CrossIcon from '@components/Icon/CrossIcon'
 import Checkbox from '@components/Form/Checkbox'
 import axios from 'axios'
+import BaseInput from '@components/Form/BaseInput'
 type hashtag = {
   acc: number
   hashtag: string
@@ -16,6 +17,7 @@ const ImageUpload: React.FC = () => {
   const [imageRes, setImageRes] = useState<ModelResult>({ data: [] })
   const [labels, setLabels] = useState<Labels[]>([])
   const [selectedHashtags, setSelectedHashtags] = useState<string[]>([])
+  const [fileUrl, setFileUrl] = useState<string>('')
   const toggleCheckbox = useCallback(
     (hashtag: string) => {
       setSelectedHashtags((prevSelected) =>
@@ -91,14 +93,7 @@ const ImageUpload: React.FC = () => {
 
     setLoading(true)
     try {
-      const formData = new FormData()
-      formData.append('image', file)
       const labelRes = await uploadImage(file, {
-        headers: {
-          processData: false,
-          'Content-Type': false,
-          cache: false,
-        },
         timeout: 30000,
         maxBodyLength: 8 * 1024 * 1024,
         maxContentLength: 8 * 1024 * 1024,
@@ -109,6 +104,30 @@ const ImageUpload: React.FC = () => {
         return
       }
       setLabels(labelRes)
+    } catch (error) {
+      console.error('Error in upload or fetching hashtags:', error)
+      window.alert(error)
+      setLabels([])
+    } finally {
+      setLoading(false)
+    }
+  }, [file])
+
+  const handleUploadURL = useCallback(async () => {
+    if (!fileUrl) {
+      window.alert('No url find.')
+      return
+    }
+    setLoading(true)
+    try {
+      const labelRes = await labelImage(fileUrl, false)
+      const labels = labelRes?.data ?? []
+      if (labels?.length === 0 || labels.length === undefined) {
+        window.alert('No labels detected.')
+        setLabels([])
+        return
+      }
+      setLabels(labels)
     } catch (error) {
       console.error('Error in upload or fetching hashtags:', error)
       window.alert(error)
@@ -133,12 +152,24 @@ const ImageUpload: React.FC = () => {
           <Dropzone onChange={handleFileChange} classNames="w-full" />
         )}
       </div>
-      <div className="flex gap-6 p-4">
+      <div className="flex items-center gap-6 p-4">
         <Button.Primary onClick={handleUpload} loading={loading}>
           {!labels?.length ? 'Upload' : 'Re-Upload'}
         </Button.Primary>
         <Button.Primary onClick={handleRetryRecommendation} loading={loading} disabled={!labels?.length}>
           {!labels?.length ? 'Get Keywords' : 'Get Keywords With Labels...'}
+        </Button.Primary>
+        <div>Or</div>
+        <BaseInput
+          placeholder="Image Url"
+          className="order-shades-100 block w-full rounded-lg border p-2  text-slate-600 placeholder-slate-400 outline-none focus:border-slate-700 focus:outline-none"
+          onChange={(e) => {
+            console.log(e.target.value)
+            setFileUrl(e.target.value)
+          }}
+        ></BaseInput>
+        <Button.Primary onClick={handleUploadURL} loading={loading}>
+          Label Url
         </Button.Primary>
       </div>
 
