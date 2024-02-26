@@ -119,7 +119,7 @@ const AccountsErrorPage = ({ paginationData }: Props) => {
     {
       title: 'occurred_at(HK Time)',
       dataIndex: 'occurred_at',
-      render: (e: any) => {
+      render: (e: string) => {
         const date = dayjs(e, 'YYYY-MM-DD THH:mm:ss')
         return dayjs.utc(date).local().format('YYYY-MM-DD HH:mm:ss')
       },
