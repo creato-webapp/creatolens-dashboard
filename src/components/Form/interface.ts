@@ -36,6 +36,11 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
   defaultValue?: string | undefined
   customFormItemProps?: React.InputHTMLAttributes<HTMLInputElement>
 }
+export interface NumberInputProps extends InputHTMLAttributes<HTMLInputElement> {
+  id: string
+  placeholder?: string
+  customFormItemProps?: React.InputHTMLAttributes<HTMLInputElement>
+}
 
 export interface CheckBoxProps extends InputHTMLAttributes<HTMLInputElement> {
   id: string

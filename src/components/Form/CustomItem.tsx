@@ -38,7 +38,7 @@ const CustomItem: FC<CustomItemProps> = (props: CustomItemProps) => {
       return (
         <InputNumber
           id={props.id}
-          defaultValue={props.defaultValue as string}
+          defaultValue={props.defaultValue as number}
           placeholder={props?.placeholder}
           disabled={props.disabled}
           onChange={props.onChange}

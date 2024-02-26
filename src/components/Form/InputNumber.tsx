@@ -1,8 +1,8 @@
 import React, { FC } from 'react'
-import { InputProps } from './interface'
+import { NumberInputProps } from './interface'
 import BaseInput from './BaseInput'
 
-const InputNumber: FC<InputProps> = (props: InputProps) => {
+const InputNumber: FC<NumberInputProps> = (props: NumberInputProps) => {
   const { id, placeholder, defaultValue, customFormItemProps, onChange: onNewChange, value } = props
   const onChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     onNewChange && onNewChange(e)
