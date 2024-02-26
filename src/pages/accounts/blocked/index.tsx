@@ -87,7 +87,7 @@ const BlockedAccountsPage = ({ paginationData }: Props) => {
     {
       title: 'Blocked At(HK Time)',
       dataIndex: 'blocked_at',
-      render: (e: any) => {
+      render: (e: string) => {
         const date = dayjs(e, 'YYYY-MM-DD THH:mm:ss')
         return dayjs.utc(date).local().format('YYYY-MM-DD HH:mm:ss')
       },
