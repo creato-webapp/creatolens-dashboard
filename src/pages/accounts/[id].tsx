@@ -63,7 +63,7 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
   const [showAlert, setShowAlert] = useState(false)
   const router = useRouter()
   const { id } = router.query
-  const { data, error, updateAccount: callUpdateAccount, updateSession } = useAccount(id as string, shouldFetch, isCreate ? isCreate : accountData)
+  const { data, error, updateAccount: callUpdateAccount, updateSession } = useAccount(id as string, shouldFetch, isCreate ? undefined : accountData)
   if (error) {
     console.log(error)
     return <div>Failed to load users {id}</div>

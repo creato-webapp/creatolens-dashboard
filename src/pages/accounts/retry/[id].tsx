@@ -55,11 +55,7 @@ const AccountsRetryPage = ({ accountData }: Props) => {
   const { id } = router.query
   const isCreate = id === 'create-account'
 
-  const {
-    data,
-    error,
-    updateRetryAccount: callUpdateAccount,
-  } = useRetryAccount(id as string, shouldFetch, isCreate ? isCreate : accountData)
+  const { data, error, updateRetryAccount: callUpdateAccount } = useRetryAccount(id as string, shouldFetch, isCreate ? undefined : accountData)
 
   if (error) {
     console.log(data)

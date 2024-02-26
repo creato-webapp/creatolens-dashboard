@@ -73,7 +73,7 @@ const AccountsPage = ({ paginationData }: Props) => {
   })
   const [createDateOrder, setCreateDateOrder] = useState<string | number>('desc')
   // const [fetching, setFetching] = useState(false)
-  const { accounts: responseData, error } = useGetAccountsPagination(pageParams, true, paginationData)
+  const { accounts: responseData, error } = useGetAccountsPagination(pageParams, true)
   // const [accountData, setAccountData] = useState<
   //   {
   //     page: number
