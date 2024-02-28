@@ -15,14 +15,8 @@ export type ModelResult = {
   data: hashtag[]
 }
 
-interface LabelImageRequest {
-  imageUrl: string
-  isGcsUri: boolean
-}
-
-export interface LabelImageResponse {
-  status_code: number
-  data: Labels[]
+export interface UploadImageResponse {
+  path: string
 }
 
 function validateImage(file: File, maxSize: number, validTypes: string[]): boolean {
@@ -38,7 +32,7 @@ function validateImage(file: File, maxSize: number, validTypes: string[]): boole
   return true
 }
 
-export async function uploadImage(file: File, customConfig?: AxiosRequestConfig): Promise<Labels[]> {
+export async function uploadImage(file: File, customConfig?: AxiosRequestConfig): Promise<UploadImageResponse> {
   try {
     if (!validateImage(file, 8 * 1024 * 1024, ['image/jpeg', 'image/png', 'image/gif'])) {
       throw new Error('Invalid image')
@@ -53,27 +47,11 @@ export async function uploadImage(file: File, customConfig?: AxiosRequestConfig)
       ...customConfig,
     }
 
-    const response = await Fetcher.POST('/api/blob', formData, config)
-    window.alert('Image upload ended')
+    const response: UploadImageResponse = await Fetcher.POST('/api/blob', formData, config)
 
     return response
   } catch (error: any) {
     window.alert('Image upload failed: ' + error.message)
     throw new Error('Image upload failed: ' + error.message)
-  }
-}
-
-export async function labelImage(imageUrl: string, isGcsUri: boolean): Promise<LabelImageResponse> {
-  const payload: LabelImageRequest = {
-    imageUrl,
-    isGcsUri,
-  }
-
-  try {
-    const response: LabelImageResponse = await Fetcher.POST('/api/blob/withUrl', payload)
-    return response
-  } catch (error: any) {
-    console.error('Error labeling image:', error.response?.data || error.message)
-    throw error
   }
 }

@@ -1,11 +1,11 @@
 import React, { useState, useCallback } from 'react'
-import { uploadImage, Labels, ModelResult, labelImage } from '@services/Object/ImageBlob'
+import { uploadImage, Labels, ModelResult } from '@services/Object/ImageBlob'
+import { LabelImage } from '@services/Object/Gemini'
 import { Button } from '@components/Button'
 import Dropzone from '@components/Dropzone'
 import CrossIcon from '@components/Icon/CrossIcon'
 import Checkbox from '@components/Form/Checkbox'
 import axios from 'axios'
-import BaseInput from '@components/Form/BaseInput'
 type hashtag = {
   acc: number
   hashtag: string
@@ -16,6 +16,7 @@ const ImageUpload: React.FC = () => {
   const [file, setFile] = useState<File | null>(null)
   const [imageRes, setImageRes] = useState<ModelResult>({ data: [] })
   const [labels, setLabels] = useState<Labels[]>([])
+  const [uploadedUrl, setUploadedUrl] = useState<string>('')
   const [selectedHashtags, setSelectedHashtags] = useState<string[]>([])
   const toggleCheckbox = useCallback(
     (hashtag: string) => {
@@ -48,6 +49,7 @@ const ImageUpload: React.FC = () => {
     setLabels([])
     setImageRes({ data: [] })
     setSelectedHashtags([])
+    setUploadedUrl('')
   }, [])
 
   const getHashtag = useCallback(async (input: string): Promise<ModelResult> => {
@@ -66,6 +68,23 @@ const ImageUpload: React.FC = () => {
     }
   }, [])
 
+  const handlerRetryLabelImage = useCallback(async () => {
+    try {
+      if (!uploadedUrl) {
+        window.alert('No image uploaded.')
+        return
+      }
+      setLoading(true)
+      const labels = await LabelImage(uploadedUrl)
+      setLabels(labels)
+    } catch (error) {
+      console.error('Error in fetching labels:', error)
+      window.alert(error)
+    } finally {
+      setLoading(false)
+    }
+  }, [uploadedUrl])
+
   const handleRetryRecommendation = useCallback(async () => {
     try {
       if (!labels) {
@@ -73,7 +92,7 @@ const ImageUpload: React.FC = () => {
         return
       }
       setLoading(true)
-      const labelsJoined = labels.map((e) => e.description).join(', ')
+      const labelsJoined = labels.map((e) => e).join(', ')
       const hashtagRes = await getHashtag(labelsJoined)
       setImageRes(hashtagRes)
     } catch (error) {
@@ -92,17 +111,13 @@ const ImageUpload: React.FC = () => {
 
     setLoading(true)
     try {
-      const labelRes = await uploadImage(file, {
+      const imageRes = await uploadImage(file, {
         timeout: 30000,
         maxBodyLength: 8 * 1024 * 1024,
         maxContentLength: 8 * 1024 * 1024,
       })
-      if (labelRes.length === 0 || labelRes.length === undefined) {
-        window.alert('No labels detected.')
-        setLabels([])
-        return
-      }
-      setLabels(labelRes)
+
+      setUploadedUrl(imageRes.path)
     } catch (error) {
       console.error('Error in upload or fetching hashtags:', error)
       window.alert(error)
@@ -131,15 +146,20 @@ const ImageUpload: React.FC = () => {
         <Button.Primary onClick={handleUpload} loading={loading}>
           {!labels?.length ? 'Upload' : 'Re-Upload'}
         </Button.Primary>
+        <Button.Primary onClick={handlerRetryLabelImage} loading={loading} disabled={!uploadedUrl}>
+          {!labels?.length ? 'Annotate' : 'Re-Annotate'}
+        </Button.Primary>
         <Button.Primary onClick={handleRetryRecommendation} loading={loading} disabled={!labels?.length}>
           {!labels?.length ? 'Get Keywords' : 'Get Keywords With Labels...'}
         </Button.Primary>
       </div>
 
       <div className="mb-4 flex flex-col">
+        <h4>Images Uploaded</h4>
+        <>{uploadedUrl}</>
         <h4>Labels detected</h4>
         {labels?.map((e) => (
-          <>{e.description} &#8203; </>
+          <>{e} &#8203; </>
         ))}
         {labels?.length === 0 && <p>No labels detected</p>}
       </div>

@@ -1,7 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { type NextRequest } from 'next/server'
 import BlobInstance from '../axiosInstance/Blob'
-import { LabelImageResponse, Labels } from '@services/Object/ImageBlob'
+import { UploadImageResponse } from '@services/Object/ImageBlob'
 import axios from 'axios'
 export const config = {
   api: {
@@ -9,7 +9,7 @@ export const config = {
   },
 }
 
-export default async function GeminiAnnotations(req: NextApiRequest, res: NextApiResponse) {
+export default async function CloudStorage(req: NextApiRequest, res: NextApiResponse) {
   const { body, method, query } = req
   switch (method) {
     case 'GET':
@@ -36,23 +36,21 @@ export default async function GeminiAnnotations(req: NextApiRequest, res: NextAp
         if (!req.headers.cookie) {
           return res.status(401).json({ message: 'Unauthorized' })
         }
-        const response = await BlobInstance.post<LabelImageResponse>(`/cloud-vision`, req, {
+        const response = await BlobInstance.post<UploadImageResponse>(`/cloud-vision`, req, {
           headers: {
             'Content-Type': req.headers['content-type'],
           },
         })
-        const labelRes = response.data
-
-        if (labelRes.status_code !== 200) {
-          return res.status(labelRes.status_code).json({ message: 'Gemini Cannot Label the image' })
+        if (response.status !== 200) {
+          return res.status(response.status).json({ message: 'Cannot store the image' })
         }
-        if (!labelRes.data) {
+        if (!response.data) {
           return res.status(400).json({ message: 'Invalid request' })
         }
-        return res.status(200).json(labelRes.data)
+        return res.status(200).json(response.data)
       } catch (error) {
         console.log(error)
-        return res.status(500).json({ message: 'Something went wrong in labeling stage', error: error })
+        return res.status(500).json({ message: 'Something went wrong in uploading stage', error: error })
       }
     default:
       res.setHeader('Allow', ['GET', 'POST'])
