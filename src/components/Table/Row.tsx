@@ -1,8 +1,8 @@
-import { Column, rowData } from './Interface'
+import { Column, RowData } from './Interface'
 export interface RowProps extends React.TableHTMLAttributes<HTMLTableRowElement> {
   rowKey: number
   columns: Column[]
-  rowData: rowData
+  rowData: RowData
   rowProps?: React.HTMLAttributes<HTMLTableRowElement>
   cellProps?: React.HTMLAttributes<HTMLTableCellElement>
 }

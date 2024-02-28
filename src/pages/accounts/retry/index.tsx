@@ -13,6 +13,7 @@ import Pagination from '@components/Pagination'
 import { useGetRetryAccountsPagination } from 'src/hooks/useRetryAccount'
 import { GetRetryAccountsPagination, PaginationMetadata } from '@services/Account/RetryAccount'
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
+import { RowData } from '@components/Table/Interface'
 
 const dayjs = require('dayjs')
 const utc = require('dayjs/plugin/utc')
