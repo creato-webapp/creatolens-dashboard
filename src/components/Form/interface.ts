@@ -10,13 +10,13 @@ export interface IField {
   customFormItemProps?: React.InputHTMLAttributes<HTMLInputElement>
 }
 
-export interface FormLayoutProps extends Omit<FormHTMLAttributes<HTMLFormElement>, 'onSubmit'> {
+export interface FormLayoutProps<T> extends Omit<FormHTMLAttributes<HTMLFormElement>, 'onSubmit'> {
   Header?: string
   subHeader?: string
   fields: IField[]
   loading: boolean
   allowSubmit?: boolean
-  onSubmit: <T>(values: T) => void | Promise<void>
+  onSubmit: (values: T) => void | Promise<void>
   formStyles?: string
   formInnerStyles?: string
   buttonStyles?: string

@@ -5,7 +5,7 @@ const dayjs = require('dayjs')
 const utc = require('dayjs/plugin/utc')
 dayjs.extend(utc)
 
-const Layout: FC<FormLayoutProps> = (props: FormLayoutProps) => {
+const Layout = <T,>(props: FormLayoutProps<T>) => {
   const {
     Header,
     subHeader,
@@ -29,12 +29,11 @@ const Layout: FC<FormLayoutProps> = (props: FormLayoutProps) => {
       e.type == 'Checkbox'
         ? (values[e.name] = target[e.name].checked)
         : e.type == 'DateTimePicker'
-          ? (values[e.name] = dayjs(target[e.name].value).format('YYYY-MM-DD THH:mm:ss'))
-          : (values[e.name] = target[e.name].value)
+        ? (values[e.name] = dayjs(target[e.name].value).format('YYYY-MM-DD THH:mm:ss'))
+        : (values[e.name] = target[e.name].value)
     )
-    onSubmit(values)
+    onSubmit(values as T)
   }
-
   return (
     <div className={`${formStyles} form-container`}>
       <form onSubmit={SubmitHandler} className={`mx-auto max-w-xl py-9 px-4 text-gray-900 antialiased md:max-w-4xl ${formInnerStyles}`}>

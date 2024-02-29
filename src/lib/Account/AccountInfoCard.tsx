@@ -103,7 +103,7 @@ const AccountInfoCard: React.FC<AccountInfoCardProps> = ({ isLoading, account, h
         </Button.Primary>
       }
     >
-      <Form.Layout
+      <Form.Layout<IAccount>
         onSubmit={handleSubmit}
         Header={account.username}
         loading={isLoading}
