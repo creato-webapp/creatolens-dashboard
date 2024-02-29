@@ -86,7 +86,7 @@ export async function GetBlockedAccounts(account?: Partial<IBlockedAccount>, ord
 export async function GetBlockedAccountsPagination(
   params: PaginationParams,
   customConfig?: AxiosRequestConfig
-): Promise<PaginationMetadata<IBlockedAccount>> {
+): Promise<PaginationMetadata<IBlockedAccount[]>> {
   const response = await Fetcher.GET(
     `/api/accounts/blocked`,
     {
