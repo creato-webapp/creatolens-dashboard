@@ -20,13 +20,13 @@ const utc = require('dayjs/plugin/utc')
 dayjs.extend(utc)
 
 type Props = {
-  paginationData: PaginationMetadata
+  paginationData: PaginationMetadata<IRetryAccount[]>
 }
 
 //TODO getServerSideProps: GetServerSideProps; cannot set GetServerSideProps type.
 export const getServerSideProps: GetServerSideProps = async (
   context: GetServerSidePropsContext
-): Promise<GetServerSidePropsResult<{ paginationData?: PaginationMetadata }>> => {
+): Promise<GetServerSidePropsResult<{ paginationData?: PaginationMetadata<IRetryAccount[]> }>> => {
   const session = await getSession(context)
   if (!session) {
     return {
@@ -45,7 +45,7 @@ export const getServerSideProps: GetServerSideProps = async (
   const response = await GetRetryAccountsPagination(paginationProps)
   const accountData: IRetryAccount[] = response ? response.data : []
 
-  const paginationData: PaginationMetadata = {
+  const paginationData: PaginationMetadata<IRetryAccount[]> = {
     data: accountData,
     has_next: response ? response.has_next : false,
     has_prev: response ? response.has_prev : false,

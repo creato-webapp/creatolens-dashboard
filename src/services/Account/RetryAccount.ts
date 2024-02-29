@@ -84,7 +84,7 @@ export async function GetRetryAccounts(account?: Partial<IRetryAccount>, orderBy
 export async function GetRetryAccountsPagination(
   params: PaginationParams,
   customConfig?: AxiosRequestConfig
-): Promise<PaginationMetadata<IRetryAccount>> {
+): Promise<PaginationMetadata<IRetryAccount[]>> {
   const response = await Fetcher.GET(
     `/api/accounts/retry`,
     {

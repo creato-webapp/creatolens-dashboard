@@ -1,7 +1,7 @@
 import useSWR from 'swr'
 import { GetHashtag } from '@services/HashtagHelper'
-import { HashetProps } from 'src/pages/recommendation'
-export const useGetHashtag = (input: string, shouldFetch: boolean = true, fallbackData?: HashetProps) => {
+import { IHashet } from 'src/pages/recommendation'
+export const useGetHashtag = (input: string, shouldFetch: boolean = true, fallbackData?: { data: IHashet[] }) => {
   const { data, error, mutate, ...swr } = useSWR(shouldFetch ? input : null, GetHashtag, {
     refreshInterval: 0,
     fallbackData: fallbackData,

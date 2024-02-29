@@ -17,7 +17,7 @@ interface AccountCreateCardProps {
 }
 
 const AccountCreateCard: React.FC<AccountCreateCardProps> = ({ isLoading, isCreate, account, handleSubmit, isChecked, handleChange }) => {
-  const onSubmit = (values: IAccount) => {
+  const onSubmit: <IAccount>(values: IAccount) => void | Promise<void> = async (values: IAccount) => {
     let valid = true
     const newErrors = { username: '', pwd: '' }
     if (values.username) {
@@ -77,17 +77,19 @@ const AccountCreateCard: React.FC<AccountCreateCardProps> = ({ isLoading, isCrea
         buttonText="Create"
         buttonSizes={['m', 'm', 'm']}
       >
-        {fields.map((e: IField, index) => (
-          <Form.Item label={e.label} key={index} customFormItemProps={e.customFormItemProps}>
-            <Form.CustomItem
-              id={e.name}
-              defaultValue={account[e.name]}
-              type={e.type}
-              customFormItemProps={e.customFormItemProps}
-              className={`${isCreate ? 'w-full' : ''}`}
-            />
-          </Form.Item>
-        ))}
+        {fields.map((e: IField, index) => {
+          return (
+            <Form.Item label={e.label} key={index} customFormItemProps={e.customFormItemProps}>
+              <Form.CustomItem
+                id={e.name}
+                defaultValue={account[e.name]}
+                type={e.type}
+                customFormItemProps={e.customFormItemProps}
+                className={`${isCreate ? 'w-full' : ''}`}
+              />
+            </Form.Item>
+          )
+        })}
         <Paragraph size="sm">
           By connecting your Instagram account, you agree to our terms and privacy policy. We may access your information for personalized features
           and analysis. Your data is protected, but not 100% secure. Contact support for questions.
