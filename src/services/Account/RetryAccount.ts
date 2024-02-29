@@ -2,22 +2,7 @@
 import { AxiosRequestConfig } from 'axios'
 import { Fetcher } from '../fetcher'
 import { Cookies, IRetryAccount } from '@lib/Account/Account/interface'
-
-export interface PaginationParams {
-  pageNumber: number
-  pageSize: number
-  orderBy: string
-  isAsc: boolean
-}
-
-export interface PaginationMetadata {
-  data: IRetryAccount[]
-  has_next: boolean
-  has_prev: boolean
-  page: number
-  size: number
-  total_items: number
-}
+import { PaginationParams, PaginationMetadata } from './AccountInterface'
 
 type PartialAccount = Partial<{
   id: string
@@ -96,7 +81,10 @@ export async function GetRetryAccounts(account?: Partial<IRetryAccount>, orderBy
   return response
 }
 
-export async function GetRetryAccountsPagination(params: PaginationParams, customConfig?: AxiosRequestConfig): Promise<PaginationMetadata> {
+export async function GetRetryAccountsPagination(
+  params: PaginationParams,
+  customConfig?: AxiosRequestConfig
+): Promise<PaginationMetadata<IRetryAccount>> {
   const response = await Fetcher.GET(
     `/api/accounts/retry`,
     {

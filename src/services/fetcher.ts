@@ -55,11 +55,11 @@ FetcherInstance.interceptors.response.use(
   }
 )
 
-export const CommonRequest = async (
+export const CommonRequest = async <D, P>(
   method: 'GET' | 'POST' | 'PATCH' | 'DELETE',
   url: string,
-  data?: any,
-  params?: any,
+  data?: D,
+  params?: P,
   customConfig?: AxiosRequestConfig
 ) => {
   const config: AxiosRequestConfig = {
@@ -73,11 +73,11 @@ export const CommonRequest = async (
 }
 
 export const Fetcher = {
-  GET: (url: string, params?: any, customConfig?: AxiosRequestConfig) => CommonRequest('GET', url, undefined, params, customConfig),
+  GET: <P>(url: string, params?: P, customConfig?: AxiosRequestConfig) => CommonRequest('GET', url, undefined, params, customConfig),
 
-  POST: (url: string, data?: any, customConfig?: AxiosRequestConfig) => CommonRequest('POST', url, data, undefined, customConfig),
+  POST: <D>(url: string, data?: D, customConfig?: AxiosRequestConfig) => CommonRequest('POST', url, data, undefined, customConfig),
 
-  PATCH: (url: string, data?: any, customConfig?: AxiosRequestConfig) => CommonRequest('PATCH', url, data, undefined, customConfig),
+  PATCH: <D>(url: string, data?: D, customConfig?: AxiosRequestConfig) => CommonRequest('PATCH', url, data, undefined, customConfig),
 
   DELETE: (url: string, customConfig?: AxiosRequestConfig) => CommonRequest('DELETE', url, undefined, undefined, customConfig),
 }

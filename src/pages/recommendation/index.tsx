@@ -15,7 +15,7 @@ import { useGetHashtag } from 'src/hooks/useHashtag'
 import Hero from '@components/Hero'
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 
-interface IHashet extends Record<string, string | number | boolean> {
+export interface IHashet extends Record<string, string | number | boolean> {
   hashtag: string
   acc: number
 }
@@ -74,7 +74,7 @@ const RecommendationPage = (hashetSessionData: HashetProps) => {
       key: '1',
       title: 'Categories',
       children: (
-        <div className="flex flex-wrap gap-4 md:flex md:flex-nowrap md:py-24 md:px-14">
+        <div className="flex flex-wrap gap-4 md:flex md:flex-nowrap md:px-14 md:py-24">
           <TopRelatedHashtagCard hashtags={hashetData} />
           <TopAccHashtagCard hashtags={hashetData} />
         </div>
@@ -142,7 +142,7 @@ const RecommendationPage = (hashetSessionData: HashetProps) => {
         </div>
       </Hero>
       <Card className="min-h-full w-full rounded-none border-none bg-transparent px-4 py-0 shadow-none md:px-20 md:pb-28">
-        <Tab items={tabItems} defaultActiveKey="1" scrollable={false} className="shadow-none md:shadow-xl md:px-0" />
+        <Tab items={tabItems} defaultActiveKey="1" scrollable={false} className="shadow-none md:px-0 md:shadow-xl" />
       </Card>
     </div>
   )

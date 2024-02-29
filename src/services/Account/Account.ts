@@ -2,25 +2,9 @@
 import { AxiosRequestConfig } from 'axios'
 import { Fetcher } from '../fetcher'
 import { IAccount } from '@lib/Account/Account'
-
+import { PaginationParams, PaginationMetadata } from './AccountInterface'
 interface Cookies {
   [key: string]: string
-}
-
-export interface PaginationParams {
-  pageNumber: number
-  pageSize: number
-  orderBy: string
-  isAsc: boolean
-}
-
-export interface PaginationMetadata {
-  data: IAccount[]
-  has_next: boolean
-  has_prev: boolean
-  page: number
-  size: number
-  total_items: number
 }
 
 type PartialAccount = Partial<{
@@ -102,7 +86,7 @@ export async function GetAccounts(account?: Partial<IAccount>, orderBy?: string,
   return response
 }
 
-export async function GetAccountsPagination(params: PaginationParams, customConfig?: AxiosRequestConfig): Promise<PaginationMetadata> {
+export async function GetAccountsPagination(params: PaginationParams, customConfig?: AxiosRequestConfig): Promise<PaginationMetadata<IAccount>> {
   const response = await Fetcher.GET(
     `/api/accounts`,
     {
@@ -116,13 +100,23 @@ export async function GetAccountsPagination(params: PaginationParams, customConf
   return response
 }
 
+interface SessionUpdateResponse {
+  success: boolean
+  message?: string
+  // Include other fields expected in the response
+}
+
 export async function UpdateAccount(id: string, updatedAccount: IAccount, customConfig?: AxiosRequestConfig): Promise<IAccount> {
   const res = await Fetcher.PATCH(`/api/accounts/${id}`, updatedAccount, { ...customConfig, params: { id: updatedAccount.id } })
   return res
 }
 
-export async function UpdateSession(id: string, updatedAccount: IAccount, customConfig?: AxiosRequestConfig): Promise<any> {
-  const res = await Fetcher.POST(
+export async function UpdateSession(id: string, updatedAccount: IAccount, customConfig?: AxiosRequestConfig): Promise<SessionUpdateResponse> {
+  const res = await Fetcher.POST<{
+    username: string
+    password: string
+    account_id: string
+  }>(
     `/api/accounts/session/${id}`,
     {
       username: updatedAccount.username,

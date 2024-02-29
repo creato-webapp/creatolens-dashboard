@@ -1,8 +1,7 @@
-import { IAccount } from '@lib/Account/Account'
 import React from 'react'
 
-export interface RowData {
-  [key: string]: string | number | boolean | React.ReactNode | IAccount
+export interface RowData<T = unknown> {
+  [key: string]: T
 }
 
 export interface Column {

@@ -9,8 +9,8 @@ export interface PaginationParams {
   isAsc: boolean
 }
 
-export interface PaginationMetadata {
-  data: any
+export interface PaginationMetadata<T = unknown> {
+  data: T
   has_next: boolean
   has_prev: boolean
   page: number

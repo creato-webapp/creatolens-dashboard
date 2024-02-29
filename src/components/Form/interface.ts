@@ -16,7 +16,7 @@ export interface FormLayoutProps extends Omit<FormHTMLAttributes<HTMLFormElement
   fields: IField[]
   loading: boolean
   allowSubmit?: boolean
-  onSubmit: (values: any) => void | Promise<void>
+  onSubmit: <T = unknown>(values: T) => void | Promise<void>
   formStyles?: string
   formInnerStyles?: string
   buttonStyles?: string

@@ -1,25 +1,13 @@
 //TODO write Get, Gets, Update,
 import { AxiosRequestConfig } from 'axios'
 import { Fetcher } from '../fetcher'
+import { PaginationParams, PaginationMetadata } from './AccountInterface'
+import { IAccountError } from '@lib/Account/AccountErrors/interface'
 
-export interface PaginationParams {
-  username: string | null
-  pageNumber: number
-  pageSize: number
-  orderBy: string
-  isAsc: boolean
-}
-
-export interface PaginationMetadata {
-  data: any
-  has_next: boolean
-  has_prev: boolean
-  page: number
-  size: number
-  total_items: number
-}
-
-export async function GetErrorPagination(params: PaginationParams, customConfig?: AxiosRequestConfig): Promise<PaginationMetadata> {
+export async function GetErrorPagination(
+  params: PaginationParams,
+  customConfig?: AxiosRequestConfig
+): Promise<PaginationMetadata<{ data: IAccountError[] }>> {
   const response = await Fetcher.GET(
     `/api/accounts/error`,
     {

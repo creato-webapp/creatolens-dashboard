@@ -18,6 +18,7 @@ export interface IAccount {
   session_cookies?: Cookies
   status: 'active' | 'blocked' | 'banned' | 'retry' | 'test' | 'scrapping' | 'occupied'
   updated_at: string
+  [key: string]: string | number | boolean | Cookies | undefined // Adding an index signature
 }
 
 export interface IBlockedAccount {
@@ -39,6 +40,7 @@ export interface IBlockedAccount {
   session_cookies?: Cookies
   status: 'active' | 'blocked' | 'banned' | 'retry' | 'test' | 'scrapping' | 'occupied'
   updated_at: string
+  [key: string]: string | number | boolean | Cookies | undefined // Adding an index signature
 }
 
 export interface IRetryAccount {
@@ -59,4 +61,5 @@ export interface IRetryAccount {
   wait_until: string
   retry_history: string
   retry_count: number
+  [key: string]: string | number | boolean | Cookies | undefined // Adding an index signature
 }

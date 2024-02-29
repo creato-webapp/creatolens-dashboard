@@ -11,9 +11,9 @@ import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/solid'
 import StatusTag, { Status } from '@lib/StatusTag'
 import Pagination from '@components/Pagination'
 import { useGetRetryAccountsPagination } from 'src/hooks/useRetryAccount'
-import { GetRetryAccountsPagination, PaginationMetadata } from '@services/Account/RetryAccount'
+import { GetRetryAccountsPagination } from '@services/Account/RetryAccount'
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
-import { RowData } from '@components/Table/Interface'
+import { PaginationMetadata } from '@services/Account/AccountInterface'
 
 const dayjs = require('dayjs')
 const utc = require('dayjs/plugin/utc')
@@ -194,9 +194,10 @@ const RetryAccountsPage = ({ paginationData }: Props) => {
       <div className="hidden  md:flex">
         <Table.Layout>
           <Table.Header columns={columns} />
-
           <Table.Body>
-            {accounts?.map((e, index) => <Table.Row key={`retry-account-table-${index}`} columns={columns} rowData={e} rowKey={index} />)}
+            {accounts?.map((e, index) => {
+              return <Table.Row key={`retry-account-table-${index}`} columns={columns} rowData={e} rowKey={index} />
+            })}
           </Table.Body>
         </Table.Layout>
       </div>
