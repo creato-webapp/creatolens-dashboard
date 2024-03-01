@@ -143,7 +143,7 @@ const AccountsBlockedPage = ({ accountData }: Props) => {
     <Card title="Accounts Info">
       <Form.Layout onSubmit={handleSubmit} Header={account.username} loading={isLoading} fields={fields}>
         {fields.map((e: IField, index) => {
-          const value = account[e.name as keyof Omit<IBlockedAccount, 'session_cookies'>]
+          const value = account[e.name as keyof Omit<IBlockedAccount, 'session_cookies'>] as string
           return (
             <Form.Item label={e.label} key={index} customFormItemProps={e.customFormItemProps}>
               <Form.CustomItem id={e.name} defaultValue={value} type={e.type} customFormItemProps={e.customFormItemProps} />

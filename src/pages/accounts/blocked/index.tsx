@@ -11,15 +11,16 @@ import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/solid'
 import StatusTag, { Status } from '@lib/StatusTag'
 import Pagination from '@components/Pagination'
 import { useGetBlockAccountsPagination } from 'src/hooks/useBlockedAccount'
-import { GetBlockedAccountsPagination, PaginationMetadata } from '@services/Account/BlockAccount'
+import { GetBlockedAccountsPagination } from '@services/Account/BlockAccount'
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
+import { PaginationMetadata } from '@services/Account/AccountInterface'
 
 const dayjs = require('dayjs')
 const utc = require('dayjs/plugin/utc')
 dayjs.extend(utc)
 
 type Props = {
-  paginationData: PaginationMetadata
+  paginationData: PaginationMetadata<IBlockedAccount[]>
 }
 
 //TODO getServerSideProps: GetServerSideProps; cannot set GetServerSideProps type.
@@ -42,7 +43,7 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
   const response = await GetBlockedAccountsPagination(paginationProps)
   const accountData: IBlockedAccount[] = response ? response.data : []
 
-  const paginationData: PaginationMetadata = {
+  const paginationData: PaginationMetadata<IBlockedAccount[]> = {
     data: accountData,
     has_next: response ? response.has_next : false,
     has_prev: response ? response.has_prev : false,
@@ -189,7 +190,11 @@ const BlockedAccountsPage = ({ paginationData }: Props) => {
         <Table.Layout>
           <Table.Header columns={columns} />
 
-          <Table.Body>{accounts?.map((e, index) => <Table.Row key={`accounts-row-${index}`} columns={columns} rowData={e} rowKey={index} />)}</Table.Body>
+          <Table.Body>
+            {accounts?.map((e, index) => (
+              <Table.Row key={`accounts-row-${index}`} columns={columns} rowData={e} rowKey={index} />
+            ))}
+          </Table.Body>
         </Table.Layout>
       </div>
       <Pagination

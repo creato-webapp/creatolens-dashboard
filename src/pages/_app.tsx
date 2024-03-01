@@ -1,10 +1,10 @@
 import '../styles/globals.css'
-import { Session } from 'next-auth'
 import type { AppProps } from 'next/app'
 import Head from 'next/head'
 import Footer from '@components/Footer'
 import Navbar from '../components/Layout/Layout'
 import { SessionProvider } from 'next-auth/react'
+import { Session } from 'next-auth/core/types'
 
 function MyApp({
   Component,

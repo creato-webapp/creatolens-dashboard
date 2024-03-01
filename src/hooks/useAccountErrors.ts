@@ -6,7 +6,7 @@ import { IAccountError } from '@lib/Account/AccountErrors/interface'
 export const useAccountErrorPagination = (
   paginationParams: PaginationParams,
   shouldFetch: boolean = true,
-  fallbackData?: PaginationMetadata<{ data: IAccountError[] }>
+  fallbackData?: PaginationMetadata<IAccountError[]>
 ) => {
   const { data, error, mutate, ...swr } = useSWR(shouldFetch ? [paginationParams] : null, GetErrorPagination, {
     refreshInterval: 0,

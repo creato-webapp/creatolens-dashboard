@@ -1,6 +1,6 @@
 import React from 'react'
 
-export interface RowData<T = unknown> {
+export interface RowData<T=unknown> {
   [key: string]: T
 }
 

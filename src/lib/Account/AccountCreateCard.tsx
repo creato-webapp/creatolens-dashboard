@@ -17,7 +17,7 @@ interface AccountCreateCardProps {
 }
 
 const AccountCreateCard: React.FC<AccountCreateCardProps> = ({ isLoading, isCreate, account, handleSubmit, isChecked, handleChange }) => {
-  const onSubmit: <IAccount>(values: IAccount) => void | Promise<void> = async (values: IAccount) => {
+  const onSubmit = async (values: IAccount) => {
     let valid = true
     const newErrors = { username: '', pwd: '' }
     if (values.username) {
@@ -65,7 +65,7 @@ const AccountCreateCard: React.FC<AccountCreateCardProps> = ({ isLoading, isCrea
         )
       }
     >
-      <Form.Layout
+      <Form.Layout<IAccount>
         onSubmit={onSubmit}
         Header={account.username}
         loading={isLoading}
@@ -82,7 +82,7 @@ const AccountCreateCard: React.FC<AccountCreateCardProps> = ({ isLoading, isCrea
             <Form.Item label={e.label} key={index} customFormItemProps={e.customFormItemProps}>
               <Form.CustomItem
                 id={e.name}
-                defaultValue={account[e.name]}
+                defaultValue={account[e.name] as string}
                 type={e.type}
                 customFormItemProps={e.customFormItemProps}
                 className={`${isCreate ? 'w-full' : ''}`}

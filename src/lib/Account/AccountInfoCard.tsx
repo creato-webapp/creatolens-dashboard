@@ -126,14 +126,14 @@ const AccountInfoCard: React.FC<AccountInfoCardProps> = ({ isLoading, account, h
                 <Paragraph size={'lg'} bold className="font-bold">
                   {e.label}
                 </Paragraph>
-                <Paragraph key={e.name}>{value}</Paragraph>
+                <Paragraph key={e.name}>{value as string}</Paragraph>
               </div>
             )
           })}
         </div>
         <div className="flex flex-wrap gap-8 ">
           {checkBoxField.map((e: IField, index) => {
-            const value = account[e.name as keyof Omit<IAccount, 'session_cookies'>]
+            const value = account[e.name] as string
             return (
               <Form.Item label={e.label} key={index} customFormItemProps={e.customFormItemProps}>
                 <Form.CustomItem id={e.name} defaultValue={value} type={e.type} customFormItemProps={e.customFormItemProps} />
@@ -146,7 +146,7 @@ const AccountInfoCard: React.FC<AccountInfoCardProps> = ({ isLoading, account, h
           const value = account[e.name as keyof Omit<IAccount, 'session_cookies'>]
           return (
             <Form.Item label={e.label} key={index} customFormItemProps={e.customFormItemProps}>
-              <Form.CustomItem id={e.name} defaultValue={value} type={e.type} customFormItemProps={e.customFormItemProps} />
+              <Form.CustomItem id={e.name} defaultValue={value as string} type={e.type} customFormItemProps={e.customFormItemProps} />
             </Form.Item>
           )
         })}
