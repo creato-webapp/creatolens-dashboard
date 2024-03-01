@@ -1,6 +1,7 @@
 import React, { useState, useCallback } from 'react'
 import Card from '@components/Card'
 import { Table } from '@components/Table'
+
 import { IAccountError } from '@lib/Account/AccountErrors/interface'
 import { getSession } from 'next-auth/react'
 import Link from 'next/link'
@@ -36,7 +37,7 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
 
   const response = await GetErrorPagination(paginationProps)
 
-  const accountData =  response.data ?? []
+  const accountData = response.data ?? []
 
   const paginationData: PaginationMetadata<IAccountError[]> = {
     data: accountData,

@@ -1,9 +1,5 @@
 import React from 'react'
 
-export interface RowData<T=unknown> {
-  [key: string]: T
-}
-
 export interface Column {
   title: string
   dataIndex: string

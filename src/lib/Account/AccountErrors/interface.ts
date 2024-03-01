@@ -1,4 +1,6 @@
-export interface IAccountError {
+import { IGenericRowData } from '@components/Table/Row'
+
+export interface IAccountError extends IGenericRowData {
   account: string
   exception: string
   occurred_at: string
