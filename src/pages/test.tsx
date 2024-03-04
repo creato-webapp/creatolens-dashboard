@@ -101,7 +101,7 @@ const ImageUpload: React.FC = () => {
     } finally {
       setLoading(false)
     }
-  }, [labels])
+  }, [labels, getHashtag])
 
   const handleUpload = useCallback(async () => {
     if (!file) {
@@ -134,7 +134,7 @@ const ImageUpload: React.FC = () => {
         {file ? (
           <div className="relative flex h-full w-auto justify-center bg-bg-dark">
             <img src={URL.createObjectURL(file)} alt="Dropped Image" className="object-fit h-auto rounded-lg" />
-            <button className="absolute top-2 right-2 rounded-full bg-accent1-500 p-1 text-white" onClick={handleClose}>
+            <button className="absolute right-2 top-2 rounded-full bg-accent1-500 p-1 text-white" onClick={handleClose}>
               <CrossIcon />
             </button>
           </div>
