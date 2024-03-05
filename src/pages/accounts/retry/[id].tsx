@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
 import Card from '@components/Card'
 import { useRouter } from 'next/router'
-import { Form } from '@components/Form'
 import { IField } from '@components/Form/interface'
-import { IAccount, IRetryAccount } from '@lib/Account/Account/interface'
+import { IRetryAccount } from '@lib/Account/Account/interface'
 import { getSession } from 'next-auth/react'
 import { GetRetryAccount } from '@services/Account/RetryAccount'
 import { useRetryAccount } from 'src/hooks/useRetryAccount'
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
+import DynamicForm from '@components/Form/DynamicForm'
 
 type Props = {
   accountData: IRetryAccount
@@ -21,7 +21,7 @@ export const getServerSideProps: GetServerSideProps = async (
   context: GetServerSidePropsContext
 ): Promise<
   GetServerSidePropsResult<{
-    accountData: IAccount
+    accountData: IRetryAccount
   }>
 > => {
   const session = await getSession(context)
@@ -44,7 +44,7 @@ export const getServerSideProps: GetServerSideProps = async (
     },
   })
   // Pass data to the page via props
-  const accountData: IAccount = res as IRetryAccount
+  const accountData: IRetryAccount = res as IRetryAccount
   return { props: { accountData } }
 }
 
@@ -67,7 +67,7 @@ const AccountsRetryPage = ({ accountData }: Props) => {
     return <div>Loading...</div>
   }
 
-  const account: IAccount = {
+  const account: IRetryAccount = {
     ...data,
     wait_until: dayjs(data?.wait_until, 'YYYY-MM-DD THH:mm:ss').format('YYYY-MM-DDTHH:mm'),
   }
@@ -77,38 +77,53 @@ const AccountsRetryPage = ({ accountData }: Props) => {
       label: 'document_id',
       type: 'Input',
       name: 'id',
+      id: 'id',
+      value: account['id'],
     },
     {
       label: 'username',
       type: 'Input',
       name: 'username',
-      customFormItemProps: { required: true },
+      id: 'username',
+      value: account['username'],
+
+      required: true,
     },
     {
       label: 'pwd',
       type: 'Input',
       name: 'pwd',
-      customFormItemProps: { required: true },
+      id: 'username',
+      value: account['username'],
+      required: true,
     },
     {
       label: 'status',
       type: 'Input',
       name: 'status',
+      id: 'status',
+      value: account['status'],
     },
     {
       label: 'enabled',
       type: 'Checkbox',
       name: 'enabled',
+      id: 'enabled',
+      checked: account['enabled'],
     },
     {
       label: 'is_occupied',
       type: 'Checkbox',
       name: 'is_occupied',
+      id: 'is_occupied',
+      checked: account['is_occupied'],
     },
     {
       label: 'wait_until',
       type: 'DateTimePicker',
       name: 'wait_until',
+      id: 'wait_until',
+      value: account['wait_until'],
     },
   ]
 
@@ -137,16 +152,7 @@ const AccountsRetryPage = ({ accountData }: Props) => {
 
   return (
     <Card title="Accounts Info">
-      <Form.Layout onSubmit={handleSubmit} Header={account.username} loading={isLoading} fields={fields}>
-        {fields.map((e: IField, index) => {
-          const value = account[e.name as keyof Omit<IAccount, 'session_cookies'>]
-          return (
-            <Form.Item label={e.label} key={index} customFormItemProps={e.customFormItemProps}>
-              <Form.CustomItem id={e.name} defaultValue={value} type={e.type} customFormItemProps={e.customFormItemProps} />
-            </Form.Item>
-          )
-        })}
-      </Form.Layout>
+      <DynamicForm onSubmit={handleSubmit} Header={account.username} loading={isLoading} fields={fields} />
     </Card>
   )
 }

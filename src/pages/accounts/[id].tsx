@@ -63,20 +63,18 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
   const [showAlert, setShowAlert] = useState(false)
   const router = useRouter()
   const { id } = router.query
-  const { data, error, updateAccount: callUpdateAccount, updateSession } = useAccount(id as string, shouldFetch, isCreate ? undefined : accountData)
+  const { data, error, updateAccount: callUpdateAccount, updateSession } = useAccount(id as string, shouldFetch, accountData)
   if (error) {
     console.log(error)
     return <div>Failed to load users {id}</div>
   }
-  if (!data) {
-    console.log(data)
-    return <div>Loading...</div>
-  }
 
-  const account: IAccount = {
-    ...data,
-    last_login_dt: dayjs(data?.last_login_dt, 'YYYY-MM-DD THH:mm:ss').utc().local().format('YYYY-MM-DDTHH:mm'),
-  }
+  const account: IAccount | null = data
+    ? {
+        ...data,
+        last_login_dt: dayjs(data.last_login_dt, 'YYYY-MM-DDTHH:mm:ss').utc().local().format('YYYY-MM-DDTHH:mm'),
+      }
+    : null
 
   const handleCreateSubmit = async (values: IAccount) => {
     try {
@@ -173,7 +171,6 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
               <AccountCreateCard
                 isLoading={isLoading}
                 isCreate={isCreate}
-                account={account}
                 handleSubmit={handleCreateSubmit}
                 setIsShow={setIsShow}
                 isChecked={isChecked}
@@ -185,7 +182,7 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
       ) : (
         <div className="h-full bg-cover bg-center bg-no-repeat md:px-12 ">
           <div className="flex justify-center">
-            <AccountInfoCard isLoading={isLoading} isCreate={isCreate} account={account} handleSubmit={handleUpdateSubmit} setIsShow={setIsShow} />
+            <AccountInfoCard isLoading={isLoading} isCreate={isCreate} account={account!} handleSubmit={handleUpdateSubmit} setIsShow={setIsShow} />
           </div>
         </div>
       )}

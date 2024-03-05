@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
 import Card from '@components/Card'
 import { useRouter } from 'next/router'
-import { Form } from '@components/Form'
 import { IField } from '@components/Form/interface'
 import { IBlockedAccount } from '@lib/Account/Account/interface'
 import { getSession } from 'next-auth/react'
 import { GetBlockedAccount } from '@services/Account/BlockAccount'
 import { useBlockAccount } from 'src/hooks/useBlockedAccount'
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
+import DynamicForm from '@components/Form/DynamicForm'
 
 type Props = {
   accountData: IBlockedAccount
@@ -81,38 +81,59 @@ const AccountsBlockedPage = ({ accountData }: Props) => {
       label: 'document_id',
       type: 'Input',
       name: 'id',
+      id: 'id',
+      value: account['id'],
     },
     {
       label: 'username',
       type: 'Input',
       name: 'username',
-      customFormItemProps: { required: true },
+      id: 'username',
+      required: true,
+      value: account['username'],
     },
     {
       label: 'pwd',
       type: 'Input',
       name: 'pwd',
-      customFormItemProps: { required: true },
+      id: 'pwd',
+      required: true,
+      value: account['pwd'],
     },
     {
       label: 'status',
       type: 'Input',
       name: 'status',
+      id: 'status',
+      value: account['status'],
+    },
+    {
+      label: 'post_scraped_count',
+      type: 'Input',
+      name: 'post_scraped_count',
+      id: 'post_scraped_count',
+      value: account['post_scrapped_count'],
     },
     {
       label: 'enabled',
       type: 'Checkbox',
       name: 'enabled',
+      id: 'enabled',
+      checked: account['enabled'],
     },
     {
       label: 'is_occupied',
       type: 'Checkbox',
       name: 'is_occupied',
+      id: 'is_occupied',
+      checked: account['is_occupied'],
     },
     {
       label: 'last_login_dt',
       type: 'DateTimePicker',
       name: 'last_login_dt',
+      id: 'last_login_dt',
+      value: account['last_login_dt'],
     },
   ]
 
@@ -141,16 +162,7 @@ const AccountsBlockedPage = ({ accountData }: Props) => {
 
   return (
     <Card title="Accounts Info">
-      <Form.Layout onSubmit={handleSubmit} Header={account.username} loading={isLoading} fields={fields}>
-        {fields.map((e: IField, index) => {
-          const value = account[e.name as keyof Omit<IBlockedAccount, 'session_cookies'>] as string
-          return (
-            <Form.Item label={e.label} key={index} customFormItemProps={e.customFormItemProps}>
-              <Form.CustomItem id={e.name} defaultValue={value} type={e.type} customFormItemProps={e.customFormItemProps} />
-            </Form.Item>
-          )
-        })}
-      </Form.Layout>
+      <DynamicForm fields={fields} onSubmit={handleSubmit} Header={account.username} loading={isLoading} />
     </Card>
   )
 }
