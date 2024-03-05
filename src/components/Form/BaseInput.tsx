@@ -48,6 +48,7 @@ const BaseInput: React.FunctionComponent<IBaseInputProps> = ({
           {...customFormItemProps}
           {...props}
           id={id}
+          type={props.type}
           name={name}
           value={value}
           onChange={onChange}

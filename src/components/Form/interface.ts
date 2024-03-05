@@ -1,13 +1,15 @@
-import React, { InputHTMLAttributes, FormHTMLAttributes, DetailedHTMLProps, LabelHTMLAttributes } from 'react'
+import React, { InputHTMLAttributes, FormHTMLAttributes, DetailedHTMLProps, LabelHTMLAttributes, ReactNode } from 'react'
 import { ButtonProps } from '@components/Button/interface'
-export type InputType = 'Input' | 'DatePicker' | 'TimePicker' | 'DateTimePicker' | 'Checkbox' | 'InputNumber' | 'InputPassword'
+export type InputType = 'Input' | 'DatePicker' | 'TimePicker' | 'DateTimePicker' | 'Checkbox' | 'InputNumber' | 'InputPassword' | 'CustomItem'
 
-export interface IField {
+export interface IField extends React.InputHTMLAttributes<HTMLInputElement> {
+  //IField
   type: InputType
   label: string
   name: string
+  id: string
   required?: boolean
-  customFormItemProps?: React.InputHTMLAttributes<HTMLInputElement>
+  component?: ReactNode
 }
 
 export interface FormLayoutProps<T> extends Omit<FormHTMLAttributes<HTMLFormElement>, 'onSubmit'> {
@@ -30,33 +32,31 @@ export interface ItemProps extends DetailedHTMLProps<LabelHTMLAttributes<HTMLLab
   customFormItemProps?: React.InputHTMLAttributes<HTMLInputElement>
 }
 
-export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
-  id: string
-  placeholder?: string
-  defaultValue?: string | undefined
-  customFormItemProps?: React.InputHTMLAttributes<HTMLInputElement>
+export interface InputProps extends BaseInputProps {}
+export interface NumberInputProps extends BaseInputProps {
+  value?: number
 }
-export interface NumberInputProps extends InputHTMLAttributes<HTMLInputElement> {
-  id: string
-  placeholder?: string
-  customFormItemProps?: React.InputHTMLAttributes<HTMLInputElement>
-}
+export interface CheckBoxProps extends BaseInputProps {}
 
-export interface CheckBoxProps extends InputHTMLAttributes<HTMLInputElement> {
-  id: string
-  defaultChecked?: boolean
-  disabled?: boolean
-  customFormItemProps?: React.InputHTMLAttributes<HTMLInputElement>
+export interface DatePickerProps extends BaseInputProps {}
+
+export interface TimePickerProps extends BaseInputProps {}
+
+export interface DateTimePicker extends TimePickerProps, DatePickerProps {}
+
+// export interface CustomItemProps {
+//   type: InputType // Assuming InputType is defined elsewhere
+//   id: string
+//   placeholder?: string
+//   defaultValue?: string | boolean | number | undefined
+//   className?: string
+//   disabled?: boolean
+//   customFormItemProps?: React.InputHTMLAttributes<HTMLInputElement> // Ensure this is defined correctly, or replace 'any' with the actual type
+//   onChange?: React.ChangeEventHandler<HTMLInputElement> // Specified for HTMLInputElement
+// }
+
+interface BaseInputProps extends InputHTMLAttributes<HTMLInputElement> {
   className?: string
 }
 
-export interface CustomItemProps {
-  type: InputType // Assuming InputType is defined elsewhere
-  id: string
-  placeholder?: string
-  defaultValue?: string | boolean | number | undefined
-  className?: string
-  disabled?: boolean
-  customFormItemProps?: React.InputHTMLAttributes<HTMLInputElement> // Ensure this is defined correctly, or replace 'any' with the actual type
-  onChange?: React.ChangeEventHandler<HTMLInputElement> // Specified for HTMLInputElement
-}
+export type CustomItemProps = InputProps | CheckBoxProps | NumberInputProps | DatePickerProps | DatePickerProps | TimePickerProps | DateTimePicker
