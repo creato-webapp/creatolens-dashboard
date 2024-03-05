@@ -1,9 +1,9 @@
 import useSWR from 'swr'
-import { IAccount, IRetryAccount } from '@lib/Account/Account/interface'
+import { IRetryAccount } from '@lib/Account/Account/interface'
 
 import { GetRetryAccountsPagination, GetRetryAccount, UpdateRetryAccount } from '@services/Account/RetryAccount'
 import { PaginationMetadata, PaginationParams } from '@services/Account/AccountInterface'
-export const useRetryAccount = (id: string, shouldFetch: boolean = true, fallbackData?: IAccount) => {
+export const useRetryAccount = (id: string, shouldFetch: boolean = true, fallbackData?: IRetryAccount) => {
   const { data, error, mutate, ...swr } = useSWR(shouldFetch ? [id] : null, (id) => GetRetryAccount(id), {
     refreshInterval: 0,
     fallbackData: fallbackData,

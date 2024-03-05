@@ -10,7 +10,7 @@ import Pagination from '@components/Pagination'
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 
 type Props = {
-  paginationData: PaginationMetadata
+  paginationData: PaginationMetadata<unknown>
 }
 
 interface AccountSessionPaginationParams extends PaginationParams {
@@ -23,7 +23,7 @@ dayjs.extend(utc)
 
 export const getServerSideProps: GetServerSideProps = async (
   context: GetServerSidePropsContext
-): Promise<GetServerSidePropsResult<{ paginationData?: PaginationMetadata }>> => {
+): Promise<GetServerSidePropsResult<{ paginationData?: PaginationMetadata<unknown> }>> => {
   const session = await getSession(context)
 
   if (!session) {
@@ -44,7 +44,7 @@ export const getServerSideProps: GetServerSideProps = async (
     isAsc: false,
   }
   const response = await GetSessionPagination(paginationProps)
-  const paginationData: PaginationMetadata = {
+  const paginationData: PaginationMetadata<unknown> = {
     data: response ? response?.data : [],
     has_next: response ? response.has_next : false,
     has_prev: response ? response.has_prev : false,
@@ -82,7 +82,7 @@ const AccountsSessionPage = ({ paginationData }: Props) => {
   }, [])
 
   const { sessions: responseData, isLoading, error } = useAccountSessionPagination(pageParams, true, paginationData)
-  const accountSession: PaginationMetadata[] = responseData?.data ? responseData.data : []
+  const accountSession: any[] = responseData?.data ? responseData.data : []
   if (error) {
     console.log(responseData)
     console.log(error)

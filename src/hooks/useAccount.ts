@@ -34,7 +34,7 @@ export const useAccount = (id: string, shouldFetch: boolean = true, fallbackData
 }
 
 export const useGetAccountsPagination = (paginationParams: PaginationParams, shouldFetch?: true) => {
-  const mutableRef = useRef<PaginationMetadata<IAccount>>()
+  const mutableRef = useRef<PaginationMetadata<IAccount[]>>()
   const { data, error, mutate, ...swr } = useSWR(shouldFetch ? [paginationParams] : null, GetAccountsPagination, {
     refreshInterval: 0,
     fallbackData: mutableRef.current ? mutableRef.current : undefined,
