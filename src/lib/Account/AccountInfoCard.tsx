@@ -1,11 +1,11 @@
 import React, { useCallback } from 'react'
 import Card from '@components/Card'
 import { Button } from '@components/Button'
-import { Form } from '@components/Form'
 import { IField } from '@components/Form/interface'
 import { IAccount } from '@lib/Account/Account/interface'
 import { Paragraph } from '@components/Typography'
 import StatusTag from '@lib/StatusTag'
+import DynamicForm from '@components/Form/DynamicForm'
 interface AccountInfoCardProps {
   isLoading: boolean
   isCreate: boolean
@@ -18,26 +18,34 @@ const AccountInfoCard: React.FC<AccountInfoCardProps> = ({ isLoading, account, h
   const accountInfoField: IField[] = [
     {
       label: 'login count',
+      id: 'login_count',
       type: 'InputNumber',
       name: 'login_count',
-      customFormItemProps: { disabled: true },
+      value: account['login_count'],
+      disabled: true,
     },
     {
       label: 'ID',
       type: 'Input',
       name: 'id',
+      value: account['id'],
+      id: 'id',
     },
     {
       label: 'created by',
       type: 'Input',
       name: 'created_by',
-      customFormItemProps: { disabled: true },
+      id: 'created_by',
+      value: account['created_by'],
+      disabled: true,
     },
     {
       label: 'updated by',
       type: 'Input',
       name: 'updated_by',
-      customFormItemProps: { disabled: true },
+      id: 'updated_by',
+      value: account['updated_by'],
+      disabled: true,
     },
   ]
   const checkBoxField: IField[] = [
@@ -45,51 +53,84 @@ const AccountInfoCard: React.FC<AccountInfoCardProps> = ({ isLoading, account, h
       label: 'enabled',
       type: 'Checkbox',
       name: 'enabled',
+      checked: account['enabled'],
+      id: 'enabled',
     },
     {
       label: 'is_authenticated',
       type: 'Checkbox',
       name: 'is_authenticated',
+      checked: account['is_authenticated'],
+      id: 'is_authenticated',
     },
     {
       label: 'is_occupied',
       type: 'Checkbox',
       name: 'is_occupied',
+      checked: account['is_occupied'],
+      id: 'is_occupied',
     },
   ]
   const fields: IField[] = [
     {
+      label: 'custom',
+      type: 'CustomItem',
+      name: 'custom',
+      id: 'custom',
+      component: (
+        <div className="">
+          <Paragraph key={'0'} size={'lg'} bold className="font-bold">
+            Status
+          </Paragraph>
+          <StatusTag status={account['status']}></StatusTag>
+        </div>
+      ),
+    },
+    {
       label: 'username',
       type: 'Input',
       name: 'username',
-      customFormItemProps: { required: true },
+      id: 'username',
+      value: account['username'],
+      required: true,
     },
     {
       label: 'password',
       type: 'InputPassword',
       name: 'pwd',
-      customFormItemProps: { required: true },
+      value: account['pwd'],
+      id: 'pwd',
+      required: true,
     },
-
     {
       label: 'login attempt count',
       type: 'InputNumber',
       name: 'login_attempt_count',
-      customFormItemProps: { disabled: true },
+      value: account['login_attempt_count'],
+
+      id: 'login_attempt_count',
+      disabled: true,
     },
     {
       label: 'post_scrapped_count',
       type: 'InputNumber',
       name: 'post_scrapped_count',
-      customFormItemProps: { disabled: true },
+      value: account['post_scrapped_count'],
+
+      id: 'post_scrapped_count',
+      disabled: true,
     },
     {
       label: 'last_login_dt',
       type: 'DateTimePicker',
       name: 'last_login_dt',
-      customFormItemProps: { required: true },
+      value: account['last_login_dt'],
+      id: 'last_login_dt',
+      required: true,
     },
   ]
+
+  const combinedField: IField[] = [...accountInfoField, ...checkBoxField, ...fields]
   const handleClick = useCallback(() => {
     setIsShow(true)
   }, [])
@@ -103,54 +144,7 @@ const AccountInfoCard: React.FC<AccountInfoCardProps> = ({ isLoading, account, h
         </Button.Primary>
       }
     >
-      <Form.Layout<IAccount>
-        onSubmit={handleSubmit}
-        Header={account.username}
-        loading={isLoading}
-        fields={[...fields, ...checkBoxField]}
-        allowSubmit={!!isLoading}
-      >
-        <div className="flex flex-wrap justify-between">
-          <div className="">
-            <Paragraph key={'0'} size={'lg'} bold className="font-bold">
-              Status
-            </Paragraph>
-            <Paragraph key={'status'}>
-              <StatusTag status={account['status']}></StatusTag>
-            </Paragraph>
-          </div>
-          {accountInfoField.map((e: IField) => {
-            const value = account[e.name as keyof Omit<IAccount, 'session_cookies'>]
-            return (
-              <div key={e.label}>
-                <Paragraph size={'lg'} bold className="font-bold">
-                  {e.label}
-                </Paragraph>
-                <Paragraph key={e.name}>{value as string}</Paragraph>
-              </div>
-            )
-          })}
-        </div>
-        <div className="flex flex-wrap gap-8 ">
-          {checkBoxField.map((e: IField, index) => {
-            const value = account[e.name] as string
-            return (
-              <Form.Item label={e.label} key={index} customFormItemProps={e.customFormItemProps}>
-                <Form.CustomItem id={e.name} defaultValue={value} type={e.type} customFormItemProps={e.customFormItemProps} />
-              </Form.Item>
-            )
-          })}
-        </div>
-
-        {fields.map((e: IField, index) => {
-          const value = account[e.name as keyof Omit<IAccount, 'session_cookies'>]
-          return (
-            <Form.Item label={e.label} key={index} customFormItemProps={e.customFormItemProps}>
-              <Form.CustomItem id={e.name} defaultValue={value as string} type={e.type} customFormItemProps={e.customFormItemProps} />
-            </Form.Item>
-          )
-        })}
-      </Form.Layout>
+      <DynamicForm onSubmit={handleSubmit} Header={account.username} loading={isLoading} fields={combinedField} allowSubmit={!!isLoading} />
     </Card>
   )
 }

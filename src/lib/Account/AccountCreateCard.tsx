@@ -1,22 +1,21 @@
 import React from 'react'
 import Card from '@components/Card'
-import { Form } from '@components/Form'
 import { IField } from '@components/Form/interface'
 import { IAccount } from '@lib/Account/Account'
 import { Paragraph } from '@components/Typography'
 import Checkbox from '@components/Form/Checkbox'
-
+import DynamicForm from '@components/Form/DynamicForm'
 interface AccountCreateCardProps {
   isLoading: boolean
   isCreate: boolean
-  account: IAccount
+  account?: IAccount
   handleSubmit: (values: IAccount) => void
   setIsShow: (show: boolean) => void
   isChecked: boolean
   handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 
-const AccountCreateCard: React.FC<AccountCreateCardProps> = ({ isLoading, isCreate, account, handleSubmit, isChecked, handleChange }) => {
+const AccountCreateCard: React.FC<AccountCreateCardProps> = ({ isLoading, isCreate, handleSubmit, isChecked, handleChange }) => {
   const onSubmit = async (values: IAccount) => {
     let valid = true
     const newErrors = { username: '', pwd: '' }
@@ -41,13 +40,41 @@ const AccountCreateCard: React.FC<AccountCreateCardProps> = ({ isLoading, isCrea
       label: 'Instagram account',
       type: 'Input',
       name: 'username',
-      customFormItemProps: { required: true, placeholder: 'Enter username' },
+      id: 'username',
+      required: true,
+      placeholder: 'Enter username',
     },
     {
       label: 'Account password',
       type: 'InputPassword',
       name: 'pwd',
-      customFormItemProps: { required: true, placeholder: 'Enter password' },
+      id: 'pwd',
+      required: true,
+      placeholder: 'Enter password',
+    },
+    {
+      label: 'custom',
+      type: 'CustomItem',
+      name: 'custom',
+      id: 'custom',
+      component: (
+        <Paragraph size="sm">
+          By connecting your Instagram account, you agree to our terms and privacy policy. We may access your information for personalized features
+          and analysis. Your data is protected, but not 100% secure. Contact support for questions.
+        </Paragraph>
+      ),
+    },
+    {
+      label: 'custom',
+      type: 'CustomItem',
+      name: 'custom',
+      id: 'custom',
+      component: (
+        <Paragraph size="sm" className="flex w-full md:ml-auto md:mr-auto" bold>
+          <Checkbox id="acknowledge" className="mr-2" onChange={(event) => handleChange(event)}></Checkbox>I acknowledge and agree to the terms and
+          privacy policy by checking this box.
+        </Paragraph>
+      ),
     },
   ]
   return (
@@ -65,9 +92,8 @@ const AccountCreateCard: React.FC<AccountCreateCardProps> = ({ isLoading, isCrea
         )
       }
     >
-      <Form.Layout<IAccount>
+      <DynamicForm
         onSubmit={onSubmit}
-        Header={account.username}
         loading={isLoading}
         fields={fields}
         allowSubmit={!isChecked}
@@ -76,30 +102,7 @@ const AccountCreateCard: React.FC<AccountCreateCardProps> = ({ isLoading, isCrea
         buttonStyles="w-full"
         buttonText="Create"
         buttonSizes={['m', 'm', 'm']}
-      >
-        {fields.map((e: IField, index) => {
-          return (
-            <Form.Item label={e.label} key={index} customFormItemProps={e.customFormItemProps}>
-              <Form.CustomItem
-                id={e.name}
-                defaultValue={account[e.name] as string}
-                type={e.type}
-                customFormItemProps={e.customFormItemProps}
-                className={`${isCreate ? 'w-full' : ''}`}
-              />
-            </Form.Item>
-          )
-        })}
-        <Paragraph size="sm">
-          By connecting your Instagram account, you agree to our terms and privacy policy. We may access your information for personalized features
-          and analysis. Your data is protected, but not 100% secure. Contact support for questions.
-        </Paragraph>
-
-        <Paragraph size="sm" className="flex w-full md:ml-auto md:mr-auto" bold>
-          <Checkbox id="acknowledge" className="mr-2" onChange={(event) => handleChange(event)}></Checkbox>I acknowledge and agree to the terms and
-          privacy policy by checking this box.
-        </Paragraph>
-      </Form.Layout>
+      ></DynamicForm>
     </Card>
   )
 }

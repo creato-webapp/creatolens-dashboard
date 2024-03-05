@@ -106,10 +106,11 @@ const AccountsBlockedPage = ({ accountData }: Props) => {
       name: 'status',
       id: 'status',
       value: account['status'],
+      disabled: true,
     },
     {
       label: 'post_scraped_count',
-      type: 'Input',
+      type: 'InputNumber',
       name: 'post_scraped_count',
       id: 'post_scraped_count',
       value: account['post_scrapped_count'],
