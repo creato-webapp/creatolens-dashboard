@@ -22,7 +22,7 @@ const Paragraph: React.FC<ParagraphProps> = ({ italic, children, ...restProps })
     font || 'p',
     {
       className: `${paragraphStyles}`,
-      restProps: restProps,
+      restprops: restProps,
     },
     children
   )
