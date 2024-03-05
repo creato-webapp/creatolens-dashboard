@@ -86,7 +86,7 @@ export async function GetAccounts(account?: Partial<IAccount>, orderBy?: string,
   return response
 }
 
-export async function GetAccountsPagination(params: PaginationParams, customConfig?: AxiosRequestConfig): Promise<PaginationMetadata<IAccount>> {
+export async function GetAccountsPagination(params: PaginationParams, customConfig?: AxiosRequestConfig): Promise<PaginationMetadata<IAccount[]>> {
   const response = await Fetcher.GET(
     `/api/accounts`,
     {

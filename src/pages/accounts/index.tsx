@@ -8,7 +8,7 @@ import Link from 'next/link'
 import { getSession } from 'next-auth/react'
 import Pagination from '@components/Pagination'
 import { useGetAccountsPagination } from 'src/hooks/useAccount'
-import { GetAccountsPagination, PaginationMetadata } from '@services/Account/Account'
+import { GetAccountsPagination } from '@services/Account/Account'
 import Image from 'next/image'
 import Badges, { Status } from '@components/Badges'
 import Hero from '@components/Hero'
@@ -17,18 +17,19 @@ import Dropdown from '@components/Form/Dropdown'
 import EditIcon from '@components/Icon/EditIcon'
 import { Timestamp } from 'firebase/firestore'
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
+import { PaginationMetadata } from '@services/Account/AccountInterface'
 
 const dayjs = require('dayjs')
 const utc = require('dayjs/plugin/utc')
 dayjs.extend(utc)
 
 export type PaginationMetaProps = {
-  paginationData: PaginationMetadata
+  paginationData: PaginationMetadata<IAccount>
 }
 
 export const getServerSideProps: GetServerSideProps = async (
   context: GetServerSidePropsContext
-): Promise<GetServerSidePropsResult<{ paginationData: PaginationMetadata }>> => {
+): Promise<GetServerSidePropsResult<{ paginationData: PaginationMetadata<IAccount[]> }>> => {
   const session = await getSession(context)
   if (!session) {
     return {
@@ -53,7 +54,7 @@ export const getServerSideProps: GetServerSideProps = async (
   // Pass data to the page via props
   const accountData: IAccount[] = response ? response?.data : []
   console.log(response)
-  const paginationData: PaginationMetadata = {
+  const paginationData: PaginationMetadata<IAccount[]> = {
     data: accountData,
     has_next: response ? response.has_next : false,
     has_prev: response ? response.has_prev : false,

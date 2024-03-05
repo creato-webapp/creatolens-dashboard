@@ -6,6 +6,8 @@ export interface IAccount {
   id: string
   username: string
   created_at: string
+  created_by: string
+  updated_by: string
   enabled: boolean
   is_authenticated: boolean
   is_occupied: boolean
