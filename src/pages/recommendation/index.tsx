@@ -38,7 +38,7 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
   return { props: { hashetSessionData } }
 }
 
-const RecommendationPage = (hashetSessionData: HashetProps) => {
+const RecommendationPage = () => {
   //find better way to write fetch logic
   const [inputString, setInputString] = useState('')
   const [stringToSubmit, setStringToSubmit] = useState('')
@@ -51,14 +51,14 @@ const RecommendationPage = (hashetSessionData: HashetProps) => {
     await mutateHashet()
   }, [inputString])
 
-  const { data, error, mutate: mutateHashet, isValidating } = useGetHashtag(stringToSubmit, stringToSubmit ? true : false, hashetSessionData)
+  const { data, error, mutate: mutateHashet, isValidating } = useGetHashtag(stringToSubmit, stringToSubmit ? true : false)
   if (error) {
-    console.log(data)
-    console.log(error)
+    console.error(data)
+    console.error(error)
     return <div>Failed to load hashet error data</div>
   }
   if (!data) {
-    console.log(data)
+    console.error(data)
     return <div>Loading...</div>
   }
 
