@@ -9,7 +9,6 @@ interface CombinedUser extends User {
 async function fetchWhitelist(): Promise<CombinedUser[]> {
   try {
     const response = await axios.get<CombinedUser[]>(`${process.env.LOCAL_SERVER_URL}/api/whitelist`)
-    console.log('Fetched whitelist:', response.data)
     return response.data
   } catch (error) {
     console.error('Error fetching whitelist:', error)
@@ -24,7 +23,6 @@ export async function getRoles(userEmail: string) {
   }
 
   const whitelist = await fetchWhitelist()
-  console.log({ whitelist })
   const userEntry = whitelist.find((entry) => entry.email === userEmail)
   return userEntry ? userEntry.role : []
 }

@@ -78,12 +78,12 @@ const BlockedAccountsPage = ({ paginationData }: Props) => {
   }, [pageParams])
 
   if (error) {
-    console.log(responseData)
-    console.log(error)
+    console.error(responseData)
+    console.error(error)
     return <div>Failed to load users</div>
   }
   if (!responseData) {
-    console.log(responseData)
+    console.error(responseData)
     return <div>Loading...</div>
   }
 

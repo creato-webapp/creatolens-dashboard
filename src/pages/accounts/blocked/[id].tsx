@@ -62,12 +62,12 @@ const AccountsBlockedPage = ({ accountData }: Props) => {
   const { data, error, updateBlockAccount: callUpdateAccount } = useBlockAccount(id as string, shouldFetch, isCreate ? undefined : accountData)
 
   if (error) {
-    console.log(data)
-    console.log(error)
+    console.error(data)
+    console.error(error)
     return <div>Failed to load users {id}</div>
   }
   if (!data) {
-    console.log(data)
+    console.error(data)
     return <div>Loading...</div>
   }
 
@@ -145,7 +145,7 @@ const AccountsBlockedPage = ({ accountData }: Props) => {
       const res = await updateAccount(values)
       window.alert(res)
     } catch (error) {
-      console.log(error)
+      console.error(error)
       window.alert(error)
     } finally {
       setIsLoading(false)

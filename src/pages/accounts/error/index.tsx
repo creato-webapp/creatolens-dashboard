@@ -83,12 +83,12 @@ const AccountsErrorPage = (paginationData: PaginationMetadata<IAccountError[]>) 
   const accountError: IAccountError[] = responseData?.data ? responseData.data : []
 
   if (error) {
-    console.log(responseData)
-    console.log(error)
+    console.error(responseData)
+    console.error(error)
     return <div>Failed to load account error data</div>
   }
   if (!responseData) {
-    console.log(responseData)
+    console.error(responseData)
     return <div>Loading...</div>
   }
 

@@ -27,15 +27,15 @@ ScrapperInstance.interceptors.response.use(
     if (error.response) {
       switch (error.response.status) {
         case 404:
-          console.log('Not Found')
+          console.error('Not Found')
           return error.response
 
         case 400:
-          console.log('Bad Request')
+          console.error('Bad Request')
           return error.response
 
         default:
-          console.log(error.message)
+          console.error(error.message)
           return error.response
       }
     }

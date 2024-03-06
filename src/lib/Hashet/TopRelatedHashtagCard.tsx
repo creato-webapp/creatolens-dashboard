@@ -17,7 +17,6 @@ const TopRelatedHashtagCard: React.FC<Props> = ({ hashtags }) => {
   const slicedHashtags = hashtags.length > 0 ? hashtags.slice(0, numberOfHashes as number) : []
 
   const copyToClipboard = useCallback(async () => {
-    console.log(slicedHashtags)
     const copiedHashtags = slicedHashtags.map((tag) => tag.hashtag).join(' ')
     await navigator.clipboard.writeText(copiedHashtags)
     window.alert('Copied to clipboard!')

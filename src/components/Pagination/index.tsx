@@ -60,13 +60,6 @@ const Pagination: React.FC<PaginationProps> = ({ isLoading, page, size, totalIte
     )
   }
 
-  console.log(
-    pageNumbers.slice(
-      Math.max(1, Math.min(page - Math.floor(pagesToShow / 2), totalPages - pagesToShow)),
-      Math.min(page + Math.floor(pagesToShow / 2), totalPages - 1)
-    )
-  )
-
   return (
     <div className="mt-4 flex w-full items-center justify-center gap-3 md:mt-0">
       <div className="flex flex-row gap-2">

@@ -31,15 +31,15 @@ FetcherInstance.interceptors.response.use(
     if (error.response) {
       switch (error.response.status) {
         case 404:
-          console.log(error.message)
+          console.error(error.message)
           return error.response
 
         case 400:
-          console.log(error.message)
+          console.error(error.message)
           return error.response
 
         case 401:
-          console.log(error.message)
+          console.error(error.message)
           signOut()
           if (typeof window !== 'undefined') {
             window.alert('Your session has expired. Please login again.')
@@ -47,7 +47,7 @@ FetcherInstance.interceptors.response.use(
           return error
 
         default:
-          console.log(error.message)
+          console.error(error.message)
           return error.response
       }
     }

@@ -84,12 +84,12 @@ const AccountsSessionPage = ({ paginationData }: Props) => {
   const { sessions: responseData, isLoading, error } = useAccountSessionPagination(pageParams, true, paginationData)
   const accountSession: any[] = responseData?.data ? responseData.data : []
   if (error) {
-    console.log(responseData)
-    console.log(error)
+    console.error(responseData)
+    console.error(error)
     return <div>Failed to load account error data</div>
   }
   if (!responseData) {
-    console.log(responseData)
+    console.error('No response data', responseData)
     return <div>Loading...</div>
   }
   const columns = [

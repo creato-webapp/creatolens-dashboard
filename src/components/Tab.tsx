@@ -34,7 +34,6 @@ const Tab: React.FC<TabProps> = ({
 
   const handleChange = (event: React.MouseEvent<HTMLButtonElement>) => {
     const key = event.currentTarget.dataset.key
-    console.log(key, items)
     setCurrentActiveKey(key)
     if (onKeyChange && key) {
       onKeyChange(key)

@@ -10,10 +10,8 @@ export default function AccountHandler(req: NextApiRequest, res: NextApiResponse
 
   switch (method) {
     case 'POST': {
-      console.log(id, body)
       AccountInstance.post(`account-session/renewal/${id}`, body)
         .then((response) => {
-          console.log(response)
           res.status(200).json(response.data)
         })
         .catch((error) => {

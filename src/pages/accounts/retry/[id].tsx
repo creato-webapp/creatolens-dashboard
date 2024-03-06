@@ -58,12 +58,12 @@ const AccountsRetryPage = ({ accountData }: Props) => {
   const { data, error, updateRetryAccount: callUpdateAccount } = useRetryAccount(id as string, shouldFetch, isCreate ? undefined : accountData)
 
   if (error) {
-    console.log(data)
-    console.log(error)
+    console.error(data)
+    console.error(error)
     return <div>Failed to load users {id}</div>
   }
   if (!data) {
-    console.log(data)
+    console.error(data)
     return <div>Loading...</div>
   }
 
@@ -134,7 +134,7 @@ const AccountsRetryPage = ({ accountData }: Props) => {
       const res = await updateAccount(values)
       window.alert(res)
     } catch (error) {
-      console.log(error)
+      console.error(error)
       window.alert(error)
     } finally {
       setIsLoading(false)

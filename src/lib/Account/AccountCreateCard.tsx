@@ -31,7 +31,6 @@ const AccountCreateCard: React.FC<AccountCreateCardProps> = ({ isLoading, isCrea
         valid = false
       }
     }
-    console.log(values)
     valid ? handleSubmit(values) : alert(newErrors.username + '\n' + newErrors.pwd)
   }
 

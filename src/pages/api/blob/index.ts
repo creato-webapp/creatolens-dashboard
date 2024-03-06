@@ -55,7 +55,7 @@ export default async function accountQueryHandler(req: NextApiRequest, res: Next
             return [data1, data2, data3, error]
           })
           .catch((error) => {
-            console.log(error)
+            console.error(error)
             return res.status(response.status).json({ labels: response.data, error: error })
           })
         if (hashtagRes) {

@@ -26,10 +26,9 @@ export default async function accountQueryHandler(req: NextApiRequest, res: Next
             Cookie: req.headers.cookie,
           },
         })
-        console.log(response)
         return res.status(response.status).json(response.data)
       } catch (error) {
-        console.log(error)
+        console.error(error)
         // If you want to send a response on error, you should do it here.
         // Make sure to return after sending a response to avoid trying to send
         // another response which would cause an error.

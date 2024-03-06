@@ -65,7 +65,7 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
   const { id } = router.query
   const { data, error, updateAccount: callUpdateAccount, updateSession } = useAccount(id as string, shouldFetch, accountData)
   if (error) {
-    console.log(error)
+    console.error(error)
     return <div>Failed to load users {id}</div>
   }
 
@@ -96,7 +96,7 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
 
       // You can navigate to another page if needed
     } catch (error) {
-      console.log(error)
+      console.error(error)
       window.alert(error)
     } finally {
       setIsLoading(false)
@@ -121,7 +121,7 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
         window.alert(res)
       }
     } catch (error) {
-      console.log(error)
+      console.error(error)
       window.alert(error)
     } finally {
       setIsLoading(false)
@@ -134,7 +134,6 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
       ...values,
       last_login_dt: dayjs(values.last_login_dt, 'YYYY-MM-DDTHH:mm').utc().local().format('YYYY-MM-DD THH:mm:ss'),
     }
-    console.log({ newValues })
     const res = await callUpdateAccount(newValues)
     return res
   }

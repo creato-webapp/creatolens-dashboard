@@ -40,7 +40,6 @@ const DynamicForm = <T,>(props: FormLayoutProps<T>) => {
 
     fields.map((e) => {
       if (e.type === 'CustomItem') {
-        console.log('CustomItem')
         return
       }
       return e.type == 'Checkbox'
