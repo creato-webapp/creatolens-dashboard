@@ -149,9 +149,7 @@ const BlockedAccountsPage = ({ paginationData }: Props) => {
       dataIndex: 'id',
       render: (e: string) => (
         <Link href="/accounts/blocked/[id]" as={`/accounts/blocked/${e}`} legacyBehavior>
-          <Button.Text loading={false} onClick={() => console.log(e)}>
-            Edit
-          </Button.Text>
+          <Button.Text loading={false}>Edit</Button.Text>
         </Link>
       ),
     },

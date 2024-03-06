@@ -1,7 +1,9 @@
+import { Cookies } from '@lib/Account/Account/interface'
 import { Column } from './Interface'
 
+type RowData = string | number | boolean | Date | null | Cookies | undefined
 export interface IGenericRowData {
-  [key: string]: string | number | boolean | Date | null | undefined
+  [key: string]: RowData
 }
 
 export interface RowProps extends React.TableHTMLAttributes<HTMLTableRowElement> {
@@ -17,7 +19,7 @@ const Row = (props: RowProps) => {
   const { className: rowClassName, ...rowRest } = rowProps || {}
   const { className: cellClassName, ...cellRest } = cellProps || {}
 
-  function accessProperty<T extends IGenericRowData>(rowData: T, dataIndex: string): any {
+  function accessProperty<T extends IGenericRowData>(rowData: T, dataIndex: string): RowData {
     return rowData[dataIndex]
   }
 
@@ -27,7 +29,7 @@ const Row = (props: RowProps) => {
         <td
           key={index}
           {...cellRest}
-          className={`min-w-32 h-12 items-center justify-start border border-slate-300 bg-neutral-50 p-2 ${cellClassName}`}
+          className={`h-12 min-w-32 items-center justify-start border border-slate-300 bg-neutral-50 p-2 ${cellClassName}`}
         >
           {render ? render(accessProperty(props.rowData, dataIndex)) : accessProperty(props.rowData, dataIndex)}
         </td>

@@ -5,7 +5,7 @@ import Image from 'next/image'
 import XCircleIcon from '@components/Icon/XCircleIcon'
 import CheckIcon from '@components/Icon/CheckIcon'
 import EditIcon from '@components/Icon/EditIcon'
-import { RowData } from '@components/Table/Interface'
+import { IGenericRowData } from '@components/Table/Row'
 
 const dayjs = require('dayjs')
 const utc = require('dayjs/plugin/utc')
@@ -20,7 +20,7 @@ export interface Column {
 export interface ResponsiveAccountCardProps extends HTMLAttributes<HTMLDivElement> {
   key: string
   columns: Column[]
-  rowData: RowData
+  rowData: IGenericRowData
 }
 
 const ResponsiveAccountCard: FC<ResponsiveAccountCardProps> = (props: ResponsiveAccountCardProps) => {

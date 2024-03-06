@@ -151,9 +151,7 @@ const RetryAccountsPage = ({ paginationData }: Props) => {
       dataIndex: 'id',
       render: (e: string) => (
         <Link href="/accounts/retry/[id]" as={`/accounts/retry/${e}`} legacyBehavior>
-          <Button.Text loading={false} onClick={() => console.log(e)}>
-            Edit
-          </Button.Text>
+          <Button.Text loading={false}>Edit</Button.Text>
         </Link>
       ),
     },
