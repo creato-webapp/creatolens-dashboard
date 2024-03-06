@@ -9,7 +9,6 @@ export default async function AccountHandler(req: NextApiRequest, res: NextApiRe
   switch (method) {
     case 'GET': {
       const response = await AccountInstance.get(`forbidden-accounts/${id}`)
-      console.log(response)
       return res.status(response.status).json(response.data)
     }
 
