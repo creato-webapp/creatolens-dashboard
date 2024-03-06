@@ -27,10 +27,9 @@ export default async function accountQueryHandler(req: NextApiRequest, res: Next
             Cookie: req.headers.cookie,
           },
         })
-        console.log(response)
         return res.status(response.status).json(response.data)
       } catch (error) {
-        console.log(error)
+        console.error(error)
         // Handle the error appropriately
         // For example, return an HTTP 500 status code
         return res.status(500).json({ message: 'Internal Server Error' })

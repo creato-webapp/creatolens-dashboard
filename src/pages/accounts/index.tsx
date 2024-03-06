@@ -53,7 +53,6 @@ export const getServerSideProps: GetServerSideProps = async (
   })
   // Pass data to the page via props
   const accountData: IAccount[] = response ? response?.data : []
-  console.log(response)
   const paginationData: PaginationMetadata<IAccount[]> = {
     data: accountData,
     has_next: response ? response.has_next : false,
@@ -105,7 +104,6 @@ const AccountsPage = () => {
   // useEffect(() => {
   //   // check responseDeffectata page number and update accountData
   //   if (responseData) {
-  //     console.log('responseData is not null', responseData)
   //     const page = responseData.page
   //     const index = accountData.findIndex((e) => e.page === page)
   //     if (index === -1) {
