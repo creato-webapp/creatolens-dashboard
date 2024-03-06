@@ -1,5 +1,5 @@
 import type { FC } from 'react'
-import { DatePickerProps } from './interface'
+import { DatePickerProps } from '../interface'
 
 const DatePicker: FC<DatePickerProps> = (props: DatePickerProps) => {
   return (
