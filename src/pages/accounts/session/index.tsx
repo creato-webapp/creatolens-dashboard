@@ -8,22 +8,31 @@ import { GetSessionPagination, PaginationParams, PaginationMetadata } from '@ser
 import { Form } from '@components/Form'
 import Pagination from '@components/Pagination'
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
+import { IGenericRowData } from '@components/Table/Row'
+import { Cookies } from '@lib/Account/Account/interface'
 
 type Props = {
-  paginationData: PaginationMetadata<unknown>
+  paginationData: PaginationMetadata<IAccountSession[]>
 }
 
 interface AccountSessionPaginationParams extends PaginationParams {
   username?: string | null
 }
-
+export interface IAccountSession extends IGenericRowData {
+  account_id: string
+  created_at: string
+  trace_id: string
+  updated_at: string
+  username: string
+  session_cookies: Cookies
+}
 const dayjs = require('dayjs')
 const utc = require('dayjs/plugin/utc')
 dayjs.extend(utc)
 
 export const getServerSideProps: GetServerSideProps = async (
   context: GetServerSidePropsContext
-): Promise<GetServerSidePropsResult<{ paginationData?: PaginationMetadata<unknown> }>> => {
+): Promise<GetServerSidePropsResult<{ paginationData?: PaginationMetadata<IAccountSession[]> }>> => {
   const session = await getSession(context)
 
   if (!session) {
@@ -44,7 +53,7 @@ export const getServerSideProps: GetServerSideProps = async (
     isAsc: false,
   }
   const response = await GetSessionPagination(paginationProps)
-  const paginationData: PaginationMetadata<unknown> = {
+  const paginationData: PaginationMetadata<IAccountSession[]> = {
     data: response ? response?.data : [],
     has_next: response ? response.has_next : false,
     has_prev: response ? response.has_prev : false,
@@ -82,7 +91,8 @@ const AccountsSessionPage = ({ paginationData }: Props) => {
   }, [])
 
   const { sessions: responseData, isLoading, error } = useAccountSessionPagination(pageParams, true, paginationData)
-  const accountSession: any[] = responseData?.data ? responseData.data : []
+
+  const accountSession: IAccountSession[] = responseData?.data ? responseData.data : []
   if (error) {
     console.error(responseData)
     console.error(error)
