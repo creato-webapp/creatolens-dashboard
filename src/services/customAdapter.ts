@@ -1,6 +1,6 @@
 import { FirestoreAdapter } from '@next-auth/firebase-adapter'
 import { getRoles } from '@services/util'
-import { Awaitable } from 'next-auth'
+import { Awaitable } from 'next-auth/index'
 import { AdapterUser } from 'next-auth/adapters'
 export interface FirestoreAdapterOptions {
   emulator?: {
@@ -13,14 +13,14 @@ interface CombinedUser extends AdapterUser {
   roles: string[]
 }
 
-interface FirebaseConfig {
+export interface FirebaseConfig {
   apiKey: string
   appId: string
   authDomain: string
-  databaseURL: string
   projectId: string
   storageBucket: string
   messagingSenderId: string
+  databaseURL?: string
 }
 
 export const FireStoreAdapterWrapper = (options: FirebaseConfig) => {
