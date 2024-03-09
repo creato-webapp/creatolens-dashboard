@@ -17,29 +17,36 @@ const BaseInput: React.FunctionComponent<IBaseInputProps> = ({
   value,
   disabled,
   className,
-  onChange: onNewChange,
   allowSpace,
   children,
   customFormItemProps,
   childrenPosition = 'right',
   ...props
 }) => {
-  const [state, setState] = useState<IBaseInputProps['value']>()
   const [errorMessage, setErrorMessage] = useState<string>('')
+  const [inputValue, setInputValue] = useState(value)
+
+  useEffect(() => {
+    setInputValue(value) // Sync state with prop
+  }, [value])
+
   const onChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-    if (allowSpace || e.target.value.indexOf(' ') === -1) {
-      const target = e.target as HTMLInputElement
-      setState(target.value)
-      onNewChange && onNewChange(e)
+    if (props.type === 'number') {
+      // Regex to allow only numbers (integers or decimals) without scientific notation characters
+      const validNumber = /^-?\d*\.?\d*$/
+      if (!validNumber.test(e.target.value) && value !== '') {
+        // Optionally handle invalid input, e.g., by showing an error or ignoring the input
+        return
+      }
+    }
+    const { value: newValue } = e.target
+    if (allowSpace || !newValue.includes(' ')) {
       setErrorMessage('')
+      setInputValue(newValue)
     } else {
       setErrorMessage('Space input is not allowed!')
     }
   }
-
-  useEffect(() => {
-    setState(value || '')
-  }, [value])
   return (
     <>
       <div className="relative flex w-full items-center rounded-md">
@@ -50,7 +57,7 @@ const BaseInput: React.FunctionComponent<IBaseInputProps> = ({
           id={id}
           type={props.type}
           name={name}
-          value={value}
+          value={inputValue}
           onChange={onChange}
           required={customFormItemProps?.required}
           disabled={disabled}
@@ -70,7 +77,7 @@ const BaseInput: React.FunctionComponent<IBaseInputProps> = ({
         </p>
       )}
       {props.type === 'text' && props?.maxLength && (
-        <p className="text-right italic text-neutral-400">{`(${state?.toString().length ?? 0}/${props?.maxLength} words)`}</p>
+        <p className="text-right italic text-neutral-400">{`(${inputValue?.toString().length ?? 0}/${props?.maxLength} words)`}</p>
       )}
     </>
   )

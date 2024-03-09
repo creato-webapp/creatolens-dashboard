@@ -75,14 +75,14 @@ const AccountsRetryPage = ({ accountData }: Props) => {
   const fields: IField[] = [
     {
       label: 'document_id',
-      type: 'Input',
+      type: 'text',
       name: 'id',
       id: 'id',
       value: account['id'],
     },
     {
       label: 'username',
-      type: 'Input',
+      type: 'text',
       name: 'username',
       id: 'username',
       value: account['username'],
@@ -91,7 +91,7 @@ const AccountsRetryPage = ({ accountData }: Props) => {
     },
     {
       label: 'pwd',
-      type: 'Input',
+      type: 'password',
       name: 'pwd',
       id: 'username',
       value: account['username'],
@@ -99,28 +99,28 @@ const AccountsRetryPage = ({ accountData }: Props) => {
     },
     {
       label: 'status',
-      type: 'Input',
+      type: 'text',
       name: 'status',
       id: 'status',
       value: account['status'],
     },
     {
       label: 'enabled',
-      type: 'Checkbox',
+      type: 'checkbox',
       name: 'enabled',
       id: 'enabled',
       checked: account['enabled'],
     },
     {
       label: 'is_occupied',
-      type: 'Checkbox',
+      type: 'checkbox',
       name: 'is_occupied',
       id: 'is_occupied',
       checked: account['is_occupied'],
     },
     {
       label: 'wait_until',
-      type: 'DateTimePicker',
+      type: 'datetime-local',
       name: 'wait_until',
       id: 'wait_until',
       value: account['wait_until'],

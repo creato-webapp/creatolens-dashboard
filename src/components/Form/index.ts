@@ -1,4 +1,3 @@
-import Layout from './Layout'
 import Item from './Item'
 import TextInput from './TextInput'
 import BaseInput from './BaseInput'
@@ -9,7 +8,6 @@ import Dropdown from './Dropdown'
 import InputPassword from './InputPassword'
 
 export const Form = {
-  Layout,
   Item,
   TextInput,
   InputPassword,

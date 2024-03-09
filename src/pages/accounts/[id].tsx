@@ -181,7 +181,9 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
       ) : (
         <div className="h-full bg-cover bg-center bg-no-repeat md:px-12 ">
           <div className="flex justify-center">
-            <AccountInfoCard isLoading={isLoading} isCreate={isCreate} account={account!} handleSubmit={handleUpdateSubmit} setIsShow={setIsShow} />
+            {account && (
+              <AccountInfoCard isLoading={isLoading} isCreate={isCreate} account={account} handleSubmit={handleUpdateSubmit} setIsShow={setIsShow} />
+            )}
           </div>
         </div>
       )}

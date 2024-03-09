@@ -1,6 +1,6 @@
 import React, { InputHTMLAttributes, FormHTMLAttributes, DetailedHTMLProps, LabelHTMLAttributes, ReactNode } from 'react'
 import { ButtonProps } from '@components/Button/interface'
-export type InputType = 'Input' | 'DatePicker' | 'TimePicker' | 'DateTimePicker' | 'Checkbox' | 'InputNumber' | 'InputPassword' | 'CustomItem'
+export type InputType = 'text' | 'date' | 'time' | 'datetime-local' | 'checkbox' | 'number' | 'password' | 'CustomItem'
 
 export interface IField extends React.InputHTMLAttributes<HTMLInputElement> {
   //IField

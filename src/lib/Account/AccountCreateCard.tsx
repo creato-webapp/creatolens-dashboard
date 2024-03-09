@@ -37,7 +37,7 @@ const AccountCreateCard: React.FC<AccountCreateCardProps> = ({ isLoading, isCrea
   const fields: IField[] = [
     {
       label: 'Instagram account',
-      type: 'Input',
+      type: 'text',
       name: 'username',
       id: 'username',
       required: true,
@@ -45,7 +45,7 @@ const AccountCreateCard: React.FC<AccountCreateCardProps> = ({ isLoading, isCrea
     },
     {
       label: 'Account password',
-      type: 'InputPassword',
+      type: 'password',
       name: 'pwd',
       id: 'pwd',
       required: true,

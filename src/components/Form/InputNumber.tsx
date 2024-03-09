@@ -1,12 +1,9 @@
-import React, { FC } from 'react'
+import React, { FC, useState } from 'react'
 import { NumberInputProps } from './interface'
 import BaseInput from './BaseInput'
 
 const InputNumber: FC<NumberInputProps> = (props: NumberInputProps) => {
-  const { id, placeholder, defaultValue, onChange: onNewChange, value } = props
-  const onChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-    onNewChange && onNewChange(e)
-  }
+  const { id, placeholder, defaultValue, value } = props
 
   return (
     <BaseInput
@@ -25,7 +22,6 @@ const InputNumber: FC<NumberInputProps> = (props: NumberInputProps) => {
       placeholder={placeholder}
       defaultValue={defaultValue}
       disabled={props.disabled}
-      onChange={onChange}
       {...props}
     />
   )

@@ -79,14 +79,14 @@ const AccountsBlockedPage = ({ accountData }: Props) => {
   const fields: IField[] = [
     {
       label: 'document_id',
-      type: 'Input',
+      type: 'text',
       name: 'id',
       id: 'id',
       value: account['id'],
     },
     {
       label: 'username',
-      type: 'Input',
+      type: 'text',
       name: 'username',
       id: 'username',
       required: true,
@@ -94,7 +94,7 @@ const AccountsBlockedPage = ({ accountData }: Props) => {
     },
     {
       label: 'pwd',
-      type: 'Input',
+      type: 'password',
       name: 'pwd',
       id: 'pwd',
       required: true,
@@ -102,7 +102,7 @@ const AccountsBlockedPage = ({ accountData }: Props) => {
     },
     {
       label: 'status',
-      type: 'Input',
+      type: 'text',
       name: 'status',
       id: 'status',
       value: account['status'],
@@ -110,28 +110,28 @@ const AccountsBlockedPage = ({ accountData }: Props) => {
     },
     {
       label: 'post_scraped_count',
-      type: 'InputNumber',
+      type: 'number',
       name: 'post_scraped_count',
       id: 'post_scraped_count',
       value: account['post_scrapped_count'],
     },
     {
       label: 'enabled',
-      type: 'Checkbox',
+      type: 'checkbox',
       name: 'enabled',
       id: 'enabled',
       checked: account['enabled'],
     },
     {
       label: 'is_occupied',
-      type: 'Checkbox',
+      type: 'checkbox',
       name: 'is_occupied',
       id: 'is_occupied',
       checked: account['is_occupied'],
     },
     {
       label: 'last_login_dt',
-      type: 'DateTimePicker',
+      type: 'datetime-local',
       name: 'last_login_dt',
       id: 'last_login_dt',
       value: account['last_login_dt'],
