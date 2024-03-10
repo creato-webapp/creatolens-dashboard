@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react'
+import React, { FC } from 'react'
 import { NumberInputProps } from './interface'
 import BaseInput from './BaseInput'
 
