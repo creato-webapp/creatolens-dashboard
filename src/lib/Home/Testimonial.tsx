@@ -1,4 +1,5 @@
 // TestimonialCards.tsx
+import React from 'react'
 interface Comment {
   img?: string
   author: string
