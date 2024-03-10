@@ -51,7 +51,7 @@ const Popup: React.FC<PopupProps> = ({
       document.removeEventListener('mousedown', handleClickOutside)
       document.body.style.overflow = 'auto'
     }
-  }, [isShow, isDisabledScroll])
+  }, [isShow, isDisabledScroll, handleClickOutside])
 
   useEffect(() => {
     setIsShow(defaultShow)

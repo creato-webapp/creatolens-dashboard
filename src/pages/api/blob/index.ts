@@ -1,5 +1,4 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { type NextRequest } from 'next/server'
 import BlobInstance from '../axiosInstance/Blob'
 import { UploadImageResponse } from '@services/Object/ImageBlob'
 import axios from 'axios'
@@ -10,7 +9,7 @@ export const config = {
 }
 
 export default async function CloudStorage(req: NextApiRequest, res: NextApiResponse) {
-  const { body, method, query } = req
+  const { method } = req
   switch (method) {
     case 'GET':
       try {
@@ -49,7 +48,6 @@ export default async function CloudStorage(req: NextApiRequest, res: NextApiResp
         }
         return res.status(200).json(response.data)
       } catch (error) {
-        console.log(error)
         return res.status(500).json({ message: 'Something went wrong in uploading stage', error: error })
       }
     default:

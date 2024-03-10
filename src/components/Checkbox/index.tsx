@@ -30,7 +30,7 @@ const Checkbox = ({ hasError = false, indeterminate = false, inactive = false, t
     if (checked) return
     if (indeterminate) return
     return hasError ? 'border-error-500 border-2 border-solid' : 'border-stroke border-2 border-solid'
-  }, [checked, hasError])
+  }, [checked, hasError, indeterminate])
 
   const textColor = useMemo(() => {
     if (hasError) {

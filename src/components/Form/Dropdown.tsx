@@ -26,7 +26,7 @@ const Dropdown: React.FC<DropdownProps> = ({ name = '', options, defaultValue, o
   const mapSelectedValueToOptions = useMemo(() => {
     const selectedOption = options.find((option) => option.value === selectedValue)
     return selectedOption ? selectedOption.label : selectedValue
-  }, [selectedValue])
+  }, [selectedValue, options])
 
   const handleOptionSelect = useCallback(
     (value: string | number) => () => {

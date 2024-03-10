@@ -37,7 +37,7 @@ const Pagination: React.FC<PaginationProps> = ({ isLoading, page, size, totalIte
     (page: number) => () => {
       onPageChange(page)
     },
-    []
+    [onPageChange]
   )
 
   const pageNumbers = generatePageNumbers()

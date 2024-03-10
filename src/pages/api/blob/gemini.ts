@@ -1,8 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { type NextRequest } from 'next/server'
 import BlobInstance from '../axiosInstance/Blob'
 import { LabelImageResponse } from '@services/Object/Gemini'
-import axios from 'axios'
 export const config = {
   api: {
     bodyParser: false,
@@ -10,7 +8,7 @@ export const config = {
 }
 
 export default async function GeminiAnnotations(req: NextApiRequest, res: NextApiResponse) {
-  const { body, method, query } = req
+  const { method } = req
   switch (method) {
     case 'POST':
       try {
@@ -30,7 +28,6 @@ export default async function GeminiAnnotations(req: NextApiRequest, res: NextAp
         }
         return res.status(200).json(response.data)
       } catch (error) {
-        console.log(error)
         return res.status(500).json({ message: 'Something went wrong in labeling stage', error: error })
       }
     default:
