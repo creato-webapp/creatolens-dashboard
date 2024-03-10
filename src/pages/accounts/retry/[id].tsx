@@ -35,7 +35,6 @@ export const getServerSideProps: GetServerSideProps = async (
   }
   const { params } = context
   if (!params || typeof params.id !== 'string') {
-    // Check if params.id exists and is a string
     return { redirect: { destination: '/404', permanent: false } }
   }
   const res = await GetRetryAccount(params.id, {
@@ -43,7 +42,6 @@ export const getServerSideProps: GetServerSideProps = async (
       Cookie: context.req.headers.cookie,
     },
   })
-  // Pass data to the page via props
   const accountData: IRetryAccount = res as IRetryAccount
   return { props: { accountData } }
 }

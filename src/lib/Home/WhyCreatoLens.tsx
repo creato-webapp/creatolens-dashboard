@@ -1,4 +1,4 @@
-const WhyCreatoLens: React.FC = () => {
+const WhyCreatoLens = () => {
   return (
     <div className="inline-flex h-auto w-full flex-col items-center justify-start bg-accent2-800 px-8 py-8 text-text-white">
       <h1 className="mb-12 font-extrabold">Why Creato Lens?</h1>

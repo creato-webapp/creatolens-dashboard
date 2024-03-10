@@ -22,8 +22,6 @@ dayjs.extend(utc)
 type Props = {
   paginationData: PaginationMetadata<IBlockedAccount[]>
 }
-
-//TODO getServerSideProps: GetServerSideProps; cannot set GetServerSideProps type.
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext): Promise<GetServerSidePropsResult<{}>> => {
   const session = await getSession(context)
   if (!session) {

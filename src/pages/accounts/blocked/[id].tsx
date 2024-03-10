@@ -17,7 +17,6 @@ const dayjs = require('dayjs')
 const utc = require('dayjs/plugin/utc')
 dayjs.extend(utc)
 
-//TODO remove type any in context:any
 export const getServerSideProps: GetServerSideProps = async (
   context: GetServerSidePropsContext
 ): Promise<
@@ -25,8 +24,6 @@ export const getServerSideProps: GetServerSideProps = async (
     accountData: IBlockedAccount
   }>
 > => {
-  //remove any
-
   const session = await getSession(context)
   if (!session) {
     return {

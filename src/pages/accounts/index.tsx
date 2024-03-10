@@ -74,52 +74,6 @@ const AccountsPage = () => {
   const [createDateOrder, setCreateDateOrder] = useState<string | number>('desc')
   // const [fetching, setFetching] = useState(false)
   const { accounts: responseData, error } = useGetAccountsPagination(pageParams, true)
-  // const [accountData, setAccountData] = useState<
-  //   {
-  //     page: number
-  //     data: IAccount[]
-  //   }[]
-  // >([{ page: 1, data: responseData?.data || [] }])
-
-  // const { ref, inView, entry } = useInView({
-  //   /* Optional options */
-  //   threshold: 0,
-  // })
-
-  // useEffect(() => {
-  //   const totalItems = accountData.reduce((acc, cur) => {
-  //     return acc + cur.data.length
-  //   }, 0)
-  //   if (responseData?.total_items === totalItems) {
-  //     return
-  //   }
-  //   if (!inView) return
-  //   setFetching(true)
-  //   setPageParams((prevParams) => ({
-  //     ...prevParams,
-  //     pageNumber: prevParams.pageNumber + 1,
-  //   }))
-  // }, [inView])
-
-  // useEffect(() => {
-  //   // check responseDeffectata page number and update accountData
-  //   if (responseData) {
-  //     const page = responseData.page
-  //     const index = accountData.findIndex((e) => e.page === page)
-  //     if (index === -1) {
-  //       setAccountData((prevData) => [...prevData, { page: responseData.page, data: responseData.data }])
-  //     } else {
-  //       if (responseData.page === 1) {
-  //         setAccountData([{ page: responseData.page, data: responseData.data }])
-  //         return
-  //       }
-  //       const temp = [...accountData]
-  //       temp[index].data = responseData.data
-  //       setAccountData(temp)
-  //     }
-  //   }
-  //   setFetching(false)
-  // }, [responseData])
 
   const accounts: IAccount[] = responseData?.data || []
   const isLoading = !responseData && !error
@@ -323,28 +277,11 @@ const AccountsPage = () => {
           </div>
         </div>
 
-        {/* <div className="flex flex-col gap-12 md:hidden">
-          {accountData?.map((e, index) => (
-            <div key={`account_page_${index}`} className="flex flex-col items-center gap-4">
-              <h3>Page: {e.page}</h3>
-              <div className="flex w-full flex-col gap-16 bg-none">
-                {e.data.map((account, index) => (
-                  <ResponsiveAccountCard columns={columns} rowData={account} key={`account_data_${index}`} />
-                ))}
-              </div>
-            </div>
-          ))}
-        </div> */}
-
         <div className="flex w-full flex-col justify-center gap-16 bg-none md:hidden">
           {accounts?.map((e, index) => (
             <ResponsiveAccountCard columns={columns} rowData={e} key={`account_data_${index}`} />
           ))}
         </div>
-        {/* <div ref={ref} className="flex justify-center md:hidden">
-          {fetching && <div>Loading...</div>}
-        </div>
-        {endOfPage ? <div className="flex items-center justify-center md:hidden">End of page</div> : null} */}
         <Pagination
           isLoading={isLoading}
           page={responseData.page}

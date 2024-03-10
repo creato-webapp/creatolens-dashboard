@@ -29,7 +29,7 @@ const Row = (props: RowProps) => {
         <td
           key={index}
           {...cellRest}
-          className={`h-12 min-w-32 items-center justify-start border border-slate-300 bg-neutral-50 p-2 ${cellClassName}`}
+          className={`min-w-32 h-12 items-center justify-start border border-slate-300 bg-neutral-50 p-2 ${cellClassName}`}
         >
           {render ? render(accessProperty(props.rowData, dataIndex)) : accessProperty(props.rowData, dataIndex)}
         </td>

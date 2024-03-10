@@ -39,7 +39,6 @@ export const getServerSideProps: GetServerSideProps = async (
     return {
       redirect: {
         destination: '/some-destination',
-        // Optionally, set the status code (e.g., temporary: 307 or permanent: 308)
         permanent: false,
       },
     }

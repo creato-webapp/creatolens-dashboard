@@ -1,7 +1,6 @@
 import React, { useState, useCallback } from 'react'
 import Card from '@components/Card'
 import { Table } from '@components/Table'
-
 import { IAccountError } from '@lib/Account/AccountErrors/interface'
 import { getSession } from 'next-auth/react'
 import Link from 'next/link'

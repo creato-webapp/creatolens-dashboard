@@ -28,7 +28,6 @@ export default function Card({
   // const { title, children, extra, className, coverImage, subExtra, description, onClick } = props
   return (
     <div className={`flex h-fit w-full flex-col gap-6 rounded-xl border border-slate-300 p-6 shadow-lg ${className}`}>
-      {/* <div className="absolute top-0 right-0 px-6 py-6">{extra}</div> */}
       {coverImage ? <img alt="card" className="h-auto w-auto rounded-xl md:shrink-0" src={coverImage} /> : null}
       {subExtra ? <div className="h-auto w-auto">{subExtra}</div> : null}
       {customTitle || description || extra ? (

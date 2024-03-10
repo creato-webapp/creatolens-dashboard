@@ -23,7 +23,6 @@ type Props = {
   paginationData: PaginationMetadata<IRetryAccount[]>
 }
 
-//TODO getServerSideProps: GetServerSideProps; cannot set GetServerSideProps type.
 export const getServerSideProps: GetServerSideProps = async (
   context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<{ paginationData?: PaginationMetadata<IRetryAccount[]> }>> => {

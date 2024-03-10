@@ -38,7 +38,6 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
 
   const { params } = context
   if (!params || typeof params.id !== 'string') {
-    // Check if params.id exists and is a string
     return { redirect: { destination: '/404', permanent: false } }
   }
   const isCreate = params.id === 'create-account'
@@ -93,8 +92,6 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
       } else {
         window.alert(res)
       }
-
-      // You can navigate to another page if needed
     } catch (error) {
       console.error(error)
       window.alert(error)

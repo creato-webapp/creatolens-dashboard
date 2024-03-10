@@ -40,13 +40,6 @@ const Popup: React.FC<PopupProps> = ({
     }
   }
 
-  // const handleConfirm = (event: MouseEvent) => {
-  //   if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
-  //     setIsShow(false)
-  //     onConfirm && onConfirm()
-  //   }
-  // }
-
   useEffect(() => {
     // Add when the component is mounted
     if (isDisabledScroll && isShow) {
@@ -54,7 +47,6 @@ const Popup: React.FC<PopupProps> = ({
     }
 
     document.addEventListener('mousedown', handleClickOutside)
-    // Return function to be called when unmounted
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
       document.body.style.overflow = 'auto'

@@ -41,22 +41,22 @@ const DynamicForm = <T,>(props: FormLayoutProps<T>) => {
     fields.forEach((e) => {
       if (e.type === 'CustomItem') {
         // Skip CustomItem types
-        return;
+        return
       }
       if (e.type === 'checkbox') {
         // Directly assign boolean values for checkboxes
-        values[e.name] = target[e.name].checked;
+        values[e.name] = target[e.name].checked
       } else if (e.type === 'datetime-local') {
         // Format datetime inputs
-        values[e.name] = dayjs(target[e.name].value).format('YYYY-MM-DDTHH:mm:ss');
+        values[e.name] = dayjs(target[e.name].value).format('YYYY-MM-DDTHH:mm:ss')
       } else if (e.type === 'number') {
         // Convert string to number for numeric inputs
-        values[e.name] = Number(target[e.name].value);
+        values[e.name] = Number(target[e.name].value)
       } else {
         // Assign string values for all other types
-        values[e.name] = target[e.name].value;
+        values[e.name] = target[e.name].value
       }
-    });
+    })
     onSubmit(values as T)
   }
 
@@ -66,21 +66,14 @@ const DynamicForm = <T,>(props: FormLayoutProps<T>) => {
         return <Form.TextInput {...field} />
       case 'number':
         return <Form.InputNumber {...field} />
-        // Implement NumberInput component and use here
-        break
       case 'password':
         return <Form.InputPassword {...field} />
-        break
       case 'checkbox':
         return <Form.Checkbox {...field} />
-        // Implement Checkbox component and use here
-        break
       case 'time':
         return <Form.TimePicker {...field} />
-        break
       case 'date':
         return <Form.DatePicker {...field} />
-
       case 'datetime-local':
         return <Form.DateTimePicker {...field} />
       case 'CustomItem':

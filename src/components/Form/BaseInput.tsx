@@ -30,10 +30,8 @@ const BaseInput: React.FunctionComponent<IBaseInputProps> = ({
 
   const onChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     if (props.type === 'number') {
-      // Regex to allow only numbers (integers or decimals) without scientific notation characters
       const validNumber = /^-?\d*\.?\d*$/
       if (!validNumber.test(e.target.value) && value !== '') {
-        // Optionally handle invalid input, e.g., by showing an error or ignoring the input
         return
       }
     }
@@ -57,7 +55,7 @@ const BaseInput: React.FunctionComponent<IBaseInputProps> = ({
           value={inputValue}
           onChange={onChange}
           disabled={disabled}
-          className={`base-input inline-flex min-w-64 rounded-md border border-gray-500 bg-neutral-50 p-2 font-semibold ${
+          className={`base-input min-w-64 inline-flex rounded-md border border-gray-500 bg-neutral-50 p-2 font-semibold ${
             errorMessage ? 'focus:border-0 focus:border-none focus:outline-error-600' : ''
           } ${className ? className : ''}`}
         />
