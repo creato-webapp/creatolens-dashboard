@@ -174,10 +174,10 @@ const AccountsPage = ({ paginationData }: Props) => {
       dataIndex: 'id',
       render: (e: any) => (
         <Link href="/accounts/[id]" as={`/accounts/${e}`} legacyBehavior>
-          <a className="flex w-full flex-row items-center justify-center gap-2">
+          <div className="flex w-full flex-row items-center justify-center gap-2 cursor-pointer">
             <EditIcon size={16} className="fill-accent2-500" />
             <div className="font-semibold text-accent2-500">Edit</div>
-          </a>
+          </div>
         </Link>
       ),
     },
@@ -271,14 +271,12 @@ const AccountsPage = ({ paginationData }: Props) => {
             <h1 className="font-extrabold text-white">ACCOUNTS</h1>
           </div>
           <Link href="/accounts/create-account">
-            <a>
               <Button.Primary sizes={['s', 'l', 'l']} styleClassName="px-2">
                 <div className="flex flex-row items-center gap-2">
                   <PlusIcon className="h-6 w-6" />
                   <div className="hidden md:flex">Create New Account</div>
                 </div>
               </Button.Primary>
-            </a>
           </Link>
         </div>
       </Hero>
