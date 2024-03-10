@@ -17,11 +17,6 @@ async function fetchWhitelist(): Promise<CombinedUser[]> {
 }
 
 export async function getRoles(userEmail: string) {
-  const bucket = 'firebase-creatolens-whitelist'
-  if (bucket === undefined) {
-    window.alert('CLOUD_BUCKET is undefined')
-  }
-
   const whitelist = await fetchWhitelist()
   const userEntry = whitelist.find((entry) => entry.email === userEmail)
   return userEntry ? userEntry.role : []

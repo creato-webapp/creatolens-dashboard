@@ -1,6 +1,5 @@
-import { AxiosRequestConfig } from 'axios'
+import { AxiosRequestConfig, AxiosResponse } from 'axios'
 import { Fetcher } from '../fetcher'
-import { imageToBase64 } from '../util'
 
 type hashtag = {
   acc: number
@@ -12,18 +11,12 @@ export type Labels = {
   score: number
 }
 
-export type ImageResponse = {
-  labels: Array<Labels>
-  data: Array<ImageRecord>
-  firstTwo: Array<hashtag>
-  middleTwo: Array<hashtag>
-  lastTwo: Array<hashtag>
-  error?: { message: string }
+export type ModelResult = {
+  data: hashtag[]
 }
 
-export type ImageRecord = {
-  labels: Array<string>
-  target: Array<string>
+export interface UploadImageResponse {
+  path: string
 }
 
 function validateImage(file: File, maxSize: number, validTypes: string[]): boolean {
@@ -39,27 +32,22 @@ function validateImage(file: File, maxSize: number, validTypes: string[]): boole
   return true
 }
 
-export async function uploadImage(file: File, customConfig?: AxiosRequestConfig): Promise<ImageResponse> {
+export async function uploadImage(file: File, customConfig?: AxiosRequestConfig): Promise<UploadImageResponse> {
   try {
     if (!validateImage(file, 8 * 1024 * 1024, ['image/jpeg', 'image/png', 'image/gif'])) {
       throw new Error('Invalid image')
     }
 
-    const imageString = await imageToBase64(file)
-    const response = await Fetcher.POST(
-      '/api/blob',
-      JSON.stringify({
-        filename: file.name,
-        body: imageString,
-        format: 'JPEG',
-        size: file.size,
-      }),
-      {
-        maxBodyLength: 8 * 1024 * 1024,
-        maxContentLength: 8 * 1024 * 1024,
-        ...customConfig,
-      }
-    )
+    const formData = new FormData()
+    formData.append('file', file)
+
+    const config = {
+      maxBodyLength: 8 * 1024 * 1024,
+      maxContentLength: 8 * 1024 * 1024,
+      ...customConfig,
+    }
+
+    const response: UploadImageResponse = await Fetcher.POST('/api/blob', formData, config)
 
     return response
   } catch (error) {

@@ -3,10 +3,18 @@ module.exports = {
   fonts: [
     {
       family: 'Lato',
-      variants: ['300', '400', '700', '900'],
+      variants: ['300', '400',  '700',  '900'],
     },
   ],
   content: ['./src/pages/**/*.{js,ts,jsx,tsx}', './src/components/**/*.{js,ts,jsx,tsx}', './src/lib/**/*.{js,ts,jsx,tsx}'],
+  safelist: [
+    {
+      pattern: /border-(error|warning|successful)-(500|600|700)/,
+    },
+    {
+      pattern: /text-(error|warning|successful)-(500|600|700)/,
+    },
+  ],
   theme: {
     fontFamily: {
       lato: ['Lato', 'system-ui'],
@@ -124,6 +132,11 @@ module.exports = {
           200: '#FFF5A9',
           100: '#FFFAD3',
         },
+      },
+      animation: {
+        slideInFromRight: 'slideInFromRight 0.7s ease-out forwards',
+        fadeOut: 'fadeOut 0.5s ease-out forwards', // If you want to use the fade-out animation
+        fadeIn: 'fadeIn 0.5s ease-out forwards', // Add this line for fade-in animation
       },
     },
   },
