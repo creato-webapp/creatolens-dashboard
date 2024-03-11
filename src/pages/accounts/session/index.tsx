@@ -111,7 +111,7 @@ const AccountsSessionPage = ({ paginationData }: Props) => {
         }
         return (
           <Link href="/accounts/[id]" as={`/accounts/${e}`} legacyBehavior>
-            <a style={{ color: '#0070f3' }}>{e}</a>
+            <div style={{ color: '#0070f3', cursor: 'pointer' }}>{e}</div>
           </Link>
         )
       },
@@ -122,7 +122,7 @@ const AccountsSessionPage = ({ paginationData }: Props) => {
       render: (e: string) => {
         return (
           <Link href="/accounts/[id]" as={`/accounts/${e}`} legacyBehavior>
-            <a style={{ color: '#0070f3' }}>{e}</a>
+            <div style={{ color: '#0070f3', cursor: 'pointer' }}>{e}</div>
           </Link>
         )
       },

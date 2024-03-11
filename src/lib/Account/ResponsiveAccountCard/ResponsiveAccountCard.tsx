@@ -71,10 +71,10 @@ const ResponsiveAccountCard: FC<ResponsiveAccountCardProps> = (props: Responsive
           </h3>
         </div>
         <Link href="/accounts/[id]" as={`/accounts/${props.rowData?.id}`} legacyBehavior>
-          <a className="flex w-full flex-row items-center justify-center gap-2">
+          <div className="flex w-full flex-row items-center justify-center gap-2">
             <EditIcon size={16} className="fill-accent2-500" />
             <div className="font-semibold text-accent2-500">Edit</div>
-          </a>
+          </div>
         </Link>
       </div>
     </div>
