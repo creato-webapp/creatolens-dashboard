@@ -7,24 +7,39 @@ import { useAccountSessionPagination } from 'src/hooks/useAccountSession'
 import { GetSessionPagination, PaginationParams, PaginationMetadata } from '@services/Account/Session'
 import { Form } from '@components/Form'
 import Pagination from '@components/Pagination'
+import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
+import { IGenericRowData } from '@components/Table/Row'
+import { Cookies } from '@lib/Account/Account/interface'
+
 type Props = {
-  paginationData: PaginationMetadata
+  paginationData: PaginationMetadata<IAccountSession[]>
 }
 
 interface AccountSessionPaginationParams extends PaginationParams {
   username?: string | null
 }
-
+export interface IAccountSession extends IGenericRowData {
+  account_id: string
+  created_at: string
+  trace_id: string
+  updated_at: string
+  username: string
+  session_cookies: Cookies
+}
 const dayjs = require('dayjs')
 const utc = require('dayjs/plugin/utc')
 dayjs.extend(utc)
 
-export const getServerSideProps = async (context: any) => {
+export const getServerSideProps: GetServerSideProps = async (
+  context: GetServerSidePropsContext
+): Promise<GetServerSidePropsResult<{ paginationData?: PaginationMetadata<IAccountSession[]> }>> => {
   const session = await getSession(context)
+
   if (!session) {
     return {
       redirect: {
-        destination: '/auth/login',
+        destination: '/some-destination',
+        permanent: false,
       },
     }
   }
@@ -37,7 +52,7 @@ export const getServerSideProps = async (context: any) => {
     isAsc: false,
   }
   const response = await GetSessionPagination(paginationProps)
-  const paginationData: PaginationMetadata = {
+  const paginationData: PaginationMetadata<IAccountSession[]> = {
     data: response ? response?.data : [],
     has_next: response ? response.has_next : false,
     has_prev: response ? response.has_prev : false,
@@ -75,14 +90,15 @@ const AccountsSessionPage = ({ paginationData }: Props) => {
   }, [])
 
   const { sessions: responseData, isLoading, error } = useAccountSessionPagination(pageParams, true, paginationData)
-  const accountSession: PaginationMetadata[] = responseData?.data ? responseData.data : []
+
+  const accountSession: IAccountSession[] = responseData?.data ? responseData.data : []
   if (error) {
-    console.log(responseData)
-    console.log(error)
+    console.error(responseData)
+    console.error(error)
     return <div>Failed to load account error data</div>
   }
   if (!responseData) {
-    console.log(responseData)
+    console.error('No response data', responseData)
     return <div>Loading...</div>
   }
   const columns = [
@@ -114,7 +130,7 @@ const AccountsSessionPage = ({ paginationData }: Props) => {
     {
       title: 'created_at(HK Time)',
       dataIndex: 'created_at',
-      render: (e: any) => {
+      render: (e: string) => {
         const date = dayjs(e, 'YYYY-MM-DD THH:mm:ss')
         return dayjs.utc(date).local().format('YYYY-MM-DD HH:mm:ss')
       },
@@ -135,7 +151,7 @@ const AccountsSessionPage = ({ paginationData }: Props) => {
           <Table.Header columns={columns} />
           <Table.Body>
             {accountSession.map((e, index) => (
-              <Table.Row columns={columns} rowData={e} rowKey={index} />
+              <Table.Row key={`accountSession-table-row-${index}`} columns={columns} rowData={e} rowKey={index} />
             ))}
           </Table.Body>
         </Table.Layout>

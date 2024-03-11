@@ -1,4 +1,4 @@
-import { FC, useState } from 'react'
+import { FC } from 'react'
 import { Button } from '@components/Button'
 
 export interface ModalProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'title'> {

@@ -1,17 +1,18 @@
 import type { NextPage } from 'next'
-import { useSession, signIn, signOut, getSession } from 'next-auth/react'
-import { useRouter } from 'next/router'
+import { getSession } from 'next-auth/react'
 import LandingHeader from '@lib/Home/LandingHeader'
 import HowItWorks from '@lib/Home/HowItWorks'
 import WhyCreatoLens from '@lib/Home/WhyCreatoLens'
 import Testimonial from '@lib/Home/Testimonial'
+import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 
-export const getServerSideProps = async (context: any) => {
+export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext): Promise<GetServerSidePropsResult<{}>> => {
   const session = await getSession(context)
   if (session) {
     return {
       redirect: {
         destination: '/guide',
+        permanent: false,
       },
     }
   }

@@ -2,7 +2,6 @@ import React, { useState, useCallback } from 'react'
 import Card from '@components/Card'
 import { getSession } from 'next-auth/react'
 import { Form } from '@components/Form'
-import Title from '@components/Typography/Title'
 import MagnifyingGlassIcon from '@components/Icon/MagnifyingGlassIcon'
 import LoaderIcon from '@components/Icon/LoaderIcon'
 import LightBulbIcon from '@components/Icon/LightBulbIcon'
@@ -14,21 +13,24 @@ import Tab from '@components/Tab'
 import CustomizeHashtagCard from '@lib/Hashet/CustomizeHashtagCard'
 import { useGetHashtag } from 'src/hooks/useHashtag'
 import Hero from '@components/Hero'
-interface IHashet extends Record<string, string | number | boolean> {
+import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
+
+export interface IHashet extends Record<string, string | number | boolean> {
   hashtag: string
   acc: number
 }
 
-type Props = {
+export type HashetProps = {
   hashetSessionData: IHashet[]
 }
 
-export const getServerSideProps = async (context: any) => {
+export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext): Promise<GetServerSidePropsResult<{}>> => {
   const session = await getSession(context)
   if (!session) {
     return {
       redirect: {
         destination: '/auth/login',
+        permanent: false,
       },
     }
   }
@@ -36,7 +38,7 @@ export const getServerSideProps = async (context: any) => {
   return { props: { hashetSessionData } }
 }
 
-const RecommendationPage = ({ hashetSessionData }: Props) => {
+const RecommendationPage = () => {
   //find better way to write fetch logic
   const [inputString, setInputString] = useState('')
   const [stringToSubmit, setStringToSubmit] = useState('')
@@ -49,14 +51,14 @@ const RecommendationPage = ({ hashetSessionData }: Props) => {
     await mutateHashet()
   }, [inputString])
 
-  const { data, error, mutate: mutateHashet, isValidating } = useGetHashtag(stringToSubmit, stringToSubmit ? true : false, hashetSessionData)
+  const { data, error, mutate: mutateHashet, isValidating } = useGetHashtag(stringToSubmit, stringToSubmit ? true : false)
   if (error) {
-    console.log(data)
-    console.log(error)
+    console.error(data)
+    console.error(error)
     return <div>Failed to load hashet error data</div>
   }
   if (!data) {
-    console.log(data)
+    console.error(data)
     return <div>Loading...</div>
   }
 
@@ -72,7 +74,7 @@ const RecommendationPage = ({ hashetSessionData }: Props) => {
       key: '1',
       title: 'Categories',
       children: (
-        <div className="flex flex-wrap gap-4 md:flex md:flex-nowrap md:py-24 md:px-14">
+        <div className="flex flex-wrap gap-4 md:flex md:flex-nowrap md:px-14 md:py-24">
           <TopRelatedHashtagCard hashtags={hashetData} />
           <TopAccHashtagCard hashtags={hashetData} />
         </div>
@@ -140,7 +142,7 @@ const RecommendationPage = ({ hashetSessionData }: Props) => {
         </div>
       </Hero>
       <Card className="min-h-full w-full rounded-none border-none bg-transparent px-4 py-0 shadow-none md:px-20 md:pb-28">
-        <Tab items={tabItems} defaultActiveKey="1" scrollable={false} className="shadow-none md:shadow-xl md:px-0" />
+        <Tab items={tabItems} defaultActiveKey="1" scrollable={false} className="shadow-none md:px-0 md:shadow-xl" />
       </Card>
     </div>
   )

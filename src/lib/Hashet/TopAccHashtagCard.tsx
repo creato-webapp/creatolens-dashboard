@@ -2,7 +2,6 @@ import React, { useState, useCallback } from 'react'
 import Card from '@components/Card'
 import Dropdown from '@components/Form/Dropdown'
 import { Button } from '@components/Button'
-import { Title } from '@components/Typography'
 
 interface Hashtag {
   acc: number
@@ -28,7 +27,6 @@ const TopAccHashtagCard: React.FC<Props> = ({ hashtags }) => {
   const slicedHashtags = filterHashtags()
 
   const copyToClipboard = useCallback(async () => {
-    console.log(slicedHashtags)
     const copiedHashtags = slicedHashtags.map((tag) => tag.hashtag).join(' ')
     await navigator.clipboard.writeText(copiedHashtags)
     window.alert('Copied to clipboard!')

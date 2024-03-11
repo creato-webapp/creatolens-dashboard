@@ -1,11 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import AccountInstance from './axiosInstance/Account'
 export default async function accountQueryHandler(req: NextApiRequest, res: NextApiResponse) {
-  const {
-    query: { id, name, pageNumber, pageSize, orderBy, isAsc },
-    body,
-    method,
-  } = req
+  const { method } = req
   switch (method) {
     case 'GET': {
       const response = await AccountInstance.get(`/contacts?filter=email != null`, {

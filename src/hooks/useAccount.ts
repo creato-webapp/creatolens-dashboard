@@ -1,9 +1,10 @@
 import useSWR from 'swr'
 import { IAccount } from '@lib/Account/Account'
-import { GetAccountsPagination, GetAccount, UpdateSession, UpdateAccount, PaginationParams, PaginationMetadata } from '@services/Account/Account'
+import { GetAccountsPagination, GetAccount, UpdateSession, UpdateAccount } from '@services/Account/Account'
 import { useRef } from 'react'
+import { PaginationMetadata, PaginationParams } from '@services/Account/AccountInterface'
 
-export const useAccount = (id: string, shouldFetch: boolean = true, fallbackData?: any) => {
+export const useAccount = (id: string, shouldFetch: boolean = true, fallbackData?: IAccount) => {
   const { data, error, mutate, ...swr } = useSWR(shouldFetch ? [id] : null, (id) => GetAccount(id), {
     refreshInterval: 0,
     fallbackData: fallbackData,
@@ -32,8 +33,8 @@ export const useAccount = (id: string, shouldFetch: boolean = true, fallbackData
   }
 }
 
-export const useGetAccountsPagination = (paginationParams: PaginationParams, shouldFetch?: true, fallbackData?: PaginationMetadata) => {
-  const mutableRef = useRef<PaginationMetadata>()
+export const useGetAccountsPagination = (paginationParams: PaginationParams, shouldFetch?: true) => {
+  const mutableRef = useRef<PaginationMetadata<IAccount[]>>()
   const { data, error, mutate, ...swr } = useSWR(shouldFetch ? [paginationParams] : null, GetAccountsPagination, {
     refreshInterval: 0,
     fallbackData: mutableRef.current ? mutableRef.current : undefined,

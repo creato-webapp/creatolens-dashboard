@@ -1,11 +1,11 @@
 import React, { useCallback } from 'react'
 import Card from '@components/Card'
 import { Button } from '@components/Button'
-import { Form } from '@components/Form'
 import { IField } from '@components/Form/interface'
 import { IAccount } from '@lib/Account/Account/interface'
 import { Paragraph } from '@components/Typography'
 import StatusTag from '@lib/StatusTag'
+import DynamicForm from '@components/Form/DynamicForm'
 interface AccountInfoCardProps {
   isLoading: boolean
   isCreate: boolean
@@ -14,88 +14,122 @@ interface AccountInfoCardProps {
   setIsShow: (show: boolean) => void
 }
 
-const AccountInfoCard: React.FC<AccountInfoCardProps> = ({ isLoading, isCreate, account, handleSubmit, setIsShow }) => {
+const AccountInfoCard: React.FC<AccountInfoCardProps> = ({ isLoading, account, handleSubmit, setIsShow }) => {
   const accountInfoField: IField[] = [
     {
       label: 'login count',
-      type: 'InputNumber',
+      id: 'login_count',
+      type: 'number', 
       name: 'login_count',
-      customFormItemProps: { disabled: true },
+      value: account['login_count'],
     },
     {
       label: 'ID',
-      type: 'Input',
+      type: 'text',
       name: 'id',
+      value: account['id'],
+      id: 'id',
     },
     {
       label: 'created by',
-      type: 'Input',
+      type: 'text',
       name: 'created_by',
-      customFormItemProps: { disabled: true },
+      id: 'created_by',
+      value: account['created_by'],
     },
     {
       label: 'updated by',
-      type: 'Input',
+      type: 'text',
       name: 'updated_by',
-      customFormItemProps: { disabled: true },
+      id: 'updated_by',
+      value: account['updated_by'],
     },
   ]
   const checkBoxField: IField[] = [
     {
       label: 'enabled',
-      type: 'Checkbox',
+      type: 'checkbox',
       name: 'enabled',
+      checked: account['enabled'],
+      id: 'enabled',
     },
     {
       label: 'is_authenticated',
-      type: 'Checkbox',
+      type: 'checkbox',
       name: 'is_authenticated',
+      checked: account['is_authenticated'],
+      id: 'is_authenticated',
     },
     {
       label: 'is_occupied',
-      type: 'Checkbox',
+      type: 'checkbox',
       name: 'is_occupied',
+      checked: account['is_occupied'],
+      id: 'is_occupied',
     },
   ]
   const fields: IField[] = [
     {
+      label: 'custom',
+      type: 'CustomItem',
+      name: 'custom',
+      id: 'custom',
+      component: (
+        <div className="">
+          <Paragraph key={'0'} size={'lg'} bold className="font-bold">
+            Status
+          </Paragraph>
+          <StatusTag status={account['status']}></StatusTag>
+        </div>
+      ),
+    },
+    {
       label: 'username',
-      type: 'Input',
+      type: 'text',
       name: 'username',
-      customFormItemProps: { required: true },
+      id: 'username',
+      value: account['username'],
+      required: true,
     },
     {
       label: 'password',
-      type: 'InputPassword',
+      type: 'password',
       name: 'pwd',
-      customFormItemProps: { required: true },
+      value: account['pwd'],
+      id: 'pwd',
+      required: true,
     },
-
     {
       label: 'login attempt count',
-      type: 'InputNumber',
+      type: 'number',
       name: 'login_attempt_count',
-      customFormItemProps: { disabled: true },
+      value: account['login_attempt_count'],
+      id: 'login_attempt_count',
     },
     {
-      label: 'post_scrapped_count',
-      type: 'InputNumber',
+      label: 'post scrapped count',
+      type: 'number',
       name: 'post_scrapped_count',
-      customFormItemProps: { disabled: true },
+      value: account['post_scrapped_count'],
+      id: 'post_scrapped_count',
     },
     {
       label: 'last_login_dt',
-      type: 'DateTimePicker',
+      type: 'datetime-local',
       name: 'last_login_dt',
-      customFormItemProps: { required: true },
+      value: account['last_login_dt'],
+      id: 'last_login_dt',
+      required: true,
     },
   ]
+
+  const combinedField: IField[] = [...accountInfoField, ...checkBoxField, ...fields]
   const handleClick = useCallback(() => {
     setIsShow(true)
   }, [])
   return (
     <Card
-      className="ml-auto mr-auto mb-8 mt-0 w-full bg-bg-white border-none shadow-none"
+      className="mb-8 ml-auto mr-auto mt-0 w-full border-none bg-bg-white shadow-none"
       customTitle={<h3 className="mr-auto w-auto pt-2 text-4xl text-text-primary">Account Info</h3>}
       extra={
         <Button.Primary loading={isLoading} onClick={handleClick}>
@@ -103,45 +137,7 @@ const AccountInfoCard: React.FC<AccountInfoCardProps> = ({ isLoading, isCreate, 
         </Button.Primary>
       }
     >
-      <Form.Layout
-        onSubmit={handleSubmit}
-        Header={account.username}
-        loading={isLoading}
-        fields={[...fields, ...checkBoxField]}
-        allowSubmit={!!isLoading}
-      >
-        <div className="flex flex-wrap justify-between">
-          <div className="">
-            <Paragraph key={'0'} size={'lg'} bold className="font-bold">
-              Status
-            </Paragraph>
-            <Paragraph key={'status'}>
-              <StatusTag status={account['status']}></StatusTag>
-            </Paragraph>
-          </div>
-          {accountInfoField.map((e: IField, index) => (
-            <div>
-              <Paragraph key={e.label} size={'lg'} bold className="font-bold">
-                {e.label}
-              </Paragraph>
-              <Paragraph key={e.name}>{account[e.name]}</Paragraph>
-            </div>
-          ))}
-        </div>
-        <div className="flex flex-wrap gap-8 ">
-          {checkBoxField.map((e: IField, index) => (
-            <Form.Item label={e.label} key={index} customFormItemProps={e.customFormItemProps}>
-              <Form.CustomItem id={e.name} defaultValue={account[e.name]} type={e.type} customFormItemProps={e.customFormItemProps} />
-            </Form.Item>
-          ))}
-        </div>
-
-        {fields.map((e: IField, index) => (
-          <Form.Item label={e.label} key={index} customFormItemProps={e.customFormItemProps}>
-            <Form.CustomItem id={e.name} defaultValue={account[e.name]} type={e.type} customFormItemProps={e.customFormItemProps} />
-          </Form.Item>
-        ))}
-      </Form.Layout>
+      <DynamicForm onSubmit={handleSubmit} Header={account.username} loading={isLoading} fields={combinedField} allowSubmit={!!isLoading} />
     </Card>
   )
 }

@@ -1,7 +1,4 @@
-import CaretLeftIcon from '@components/Icon/CaretLeftIcon'
-import CaretRightIcon from '@components/Icon/CaretRightIcon'
-import React, { useCallback, useState } from 'react'
-import { Button } from '@components/Button'
+import React, { useCallback } from 'react'
 interface PaginationProps {
   isLoading: boolean
   page: number
@@ -24,9 +21,6 @@ const Pagination: React.FC<PaginationProps> = ({ isLoading, page, size, totalIte
     return pageNumbers
   }, [totalPages])
 
-  if (isLoading) {
-    return <div>Loading...</div>
-  }
   const handlePrevClick = useCallback(() => {
     if (hasPrev) {
       onPageChange(page - 1)
@@ -40,13 +34,17 @@ const Pagination: React.FC<PaginationProps> = ({ isLoading, page, size, totalIte
   }, [hasNext, onPageChange, page])
 
   const handlePageClick = useCallback(
-    (page: number) => (event: React.MouseEvent<HTMLButtonElement>) => {
+    (page: number) => () => {
       onPageChange(page)
     },
-    []
+    [onPageChange]
   )
 
   const pageNumbers = generatePageNumbers()
+
+  if (isLoading) {
+    return <div>Loading...</div>
+  }
 
   const renderPageButton = (pageNumber: number) => {
     return (
@@ -61,13 +59,6 @@ const Pagination: React.FC<PaginationProps> = ({ isLoading, page, size, totalIte
       </button>
     )
   }
-
-  console.log(
-    pageNumbers.slice(
-      Math.max(1, Math.min(page - Math.floor(pagesToShow / 2), totalPages - pagesToShow)),
-      Math.min(page + Math.floor(pagesToShow / 2), totalPages - 1)
-    )
-  )
 
   return (
     <div className="mt-4 flex w-full items-center justify-center gap-3 md:mt-0">
@@ -92,7 +83,7 @@ const Pagination: React.FC<PaginationProps> = ({ isLoading, page, size, totalIte
         </div>
 
         <button
-          className={`disabled:text-disabled h-10 w-10 rounded-lg bg-bg-dark text-text-primary disabled:bg-bg-disabled `}
+          className={`h-10 w-10 rounded-lg bg-bg-dark text-text-primary disabled:bg-bg-disabled disabled:text-disabled `}
           onClick={handleNextClick}
           disabled={page >= totalPages}
         >

@@ -1,7 +1,13 @@
-export interface IAccount extends Record<string, string | number | boolean> {
+export interface Cookies {
+  [key: string]: string
+}
+
+export interface IAccount {
   id: string
   username: string
   created_at: string
+  created_by: string
+  updated_by: string
   enabled: boolean
   is_authenticated: boolean
   is_occupied: boolean
@@ -10,12 +16,14 @@ export interface IAccount extends Record<string, string | number | boolean> {
   login_count: number
   post_scrapped_count: number
   pwd: string
-  session_cookies?: any
+  wait_until: string
+  session_cookies?: Cookies
   status: 'active' | 'blocked' | 'banned' | 'retry' | 'test' | 'scrapping' | 'occupied'
   updated_at: string
+  [key: string]: string | number | boolean | Cookies | undefined // Adding an index signature
 }
 
-export interface IBlockedAccount extends Record<string, string | number | boolean> {
+export interface IBlockedAccount {
   id: string
   username: string
   created_at: string
@@ -31,12 +39,13 @@ export interface IBlockedAccount extends Record<string, string | number | boolea
   login_count: number
   post_scrapped_count: number
   pwd: string
-  session_cookies?: any
+  session_cookies?: Cookies
   status: 'active' | 'blocked' | 'banned' | 'retry' | 'test' | 'scrapping' | 'occupied'
   updated_at: string
+  [key: string]: string | number | boolean | Cookies | undefined // Adding an index signature
 }
 
-export interface IRetryAccount extends Record<string, string | number | boolean> {
+export interface IRetryAccount {
   id: string
   username: string
   created_at: string
@@ -48,10 +57,11 @@ export interface IRetryAccount extends Record<string, string | number | boolean>
   login_count: number
   post_scrapped_count: number
   pwd: string
-  session_cookies?: any
+  session_cookies?: Cookies
   status: 'active' | 'blocked' | 'banned' | 'retry' | 'test' | 'scrapping' | 'occupied'
   updated_at: string
   wait_until: string
   retry_history: string
   retry_count: number
+  [key: string]: string | number | boolean | Cookies | undefined // Adding an index signature
 }

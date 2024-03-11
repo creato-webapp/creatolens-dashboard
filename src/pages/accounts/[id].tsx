@@ -11,6 +11,7 @@ import AccountCreateCard from '@lib/Account/AccountCreateCard'
 import { useAccount } from 'src/hooks/useAccount'
 import { GetAccount, CreateAccount } from '@services/Account/Account'
 import Image from 'next/image'
+import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 
 const dayjs = require('dayjs')
 const utc = require('dayjs/plugin/utc')
@@ -23,18 +24,22 @@ type Props = {
 }
 
 //TODO remove type any in context:any
-export const getServerSideProps = async (context: any) => {
+export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext): Promise<GetServerSidePropsResult<Props>> => {
   //remove any
-  const session: any = await getSession(context)
+  const session = await getSession(context)
   if (!session) {
     return {
       redirect: {
         destination: '/404',
+        permanent: false,
       },
     }
   }
 
   const { params } = context
+  if (!params || typeof params.id !== 'string') {
+    return { redirect: { destination: '/404', permanent: false } }
+  }
   const isCreate = params.id === 'create-account'
   const canRenewSession = false
 
@@ -55,29 +60,20 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
   const [shouldFetch, setShouldFetch] = useState(false)
   const [isShow, setIsShow] = useState(false)
   const [showAlert, setShowAlert] = useState(false)
-  const session = getSession()
   const router = useRouter()
   const { id } = router.query
-  const {
-    data,
-    isLoading: loading,
-    error,
-    updateAccount: useUpdateAccount,
-    updateSession,
-  } = useAccount(id as string, shouldFetch, isCreate ? isCreate : accountData)
+  const { data, error, updateAccount: callUpdateAccount, updateSession } = useAccount(id as string, shouldFetch, accountData)
   if (error) {
-    console.log(error)
+    console.error(error)
     return <div>Failed to load users {id}</div>
   }
-  if (!data) {
-    console.log(data)
-    return <div>Loading...</div>
-  }
 
-  const account: IAccount = {
-    ...data,
-    last_login_dt: dayjs(data?.last_login_dt, 'YYYY-MM-DD THH:mm:ss').utc().local().format('YYYY-MM-DDTHH:mm'),
-  }
+  const account: IAccount | null = data
+    ? {
+        ...data,
+        last_login_dt: dayjs(data.last_login_dt, 'YYYY-MM-DDTHH:mm:ss').utc().local().format('YYYY-MM-DDTHH:mm'),
+      }
+    : null
 
   const handleCreateSubmit = async (values: IAccount) => {
     try {
@@ -96,10 +92,8 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
       } else {
         window.alert(res)
       }
-
-      // You can navigate to another page if needed
     } catch (error) {
-      console.log(error)
+      console.error(error)
       window.alert(error)
     } finally {
       setIsLoading(false)
@@ -124,7 +118,7 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
         window.alert(res)
       }
     } catch (error) {
-      console.log(error)
+      console.error(error)
       window.alert(error)
     } finally {
       setIsLoading(false)
@@ -137,8 +131,7 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
       ...values,
       last_login_dt: dayjs(values.last_login_dt, 'YYYY-MM-DDTHH:mm').utc().local().format('YYYY-MM-DD THH:mm:ss'),
     }
-    console.log({ newValues })
-    const res = await useUpdateAccount(newValues)
+    const res = await callUpdateAccount(newValues)
     return res
   }
 
@@ -157,7 +150,7 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
             <div className="flex flex-col pb-8">
               <div className="pb-4 pt-3">
                 <div className="flex cursor-pointer flex-row gap-2 font-semibold text-accent2-500" onClick={goBack}>
-                  <Image alt="back button" src="/create-account/back.svg" width={20} height={20} />
+                  <Image alt="back" src="/create-account/back.svg" width={20} height={20} />
                   <div>{`Back`}</div>
                 </div>
               </div>
@@ -174,7 +167,6 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
               <AccountCreateCard
                 isLoading={isLoading}
                 isCreate={isCreate}
-                account={account}
                 handleSubmit={handleCreateSubmit}
                 setIsShow={setIsShow}
                 isChecked={isChecked}
@@ -186,7 +178,9 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
       ) : (
         <div className="h-full bg-cover bg-center bg-no-repeat md:px-12 ">
           <div className="flex justify-center">
-            <AccountInfoCard isLoading={isLoading} isCreate={isCreate} account={account} handleSubmit={handleUpdateSubmit} setIsShow={setIsShow} />
+            {account && (
+              <AccountInfoCard isLoading={isLoading} isCreate={isCreate} account={account} handleSubmit={handleUpdateSubmit} setIsShow={setIsShow} />
+            )}
           </div>
         </div>
       )}

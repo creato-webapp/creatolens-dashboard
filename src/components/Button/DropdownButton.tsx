@@ -1,5 +1,4 @@
 import React from 'react'
-import Spinner from '../Spinner'
 import { ButtonProps } from './interface'
 import Button from './Button'
 

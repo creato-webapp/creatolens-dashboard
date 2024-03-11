@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { User, NextAuthOptions } from 'next-auth'
+import { User } from 'next-auth'
 
 interface CombinedUser extends User {
   emailVerified: boolean
@@ -9,7 +9,6 @@ interface CombinedUser extends User {
 async function fetchWhitelist(): Promise<CombinedUser[]> {
   try {
     const response = await axios.get<CombinedUser[]>(`${process.env.LOCAL_SERVER_URL}/api/whitelist`)
-    console.log('Fetched whitelist:', response.data)
     return response.data
   } catch (error) {
     console.error('Error fetching whitelist:', error)
@@ -18,14 +17,7 @@ async function fetchWhitelist(): Promise<CombinedUser[]> {
 }
 
 export async function getRoles(userEmail: string) {
-  const fileName = 'users.json'
-  const bucket = 'firebase-creatolens-whitelist'
-  if (bucket === undefined) {
-    window.alert('CLOUD_BUCKET is undefined')
-  }
-
   const whitelist = await fetchWhitelist()
-  console.log({ whitelist })
   const userEntry = whitelist.find((entry) => entry.email === userEmail)
   return userEntry ? userEntry.role : []
 }

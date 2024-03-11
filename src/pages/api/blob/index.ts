@@ -1,76 +1,55 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import BlobInstance from '../axiosInstance/Blob'
+import { UploadImageResponse } from '@services/Object/ImageBlob'
 import axios from 'axios'
-const FormData = require('form-data')
-const fs = require('fs')
-import LabelInstance from '../axiosInstance/Labels'
 export const config = {
   api: {
-    bodyParser: {
-      sizeLimit: '8mb',
-    },
+    bodyParser: false,
   },
-  maxDuration: 10,
 }
 
-export default async function accountQueryHandler(req: NextApiRequest, res: NextApiResponse) {
-  const { body, method } = req
+export default async function CloudStorage(req: NextApiRequest, res: NextApiResponse) {
+  const { method } = req
   switch (method) {
-    case 'POST': {
+    case 'GET':
       try {
         if (!req.headers.cookie) {
           return res.status(401).json({ message: 'Unauthorized' })
         }
-        if (!req.body) {
-          return res.status(400).json({ message: 'Invalid request' })
-        }
-
-        const response = await BlobInstance.post('/cloud-vision', body, {
+        const response = await axios.get(`${process.env.IMAGE_HASHTAG_1}/model`, {
           headers: {
             Cookie: req.headers.cookie,
           },
+          params: { input: req.query.input },
+          timeout: 30000,
         })
         if (response.status !== 200) {
-          return res.status(response.status).json({ message: 'Something went wrong' })
+          return res.status(response.status).json({ message: 'Cannot Recommend the image' })
+        }
+        return res.status(200).json(response.data)
+      } catch (error) {
+        return res.status(500).json({ message: 'Something went wrong in recommendation stage', error: error })
+      }
+    case 'POST':
+      try {
+        if (!req.headers.cookie) {
+          return res.status(401).json({ message: 'Unauthorized' })
+        }
+        const response = await BlobInstance.post<UploadImageResponse>(`/cloud-vision`, req, {
+          headers: {
+            'Content-Type': req.headers['content-type'],
+          },
+        })
+        if (response.status !== 200) {
+          return res.status(response.status).json({ message: 'Cannot store the image' })
         }
         if (!response.data) {
           return res.status(400).json({ message: 'Invalid request' })
         }
-        const labels = response.data.map((e: any) => e.description)
-        const hashtagRes = await Promise.allSettled([
-          axios.get(process.env.IMAGE_HASHTAG_1 as string, {
-            params: { input: labels.join(', ') },
-          }),
-          axios.get(process.env.IMAGE_HASHTAG_2 as string, {
-            params: { input: labels.join(', ') },
-          }),
-          axios.get(process.env.IMAGE_HASHTAG_3 as string, {
-            params: { input: labels.join(', ') },
-          }),
-        ])
-          .then((results) => {
-            const data1 = results[0].status === 'fulfilled' ? results[0].value.data.data : null
-            const data2 = results[1].status === 'fulfilled' ? results[1].value.data.data : null
-            const data3 = results[2].status === 'fulfilled' ? results[2].value.data.data : null
-
-            const error = results.find((result) => result.status === 'rejected')?.status || null
-
-            return [data1, data2, data3, error]
-          })
-          .catch((error) => {
-            console.log(error)
-            return res.status(response.status).json({ labels: response.data, error: error })
-          })
-        if (hashtagRes) {
-          return res
-            .status(response.status)
-            .json({ labels: response.data, firstTwo: hashtagRes[0], middleTwo: hashtagRes[1], lastTwo: hashtagRes[2] })
-        }
-        return res.status(response.status).json({ labels: response.data, error: hashtagRes?.[3] })
+        return res.status(200).json(response.data)
       } catch (error) {
-        return res.status(400).json({ message: 'Something went wrong in labeling stage', error: error })
+        return res.status(500).json({ message: 'Something went wrong in uploading stage', error: error })
       }
-    }
     default:
       res.setHeader('Allow', ['GET', 'POST'])
       res.status(405).end(`Method ${method} Not Allowed`)

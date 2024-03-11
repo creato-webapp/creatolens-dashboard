@@ -20,7 +20,6 @@ interface TabProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const Tab: React.FC<TabProps> = ({
-  activeKey,
   centered,
   defaultActiveKey,
   items,
@@ -29,14 +28,12 @@ const Tab: React.FC<TabProps> = ({
   tabBarExtraContent,
   tabBarStyle,
   onKeyChange,
-  onEdit,
   className,
 }) => {
   const [currentActiveKey, setCurrentActiveKey] = useState<string | undefined>(defaultActiveKey)
 
   const handleChange = (event: React.MouseEvent<HTMLButtonElement>) => {
     const key = event.currentTarget.dataset.key
-    console.log(key, items)
     setCurrentActiveKey(key)
     if (onKeyChange && key) {
       onKeyChange(key)
@@ -48,13 +45,14 @@ const Tab: React.FC<TabProps> = ({
       <div className={`tabs-bar ${centered ? 'centered' : ''} -top-12 flex w-full md:absolute `} style={tabBarStyle}>
         {items.map((item) => (
           <button
+            key={item.key}
             className={`disabled:text-text-disable h-8 w-full hover:bg-accent1-300 hover:text-text-white hover:underline hover:underline-offset-2 focus:bg-accent1-500 active:bg-accent1-500 disabled:bg-disabled md:h-12 md:w-auto md:min-w-[12.5rem] ${
               currentActiveKey == item.key ? 'bg-accent1-500 text-text-white' : 'bg-bg-dark text-text-primary'
             }`}
             onClick={handleChange}
             data-key={item.key}
           >
-            <div key={item.key} className={`tab ${currentActiveKey === item.key ? 'active' : ''} ${size ?? ''} flex items-center justify-center`}>
+            <div className={`tab ${currentActiveKey === item.key ? 'active' : ''} ${size ?? ''} flex items-center justify-center`}>
               <h4>{item.title}</h4>
             </div>
           </button>

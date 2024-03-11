@@ -1,4 +1,4 @@
-import axios, { AxiosRequestConfig, AxiosError } from 'axios'
+import axios, { AxiosError } from 'axios'
 
 const AccountInstance = axios.create({
   baseURL: process.env.ACCOUNT_SERVICE + '/',
@@ -28,18 +28,18 @@ AccountInstance.interceptors.response.use(
     if (error.response) {
       switch (error.response.status) {
         case 404:
-          console.log('Not Found')
+          console.error('Not Found')
           return error.response
 
         case 400:
-          console.log('Bad Request')
+          console.error('Bad Request')
           return error.response
 
         case 401:
-          console.log('Session Timed Out')
+          console.error('Session Timed Out')
           return error.response
         default:
-          console.log(error.message)
+          console.error(error.message)
           return error.response
       }
     }

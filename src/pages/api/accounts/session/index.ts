@@ -2,8 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import AccountInstance from '../../axiosInstance/Account'
 export default async function accountQueryHandler(req: NextApiRequest, res: NextApiResponse) {
   const {
-    query: { id, username, pageNumber, pageSize, orderBy, isAsc },
-    body,
+    query: { username, pageNumber, pageSize, orderBy, isAsc },
     method,
   } = req
   switch (method) {

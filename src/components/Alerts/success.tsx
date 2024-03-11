@@ -4,7 +4,7 @@ interface AlertsProps extends HTMLAttributes<HTMLDivElement> {
   setIsShow: Function
 }
 
-const Alerts: FC<AlertsProps> = ({ isShow = true, setIsShow }) => {
+const Alerts: FC<AlertsProps> = ({ isShow = true }) => {
   const [isHide, setIsHide] = useState(false)
 
   useEffect(() => {

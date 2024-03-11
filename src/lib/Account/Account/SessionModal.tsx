@@ -1,28 +1,24 @@
 import { FC, useState, useCallback } from 'react'
-import { IAccount } from './interface'
+import { IAccount, Cookies } from './interface'
 import Modal from '@components/Modal'
 import { Button } from '@components/Button'
 import { ModalProps } from '@components/Modal'
 
 interface SessionModalProps extends ModalProps {
   isDisable: boolean
-  account: IAccount
+  account: IAccount | null
   isLoading: boolean
   isShow: boolean
   updateSession: Function
   onCancel: () => void
 }
 
-interface Cookies {
-  [key: string]: string
-}
-
-const dataItemToKeyValues = (item: Cookies[]) => {
+const dataItemToKeyValues = (item: Cookies) => {
   if (!item) return <></>
   const entries = Object.entries(item)
   const listItems = entries.map(([key, value], index) => (
-    <div>
-      <li key={index}>
+    <div key={index}>
+      <li>
         <p className="break-all">{`${key}: ${value}`}</p>
       </li>
     </div>
@@ -30,7 +26,7 @@ const dataItemToKeyValues = (item: Cookies[]) => {
   return <ul className="list-none">{listItems}</ul>
 }
 
-const SessionModal: FC<SessionModalProps> = ({ account, isLoading: loading, isDisable, isShow, updateSession, onCancel }) => {
+const SessionModal: FC<SessionModalProps> = ({ account, isShow, updateSession, onCancel }) => {
   const [isLoading, setIsLoading] = useState(false)
   const updateAccountSession = useCallback(async () => {
     try {
@@ -47,7 +43,7 @@ const SessionModal: FC<SessionModalProps> = ({ account, isLoading: loading, isDi
   return (
     <Modal isLoading={isLoading} isShow={isShow} onCancel={onCancel} title="SessionModal">
       <code className="prose-code:text-blue-600">
-        <div className="flex flex-wrap">{dataItemToKeyValues(account.session_cookies)}</div>
+        <div className="flex flex-wrap">{account && account.session_cookies && dataItemToKeyValues(account.session_cookies)}</div>
       </code>
       <div className="flex justify-start space-y-2">
         <Button.Primary

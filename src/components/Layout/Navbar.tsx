@@ -6,7 +6,8 @@ import MenuIcon from '@components/Icon/MenuIcon'
 import LogoutIcon from '@components/Icon/LogOutIcon'
 import CrossIcon from '@components/Icon/CrossIcon'
 import LoginIcon from '@components/Icon/LoginIcon'
-import { useSession, signIn, signOut } from 'next-auth/react'
+import { useSession } from 'next-auth/react'
+import Link from 'next/link'
 interface Page {
   name: string
   path: string
@@ -45,10 +46,11 @@ const NavBar: React.FC<NavBarProps> = ({ logo, pages, isLoggedIn, onLogin, onLog
           </div>
         )}
       </div>
-
-      <a href="/" className="mx-8 my-auto shrink-0 md:mx-16">
-        <img src={logo} alt="Logo" className="h-12 md:h-16" />
-      </a>
+      <Link href="/">
+        <a className="mx-8 my-auto shrink-0 md:mx-16">
+          <img src={logo} alt="Logo" className="h-12 md:h-16" />
+        </a>
+      </Link>
       <div className="hidden space-x-10 justify-self-center md:flex md:min-h-[4rem] md:items-center">
         {pages.map((page, index) => (
           <div key={`${page.name}-${index}`} className={`flex h-full flex-col items-center justify-center`}>

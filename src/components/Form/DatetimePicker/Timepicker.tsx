@@ -1,10 +1,11 @@
 import type { FC } from 'react'
-import { TimePickerProps } from './interface'
+import { TimePickerProps } from '../interface'
+import BaseInput from '../BaseInput'
 
 const TimePicker: FC<TimePickerProps> = (props: TimePickerProps) => {
   return (
     <div className="mb-4 flex items-center">
-      <input
+      <BaseInput
         id={props.id}
         name={props.id}
         type="time"

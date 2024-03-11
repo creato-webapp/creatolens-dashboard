@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useCallback } from 'react'
 import Card from '@components/Card'
 import { Table } from '@components/Table'
 import { Button } from '@components/Button'
@@ -8,30 +8,34 @@ import Link from 'next/link'
 import { getSession } from 'next-auth/react'
 import Pagination from '@components/Pagination'
 import { useGetAccountsPagination } from 'src/hooks/useAccount'
-import { GetAccountsPagination, PaginationMetadata } from '@services/Account/Account'
+import { GetAccountsPagination } from '@services/Account/Account'
 import Image from 'next/image'
 import Badges, { Status } from '@components/Badges'
 import Hero from '@components/Hero'
 import { PlusIcon } from '@heroicons/react/24/solid'
 import Dropdown from '@components/Form/Dropdown'
 import EditIcon from '@components/Icon/EditIcon'
-import { useInView } from 'react-intersection-observer'
+import { Timestamp } from 'firebase/firestore'
+import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
+import { PaginationMetadata } from '@services/Account/AccountInterface'
 
 const dayjs = require('dayjs')
 const utc = require('dayjs/plugin/utc')
 dayjs.extend(utc)
 
-type Props = {
-  paginationData: PaginationMetadata
+export type PaginationMetaProps = {
+  paginationData: PaginationMetadata<IAccount>
 }
 
-//TODO getServerSideProps: GetServerSideProps; cannot set GetServerSideProps type.
-export const getServerSideProps = async (context: any) => {
+export const getServerSideProps: GetServerSideProps = async (
+  context: GetServerSidePropsContext
+): Promise<GetServerSidePropsResult<{ paginationData: PaginationMetadata<IAccount[]> }>> => {
   const session = await getSession(context)
   if (!session) {
     return {
       redirect: {
         destination: '/auth/login',
+        permanent: false,
       },
     }
   }
@@ -49,8 +53,7 @@ export const getServerSideProps = async (context: any) => {
   })
   // Pass data to the page via props
   const accountData: IAccount[] = response ? response?.data : []
-  console.log(response)
-  const paginationData: PaginationMetadata = {
+  const paginationData: PaginationMetadata<IAccount[]> = {
     data: accountData,
     has_next: response ? response.has_next : false,
     has_prev: response ? response.has_prev : false,
@@ -61,7 +64,7 @@ export const getServerSideProps = async (context: any) => {
   return { props: { paginationData } }
 }
 
-const AccountsPage = ({ paginationData }: Props) => {
+const AccountsPage = () => {
   const [pageParams, setPageParams] = useState({
     pageNumber: 1,
     pageSize: 10,
@@ -70,54 +73,7 @@ const AccountsPage = ({ paginationData }: Props) => {
   })
   const [createDateOrder, setCreateDateOrder] = useState<string | number>('desc')
   // const [fetching, setFetching] = useState(false)
-  const { accounts: responseData, error, mutate } = useGetAccountsPagination(pageParams, true, paginationData)
-  // const [accountData, setAccountData] = useState<
-  //   {
-  //     page: number
-  //     data: IAccount[]
-  //   }[]
-  // >([{ page: 1, data: responseData?.data || [] }])
-
-  // const { ref, inView, entry } = useInView({
-  //   /* Optional options */
-  //   threshold: 0,
-  // })
-
-  // useEffect(() => {
-  //   const totalItems = accountData.reduce((acc, cur) => {
-  //     return acc + cur.data.length
-  //   }, 0)
-  //   if (responseData?.total_items === totalItems) {
-  //     return
-  //   }
-  //   if (!inView) return
-  //   setFetching(true)
-  //   setPageParams((prevParams) => ({
-  //     ...prevParams,
-  //     pageNumber: prevParams.pageNumber + 1,
-  //   }))
-  // }, [inView])
-
-  // useEffect(() => {
-  //   // check responseDeffectata page number and update accountData
-  //   if (responseData) {
-  //     console.log('responseData is not null', responseData)
-  //     const page = responseData.page
-  //     const index = accountData.findIndex((e) => e.page === page)
-  //     if (index === -1) {
-  //       setAccountData((prevData) => [...prevData, { page: responseData.page, data: responseData.data }])
-  //     } else {
-  //       if (responseData.page === 1) {
-  //         setAccountData([{ page: responseData.page, data: responseData.data }])
-  //         return
-  //       }
-  //       const temp = [...accountData]
-  //       temp[index].data = responseData.data
-  //       setAccountData(temp)
-  //     }
-  //   }
-  //   setFetching(false)
-  // }, [responseData])
+  const { accounts: responseData, error } = useGetAccountsPagination(pageParams, true)
 
   const accounts: IAccount[] = responseData?.data || []
   const isLoading = !responseData && !error
@@ -136,7 +92,7 @@ const AccountsPage = ({ paginationData }: Props) => {
 
   const updateSorting = useCallback(
     (orderBy: string, isAsc: boolean): React.MouseEventHandler<HTMLDivElement> =>
-      (e) => {
+      () => {
         setPageParams((prevParams) => ({
           ...prevParams,
           orderBy: orderBy,
@@ -147,12 +103,9 @@ const AccountsPage = ({ paginationData }: Props) => {
   )
 
   if (error) {
-    console.log(responseData)
-    console.log(error)
     return <div>Failed to load users</div>
   }
   if (!responseData) {
-    console.log(responseData)
     return <div>Loading...</div>
   }
 
@@ -172,7 +125,7 @@ const AccountsPage = ({ paginationData }: Props) => {
     {
       title: 'Profile',
       dataIndex: 'id',
-      render: (e: any) => (
+      render: (e: string) => (
         <Link href="/accounts/[id]" as={`/accounts/${e}`} legacyBehavior>
           <div className="flex w-full flex-row items-center justify-center gap-2 cursor-pointer">
             <EditIcon size={16} className="fill-accent2-500" />
@@ -182,10 +135,10 @@ const AccountsPage = ({ paginationData }: Props) => {
       ),
     },
     {
-      headerIcon: <Image alt="instagram logo" src="/account/InstagramLogo.svg" className="w-full" width={24} height={24}></Image>,
+      headerIcon: <Image alt="instagram" src="/account/InstagramLogo.svg" className="w-full" width={24} height={24}></Image>,
       title: 'Username',
       dataIndex: 'username',
-      render: (e: any) => {
+      render: (e: string) => {
         return <div className="flex items-center text-accent1-600">{e}</div>
       },
     },
@@ -193,7 +146,7 @@ const AccountsPage = ({ paginationData }: Props) => {
       title: 'Created On',
       dataIndex: 'created_at',
       sortAvailable: true,
-      render: (e: any) => {
+      render: (e: Timestamp) => {
         const date = dayjs(e, 'YYYY-MM-DD THH:mm:ss')
         return date.local().format('DD MMM YYYY')
       },
@@ -201,7 +154,7 @@ const AccountsPage = ({ paginationData }: Props) => {
     {
       title: 'Created Time',
       dataIndex: 'created_at',
-      render: (e: any) => {
+      render: (e: Timestamp) => {
         const date = dayjs(e, 'THH:mm:ss')
         return date.local().format('hh:mm:ss')
       },
@@ -238,21 +191,21 @@ const AccountsPage = ({ paginationData }: Props) => {
     {
       title: 'Is Occupied',
       dataIndex: 'is_occupied',
-      render: (e: any) => {
+      render: (e: boolean) => {
         return IconRender(e)
       },
     },
     {
       title: 'Is Enabled',
       dataIndex: 'enabled',
-      render: (e: any) => {
+      render: (e: boolean) => {
         return IconRender(e)
       },
     },
     {
       title: 'Is Auth',
       dataIndex: 'is_authenticated',
-      render: (e: any) => {
+      render: (e: boolean) => {
         return IconRender(e)
       },
     },
@@ -292,7 +245,7 @@ const AccountsPage = ({ paginationData }: Props) => {
             />
             <Table.Body className="text-sm font-normal leading-5 text-black">
               {accounts?.map((e, index) => (
-                <Table.Row columns={columns} className="text-sm" rowData={e} rowKey={index} />
+                <Table.Row key={`accounts-table-${index}`} columns={columns} className="text-sm" rowData={e} rowKey={index} />
               ))}
             </Table.Body>
           </Table.Layout>
@@ -322,28 +275,11 @@ const AccountsPage = ({ paginationData }: Props) => {
           </div>
         </div>
 
-        {/* <div className="flex flex-col gap-12 md:hidden">
-          {accountData?.map((e, index) => (
-            <div key={`account_page_${index}`} className="flex flex-col items-center gap-4">
-              <h3>Page: {e.page}</h3>
-              <div className="flex w-full flex-col gap-16 bg-none">
-                {e.data.map((account, index) => (
-                  <ResponsiveAccountCard columns={columns} rowData={account} key={`account_data_${index}`} />
-                ))}
-              </div>
-            </div>
-          ))}
-        </div> */}
-
         <div className="flex w-full flex-col justify-center gap-16 bg-none md:hidden">
           {accounts?.map((e, index) => (
             <ResponsiveAccountCard columns={columns} rowData={e} key={`account_data_${index}`} />
           ))}
         </div>
-        {/* <div ref={ref} className="flex justify-center md:hidden">
-          {fetching && <div>Loading...</div>}
-        </div>
-        {endOfPage ? <div className="flex items-center justify-center md:hidden">End of page</div> : null} */}
         <Pagination
           isLoading={isLoading}
           page={responseData.page}

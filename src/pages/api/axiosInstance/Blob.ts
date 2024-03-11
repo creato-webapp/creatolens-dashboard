@@ -1,10 +1,10 @@
-import axios, { AxiosRequestConfig, AxiosError } from 'axios'
+import axios, { AxiosError } from 'axios'
 
 const BlobInstance = axios.create({
   baseURL: process.env.MEDIA_SERVICE,
   withCredentials: true,
   headers: { 'Content-Type': 'application/json' },
-  timeout: 10000,
+  timeout: 30000,
   maxBodyLength: 8 * 1024 * 1024,
   maxContentLength: 8 * 1024 * 1024,
 })
@@ -23,25 +23,24 @@ BlobInstance.interceptors.request.use(
 BlobInstance.interceptors.response.use(
   function (response) {
     // Do something with response data
-    response.data = response.data.data
     return response
   },
   function (error: AxiosError) {
     if (error.response) {
       switch (error.response.status) {
         case 404:
-          console.log('Not Found')
+          console.error('Not Found')
           return error.response
 
         case 400:
-          console.log('Bad Request')
+          console.error('Bad Request')
           return error.response
 
         case 401:
-          console.log('Session Timed Out')
+          console.error('Session Timed Out')
           return error.response
         default:
-          console.log(error.message)
+          console.error(error.message)
           return error.response
       }
     }

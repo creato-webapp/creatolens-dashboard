@@ -1,6 +1,4 @@
-export interface rowData {
-  [key: string]: any
-}
+import React from 'react'
 
 export interface Column {
   title: string

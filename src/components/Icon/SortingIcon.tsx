@@ -7,7 +7,7 @@ interface SortingIconProps {
   fillColor?: string
 }
 
-const SortingIcon: React.FC<SortingIconProps> = ({ size = 12, color, className, fillColor }) => (
+const SortingIcon: React.FC<SortingIconProps> = ({ color, className, fillColor }) => (
   <svg width="12" height="8" viewBox="0 0 12 8" fill={fillColor} xmlns="http://www.w3.org/2000/svg" className={className}>
     <path
       id="Vector"

@@ -8,26 +8,30 @@ import { getSession } from 'next-auth/react'
 import Tag from '@components/Tag'
 import Avatar from '@components/Avatar'
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/solid'
-import StatusTag from '@lib/StatusTag'
+import StatusTag, { Status } from '@lib/StatusTag'
 import Pagination from '@components/Pagination'
 import { useGetRetryAccountsPagination } from 'src/hooks/useRetryAccount'
-import { GetRetryAccountsPagination, PaginationMetadata } from '@services/Account/RetryAccount'
+import { GetRetryAccountsPagination } from '@services/Account/RetryAccount'
+import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
+import { PaginationMetadata } from '@services/Account/AccountInterface'
 
 const dayjs = require('dayjs')
 const utc = require('dayjs/plugin/utc')
 dayjs.extend(utc)
 
 type Props = {
-  paginationData: PaginationMetadata
+  paginationData: PaginationMetadata<IRetryAccount[]>
 }
 
-//TODO getServerSideProps: GetServerSideProps; cannot set GetServerSideProps type.
-export const getServerSideProps = async (context: any) => {
+export const getServerSideProps: GetServerSideProps = async (
+  context: GetServerSidePropsContext
+): Promise<GetServerSidePropsResult<{ paginationData?: PaginationMetadata<IRetryAccount[]> }>> => {
   const session = await getSession(context)
   if (!session) {
     return {
       redirect: {
         destination: '/auth/login',
+        permanent: false,
       },
     }
   }
@@ -40,7 +44,7 @@ export const getServerSideProps = async (context: any) => {
   const response = await GetRetryAccountsPagination(paginationProps)
   const accountData: IRetryAccount[] = response ? response.data : []
 
-  const paginationData: PaginationMetadata = {
+  const paginationData: PaginationMetadata<IRetryAccount[]> = {
     data: accountData,
     has_next: response ? response.has_next : false,
     has_prev: response ? response.has_prev : false,
@@ -76,12 +80,11 @@ const RetryAccountsPage = ({ paginationData }: Props) => {
   }, [pageParams])
 
   if (error) {
-    console.log(responseData)
-    console.log(error)
+    console.error(responseData)
+    console.error(error)
     return <div>Failed to load users</div>
   }
   if (!responseData) {
-    console.log(responseData)
     return <div>Loading...</div>
   }
 
@@ -89,7 +92,7 @@ const RetryAccountsPage = ({ paginationData }: Props) => {
     {
       title: 'Wait Until(HK Time)',
       dataIndex: 'wait_until',
-      render: (e: any) => {
+      render: (e: string) => {
         const date = dayjs(e, 'YYYY-MM-DD THH:mm:ss')
         return dayjs.utc(date).local().format('YYYY-MM-DD HH:mm:ss')
       },
@@ -99,7 +102,7 @@ const RetryAccountsPage = ({ paginationData }: Props) => {
     {
       title: 'Username',
       dataIndex: 'username',
-      render: (e: any) => {
+      render: (e: string) => {
         return (
           <Tag
             label={
@@ -116,28 +119,28 @@ const RetryAccountsPage = ({ paginationData }: Props) => {
     {
       title: 'Status',
       dataIndex: 'status',
-      render: (e: any) => {
+      render: (e: Status) => {
         return <StatusTag status={e} />
       },
     },
     {
       title: 'Is Occupied',
       dataIndex: 'is_occupied',
-      render: (e: any) => {
+      render: (e: boolean) => {
         return e ? <CheckCircleIcon className="h-6 w-6 text-successful-600" /> : <XCircleIcon className="h-6 w-6 text-error-500" />
       },
     },
     {
       title: 'Is Enabled',
       dataIndex: 'enabled',
-      render: (e: any) => {
+      render: (e: boolean) => {
         return e ? <CheckCircleIcon className="h-6 w-6 text-successful-600" /> : <XCircleIcon className="h-6 w-6 text-error-500" />
       },
     },
     {
       title: 'Is Auth',
       dataIndex: 'is_authenticated',
-      render: (e: any) => {
+      render: (e: boolean) => {
         return e ? <CheckCircleIcon className="h-6 w-6 text-successful-600" /> : <XCircleIcon className="h-6 w-6 text-error-500" />
       },
     },
@@ -145,11 +148,9 @@ const RetryAccountsPage = ({ paginationData }: Props) => {
     {
       title: 'Account Info',
       dataIndex: 'id',
-      render: (e: any) => (
+      render: (e: string) => (
         <Link href="/accounts/retry/[id]" as={`/accounts/retry/${e}`} legacyBehavior>
-          <Button.Text loading={false} onClick={() => console.log(e)}>
-            Edit
-          </Button.Text>
+          <Button.Text loading={false}>Edit</Button.Text>
         </Link>
       ),
     },
@@ -189,11 +190,10 @@ const RetryAccountsPage = ({ paginationData }: Props) => {
       <div className="hidden  md:flex">
         <Table.Layout>
           <Table.Header columns={columns} />
-
           <Table.Body>
-            {accounts?.map((e, index) => (
-              <Table.Row columns={columns} rowData={e} rowKey={index} />
-            ))}
+            {accounts?.map((e, index) => {
+              return <Table.Row key={`retry-account-table-${index}`} columns={columns} rowData={e} rowKey={index} />
+            })}
           </Table.Body>
         </Table.Layout>
       </div>

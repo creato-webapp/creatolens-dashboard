@@ -3,31 +3,32 @@ import Card from '@components/Card'
 import { Table } from '@components/Table'
 import { Button } from '@components/Button'
 import { IBlockedAccount } from '@lib/Account/Account/interface'
-import { ResponsiveAccountCard } from '@lib/Account/ResponsiveAccountCard'
 import Link from 'next/link'
 import { getSession } from 'next-auth/react'
 import Tag from '@components/Tag'
 import Avatar from '@components/Avatar'
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/solid'
-import StatusTag from '@lib/StatusTag'
+import StatusTag, { Status } from '@lib/StatusTag'
 import Pagination from '@components/Pagination'
 import { useGetBlockAccountsPagination } from 'src/hooks/useBlockedAccount'
-import { GetBlockedAccountsPagination, PaginationParams, PaginationMetadata } from '@services/Account/BlockAccount'
+import { GetBlockedAccountsPagination } from '@services/Account/BlockAccount'
+import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
+import { PaginationMetadata } from '@services/Account/AccountInterface'
+
 const dayjs = require('dayjs')
 const utc = require('dayjs/plugin/utc')
 dayjs.extend(utc)
 
 type Props = {
-  paginationData: PaginationMetadata
+  paginationData: PaginationMetadata<IBlockedAccount[]>
 }
-
-//TODO getServerSideProps: GetServerSideProps; cannot set GetServerSideProps type.
-export const getServerSideProps = async (context: any) => {
+export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext): Promise<GetServerSidePropsResult<{}>> => {
   const session = await getSession(context)
   if (!session) {
     return {
       redirect: {
         destination: '/auth/login',
+        permanent: false,
       },
     }
   }
@@ -40,7 +41,7 @@ export const getServerSideProps = async (context: any) => {
   const response = await GetBlockedAccountsPagination(paginationProps)
   const accountData: IBlockedAccount[] = response ? response.data : []
 
-  const paginationData: PaginationMetadata = {
+  const paginationData: PaginationMetadata<IBlockedAccount[]> = {
     data: accountData,
     has_next: response ? response.has_next : false,
     has_prev: response ? response.has_prev : false,
@@ -75,12 +76,12 @@ const BlockedAccountsPage = ({ paginationData }: Props) => {
   }, [pageParams])
 
   if (error) {
-    console.log(responseData)
-    console.log(error)
+    console.error(responseData)
+    console.error(error)
     return <div>Failed to load users</div>
   }
   if (!responseData) {
-    console.log(responseData)
+    console.error(responseData)
     return <div>Loading...</div>
   }
 
@@ -88,7 +89,7 @@ const BlockedAccountsPage = ({ paginationData }: Props) => {
     {
       title: 'Blocked At(HK Time)',
       dataIndex: 'blocked_at',
-      render: (e: any) => {
+      render: (e: string) => {
         const date = dayjs(e, 'YYYY-MM-DD THH:mm:ss')
         return dayjs.utc(date).local().format('YYYY-MM-DD HH:mm:ss')
       },
@@ -98,7 +99,7 @@ const BlockedAccountsPage = ({ paginationData }: Props) => {
     {
       title: 'Username',
       dataIndex: 'username',
-      render: (e: any) => {
+      render: (e: string) => {
         return (
           <Tag
             label={
@@ -115,28 +116,28 @@ const BlockedAccountsPage = ({ paginationData }: Props) => {
     {
       title: 'Status',
       dataIndex: 'status',
-      render: (e: any) => {
+      render: (e: Status) => {
         return <StatusTag status={e} />
       },
     },
     {
       title: 'Is Occupied',
       dataIndex: 'is_occupied',
-      render: (e: any) => {
+      render: (e: boolean) => {
         return e ? <CheckCircleIcon className="h-6 w-6 text-successful-600" /> : <XCircleIcon className="h-6 w-6 text-error-500" />
       },
     },
     {
       title: 'Is Enabled',
       dataIndex: 'enabled',
-      render: (e: any) => {
+      render: (e: boolean) => {
         return e ? <CheckCircleIcon className="h-6 w-6 text-successful-600" /> : <XCircleIcon className="h-6 w-6 text-error-500" />
       },
     },
     {
       title: 'Is Auth',
       dataIndex: 'is_authenticated',
-      render: (e: any) => {
+      render: (e: boolean) => {
         return e ? <CheckCircleIcon className="h-6 w-6 text-successful-600" /> : <XCircleIcon className="h-6 w-6 text-error-500" />
       },
     },
@@ -144,11 +145,9 @@ const BlockedAccountsPage = ({ paginationData }: Props) => {
     {
       title: 'Account Info',
       dataIndex: 'id',
-      render: (e: any) => (
+      render: (e: string) => (
         <Link href="/accounts/blocked/[id]" as={`/accounts/blocked/${e}`} legacyBehavior>
-          <Button.Text loading={false} onClick={() => console.log(e)}>
-            Edit
-          </Button.Text>
+          <Button.Text loading={false}>Edit</Button.Text>
         </Link>
       ),
     },
@@ -189,7 +188,7 @@ const BlockedAccountsPage = ({ paginationData }: Props) => {
 
           <Table.Body>
             {accounts?.map((e, index) => (
-              <Table.Row columns={columns} rowData={e} rowKey={index} />
+              <Table.Row key={`accounts-row-${index}`} columns={columns} rowData={e} rowKey={index} />
             ))}
           </Table.Body>
         </Table.Layout>

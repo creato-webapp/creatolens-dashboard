@@ -6,22 +6,22 @@ import { getSession } from 'next-auth/react'
 import Link from 'next/link'
 import { Form } from '@components/Form'
 import { useAccountErrorPagination } from 'src/hooks/useAccountErrors'
-import { GetErrorPagination, PaginationParams, PaginationMetadata } from '@services/Account/AccountErros'
+import { GetErrorPagination } from '@services/Account/AccountErros'
 import Pagination from '@components/Pagination'
-type Props = {
-  paginationData: PaginationMetadata
-}
+import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
+import { PaginationMetadata, PaginationParams } from '@services/Account/AccountInterface'
 
 const dayjs = require('dayjs')
 const utc = require('dayjs/plugin/utc')
 dayjs.extend(utc)
 
-export const getServerSideProps = async (context: any) => {
+export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext): Promise<GetServerSidePropsResult<{}>> => {
   const session = await getSession(context)
   if (!session) {
     return {
       redirect: {
         destination: '/auth/login',
+        permanent: false,
       },
     }
   }
@@ -36,9 +36,9 @@ export const getServerSideProps = async (context: any) => {
 
   const response = await GetErrorPagination(paginationProps)
 
-  const accountData: IAccountError[] = response ? response.data : []
+  const accountData = response.data ?? []
 
-  const paginationData: PaginationMetadata = {
+  const paginationData: PaginationMetadata<IAccountError[]> = {
     data: accountData,
     has_next: response ? response.has_next : false,
     has_prev: response ? response.has_prev : false,
@@ -49,7 +49,7 @@ export const getServerSideProps = async (context: any) => {
   return { props: { paginationData } }
 }
 
-const AccountsErrorPage = ({ paginationData }: Props) => {
+const AccountsErrorPage = (paginationData: PaginationMetadata<IAccountError[]>) => {
   const [pageParams, setPageParams] = useState<PaginationParams>({
     username: null,
     pageNumber: 1,
@@ -80,13 +80,14 @@ const AccountsErrorPage = ({ paginationData }: Props) => {
 
   const { errors: responseData, isLoading, error } = useAccountErrorPagination(pageParams, true, paginationData)
   const accountError: IAccountError[] = responseData?.data ? responseData.data : []
+
   if (error) {
-    console.log(responseData)
-    console.log(error)
+    console.error(responseData)
+    console.error(error)
     return <div>Failed to load account error data</div>
   }
   if (!responseData) {
-    console.log(responseData)
+    console.error(responseData)
     return <div>Loading...</div>
   }
 
@@ -119,7 +120,7 @@ const AccountsErrorPage = ({ paginationData }: Props) => {
     {
       title: 'occurred_at(HK Time)',
       dataIndex: 'occurred_at',
-      render: (e: any) => {
+      render: (e: string) => {
         const date = dayjs(e, 'YYYY-MM-DD THH:mm:ss')
         return dayjs.utc(date).local().format('YYYY-MM-DD HH:mm:ss')
       },
@@ -140,7 +141,7 @@ const AccountsErrorPage = ({ paginationData }: Props) => {
           <Table.Header columns={columns} />
           <Table.Body>
             {accountError.map((e, index) => (
-              <Table.Row columns={columns} rowData={e} rowKey={index} />
+              <Table.Row key={`account-error-${index}`} columns={columns} rowData={e} rowKey={index} />
             ))}
           </Table.Body>
         </Table.Layout>

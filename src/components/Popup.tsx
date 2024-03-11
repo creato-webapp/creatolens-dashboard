@@ -1,7 +1,6 @@
 import React, { useRef, useEffect, useState } from 'react'
 import { Button } from './Button'
 import CrossIcon from './Icon/CrossIcon'
-import { Title } from './Typography'
 
 interface PopupProps extends React.HTMLProps<HTMLDivElement> {
   defaultShow?: boolean
@@ -24,7 +23,6 @@ const Popup: React.FC<PopupProps> = ({
   withCloseButton = true,
   withCancelButton = true,
   footer,
-  onConfirm,
   onClose,
 }) => {
   const popupRef = useRef<HTMLDivElement>(null)
@@ -42,13 +40,6 @@ const Popup: React.FC<PopupProps> = ({
     }
   }
 
-  const handleConfirm = (event: MouseEvent) => {
-    if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
-      setIsShow(false)
-      onConfirm && onConfirm()
-    }
-  }
-
   useEffect(() => {
     // Add when the component is mounted
     if (isDisabledScroll && isShow) {
@@ -56,12 +47,11 @@ const Popup: React.FC<PopupProps> = ({
     }
 
     document.addEventListener('mousedown', handleClickOutside)
-    // Return function to be called when unmounted
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
       document.body.style.overflow = 'auto'
     }
-  }, [isShow, isDisabledScroll])
+  }, [isShow, isDisabledScroll, handleClickOutside])
 
   useEffect(() => {
     setIsShow(defaultShow)
@@ -70,7 +60,7 @@ const Popup: React.FC<PopupProps> = ({
   return isShow ? (
     <div className="fixed inset-0 h-full w-full overflow-y-auto bg-gray-600 bg-opacity-50">
       <div
-        className="absolute top-1/2 left-1/2 mx-auto w-96 -translate-x-1/2 -translate-y-1/2 transform rounded-md border bg-white p-5 shadow-lg"
+        className="absolute left-1/2 top-1/2 mx-auto w-96 -translate-x-1/2 -translate-y-1/2 transform rounded-md border bg-white p-5 shadow-lg"
         ref={popupRef}
       >
         <div className="flex flex-col justify-center space-y-3  ">
