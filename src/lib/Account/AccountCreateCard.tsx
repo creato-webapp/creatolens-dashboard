@@ -52,7 +52,6 @@ const AccountCreateCard: React.FC<AccountCreateCardProps> = ({ isLoading, isCrea
       placeholder: 'Enter password',
     },
     {
-      label: 'custom',
       type: 'CustomItem',
       name: 'custom',
       id: 'custom',
@@ -64,7 +63,6 @@ const AccountCreateCard: React.FC<AccountCreateCardProps> = ({ isLoading, isCrea
       ),
     },
     {
-      label: 'custom',
       type: 'CustomItem',
       name: 'custom',
       id: 'custom',

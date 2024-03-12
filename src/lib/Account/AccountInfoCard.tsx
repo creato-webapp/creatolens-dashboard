@@ -70,7 +70,6 @@ const AccountInfoCard: React.FC<AccountInfoCardProps> = ({ isLoading, account, h
   ]
   const fields: IField[] = [
     {
-      label: 'custom',
       type: 'CustomItem',
       name: 'custom',
       id: 'custom',

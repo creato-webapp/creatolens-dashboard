@@ -9,7 +9,7 @@ dayjs.extend(utc)
 
 export type FormField = {
   type: InputType
-  label: string
+  label?: string
   name: string
   placeholder?: string
   options?: Array<{ label: string; value: string }>

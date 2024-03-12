@@ -5,7 +5,7 @@ export type InputType = 'text' | 'date' | 'time' | 'datetime-local' | 'checkbox'
 
 export interface IField extends React.InputHTMLAttributes<HTMLInputElement> {
   type: InputType
-  label: string
+  label?: string
   name: string
   id: string
   required?: boolean
