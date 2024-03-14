@@ -46,12 +46,13 @@ const RecommendationPage = () => {
     setInputString(e.target.value)
   }
 
+  const { data, error, mutate: mutateHashet, isValidating } = useGetHashtag(stringToSubmit, stringToSubmit ? true : false)
+
   const onSubmit = useCallback(async () => {
     setStringToSubmit(inputString)
     await mutateHashet()
-  }, [inputString])
+  }, [inputString, mutateHashet])
 
-  const { data, error, mutate: mutateHashet, isValidating } = useGetHashtag(stringToSubmit, stringToSubmit ? true : false)
   if (error) {
     console.error(data)
     console.error(error)

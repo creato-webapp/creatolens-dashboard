@@ -169,7 +169,7 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
                 isCreate={isCreate}
                 handleSubmit={handleCreateSubmit}
                 setIsShow={setIsShow}
-                isChecked={isChecked}
+                isValidate={isChecked}
                 handleChange={handleChange}
               />
             </div>

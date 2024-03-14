@@ -1,3 +1,5 @@
+import { CountryEnum } from 'src/enums/CountryCodeEnums'
+
 export interface Cookies {
   [key: string]: string
 }
@@ -11,6 +13,7 @@ export interface IAccount {
   enabled: boolean
   is_authenticated: boolean
   is_occupied: boolean
+  location: CountryEnum
   last_login_dt: string
   login_attempt_count: number
   login_count: number

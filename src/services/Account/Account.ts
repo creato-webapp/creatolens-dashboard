@@ -2,6 +2,7 @@
 import { AxiosRequestConfig } from 'axios'
 import { Fetcher } from '../fetcher'
 import { IAccount } from '@lib/Account/Account'
+import { CountryEnum } from '../../enums/CountryCodeEnums'
 import { PaginationParams, PaginationMetadata } from './AccountInterface'
 interface Cookies {
   [key: string]: string
@@ -15,6 +16,7 @@ type PartialAccount = Partial<{
   is_authenticated: boolean
   is_occupied: boolean
   last_login_dt: string
+  location?: CountryEnum
   login_attempt_count: number
   login_count: number
   post_scrapped_count: number

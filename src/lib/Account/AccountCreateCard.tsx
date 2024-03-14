@@ -11,11 +11,11 @@ interface AccountCreateCardProps {
   account?: IAccount
   handleSubmit: (values: IAccount) => void
   setIsShow: (show: boolean) => void
-  isChecked: boolean
+  isValidate: boolean
   handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 
-const AccountCreateCard: React.FC<AccountCreateCardProps> = ({ isLoading, isCreate, handleSubmit, isChecked, handleChange }) => {
+const AccountCreateCard: React.FC<AccountCreateCardProps> = ({ isLoading, isCreate, handleSubmit, isValidate, handleChange }) => {
   const onSubmit = async (values: IAccount) => {
     let valid = true
     const newErrors = { username: '', pwd: '' }
@@ -93,7 +93,7 @@ const AccountCreateCard: React.FC<AccountCreateCardProps> = ({ isLoading, isCrea
         onSubmit={onSubmit}
         loading={isLoading}
         fields={fields}
-        allowSubmit={!isChecked}
+        allowSubmit={isValidate}
         formStyles=""
         formInnerStyles="py-px px-0"
         buttonStyles="w-full"
