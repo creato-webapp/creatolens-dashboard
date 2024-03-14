@@ -5,6 +5,7 @@ const Checkbox: FC<CheckBoxProps> = (props: CheckBoxProps) => {
   const { className, ...res } = props
   const [checked, setChecked] = useState(props.checked)
   const onChangeCheckbox: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    props.onChange && props.onChange(e)
     setChecked(e.target.checked)
   }
   return (

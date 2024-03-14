@@ -107,7 +107,7 @@ const DynamicForm = <T,>(props: FormLayoutProps<T>) => {
               sizes={buttonSizes}
               styleClassName={buttonStyles}
               className="md:w-full"
-              disabled={allowSubmit}
+              disabled={!allowSubmit}
               type="submit"
               loading={loading}
             >
