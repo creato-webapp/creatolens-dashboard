@@ -90,11 +90,10 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
         window.alert(`Account ${res.username} created successfully`)
         router.push(`/accounts`)
       } else {
-        window.alert(res)
+        window.alert(JSON.stringify(res))
       }
     } catch (error) {
       console.error(error)
-      window.alert(error)
     } finally {
       setIsLoading(false)
     }
