@@ -53,15 +53,15 @@ export async function encode(token: JWTPayload, secret: string): Promise<string>
     .setJti('test')
     .encrypt(encryptionSecret)
 }
-
 Cypress.Commands.add('login', (userObj: JWTPayload) => {
   // Generate and set a valid cookie from the fixture that next-auth can decrypt
   cy.wrap(null)
     .then(() => {
       return encode(userObj, Cypress.env('NEXTAUTH_JWT_SECRET'))
     })
-    .then((encryptedToken) => {
-      cy.setCookie('next-auth.session-token', encryptedToken)
-      cy.setCookie('idToken', '12')
-    })
+    .then((encryptedToken) => cy.setCookie('next-auth.session-token', encryptedToken))
+})
+
+Cypress.Commands.add('logout', () => {
+  cy.clearCookie('next-auth.session-token')
 })

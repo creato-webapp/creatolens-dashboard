@@ -1,15 +1,7 @@
 describe('Create Instagram Page', () => {
   it('should display create instagram page', () => {
-    const user = {
-      name: 'Morty Smith',
-      email: 'test@picklerick.com',
-      image: '/path/to/butterbot.jpg',
-      birthdate: '12/02/13',
-      role: ['player'],
-      accountId: '1234',
-    }
+    cy.login({ fixture: 'session.json' })
 
-    cy.login(user)
     cy.visit('/accounts/create-account')
 
     cy.get('h1').contains('CREATE NEW ACCOUNT')
@@ -29,7 +21,7 @@ describe('Create Instagram Page', () => {
     cy.get('input[type="password"]').should('have.value', '')
     cy.get('input[name="acknowledge"]').should('not.be.checked')
 
-    const username = 'test_username'
+    const username = 'test_username1'
     const password = 'test_password'
     cy.get('input[name="username"]').type(username).should('have.value', username)
     cy.get('input[type="password"]').type(password).should('have.value', password)
