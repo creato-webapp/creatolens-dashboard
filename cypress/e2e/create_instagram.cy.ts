@@ -1,7 +1,10 @@
 describe('Create Instagram Page', () => {
-  it('should display create instagram page', () => {
+  beforeEach(() => {
+    cy.visit('/')
+    cy.logout()
     cy.login({ fixture: 'session.json' })
-
+  })
+  it('should display create instagram page', () => {
     cy.visit('/accounts/create-account')
 
     cy.get('h1').contains('CREATE NEW ACCOUNT')

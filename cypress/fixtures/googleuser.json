@@ -1,0 +1,6 @@
+{
+  "name": "Morty Smith",
+  "email": "test@picklerick.com",
+  "image": "/path/to/butterbot.jpg",
+  "birthdate": "12/02/13"
+}
