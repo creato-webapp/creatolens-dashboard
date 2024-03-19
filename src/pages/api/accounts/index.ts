@@ -59,49 +59,52 @@ export default async function accountQueryHandler(req: NextApiRequest, res: Next
     body,
     method,
   } = req
+  if (req.headers.cookie === undefined) {
+    return res.status(401).json({ message: 'Unauthorized' })
+  }
+
+  const cookieHeader = {
+    headers: {
+      Cookie: req.headers.cookie,
+    },
+  }
+
+  const GEO_CODER_API = process.env.GEO_CODER_API
   switch (method) {
     case 'GET': {
-      const response = await AccountInstance.get(`/accounts?page_number=${pageNumber}&page_size=${pageSize}&orderby=${orderBy}&isAsc=${isAsc}`, {
-        headers: {
-          Cookie: req.headers.cookie,
-        },
-      })
+      const response = await AccountInstance.get(
+        `/accounts?page_number=${pageNumber}&page_size=${pageSize}&orderby=${orderBy}&isAsc=${isAsc}`,
+        cookieHeader
+      )
       return res.status(response.status).json(response.data)
     }
 
     case 'POST': {
-      const account = await AccountInstance.post<IAccount>('/accounts/create', body, {
-        headers: {
-          Cookie: req.headers.cookie,
-        },
-      })
+      const account = await AccountInstance.post<IAccount>('/accounts/create', body, cookieHeader)
 
       if (account.data.id === undefined) {
         return res.status(400).json({ message: 'Account Create Failed' })
       }
 
       const clientIp = requestIp.getClientIp(req)
-      const geoResponse = process.env.GEO_CODER_API
-        ? await axios.get<IGeoResponse>(process.env.GEO_CODER_API, {
-            headers: {
-              Cookie: req.headers.cookie,
-            },
+      if (clientIp === null) {
+        return res.status(400).json({ message: 'Client IP not found' })
+      }
+      const geoResponse = GEO_CODER_API
+        ? await axios.get<IGeoResponse>(GEO_CODER_API, {
+            ...cookieHeader,
             params: {
               ip: clientIp,
             },
           })
         : null
-      const countryCode = geoResponse?.data?.data?.features[0]?.properties?.country
+      const countryCode = geoResponse?.data?.data?.features?.[0]?.properties?.country ?? 'HK'
       const response = await AccountInstance.patch(
         `/accounts/update/${account.data.id}`,
         {
           location: countryCode,
         },
-        {
-          headers: {
-            Cookie: req.headers.cookie,
-          },
-        }
+        cookieHeader
       )
       return res.status(response.status).json(response.data)
     }

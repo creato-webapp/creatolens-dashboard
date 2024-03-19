@@ -39,7 +39,6 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
 }
 
 const RecommendationPage = () => {
-  //find better way to write fetch logic
   const [inputString, setInputString] = useState('')
   const [stringToSubmit, setStringToSubmit] = useState('')
   const onChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {

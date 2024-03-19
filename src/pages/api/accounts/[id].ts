@@ -1,28 +1,23 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import AccountInstance from '../axiosInstance/Account'
-import axios from 'axios'
 export default async function AccountHandler(req: NextApiRequest, res: NextApiResponse) {
   const {
     query: { id },
     body,
     method,
   } = req
-  axios.defaults.headers.common['value1'] = 'value'
+  const cookieHeader = {
+    headers: {
+      Cookie: req.headers.cookie,
+    },
+  }
   switch (method) {
     case 'GET': {
-      const response = await AccountInstance.get(`accounts/${id}`, {
-        headers: {
-          Cookie: req.headers.cookie,
-        },
-      })
+      const response = await AccountInstance.get(`accounts/${id}`, cookieHeader)
       return res.status(response.status).json(response.data)
     }
     case 'PATCH':
-      const response = await AccountInstance.patch(`accounts/update/${id}`, body, {
-        headers: {
-          Cookie: req.headers.cookie,
-        },
-      })
+      const response = await AccountInstance.patch(`accounts/update/${id}`, body, cookieHeader)
 
       return res.status(response.status).json(response.data)
     default:
