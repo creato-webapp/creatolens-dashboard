@@ -6,4 +6,5 @@ export interface ButtonProps extends React.DetailedHTMLProps<React.HTMLAttribute
   styleClassName?: string
   sizes?: [ButtonSize, ButtonSize, ButtonSize]
   isOpened?: boolean
+  id?: string
 }

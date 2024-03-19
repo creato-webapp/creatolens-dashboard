@@ -67,21 +67,28 @@ Cypress.Commands.add('login', (userObj: JWTPayload) => {
 
 Cypress.Commands.add('google_login', () => {
   // Generate and set a valid cookie from the fixture that next-auth can decrypt
+
+  cy.visit(Cypress.env('SITE_NAME'))
   const username = Cypress.env('GOOGLE_USER')
   const password = Cypress.env('GOOGLE_PW')
   const loginUrl = Cypress.env('SITE_NAME')
   const cookieName = Cypress.env('COOKIE_NAME')
+  // set timeout to 5 second
+
+
   const socialLoginOptions = {
     username,
     password,
     loginUrl,
     headless: true,
-    logs: false,
-    isPopup: true,
-    loginSelector: `a[href="${Cypress.env('SITE_NAME')}/api/auth/signin/google"]`,
+    logs: true,
+    isPopup: false,
+    // loginSelector: , //className of the login button with css selector
+    loginSelector: `button[id="login"]`,
     postLoginSelector: '.unread-count',
   }
 
+  // cy looks for button with id="login" is visible
 
   return cy.task('GoogleSocialLogin', socialLoginOptions).then(({ cookies }) => {
     cy.clearCookies()

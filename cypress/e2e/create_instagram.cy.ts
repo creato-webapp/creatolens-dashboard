@@ -3,6 +3,7 @@ describe('Create Instagram Page', () => {
     cy.visit('/')
     cy.logout()
     cy.login({ fixture: 'session.json' })
+    // cy.google_login({ fixture: 'session.json' })
   })
   it('should display create instagram page', () => {
     cy.visit('/accounts/create-account')

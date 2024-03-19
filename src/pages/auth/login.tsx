@@ -73,7 +73,7 @@ const Login: FC<loginProps> = ({ providers }) => {
             {Object.values(providers).map((provider) => (
               <div key={provider.name} className="flex justify-center">
                 {provider.name === 'Google' && (
-                  <Button.Text loading={false} onClick={() => signIn(provider.id)} className="">
+                  <Button.Text id={'login'} loading={false} onClick={() => signIn(provider.id)} className="">
                     Sign in
                   </Button.Text>
                 )}
