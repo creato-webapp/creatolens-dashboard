@@ -143,7 +143,7 @@ const AccountInfoCard: React.FC<AccountInfoCardProps> = ({ isLoading, account, h
         </Button.Primary>
       }
     >
-      <DynamicForm onSubmit={handleSubmit} Header={account.username} loading={isLoading} fields={combinedField} allowSubmit={!!isLoading} />
+      <DynamicForm onSubmit={handleSubmit} Header={account.username} loading={isLoading} fields={combinedField} allowSubmit={!isLoading} />
     </Card>
   )
 }

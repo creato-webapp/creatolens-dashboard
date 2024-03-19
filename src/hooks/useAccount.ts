@@ -4,7 +4,7 @@ import { GetAccountsPagination, GetAccount, UpdateSession, UpdateAccount } from 
 import { useRef } from 'react'
 import { PaginationMetadata, PaginationParams } from '@services/Account/AccountInterface'
 
-export const useAccount = (id: string, shouldFetch: boolean = true, fallbackData?: IAccount) => {
+export const useAccount = (id: string, shouldFetch: boolean = true, fallbackData?: IAccount | null) => {
   const { data, error, mutate, ...swr } = useSWR(shouldFetch ? [id] : null, (id) => GetAccount(id), {
     refreshInterval: 0,
     fallbackData: fallbackData,

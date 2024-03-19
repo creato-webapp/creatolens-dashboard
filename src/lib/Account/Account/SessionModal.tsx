@@ -5,7 +5,7 @@ import { Button } from '@components/Button'
 import { ModalProps } from '@components/Modal'
 
 interface SessionModalProps extends ModalProps {
-  isDisable: boolean
+  isDisable?: boolean
   account: IAccount | null
   isLoading: boolean
   isShow: boolean

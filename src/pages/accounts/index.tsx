@@ -248,7 +248,7 @@ const AccountsPage = () => {
                 { label: 'Latest', value: 'desc' },
               ]}
               onValueChange={(value) => {
-                setCreateDateOrder(value)
+                setCreateDateOrder(value as 'asc' | 'desc')
                 setPageParams((prevParams) => ({
                   ...prevParams,
                   orderBy: 'created_at',

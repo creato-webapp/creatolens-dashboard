@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useCallback, useMemo } from 'react'
 import { useRouter } from 'next/router'
 import { Alerts } from '@components/Alerts'
 import { IAccount } from '@lib/Account/Account/interface'
@@ -18,14 +18,11 @@ const utc = require('dayjs/plugin/utc')
 dayjs.extend(utc)
 
 type Props = {
-  accountData: IAccount
+  accountData: IAccount | null
   isCreate: boolean
-  canRenewSession: boolean
 }
 
-//TODO remove type any in context:any
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext): Promise<GetServerSidePropsResult<Props>> => {
-  //remove any
   const session = await getSession(context)
   if (!session) {
     return {
@@ -37,24 +34,23 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
   }
 
   const { params } = context
-  if (!params || typeof params.id !== 'string') {
+  if (typeof params?.id !== 'string') {
     return { redirect: { destination: '/404', permanent: false } }
   }
   const isCreate = params.id === 'create-account'
-  const canRenewSession = false
 
-  const res =
-    !isCreate &&
-    (await GetAccount(params.id, {
-      headers: {
-        Cookie: context.req.headers.cookie,
-      },
-    }))
-  const accountData = res as IAccount
-  return { props: { accountData, isCreate, canRenewSession } }
+  if (isCreate) {
+    return { props: { accountData: null, isCreate } }
+  }
+  const res = await GetAccount(params.id, {
+    headers: {
+      Cookie: context.req.headers.cookie,
+    },
+  })
+  return { props: { accountData: res, isCreate } }
 }
 
-const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
+const AccountsPage = ({ accountData, isCreate }: Props) => {
   const [isLoading, setIsLoading] = useState(false)
   const [isChecked, setIsChecked] = useState(false)
   const [shouldFetch, setShouldFetch] = useState(false)
@@ -63,84 +59,88 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
   const router = useRouter()
   const { id } = router.query
   const { data, error, updateAccount: callUpdateAccount, updateSession } = useAccount(id as string, shouldFetch, accountData)
+
+  const account: IAccount | null = useMemo(
+    () =>
+      data
+        ? {
+            ...data,
+            last_login_dt: dayjs(data.last_login_dt, 'YYYY-MM-DDTHH:mm:ss').utc().local().format('YYYY-MM-DDTHH:mm'),
+          }
+        : null,
+    [data]
+  )
+
+  const goBack = useCallback(() => {
+    router.push(`/accounts`)
+  }, [router])
+
+  const updateAccount = useCallback(
+    async (values: IAccount) => {
+      const newValues = {
+        ...account,
+        ...values,
+        last_login_dt: dayjs(values.last_login_dt, 'YYYY-MM-DDTHH:mm').utc().local().format('YYYY-MM-DD THH:mm:ss'),
+      }
+      const res = await callUpdateAccount(newValues)
+      return res
+    },
+    [account, callUpdateAccount]
+  )
+
+  const handleCreateSubmit = useCallback(
+    async (values: IAccount) => {
+      try {
+        setShouldFetch(false)
+        setIsLoading(true)
+        const res = await CreateAccount(values)
+        if (res.id) {
+          window.alert(`Account ${res.username} created successfully`)
+          goBack()
+        } else {
+          window.alert(res)
+        }
+      } catch (error) {
+        console.error(error)
+        window.alert(error)
+      } finally {
+        setIsLoading(false)
+      }
+    },
+    [goBack]
+  )
+
+  const handleUpdateSubmit = useCallback(
+    async (values: IAccount) => {
+      try {
+        setShouldFetch(true)
+        setIsLoading(true)
+        const res = await updateAccount(values)
+        if (res.id) {
+          window.alert(`Account ${res.username} updated successfully`)
+          goBack()
+        } else {
+          window.alert(res)
+        }
+      } catch (error) {
+        console.error(error)
+        window.alert(error)
+      } finally {
+        setIsLoading(false)
+      }
+    },
+    [goBack, updateAccount]
+  )
+
+  const handleChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    setIsChecked(event.target.checked)
+  }, [])
+
   if (error) {
-    console.error(error)
     return <div>Failed to load users {id}</div>
   }
-
-  const account: IAccount | null = data
-    ? {
-        ...data,
-        last_login_dt: dayjs(data.last_login_dt, 'YYYY-MM-DDTHH:mm:ss').utc().local().format('YYYY-MM-DDTHH:mm'),
-      }
-    : null
-
-  const handleCreateSubmit = async (values: IAccount) => {
-    try {
-      setShouldFetch(false)
-      setIsLoading(true)
-      const newValues = {
-        ...values,
-        login_attempt_count: parseInt(values.login_attempt_count as unknown as string),
-        post_scrapped_count: parseInt(values.post_scrapped_count as unknown as string),
-      }
-
-      const res = await CreateAccount(newValues)
-      if (res.id) {
-        window.alert(`Account ${res.username} created successfully`)
-        router.push(`/accounts`)
-      } else {
-        window.alert(res)
-      }
-    } catch (error) {
-      console.error(error)
-      window.alert(error)
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  const handleUpdateSubmit = async (values: IAccount) => {
-    try {
-      setShouldFetch(true)
-      setIsLoading(true)
-      const newValues = {
-        ...values,
-        login_attempt_count: parseInt(values.login_attempt_count as unknown as string),
-        post_scrapped_count: parseInt(values.post_scrapped_count as unknown as string),
-      }
-
-      const res = await updateAccount(newValues)
-      if (res.id) {
-        window.alert(`Account ${res.username} updated successfully`)
-        router.push(`/accounts`)
-      } else {
-        window.alert(res)
-      }
-    } catch (error) {
-      console.error(error)
-      window.alert(error)
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  const updateAccount = async (values: IAccount) => {
-    const newValues = {
-      ...account,
-      ...values,
-      last_login_dt: dayjs(values.last_login_dt, 'YYYY-MM-DDTHH:mm').utc().local().format('YYYY-MM-DD THH:mm:ss'),
-    }
-    const res = await callUpdateAccount(newValues)
-    return res
-  }
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setIsChecked(event.target.checked)
-  }
-
-  const goBack = () => {
-    router.push(`/accounts`)
+  if (!data) {
+    return <div>Loading...</div>
   }
   return (
     <div>
@@ -185,14 +185,7 @@ const AccountsPage = ({ accountData, isCreate, canRenewSession }: Props) => {
         </div>
       )}
 
-      <SessionModal
-        isDisable={!canRenewSession}
-        isShow={isShow}
-        account={account}
-        isLoading={!error && !data}
-        onCancel={() => setIsShow(false)}
-        updateSession={updateSession}
-      />
+      <SessionModal isShow={isShow} account={account} isLoading={!error && !data} onCancel={() => setIsShow(false)} updateSession={updateSession} />
 
       <Alerts.success isShow={showAlert} setIsShow={setShowAlert} />
     </div>
