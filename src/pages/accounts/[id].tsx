@@ -139,9 +139,6 @@ const AccountsPage = ({ accountData, isCreate }: Props) => {
   if (error) {
     return <div>Failed to load users {id}</div>
   }
-  if (!data) {
-    return <div>Loading...</div>
-  }
   return (
     <div>
       {isCreate ? (
