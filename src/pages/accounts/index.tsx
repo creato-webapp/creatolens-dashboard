@@ -15,13 +15,9 @@ import Hero from '@components/Hero'
 import { PlusIcon } from '@heroicons/react/24/solid'
 import Dropdown from '@components/Form/Dropdown'
 import EditIcon from '@components/Icon/EditIcon'
-import { Timestamp } from 'firebase/firestore'
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import { PaginationMetadata } from '@services/Account/AccountInterface'
-
-const dayjs = require('dayjs')
-const utc = require('dayjs/plugin/utc')
-dayjs.extend(utc)
+import dayjs from '@services/Dayjs'
 
 export const getServerSideProps: GetServerSideProps = async (
   context: GetServerSidePropsContext
@@ -133,7 +129,7 @@ const AccountsPage = () => {
       title: 'Created On',
       dataIndex: 'created_at',
       sortAvailable: true,
-      render: (e: Timestamp) => {
+      render: (e: string) => {
         const date = dayjs(e, 'YYYY-MM-DD THH:mm:ss')
         return date.local().format('DD MMM YYYY')
       },
@@ -141,7 +137,7 @@ const AccountsPage = () => {
     {
       title: 'Created Time',
       dataIndex: 'created_at',
-      render: (e: Timestamp) => {
+      render: (e: string) => {
         const date = dayjs(e, 'THH:mm:ss')
         return date.local().format('hh:mm:ss')
       },

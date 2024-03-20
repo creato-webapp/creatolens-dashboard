@@ -8,14 +8,11 @@ import { GetBlockedAccount } from '@services/Account/BlockAccount'
 import { useBlockAccount } from 'src/hooks/useBlockedAccount'
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import DynamicForm from '@components/Form/DynamicForm'
+import dayjs from '@services/Dayjs'
 
 type Props = {
   accountData: IBlockedAccount
 }
-
-const dayjs = require('dayjs')
-const utc = require('dayjs/plugin/utc')
-dayjs.extend(utc)
 
 export const getServerSideProps: GetServerSideProps = async (
   context: GetServerSidePropsContext
@@ -70,7 +67,7 @@ const AccountsBlockedPage = ({ accountData }: Props) => {
 
   const account: IBlockedAccount = {
     ...data,
-    last_login_dt: dayjs(data?.last_login_dt, 'YYYY-MM-DD THH:mm:ss').format('YYYY-MM-DDTHH:mm'),
+    last_login_dt: dayjs(data.last_login_dt, 'YYYY-MM-DD THH:mm:ss').format('YYYY-MM-DDTHH:mm'),
   }
 
   const fields: IField[] = [

@@ -12,10 +12,7 @@ import { useAccount } from 'src/hooks/useAccount'
 import { GetAccount, CreateAccount } from '@services/Account/Account'
 import Image from 'next/image'
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
-
-const dayjs = require('dayjs')
-const utc = require('dayjs/plugin/utc')
-dayjs.extend(utc)
+import dayjs from '@services/Dayjs'
 
 type Props = {
   accountData: IAccount | null

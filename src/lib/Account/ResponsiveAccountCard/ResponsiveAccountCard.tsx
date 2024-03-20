@@ -5,11 +5,8 @@ import Image from 'next/image'
 import XCircleIcon from '@components/Icon/XCircleIcon'
 import CheckIcon from '@components/Icon/CheckIcon'
 import EditIcon from '@components/Icon/EditIcon'
-import { IGenericRowData } from '@components/Table/Row'
-
-const dayjs = require('dayjs')
-const utc = require('dayjs/plugin/utc')
-dayjs.extend(utc)
+import dayjs from '@services/Dayjs'
+import { IAccount } from '../Account'
 
 export interface Column {
   title: string
@@ -20,7 +17,7 @@ export interface Column {
 export interface ResponsiveAccountCardProps extends HTMLAttributes<HTMLDivElement> {
   key: string
   columns: Column[]
-  rowData: IGenericRowData
+  rowData: IAccount
 }
 
 const ResponsiveAccountCard: FC<ResponsiveAccountCardProps> = (props: ResponsiveAccountCardProps) => {
@@ -35,7 +32,7 @@ const ResponsiveAccountCard: FC<ResponsiveAccountCardProps> = (props: Responsive
 
   let status: Status
 
-  if (typeof props.rowData?.status === 'string') {
+  if (typeof props.rowData.status === 'string') {
     status = statusToVariantMap[props.rowData?.status]
   }
 
@@ -63,7 +60,7 @@ const ResponsiveAccountCard: FC<ResponsiveAccountCardProps> = (props: Responsive
         </div>
         <div className="flex flex-row font-semibold">
           <span>Created On:</span>
-          <span className="ml-2 ">{dayjs(props.rowData?.created_at, 'YYYY-MM-DD THH:mm:ss').local().format('DD MMM YYYY')}</span>
+          <span className="ml-2 ">{dayjs(props.rowData.created_at, 'YYYY-MM-DD THH:mm:ss').local().format('DD MMM YYYY')}</span>
         </div>
         <div className="my-2 flex flex-row">
           <h3 className="font-normal">

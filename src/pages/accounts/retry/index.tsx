@@ -14,10 +14,7 @@ import { useGetRetryAccountsPagination } from 'src/hooks/useRetryAccount'
 import { GetRetryAccountsPagination } from '@services/Account/RetryAccount'
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import { PaginationMetadata } from '@services/Account/AccountInterface'
-
-const dayjs = require('dayjs')
-const utc = require('dayjs/plugin/utc')
-dayjs.extend(utc)
+import dayjs from '@services/Dayjs'
 
 type Props = {
   paginationData: PaginationMetadata<IRetryAccount[]>

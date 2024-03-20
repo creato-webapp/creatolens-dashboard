@@ -3,9 +3,7 @@ import { Form } from '.'
 import { Button } from '..'
 import { FormLayoutProps, InputType } from './interface'
 import { Paragraph } from '@components/Typography'
-const dayjs = require('dayjs')
-const utc = require('dayjs/plugin/utc')
-dayjs.extend(utc)
+import dayjs from '@services/Dayjs'
 
 export type FormField = {
   type: InputType
