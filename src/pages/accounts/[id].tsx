@@ -29,21 +29,19 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
       },
     }
   }
-
-  const { params } = context
-  if (typeof params?.id !== 'string') {
-    return { redirect: { destination: '/404', permanent: false } }
-  }
-  const isCreate = params.id === 'create-account'
-
+  const id = context.query.id as string
+  const isCreate = id === 'create-account'
   if (isCreate) {
     return { props: { accountData: null, isCreate } }
   }
-  const res = await GetAccount(params.id, {
+  const res = await GetAccount(id, {
     headers: {
       Cookie: context.req.headers.cookie,
     },
   })
+  if (!res) {
+    return { redirect: { destination: '/404', permanent: false } }
+  }
   return { props: { accountData: res, isCreate } }
 }
 
@@ -54,8 +52,7 @@ const AccountsPage = ({ accountData, isCreate }: Props) => {
   const [isShow, setIsShow] = useState(false)
   const [showAlert, setShowAlert] = useState(false)
   const router = useRouter()
-  const { id } = router.query
-  const { data, error, updateAccount: callUpdateAccount, updateSession } = useAccount(id as string, shouldFetch, accountData)
+  const { data, error, updateAccount: callUpdateAccount, updateSession } = useAccount(router.query.id as string, shouldFetch, accountData)
 
   const account: IAccount | null = useMemo(
     () =>
@@ -133,9 +130,6 @@ const AccountsPage = ({ accountData, isCreate }: Props) => {
     setIsChecked(event.target.checked)
   }, [])
 
-  if (error) {
-    return <div>Failed to load users {id}</div>
-  }
   return (
     <div>
       {isCreate ? (
