@@ -11,7 +11,7 @@ import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/solid'
 import StatusTag, { Status } from '@lib/StatusTag'
 import Pagination from '@components/Pagination'
 import { useGetRetryAccountsPagination } from 'src/hooks/useRetryAccount'
-import { GetRetryAccountsPagination } from '@services/Account/RetryAccount'
+import { getRetryAccountsPagination } from '@services/Account/RetryAccount'
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import { PaginationMetadata } from '@services/Account/AccountInterface'
 import dayjs from '@services/Dayjs'
@@ -38,7 +38,7 @@ export const getServerSideProps: GetServerSideProps = async (
     orderBy: 'username',
     isAsc: false,
   }
-  const response = await GetRetryAccountsPagination(paginationProps)
+  const response = await getRetryAccountsPagination(paginationProps)
   const accountData: IRetryAccount[] = response ? response.data : []
 
   const paginationData: PaginationMetadata<IRetryAccount[]> = {

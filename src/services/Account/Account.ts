@@ -71,24 +71,24 @@ export function generateAccountFilter(account: PartialAccount): string {
   return filters.join(' && ')
 }
 
-export async function CreateAccount(account: IAccount, customConfig?: AxiosRequestConfig): Promise<IAccount> {
+export async function createAccount(account: IAccount, customConfig?: AxiosRequestConfig): Promise<IAccount> {
   const response = await Fetcher.POST(`/api/accounts`, account, customConfig)
   return response
 }
 
-export async function GetAccount(id: string, customConfig?: AxiosRequestConfig): Promise<IAccount> {
+export async function getAccount(id: string, customConfig?: AxiosRequestConfig): Promise<IAccount> {
   const response = await Fetcher.GET(`/api/accounts/${id}`, customConfig)
   return response
 }
 
-export async function GetAccounts(account?: Partial<IAccount>, orderBy?: string, isAsc?: boolean): Promise<IAccount[]> {
+export async function getAccounts(account?: Partial<IAccount>, orderBy?: string, isAsc?: boolean): Promise<IAccount[]> {
   const response = await Fetcher.GET(`/api/accounts/query`, {
     params: { filter: account ? generateAccountFilter(account) : null, orderby: orderBy, isAsc: isAsc },
   })
   return response
 }
 
-export async function GetAccountsPagination(params: PaginationParams, customConfig?: AxiosRequestConfig): Promise<PaginationMetadata<IAccount[]>> {
+export async function getAccountsPagination(params: PaginationParams, customConfig?: AxiosRequestConfig): Promise<PaginationMetadata<IAccount[]>> {
   const response = await Fetcher.GET(
     `/api/accounts`,
     {
@@ -108,12 +108,12 @@ interface SessionUpdateResponse {
   // Include other fields expected in the response
 }
 
-export async function UpdateAccount(id: string, updatedAccount: IAccount, customConfig?: AxiosRequestConfig): Promise<IAccount> {
+export async function updateAccount(id: string, updatedAccount: IAccount, customConfig?: AxiosRequestConfig): Promise<IAccount> {
   const res = await Fetcher.PATCH(`/api/accounts/${id}`, updatedAccount, { ...customConfig, params: { id: updatedAccount.id } })
   return res
 }
 
-export async function UpdateSession(id: string, updatedAccount: IAccount, customConfig?: AxiosRequestConfig): Promise<SessionUpdateResponse> {
+export async function updateSession(id: string, updatedAccount: IAccount, customConfig?: AxiosRequestConfig): Promise<SessionUpdateResponse> {
   const res = await Fetcher.POST<{
     username: string
     password: string

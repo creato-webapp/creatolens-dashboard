@@ -8,7 +8,7 @@ import Link from 'next/link'
 import { getSession } from 'next-auth/react'
 import Pagination from '@components/Pagination'
 import { useGetAccountsPagination } from 'src/hooks/useAccount'
-import { GetAccountsPagination } from '@services/Account/Account'
+import { getAccountsPagination } from '@services/Account/Account'
 import Image from 'next/image'
 import Badges, { Status } from '@components/Badges'
 import Hero from '@components/Hero'
@@ -38,7 +38,7 @@ export const getServerSideProps: GetServerSideProps = async (
     isAsc: true,
   }
   const cookies = context.req.headers.cookie
-  const response = await GetAccountsPagination(paginationProps, {
+  const response = await getAccountsPagination(paginationProps, {
     headers: {
       Cookie: cookies, // Forward the cookies to the server-side request
     },
