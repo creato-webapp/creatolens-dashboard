@@ -9,7 +9,7 @@ import Paragraph from '@components/Typography/Paragraph'
 import AccountInfoCard from '@lib/Account/AccountInfoCard'
 import AccountCreateCard from '@lib/Account/AccountCreateCard'
 import { useAccount } from 'src/hooks/useAccount'
-import { GetAccount, CreateAccount } from '@services/Account/Account'
+import { getAccount, createAccount } from '@services/Account/Account'
 import Image from 'next/image'
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import dayjs from '@services/Dayjs'
@@ -39,7 +39,7 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
   if (isCreate) {
     return { props: { accountData: null, isCreate } }
   }
-  const res = await GetAccount(params.id, {
+  const res = await getAccount(params.id, {
     headers: {
       Cookie: context.req.headers.cookie,
     },
@@ -90,7 +90,7 @@ const AccountsPage = ({ accountData, isCreate }: Props) => {
       try {
         setShouldFetch(false)
         setIsLoading(true)
-        const res = await CreateAccount(values)
+        const res = await createAccount(values)
         if (res.id) {
           window.alert(`Account ${res.username} created successfully`)
           goBack()

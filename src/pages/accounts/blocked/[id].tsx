@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import { IField } from '@components/Form/interface'
 import { IBlockedAccount } from '@lib/Account/Account/interface'
 import { getSession } from 'next-auth/react'
-import { GetBlockedAccount } from '@services/Account/BlockAccount'
+import { getBlockedAccount } from '@services/Account/BlockAccount'
 import { useBlockAccount } from 'src/hooks/useBlockedAccount'
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import DynamicForm from '@components/Form/DynamicForm'
@@ -35,7 +35,7 @@ export const getServerSideProps: GetServerSideProps = async (
     // Check if params.id exists and is a string
     return { redirect: { destination: '/404', permanent: false } }
   }
-  const res = await GetBlockedAccount(params.id, {
+  const res = await getBlockedAccount(params.id, {
     headers: {
       Cookie: context.req.headers.cookie,
     },

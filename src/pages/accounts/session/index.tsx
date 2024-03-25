@@ -4,7 +4,7 @@ import { Table } from '@components/Table'
 import { getSession } from 'next-auth/react'
 import Link from 'next/link'
 import { useAccountSessionPagination } from 'src/hooks/useAccountSession'
-import { GetSessionPagination, PaginationParams, PaginationMetadata } from '@services/Account/Session'
+import { getSessionPagination, PaginationParams, PaginationMetadata } from '@services/Account/Session'
 import { Form } from '@components/Form'
 import Pagination from '@components/Pagination'
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
@@ -49,7 +49,7 @@ export const getServerSideProps: GetServerSideProps = async (
     orderBy: 'created_at',
     isAsc: false,
   }
-  const response = await GetSessionPagination(paginationProps)
+  const response = await getSessionPagination(paginationProps)
   const paginationData: PaginationMetadata<IAccountSession[]> = {
     data: response ? response?.data : [],
     has_next: response ? response.has_next : false,

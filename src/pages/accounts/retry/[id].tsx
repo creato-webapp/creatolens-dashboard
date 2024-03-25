@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import { IField } from '@components/Form/interface'
 import { IRetryAccount } from '@lib/Account/Account/interface'
 import { getSession } from 'next-auth/react'
-import { GetRetryAccount } from '@services/Account/RetryAccount'
+import { getRetryAccount } from '@services/Account/RetryAccount'
 import { useRetryAccount } from 'src/hooks/useRetryAccount'
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import DynamicForm from '@components/Form/DynamicForm'
@@ -34,7 +34,7 @@ export const getServerSideProps: GetServerSideProps = async (
   if (!params || typeof params.id !== 'string') {
     return { redirect: { destination: '/404', permanent: false } }
   }
-  const res = await GetRetryAccount(params.id, {
+  const res = await getRetryAccount(params.id, {
     headers: {
       Cookie: context.req.headers.cookie,
     },

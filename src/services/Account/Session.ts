@@ -19,7 +19,7 @@ export interface PaginationMetadata<T> {
   total_items: number
 }
 
-export async function GetSessionPagination(
+export async function getSessionPagination(
   params: PaginationParams,
   customConfig?: AxiosRequestConfig
 ): Promise<PaginationMetadata<IAccountSession[]>> {
