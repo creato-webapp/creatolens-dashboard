@@ -5,7 +5,6 @@ import { Button } from '@components/Button'
 import { IAccount } from '@lib/Account/Account/interface'
 import { ResponsiveAccountCard } from '@lib/Account/ResponsiveAccountCard'
 import Link from 'next/link'
-import { getSession } from 'next-auth/react'
 import Pagination from '@components/Pagination'
 import { useGetAccountsPagination } from 'src/hooks/useAccount'
 import { GetAccountsPagination } from '@services/Account/Account'
@@ -22,15 +21,7 @@ import dayjs from '@services/Dayjs'
 export const getServerSideProps: GetServerSideProps = async (
   context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<{ paginationData: PaginationMetadata<IAccount[]> }>> => {
-  const session = await getSession(context)
-  if (!session) {
-    return {
-      redirect: {
-        destination: '/auth/login',
-        permanent: false,
-      },
-    }
-  }
+
   const paginationProps = {
     pageNumber: 1,
     pageSize: 10,

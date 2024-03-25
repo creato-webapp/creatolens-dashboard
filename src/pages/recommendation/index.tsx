@@ -1,6 +1,5 @@
 import React, { useState, useCallback } from 'react'
 import Card from '@components/Card'
-import { getSession } from 'next-auth/react'
 import { Form } from '@components/Form'
 import MagnifyingGlassIcon from '@components/Icon/MagnifyingGlassIcon'
 import LoaderIcon from '@components/Icon/LoaderIcon'
@@ -13,7 +12,6 @@ import Tab from '@components/Tab'
 import CustomizeHashtagCard from '@lib/Hashet/CustomizeHashtagCard'
 import { useGetHashtag } from 'src/hooks/useHashtag'
 import Hero from '@components/Hero'
-import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 
 export interface IHashet extends Record<string, string | number | boolean> {
   hashtag: string
@@ -24,19 +22,6 @@ export type HashetProps = {
   hashetSessionData: IHashet[]
 }
 
-export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext): Promise<GetServerSidePropsResult<{}>> => {
-  const session = await getSession(context)
-  if (!session) {
-    return {
-      redirect: {
-        destination: '/auth/login',
-        permanent: false,
-      },
-    }
-  }
-  const hashetSessionData = { data: [] }
-  return { props: { hashetSessionData } }
-}
 
 const RecommendationPage = () => {
   const [inputString, setInputString] = useState('')
