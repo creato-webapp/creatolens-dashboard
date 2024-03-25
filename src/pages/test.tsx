@@ -7,7 +7,6 @@ import CrossIcon from '@components/Icon/CrossIcon'
 import Checkbox from '@components/Form/Checkbox'
 import { useFileUpload } from 'src/hooks/useFileUpload'
 import axios from 'axios'
-import { error } from 'console'
 type hashtag = {
   acc: number
   hashtag: string
