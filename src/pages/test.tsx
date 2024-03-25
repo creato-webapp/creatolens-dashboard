@@ -1,11 +1,13 @@
 import React, { useState, useCallback } from 'react'
-import { uploadImage, Labels, ModelResult } from '@services/Object/ImageBlob'
+import { Labels, ModelResult } from '@services/Object/ImageBlob'
 import { LabelImage } from '@services/Object/Gemini'
 import { Button } from '@components/Button'
 import Dropzone from '@components/Dropzone'
 import CrossIcon from '@components/Icon/CrossIcon'
 import Checkbox from '@components/Form/Checkbox'
+import { useFileUpload } from 'src/hooks/useFileUpload'
 import axios from 'axios'
+import { error } from 'console'
 type hashtag = {
   acc: number
   hashtag: string
@@ -18,6 +20,11 @@ const ImageUpload: React.FC = () => {
   const [labels, setLabels] = useState<Labels[]>([])
   const [uploadedUrl, setUploadedUrl] = useState<string>('')
   const [selectedHashtags, setSelectedHashtags] = useState<string[]>([])
+  const { uploadImage, isLoading, response, error } = useFileUpload({
+    timeout: 30000,
+    maxBodyLength: 8 * 1024 * 1024,
+    maxContentLength: 8 * 1024 * 1024,
+  })
   const toggleCheckbox = useCallback(
     (hashtag: string) => {
       setSelectedHashtags((prevSelected) =>
@@ -108,24 +115,14 @@ const ImageUpload: React.FC = () => {
       window.alert('No file selected.')
       return
     }
-
-    setLoading(true)
-    try {
-      const imageRes = await uploadImage(file, {
-        timeout: 30000,
-        maxBodyLength: 8 * 1024 * 1024,
-        maxContentLength: 8 * 1024 * 1024,
-      })
-
-      setUploadedUrl(imageRes.path)
-    } catch (error) {
+    await uploadImage(file)
+    response && setUploadedUrl(response.path)
+    if (error) {
       console.error('Error in upload or fetching hashtags:', error)
       window.alert(error)
       setLabels([])
-    } finally {
-      setLoading(false)
     }
-  }, [file])
+  }, [file, uploadImage, response, error])
 
   return (
     <div className="flex flex-col items-center justify-center p-4">
@@ -143,7 +140,7 @@ const ImageUpload: React.FC = () => {
         )}
       </div>
       <div className="flex items-center gap-6 p-4">
-        <Button.Primary onClick={handleUpload} loading={loading}>
+        <Button.Primary onClick={handleUpload} loading={isLoading}>
           {!labels?.length ? 'Upload' : 'Re-Upload'}
         </Button.Primary>
         <Button.Primary onClick={handlerRetryLabelImage} loading={loading} disabled={!uploadedUrl}>
