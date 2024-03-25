@@ -121,6 +121,7 @@ const RecommendationPage = () => {
           <div className="flex w-full gap-2">
             <div className="flex w-full items-center rounded-3xl bg-bg-dark px-2 text-text-primary hover:rounded-3xl hover:outline-none focus:rounded-3xl focus:outline-none focus:ring-opacity-50 active:rounded-3xl">
               <Form.BaseInput
+                // TODO fix input element (cannot enter and submit)
                 allowSpace
                 hidden
                 disabled={isValidating}
