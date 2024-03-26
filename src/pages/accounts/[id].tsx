@@ -51,7 +51,6 @@ const AccountsPage = ({ accountData, isCreate }: Props) => {
   const [isChecked, setIsChecked] = useState(false)
   const [shouldFetch, setShouldFetch] = useState(false)
   const [isShow, setIsShow] = useState(false)
-  const [showAlert, setShowAlert] = useState(false)
   const router = useRouter()
   const { id } = router.query
   const { data, error, updateAccount: callUpdateAccount, updateSession } = useAccount(id as string, shouldFetch, accountData)
