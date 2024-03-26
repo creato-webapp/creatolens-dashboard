@@ -11,16 +11,10 @@ import DynamicForm from '@components/Form/DynamicForm'
 import dayjs from '@services/Dayjs'
 
 type Props = {
-  accountData: IBlockedAccount
+  accountData: IBlockedAccount | null
 }
 
-export const getServerSideProps: GetServerSideProps = async (
-  context: GetServerSidePropsContext
-): Promise<
-  GetServerSidePropsResult<{
-    accountData: IBlockedAccount
-  }>
-> => {
+export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext): Promise<GetServerSidePropsResult<Props>> => {
   const session = await getSession(context)
   if (!session) {
     return {
@@ -30,20 +24,13 @@ export const getServerSideProps: GetServerSideProps = async (
       },
     }
   }
-  const { params } = context
-  if (!params || typeof params.id !== 'string') {
-    // Check if params.id exists and is a string
-    return { redirect: { destination: '/404', permanent: false } }
-  }
-  const res = await getBlockedAccount(params.id, {
+  const id = context.params?.id as string
+  const res = await getBlockedAccount(id, {
     headers: {
       Cookie: context.req.headers.cookie,
     },
   })
-
-  // Pass data to the page via props
-  const accountData = res as IBlockedAccount
-  return { props: { accountData } }
+  return { props: { accountData: res } }
 }
 
 const AccountsBlockedPage = ({ accountData }: Props) => {
@@ -51,15 +38,7 @@ const AccountsBlockedPage = ({ accountData }: Props) => {
   const [shouldFetch, setShouldFetch] = useState(false)
   const router = useRouter()
   const { id } = router.query
-  const isCreate = id === 'create-account'
-
-  const { data, error, updateBlockAccount: callUpdateAccount } = useBlockAccount(id as string, shouldFetch, isCreate ? undefined : accountData)
-
-  if (error) {
-    console.error(data)
-    console.error(error)
-    return <div>Failed to load users {id}</div>
-  }
+  const { data, error, updateBlockAccount: callUpdateAccount } = useBlockAccount(id as string, shouldFetch, accountData)
   if (!data) {
     console.error(data)
     return <div>Loading...</div>
@@ -153,6 +132,10 @@ const AccountsBlockedPage = ({ accountData }: Props) => {
       last_login_dt: dayjs(values.last_login_dt, 'YYYY-MM-DDTHH:mm').utc().local().format('YYYY-MM-DD THH:mm:ss'),
     }
     await callUpdateAccount(newValues)
+  }
+
+  if (error) {
+    return <div>Failed to load users {id}</div>
   }
 
   return (

@@ -28,17 +28,12 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
       },
     }
   }
-
-  const { params } = context
-  if (typeof params?.id !== 'string') {
-    return { redirect: { destination: '/404', permanent: false } }
-  }
-  const isCreate = params.id === 'create-account'
-
+  const id = context.params?.id as string
+  const isCreate = id === 'create-account'
   if (isCreate) {
     return { props: { accountData: null, isCreate } }
   }
-  const res = await getAccount(params.id, {
+  const res = await getAccount(id, {
     headers: {
       Cookie: context.req.headers.cookie,
     },
