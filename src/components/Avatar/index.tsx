@@ -1,9 +1,8 @@
 import React from 'react'
 import UserIcon from '@components/Icon/UserIcon'
-// Define the type for the avatar size
+
 type AvatarSize = 'small' | 'medium' | 'large'
 
-// Define the props for the Avatar component
 interface AvatarProps extends React.HTMLAttributes<HTMLDivElement> {
   src?: string
   alt?: string
@@ -18,7 +17,7 @@ const sizeStyles: Record<AvatarSize, string[]> = {
 }
 
 // Avatar component
-const Avatar: React.FC<AvatarProps> = ({ src, alt = 'Avatar', size = 'small', className }) => {
+const Avatar = ({ src, alt = 'Avatar', size = 'small', className }: AvatarProps) => {
   const sizeStyle = sizeStyles[size || 'medium']
   const iconSize = size === 'small' ? 18 : size === 'large' ? 36 : 26
 

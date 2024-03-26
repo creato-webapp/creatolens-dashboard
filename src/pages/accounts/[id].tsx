@@ -1,6 +1,5 @@
 import React, { useState, useCallback, useMemo } from 'react'
 import { useRouter } from 'next/router'
-import { Alerts } from '@components/Alerts'
 import { IAccount } from '@lib/Account/Account/interface'
 import SessionModal from '@lib/Account/Account/SessionModal'
 import { getSession } from 'next-auth/react'
@@ -180,8 +179,6 @@ const AccountsPage = ({ accountData, isCreate }: Props) => {
       )}
 
       <SessionModal isShow={isShow} account={account} isLoading={!error && !data} onCancel={() => setIsShow(false)} updateSession={updateSession} />
-
-      <Alerts.success isShow={showAlert} setIsShow={setShowAlert} />
     </div>
   )
 }
