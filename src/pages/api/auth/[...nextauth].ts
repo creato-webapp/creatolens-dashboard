@@ -59,10 +59,10 @@ const nextAuthOptions: NextAuthOptionsCallback = (req, res) => ({
   callbacks: {
     async signIn({ account }) {
       if (account?.id_token) {
-        // setCookie('idToken', account.id_token, {
-        //   req: req,
-        //   res: res,
-        // })
+        setCookie('idToken', account.id_token, {
+          req: req,
+          res: res,
+        })
         return true
       } else {
         // Return false to display a default error message

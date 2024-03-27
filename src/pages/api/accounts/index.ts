@@ -80,9 +80,7 @@ export default async function accountQueryHandler(req: NextApiRequest, res: Next
     }
 
     case 'POST': {
-      console.log('account', body, cookieHeader)
       const account = await AccountInstance.post<IAccount>('/accounts/create', body, cookieHeader)
-      console.log('result', account)
       if (account.data.id === undefined) {
         return res.status(400).json({ message: 'Account Create Failed' })
       }
