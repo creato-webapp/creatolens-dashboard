@@ -5,7 +5,7 @@ import { Labels } from './ImageBlob'
 export interface confidence {
   [key: string]: number
 }
-
+//TODO flatten the data body
 export interface LabelImageResponse {
   code: number
   data: {

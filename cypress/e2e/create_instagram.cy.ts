@@ -1,8 +1,13 @@
 describe('Create Instagram Page', () => {
   beforeEach(() => {
     cy.visit('/')
-    cy.logout()
-    cy.login({ fixture: 'session.json' })
+    // cy.login({ fixture: 'session.json' })
+    cy.google_login()
+    cy.visit('/accounts')
+    // cy.get('button').contains('Create New Account').should('be.visible')
+    cy.get('button').contains('Create New Account').should('be.visible').click()
+    // url should include /accounts/create-account
+    cy.url().should('include', '/accounts/create-account')
     // cy.google_login({ fixture: 'session.json' })
   })
   it('should display create instagram page', () => {
@@ -35,6 +40,10 @@ describe('Create Instagram Page', () => {
     // find button with type submit and check if it is enabled
     cy.get('button[type="submit"]').should('be.enabled')
     cy.get('button[type="submit"]').click()
+
+    cy.wait(5000)
+    cy.visit('/accounts')
+    cy.get('table').contains('td', username).should('be.visible')
 
     //
   })

@@ -1,23 +1,28 @@
 import useSWR from 'swr'
 import { IAccount } from '@lib/Account/Account'
-import { GetAccountsPagination, GetAccount, UpdateSession, UpdateAccount } from '@services/Account/Account'
+import {
+  getAccountsPagination,
+  getAccount,
+  updateSession as updateSessionHelper,
+  updateAccount as updateAccountHelper,
+} from '@services/Account/Account'
 import { useRef } from 'react'
 import { PaginationMetadata, PaginationParams } from '@services/Account/AccountInterface'
 
-export const useAccount = (id: string, shouldFetch: boolean = true, fallbackData?: IAccount) => {
-  const { data, error, mutate, ...swr } = useSWR(shouldFetch ? [id] : null, (id) => GetAccount(id), {
+export const useAccount = (id: string, shouldFetch: boolean = true, fallbackData?: IAccount | null) => {
+  const { data, error, mutate, ...swr } = useSWR(shouldFetch ? [id] : null, (id) => getAccount(id), {
     refreshInterval: 0,
     fallbackData: fallbackData,
   })
 
   const updateAccount = async (updatedAccount: IAccount) => {
-    const res = await UpdateAccount(id, updatedAccount)
+    const res = await updateAccountHelper(id, updatedAccount)
     mutate()
     return res
   }
 
   const updateSession = async (updatedAccount: IAccount) => {
-    const res = await UpdateSession(id, updatedAccount)
+    const res = await updateSessionHelper(id, updatedAccount)
     mutate()
     return res
   }
@@ -35,7 +40,7 @@ export const useAccount = (id: string, shouldFetch: boolean = true, fallbackData
 
 export const useGetAccountsPagination = (paginationParams: PaginationParams, shouldFetch?: true) => {
   const mutableRef = useRef<PaginationMetadata<IAccount[]>>()
-  const { data, error, mutate, ...swr } = useSWR(shouldFetch ? [paginationParams] : null, GetAccountsPagination, {
+  const { data, error, mutate, ...swr } = useSWR(shouldFetch ? [paginationParams] : null, getAccountsPagination, {
     refreshInterval: 0,
     fallbackData: mutableRef.current ? mutableRef.current : undefined,
   })

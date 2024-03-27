@@ -1,6 +1,5 @@
 import React, { useState, useCallback } from 'react'
 import Card from '@components/Card'
-import { getSession } from 'next-auth/react'
 import { Form } from '@components/Form'
 import MagnifyingGlassIcon from '@components/Icon/MagnifyingGlassIcon'
 import LoaderIcon from '@components/Icon/LoaderIcon'
@@ -13,7 +12,6 @@ import Tab from '@components/Tab'
 import CustomizeHashtagCard from '@lib/Hashet/CustomizeHashtagCard'
 import { useGetHashtag } from 'src/hooks/useHashtag'
 import Hero from '@components/Hero'
-import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 
 export interface IHashet extends Record<string, string | number | boolean> {
   hashtag: string
@@ -24,22 +22,8 @@ export type HashetProps = {
   hashetSessionData: IHashet[]
 }
 
-export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext): Promise<GetServerSidePropsResult<{}>> => {
-  const session = await getSession(context)
-  if (!session) {
-    return {
-      redirect: {
-        destination: '/auth/login',
-        permanent: false,
-      },
-    }
-  }
-  const hashetSessionData = { data: [] }
-  return { props: { hashetSessionData } }
-}
 
 const RecommendationPage = () => {
-  //find better way to write fetch logic
   const [inputString, setInputString] = useState('')
   const [stringToSubmit, setStringToSubmit] = useState('')
   const onChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -122,6 +106,7 @@ const RecommendationPage = () => {
           <div className="flex w-full gap-2">
             <div className="flex w-full items-center rounded-3xl bg-bg-dark px-2 text-text-primary hover:rounded-3xl hover:outline-none focus:rounded-3xl focus:outline-none focus:ring-opacity-50 active:rounded-3xl">
               <Form.BaseInput
+                // TODO fix input element (cannot enter and submit)
                 allowSpace
                 hidden
                 disabled={isValidating}

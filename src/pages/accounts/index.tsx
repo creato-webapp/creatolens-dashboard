@@ -5,40 +5,23 @@ import { Button } from '@components/Button'
 import { IAccount } from '@lib/Account/Account/interface'
 import { ResponsiveAccountCard } from '@lib/Account/ResponsiveAccountCard'
 import Link from 'next/link'
-import { getSession } from 'next-auth/react'
 import Pagination from '@components/Pagination'
 import { useGetAccountsPagination } from 'src/hooks/useAccount'
-import { GetAccountsPagination } from '@services/Account/Account'
+import { getAccountsPagination } from '@services/Account/Account'
 import Image from 'next/image'
 import Badges, { Status } from '@components/Badges'
 import Hero from '@components/Hero'
 import { PlusIcon } from '@heroicons/react/24/solid'
 import Dropdown from '@components/Form/Dropdown'
 import EditIcon from '@components/Icon/EditIcon'
-import { Timestamp } from 'firebase/firestore'
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import { PaginationMetadata } from '@services/Account/AccountInterface'
-
-const dayjs = require('dayjs')
-const utc = require('dayjs/plugin/utc')
-dayjs.extend(utc)
-
-export type PaginationMetaProps = {
-  paginationData: PaginationMetadata<IAccount>
-}
+import dayjs from '@services/Dayjs'
 
 export const getServerSideProps: GetServerSideProps = async (
   context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<{ paginationData: PaginationMetadata<IAccount[]> }>> => {
-  const session = await getSession(context)
-  if (!session) {
-    return {
-      redirect: {
-        destination: '/auth/login',
-        permanent: false,
-      },
-    }
-  }
+
   const paginationProps = {
     pageNumber: 1,
     pageSize: 10,
@@ -46,20 +29,18 @@ export const getServerSideProps: GetServerSideProps = async (
     isAsc: true,
   }
   const cookies = context.req.headers.cookie
-  const response = await GetAccountsPagination(paginationProps, {
+  const response = await getAccountsPagination(paginationProps, {
     headers: {
       Cookie: cookies, // Forward the cookies to the server-side request
     },
   })
-  // Pass data to the page via props
-  const accountData: IAccount[] = response ? response?.data : []
   const paginationData: PaginationMetadata<IAccount[]> = {
-    data: accountData,
-    has_next: response ? response.has_next : false,
-    has_prev: response ? response.has_prev : false,
-    page: response ? response.page : 1,
-    size: response ? response.size : 0,
-    total_items: response ? response.total_items : 0,
+    data: response?.data ?? [],
+    has_next: response?.has_next ?? false,
+    has_prev: response?.has_prev ?? false,
+    page: response?.page ?? 1,
+    size: response?.size ?? 0,
+    total_items: response?.total_items ?? 0,
   }
   return { props: { paginationData } }
 }
@@ -71,17 +52,10 @@ const AccountsPage = () => {
     orderBy: 'created_at',
     isAsc: false,
   })
-  const [createDateOrder, setCreateDateOrder] = useState<string | number>('desc')
-  // const [fetching, setFetching] = useState(false)
+  const [createDateOrder, setCreateDateOrder] = useState<'asc' | 'desc'>('desc')
   const { accounts: responseData, error } = useGetAccountsPagination(pageParams, true)
-
   const accounts: IAccount[] = responseData?.data || []
   const isLoading = !responseData && !error
-  // const endOfPage =
-  //   responseData?.total_items ===
-  //   accountData.reduce((acc, cur) => {
-  //     return acc + cur.data.length
-  //   }, 0)
 
   const onPageChange = (newPage: number) => {
     setPageParams((prevParams) => ({
@@ -127,7 +101,7 @@ const AccountsPage = () => {
       dataIndex: 'id',
       render: (e: string) => (
         <Link href="/accounts/[id]" as={`/accounts/${e}`} legacyBehavior>
-          <div className="flex w-full flex-row items-center justify-center gap-2 cursor-pointer">
+          <div className="flex w-full cursor-pointer flex-row items-center justify-center gap-2">
             <EditIcon size={16} className="fill-accent2-500" />
             <div className="font-semibold text-accent2-500">Edit</div>
           </div>
@@ -146,7 +120,7 @@ const AccountsPage = () => {
       title: 'Created On',
       dataIndex: 'created_at',
       sortAvailable: true,
-      render: (e: Timestamp) => {
+      render: (e: string) => {
         const date = dayjs(e, 'YYYY-MM-DD THH:mm:ss')
         return date.local().format('DD MMM YYYY')
       },
@@ -154,7 +128,7 @@ const AccountsPage = () => {
     {
       title: 'Created Time',
       dataIndex: 'created_at',
-      render: (e: Timestamp) => {
+      render: (e: string) => {
         const date = dayjs(e, 'THH:mm:ss')
         return date.local().format('hh:mm:ss')
       },
@@ -177,7 +151,6 @@ const AccountsPage = () => {
           test: 'secondary',
           banned: 'error',
         }
-        // const status: Status = statusToVariantMap[e]
         const status: Status = statusToVariantMap[e]
         return (
           <div className="flex items-center justify-center">
@@ -224,12 +197,12 @@ const AccountsPage = () => {
             <h1 className="font-extrabold text-white">ACCOUNTS</h1>
           </div>
           <Link href="/accounts/create-account">
-              <Button.Primary sizes={['s', 'l', 'l']} styleClassName="px-2">
-                <div className="flex flex-row items-center gap-2">
-                  <PlusIcon className="h-6 w-6" />
-                  <div className="hidden md:flex">Create New Account</div>
-                </div>
-              </Button.Primary>
+            <Button.Primary sizes={['s', 'l', 'l']} styleClassName="px-2">
+              <div className="flex flex-row items-center gap-2">
+                <PlusIcon className="h-6 w-6" />
+                <div className="hidden md:flex">Create New Account</div>
+              </div>
+            </Button.Primary>
           </Link>
         </div>
       </Hero>
@@ -262,7 +235,7 @@ const AccountsPage = () => {
                 { label: 'Latest', value: 'desc' },
               ]}
               onValueChange={(value) => {
-                setCreateDateOrder(value)
+                setCreateDateOrder(value as 'asc' | 'desc')
                 setPageParams((prevParams) => ({
                   ...prevParams,
                   orderBy: 'created_at',

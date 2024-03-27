@@ -4,12 +4,13 @@ import { Table } from '@components/Table'
 import { getSession } from 'next-auth/react'
 import Link from 'next/link'
 import { useAccountSessionPagination } from 'src/hooks/useAccountSession'
-import { GetSessionPagination, PaginationParams, PaginationMetadata } from '@services/Account/Session'
+import { getSessionPagination, PaginationParams, PaginationMetadata } from '@services/Account/Session'
 import { Form } from '@components/Form'
 import Pagination from '@components/Pagination'
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import { IGenericRowData } from '@components/Table/Row'
 import { Cookies } from '@lib/Account/Account/interface'
+import dayjs from '@services/Dayjs'
 
 type Props = {
   paginationData: PaginationMetadata<IAccountSession[]>
@@ -26,9 +27,6 @@ export interface IAccountSession extends IGenericRowData {
   username: string
   session_cookies: Cookies
 }
-const dayjs = require('dayjs')
-const utc = require('dayjs/plugin/utc')
-dayjs.extend(utc)
 
 export const getServerSideProps: GetServerSideProps = async (
   context: GetServerSidePropsContext
@@ -51,7 +49,7 @@ export const getServerSideProps: GetServerSideProps = async (
     orderBy: 'created_at',
     isAsc: false,
   }
-  const response = await GetSessionPagination(paginationProps)
+  const response = await getSessionPagination(paginationProps)
   const paginationData: PaginationMetadata<IAccountSession[]> = {
     data: response ? response?.data : [],
     has_next: response ? response.has_next : false,

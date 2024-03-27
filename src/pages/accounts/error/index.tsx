@@ -6,14 +6,11 @@ import { getSession } from 'next-auth/react'
 import Link from 'next/link'
 import { Form } from '@components/Form'
 import { useAccountErrorPagination } from 'src/hooks/useAccountErrors'
-import { GetErrorPagination } from '@services/Account/AccountErros'
+import { getErrorPagination } from '@services/Account/AccountErros'
 import Pagination from '@components/Pagination'
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import { PaginationMetadata, PaginationParams } from '@services/Account/AccountInterface'
-
-const dayjs = require('dayjs')
-const utc = require('dayjs/plugin/utc')
-dayjs.extend(utc)
+import dayjs from '@services/Dayjs'
 
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext): Promise<GetServerSidePropsResult<{}>> => {
   const session = await getSession(context)
@@ -34,7 +31,7 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
     isAsc: false,
   }
 
-  const response = await GetErrorPagination(paginationProps)
+  const response = await getErrorPagination(paginationProps)
 
   const accountData = response.data ?? []
 

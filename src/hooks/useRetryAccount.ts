@@ -1,16 +1,16 @@
 import useSWR from 'swr'
 import { IRetryAccount } from '@lib/Account/Account/interface'
 
-import { GetRetryAccountsPagination, GetRetryAccount, UpdateRetryAccount } from '@services/Account/RetryAccount'
+import { getRetryAccountsPagination, getRetryAccount, updateRetryAccount as updateRetryAccountHelper } from '@services/Account/RetryAccount'
 import { PaginationMetadata, PaginationParams } from '@services/Account/AccountInterface'
 export const useRetryAccount = (id: string, shouldFetch: boolean = true, fallbackData?: IRetryAccount) => {
-  const { data, error, mutate, ...swr } = useSWR(shouldFetch ? [id] : null, (id) => GetRetryAccount(id), {
+  const { data, error, mutate, ...swr } = useSWR(shouldFetch ? [id] : null, (id) => getRetryAccount(id), {
     refreshInterval: 0,
     fallbackData: fallbackData,
   })
 
   const updateRetryAccount = async (updatedAccount: IRetryAccount) => {
-    const res = await UpdateRetryAccount(id, updatedAccount)
+    const res = await updateRetryAccountHelper(id, updatedAccount)
     mutate()
     return res
   }
@@ -30,7 +30,7 @@ export const useGetRetryAccountsPagination = (
   shouldFetch?: true,
   fallbackData?: PaginationMetadata<IRetryAccount[]>
 ) => {
-  const { data, error, mutate, ...swr } = useSWR(shouldFetch ? [paginationParams] : null, GetRetryAccountsPagination, {
+  const { data, error, mutate, ...swr } = useSWR(shouldFetch ? [paginationParams] : null, getRetryAccountsPagination, {
     refreshInterval: 0,
     fallbackData: fallbackData,
   })

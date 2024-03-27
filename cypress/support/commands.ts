@@ -72,42 +72,39 @@ Cypress.Commands.add('google_login', () => {
   const username = Cypress.env('GOOGLE_USER')
   const password = Cypress.env('GOOGLE_PW')
   const loginUrl = Cypress.env('SITE_NAME')
-  const cookieName = Cypress.env('COOKIE_NAME')
-  // set timeout to 5 second
-
 
   const socialLoginOptions = {
     username,
     password,
     loginUrl,
-    headless: true,
+    headless: false,
     logs: true,
     isPopup: false,
     // loginSelector: , //className of the login button with css selector
     loginSelector: `button[id="login"]`,
-    postLoginSelector: '.unread-count',
+    postLoginSelector: 'button[id="logout-button"]',
+    // cookieName,
   }
 
   // cy looks for button with id="login" is visible
+  cy.clearCookies()
 
   return cy.task('GoogleSocialLogin', socialLoginOptions).then(({ cookies }) => {
     cy.clearCookies()
 
-    const cookie = cookies.filter((cookie) => cookie.name === cookieName).pop()
-    if (cookie) {
-      cy.setCookie(cookie.name, cookie.value, {
-        domain: cookie.domain,
-        expiry: cookie.expires,
-        httpOnly: cookie.httpOnly,
-        path: cookie.path,
-        secure: cookie.secure,
-      })
-
-      Cypress.Cookies.defaults({
-        preserve: cookieName,
-      })
-
-    }
+    cookies.forEach((cookie) => {
+      if (cookie) {
+        cy.setCookie(cookie.name, cookie.value, {
+          domain: cookie.domain,
+          expiry: cookie.expires,
+          httpOnly: cookie.httpOnly,
+          path: cookie.path,
+          secure: cookie.secure,
+        })
+      } else {
+        cy.log('no cookie')
+      }
+    })
   })
 })
 

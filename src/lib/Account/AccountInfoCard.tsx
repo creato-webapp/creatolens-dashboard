@@ -17,9 +17,16 @@ interface AccountInfoCardProps {
 const AccountInfoCard: React.FC<AccountInfoCardProps> = ({ isLoading, account, handleSubmit, setIsShow }) => {
   const accountInfoField: IField[] = [
     {
+      label: 'Country',
+      id: 'location',
+      type: 'text',
+      name: 'location',
+      value: account['location'],
+    },
+    {
       label: 'login count',
       id: 'login_count',
-      type: 'number', 
+      type: 'number',
       name: 'login_count',
       value: account['login_count'],
     },
@@ -136,7 +143,7 @@ const AccountInfoCard: React.FC<AccountInfoCardProps> = ({ isLoading, account, h
         </Button.Primary>
       }
     >
-      <DynamicForm onSubmit={handleSubmit} Header={account.username} loading={isLoading} fields={combinedField} allowSubmit={!!isLoading} />
+      <DynamicForm onSubmit={handleSubmit} Header={account.username} loading={isLoading} fields={combinedField} allowSubmit={!isLoading} />
     </Card>
   )
 }

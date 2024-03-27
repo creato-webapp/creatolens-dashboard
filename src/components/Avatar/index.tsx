@@ -20,12 +20,7 @@ const sizeStyles: Record<AvatarSize, string[]> = {
 // Avatar component
 const Avatar: React.FC<AvatarProps> = ({ src, alt = 'Avatar', size = 'small', className }) => {
   const sizeStyle = sizeStyles[size || 'medium']
-  let iconSize = 26
-  if (size === 'small') {
-    iconSize = 18
-  } else if (size === 'large') {
-    iconSize = 36
-  }
+  const iconSize = size === 'small' ? 18 : size === 'large' ? 36 : 26
 
   return (
     <div className={`flex overflow-hidden rounded-full ${sizeStyle} bg-gray-300 ${className}`}>

@@ -4,18 +4,15 @@ import { useRouter } from 'next/router'
 import { IField } from '@components/Form/interface'
 import { IBlockedAccount } from '@lib/Account/Account/interface'
 import { getSession } from 'next-auth/react'
-import { GetBlockedAccount } from '@services/Account/BlockAccount'
+import { getBlockedAccount } from '@services/Account/BlockAccount'
 import { useBlockAccount } from 'src/hooks/useBlockedAccount'
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import DynamicForm from '@components/Form/DynamicForm'
+import dayjs from '@services/Dayjs'
 
 type Props = {
   accountData: IBlockedAccount
 }
-
-const dayjs = require('dayjs')
-const utc = require('dayjs/plugin/utc')
-dayjs.extend(utc)
 
 export const getServerSideProps: GetServerSideProps = async (
   context: GetServerSidePropsContext
@@ -38,7 +35,7 @@ export const getServerSideProps: GetServerSideProps = async (
     // Check if params.id exists and is a string
     return { redirect: { destination: '/404', permanent: false } }
   }
-  const res = await GetBlockedAccount(params.id, {
+  const res = await getBlockedAccount(params.id, {
     headers: {
       Cookie: context.req.headers.cookie,
     },
@@ -70,7 +67,7 @@ const AccountsBlockedPage = ({ accountData }: Props) => {
 
   const account: IBlockedAccount = {
     ...data,
-    last_login_dt: dayjs(data?.last_login_dt, 'YYYY-MM-DD THH:mm:ss').format('YYYY-MM-DDTHH:mm'),
+    last_login_dt: dayjs(data.last_login_dt, 'YYYY-MM-DD THH:mm:ss').format('YYYY-MM-DDTHH:mm'),
   }
 
   const fields: IField[] = [

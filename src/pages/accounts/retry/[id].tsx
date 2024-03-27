@@ -4,18 +4,15 @@ import { useRouter } from 'next/router'
 import { IField } from '@components/Form/interface'
 import { IRetryAccount } from '@lib/Account/Account/interface'
 import { getSession } from 'next-auth/react'
-import { GetRetryAccount } from '@services/Account/RetryAccount'
+import { getRetryAccount } from '@services/Account/RetryAccount'
 import { useRetryAccount } from 'src/hooks/useRetryAccount'
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import DynamicForm from '@components/Form/DynamicForm'
+import dayjs from '@services/Dayjs'
 
 type Props = {
   accountData: IRetryAccount
 }
-
-const dayjs = require('dayjs')
-const utc = require('dayjs/plugin/utc')
-dayjs.extend(utc)
 
 export const getServerSideProps: GetServerSideProps = async (
   context: GetServerSidePropsContext
@@ -37,7 +34,7 @@ export const getServerSideProps: GetServerSideProps = async (
   if (!params || typeof params.id !== 'string') {
     return { redirect: { destination: '/404', permanent: false } }
   }
-  const res = await GetRetryAccount(params.id, {
+  const res = await getRetryAccount(params.id, {
     headers: {
       Cookie: context.req.headers.cookie,
     },
@@ -67,7 +64,7 @@ const AccountsRetryPage = ({ accountData }: Props) => {
 
   const account: IRetryAccount = {
     ...data,
-    wait_until: dayjs(data?.wait_until, 'YYYY-MM-DD THH:mm:ss').format('YYYY-MM-DDTHH:mm'),
+    wait_until: dayjs(data.wait_until, 'YYYY-MM-DD THH:mm:ss').format('YYYY-MM-DDTHH:mm'),
   }
 
   const fields: IField[] = [

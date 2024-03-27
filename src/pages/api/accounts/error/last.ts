@@ -7,9 +7,7 @@ export default async function accountQueryHandler(req: NextApiRequest, res: Next
   } = req
   switch (method) {
     case 'GET': {
-      let response = undefined
-
-      response = await AccountInstance.get('/handler/query', {
+      const response = await AccountInstance.get('/handler/query', {
         params: {
           filter: `document_id == ${username}`,
           orderby: 'occurred_at',

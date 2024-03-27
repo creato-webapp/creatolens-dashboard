@@ -57,6 +57,7 @@ const Login: FC<loginProps> = ({ providers }) => {
             </div>
             <div>
               <button
+              id="logout-button"
                 onClick={() => {
                   deleteCookie('idToken')
                   signOut()
