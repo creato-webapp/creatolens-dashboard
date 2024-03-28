@@ -2,7 +2,6 @@ import React, { useState, useCallback } from 'react'
 import Card from '@components/Card'
 import { Table } from '@components/Table'
 import { IAccountError } from '@lib/Account/AccountErrors/interface'
-import { getSession } from 'next-auth/react'
 import Link from 'next/link'
 import { Form } from '@components/Form'
 import { useAccountErrorPagination } from 'src/hooks/useAccountErrors'
@@ -12,17 +11,11 @@ import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult
 import { PaginationMetadata, PaginationParams } from '@services/Account/AccountInterface'
 import dayjs from '@services/Dayjs'
 
-export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext): Promise<GetServerSidePropsResult<{}>> => {
-  const session = await getSession(context)
-  if (!session) {
-    return {
-      redirect: {
-        destination: '/auth/login',
-        permanent: false,
-      },
-    }
-  }
+type Props = {
+  paginationData: PaginationMetadata<IAccountError[]>
+}
 
+export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext): Promise<GetServerSidePropsResult<Props>> => {
   const paginationProps = {
     username: null,
     pageNumber: 1,
@@ -30,18 +23,18 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
     orderBy: 'occurred_at',
     isAsc: false,
   }
-
-  const response = await getErrorPagination(paginationProps)
-
-  const accountData = response.data ?? []
-
+  const response = await getErrorPagination(paginationProps, {
+    headers: {
+      Cookie: context.req.headers.cookie,
+    },
+  })
   const paginationData: PaginationMetadata<IAccountError[]> = {
-    data: accountData,
-    has_next: response ? response.has_next : false,
-    has_prev: response ? response.has_prev : false,
-    page: response ? response.page : 1,
-    size: response ? response.size : 0,
-    total_items: response ? response.total_items : 0,
+    data: response?.data ?? [],
+    has_next: response?.has_next ?? false,
+    has_prev: response?.has_prev ?? false,
+    page: response?.page ?? 1,
+    size: response?.size ?? 0,
+    total_items: response?.total_items ?? 0,
   }
   return { props: { paginationData } }
 }
@@ -55,11 +48,16 @@ const AccountsErrorPage = (paginationData: PaginationMetadata<IAccountError[]>) 
     isAsc: false,
   })
 
+  const [shouldFetch, setShouldFetch] = useState(false)
+  const { errors: responseData, isLoading, error } = useAccountErrorPagination(pageParams, shouldFetch, paginationData)
+  const accountError: IAccountError[] = responseData?.data ? responseData.data : []
+
   const onPageChange = (newPage: number) => {
     setPageParams((prevParams) => ({
       ...prevParams,
       pageNumber: newPage,
     }))
+    setShouldFetch(true)
   }
 
   const onChange: React.ChangeEventHandler<HTMLInputElement> = useCallback(
@@ -74,17 +72,10 @@ const AccountsErrorPage = (paginationData: PaginationMetadata<IAccountError[]>) 
       })),
     []
   )
-
-  const { errors: responseData, isLoading, error } = useAccountErrorPagination(pageParams, true, paginationData)
-  const accountError: IAccountError[] = responseData?.data ? responseData.data : []
-
   if (error) {
-    console.error(responseData)
-    console.error(error)
     return <div>Failed to load account error data</div>
   }
   if (!responseData) {
-    console.error(responseData)
     return <div>Loading...</div>
   }
 

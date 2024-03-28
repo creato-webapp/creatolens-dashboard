@@ -3,7 +3,6 @@ import Card from '@components/Card'
 import { useRouter } from 'next/router'
 import { IField } from '@components/Form/interface'
 import { IBlockedAccount } from '@lib/Account/Account/interface'
-import { getSession } from 'next-auth/react'
 import { getBlockedAccount } from '@services/Account/BlockAccount'
 import { useBlockAccount } from 'src/hooks/useBlockedAccount'
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
@@ -15,15 +14,6 @@ type Props = {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext): Promise<GetServerSidePropsResult<Props>> => {
-  const session = await getSession(context)
-  if (!session) {
-    return {
-      redirect: {
-        destination: '/404',
-        permanent: false,
-      },
-    }
-  }
   const id = context.params?.id as string
   const res = await getBlockedAccount(id, {
     headers: {

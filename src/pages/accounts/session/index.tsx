@@ -1,7 +1,6 @@
 import React, { useState, useCallback } from 'react'
 import Card from '@components/Card'
 import { Table } from '@components/Table'
-import { getSession } from 'next-auth/react'
 import Link from 'next/link'
 import { useAccountSessionPagination } from 'src/hooks/useAccountSession'
 import { getSessionPagination, PaginationParams, PaginationMetadata } from '@services/Account/Session'
@@ -28,20 +27,7 @@ export interface IAccountSession extends IGenericRowData {
   session_cookies: Cookies
 }
 
-export const getServerSideProps: GetServerSideProps = async (
-  context: GetServerSidePropsContext
-): Promise<GetServerSidePropsResult<{ paginationData?: PaginationMetadata<IAccountSession[]> }>> => {
-  const session = await getSession(context)
-
-  if (!session) {
-    return {
-      redirect: {
-        destination: '/some-destination',
-        permanent: false,
-      },
-    }
-  }
-
+export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext): Promise<GetServerSidePropsResult<Props>> => {
   const paginationProps = {
     username: null,
     pageNumber: 1,
@@ -49,14 +35,18 @@ export const getServerSideProps: GetServerSideProps = async (
     orderBy: 'created_at',
     isAsc: false,
   }
-  const response = await getSessionPagination(paginationProps)
+  const response = await getSessionPagination(paginationProps, {
+    headers: {
+      Cookie: context.req.headers.cookie,
+    },
+  })
   const paginationData: PaginationMetadata<IAccountSession[]> = {
-    data: response ? response?.data : [],
-    has_next: response ? response.has_next : false,
-    has_prev: response ? response.has_prev : false,
-    page: response ? response.page : 1,
-    size: response ? response.size : 0,
-    total_items: response ? response.total_items : 0,
+    data: response?.data ?? [],
+    has_next: response?.has_next ?? false,
+    has_prev: response?.has_prev ?? false,
+    page: response?.page ?? 1,
+    size: response?.size ?? 0,
+    total_items: response?.total_items ?? 0,
   }
   return { props: { paginationData } }
 }
@@ -70,13 +60,6 @@ const AccountsSessionPage = ({ paginationData }: Props) => {
     isAsc: false,
   })
 
-  const onPageChange = (newPage: number) => {
-    setPageParams((prevParams) => ({
-      ...prevParams,
-      pageNumber: newPage,
-    }))
-  }
-
   const onChange: React.ChangeEventHandler<HTMLInputElement> = useCallback((e) => {
     setPageParams(() => ({
       pageNumber: 1,
@@ -86,17 +69,22 @@ const AccountsSessionPage = ({ paginationData }: Props) => {
       username: e.target.value,
     }))
   }, [])
+  const [shouldFetch, setShouldFetch] = useState(false)
+  const { sessions: responseData, isLoading, error } = useAccountSessionPagination(pageParams, shouldFetch, paginationData)
 
-  const { sessions: responseData, isLoading, error } = useAccountSessionPagination(pageParams, true, paginationData)
+  const onPageChange = (newPage: number) => {
+    setPageParams((prevParams) => ({
+      ...prevParams,
+      pageNumber: newPage,
+    }))
+    setShouldFetch(true)
+  }
 
   const accountSession: IAccountSession[] = responseData?.data ? responseData.data : []
   if (error) {
-    console.error(responseData)
-    console.error(error)
     return <div>Failed to load account error data</div>
   }
   if (!responseData) {
-    console.error('No response data', responseData)
     return <div>Loading...</div>
   }
   const columns = [

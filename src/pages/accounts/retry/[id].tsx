@@ -3,7 +3,6 @@ import Card from '@components/Card'
 import { useRouter } from 'next/router'
 import { IField } from '@components/Form/interface'
 import { IRetryAccount } from '@lib/Account/Account/interface'
-import { getSession } from 'next-auth/react'
 import { getRetryAccount } from '@services/Account/RetryAccount'
 import { useRetryAccount } from 'src/hooks/useRetryAccount'
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
@@ -14,22 +13,7 @@ type Props = {
   accountData: IRetryAccount
 }
 
-export const getServerSideProps: GetServerSideProps = async (
-  context: GetServerSidePropsContext
-): Promise<
-  GetServerSidePropsResult<{
-    accountData: IRetryAccount
-  }>
-> => {
-  const session = await getSession(context)
-  if (!session) {
-    return {
-      redirect: {
-        destination: '/404',
-        permanent: false,
-      },
-    }
-  }
+export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext): Promise<GetServerSidePropsResult<Props>> => {
   const { params } = context
   if (!params || typeof params.id !== 'string') {
     return { redirect: { destination: '/404', permanent: false } }

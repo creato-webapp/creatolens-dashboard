@@ -26,10 +26,9 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
     orderBy: 'username',
     isAsc: false,
   }
-  const cookies = context.req.headers.cookie
   const response = await getRetryAccountsPagination(paginationProps, {
     headers: {
-      Cookie: cookies,
+      Cookie: context.req.headers.cookie,
     },
   })
   const paginationData: PaginationMetadata<IRetryAccount[]> = {
