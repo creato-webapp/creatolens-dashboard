@@ -6,7 +6,6 @@ import {
   updateSession as updateSessionHelper,
   updateAccount as updateAccountHelper,
 } from '@services/Account/Account'
-import { useRef } from 'react'
 import { PaginationMetadata, PaginationParams } from '@services/Account/AccountInterface'
 
 export const useAccount = (id: string, shouldFetch: boolean = true, fallbackData?: IAccount | null) => {
@@ -38,14 +37,15 @@ export const useAccount = (id: string, shouldFetch: boolean = true, fallbackData
   }
 }
 
-export const useGetAccountsPagination = (paginationParams: PaginationParams, shouldFetch?: true) => {
-  const mutableRef = useRef<PaginationMetadata<IAccount[]>>()
+export const useGetAccountsPagination = (
+  paginationParams: PaginationParams,
+  shouldFetch?: boolean,
+  fallbackData?: PaginationMetadata<IAccount[]>
+) => {
   const { data, error, mutate, ...swr } = useSWR(shouldFetch ? [paginationParams] : null, getAccountsPagination, {
     refreshInterval: 0,
-    fallbackData: mutableRef.current ? mutableRef.current : undefined,
+    fallbackData: fallbackData,
   })
-
-  if (data !== undefined) mutableRef.current = data
 
   return {
     accounts: data,

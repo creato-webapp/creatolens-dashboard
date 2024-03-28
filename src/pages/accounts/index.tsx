@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useMemo } from 'react'
 import Card from '@components/Card'
 import { Table } from '@components/Table'
 import { Button } from '@components/Button'
@@ -18,15 +18,18 @@ import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult
 import { PaginationMetadata } from '@services/Account/AccountInterface'
 import dayjs from '@services/Dayjs'
 
+type Props = {
+  paginationData: PaginationMetadata<IAccount[]>
+}
+
 export const getServerSideProps: GetServerSideProps = async (
   context: GetServerSidePropsContext
 ): Promise<GetServerSidePropsResult<{ paginationData: PaginationMetadata<IAccount[]> }>> => {
-
   const paginationProps = {
     pageNumber: 1,
     pageSize: 10,
     orderBy: 'created_at',
-    isAsc: true,
+    isAsc: false,
   }
   const cookies = context.req.headers.cookie
   const response = await getAccountsPagination(paginationProps, {
@@ -45,16 +48,17 @@ export const getServerSideProps: GetServerSideProps = async (
   return { props: { paginationData } }
 }
 
-const AccountsPage = () => {
+const AccountsPage = ({ paginationData }: Props) => {
   const [pageParams, setPageParams] = useState({
     pageNumber: 1,
     pageSize: 10,
     orderBy: 'created_at',
     isAsc: false,
   })
+  const [shouldFetch, setShouldFetch] = useState(false)
   const [createDateOrder, setCreateDateOrder] = useState<'asc' | 'desc'>('desc')
-  const { accounts: responseData, error } = useGetAccountsPagination(pageParams, true)
-  const accounts: IAccount[] = responseData?.data || []
+  const { accounts: responseData, error } = useGetAccountsPagination(pageParams, shouldFetch, paginationData)
+  const accounts: IAccount[] = useMemo(() => responseData?.data || [], [responseData])
   const isLoading = !responseData && !error
 
   const onPageChange = (newPage: number) => {
@@ -62,6 +66,7 @@ const AccountsPage = () => {
       ...prevParams,
       pageNumber: newPage,
     }))
+    setShouldFetch(true)
   }
 
   const updateSorting = useCallback(
@@ -77,7 +82,7 @@ const AccountsPage = () => {
   )
 
   if (error) {
-    return <div>Failed to load users</div>
+    throw new Error('Error fetching data')
   }
   if (!responseData) {
     return <div>Loading...</div>
