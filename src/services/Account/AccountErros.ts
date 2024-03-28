@@ -8,7 +8,7 @@ export async function getErrorPagination(params: PaginationParams, customConfig?
   const response = await Fetcher.GET(
     `/api/accounts/error`,
     {
-      ...(params.username ? { username: params.username } : {}), // Conditionally add username if it's present
+      username: params.username,
       pageNumber: params.pageNumber,
       pageSize: params.pageSize,
       orderBy: params.orderBy,
