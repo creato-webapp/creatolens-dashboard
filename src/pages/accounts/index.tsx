@@ -4,9 +4,7 @@ import { Table } from '@components/Table'
 import { Button } from '@components/Button'
 import { IAccount } from '@lib/Account/Account/interface'
 import { ResponsiveAccountCard } from '@lib/Account/ResponsiveAccountCard'
-import Link from 'next/link'
 import { getSession } from 'next-auth/react'
-import Pagination from '@components/Pagination'
 import { useGetAccountsPagination } from 'src/hooks/useAccount'
 import { getAccountsPagination } from '@services/Account/Account'
 import Image from 'next/image'
@@ -15,13 +13,17 @@ import Hero from '@components/Hero'
 import { PlusIcon } from '@heroicons/react/24/solid'
 import Dropdown from '@components/Form/Dropdown'
 import EditIcon from '@components/Icon/EditIcon'
-import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
+import Pagination from '@components/Pagination'
 import { PaginationMetadata } from '@services/Account/AccountInterface'
+import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
+import Link from 'next/link'
 import dayjs from '@services/Dayjs'
 
-export const getServerSideProps: GetServerSideProps = async (
-  context: GetServerSidePropsContext
-): Promise<GetServerSidePropsResult<{ paginationData: PaginationMetadata<IAccount[]> }>> => {
+type Props = {
+  paginationData: PaginationMetadata<IAccount[]>
+}
+
+export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext): Promise<GetServerSidePropsResult<Props>> => {
   const session = await getSession(context)
   if (!session) {
     return {
@@ -35,12 +37,12 @@ export const getServerSideProps: GetServerSideProps = async (
     pageNumber: 1,
     pageSize: 10,
     orderBy: 'created_at',
-    isAsc: true,
+    isAsc: false,
   }
   const cookies = context.req.headers.cookie
   const response = await getAccountsPagination(paginationProps, {
     headers: {
-      Cookie: cookies, // Forward the cookies to the server-side request
+      Cookie: cookies,
     },
   })
   const paginationData: PaginationMetadata<IAccount[]> = {
@@ -66,12 +68,15 @@ const AccountsPage = () => {
   const accounts: IAccount[] = responseData?.data || []
   const isLoading = !responseData && !error
 
-  const onPageChange = (newPage: number) => {
-    setPageParams((prevParams) => ({
-      ...prevParams,
-      pageNumber: newPage,
-    }))
-  }
+  const onPageChange = useCallback(
+    (newPage: number) => {
+      setPageParams((prevParams) => ({
+        ...prevParams,
+        pageNumber: newPage,
+      }))
+    },
+    [setPageParams]
+  )
 
   const updateSorting = useCallback(
     (orderBy: string, isAsc: boolean): React.MouseEventHandler<HTMLDivElement> =>
