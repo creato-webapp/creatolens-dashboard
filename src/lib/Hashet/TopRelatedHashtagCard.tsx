@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useMemo } from 'react'
 import Card from '@components/Card'
 import Dropdown from '@components/Form/Dropdown'
 import { Button } from '@components/Button'
@@ -14,7 +14,7 @@ interface Props {
 const TopRelatedHashtagCard: React.FC<Props> = ({ hashtags }) => {
   const [numberOfHashes, setNumberOfHashes] = useState<string | number>(30)
 
-  const slicedHashtags = hashtags.length > 0 ? hashtags.slice(0, numberOfHashes as number) : []
+  const slicedHashtags = useMemo(() => (hashtags.length > 0 ? hashtags.slice(0, numberOfHashes as number) : []), [hashtags, numberOfHashes])
 
   const copyToClipboard = useCallback(async () => {
     const copiedHashtags = slicedHashtags.map((tag) => tag.hashtag).join(' ')
@@ -46,7 +46,7 @@ const TopRelatedHashtagCard: React.FC<Props> = ({ hashtags }) => {
           <span>Related</span>
         </h1>
       }
-      className="min-w-96 w-full whitespace-normal !rounded-none py-4 md:h-auto md:w-1/2"
+      className="w-full min-w-96 whitespace-normal !rounded-none py-4 md:h-auto md:w-1/2"
       isDropdown={true}
       extra={
         <Dropdown
