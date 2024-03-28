@@ -27,7 +27,7 @@ export const useBlockAccount = (id: string, shouldFetch: boolean = true, fallbac
 
 export const useGetBlockAccountsPagination = (
   paginationParams: PaginationParams,
-  shouldFetch?: true,
+  shouldFetch?: boolean,
   fallbackData?: PaginationMetadata<IBlockedAccount[]>
 ) => {
   const { data, error, mutate, ...swr } = useSWR(shouldFetch ? [paginationParams] : null, getBlockedAccountsPagination, {

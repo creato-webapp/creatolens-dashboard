@@ -27,7 +27,7 @@ export const useRetryAccount = (id: string, shouldFetch: boolean = true, fallbac
 
 export const useGetRetryAccountsPagination = (
   paginationParams: PaginationParams,
-  shouldFetch?: true,
+  shouldFetch?: boolean,
   fallbackData?: PaginationMetadata<IRetryAccount[]>
 ) => {
   const { data, error, mutate, ...swr } = useSWR(shouldFetch ? [paginationParams] : null, getRetryAccountsPagination, {

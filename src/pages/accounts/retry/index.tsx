@@ -1,10 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useCallback } from 'react'
 import Card from '@components/Card'
 import { Table } from '@components/Table'
 import { Button } from '@components/Button'
 import { IRetryAccount } from '@lib/Account/Account/interface'
 import Link from 'next/link'
-import { getSession } from 'next-auth/react'
 import Tag from '@components/Tag'
 import Avatar from '@components/Avatar'
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/solid'
@@ -20,34 +19,26 @@ type Props = {
   paginationData: PaginationMetadata<IRetryAccount[]>
 }
 
-export const getServerSideProps: GetServerSideProps = async (
-  context: GetServerSidePropsContext
-): Promise<GetServerSidePropsResult<{ paginationData?: PaginationMetadata<IRetryAccount[]> }>> => {
-  const session = await getSession(context)
-  if (!session) {
-    return {
-      redirect: {
-        destination: '/auth/login',
-        permanent: false,
-      },
-    }
-  }
+export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext): Promise<GetServerSidePropsResult<Props>> => {
   const paginationProps = {
     pageNumber: 1,
     pageSize: 10,
     orderBy: 'username',
     isAsc: false,
   }
-  const response = await getRetryAccountsPagination(paginationProps)
-  const accountData: IRetryAccount[] = response ? response.data : []
-
+  const cookies = context.req.headers.cookie
+  const response = await getRetryAccountsPagination(paginationProps, {
+    headers: {
+      Cookie: cookies,
+    },
+  })
   const paginationData: PaginationMetadata<IRetryAccount[]> = {
-    data: accountData,
-    has_next: response ? response.has_next : false,
-    has_prev: response ? response.has_prev : false,
-    page: response ? response.page : 1,
-    size: response ? response.size : 0,
-    total_items: response ? response.total_items : 0,
+    data: response?.data ?? [],
+    has_next: response?.has_next ?? false,
+    has_prev: response?.has_prev ?? false,
+    page: response?.page ?? 1,
+    size: response?.size ?? 0,
+    total_items: response?.total_items ?? 0,
   }
   return { props: { paginationData } }
 }
@@ -59,26 +50,32 @@ const RetryAccountsPage = ({ paginationData }: Props) => {
     orderBy: 'username',
     isAsc: false,
   })
-  const { accounts: responseData, error, mutate } = useGetRetryAccountsPagination(pageParams, true, paginationData)
-
+  const [shouldFetch, setShouldFetch] = useState(false)
+  const { accounts: responseData, error } = useGetRetryAccountsPagination(pageParams, shouldFetch, paginationData)
   const accounts: IRetryAccount[] = responseData?.data || []
   const isLoading = !responseData && !error
+
   const onPageChange = (newPage: number) => {
     setPageParams((prevParams) => ({
       ...prevParams,
       pageNumber: newPage,
     }))
+    setShouldFetch(true)
   }
 
-  useEffect(() => {
-    if (pageParams.pageNumber !== 1) {
-      mutate()
-    }
-  }, [pageParams])
+  const updateSorting = useCallback(
+    (orderBy: string, isAsc: boolean): React.MouseEventHandler<HTMLDivElement> =>
+      () => {
+        setPageParams((prevParams) => ({
+          ...prevParams,
+          orderBy: orderBy,
+          isAsc: isAsc,
+        }))
+      },
+    []
+  )
 
   if (error) {
-    console.error(responseData)
-    console.error(error)
     return <div>Failed to load users</div>
   }
   if (!responseData) {
@@ -155,37 +152,15 @@ const RetryAccountsPage = ({ paginationData }: Props) => {
 
   return (
     <Card title="Accounts Table">
-      <div className="flex gap-3">
-        <Link href="/accounts/create-account">
-          <Button.Primary loading={false}>Create New Retry Account</Button.Primary>
-        </Link>
-        <Button.Primary
-          onClick={() => {
-            setPageParams({
-              pageNumber: 1,
-              pageSize: 10,
-              orderBy: 'username',
-              isAsc: true,
-            })
-          }}
-        >
-          Change order
-        </Button.Primary>
-        <Button.Primary
-          onClick={() => {
-            setPageParams({
-              pageNumber: 1,
-              pageSize: 10,
-              orderBy: 'username',
-              isAsc: false,
-            })
-          }}
-        >
-          Reset Params
-        </Button.Primary>
-      </div>
       <div className="hidden  md:flex">
         <Table.Layout>
+          <Table.Header
+            columns={columns}
+            thClassName={'text-sm font-normal text-text-primary items-center justify-center'}
+            className="capitalize"
+            pageParams={pageParams}
+            updateSorting={updateSorting}
+          />
           <Table.Header columns={columns} />
           <Table.Body>
             {accounts?.map((e, index) => {
