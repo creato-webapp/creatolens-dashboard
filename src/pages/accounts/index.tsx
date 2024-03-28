@@ -1,10 +1,11 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useMemo } from 'react'
 import Card from '@components/Card'
 import { Table } from '@components/Table'
 import { Button } from '@components/Button'
 import { IAccount } from '@lib/Account/Account/interface'
 import { ResponsiveAccountCard } from '@lib/Account/ResponsiveAccountCard'
-import { getSession } from 'next-auth/react'
+import Link from 'next/link'
+import Pagination from '@components/Pagination'
 import { useGetAccountsPagination } from 'src/hooks/useAccount'
 import { getAccountsPagination } from '@services/Account/Account'
 import Image from 'next/image'
@@ -13,26 +14,17 @@ import Hero from '@components/Hero'
 import { PlusIcon } from '@heroicons/react/24/solid'
 import Dropdown from '@components/Form/Dropdown'
 import EditIcon from '@components/Icon/EditIcon'
-import Pagination from '@components/Pagination'
 import { PaginationMetadata } from '@services/Account/AccountInterface'
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
-import Link from 'next/link'
 import dayjs from '@services/Dayjs'
 
 type Props = {
   paginationData: PaginationMetadata<IAccount[]>
 }
 
-export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext): Promise<GetServerSidePropsResult<Props>> => {
-  const session = await getSession(context)
-  if (!session) {
-    return {
-      redirect: {
-        destination: '/auth/login',
-        permanent: false,
-      },
-    }
-  }
+export const getServerSideProps: GetServerSideProps = async (
+  context: GetServerSidePropsContext
+): Promise<GetServerSidePropsResult<{ paginationData: PaginationMetadata<IAccount[]> }>> => {
   const paginationProps = {
     pageNumber: 1,
     pageSize: 10,
@@ -56,27 +48,26 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
   return { props: { paginationData } }
 }
 
-const AccountsPage = () => {
+const AccountsPage = ({ paginationData }: Props) => {
   const [pageParams, setPageParams] = useState({
     pageNumber: 1,
     pageSize: 10,
     orderBy: 'created_at',
     isAsc: false,
   })
+  const [shouldFetch, setShouldFetch] = useState(false)
   const [createDateOrder, setCreateDateOrder] = useState<'asc' | 'desc'>('desc')
-  const { accounts: responseData, error } = useGetAccountsPagination(pageParams, true)
-  const accounts: IAccount[] = responseData?.data || []
+  const { accounts: responseData, error } = useGetAccountsPagination(pageParams, shouldFetch, paginationData)
+  const accounts: IAccount[] = useMemo(() => responseData?.data || [], [responseData])
   const isLoading = !responseData && !error
 
-  const onPageChange = useCallback(
-    (newPage: number) => {
-      setPageParams((prevParams) => ({
-        ...prevParams,
-        pageNumber: newPage,
-      }))
-    },
-    [setPageParams]
-  )
+  const onPageChange = (newPage: number) => {
+    setPageParams((prevParams) => ({
+      ...prevParams,
+      pageNumber: newPage,
+    }))
+    setShouldFetch(true)
+  }
 
   const updateSorting = useCallback(
     (orderBy: string, isAsc: boolean): React.MouseEventHandler<HTMLDivElement> =>
@@ -91,7 +82,7 @@ const AccountsPage = () => {
   )
 
   if (error) {
-    return <div>Failed to load users</div>
+    throw new Error('Error fetching data')
   }
   if (!responseData) {
     return <div>Loading...</div>
