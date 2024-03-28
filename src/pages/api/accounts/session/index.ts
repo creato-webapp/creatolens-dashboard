@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import AccountInstance from '../../axiosInstance/Account'
+import { AxiosRequestConfig } from 'axios'
 export default async function accountQueryHandler(req: NextApiRequest, res: NextApiResponse) {
   const {
     query: { username, pageNumber, pageSize, orderBy, isAsc },
@@ -7,23 +8,19 @@ export default async function accountQueryHandler(req: NextApiRequest, res: Next
   } = req
   switch (method) {
     case 'GET': {
-      let response = undefined
-      if (username) {
-        response = await AccountInstance.get(`/account-session?page_number=${pageNumber}&page_size=${pageSize}&orderby=${orderBy}&isAsc=${isAsc}`, {
-          params: {
-            filter: `account == ${username}`,
-          },
-          headers: {
-            Cookie: req.headers.cookie,
-          },
-        })
-      } else {
-        response = await AccountInstance.get(`/account-session?page_number=${pageNumber}&page_size=${pageSize}&orderby=${orderBy}&isAsc=${isAsc}`, {
-          headers: {
-            Cookie: req.headers.cookie,
-          },
-        })
+      const params: AxiosRequestConfig = {
+        headers: {
+          Cookie: req.headers.cookie,
+        },
       }
+      if (username) {
+        params.params = { username }
+      }
+      const response = await AccountInstance.get(
+        `/account-session?page_number=${pageNumber}&page_size=${pageSize}&orderby=${orderBy}&isAsc=${isAsc}`,
+        params
+      )
+
       return res.status(response.status).json(response.data)
     }
     default:
