@@ -59,10 +59,6 @@ export default async function accountQueryHandler(req: NextApiRequest, res: Next
     body,
     method,
   } = req
-  if (req.headers.cookie === undefined) {
-    return res.status(401).json({ message: 'Unauthorized' })
-  }
-
   const cookieHeader = {
     headers: {
       Cookie: req.headers.cookie,
