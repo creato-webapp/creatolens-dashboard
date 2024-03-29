@@ -12,7 +12,7 @@ const ErrorPage: React.FC = () => {
   }
 
   return (
-    <div className="md:h-[80%]">
+    <div>
       <Button.Text onClick={goBack} className="place-self-start p-4 text-accent2-500 md:hidden md:overflow-hidden">
         {'< Back'}
       </Button.Text>
