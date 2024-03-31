@@ -35,42 +35,20 @@
 //     }
 //   }
 // }
-import hkdf from '@panva/hkdf'
-import { EncryptJWT, JWTPayload } from 'jose'
 
-// Function logic derived from https://github.com/nextauthjs/next-auth/blob/5c1826a8d1f8d8c2d26959d12375704b0a693bfc/packages/next-auth/src/jwt/index.ts#L113-L121
-async function getDerivedEncryptionKey(secret: string) {
-  return await hkdf('sha256', secret, '', 'NextAuth.js Generated Encryption Key', 32)
+interface ICookie {
+  name: string
+  value: string
+  domain?: string
+  path?: string
+  secure?: boolean
+  httpOnly?: boolean
+  expiry?: number // Use 'expiry' to match Cypress's setCookie command
 }
-
-export async function encode(token: JWTPayload, secret: string): Promise<string> {
-  const maxAge = 30 * 24 * 60 * 60 // 30 days
-  const encryptionSecret = await getDerivedEncryptionKey(secret)
-  return await new EncryptJWT(token)
-    .setProtectedHeader({ alg: 'dir', enc: 'A256GCM' })
-    .setIssuedAt()
-    .setExpirationTime(Math.round(Date.now() / 1000 + maxAge))
-    .setJti('test')
-    .encrypt(encryptionSecret)
-}
-Cypress.Commands.add('login', (userObj: JWTPayload) => {
-  // Generate and set a valid cookie from the fixture that next-auth can decrypt
-  cy.wrap(null)
-    .then(() => {
-      return encode(userObj, Cypress.env('NEXTAUTH_JWT_SECRET'))
-    })
-    .then((encryptedToken) => cy.setCookie('next-auth.session-token', encryptedToken))
-
-  cy.visit('/')
-  cy.get('button').contains('Logout').should('be.visible')
-})
-
-Cypress.Commands.add('google_login', () => {
+Cypress.Commands.add('google_login', (username = Cypress.env('GOOGLE_USER'), password = Cypress.env('GOOGLE_PW')) => {
   // Generate and set a valid cookie from the fixture that next-auth can decrypt
 
   cy.visit(Cypress.env('SITE_NAME'))
-  const username = Cypress.env('GOOGLE_USER')
-  const password = Cypress.env('GOOGLE_PW')
   const loginUrl = Cypress.env('SITE_NAME')
 
   const socialLoginOptions = {
@@ -80,23 +58,21 @@ Cypress.Commands.add('google_login', () => {
     headless: false,
     logs: true,
     isPopup: false,
-    // loginSelector: , //className of the login button with css selector
     loginSelector: `button[id="login"]`,
     postLoginSelector: 'button[id="logout-button"]',
-    // cookieName,
   }
 
   // cy looks for button with id="login" is visible
   cy.clearCookies()
 
-  return cy.task('GoogleSocialLogin', socialLoginOptions).then(({ cookies }) => {
+  return cy.task<{ cookies: ICookie[] }>('GoogleSocialLogin', socialLoginOptions).then((result) => {
+    const { cookies } = result // Now 'cookies' is explicitly typed as 'ICookie[]'
     cy.clearCookies()
-
-    cookies.forEach((cookie) => {
+    cookies.forEach((cookie: ICookie) => {
       if (cookie) {
         cy.setCookie(cookie.name, cookie.value, {
           domain: cookie.domain,
-          expiry: cookie.expires,
+          expiry: new Date('2012-02-26').getTime(),
           httpOnly: cookie.httpOnly,
           path: cookie.path,
           secure: cookie.secure,
@@ -105,6 +81,7 @@ Cypress.Commands.add('google_login', () => {
         cy.log('no cookie')
       }
     })
+    cy.visit('/')
   })
 })
 

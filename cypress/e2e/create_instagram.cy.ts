@@ -30,12 +30,15 @@ describe('Create Instagram Page', () => {
     cy.get('input[type="password"]').should('have.value', '')
     cy.get('input[name="acknowledge"]').should('not.be.checked')
 
-    const username = 'test_username1'
+
+    const uuid = () => Cypress._.random(0, 1e6)
+    const id = uuid()
+    const username = `testname${id}`
     const password = 'test_password'
     cy.get('input[name="username"]').type(username).should('have.value', username)
     cy.get('input[type="password"]').type(password).should('have.value', password)
     cy.get('input[name="acknowledge"]').check().should('be.checked')
-
+1
     // check the submit button is clickable
     // find button with type submit and check if it is enabled
     cy.get('button[type="submit"]').should('be.enabled')
@@ -45,6 +48,6 @@ describe('Create Instagram Page', () => {
     cy.visit('/accounts')
     cy.get('table').contains('td', username).should('be.visible')
 
-    //
+    
   })
 })
