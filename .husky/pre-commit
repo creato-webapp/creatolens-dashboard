@@ -1,3 +1,5 @@
 # npm test
 
 npx eslint .
+npm run test:e2e:run
+

@@ -55,7 +55,7 @@ Cypress.Commands.add('google_login', (username = Cypress.env('GOOGLE_USER'), pas
     username,
     password,
     loginUrl,
-    headless: false,
+    headless: true,
     logs: true,
     isPopup: false,
     loginSelector: `button[id="login"]`,
