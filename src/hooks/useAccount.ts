@@ -9,7 +9,8 @@ import {
 } from '@services/Account/Account'
 import { PaginationMetadata, PaginationParams } from '@services/Account/AccountInterface'
 
-export const useAccount = (id: string, shouldFetch: boolean = true, fallbackData?: IAccount | null) => {
+export const useAccount = (id: string, defaultShouldFetch: boolean = true, fallbackData?: IAccount | null) => {
+  const [shouldFetch, setShouldFetch] = useState(defaultShouldFetch)
   const { data, error, mutate, ...swr } = useSWR(shouldFetch ? [id] : null, (id) => getAccount(id), {
     refreshInterval: 0,
     fallbackData: fallbackData,
@@ -30,9 +31,10 @@ export const useAccount = (id: string, shouldFetch: boolean = true, fallbackData
   return {
     data,
     isLoading: !error && !data,
-    error: error,
+    error,
     updateAccount,
     updateSession,
+    setShouldFetch,
     mutate,
     ...swr,
   }

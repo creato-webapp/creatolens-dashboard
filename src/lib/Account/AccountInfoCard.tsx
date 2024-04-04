@@ -1,20 +1,52 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import Card from '@components/Card'
+import { useRouter } from 'next/router'
 import { Button } from '@components/Button'
 import { IField } from '@components/Form/interface'
 import { IAccount } from '@lib/Account/Account/interface'
 import { Paragraph } from '@components/Typography'
+import { useAccount } from 'src/hooks/useAccount'
 import StatusTag from '@lib/StatusTag'
 import DynamicForm from '@components/Form/DynamicForm'
+import SessionModal from '@lib/Account/Account/SessionModal'
+import dayjs from '@services/Dayjs'
 interface AccountInfoCardProps {
-  isLoading: boolean
-  isCreate: boolean
   account: IAccount
-  handleSubmit: (values: IAccount) => void
-  setIsShow: (show: boolean) => void
 }
 
-const AccountInfoCard: React.FC<AccountInfoCardProps> = ({ isLoading, account, handleSubmit, setIsShow }) => {
+const AccountInfoCard: React.FC<AccountInfoCardProps> = ({ account }) => {
+  const router = useRouter()
+  const { id } = router.query
+  const [isShow, setIsShow] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+  const { data, error, updateAccount, updateSession, setShouldFetch } = useAccount(id as string, false, account)
+
+  const handleUpdateSubmit = useCallback(
+    async (values: IAccount) => {
+      try {
+        setShouldFetch(true)
+        setIsLoading(true)
+        const newValues = {
+          ...account,
+          ...values,
+          last_login_dt: dayjs(values.last_login_dt, 'YYYY-MM-DDTHH:mm').utc().local().format('YYYY-MM-DD THH:mm:ss'),
+        }
+        const res = await updateAccount(newValues)
+        if (res.id) {
+          window.alert(`Account ${res.username} updated successfully`)
+          router.push(`/accounts`)
+        } else {
+          window.alert(res)
+        }
+      } catch (error) {
+        console.error(error)
+        window.alert(error)
+      } finally {
+        setIsLoading(false)
+      }
+    },
+    [account, router, updateAccount, setShouldFetch]
+  )
   const accountInfoField: IField[] = [
     {
       label: 'Country',
@@ -130,21 +162,26 @@ const AccountInfoCard: React.FC<AccountInfoCardProps> = ({ isLoading, account, h
   ]
 
   const combinedField: IField[] = [...accountInfoField, ...checkBoxField, ...fields]
+
   const handleClick = useCallback(() => {
     setIsShow(true)
   }, [])
+
   return (
-    <Card
-      className="mb-8 ml-auto mr-auto mt-0 w-full border-none bg-bg-white shadow-none"
-      customTitle={<h3 className="mr-auto w-auto pt-2 text-4xl text-text-primary">Account Info</h3>}
-      extra={
-        <Button.Primary loading={isLoading} onClick={handleClick}>
-          Open Session Modal
-        </Button.Primary>
-      }
-    >
-      <DynamicForm onSubmit={handleSubmit} Header={account.username} loading={isLoading} fields={combinedField} allowSubmit={!isLoading} />
-    </Card>
+    <>
+      <Card
+        className="mb-8 ml-auto mr-auto mt-0 w-full border-none bg-bg-white shadow-none"
+        customTitle={<h3 className="mr-auto w-auto pt-2 text-4xl text-text-primary">Account Info</h3>}
+        extra={
+          <Button.Primary loading={isLoading} onClick={handleClick}>
+            Open Session Modal
+          </Button.Primary>
+        }
+      >
+        <DynamicForm onSubmit={handleUpdateSubmit} Header={account.username} loading={isLoading} fields={combinedField} allowSubmit={!isLoading} />
+      </Card>
+      <SessionModal isShow={isShow} account={account} isLoading={!error && !data} onCancel={() => setIsShow(false)} updateSession={updateSession} />
+    </>
   )
 }
 
