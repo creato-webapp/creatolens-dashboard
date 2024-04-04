@@ -4,6 +4,26 @@ export interface Cookies {
   [key: string]: string
 }
 
+//TODO write a account interface that without id
+export interface AbstractAccount {
+  username: string
+  pwd: string
+  created_by: string
+  updated_by: string
+  enabled: boolean
+  is_authenticated: boolean
+  is_occupied: boolean
+  location?: CountryEnum
+  last_login_dt: string
+  login_attempt_count: number
+  login_count: number
+  post_scrapped_count: number
+  session_cookies?: Cookies
+  status: 'active' | 'blocked' | 'banned' | 'retry' | 'test' | 'scrapping' | 'occupied'
+  updated_at: string
+  created_at: string
+}
+
 export interface IAccount {
   id: string
   username: string

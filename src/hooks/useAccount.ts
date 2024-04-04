@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import useSWR from 'swr'
 import { IAccount } from '@lib/Account/Account'
 import {
@@ -39,18 +40,21 @@ export const useAccount = (id: string, shouldFetch: boolean = true, fallbackData
 
 export const useGetAccountsPagination = (
   paginationParams: PaginationParams,
-  shouldFetch?: boolean,
+  defaultShouldFetch?: boolean,
   fallbackData?: PaginationMetadata<IAccount[]>
 ) => {
+  const [shouldFetch, setShouldFetch] = useState(defaultShouldFetch)
   const { data, error, mutate, ...swr } = useSWR(shouldFetch ? [paginationParams] : null, getAccountsPagination, {
     refreshInterval: 0,
     fallbackData: fallbackData,
   })
 
   return {
-    accounts: data,
+    data,
     isLoading: !error && !data,
-    error: error,
+    error,
+    shouldFetch,
+    setShouldFetch,
     mutate,
     ...swr,
   }
