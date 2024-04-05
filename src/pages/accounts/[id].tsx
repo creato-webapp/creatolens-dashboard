@@ -8,8 +8,9 @@ import AccountInfoCard from '@lib/Account/AccountInfoCard'
 import AccountCreateCard from '@lib/Account/AccountCreateCard'
 import { useAccount } from 'src/hooks/useAccount'
 import { getAccount, createAccount } from '@services/Account/Account'
-import Image from 'next/image'
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
+import { useDialogues, Status } from 'src/context/DialogueContext'
+import Image from 'next/image'
 import dayjs from '@services/Dayjs'
 
 type Props = {
@@ -40,6 +41,8 @@ const AccountsPage = ({ accountData, isCreate }: Props) => {
   const [shouldFetch, setShouldFetch] = useState(false)
   const [isShow, setIsShow] = useState(false)
   const router = useRouter()
+  const { addDialogue } = useDialogues()
+
   const { data, error, updateAccount: callUpdateAccount, updateSession } = useAccount(router.query.id as string, shouldFetch, accountData)
 
   const account: IAccount | null = useMemo(
@@ -57,19 +60,6 @@ const AccountsPage = ({ accountData, isCreate }: Props) => {
     router.push(`/accounts`)
   }, [router])
 
-  const updateAccount = useCallback(
-    async (values: IAccount) => {
-      const newValues = {
-        ...account,
-        ...values,
-        last_login_dt: dayjs(values.last_login_dt, 'YYYY-MM-DDTHH:mm').utc().local().format('YYYY-MM-DD THH:mm:ss'),
-      }
-      const res = await callUpdateAccount(newValues)
-      return res
-    },
-    [account, callUpdateAccount]
-  )
-
   const handleCreateSubmit = useCallback(
     async (values: IAccount) => {
       try {
@@ -77,19 +67,19 @@ const AccountsPage = ({ accountData, isCreate }: Props) => {
         setIsLoading(true)
         const res = await createAccount(values)
         if (res.id) {
-          window.alert(`Account ${res.username} created successfully`)
           goBack()
         } else {
-          window.alert(res)
+          throw new Error('Account Id not found')
         }
+        addDialogue('Account created successfully', Status.SUCCESS)
       } catch (error) {
         console.error(error)
-        window.alert(error)
+        addDialogue('Failed to create account', Status.FAILED)
       } finally {
         setIsLoading(false)
       }
     },
-    [goBack]
+    [goBack, addDialogue]
   )
 
   const handleUpdateSubmit = useCallback(
@@ -97,21 +87,25 @@ const AccountsPage = ({ accountData, isCreate }: Props) => {
       try {
         setShouldFetch(true)
         setIsLoading(true)
-        const res = await updateAccount(values)
-        if (res.id) {
-          window.alert(`Account ${res.username} updated successfully`)
+        const newValues = {
+          ...values,
+          last_login_dt: dayjs(values.last_login_dt, 'YYYY-MM-DDTHH:mm').utc().local().format('YYYY-MM-DD THH:mm:ss'),
+        }
+        const res = await callUpdateAccount(newValues)
+        if (res?.id) {
           goBack()
         } else {
-          window.alert(res)
+          throw new Error('Account Id not found')
         }
+        addDialogue('Account created successfully', Status.SUCCESS)
       } catch (error) {
         console.error(error)
-        window.alert(error)
+        addDialogue('Failed update account', Status.FAILED)
       } finally {
         setIsLoading(false)
       }
     },
-    [goBack, updateAccount]
+    [goBack, callUpdateAccount, addDialogue]
   )
 
   const handleChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {

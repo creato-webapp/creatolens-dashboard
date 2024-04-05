@@ -6,6 +6,8 @@ import Navbar from '../components/Layout/Layout'
 import { SessionProvider } from 'next-auth/react'
 import { Session } from 'next-auth/core/types'
 import { ErrorBoundary } from 'next/dist/client/components/error-boundary'
+import { DialogueProvider } from 'src/context/DialogueContext'
+import Dialogue from 'src/components/Dialogue'
 import ErrorComponent from './error'
 
 function MyApp({
@@ -22,7 +24,10 @@ function MyApp({
       </Head>
       <Navbar>
         <ErrorBoundary errorComponent={ErrorComponent}>
-          <Component {...pageProps} />
+          <DialogueProvider>
+            <Component {...pageProps} />
+            <Dialogue />
+          </DialogueProvider>
         </ErrorBoundary>
       </Navbar>
       <Footer />
