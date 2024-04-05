@@ -6,12 +6,14 @@ import { Paragraph } from '@components/Typography'
 import Checkbox from '@components/Form/Checkbox'
 import DynamicForm from '@components/Form/DynamicForm'
 import { createAccount } from '@services/Account/Account'
+import { useDialogues, Status } from 'src/context/DialogueContext'
 interface AccountCreateCardProps {
   isCreate: boolean
 }
 
 const AccountCreateCard: React.FC<AccountCreateCardProps> = ({ isCreate }) => {
   //TODO use library handle validation
+  const { addDialogue } = useDialogues()
   const [isLoading, setIsLoading] = useState(false)
   const [isValidate, setIsValidated] = useState(false)
 
@@ -24,11 +26,11 @@ const AccountCreateCard: React.FC<AccountCreateCardProps> = ({ isCreate }) => {
       setIsLoading(true)
       const res = await createAccount(values.username, values.pwd)
       if (res.id) {
-        window.alert(`Account ${res.username} created successfully`)
+        addDialogue(`Account ${res.username} created successfully`, Status.SUCCESS)
       }
     } catch (err) {
       if (err && err instanceof Error) {
-        console.error('Error: ', err.message)
+        addDialogue(`Failed to create account: ${err.message}`, Status.FAILED)
       }
     } finally {
       setIsLoading(false)

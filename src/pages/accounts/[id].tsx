@@ -7,8 +7,8 @@ import AccountInfoCard from '@lib/Account/AccountInfoCard'
 import AccountCreateCard from '@lib/Account/AccountCreateCard'
 import { useAccount } from 'src/hooks/useAccount'
 import { getAccount } from '@services/Account/Account'
-import Image from 'next/image'
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
+import Image from 'next/image'
 import dayjs from '@services/Dayjs'
 
 type Props = {
@@ -17,7 +17,7 @@ type Props = {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext): Promise<GetServerSidePropsResult<Props>> => {
-  const id = context.params?.id as string
+  const id = context.query.id as string
   const isCreate = id === 'create-account'
   if (isCreate) {
     return { props: { accountData: null, isCreate } }

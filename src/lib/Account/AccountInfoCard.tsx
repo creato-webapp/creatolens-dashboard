@@ -10,12 +10,14 @@ import StatusTag from '@lib/StatusTag'
 import DynamicForm from '@components/Form/DynamicForm'
 import SessionModal from '@lib/Account/Account/SessionModal'
 import dayjs from '@services/Dayjs'
+import { useDialogues, Status } from 'src/context/DialogueContext'
 interface AccountInfoCardProps {
   account: IAccount
 }
 
 const AccountInfoCard: React.FC<AccountInfoCardProps> = ({ account }) => {
   const router = useRouter()
+  const { addDialogue } = useDialogues()
   const { id } = router.query
   const [isShow, setIsShow] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -33,19 +35,20 @@ const AccountInfoCard: React.FC<AccountInfoCardProps> = ({ account }) => {
         }
         const res = await updateAccount(newValues)
         if (res.id) {
-          window.alert(`Account ${res.username} updated successfully`)
+          addDialogue(`Account ${res.username} updated successfully`, Status.SUCCESS)
           router.push(`/accounts`)
         } else {
-          window.alert(res)
+          throw new Error('Failed to update account')
         }
-      } catch (error) {
-        console.error(error)
-        window.alert(error)
+      } catch (err) {
+        if (err && err instanceof Error) {
+          addDialogue(`Failed to update account: ${err.message}`, Status.FAILED)
+        }
       } finally {
         setIsLoading(false)
       }
     },
-    [account, router, updateAccount, setShouldFetch]
+    [account, router, updateAccount, setShouldFetch, addDialogue]
   )
   const accountInfoField: IField[] = [
     {
