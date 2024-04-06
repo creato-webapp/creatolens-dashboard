@@ -1,16 +1,10 @@
 import { FC, useState, useCallback } from 'react'
 import { IAccount, Cookies } from './interface'
-import Modal from '@components/Modal'
 import { Button } from '@components/Button'
-import { ModalProps } from '@components/Modal'
 
-interface SessionModalProps extends ModalProps {
-  isDisable?: boolean
+interface SessionModalProps {
   account: IAccount | null
-  isLoading: boolean
-  isShow: boolean
   updateSession: Function
-  onCancel: () => void
 }
 
 const dataItemToKeyValues = (item: Cookies) => {
@@ -26,7 +20,7 @@ const dataItemToKeyValues = (item: Cookies) => {
   return <ul className="list-none">{listItems}</ul>
 }
 
-const SessionModal: FC<SessionModalProps> = ({ account, isShow, updateSession, onCancel }) => {
+const SessionModal: FC<SessionModalProps> = ({ account, updateSession }) => {
   const [isLoading, setIsLoading] = useState(false)
   const updateAccountSession = useCallback(async () => {
     try {
@@ -38,26 +32,19 @@ const SessionModal: FC<SessionModalProps> = ({ account, isShow, updateSession, o
     } finally {
       setIsLoading(false)
     }
-  }, [account])
+  }, [account, updateSession])
 
   return (
-    <Modal isLoading={isLoading} isShow={isShow} onCancel={onCancel} title="SessionModal">
+    <div className=" space-y-3">
       <code className="prose-code:text-blue-600">
         <div className="flex flex-wrap">{account && account.session_cookies && dataItemToKeyValues(account.session_cookies)}</div>
       </code>
-      <div className="flex justify-start space-y-2">
-        <Button.Primary
-          // disabled={user?.role !== 'admin' || isDisable}
-          loading={isLoading}
-          onClick={updateAccountSession}
-        >
+      <div className="flex justify-center space-y-3">
+        <Button.Primary loading={isLoading} onClick={updateAccountSession}>
           <div className="flex">Update Session</div>
         </Button.Primary>
       </div>
-      <div>
-        <p>*User can update session model if an error occurred after 24 hours in this account.</p>
-      </div>
-    </Modal>
+    </div>
   )
 }
 export default SessionModal
