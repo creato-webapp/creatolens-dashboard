@@ -51,12 +51,12 @@ const CustomizeHashtagCard: React.FC<Props> = ({ hashtags }) => {
 
   useEffect(() => {
     clearAll()
-  }, [hashtags])
+  }, [clearAll, hashtags])
 
   return (
     <div className="flex-col md:flex md:flex-row md:gap-16 md:px-4">
       <div className="md:flex md:w-1/4 md:flex-col md:text-end">
-        <Title bold level={3} className="ml-auto mr-0 mb-4 hidden md:flex ">
+        <Title bold level={3} className="mb-4 ml-auto mr-0 hidden md:flex ">
           Customize
         </Title>
         <Paragraph className="ml-auto mr-0">Select all hashtag you wish to put under your post and click “Copy Selected”</Paragraph>
