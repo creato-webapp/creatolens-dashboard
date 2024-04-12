@@ -1,40 +1,45 @@
 //TODO Create Modal https://trello.com/c/Tj61Pg6m/437-errormodal-using-provider-to-write-error-modal-for-error-handling-in-lens
-import React, { ReactNode, createContext, useCallback, useContext, useState } from 'react'
-import { Modal, ModalOptions } from '@components/Modal'
+import React, { ReactNode, createContext, useContext, useState } from 'react'
+import { ModalKeyEnum, GenericModalOptions, GenericModal } from '@components/Modal/GenericModal'
+import { SessionModal } from '@lib/Account/Account'
 
 type ModalContextType = {
-  modals: JSX.Element[]
-  addModal: (node: React.ReactNode, options?: ModalOptions) => void
+  modal: IModalKey | null
+  content: ReactNode | null
+  options: GenericModalOptions | null
+  openModal: (key: IModalKey, node: React.ReactNode, options?: GenericModalOptions) => void
+  closeModal: () => void
+  // onClose: () => void
+  // onConfirm: () => void
 }
+
+type IModalKey = keyof typeof ModalKeyEnum
 
 const ModalContext = createContext<ModalContextType | undefined>(undefined)
 
-let idCounter = 0
-
 export const ModalProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [modals, setModals] = useState<JSX.Element[]>([])
-  const addModal = useCallback((node: React.ReactNode, options: ModalOptions = {}) => {
-    const id = ++idCounter
+  const [modal, setModal] = useState<IModalKey | null>(null)
+  const [content, setContent] = useState<ReactNode>(null)
+  const [options, setOptions] = useState<GenericModalOptions | null>(null)
+  const openModal = (key: IModalKey, node: ReactNode, options?: GenericModalOptions) => {
+    setModal(key)
+    setContent(node)
+    if (options) setOptions(options)
+  }
+  const closeModal = () => {
+    setModal(null)
+  }
 
-    const close = () => {
-      setModals((modals: JSX.Element[]) => {
-        return modals.filter((modal) => modal.key !== `${id}`)
-      })
-    }
-    const modal = (
-      <Modal key={id} close={close} options={options}>
-        {node}
-      </Modal>
-    )
+  return <ModalContext.Provider value={{ modal, content, options, openModal, closeModal }}>{children}</ModalContext.Provider>
+}
 
-    setModals((modals) => [...modals, modal])
-  }, [])
-
+export const HOCModal = () => {
+  const { modal } = useModals()
   return (
-    <ModalContext.Provider value={{ modals, addModal }}>
-      {modals}
-      {children}
-    </ModalContext.Provider>
+    <>
+      {modal === ModalKeyEnum.DEFAULT && <GenericModal />}
+      {modal === ModalKeyEnum.SESSION && <SessionModal />}
+    </>
   )
 }
 

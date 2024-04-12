@@ -1,8 +1,9 @@
 import React, { PropsWithChildren } from 'react'
 import { Button } from '../Button'
 import CrossIcon from '../Icon/CrossIcon'
+import { useModals } from 'src/context/ModalContext'
 
-export enum ModalType {
+export enum ModalKeyEnum {
   DEFAULT = 'DEFAULT',
   SESSION = 'SESSION',
 }
@@ -15,12 +16,10 @@ export type GenericModalOptions = {
   footer?: string
 }
 
-export interface GenericModalInterface extends PropsWithChildren {
-  close: () => void
-  options: GenericModalOptions
-}
+export interface GenericModalInterface extends PropsWithChildren {}
 
-export const GenericModal = ({ children, close, options }: GenericModalInterface) => {
+export const GenericModal = ({ children }: GenericModalInterface) => {
+  const { options, closeModal } = useModals()
   const { closeable, cancelable, confirmable, footer, title } = options || {}
   return (
     <div className="fixed inset-0 z-10 h-screen w-screen overflow-y-auto bg-gray-600 bg-opacity-50">
@@ -30,7 +29,7 @@ export const GenericModal = ({ children, close, options }: GenericModalInterface
             {title ? <h3 className="font-h3-bold">{title}</h3> : <div className="w-auto"></div>}
             {closeable && (
               <div>
-                <Button.Text className="text-text-primary" onClick={close}>
+                <Button.Text className="text-text-primary" onClick={closeModal}>
                   <CrossIcon />
                 </Button.Text>
               </div>
@@ -40,7 +39,7 @@ export const GenericModal = ({ children, close, options }: GenericModalInterface
           <div>{children}</div>
           <div className="flex justify-center gap-6 self-center px-2 py-2">
             {cancelable && (
-              <Button.Outline className="max-w-fit self-center" onClick={close}>
+              <Button.Outline className="max-w-fit self-center" onClick={closeModal}>
                 Cancel
               </Button.Outline>
             )}
