@@ -2,7 +2,6 @@ import { FC, useState, useCallback } from 'react'
 import { IAccount, Cookies } from '../../lib/Account/Account/interface'
 import { Button } from '@components/Button'
 import { GenericModal, GenericModalInterface } from './GenericModal'
-import { useModals } from 'src/context/ModalContext'
 
 interface SessionModalProps extends GenericModalInterface {
   account: IAccount | null
@@ -22,18 +21,19 @@ const dataItemToKeyValues = (item: Cookies) => {
   return <ul className="list-none">{listItems}</ul>
 }
 
-const SessionModal: FC<SessionModalProps> = ({ account, updateSession, ...props }) => {
-  const { options } = props
-  const { closeModal } = useModals()
+const SessionModal: FC<SessionModalProps> = ({ account, updateSession }) => {
   const [isLoading, setIsLoading] = useState(false)
-  const modalOptions = {
-    title: 'Session Modal',
-    closeable: true,
-    confirmable: false,
-    cancelable: false,
-    footer: '*User can update session model if an error occurred after 24 hours in this account.',
-    ...options,
-  }
+  // const { options } = props
+  // const { closeModal } = useModals()
+
+  // const modalOptions = {
+  //   title: 'Session Modal',
+  //   closeable: true,
+  //   confirmable: false,
+  //   cancelable: false,
+  //   footer: '*User can update session model if an error occurred after 24 hours in this account.',
+  //   ...options,
+  // }
 
   const updateAccountSession = useCallback(async () => {
     try {
@@ -48,7 +48,7 @@ const SessionModal: FC<SessionModalProps> = ({ account, updateSession, ...props 
   }, [account, updateSession])
 
   return (
-    <GenericModal close={closeModal} options={modalOptions}>
+    <GenericModal>
       <div className=" space-y-3">
         <code className="prose-code:text-blue-600">
           <div className="flex flex-wrap">{account && account.session_cookies && dataItemToKeyValues(account.session_cookies)}</div>

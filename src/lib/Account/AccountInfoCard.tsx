@@ -8,11 +8,9 @@ import { Paragraph } from '@components/Typography'
 import { useAccount } from 'src/hooks/useAccount'
 import StatusTag from '@lib/StatusTag'
 import DynamicForm from '@components/Form/DynamicForm'
-import SessionModal from '@lib/Account/Account/SessionModal'
 import dayjs from '@services/Dayjs'
 import { useDialogues, Status } from 'src/context/DialogueContext'
-import { useModals } from 'src/context/ModalContext'
-import Modal from '@components/Modal'
+
 interface AccountInfoCardProps {
   account: IAccount
 }
@@ -20,11 +18,9 @@ interface AccountInfoCardProps {
 const AccountInfoCard: React.FC<AccountInfoCardProps> = ({ account }) => {
   const router = useRouter()
   const { addDialogue } = useDialogues()
-  const { addModal } = useModals()
   const { id } = router.query
-  const [isShow, setIsShow] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const { data, error, updateAccount, updateSession, setShouldFetch } = useAccount(id as string, false, account)
+  const { updateAccount, setShouldFetch } = useAccount(id as string, false, account)
 
   const handleUpdateSubmit = useCallback(
     async (values: IAccount) => {
@@ -170,15 +166,15 @@ const AccountInfoCard: React.FC<AccountInfoCardProps> = ({ account }) => {
   const combinedField: IField[] = [...accountInfoField, ...checkBoxField, ...fields]
 
   const handleClick = useCallback(() => {
-    const sessionContent = <SessionModal account={account} updateSession={updateSession} />
-    addModal(sessionContent, {
-      title: 'Session Modal',
-      closeable: true,
-      confirmable: false,
-      cancelable: false,
-      footer: '*User can update session model if an error occurred after 24 hours in this account.',
-    })
-    setIsShow(true)
+    // const sessionContent = <SessionModal account={account} updateSession={updateSession} />
+    // addModal(sessionContent, {
+    //   title: 'Session Modal',
+    //   closeable: true,
+    //   confirmable: false,
+    //   cancelable: false,
+    //   footer: '*User can update session model if an error occurred after 24 hours in this account.',
+    // })
+    // setIsShow(true)
   }, [])
 
   return (
