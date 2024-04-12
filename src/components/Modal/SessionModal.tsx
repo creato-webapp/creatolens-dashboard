@@ -1,12 +1,10 @@
-import { FC, useState, useCallback } from 'react'
-import { IAccount, Cookies } from '../../lib/Account/Account/interface'
+import { useCallback } from 'react'
+import { Cookies } from '../../lib/Account/Account/interface'
 import { Button } from '@components/Button'
-import { GenericModal, GenericModalInterface } from './GenericModal'
-
-interface SessionModalProps extends GenericModalInterface {
-  account: IAccount | null
-  updateSession: Function
-}
+import { GenericModal } from './GenericModal'
+import { useRouter } from 'next/router'
+import { useAccount } from 'src/hooks/useAccount'
+import { useDialogues, Status } from 'src/context/DialogueContext'
 
 const dataItemToKeyValues = (item: Cookies) => {
   if (!item) return <></>
@@ -21,40 +19,43 @@ const dataItemToKeyValues = (item: Cookies) => {
   return <ul className="list-none">{listItems}</ul>
 }
 
-const SessionModal: FC<SessionModalProps> = ({ account, updateSession }) => {
-  const [isLoading, setIsLoading] = useState(false)
-  // const { options } = props
-  // const { closeModal } = useModals()
+const SessionModal = () => {
+  const router = useRouter()
+  const { id } = router.query
+  const { updateSession, data, isLoading } = useAccount(id as string, true)
+  const { addDialogue } = useDialogues()
 
-  // const modalOptions = {
-  //   title: 'Session Modal',
-  //   closeable: true,
-  //   confirmable: false,
-  //   cancelable: false,
-  //   footer: '*User can update session model if an error occurred after 24 hours in this account.',
-  //   ...options,
-  // }
-
-  const updateAccountSession = useCallback(async () => {
+  const handleUpdateSubmit = useCallback(async () => {
     try {
-      setIsLoading(true)
-      const res = await updateSession(account)
-      window.alert(res.message)
+      if (!data) {
+        addDialogue(`Account session aborted`, Status.FAILED)
+        return
+      }
+      await updateSession(data)
+      addDialogue(`Account session started update`, Status.SUCCESS)
     } catch (err) {
-      window.alert(err)
-    } finally {
-      setIsLoading(false)
+      if (err && err instanceof Error) {
+        addDialogue(`Failed to update account: ${err.message}`, Status.FAILED)
+      }
     }
-  }, [account, updateSession])
+  }, [addDialogue, data, updateSession])
+
+  const modalOptions = {
+    title: 'Session Modal',
+    closeable: true,
+    confirmable: false,
+    cancelable: false,
+    footer: '*User can update session model if an error occurred after 24 hours in this account.',
+  }
 
   return (
-    <GenericModal>
+    <GenericModal options={modalOptions}>
       <div className=" space-y-3">
         <code className="prose-code:text-blue-600">
-          <div className="flex flex-wrap">{account && account.session_cookies && dataItemToKeyValues(account.session_cookies)}</div>
+          <div className="flex flex-wrap">{data?.session_cookies ? dataItemToKeyValues(data.session_cookies) : 'This instabot do not have any cookies yet'}</div>
         </code>
         <div className="flex justify-center space-y-3">
-          <Button.Primary loading={isLoading} onClick={updateAccountSession}>
+          <Button.Primary loading={isLoading} onClick={handleUpdateSubmit}>
             <div className="flex">Update Session</div>
           </Button.Primary>
         </div>

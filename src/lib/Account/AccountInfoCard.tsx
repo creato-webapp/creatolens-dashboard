@@ -10,17 +10,18 @@ import StatusTag from '@lib/StatusTag'
 import DynamicForm from '@components/Form/DynamicForm'
 import dayjs from '@services/Dayjs'
 import { useDialogues, Status } from 'src/context/DialogueContext'
+import { useModals, ModalKeyEnum } from 'src/context/ModalContext'
 
 interface AccountInfoCardProps {
   account: IAccount
 }
-
 const AccountInfoCard: React.FC<AccountInfoCardProps> = ({ account }) => {
   const router = useRouter()
   const { addDialogue } = useDialogues()
   const { id } = router.query
   const [isLoading, setIsLoading] = useState(false)
   const { updateAccount, setShouldFetch } = useAccount(id as string, false, account)
+  const { openModal, onClearCallbacks, onCloseRegistry } = useModals()
 
   const handleUpdateSubmit = useCallback(
     async (values: IAccount) => {
@@ -166,16 +167,12 @@ const AccountInfoCard: React.FC<AccountInfoCardProps> = ({ account }) => {
   const combinedField: IField[] = [...accountInfoField, ...checkBoxField, ...fields]
 
   const handleClick = useCallback(() => {
-    // const sessionContent = <SessionModal account={account} updateSession={updateSession} />
-    // addModal(sessionContent, {
-    //   title: 'Session Modal',
-    //   closeable: true,
-    //   confirmable: false,
-    //   cancelable: false,
-    //   footer: '*User can update session model if an error occurred after 24 hours in this account.',
-    // })
-    // setIsShow(true)
-  }, [])
+    onCloseRegistry(() => console.log('test')) // eslint-disable-line no-console
+    openModal(ModalKeyEnum.SESSION)
+    return () => {
+      onClearCallbacks
+    }
+  }, [onCloseRegistry, openModal, onClearCallbacks])
 
   return (
     <>

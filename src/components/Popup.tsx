@@ -33,15 +33,16 @@ const Popup: React.FC<PopupProps> = ({
     onClose && onClose()
   }
 
-  const handleClickOutside = (event: MouseEvent) => {
-    if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
-      setIsShow(false)
-      onClose && onClose()
-    }
-  }
+
 
   useEffect(() => {
-    // Add when the component is mounted
+    const handleClickOutside = (event: MouseEvent) => {
+      if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
+        setIsShow(false)
+        onClose && onClose()
+      }
+    }
+
     if (isDisabledScroll && isShow) {
       document.body.style.overflow = 'hidden'
     }
@@ -51,7 +52,7 @@ const Popup: React.FC<PopupProps> = ({
       document.removeEventListener('mousedown', handleClickOutside)
       document.body.style.overflow = 'auto'
     }
-  }, [isShow, isDisabledScroll, handleClickOutside])
+  }, [isShow, isDisabledScroll, onClose])
 
   useEffect(() => {
     setIsShow(defaultShow)
