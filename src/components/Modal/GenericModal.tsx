@@ -1,7 +1,7 @@
 import React, { PropsWithChildren } from 'react'
 import { Button } from '../Button'
 import CrossIcon from '../Icon/CrossIcon'
-import { useModals } from 'src/context/ModalContext'
+import { useModals } from 'src/hooks/useModal'
 
 export type GenericModalOptions = {
   title?: string

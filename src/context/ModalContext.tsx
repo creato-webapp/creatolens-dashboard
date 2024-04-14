@@ -1,7 +1,7 @@
 //TODO Create Modal https://trello.com/c/Tj61Pg6m/437-errormodal-using-provider-to-write-error-modal-for-error-handling-in-lens
-import React, { ReactNode, createContext, useContext, useState } from 'react'
-import { GenericModalOptions, GenericModal } from '@components/Modal/GenericModal'
-import SessionModal from '@components/Modal/SessionModal'
+import React, { ReactNode, createContext, useState } from 'react'
+import { GenericModalOptions } from '@components/Modal/GenericModal'
+import { PropsWithChildren } from 'react'
 
 export enum ModalKeyEnum {
   DEFAULT = 'DEFAULT',
@@ -29,9 +29,11 @@ type ModalContextType = {
 
 type IModalKey = keyof typeof ModalKeyEnum
 //
-const ModalContext = createContext<ModalContextType | undefined>(undefined)
+export const ModalContext = createContext<ModalContextType | undefined>(undefined)
 
-export const ModalProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+type ModalProviderProps = {} & PropsWithChildren
+
+export const ModalProvider = ({ children }: ModalProviderProps) => {
   const [modal, setModal] = useState<IModalKey | null>(null)
   const [content, setContent] = useState<ReactNode>(null)
   const [options, setOptions] = useState<GenericModalOptions | null>(null)
@@ -87,22 +89,4 @@ export const ModalProvider: React.FC<{ children: ReactNode }> = ({ children }) =
       {children}
     </ModalContext.Provider>
   )
-}
-
-export const Modals = () => {
-  const { modal } = useModals()
-  return (
-    <>
-      {modal === ModalKeyEnum.DEFAULT && <GenericModal />}
-      {modal === ModalKeyEnum.SESSION && <SessionModal />}
-    </>
-  )
-}
-
-export const useModals = () => {
-  const context = useContext(ModalContext)
-  if (context === undefined) {
-    throw new Error('useModals must be used within a ModalProvider')
-  }
-  return context
 }

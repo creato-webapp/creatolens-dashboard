@@ -9,7 +9,8 @@ import { ErrorBoundary } from 'next/dist/client/components/error-boundary'
 import { DialogueProvider } from 'src/context/DialogueContext'
 import Dialogue from 'src/components/Dialogue'
 import ErrorComponent from './error'
-import { ModalProvider, Modals } from 'src/context/ModalContext'
+import { ModalProvider } from 'src/context/ModalContext'
+import Modals from '@components/Modal'
 
 function MyApp({
   Component,

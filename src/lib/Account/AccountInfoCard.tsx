@@ -10,7 +10,8 @@ import StatusTag from '@lib/StatusTag'
 import DynamicForm from '@components/Form/DynamicForm'
 import dayjs from '@services/Dayjs'
 import { useDialogues, Status } from 'src/context/DialogueContext'
-import { useModals, ModalKeyEnum } from 'src/context/ModalContext'
+import { ModalKeyEnum } from 'src/context/ModalContext'
+import { useModals } from 'src/hooks/useModal'
 
 interface AccountInfoCardProps {
   account: IAccount

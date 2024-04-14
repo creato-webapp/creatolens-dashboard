@@ -19,7 +19,7 @@ const dataItemToKeyValues = (item: Cookies) => {
   return <ul className="list-none">{listItems}</ul>
 }
 
-const SessionModal = () => {
+export const SessionModal = () => {
   const router = useRouter()
   const { id } = router.query
   const { updateSession, data, isLoading } = useAccount(id as string, true)
@@ -52,7 +52,8 @@ const SessionModal = () => {
     <GenericModal options={modalOptions}>
       <div className=" space-y-3">
         <code className="prose-code:text-blue-600">
-          <div className="flex flex-wrap">{data?.session_cookies ? dataItemToKeyValues(data.session_cookies) : 'This instabot do not have any cookies yet'}</div>
+          {isLoading ? 'Loading' :  <div className="flex flex-wrap">{data?.session_cookies ? dataItemToKeyValues(data.session_cookies) : 'This instabot do not have any cookies yet'}</div>}
+         
         </code>
         <div className="flex justify-center space-y-3">
           <Button.Primary loading={isLoading} onClick={handleUpdateSubmit}>
@@ -63,4 +64,3 @@ const SessionModal = () => {
     </GenericModal>
   )
 }
-export default SessionModal
