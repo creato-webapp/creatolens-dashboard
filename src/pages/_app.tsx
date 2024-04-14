@@ -9,7 +9,7 @@ import { ErrorBoundary } from 'next/dist/client/components/error-boundary'
 import { DialogueProvider } from 'src/context/DialogueContext'
 import Dialogue from 'src/components/Dialogue'
 import ErrorComponent from './error'
-import { ModalProvider, HOCModal } from 'src/context/ModalContext'
+import { ModalProvider, Modals } from 'src/context/ModalContext'
 
 function MyApp({
   Component,
@@ -29,7 +29,7 @@ function MyApp({
             <ModalProvider>
               <Component {...pageProps} />
               <Dialogue />
-              <HOCModal />
+              <Modals />
             </ModalProvider>
           </DialogueProvider>
         </ErrorBoundary>
