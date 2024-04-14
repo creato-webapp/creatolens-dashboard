@@ -89,7 +89,7 @@ export const ModalProvider: React.FC<{ children: ReactNode }> = ({ children }) =
   )
 }
 
-export const HOCModal = () => {
+export const Modals = () => {
   const { modal } = useModals()
   return (
     <>
