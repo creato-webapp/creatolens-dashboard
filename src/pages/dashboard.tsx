@@ -1,4 +1,3 @@
-import Card from '@components/Card'
 import Hero from '@components/Hero'
 import ReportLayout from '@components/Layout/ReportLayout'
 import Tab from '@components/Tab'

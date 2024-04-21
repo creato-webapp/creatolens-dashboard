@@ -1,6 +1,5 @@
 import React, { HTMLAttributes } from 'react'
 import { Title } from '@components/Typography'
-import Tag from './Tag'
 import { Button } from './Button'
 import Image from 'next/image'
 interface CardProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'> {
@@ -30,9 +29,9 @@ export default function CardWithIgPost({
 }: CardProps) {
   return (
     <div className={`flex w-full flex-row gap-6 rounded-xl border border-slate-300 p-6 shadow-lg ${className}`}>
-      <div className="relative flex h-full min-h-64 w-1/2">
+      <div className="relative flex h-full w-1/2 aspect-square">
         {instaPost && (
-          <Image sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" fill={true} alt="instagram post" className="" src={instaPost} />
+          <Image fill={true} alt="instagram post" className="" src={instaPost} />
         )}
       </div>
       <div>
