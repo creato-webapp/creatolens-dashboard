@@ -26,20 +26,16 @@ const Dashboard = () => {
     },
   ]
   return (
-    <div>
+    <div className="mb-4">
       <Hero
         backgroundImage="./GuideHero.svg"
         className="flex h-full flex-col justify-between md:h-52"
-        childrenStyle="h-full md:gap-3 flex-col flex md:py-16 justify-center"
+        childrenStyle="h-full md:gap-3 flex-col flex md:py-16 justify-center py-2"
       >
-        <div>
-          <h1 className="uppercase md:font-extrabold">TREND ANALYSIS</h1>
-        </div>
+        <h1 className="uppercase md:font-extrabold">TREND ANALYSIS</h1>
       </Hero>
 
-      {/* <Card className="min-h-full w-full rounded-none border-none bg-transparent px-4 pt-3 shadow-none md:px-20 md:pb-28"> */}
       <Tab items={tabItems} defaultActiveKey="1" scrollable={false} className="mt-3 px-2 shadow-none md:px-4 md:shadow-xl lg:px-24" />
-      {/* </Card> */}
     </div>
   )
 }

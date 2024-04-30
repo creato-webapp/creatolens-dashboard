@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export interface TabItem {
   key: string
@@ -19,6 +19,19 @@ interface TabProps extends React.HTMLAttributes<HTMLDivElement> {
   onEdit?: (targetKey: string, action: 'add' | 'remove') => void
 }
 
+// interface DashboardDataList {
+//   code: number
+//   data: Array<DashboardData>
+// }
+// interface DashboardData {
+//   count: number,
+//   fetched_by: string,
+//   last_created_at: string,
+//   last_updated_at: string,
+//   last_uploaded_at: string,
+//   term: string
+// }
+
 const Tab: React.FC<TabProps> = ({
   centered,
   defaultActiveKey,
@@ -32,6 +45,7 @@ const Tab: React.FC<TabProps> = ({
 }) => {
   const [currentActiveKey, setCurrentActiveKey] = useState<string | undefined>(defaultActiveKey)
 
+
   const handleChange = (event: React.MouseEvent<HTMLButtonElement>) => {
     const key = event.currentTarget.dataset.key
     setCurrentActiveKey(key)
@@ -39,6 +53,17 @@ const Tab: React.FC<TabProps> = ({
       onKeyChange(key)
     }
   }
+
+  useEffect(()=>{
+    const api = process.env.DASHBOARD_API
+    if (!api) return
+    fetch(api).then((res)=>{
+      return res.json()
+    }).then((data)=>{
+      console.error(data)
+    })
+  },[])
+
 
   return (
     <div className={`tabs  relative flex h-auto w-auto min-w-full flex-col items-center gap-4 shadow-lg md:items-start md:px-3 ${className ?? ''}`}>

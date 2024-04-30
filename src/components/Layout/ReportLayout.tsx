@@ -12,6 +12,7 @@ const props = {
 
 const ReportLayout = () => {
   const { account_name } = props
+
   return (
     <div>
       <div className="flex flex-col justify-between md:flex-col">
@@ -69,7 +70,7 @@ const ReportLayout = () => {
               Lantau Island (80), Temple Street Night Market (78), Central (75)
             </p>
             <div className="flex flex-col items-center justify-center gap-3 md:flex-row">
-              <Primary className="flex w-full">+ Add New Account</Primary>
+              <Primary onClick={} className="flex w-full">+ Add New Account</Primary>
               <Primary className="flex w-full">+ Add New Account</Primary>
             </div>
           </div>
