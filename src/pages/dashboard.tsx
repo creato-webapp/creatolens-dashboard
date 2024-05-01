@@ -1,8 +1,57 @@
 import Hero from '@components/Hero'
 import ReportLayout from '@components/Layout/ReportLayout'
 import Tab from '@components/Tab'
+import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
+import { getMeta } from '@services/Meta'
+import { useState } from 'react'
+import { useMeta } from 'src/hooks/useMeta'
+
+type Props = {
+  dashboardData: DashboardDataList
+}
+
+interface DashboardDataList {
+  code: string
+  data: Array<DashboardData>
+}
+export interface DashboardData {
+  count: number
+  fetched_by: string
+  last_created_at: string
+  last_updated_at: string
+  last_uploaded_at: string
+  term: string
+}
+
+export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext): Promise<GetServerSidePropsResult<Props>> => {
+  const id = context.params?.id as string
+
+  const days = {
+    accId: id,
+    days: 3,
+  }
+  const response = await getMeta(days, {
+    headers: {
+      Cookie: context.req.headers.cookie,
+    },
+  })
+  return { props: { dashboardData: response } }
+}
 
 const Dashboard = () => {
+  const [shouldFetch, setShouldFetch] = useState(false)
+  const {
+    data: responseData,
+    isLoading,
+    error,
+  } = useMeta(
+    {
+      accId: '123',
+      days: 5,
+    },
+    shouldFetch
+  )
+
   const tabItems = [
     {
       key: '1',
