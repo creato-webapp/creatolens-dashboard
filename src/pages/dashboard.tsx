@@ -5,9 +5,10 @@ import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult
 import { getMeta } from '@services/Meta'
 import { useState } from 'react'
 import { useMeta } from 'src/hooks/useMeta'
+import { getSession } from 'next-auth/react'
 
 type Props = {
-  dashboardData: DashboardDataList
+  dashboardData?: DashboardDataList
 }
 
 interface DashboardDataList {
@@ -24,11 +25,12 @@ export interface DashboardData {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext): Promise<GetServerSidePropsResult<Props>> => {
-  const id = context.params?.id as string
+  const session = await getSession(context)
 
+  if (!session?.user?.id) return { props: { dashboardData: undefined } }
   const days = {
-    accId: id,
-    days: 3,
+    accId: session.user.id,
+    days: 90,
   }
   const response = await getMeta(days, {
     headers: {
@@ -38,7 +40,7 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
   return { props: { dashboardData: response } }
 }
 
-const Dashboard = () => {
+const Dashboard = ({ dashboardData }) => {
   const [shouldFetch, setShouldFetch] = useState(false)
   const {
     data: responseData,

@@ -20,18 +20,6 @@ interface TabProps extends React.HTMLAttributes<HTMLDivElement> {
   onEdit?: (targetKey: string, action: 'add' | 'remove') => void
 }
 
-interface DashboardDataList {
-  code: number
-  data: Array<DashboardData>
-}
-interface DashboardData {
-  count: number
-  fetched_by: string
-  last_created_at: string
-  last_updated_at: string
-  last_uploaded_at: string
-  term: string
-}
 
 const Tab: React.FC<TabProps> = ({
   centered,

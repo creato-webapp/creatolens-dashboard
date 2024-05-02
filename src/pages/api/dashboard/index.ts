@@ -4,7 +4,8 @@ export default async function dashboardQueryHandler(req: NextApiRequest, res: Ne
   const {
     query: { accId , days},
   } = req
-  const response = await MetaInstance.get(`/${accId}/scrapped_posts/keywords`, {
+
+  const response = await MetaInstance.get(`/${accId}/scrapped_posts/info?`, {
     params: { days },
     headers: {
       Cookie: req.headers.cookie,
