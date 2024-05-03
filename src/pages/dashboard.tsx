@@ -3,9 +3,10 @@ import ReportLayout from '@components/Layout/ReportLayout'
 import Tab from '@components/Tab'
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import { getMeta } from '@services/Meta'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useMeta } from 'src/hooks/useMeta'
 import { getSession } from 'next-auth/react'
+import { getAccount } from '@services/Account/Account'
 
 type Props = {
   dashboardData?: DashboardDataList
@@ -29,41 +30,55 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
 
   if (!session?.user?.id) return { props: { dashboardData: undefined } }
   const days = {
-    accId: session.user.id,
-    days: 90,
+    accId: session?.user?.id,
+    days: 3,
   }
+  const res = await getAccount(session?.user?.id, {
+    headers: {
+      Cookie: context.req.headers.cookie,
+    },
+  })
   const response = await getMeta(days, {
     headers: {
       Cookie: context.req.headers.cookie,
     },
   })
-  return { props: { dashboardData: response } }
+  const data = {
+    ...res,
+    ...response,
+  }
+  return { props: { dashboardData: data } }
 }
 
 const Dashboard = ({ dashboardData }) => {
   const [shouldFetch, setShouldFetch] = useState(false)
-  const {
-    data: responseData,
-    isLoading,
-    error,
-  } = useMeta(
-    {
-      accId: '123',
-      days: 5,
-    },
-    shouldFetch
-  )
+  const [metaAttributes, setMetaAttributes] = useState({
+    accId: '0zfomMvxGqcCPPMZ8wMT',
+    days: 3,
+  })
+  const { data: responseData, isLoading, error } = useMeta(metaAttributes, shouldFetch, dashboardData)
+
+  const onKeyChange = (key: string) => {
+    const targetItem = tabItems.find((item) => item.key === key)
+    setShouldFetch(true)
+    setMetaAttributes((pre) => ({
+      ...pre,
+      days: Number(targetItem?.days),
+    }))
+  }
 
   const tabItems = [
     {
       key: '1',
       title: '3 Days Report',
-      children: <ReportLayout />,
+      children: <ReportLayout data={responseData} />,
+      days: 3,
     },
     {
       key: '2',
       title: '7 Days Report',
-      children: <ReportLayout />,
+      children: <ReportLayout data={responseData} />,
+      days: 7,
     },
     {
       key: '3',
@@ -76,6 +91,7 @@ const Dashboard = ({ dashboardData }) => {
       children: <div className="w-full flex-wrap gap-2 md:flex md:flex-nowrap md:justify-center md:py-12 md:shadow-lg">Custom Period</div>,
     },
   ]
+
   return (
     <div>
       <Hero
@@ -89,7 +105,13 @@ const Dashboard = ({ dashboardData }) => {
       </Hero>
 
       {/* <Card className="min-h-full w-full rounded-none border-none bg-transparent px-4 pt-3 shadow-none md:px-20 md:pb-28"> */}
-      <Tab items={tabItems} defaultActiveKey="1" scrollable={false} className="mt-3 px-2 shadow-none md:px-4 md:shadow-xl lg:px-24" />
+      <Tab
+        items={tabItems}
+        defaultActiveKey="1"
+        onKeyChange={onKeyChange}
+        scrollable={false}
+        className="mt-3 px-2 shadow-none md:px-4 md:shadow-xl lg:px-24"
+      />
       {/* </Card> */}
     </div>
   )

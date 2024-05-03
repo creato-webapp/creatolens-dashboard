@@ -4,14 +4,17 @@ import Divider from '@components/Divider'
 import Primary from '@components/Button/PrimaryButton'
 import Outline from '@components/Button/OutlineButton'
 import Avatar from '@components/Avatar'
+import { useEffect } from 'react'
 
 // generate fake data for this layout
-const props = {
+const account = {
   account_name: 'Timothy Lam',
 }
 
-const ReportLayout = () => {
-  const { account_name } = props
+const ReportLayout = (props) => {
+  const { account_name } = account
+  const { data } = props
+
   return (
     <div>
       <div className="flex flex-col justify-between md:flex-col">
@@ -36,7 +39,7 @@ const ReportLayout = () => {
       <div className="flex flex-col gap-12">
         <div className="flex flex-col gap-6 md:flex-row">
           <Card className="w-full" customTitle="Period Show"></Card>
-          <Card className="w-full"></Card>
+          <Card className="w-full">{data.data.length}</Card>
         </div>
 
         <CardWithIgPost
@@ -46,15 +49,6 @@ const ReportLayout = () => {
           className="col-span-2 w-full"
           instaPost="/landing-mobile-new.png"
         ></CardWithIgPost>
-
-        <CardWithIgPost
-          title="Tesing"
-          description="Testing description"
-          repostNumber={20}
-          className="col-span-2 w-full"
-          instaPost="/landing-mobile-new.png"
-        ></CardWithIgPost>
-
         <Outline className="w-full md:hidden">Export To PDF</Outline>
       </div>
     </div>

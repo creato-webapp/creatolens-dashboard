@@ -33,7 +33,6 @@ const Tab: React.FC<TabProps> = ({
   className,
 }) => {
   const [currentActiveKey, setCurrentActiveKey] = useState<string | undefined>(defaultActiveKey)
-  const [shouldFetch, setShouldFetch] = useState(false)
 
   const handleChange = (event: React.MouseEvent<HTMLButtonElement>) => {
     const key = event.currentTarget.dataset.key
@@ -42,6 +41,7 @@ const Tab: React.FC<TabProps> = ({
       onKeyChange(key)
     }
   }
+
 
   // useEffect(() => {
   //   fetch()
