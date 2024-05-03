@@ -22,7 +22,6 @@ export type HashetProps = {
   hashetSessionData: IHashet[]
 }
 
-
 const RecommendationPage = () => {
   const [inputString, setInputString] = useState('')
   const [stringToSubmit, setStringToSubmit] = useState('')
@@ -30,7 +29,7 @@ const RecommendationPage = () => {
     setInputString(e.target.value)
   }
 
-  const { data, error, mutate: mutateHashet, isValidating } = useGetHashtag(stringToSubmit, stringToSubmit ? true : false)
+  const { data, error, mutate: mutateHashet, isValidating } = useGetHashtag(stringToSubmit, !!stringToSubmit)
 
   const onSubmit = useCallback(async () => {
     setStringToSubmit(inputString)
@@ -41,10 +40,6 @@ const RecommendationPage = () => {
     console.error(data)
     console.error(error)
     return <div>Failed to load hashet error data</div>
-  }
-  if (!data) {
-    console.error(data)
-    return <div>Loading...</div>
   }
 
   const hashetData: IHashet[] = data?.data ? data.data : []
@@ -121,7 +116,7 @@ const RecommendationPage = () => {
                 {isValidating ? <LoaderIcon className="animate-spin" /> : <MagnifyingGlassIcon />}
               </Form.BaseInput>
             </div>
-            <Button.Primary className="w-auto" sizes={['s', 'm', 'm']} onClick={() => onSubmit()} loading={isValidating}>
+            <Button.Primary className="w-auto" sizes={['s', 'm', 'm']} onClick={onSubmit} loading={isValidating}>
               Search
             </Button.Primary>
           </div>
