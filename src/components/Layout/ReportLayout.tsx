@@ -11,9 +11,17 @@ const account = {
   account_name: 'Timothy Lam',
 }
 
+const periodDescription = 'This is your @X@ days report according to your traced followers'
+
 const ReportLayout = (props) => {
   const { account_name } = account
-  const { data } = props
+  const { data, days } = props
+
+  // dayFormat = MMM DD YYYY - MMM DD YYYY
+  const today = new Date()
+  const lastDate = new Date(today)
+  lastDate.setDate(today.getDate() - days)
+  const dateStr = `${lastDate.toDateString()} - ${today.toDateString()}`
 
   return (
     <div>
@@ -38,8 +46,23 @@ const ReportLayout = (props) => {
       <Divider margin="28px" />
       <div className="flex flex-col gap-12">
         <div className="flex flex-col gap-6 md:flex-row">
-          <Card className="w-full" customTitle="Period Show"></Card>
-          <Card className="w-full">{data.data.length}</Card>
+          <Card className="w-full rounded-none">
+            {
+              <div>
+                <h2>Period Show</h2>
+                <div className="italic text-text-secondary">{`"This is your ${days} days report according to your traced followers"`}</div>
+                <h2 className="font-extrabold text-accent1-500">{dateStr}</h2>
+              </div>
+            }
+          </Card>
+          <Card className="w-full">
+            {
+              <div>
+                <h2>Post Count</h2>
+                <div className="italic text-text-secondary">"Total post fetched in this period"</div>
+              </div>
+            }
+          </Card>
         </div>
 
         <CardWithIgPost

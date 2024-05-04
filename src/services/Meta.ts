@@ -9,6 +9,7 @@ export async function getMeta(
   },
   customConfig?: AxiosRequestConfig
 ): Promise<{ code: string; data: Array<DashboardData> }> {
+  console.log('data',data.accId)
   const response = await Fetcher.GET(
     `/api/dashboard`,
     {

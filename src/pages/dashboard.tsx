@@ -30,7 +30,7 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
 
   if (!session?.user?.id) return { props: { dashboardData: undefined } }
   const days = {
-    accId: session?.user?.id,
+    accId: "0zfomMvxGqcCPPMZ8wMT",
     days: 3,
   }
   const res = await getAccount(session?.user?.id, {
@@ -50,7 +50,7 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
   return { props: { dashboardData: data } }
 }
 
-const Dashboard = ({ dashboardData }) => {
+const Dashboard = ({dashboardData}) => {
   const [shouldFetch, setShouldFetch] = useState(false)
   const [metaAttributes, setMetaAttributes] = useState({
     accId: '0zfomMvxGqcCPPMZ8wMT',
@@ -71,25 +71,25 @@ const Dashboard = ({ dashboardData }) => {
     {
       key: '1',
       title: '3 Days Report',
-      children: <ReportLayout data={responseData} />,
+      children: <ReportLayout days={3} data={responseData} isLoading={isLoading} error={error} />,
       days: 3,
     },
     {
       key: '2',
       title: '7 Days Report',
-      children: <ReportLayout data={responseData} />,
+      children: <ReportLayout days={7} data={responseData} isLoading={isLoading} error={error} />,
       days: 7,
     },
-    {
-      key: '3',
-      title: 'Compare Period',
-      children: <div className="w-full flex-wrap gap-2 md:flex md:flex-nowrap md:justify-center md:py-12 md:shadow-lg">Compare Period</div>,
-    },
-    {
-      key: '4',
-      title: 'Compared Account',
-      children: <div className="w-full flex-wrap gap-2 md:flex md:flex-nowrap md:justify-center md:py-12 md:shadow-lg">Custom Period</div>,
-    },
+    // {
+    //   key: '3',
+    //   title: 'Compare Period',
+    //   children: <div className="w-full flex-wrap gap-2 md:flex md:flex-nowrap md:justify-center md:py-12 md:shadow-lg">Compare Period</div>,
+    // },
+    // {
+    //   key: '4',
+    //   title: 'Compared Account',
+    //   children: <div className="w-full flex-wrap gap-2 md:flex md:flex-nowrap md:justify-center md:py-12 md:shadow-lg">Custom Period</div>,
+    // },
   ]
 
   return (
