@@ -9,7 +9,6 @@ export async function getMeta(
   },
   customConfig?: AxiosRequestConfig
 ): Promise<{ code: string; data: Array<DashboardData> }> {
-  console.log('data',data.accId)
   const response = await Fetcher.GET(
     `/api/dashboard`,
     {
@@ -18,5 +17,20 @@ export async function getMeta(
     },
     { ...customConfig }
   )
-  return response
+
+  const keywordResponse = await Fetcher.GET(
+    '/api/dashboard/keyword',
+    {
+      accId: data.accId,
+      days: data.days,
+    },
+    { ...customConfig }
+  )
+
+  const combineResponse = {
+    data: response,
+    keyword: keywordResponse,
+  }
+
+  return combineResponse
 }

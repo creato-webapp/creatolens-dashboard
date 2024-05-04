@@ -30,10 +30,10 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
 
   if (!session?.user?.id) return { props: { dashboardData: undefined } }
   const days = {
-    accId: "0zfomMvxGqcCPPMZ8wMT",
+    accId: '0zfomMvxGqcCPPMZ8wMT',
     days: 3,
   }
-  const res = await getAccount(session?.user?.id, {
+  const res = await getAccount('0zfomMvxGqcCPPMZ8wMT', {
     headers: {
       Cookie: context.req.headers.cookie,
     },
@@ -43,6 +43,7 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
       Cookie: context.req.headers.cookie,
     },
   })
+
   const data = {
     ...res,
     ...response,
@@ -50,7 +51,7 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
   return { props: { dashboardData: data } }
 }
 
-const Dashboard = ({dashboardData}) => {
+const Dashboard = ({ dashboardData }) => {
   const [shouldFetch, setShouldFetch] = useState(false)
   const [metaAttributes, setMetaAttributes] = useState({
     accId: '0zfomMvxGqcCPPMZ8wMT',
@@ -91,6 +92,8 @@ const Dashboard = ({dashboardData}) => {
     //   children: <div className="w-full flex-wrap gap-2 md:flex md:flex-nowrap md:justify-center md:py-12 md:shadow-lg">Custom Period</div>,
     // },
   ]
+
+  console.log('responseData', responseData)
 
   return (
     <div>

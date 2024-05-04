@@ -11,11 +11,10 @@ const account = {
   account_name: 'Timothy Lam',
 }
 
-const periodDescription = 'This is your @X@ days report according to your traced followers'
-
 const ReportLayout = (props) => {
+  console.log('props', props)
   const { account_name } = account
-  const { data, days } = props
+  const { data, days, keyword } = props
 
   // dayFormat = MMM DD YYYY - MMM DD YYYY
   const today = new Date()
@@ -23,6 +22,7 @@ const ReportLayout = (props) => {
   lastDate.setDate(today.getDate() - days)
   const dateStr = `${lastDate.toDateString()} - ${today.toDateString()}`
 
+  console.log('keyword', data.keyword.data)
   return (
     <div>
       <div className="flex flex-col justify-between md:flex-col">
@@ -64,6 +64,24 @@ const ReportLayout = (props) => {
             }
           </Card>
         </div>
+        <Card className="w-full">
+          {
+            <div>
+              <h2>Top 10 Keywords</h2>
+              <div className="italic text-text-secondary">"From hashtags, captions, locations"</div>
+              <div className="flex text-xl">
+                {data.keyword &&
+                  data.keyword.data.map((item) => {
+                    return (
+                      <div key={item.term} className="flex flex-row font-bold">
+                        {item.term} <div className="text-accent1-500 ">({item.count})</div>
+                      </div>
+                    )
+                  })}
+              </div>
+            </div>
+          }
+        </Card>
 
         <CardWithIgPost
           title="Tesing"
