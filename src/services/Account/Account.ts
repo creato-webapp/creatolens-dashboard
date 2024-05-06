@@ -24,6 +24,7 @@ type PartialAccount = Partial<{
   session_cookies: Cookies
   status: 'active' | 'blocked' | 'banned' | 'retry' | 'test' | 'scrapping' | 'occupied'
   updated_at: string
+  created_by: string
 }>
 
 export function generateAccountFilter(account: PartialAccount): string {
@@ -68,6 +69,9 @@ export function generateAccountFilter(account: PartialAccount): string {
   if (account.updated_at) {
     filters.push(`updated_at = "${account.updated_at}"`)
   }
+  if (account.created_by) {
+    filters.push(`created_by == ${account.created_by}`)
+  }
   return filters.join(' && ')
 }
 
@@ -81,10 +85,23 @@ export async function getAccount(id: string, customConfig?: AxiosRequestConfig):
   return response
 }
 
-export async function getAccounts(account?: Partial<IAccount>, orderBy?: string, isAsc?: boolean): Promise<IAccount[]> {
-  const response = await Fetcher.GET(`/api/accounts/query`, {
-    params: { filter: account ? generateAccountFilter(account) : null, orderby: orderBy, isAsc: isAsc },
-  })
+export async function getAccounts(
+  account?: Partial<IAccount>,
+  orderBy?: string,
+  isAsc?: boolean,
+  customConfig?: AxiosRequestConfig
+): Promise<IAccount[]> {
+  if (!account) return []
+  const filterData = generateAccountFilter(account)
+  const response = await Fetcher.GET(
+    `/api/accounts/query`,
+    {
+      orderBy: orderBy,
+      isAsc: isAsc,
+      filter: filterData,
+    },
+    customConfig
+  )
   return response
 }
 

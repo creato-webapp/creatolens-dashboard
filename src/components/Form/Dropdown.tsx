@@ -112,7 +112,7 @@ const Dropdown: React.FC<DropdownProps> = ({ name = '', options, defaultValue, o
         className={`drowpdown-button w-full rounded-lg border-none ${color} ${padding} ${focusStyle} ${hoverStyle} ${activeStyle}`}
         onClick={handleToggleMenu}
       >
-        <div className={`inline-flex w-full min-w-fit items-center justify-between gap-2.5 whitespace-nowrap rounded-md hover:shadow-sm`}>
+        <div className={`text-lg inline-flex w-full min-w-fit items-center justify-between gap-2.5 whitespace-nowrap rounded-md hover:shadow-sm`}>
           {mapSelectedValueToOptions}
           <CaretUpIcon
             className={`pointer-events-none transform transition-all ${caretSize} ${!isOpen ? 'rotate-180 ' : ''}`}
@@ -121,11 +121,11 @@ const Dropdown: React.FC<DropdownProps> = ({ name = '', options, defaultValue, o
         </div>
       </button>
       {isOpen && (
-        <ul className="absolute left-0 top-full z-10 mt-2 w-full rounded-md border border-gray-200 bg-white shadow-lg">
+        <ul className="absolute h-64 overflow-y-scroll left-0 top-full z-10 mt-2 w-full rounded-md border border-gray-200 bg-white shadow-lg">
           {options.map((option) => (
             <li
               key={option.value}
-              className="flex cursor-pointer list-none items-center gap-2 whitespace-nowrap px-4 py-2 hover:bg-gray-100"
+              className="flex w-full cursor-pointer list-none flex-wrap items-center gap-2 overflow-hidden px-4 py-2 hover:bg-gray-100"
               onClick={handleOptionSelect(option.value)}
             >
               {icon && icon}

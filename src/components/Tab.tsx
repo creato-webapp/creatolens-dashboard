@@ -20,7 +20,6 @@ interface TabProps extends React.HTMLAttributes<HTMLDivElement> {
   onEdit?: (targetKey: string, action: 'add' | 'remove') => void
 }
 
-
 const Tab: React.FC<TabProps> = ({
   centered,
   defaultActiveKey,
@@ -42,7 +41,6 @@ const Tab: React.FC<TabProps> = ({
     }
   }
 
-
   // useEffect(() => {
   //   fetch()
   //     .then((res) => {
@@ -54,8 +52,8 @@ const Tab: React.FC<TabProps> = ({
   // }, [])
 
   return (
-    <div className={`tabs  relative flex h-auto w-auto min-w-full flex-col items-center gap-4 shadow-lg md:items-start md:px-3 ${className ?? ''}`}>
-      <div className={`tabs-bar ${centered ? 'centered' : ''} -top-12 flex w-full overflow-x-scroll md:absolute `} style={tabBarStyle}>
+    <div className={`tabs relative flex h-auto w-auto min-w-full flex-col items-center gap-4 shadow-lg md:items-start md:px-3 ${className ?? ''}`}>
+      <div className={`tabs-bar ${centered ? 'centered' : ''} -top-12 flex w-full md:absolute overflow-hidden`} style={tabBarStyle}>
         {items.map((item) => (
           <button
             className={`disabled:text-text-disable flex h-8 min-w-[50%] flex-nowrap items-center  justify-center hover:bg-accent1-300 hover:text-text-white hover:underline hover:underline-offset-2 focus:bg-accent1-500 active:bg-accent1-500 disabled:bg-disabled md:h-12 md:min-w-[10rem] lg:min-w-[15rem] ${

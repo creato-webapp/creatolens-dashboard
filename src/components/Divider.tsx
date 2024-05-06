@@ -1,8 +1,8 @@
 // Create a divider component that can be used to separate content
 // The divider should have a height of 1px and a background color of #DDE5EA
-const Divider = ({ margin = "1px" }) => {
+const Divider = ({ margin = '1px', className="" }) => {
   return (
-    <div>
+    <div className={className}>
       <div style={{ height: '1px', backgroundColor: '#DDE5EA', margin: margin }} />
     </div>
   )

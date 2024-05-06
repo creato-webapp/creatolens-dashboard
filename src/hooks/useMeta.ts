@@ -1,11 +1,11 @@
 import useSWR from 'swr'
 import { getMeta } from '@services/Meta'
-export const useMeta = (input: { accId: string; days: number }, shouldFetch: boolean = true, fallbackData?: { data: any }) => {
+export const useMeta = (input: { accId: string; days: number; profile_id?: string }, shouldFetch: boolean = true) => {
   const { data, error, mutate, ...swr } = useSWR(shouldFetch ? input : null, getMeta, {
     refreshInterval: 0,
-    fallbackData: fallbackData,
     revalidateOnFocus: false,
   })
+
   return {
     data,
     isLoading: !error && !data,
