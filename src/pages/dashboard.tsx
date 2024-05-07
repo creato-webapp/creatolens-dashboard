@@ -2,11 +2,12 @@ import Hero from '@components/Hero'
 import ReportLayout from '@components/Layout/ReportLayout'
 import Tab from '@components/Tab'
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useMeta } from 'src/hooks/useMeta'
 import { getSession } from 'next-auth/react'
 import { getAccounts } from '@services/Account/Account'
 import { IAccount } from '@lib/Account/Account'
+import { getMetaImage } from '@services/Image'
 
 type Props = {
   botList?: IAccount[]
@@ -47,6 +48,56 @@ const Dashboard = ({ botList }: Props) => {
     profile_id: botList![0].profile_id as string,
   })
 
+  const [userProfilePic, setUserProfilePic] = useState('')
+  const selectedAccount = useMemo(() => {
+    if (!botList || botList.length === 0) {
+      return null
+    }
+    const bot = botList.find((bot: IAccount) => bot.id === metaAttributes.accId)
+    return bot ? bot : null
+  }, [botList, metaAttributes.accId])
+
+  useEffect(() => {
+    const fetchImage = async (profileId: string) => {
+      try {
+        const response = await getMetaImage({ profile_id: profileId })
+
+        const buffer = Buffer.from(response, 'binary')
+
+        // Convert the Buffer to a base64 string
+        const base64String = buffer.toString('base64')
+
+        // Create an object URL from the base64 string
+        const objectUrl = `data:image/jpeg;base64,${base64String}`
+        // const newResponse = response
+        console.log('dllm', objectUrl)
+        return objectUrl
+      } catch (error) {
+        console.error('Failed to fetch image', error)
+        return null // Return null or handle the error appropriately
+      }
+    }
+
+    if (selectedAccount && selectedAccount.profile_id) {
+      fetchImage(selectedAccount.profile_id as string)
+        .then((userPic) => {
+          if (userPic) {
+            console.log('userPic', userPic)
+            // Do something with the userPic
+            setUserProfilePic(userPic)
+            console.log('User Picture Fetched:', userPic)
+          } else {
+            console.log('No picture fetched.')
+          }
+        })
+        .catch((error) => {
+          console.error('Error fetching user picture:', error)
+        })
+    } else {
+      console.log('No selected account')
+    }
+  }, [selectedAccount])
+
   const { data: responseData, isLoading } = useMeta(metaAttributes, true)
 
   const onKeyChange = (key: string) => {
@@ -66,14 +117,6 @@ const Dashboard = ({ botList }: Props) => {
     }))
   }
 
-  const selectedAccount = useMemo(() => {
-    if (!botList || botList.length === 0) {
-      return null
-    }
-    const bot = botList.find((bot: IAccount) => bot.id === metaAttributes.accId)
-    return bot ? bot : null
-  }, [botList, metaAttributes.accId])
-
   const tabItems = [
     {
       key: '1',
@@ -86,6 +129,7 @@ const Dashboard = ({ botList }: Props) => {
           data={responseData}
           isLoading={isLoading}
           selectedAccount={selectedAccount}
+          userProfilePic={userProfilePic}
         />
       ),
       days: 3,
@@ -101,6 +145,7 @@ const Dashboard = ({ botList }: Props) => {
           onAccountChange={onAccountChange}
           botList={botList || []}
           selectedAccount={selectedAccount}
+          userProfilePic={userProfilePic}
         />
       ),
       days: 7,

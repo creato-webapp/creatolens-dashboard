@@ -10,6 +10,8 @@ import Dropdown from '@components/Form/Dropdown'
 import Link from 'next/link'
 import { IAccount } from '@lib/Account/Account'
 import { Fetcher } from '@services/fetcher'
+import Avatar from '@components/Avatar'
+import { getMetaImage } from '@services/Image'
 
 // generate fake data for this layout
 
@@ -33,16 +35,17 @@ interface Prop {
   selectedAccount: {
     username: string
     id: string
+    profile_id: string
   } | null
   data: {
     data: PostData[]
     keyword?: { term: string; count: number }[]
     postCount?: number
+    mostRepeatedPost: any
   }
 }
 const ReportLayout = (props: Prop) => {
-  const { data, days, isLoading, botList, onAccountChange, selectedAccount } = props
-  const [mostRepeatedPost, setMostRepeatedPost] = useState<MostRepeatedPost | null>(null)
+  const { data, days, isLoading, botList, onAccountChange, selectedAccount, userProfilePic } = props
 
   // dayFormat = MMM DD YYYY - MMM DD YYYY
   const today = new Date()
@@ -50,6 +53,7 @@ const ReportLayout = (props: Prop) => {
   lastDate.setDate(today.getDate() - days)
   const dateStr = `${lastDate.toDateString().split(' ').slice(1).join(' ')} - ${today.toDateString().split(' ').slice(1).join(' ')}`
   const keywords = data?.keyword
+  const mostRepeatedPost = data?.mostRepeatedPost
 
   const instaBotList = useMemo(() => {
     if (!botList || botList.length <= 0) return []
@@ -61,42 +65,6 @@ const ReportLayout = (props: Prop) => {
     })
   }, [botList])
 
-  // const userAvatar = useMemo(() => {
-  //   if (data?.profile?.user?.profile_pic_url) return data.profile.user.profile_pic_url
-  //   else return ''
-  // }, [data?.profile])
-
-  const fetchUsername = async (owner_username: string): Promise<string> => {
-    const response = await Fetcher.GET('/api/dashboard/instaProfile', {
-      profile_id: owner_username,
-    })
-    return response.user.username || ''
-  }
-
-  useEffect(() => {
-    const fetchMostReatedPost = async () => {
-      if (!props.data || props.data.data.length === 0) {
-        setMostRepeatedPost(null)
-        return
-      }
-
-      const maxCountImage = props.data.data.reduce(
-        (maxImage: PostData, currentImage: PostData) => (currentImage.count > maxImage.count ? currentImage : maxImage),
-        { count: -Infinity, owner_username: '' } as PostData
-      )
-
-      if (maxCountImage.count !== -Infinity) {
-        const username = await fetchUsername(maxCountImage.owner_username)
-        const combined: MostRepeatedPost = {
-          ...maxCountImage,
-          username,
-        }
-        setMostRepeatedPost(combined)
-      }
-    }
-
-    fetchMostReatedPost()
-  }, [props.data]) // Including props.data in the dependency array
   if (!botList || botList.length == 0) {
     return <div>No Bot Available</div>
   }
@@ -119,7 +87,9 @@ const ReportLayout = (props: Prop) => {
         </div>
         <div className="flex flex-col justify-between gap-7 md:flex-row">
           <div className="flex flex-row items-center gap-2">
-            {/* <Avatar size={'medium'} src={userAvatar} /> */}
+            {/* <Avatar size={'medium'} src={URL.createObjectURL(userProfilePic)} /> */}
+            {/* {selectedAccount && <img src={`/api/dashboard/image?profile_id=${selectedAccount.profile_id}`} />} */}
+            {userProfilePic && <img src={userProfilePic} />}
             <h1 className="hidden text-text-secondary md:flex">{selectedAccount && '@' + selectedAccount.username}</h1>
             <div className="md:hidden">
               <Dropdown
@@ -210,11 +180,12 @@ const ReportLayout = (props: Prop) => {
           className="col-span-2 w-full"
           instaPost="/landing-mobile-new.png"
           icon="./Repeat.svg"
+          isLoading={isLoading}
         >
           <div>
-            <div>{mostRepeatedPost?.latest_created_at}</div>
-            <div>{mostRepeatedPost?.second_latest_created_at}</div>
-            <div>{mostRepeatedPost?.caption}</div>
+            <div>{isLoading ? <Skeleton /> : mostRepeatedPost ? mostRepeatedPost?.latest_created_at : ''}</div>
+            <div>{isLoading ? <Skeleton /> : mostRepeatedPost ? mostRepeatedPost?.second_latest_created_at : ''}</div>
+            <div>{isLoading ? <Skeleton /> : mostRepeatedPost ? mostRepeatedPost?.caption : ''}</div>
           </div>
         </CardWithIgPost>
         <Outline className="w-full md:hidden">Export To PDF</Outline>

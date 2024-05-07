@@ -4,7 +4,7 @@ const MetaInstance = axios.create({
   baseURL: process.env.DASHBOARD_API,
   withCredentials: true,
   headers: { 'Content-Type': 'application/json' },
-  timeout: 50000,
+  timeout: 500000,
 })
 
 MetaInstance.interceptors.request.use(
