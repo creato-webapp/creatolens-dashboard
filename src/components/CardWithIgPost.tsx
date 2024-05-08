@@ -32,7 +32,7 @@ export default function CardWithIgPost({
 }: CardProps) {
   return (
     <div className={`flex  w-full flex-col items-center gap-6 border border-slate-300 p-6 shadow-lg md:flex-row ${className}`}>
-      <div className="relative flex w-full  items-center justify-center md:min-h-128">
+      <div className="relative flex w-full  items-center justify-center min-h-64 md:min-h-128">
         {instaPost && (
           <Image
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

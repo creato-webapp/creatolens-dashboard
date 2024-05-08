@@ -1,7 +1,6 @@
 import Card from '@components/Card'
 import CardWithIgPost from '@components/CardWithIgPost'
 import Primary from '@components/Button/PrimaryButton'
-import Outline from '@components/Button/OutlineButton'
 import { useMemo } from 'react'
 import Image from 'next/image'
 import Skeleton from 'react-loading-skeleton'
@@ -188,7 +187,7 @@ const ReportLayout = (props: Prop) => {
             <div className='flex-wrap break-all'>{isLoading ? <Skeleton /> : mostRepeatedPost ? mostRepeatedPost?.caption : ''}</div>
           </div>
         </CardWithIgPost>
-        <Outline className="w-full md:hidden">Export To PDF</Outline>
+        {/* <Outline className="w-full md:hidden">Export To PDF</Outline> */}
       </div>
     </div>
   )
