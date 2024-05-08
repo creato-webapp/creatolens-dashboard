@@ -1,15 +1,14 @@
-import React, { useState, useCallback, useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { useRouter } from 'next/router'
 import { IAccount } from '@lib/Account/Account/interface'
-import SessionModal from '@lib/Account/Account/SessionModal'
 import Title from '@components/Typography/Title'
 import Paragraph from '@components/Typography/Paragraph'
 import AccountInfoCard from '@lib/Account/AccountInfoCard'
 import AccountCreateCard from '@lib/Account/AccountCreateCard'
 import { useAccount } from 'src/hooks/useAccount'
-import { getAccount, createAccount } from '@services/Account/Account'
-import Image from 'next/image'
+import { getAccount } from '@services/Account/Account'
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
+import Image from 'next/image'
 import dayjs from '@services/Dayjs'
 
 type Props = {
@@ -18,7 +17,7 @@ type Props = {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext): Promise<GetServerSidePropsResult<Props>> => {
-  const id = context.params?.id as string
+  const id = context.query.id as string
   const isCreate = id === 'create-account'
   if (isCreate) {
     return { props: { accountData: null, isCreate } }
@@ -28,17 +27,18 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
       Cookie: context.req.headers.cookie,
     },
   })
+  if (!res) {
+    return {
+      notFound: true,
+    }
+  }
   return { props: { accountData: res, isCreate } }
 }
 
 const AccountsPage = ({ accountData, isCreate }: Props) => {
-  const [isLoading, setIsLoading] = useState(false)
-  const [isChecked, setIsChecked] = useState(false)
-  const [shouldFetch, setShouldFetch] = useState(false)
-  const [isShow, setIsShow] = useState(false)
   const router = useRouter()
   const { id } = router.query
-  const { data, error, updateAccount: callUpdateAccount, updateSession } = useAccount(id as string, shouldFetch, accountData)
+  const { data } = useAccount(id as string, false, accountData)
 
   const account: IAccount | null = useMemo(
     () =>
@@ -55,70 +55,6 @@ const AccountsPage = ({ accountData, isCreate }: Props) => {
     router.push(`/accounts`)
   }, [router])
 
-  const updateAccount = useCallback(
-    async (values: IAccount) => {
-      const newValues = {
-        ...account,
-        ...values,
-        last_login_dt: dayjs(values.last_login_dt, 'YYYY-MM-DDTHH:mm').utc().local().format('YYYY-MM-DD THH:mm:ss'),
-      }
-      const res = await callUpdateAccount(newValues)
-      return res
-    },
-    [account, callUpdateAccount]
-  )
-
-  const handleCreateSubmit = useCallback(
-    async (values: IAccount) => {
-      try {
-        setShouldFetch(false)
-        setIsLoading(true)
-        const res = await createAccount(values)
-        if (res.id) {
-          window.alert(`Account ${res.username} created successfully`)
-          goBack()
-        } else {
-          window.alert(res)
-        }
-      } catch (error) {
-        console.error(error)
-        window.alert(error)
-      } finally {
-        setIsLoading(false)
-      }
-    },
-    [goBack]
-  )
-
-  const handleUpdateSubmit = useCallback(
-    async (values: IAccount) => {
-      try {
-        setShouldFetch(true)
-        setIsLoading(true)
-        const res = await updateAccount(values)
-        if (res.id) {
-          window.alert(`Account ${res.username} updated successfully`)
-          goBack()
-        } else {
-          window.alert(res)
-        }
-      } catch (error) {
-        console.error(error)
-        window.alert(error)
-      } finally {
-        setIsLoading(false)
-      }
-    },
-    [goBack, updateAccount]
-  )
-
-  const handleChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-    setIsChecked(event.target.checked)
-  }, [])
-
-  if (error) {
-    return <div>Failed to load users {id}</div>
-  }
   return (
     <div>
       {isCreate ? (
@@ -141,28 +77,15 @@ const AccountsPage = ({ accountData, isCreate }: Props) => {
               </div>
             </div>
             <div className="flex w-full justify-center shadow-lg md:ml-12 md:max-w-sm ">
-              <AccountCreateCard
-                isLoading={isLoading}
-                isCreate={isCreate}
-                handleSubmit={handleCreateSubmit}
-                setIsShow={setIsShow}
-                isValidate={isChecked}
-                handleChange={handleChange}
-              />
+              <AccountCreateCard isCreate={isCreate} />
             </div>
           </div>
         </div>
       ) : (
         <div className="h-full bg-cover bg-center bg-no-repeat md:px-12 ">
-          <div className="flex justify-center">
-            {account && (
-              <AccountInfoCard isLoading={isLoading} isCreate={isCreate} account={account} handleSubmit={handleUpdateSubmit} setIsShow={setIsShow} />
-            )}
-          </div>
+          <div className="flex justify-center">{account && <AccountInfoCard account={account} />}</div>
         </div>
       )}
-
-      <SessionModal isShow={isShow} account={account} isLoading={!error && !data} onCancel={() => setIsShow(false)} updateSession={updateSession} />
     </div>
   )
 }

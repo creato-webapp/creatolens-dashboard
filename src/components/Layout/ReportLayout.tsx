@@ -11,6 +11,7 @@ import Link from 'next/link'
 import { IAccount } from '@lib/Account/Account'
 import Avatar from '@components/Avatar'
 import PlusIcon from '@components/Icon/PlusIcon'
+import { KeywordData, MostRepeatedPost } from '@services/Meta'
 
 // generate fake data for this layout
 
@@ -25,15 +26,9 @@ interface Prop {
     profile_id?: string
   } | null
   data: {
-    keyword?: { term: string; count: number }[]
+    keyword?: KeywordData[]
     postCount?: number
-    mostRepeatedPost: {
-      count?: number
-      latest_created_at?: string
-      second_latest_created_at?: string
-      caption?: string
-      shortcode?: string
-    }
+    mostRepeatedPost?: MostRepeatedPost
   }
 }
 const ReportLayout = (props: Prop) => {
@@ -96,7 +91,7 @@ const ReportLayout = (props: Prop) => {
             <h1 className="hidden text-text-secondary md:flex">{selectedAccount && '@' + selectedAccount.username}</h1>
             <div className="md:hidden">
               <Dropdown
-                dropDownSizes={['l', 'l', 'l']}
+                dropDownSizes={['m', 'l', 'l']}
                 onValueChange={onAccountChange}
                 value={selectedAccount?.id}
                 defaultValue={selectedAccount?.id}
@@ -190,7 +185,7 @@ const ReportLayout = (props: Prop) => {
           <div>
             <div>{isLoading ? <Skeleton /> : mostRepeatedPost ? mostRepeatedPost?.latest_created_at : ''}</div>
             <div>{isLoading ? <Skeleton /> : mostRepeatedPost ? mostRepeatedPost?.second_latest_created_at : ''}</div>
-            <div>{isLoading ? <Skeleton /> : mostRepeatedPost ? mostRepeatedPost?.caption : ''}</div>
+            <div className='flex-wrap break-all'>{isLoading ? <Skeleton /> : mostRepeatedPost ? mostRepeatedPost?.caption : ''}</div>
           </div>
         </CardWithIgPost>
         <Outline className="w-full md:hidden">Export To PDF</Outline>

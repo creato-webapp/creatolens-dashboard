@@ -1,37 +1,56 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Card from '@components/Card'
 import { IField } from '@components/Form/interface'
 import { IAccount } from '@lib/Account/Account'
 import { Paragraph } from '@components/Typography'
 import Checkbox from '@components/Form/Checkbox'
 import DynamicForm from '@components/Form/DynamicForm'
+import { createAccount } from '@services/Account/Account'
+import { useDialogues, Status } from 'src/context/DialogueContext'
 interface AccountCreateCardProps {
-  isLoading: boolean
   isCreate: boolean
-  account?: IAccount
-  handleSubmit: (values: IAccount) => void
-  setIsShow: (show: boolean) => void
-  isValidate: boolean
-  handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 
-const AccountCreateCard: React.FC<AccountCreateCardProps> = ({ isLoading, isCreate, handleSubmit, isValidate, handleChange }) => {
+const AccountCreateCard: React.FC<AccountCreateCardProps> = ({ isCreate }) => {
+  //TODO use library handle validation
+  const { addDialogue } = useDialogues()
+  const [isLoading, setIsLoading] = useState(false)
+  const [isValidate, setIsValidated] = useState(false)
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setIsValidated(event.target.checked)
+  }
+
+  const handleSubmit = async (values: IAccount) => {
+    try {
+      setIsLoading(true)
+      const res = await createAccount(values.username, values.pwd)
+      if (res.id) {
+        addDialogue(`Account ${res.username} created successfully`, Status.SUCCESS)
+      }
+    } catch (err) {
+      if (err && err instanceof Error) {
+        addDialogue(`Failed to create account: ${err.message}`, Status.FAILED)
+      }
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
   const onSubmit = async (values: IAccount) => {
-    let valid = true
-    const newErrors = { username: '', pwd: '' }
     if (values.username) {
       if (values.username.includes(' ')) {
-        newErrors.username = 'Username cannot contain spaces.'
-        valid = false
+        alert('Username cannot contain spaces.')
+        return
       }
     }
     if (values.pwd) {
       if (values.pwd.includes(' ')) {
-        newErrors.pwd = 'Password cannot contain spaces.'
-        valid = false
+        alert('Password cannot contain spaces.')
+        return
       }
     }
-    valid ? handleSubmit(values) : alert(newErrors.username + '\n' + newErrors.pwd)
+    handleSubmit(values)
   }
 
   const fields: IField[] = [
@@ -68,8 +87,8 @@ const AccountCreateCard: React.FC<AccountCreateCardProps> = ({ isLoading, isCrea
       id: 'custom',
       component: (
         <Paragraph size="sm" className="flex w-full md:ml-auto md:mr-auto" bold>
-          <Checkbox id="acknowledge" className="mr-2" onChange={(event) => handleChange(event)}></Checkbox>I acknowledge and agree to the terms and
-          privacy policy by checking this box.
+          <Checkbox id="acknowledge" className="mr-2" onChange={handleChange}></Checkbox>I acknowledge and agree to the terms and privacy policy by
+          checking this box.
         </Paragraph>
       ),
     },
@@ -79,13 +98,11 @@ const AccountCreateCard: React.FC<AccountCreateCardProps> = ({ isLoading, isCrea
       className="ml-auto gap-1 !rounded-none border-none bg-white !p-4 shadow-none"
       title={isCreate ? '' : 'Accounts Info'}
       extra={
-        isCreate ? (
+        isCreate && (
           <div className=" py-2">
             <span className="text-lg font-bold leading-loose text-rose-500">* </span>
             <span className="text-lg font-bold leading-loose text-neutral-800">Required</span>
           </div>
-        ) : (
-          <></>
         )
       }
     >

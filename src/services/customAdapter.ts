@@ -29,7 +29,7 @@ export const FireStoreAdapterWrapper = (options: FirebaseConfig) => {
     const roles = await getRoles(user.email)
     const combinedUser = { ...(user as CombinedUser), roles: roles }
     if (FirestoreAdapter(options).createUser) {
-      return FirestoreAdapter(options).createUser?.(combinedUser) as Awaitable<AdapterUser>
+      return FirestoreAdapter(options).createUser(combinedUser) as Awaitable<AdapterUser>
     }
     return combinedUser
   }

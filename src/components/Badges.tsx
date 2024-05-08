@@ -63,7 +63,6 @@ const Badges = ({ ...props }: BadgesProps) => {
   const SmallBadges = () => {
     return (
       <div
-        {...props}
         className={`curs flex h-auto w-fit items-center justify-center px-2 py-1 ${roundedStyle}
     ${isOutline ? outlineBadgesStyles : solidBadgesStyles}
     ${isDisabled ? 'bg-bg-dark' : ''} ${className}
@@ -83,7 +82,6 @@ const Badges = ({ ...props }: BadgesProps) => {
   const LargeBadges = () => {
     return (
       <div
-        {...props}
         className={`curs flex h-auto w-fit items-center justify-center px-2 py-1  ${roundedStyle}
     ${isOutline ? outlineBadgesStyles : solidBadgesStyles}
     ${isDisabled ? 'bg-bg-dark' : ''} ${className}

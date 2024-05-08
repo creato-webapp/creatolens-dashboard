@@ -76,10 +76,17 @@ export default async function accountQueryHandler(req: NextApiRequest, res: Next
     }
 
     case 'POST': {
-      const account = await AccountInstance.post<IAccount>('/accounts/create', body, cookieHeader)
+      const account = await AccountInstance.post<IAccount>(
+        '/accounts/create',
+        {
+          username: body.username,
+          pwd: body.password,
+        },
+        cookieHeader
+      )
 
       if (account.data.id === undefined) {
-        return res.status(400).json({ message: 'Account Create Failed' })
+        return res.status(account.status).json(account.data)
       }
 
       const clientIp = requestIp.getClientIp(req)
@@ -94,7 +101,7 @@ export default async function accountQueryHandler(req: NextApiRequest, res: Next
             },
           })
         : null
-      const countryCode = geoResponse?.data?.data?.features?.[0]?.properties?.country ?? 'HK'
+      const countryCode = geoResponse?.data.data.features?.[0].properties.country ?? 'HK'
       const response = await AccountInstance.patch(
         `/accounts/update/${account.data.id}`,
         {

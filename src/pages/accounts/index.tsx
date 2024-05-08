@@ -16,50 +16,49 @@ import Dropdown from '@components/Form/Dropdown'
 import EditIcon from '@components/Icon/EditIcon'
 import { PaginationMetadata } from '@services/Account/AccountInterface'
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
+import { usePagination } from '@hooks/usePagination'
 import dayjs from '@services/Dayjs'
 
 type Props = {
   paginationData: PaginationMetadata<IAccount[]>
 }
 
-export const getServerSideProps: GetServerSideProps = async (
-  context: GetServerSidePropsContext
-): Promise<GetServerSidePropsResult<{ paginationData: PaginationMetadata<IAccount[]> }>> => {
-  const paginationProps = {
-    pageNumber: 1,
-    pageSize: 10,
-    orderBy: 'created_at',
-    isAsc: false,
-  }
+export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext): Promise<GetServerSidePropsResult<Props>> => {
   const cookies = context.req.headers.cookie
-  const response = await getAccountsPagination(paginationProps, {
-    headers: {
-      Cookie: cookies,
+  const response = await getAccountsPagination(
+    {
+      pageNumber: 1,
+      pageSize: 10,
+      orderBy: 'created_at',
+      isAsc: false,
     },
-  })
-  const paginationData: PaginationMetadata<IAccount[]> = {
-    data: response?.data ?? [],
-    has_next: response?.has_next ?? false,
-    has_prev: response?.has_prev ?? false,
-    page: response?.page ?? 1,
-    size: response?.size ?? 0,
-    total_items: response?.total_items ?? 0,
+    {
+      headers: {
+        Cookie: cookies,
+      },
+    }
+  )
+  if (!response) {
+    return {
+      notFound: true,
+    }
   }
-  return { props: { paginationData } }
+  return { props: { paginationData: response } }
 }
 
 const AccountsPage = ({ paginationData }: Props) => {
-  const [pageParams, setPageParams] = useState({
-    pageNumber: 1,
-    pageSize: 10,
-    orderBy: 'created_at',
-    isAsc: false,
-  })
-  const [shouldFetch, setShouldFetch] = useState(false)
   const [createDateOrder, setCreateDateOrder] = useState<'asc' | 'desc'>('desc')
-  const { accounts: responseData, error } = useGetAccountsPagination(pageParams, shouldFetch, paginationData)
-  const accounts: IAccount[] = useMemo(() => responseData?.data || [], [responseData])
-  const isLoading = !responseData && !error
+  const { pageParams, setPageParams } = usePagination()
+  const { data, isLoading, setShouldFetch } = useGetAccountsPagination(pageParams, false, paginationData)
+  const accounts: IAccount[] = useMemo(() => data?.data || [], [data])
+  const responseData = data || {
+    data: [],
+    has_next: false,
+    has_prev: false,
+    page: 1,
+    size: 0,
+    total_items: 0,
+  }
 
   const onPageChange = (newPage: number) => {
     setPageParams((prevParams) => ({
@@ -78,13 +77,9 @@ const AccountsPage = ({ paginationData }: Props) => {
           isAsc: isAsc,
         }))
       },
-    []
+    [setPageParams]
   )
-
-  if (error) {
-    throw new Error('Error fetching data')
-  }
-  if (!responseData) {
+  if (isLoading) {
     return <div>Loading...</div>
   }
 
@@ -156,10 +151,10 @@ const AccountsPage = ({ paginationData }: Props) => {
           test: 'secondary',
           banned: 'error',
         }
-        const status: Status = statusToVariantMap[e]
+        const status = statusToVariantMap[e]
         return (
           <div className="flex items-center justify-center">
-            <Badges size={'sm'} status={status} className="capitalize" rounded>
+            <Badges size="sm" status={status} className="capitalize" rounded>
               {e}
             </Badges>
           </div>
@@ -219,10 +214,10 @@ const AccountsPage = ({ paginationData }: Props) => {
               thClassName={'text-sm font-normal text-text-primary items-center justify-center'}
               className="capitalize"
               pageParams={pageParams}
-              updateSorting={updateSorting}
+              updateSorting={() => updateSorting('created_at', createDateOrder === 'asc')}
             />
             <Table.Body className="text-sm font-normal leading-5 text-black">
-              {accounts?.map((e, index) => (
+              {accounts.map((e, index) => (
                 <Table.Row key={`accounts-table-${index}`} columns={columns} className="text-sm" rowData={e} rowKey={index} />
               ))}
             </Table.Body>

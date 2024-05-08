@@ -23,15 +23,14 @@ export async function getSessionPagination(
   params: PaginationParams,
   customConfig?: AxiosRequestConfig
 ): Promise<PaginationMetadata<IAccountSession[]>> {
-  const response = await Fetcher.GET(
-    `/api/accounts/session`,
-    {
+  const response = await Fetcher.GET<PaginationMetadata<IAccountSession[]>>(`/api/accounts/session`, {
+    ...customConfig,
+    params: {
       pageNumber: params.pageNumber,
       pageSize: params.pageSize,
       orderBy: params.orderBy,
       isAsc: params.isAsc,
     },
-    customConfig
-  )
+  })
   return response
 }

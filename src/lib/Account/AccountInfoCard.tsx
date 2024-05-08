@@ -1,20 +1,56 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import Card from '@components/Card'
+import { useRouter } from 'next/router'
 import { Button } from '@components/Button'
 import { IField } from '@components/Form/interface'
 import { IAccount } from '@lib/Account/Account/interface'
 import { Paragraph } from '@components/Typography'
+import { useAccount } from 'src/hooks/useAccount'
 import StatusTag from '@lib/StatusTag'
 import DynamicForm from '@components/Form/DynamicForm'
-interface AccountInfoCardProps {
-  isLoading: boolean
-  isCreate: boolean
-  account: IAccount
-  handleSubmit: (values: IAccount) => void
-  setIsShow: (show: boolean) => void
-}
+import dayjs from '@services/Dayjs'
+import { useDialogues, Status } from 'src/context/DialogueContext'
+import { ModalKeyEnum } from 'src/context/ModalContext'
+import { useModals } from 'src/hooks/useModal'
 
-const AccountInfoCard: React.FC<AccountInfoCardProps> = ({ isLoading, account, handleSubmit, setIsShow }) => {
+interface AccountInfoCardProps {
+  account: IAccount
+}
+const AccountInfoCard: React.FC<AccountInfoCardProps> = ({ account }) => {
+  const router = useRouter()
+  const { addDialogue } = useDialogues()
+  const { id } = router.query
+  const [isLoading, setIsLoading] = useState(false)
+  const { updateAccount, setShouldFetch } = useAccount(id as string, false, account)
+  const { openModal, onClearCallbacks, onCloseRegistry } = useModals()
+
+  const handleUpdateSubmit = useCallback(
+    async (values: IAccount) => {
+      try {
+        setShouldFetch(true)
+        setIsLoading(true)
+        const newValues = {
+          ...account,
+          ...values,
+          last_login_dt: dayjs(values.last_login_dt, 'YYYY-MM-DDTHH:mm').utc().local().format('YYYY-MM-DD THH:mm:ss'),
+        }
+        const res = await updateAccount(newValues)
+        if (res.id) {
+          addDialogue(`Account ${res.username} updated successfully`, Status.SUCCESS)
+          router.push(`/accounts`)
+        } else {
+          throw new Error('Failed to update account')
+        }
+      } catch (err) {
+        if (err && err instanceof Error) {
+          addDialogue(`Failed to update account: ${err.message}`, Status.FAILED)
+        }
+      } finally {
+        setIsLoading(false)
+      }
+    },
+    [account, router, updateAccount, setShouldFetch, addDialogue]
+  )
   const accountInfoField: IField[] = [
     {
       label: 'Country',
@@ -130,21 +166,29 @@ const AccountInfoCard: React.FC<AccountInfoCardProps> = ({ isLoading, account, h
   ]
 
   const combinedField: IField[] = [...accountInfoField, ...checkBoxField, ...fields]
+
   const handleClick = useCallback(() => {
-    setIsShow(true)
-  }, [])
+    onCloseRegistry(() => console.log('test')) // eslint-disable-line no-console
+    openModal(ModalKeyEnum.SESSION)
+    return () => {
+      onClearCallbacks
+    }
+  }, [onCloseRegistry, openModal, onClearCallbacks])
+
   return (
-    <Card
-      className="mb-8 ml-auto mr-auto mt-0 w-full border-none bg-bg-white shadow-none"
-      customTitle={<h3 className="mr-auto w-auto pt-2 text-4xl text-text-primary">Account Info</h3>}
-      extra={
-        <Button.Primary loading={isLoading} onClick={handleClick}>
-          Open Session Modal
-        </Button.Primary>
-      }
-    >
-      <DynamicForm onSubmit={handleSubmit} Header={account.username} loading={isLoading} fields={combinedField} allowSubmit={!isLoading} />
-    </Card>
+    <>
+      <Card
+        className="mb-8 ml-auto mr-auto mt-0 w-full border-none bg-bg-white shadow-none"
+        customTitle={<h3 className="mr-auto w-auto pt-2 text-4xl text-text-primary">Account Info</h3>}
+        extra={
+          <Button.Primary loading={isLoading} onClick={handleClick}>
+            Open Session Modal
+          </Button.Primary>
+        }
+      >
+        <DynamicForm onSubmit={handleUpdateSubmit} Header={account.username} loading={isLoading} fields={combinedField} allowSubmit={!isLoading} />
+      </Card>
+    </>
   )
 }
 

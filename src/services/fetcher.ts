@@ -1,6 +1,4 @@
 import axios, { AxiosError, AxiosRequestConfig } from 'axios'
-import { signOut } from 'next-auth/react'
-import { getCookie } from 'cookies-next'
 
 export const FetcherInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_LOCAL_SERVER_URL,
@@ -10,9 +8,7 @@ export const FetcherInstance = axios.create({
 
 FetcherInstance.interceptors.request.use(
   async function (config) {
-    // Do something before request is sent
-    const idToken = getCookie('idToken')
-    axios.defaults.headers.common['idToken'] = idToken ? idToken : '' // for all requests
+    // Do something before request is sen
 
     return config
   },
@@ -28,56 +24,24 @@ FetcherInstance.interceptors.response.use(
     return response
   },
   function (error: AxiosError) {
-    if (error.response) {
-      switch (error.response.status) {
-        case 404:
-          console.error(error.message)
-          return error.response
-
-        case 400:
-          console.error(error.message)
-          return error.response
-
-        case 401:
-          console.error(error.message)
-          signOut()
-          if (typeof window !== 'undefined') {
-            window.alert('Your session has expired. Please login again.')
-          }
-          return error
-
-        default:
-          console.error(error.message)
-          return error.response
+    if (axios.isAxiosError(error)) {
+      if (typeof window !== 'undefined') {
+        window.alert(error.message)
       }
+      console.error(error.response?.data)
     }
     return Promise.reject(error)
   }
 )
 
-export const CommonRequest = async <D, P>(
-  method: 'GET' | 'POST' | 'PATCH' | 'DELETE',
-  url: string,
-  data?: D,
-  params?: P,
-  customConfig?: AxiosRequestConfig
-) => {
-  const config: AxiosRequestConfig = {
-    method,
-    url,
-    data,
-    params,
-    ...customConfig,
-  }
-  return await FetcherInstance(config).then((res) => res.data)
-}
-
 export const Fetcher = {
-  GET: <P>(url: string, params?: P, customConfig?: AxiosRequestConfig) => CommonRequest('GET', url, undefined, params, customConfig),
+  GET: <T>(url: string, customConfig?: AxiosRequestConfig) => FetcherInstance.get<T>(url, customConfig).then((res) => res.data),
 
-  POST: <D>(url: string, data?: D, customConfig?: AxiosRequestConfig) => CommonRequest('POST', url, data, undefined, customConfig),
+  POST: <T, D = {}>(url: string, data?: D, customConfig?: AxiosRequestConfig) =>
+    FetcherInstance.post<T>(url, data, customConfig).then((res) => res.data),
 
-  PATCH: <D>(url: string, data?: D, customConfig?: AxiosRequestConfig) => CommonRequest('PATCH', url, data, undefined, customConfig),
+  PATCH: <T, D = {}>(url: string, data?: Partial<D>, customConfig?: AxiosRequestConfig) =>
+    FetcherInstance.patch<T>(url, data, customConfig).then((res) => res.data),
 
-  DELETE: (url: string, customConfig?: AxiosRequestConfig) => CommonRequest('DELETE', url, undefined, undefined, customConfig),
+  DELETE: <T>(url: string, customConfig?: AxiosRequestConfig) => FetcherInstance.delete<T>(url, customConfig).then((res) => res.data),
 }
