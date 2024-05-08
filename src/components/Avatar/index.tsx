@@ -24,7 +24,12 @@ const Avatar = ({ src, alt = 'Avatar', size = 'small', className }: AvatarProps)
   return (
     <div className={`flex overflow-hidden rounded-full ${sizeStyle} bg-gray-300 ${className}`}>
       {src ? (
-        <img src={src} alt={alt} className="h-full w-full object-cover" />
+        <img
+          src={src}
+          alt={alt}
+          className="h-full w-full object-cover"
+          onerror="this.onerror=null;this.src='https://placeimg.com/200/300/animals';"
+        />
       ) : (
         <UserIcon size={iconSize} color="currentColor" className="m-auto" />
       )}

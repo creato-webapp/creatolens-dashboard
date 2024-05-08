@@ -12,6 +12,7 @@ import { IAccount } from '@lib/Account/Account'
 import { Fetcher } from '@services/fetcher'
 import Avatar from '@components/Avatar'
 import { getMetaImage } from '@services/Image'
+import PlusIcon from '@components/Icon/PlusIcon'
 
 // generate fake data for this layout
 
@@ -66,7 +67,19 @@ const ReportLayout = (props: Prop) => {
   }, [botList])
 
   if (!botList || botList.length == 0) {
-    return <div>No Bot Available</div>
+    return (
+      <div className="flex h-64 w-full flex-col items-center justify-center gap-4">
+        <h2>No Account Available</h2>
+        <Link href="/accounts/create-account">
+          <Primary sizes={['s', 'l', 'l']} styleClassName="px-2">
+            <div className="flex flex-row items-center gap-2">
+              <PlusIcon className="h-6 w-6" />
+              <div className="hidden md:flex">Create New Account</div>
+            </div>
+          </Primary>
+        </Link>
+      </div>
+    )
   }
 
   return (
@@ -87,9 +100,8 @@ const ReportLayout = (props: Prop) => {
         </div>
         <div className="flex flex-col justify-between gap-7 md:flex-row">
           <div className="flex flex-row items-center gap-2">
-            {/* <Avatar size={'medium'} src={URL.createObjectURL(userProfilePic)} /> */}
-            {/* {selectedAccount && <img src={`/api/dashboard/image?profile_id=${selectedAccount.profile_id}`} />} */}
-            {userProfilePic && <img src={userProfilePic} />}
+            {selectedAccount && <Avatar size={'medium'} src={`/api/dashboard/userImage?profile_id=${selectedAccount.profile_id}`} />}
+
             <h1 className="hidden text-text-secondary md:flex">{selectedAccount && '@' + selectedAccount.username}</h1>
             <div className="md:hidden">
               <Dropdown
@@ -109,9 +121,6 @@ const ReportLayout = (props: Prop) => {
               <Primary sizes={['m', 'l', 'l']} className="flex w-full">
                 + Add New Account
               </Primary>
-              {/* <Outline sizes={['m', 'l', 'l']} className="flex w-full">
-                Export To PDF
-              </Outline> */}
             </div>
           </div>
         </div>
@@ -168,8 +177,13 @@ const ReportLayout = (props: Prop) => {
             </div>
           }
           <div className="flex  flex-col items-center justify-center gap-4  md:flex-row">
-            <Primary className="flex  justify-center">+ Search Hashtag by Text</Primary>
-            <Primary className="flex  justify-center">+ Search Hashtag By Image</Primary>
+            <Primary className="flex  justify-center">
+              <PlusIcon className="h-6 w-6" />
+              Search Hashtag by Text
+            </Primary>
+            <Primary className="flex  justify-center">
+              <PlusIcon className="h-6 w-6" />+ Search Hashtag By Image
+            </Primary>
           </div>
         </Card>
 
@@ -178,7 +192,7 @@ const ReportLayout = (props: Prop) => {
           description="“Most repeated post showing on explore during fetching”"
           number={mostRepeatedPost?.count || 0}
           className="col-span-2 w-full"
-          instaPost="/landing-mobile-new.png"
+          instaPost={mostRepeatedPost?.shortcode && `/api/dashboard/instapostImage?shortcode=${mostRepeatedPost.shortcode}`}
           icon="./Repeat.svg"
           isLoading={isLoading}
         >

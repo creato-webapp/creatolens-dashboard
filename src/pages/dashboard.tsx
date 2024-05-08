@@ -38,14 +38,16 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
   const botList = await getAccounts({
     created_by: user.email!,
   })
+
+  // const botList = []
   return { props: { botList } }
 }
 
 const Dashboard = ({ botList }: Props) => {
   const [metaAttributes, setMetaAttributes] = useState({
-    accId: botList![0].id,
+    accId: botList[0]?.id ?? null,
     days: 3,
-    profile_id: botList![0].profile_id as string,
+    profile_id: (botList[0]?.profile_id as string) ?? null,
   })
 
   const [userProfilePic, setUserProfilePic] = useState('')
@@ -168,7 +170,7 @@ const Dashboard = ({ botList }: Props) => {
         defaultActiveKey="1"
         onKeyChange={onKeyChange}
         scrollable={false}
-        className="mt-3 px-2 shadow-none md:px-4 md:shadow-xl lg:px-24"
+        className="mt-3 px-2 shadow-none md:px-4 md:pb-12 lg:px-24"
       />
     </div>
   )

@@ -10,9 +10,28 @@ export async function getMetaImage(
   any
 }> {
   const response = await Fetcher.GET(
-    '/api/dashboard/image',
+    '/api/dashboard/userImage',
     {
       profile_id: data.profile_id,
+    },
+    { ...customConfig }
+  )
+
+  return response
+}
+
+export async function getMetaPostImage(
+  data: {
+    shortcode?: string
+  },
+  customConfig?: AxiosRequestConfig
+): Promise<{
+  any
+}> {
+  const response = await Fetcher.GET(
+    '/api/dashboard/instapostImage',
+    {
+      shortcode: data.shortcode,
     },
     { ...customConfig }
   )
