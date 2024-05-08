@@ -19,6 +19,7 @@ export default function Navbar(props: NavbarProps) {
         { name: 'User Guide', path: '/guide' },
         { name: 'Accounts', path: '/accounts' },
         { name: 'Recommendation', path: '/recommendation' },
+        { name: 'Trend Analysis', path: '/dashboard' },
       ]
     : []
 
