@@ -2,31 +2,17 @@ import Card from '@components/Card'
 import CardWithIgPost from '@components/CardWithIgPost'
 import Primary from '@components/Button/PrimaryButton'
 import Outline from '@components/Button/OutlineButton'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import Image from 'next/image'
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import Dropdown from '@components/Form/Dropdown'
 import Link from 'next/link'
 import { IAccount } from '@lib/Account/Account'
-import { Fetcher } from '@services/fetcher'
 import Avatar from '@components/Avatar'
-import { getMetaImage } from '@services/Image'
 import PlusIcon from '@components/Icon/PlusIcon'
 
 // generate fake data for this layout
-
-interface PostData {
-  count: number
-  owner_username: string
-  latest_created_at?: string
-  second_latest_created_at?: string
-  caption?: string
-}
-
-interface MostRepeatedPost extends PostData {
-  username: string
-}
 
 interface Prop {
   days: number
@@ -36,17 +22,22 @@ interface Prop {
   selectedAccount: {
     username: string
     id: string
-    profile_id: string
+    profile_id?: string
   } | null
   data: {
-    data: PostData[]
     keyword?: { term: string; count: number }[]
     postCount?: number
-    mostRepeatedPost: any
+    mostRepeatedPost: {
+      count?: number
+      latest_created_at?: string
+      second_latest_created_at?: string
+      caption?: string
+      shortcode?: string
+    }
   }
 }
 const ReportLayout = (props: Prop) => {
-  const { data, days, isLoading, botList, onAccountChange, selectedAccount, userProfilePic } = props
+  const { data, days, isLoading, botList, onAccountChange, selectedAccount } = props
 
   // dayFormat = MMM DD YYYY - MMM DD YYYY
   const today = new Date()
@@ -118,16 +109,16 @@ const ReportLayout = (props: Prop) => {
           </div>
           <div className="flex flex-col">
             <div className="flex w-fit flex-col gap-3 md:flex-row md:gap-4">
-              <Primary sizes={['m', 'l', 'l']} className="flex w-full">
-                + Add New Account
-              </Primary>
+              <Link href="/accounts/create-account">
+                <Primary sizes={['m', 'l', 'l']} className="flex w-full">
+                  <PlusIcon className="h-6 w-6" /> Add New Account
+                </Primary>
+              </Link>
             </div>
           </div>
         </div>
       </div>
-      {/* <div className={'my-7 md:flex h-[1px]'}> */}
       <div className="my-2 md:my-7 md:h-[1px] md:bg-[#DDE5EA]" />
-      {/* </div> */}
       <div className="flex flex-col gap-7">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <Card className="h-full w-full !rounded-none">

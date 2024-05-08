@@ -32,12 +32,10 @@ export default function CardWithIgPost({
 }: CardProps) {
   return (
     <div className={`flex  w-full flex-col items-center gap-6 border border-slate-300 p-6 shadow-lg md:flex-row ${className}`}>
-      <div className="flex w-full md:min-h-128  items-center justify-center relative">
+      <div className="relative flex w-full  items-center justify-center md:min-h-128">
         {instaPost && (
           <Image
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            // width={320}
-            // height={320}
             fill={true}
             alt="instagram post"
             className="object-contain "
@@ -45,7 +43,7 @@ export default function CardWithIgPost({
           />
         )}
       </div>
-      <div className='flex w-full flex-col'> 
+      <div className="flex w-full flex-col">
         {title ? (
           <Title level={1} bold>
             {title}

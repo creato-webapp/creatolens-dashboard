@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react'
-import { useMeta } from 'src/hooks/useMeta'
+import { useState } from "react"
 
 export interface TabItem {
   key: string

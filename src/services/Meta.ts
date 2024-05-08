@@ -1,4 +1,3 @@
-import { DashboardData } from 'src/pages/dashboard'
 import { Fetcher } from './fetcher'
 import { AxiosRequestConfig } from 'axios'
 
@@ -17,7 +16,17 @@ export async function getMeta(
     profile_id?: string
   },
   customConfig?: AxiosRequestConfig
-): Promise<{ keyword: string; data: Array<DashboardData> }> {
+): Promise<{
+  keyword?: { term: string; count: number }[]
+  postCount?: number
+  mostRepeatedPost: {
+    count?: number
+    latest_created_at?: string
+    second_latest_created_at?: string
+    caption?: string
+    shortcode?: string
+  }
+}> {
   const response = await Fetcher.GET(
     `/api/dashboard`,
     {
@@ -62,7 +71,7 @@ export async function getMeta(
 
     maxCountImage = {
       ...maxCountImage,
-      ...maxCountImageResponse
+      ...maxCountImageResponse,
     }
   }
 

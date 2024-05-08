@@ -7,7 +7,8 @@ export async function getMetaImage(
   },
   customConfig?: AxiosRequestConfig
 ): Promise<{
-  any
+  // response data is image
+  image: string
 }> {
   const response = await Fetcher.GET(
     '/api/dashboard/userImage',
@@ -26,7 +27,7 @@ export async function getMetaPostImage(
   },
   customConfig?: AxiosRequestConfig
 ): Promise<{
-  any
+  image: string
 }> {
   const response = await Fetcher.GET(
     '/api/dashboard/instapostImage',
