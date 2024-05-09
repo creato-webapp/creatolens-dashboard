@@ -71,7 +71,7 @@ const ReportLayout = (props: Prop) => {
   }
 
   return (
-    <div>
+    <div className='flex flex-col'>
       <div className="flex flex-col justify-between md:flex-col">
         <div className="my-2 flex flex-row justify-between md:my-7">
           <h1>Account Overview:</h1>
@@ -116,8 +116,8 @@ const ReportLayout = (props: Prop) => {
         </div>
       </div>
       <div className="my-2 md:my-7 md:h-[1px] md:bg-[#DDE5EA]" />
-      <div className="flex flex-col gap-7">
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+      <div className="flex flex-col gap-12">
+        <div className="flex flex-col grid-cols-1 gap-4 md:grid md:grid-cols-2">
           <Card className="h-full w-full !rounded-none">
             {
               <div>
@@ -164,7 +164,7 @@ const ReportLayout = (props: Prop) => {
               </div>
             </div>
           }
-          <div className="flex  flex-col items-center justify-center gap-4  md:flex-row">
+          <div className="flex flex-col items-center justify-center gap-4  md:flex-row">
             <Primary className="flex  justify-center">
               <PlusIcon className="h-6 w-6" />
               Search Hashtag by Text
