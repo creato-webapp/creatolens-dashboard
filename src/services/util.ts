@@ -48,3 +48,14 @@ export const imageToBase64 = (file: File): Promise<string | null> => {
     }
   })
 }
+
+export function hoursAgo(dateString: string): string {
+  const pastDate = new Date(dateString)
+  const currentDate = new Date()
+
+  const diffInMilliseconds = currentDate.getTime() - pastDate.getTime()
+
+  const diffInHours = Math.floor(diffInMilliseconds / 1000 / 60 / 60)
+
+  return `${diffInHours}H ago`
+}

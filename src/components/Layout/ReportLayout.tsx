@@ -10,7 +10,10 @@ import Link from 'next/link'
 import { IAccount } from '@lib/Account/Account'
 import Avatar from '@components/Avatar'
 import PlusIcon from '@components/Icon/PlusIcon'
+import ClockIcon from '@components/Icon/ClockIcon'
+import { hoursAgo } from '@services/util'
 import { KeywordData, MostRepeatedPost } from '@services/Meta'
+import Badges from '@components/Badges'
 
 // generate fake data for this layout
 
@@ -181,11 +184,33 @@ const ReportLayout = (props: Prop) => {
           icon="./Repeat.svg"
           isLoading={isLoading}
         >
-          <div>
-            <div>{isLoading ? <Skeleton /> : mostRepeatedPost ? mostRepeatedPost?.latest_created_at : ''}</div>
-            <div>{isLoading ? <Skeleton /> : mostRepeatedPost ? mostRepeatedPost?.second_latest_created_at : ''}</div>
-            <div className='flex-wrap break-all'>{isLoading ? <Skeleton /> : mostRepeatedPost ? mostRepeatedPost?.caption : ''}</div>
+          <div className="flex flex-wrap gap-2">
+            <div>
+              {isLoading ? (
+                <Skeleton />
+              ) : mostRepeatedPost ? (
+                <Badges size="sm" status="text-secondary">
+                  <ClockIcon />
+                  {mostRepeatedPost?.latest_created_at + ' ' + hoursAgo(mostRepeatedPost.latest_created_at!)}
+                </Badges>
+              ) : (
+                ''
+              )}
+            </div>
+            <div>
+              {isLoading ? (
+                <Skeleton />
+              ) : mostRepeatedPost ? (
+                <Badges size="sm" status="text-secondary">
+                  <ClockIcon />
+                  {mostRepeatedPost?.second_latest_created_at + ' ' + hoursAgo(mostRepeatedPost.second_latest_created_at!)}
+                </Badges>
+              ) : (
+                ''
+              )}
+            </div>
           </div>
+          <div className="flex-wrap break-all">{isLoading ? <Skeleton /> : mostRepeatedPost ? mostRepeatedPost?.caption : ''}</div>
         </CardWithIgPost>
         {/* <Outline className="w-full md:hidden">Export To PDF</Outline> */}
       </div>

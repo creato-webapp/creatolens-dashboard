@@ -69,7 +69,7 @@ const Badges = ({ ...props }: BadgesProps) => {
     ${closeable ? 'cursor-pointer' : ''}
     `}
       >
-        <h6 className="capitalize-first-letter flex flex-row font-normal">{children}</h6>
+        <h6 className="capitalize-first-letter flex flex-row items-center font-normal">{children}</h6>
         {closeable && (
           <button onClick={handleClose} className="ml-1 focus:outline-none">
             <XCircleIcon size={18} />
