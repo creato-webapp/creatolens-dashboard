@@ -15,7 +15,7 @@ import IGIcon from '../../assets/icons/ig-icon.jpg'
 import { hoursAgo } from '@services/util'
 import { KeywordData, MostRepeatedPost } from '@services/Meta'
 import Badges from '@components/Badges'
-
+import dayjs from 'src/utils/dayjs'
 // generate fake data for this layout
 
 interface Prop {
@@ -71,7 +71,7 @@ const ReportLayout = (props: Prop) => {
   }
 
   return (
-    <div className='flex flex-col'>
+    <div className="flex flex-col">
       <div className="flex flex-col justify-between md:flex-col">
         <div className="my-2 flex flex-row justify-between md:my-7">
           <h1>Account Overview:</h1>
@@ -122,7 +122,7 @@ const ReportLayout = (props: Prop) => {
       </div>
       <div className="my-2 md:my-7 md:h-[1px] md:bg-[#DDE5EA]" />
       <div className="flex flex-col gap-12">
-        <div className="flex flex-col grid-cols-1 gap-4 md:grid md:grid-cols-2">
+        <div className="flex grid-cols-1 flex-col gap-4 md:grid md:grid-cols-2">
           <Card className="h-full w-full !rounded-none">
             {
               <div>
@@ -197,7 +197,7 @@ const ReportLayout = (props: Prop) => {
               ) : mostRepeatedPost ? (
                 <Badges size="sm" status="text-secondary">
                   <ClockIcon />
-                  {mostRepeatedPost?.latest_created_at + ' ' + hoursAgo(mostRepeatedPost.latest_created_at!)}
+                  {dayjs(mostRepeatedPost?.latest_created_at).format('YYYY-MM-DD HH:mm:ss') + ' ' + hoursAgo(mostRepeatedPost.latest_created_at!)}
                 </Badges>
               ) : (
                 ''
@@ -209,7 +209,9 @@ const ReportLayout = (props: Prop) => {
               ) : mostRepeatedPost ? (
                 <Badges size="sm" status="text-secondary">
                   <ClockIcon />
-                  {mostRepeatedPost?.second_latest_created_at + ' ' + hoursAgo(mostRepeatedPost.second_latest_created_at!)}
+                  {dayjs(mostRepeatedPost?.second_latest_created_at).format('YYYY-MM-DD HH:mm:ss') +
+                    ' ' +
+                    hoursAgo(mostRepeatedPost?.second_latest_created_at!)}
                 </Badges>
               ) : (
                 ''
