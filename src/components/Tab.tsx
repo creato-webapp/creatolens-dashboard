@@ -74,7 +74,7 @@ const Tab: React.FC<TabProps> = ({
           currentActiveKey === item.key ? (
             <div
               key={item.key}
-              className={`tab-pane ${currentActiveKey === item.key ? 'active' : ''}  inline-block min-w-full flex-col justify-center`}
+              className={`tab-pane ${currentActiveKey === item.key ? 'active' : ''}  flex min-w-full flex-col justify-center`}
             >
               {item.children}
             </div>
