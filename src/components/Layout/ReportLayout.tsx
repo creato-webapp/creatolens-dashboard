@@ -88,7 +88,11 @@ const ReportLayout = (props: Prop) => {
         <div className="flex flex-col justify-between gap-7 md:flex-row">
           <div className="flex flex-row items-center gap-2">
             {selectedAccount && (
-              <Avatar size={'medium'} src={`/api/dashboard/userImage?profile_id=${selectedAccount.profile_id!}`} fallbackSrc={'insta-bot.svg'} />
+              <Avatar
+                size={'medium'}
+                src={selectedAccount.profile_id ? `/api/dashboard/userImage?profile_id=${selectedAccount.profile_id!}` : 'insta-bot.svg'}
+                fallbackSrc={'insta-bot.svg'}
+              />
             )}
 
             <h1 className="hidden text-text-secondary md:flex">{selectedAccount && '@' + selectedAccount.username}</h1>
@@ -99,7 +103,7 @@ const ReportLayout = (props: Prop) => {
                 value={selectedAccount?.id}
                 defaultValue={selectedAccount?.id}
                 options={instaBotList}
-                className=''
+                className=""
               />
             </div>
             <Link href={`https://www.instagram.com/${selectedAccount?.username}`} target="_blank">
@@ -167,7 +171,7 @@ const ReportLayout = (props: Prop) => {
             </div>
           }
           <div className="flex flex-col items-center justify-center gap-4 md:flex-row ">
-            <Link href={"/recommendation"}>
+            <Link href={'/recommendation'}>
               <Primary className="flex justify-center">
                 <PlusIcon className="h-6 w-6" />
                 Search Hashtag by Text
