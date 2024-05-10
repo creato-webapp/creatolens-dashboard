@@ -11,6 +11,7 @@ import { IAccount } from '@lib/Account/Account'
 import Avatar from '@components/Avatar'
 import PlusIcon from '@components/Icon/PlusIcon'
 import ClockIcon from '@components/Icon/ClockIcon'
+import IGIcon from '../../assets/icons/ig-icon.jpg'
 import { hoursAgo } from '@services/util'
 import { KeywordData, MostRepeatedPost } from '@services/Meta'
 import Badges from '@components/Badges'
@@ -35,7 +36,6 @@ interface Prop {
 }
 const ReportLayout = (props: Prop) => {
   const { data, days, isLoading, botList, onAccountChange, selectedAccount } = props
-
   // dayFormat = MMM DD YYYY - MMM DD YYYY
   const today = new Date()
   const lastDate = new Date(today)
@@ -48,7 +48,7 @@ const ReportLayout = (props: Prop) => {
     if (!botList || botList.length <= 0) return []
     return botList.map((bot: IAccount) => {
       return {
-        label: bot.username,
+        label: (!bot.profile_id ? '[No Profile Found]\n' : '') + bot.username,
         value: bot.id,
       }
     })
@@ -88,7 +88,12 @@ const ReportLayout = (props: Prop) => {
         </div>
         <div className="flex flex-col justify-between gap-7 md:flex-row">
           <div className="flex flex-row items-center gap-2">
-            {selectedAccount && <Avatar size={'medium'} src={`/api/dashboard/userImage?profile_id=${selectedAccount.profile_id}`} />}
+            {selectedAccount && (
+              <Avatar
+                size={'medium'}
+                src={selectedAccount.profile_id ? `/api/dashboard/userImage?profile_id=${selectedAccount.profile_id!}` : IGIcon.src}
+              />
+            )}
 
             <h1 className="hidden text-text-secondary md:flex">{selectedAccount && '@' + selectedAccount.username}</h1>
             <div className="md:hidden">
@@ -170,7 +175,8 @@ const ReportLayout = (props: Prop) => {
               Search Hashtag by Text
             </Primary>
             <Primary className="flex  justify-center">
-              <PlusIcon className="h-6 w-6" />+ Search Hashtag By Image
+              <PlusIcon className="h-6 w-6" />
+              Search Hashtag By Image
             </Primary>
           </div>
         </Card>
@@ -212,7 +218,6 @@ const ReportLayout = (props: Prop) => {
           </div>
           <div className="flex-wrap break-all">{isLoading ? <Skeleton /> : mostRepeatedPost ? mostRepeatedPost?.caption : ''}</div>
         </CardWithIgPost>
-        {/* <Outline className="w-full md:hidden">Export To PDF</Outline> */}
       </div>
     </div>
   )

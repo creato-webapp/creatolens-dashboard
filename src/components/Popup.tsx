@@ -33,8 +33,6 @@ const Popup: React.FC<PopupProps> = ({
     onClose && onClose()
   }
 
-
-
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
@@ -64,7 +62,7 @@ const Popup: React.FC<PopupProps> = ({
         className="absolute left-1/2 top-1/2 mx-auto w-96 -translate-x-1/2 -translate-y-1/2 transform rounded-md border bg-white p-5 shadow-lg"
         ref={popupRef}
       >
-        <div className="flex flex-col justify-center space-y-3  ">
+        <div className="flex flex-col justify-center space-y-3">
           <div className="flex items-center justify-between">
             {title ? <h3 className="font-h3-bold">{title}</h3> : <div className="w-auto"></div>}
             {withCloseButton && (
