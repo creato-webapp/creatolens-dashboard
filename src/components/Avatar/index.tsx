@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import UserIcon from '@components/Icon/UserIcon'
-import Image from 'next/image'
 
 type AvatarSize = 'small' | 'medium' | 'large'
 
@@ -31,7 +30,7 @@ const Avatar = ({ src, alt = 'Avatar', size = 'small', className }: AvatarProps)
   return (
     <div className={`flex overflow-hidden rounded-full ${sizeStyle} bg-gray-300 ${className}`}>
       {src ? (
-        <Image
+        <img
           width={iconSize}
           height={iconSize}
           src={error ? '/logo_orange.png' : src}
