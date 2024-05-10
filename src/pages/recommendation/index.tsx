@@ -54,7 +54,7 @@ const RecommendationPage = () => {
       key: '1',
       title: 'Categories',
       children: (
-        <div className="flex flex-wrap gap-4 md:flex md:flex-nowrap md:px-14 md:py-24">
+        <div className="flex gap-4 md:flex md:px-14 md:py-24 justify-center flex-col md:flex-row ">
           <TopRelatedHashtagCard hashtags={hashetData} />
           <TopAccHashtagCard hashtags={hashetData} />
         </div>

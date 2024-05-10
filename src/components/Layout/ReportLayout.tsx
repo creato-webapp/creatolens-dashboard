@@ -103,6 +103,7 @@ const ReportLayout = (props: Prop) => {
                 value={selectedAccount?.id}
                 defaultValue={selectedAccount?.id}
                 options={instaBotList}
+                className=''
               />
             </div>
             <Link href={`https://www.instagram.com/${selectedAccount?.username}`} target="_blank">
@@ -121,7 +122,7 @@ const ReportLayout = (props: Prop) => {
         </div>
       </div>
       <div className="my-2 md:my-7 md:h-[1px] md:bg-[#DDE5EA]" />
-      <div className="flex flex-col gap-12">
+      <div className="flex flex-col gap-5 md:gap-12">
         <div className="flex grid-cols-1 flex-col gap-4 md:grid md:grid-cols-2">
           <Card className="h-full w-full !rounded-none">
             {
@@ -146,12 +147,12 @@ const ReportLayout = (props: Prop) => {
           {
             <div>
               <h2>Top 10 Keywords</h2>
-              <div className="italic text-text-secondary">&quot;From hashtags, captions, locations&quot;</div>
+              <div className="font-lato font-medium italic text-text-secondary">&quot;From hashtags, captions, locations&quot;</div>
               <div className="flex w-full flex-row flex-wrap text-xl">
                 {keywords ? (
                   keywords.map((item: { term: string; count: number }, index: number) => {
                     return (
-                      <div key={item.term} className="flex flex-row font-bold">
+                      <div key={item.term} className="flex flex-row font-lato font-bold text-text-secondary">
                         {item.term}
                         <div className="mr-2 text-accent1-500">
                           ({item.count}){keywords.length != index + 1 ? ',' : ''}
@@ -169,11 +170,13 @@ const ReportLayout = (props: Prop) => {
               </div>
             </div>
           }
-          <div className="flex flex-col items-center justify-center gap-4  md:flex-row">
-            <Primary className="flex  justify-center">
-              <PlusIcon className="h-6 w-6" />
-              Search Hashtag by Text
-            </Primary>
+          <div className="flex flex-col items-center justify-center gap-4 md:flex-row ">
+            <Link href={"/recommendation"}>
+              <Primary className="flex justify-center">
+                <PlusIcon className="h-6 w-6" />
+                Search Hashtag by Text
+              </Primary>
+            </Link>
             <Primary className="flex  justify-center">
               <PlusIcon className="h-6 w-6" />
               Search Hashtag By Image
@@ -218,6 +221,7 @@ const ReportLayout = (props: Prop) => {
               )}
             </div>
           </div>
+          <h3 className="font-extrabold">{mostRepeatedPost?.user.username && '@' + mostRepeatedPost?.user.username}</h3>
           <div className="flex-wrap break-all">{isLoading ? <Skeleton /> : mostRepeatedPost ? mostRepeatedPost?.caption : ''}</div>
         </CardWithIgPost>
       </div>

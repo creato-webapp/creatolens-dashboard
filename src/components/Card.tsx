@@ -27,7 +27,7 @@ export default function Card({
 }: CardProps) {
   // const { title, children, extra, className, coverImage, subExtra, description, onClick } = props
   return (
-    <div className={`flex h-fit w-full flex-col gap-6 rounded-xl border border-slate-300 p-6 shadow-lg ${className}`}>
+    <div className={`flex h-fit  w-full flex-col gap-6 rounded-xl border border-slate-300 p-6 shadow-lg ${className}`}>
       {coverImage ? <img alt="card" className="h-auto w-auto rounded-xl md:shrink-0" src={coverImage} /> : null}
       {subExtra ? <div className="h-auto w-auto">{subExtra}</div> : null}
       {customTitle || description || extra ? (
