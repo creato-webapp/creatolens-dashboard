@@ -7,6 +7,7 @@ interface AvatarProps extends React.HTMLAttributes<HTMLDivElement> {
   src?: string
   alt?: string
   size?: AvatarSize
+  fallbackSrc?: string
 }
 
 // Define the styles for each avatar size
@@ -17,7 +18,7 @@ const sizeStyles: Record<AvatarSize, string[]> = {
 }
 
 // Avatar component
-const Avatar = ({ src, alt = 'Avatar', size = 'small', className }: AvatarProps) => {
+const Avatar = ({ src, alt = 'Avatar', size = 'small', className, fallbackSrc = '/logo_orange.png' }: AvatarProps) => {
   const sizeStyle = sizeStyles[size || 'medium']
   const iconSize = size === 'small' ? 18 : size === 'large' ? 36 : 26
 
@@ -34,7 +35,10 @@ const Avatar = ({ src, alt = 'Avatar', size = 'small', className }: AvatarProps)
           width={iconSize}
           height={iconSize}
           src={error ? '/logo_orange.png' : src}
-          onError={() => setError}
+          onError={({ currentTarget }) => {
+            currentTarget.onerror = null
+            currentTarget.src = fallbackSrc
+          }}
           alt={alt}
           className="h-full w-full object-cover"
         />
