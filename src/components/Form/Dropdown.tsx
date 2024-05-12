@@ -6,7 +6,7 @@ export interface DropdownOption {
   value: string | number
 }
 
-type DropdownSize = 's' | 'm' | 'l'
+type DropdownSize = 's' | 'm' | 'l' | 'full'
 interface DropdownProps extends HTMLProps<HTMLSelectElement> {
   name?: string
   options: DropdownOption[]
@@ -87,6 +87,12 @@ const Dropdown: React.FC<DropdownProps> = ({ name = '', options, defaultValue, o
           maxWidth += ` ${breakpoint}max-w-[20rem]`
           caretSize += ` ${breakpoint}w-6 ${breakpoint}h-6`
           break
+
+        case 'full':
+          padding += ` ${breakpoint}px-6 ${breakpoint}py-3`
+          caretSize += ` ${breakpoint}w-6 ${breakpoint}h-6`
+          break
+
         default:
           padding = 'px-2 py-1 md:px-3 md:py-2 lg:py-3 lg:px-3'
           caretSize = 'w-6 h-6'
@@ -107,15 +113,15 @@ const Dropdown: React.FC<DropdownProps> = ({ name = '', options, defaultValue, o
   const { padding, caretSize, maxWidth } = generatePadding(dropDownSizes!)
 
   return (
-    <div ref={dropdownRef} className={`dropdown relative flex w-full justify-end ${maxWidth}`}>
+    <div ref={dropdownRef} className={`dropdown relative w-full justify-end overflow-hidden ${maxWidth}`}>
       <button
         className={`drowpdown-button w-full rounded-lg border-none ${color} ${padding} ${focusStyle} ${hoverStyle} ${activeStyle}`}
         onClick={handleToggleMenu}
       >
         <div className={`inline-flex w-full items-center justify-between gap-2.5 rounded-md text-md hover:shadow-sm`}>
-          <div className='overflow-hidden'>{mapSelectedValueToOptions}</div>
+          <div className="truncate ">{mapSelectedValueToOptions}</div>
           <CaretUpIcon
-            className={`pointer-events-none transform transition-all ${caretSize} ${!isOpen ? 'rotate-180 ' : ''}`}
+            className={`pointer-events-none w-fit transform transition-all ${caretSize} ${!isOpen ? 'rotate-180 ' : ''}`}
             color={isOpen ? 'white' : isDropdownNotSelected ? 'black' : 'white'}
           />
         </div>

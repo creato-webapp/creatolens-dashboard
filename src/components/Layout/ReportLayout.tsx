@@ -87,18 +87,20 @@ const ReportLayout = (props: Prop) => {
         </div>
         <div className="flex flex-col justify-between gap-7 md:flex-row">
           <div className="flex flex-row items-center gap-2">
-            {selectedAccount && (
-              <Avatar
-                size={'medium'}
-                src={selectedAccount.profile_id ? `/api/dashboard/userImage?profile_id=${selectedAccount.profile_id!}` : 'insta-bot.svg'}
-                fallbackSrc={'insta-bot.svg'}
-              />
-            )}
+            <div className="flex">
+              {selectedAccount && (
+                <Avatar
+                  size={'medium'}
+                  src={selectedAccount.profile_id ? `/api/dashboard/userImage?profile_id=${selectedAccount.profile_id!}` : 'insta-bot.svg'}
+                  fallbackSrc={'insta-bot.svg'}
+                />
+              )}
+            </div>
 
             <h1 className="hidden text-text-secondary md:flex">{selectedAccount && '@' + selectedAccount.username}</h1>
-            <div className="md:hidden">
+            <div className="w-full flex-auto overflow-hidden md:hidden">
               <Dropdown
-                dropDownSizes={['m', 'l', 'l']}
+                dropDownSizes={['full', 'l', 'l']}
                 onValueChange={onAccountChange}
                 value={selectedAccount?.id}
                 defaultValue={selectedAccount?.id}
@@ -106,7 +108,7 @@ const ReportLayout = (props: Prop) => {
                 className=""
               />
             </div>
-            <Link href={`https://www.instagram.com/${selectedAccount?.username}`} target="_blank">
+            <Link href={`https://www.instagram.com/${selectedAccount?.username}`} target="_blank" className="flex min-h-6 min-w-6">
               <Image className="cursor-pointer" alt={'account share button'} src={'./external-link.svg'} width={24} height={24} />
             </Link>
           </div>
