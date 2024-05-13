@@ -53,22 +53,6 @@ const ReportLayout = (props: Prop) => {
     })
   }, [botList])
 
-  if (!botList || botList.length == 0) {
-    return (
-      <div className="flex h-64 w-full flex-col items-center justify-center gap-4">
-        <h2>No Account Available</h2>
-        <Link href="/accounts/create-account">
-          <Primary sizes={['s', 'l', 'l']} styleClassName="px-2">
-            <div className="flex flex-row items-center gap-2">
-              <PlusIcon className="h-6 w-6" />
-              <div className="hidden md:flex">Create New Account</div>
-            </div>
-          </Primary>
-        </Link>
-      </div>
-    )
-  }
-
   return (
     <div className="flex flex-col">
       <div className="flex flex-col justify-between md:flex-col">
