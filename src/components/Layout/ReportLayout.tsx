@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react'
 import Card from '@components/Card'
 import CardWithIgPost from '@components/CardWithIgPost'
 import Primary from '@components/Button/PrimaryButton'
@@ -15,6 +16,7 @@ import { hoursAgo } from '@services/util'
 import { KeywordData, MostRepeatedPost } from '@services/Meta'
 import Badges from '@components/Badges'
 import dayjs from 'src/utils/dayjs'
+import axios from 'axios'
 // generate fake data for this layout
 
 interface Prop {
@@ -42,6 +44,7 @@ const ReportLayout = (props: Prop) => {
   const dateStr = `${lastDate.toDateString().split(' ').slice(1).join(' ')} - ${today.toDateString().split(' ').slice(1).join(' ')}`
   const keywords = data?.keyword
   const mostRepeatedPost = data?.mostRepeatedPost
+  const [imageUrl, setImageUrl] = useState<string>('')
 
   const instaBotList = useMemo(() => {
     if (!botList || botList.length <= 0) return []
@@ -52,6 +55,15 @@ const ReportLayout = (props: Prop) => {
       }
     })
   }, [botList])
+
+  useEffect(() => {
+    if (mostRepeatedPost) {
+      const apiUrl = `/api/dashboard/instapostImage?shortcode=${mostRepeatedPost.shortcode}&batch_id=${mostRepeatedPost.batch_id}`
+      axios.get(apiUrl).then((res) => {
+        setImageUrl(res.data)
+      })
+    }
+  }, [mostRepeatedPost])
 
   if (!botList || botList.length == 0) {
     return (
@@ -189,7 +201,7 @@ const ReportLayout = (props: Prop) => {
           description="“Most repeated post showing on explore during fetching”"
           number={mostRepeatedPost?.count || 0}
           className="col-span-2 w-full"
-          instaPost={mostRepeatedPost?.shortcode && `/api/dashboard/instapostImage?shortcode=${mostRepeatedPost.shortcode}`}
+          instaPost={imageUrl}
           icon="./Repeat.svg"
           isLoading={isLoading}
         >
