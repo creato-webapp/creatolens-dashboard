@@ -7,6 +7,9 @@ import { useMeta } from 'src/hooks/useMeta'
 import { getSession } from 'next-auth/react'
 import { getAccounts } from '@services/Account/Account'
 import { IAccount } from '@lib/Account/Account'
+import Link from 'next/link'
+import Primary from '@components/Button/PrimaryButton'
+import PlusIcon from '@components/Icon/PlusIcon'
 
 type Props = {
   botList: IAccount[]
@@ -123,13 +126,31 @@ const Dashboard = ({ botList }: Props) => {
           <h1 className="uppercase md:font-extrabold">TREND ANALYSIS</h1>
         </div>
       </Hero>
-      <Tab
-        items={tabItems}
-        defaultActiveKey="1"
-        onKeyChange={onKeyChange}
-        scrollable={false}
-        className="mt-3 px-2 shadow-none md:px-4 md:pb-12 lg:px-24"
-      />
+      {!botList || botList.length == 0 ? (
+        <div className="flex w-full flex-col items-center justify-center gap-4 px-4 py-4 md:py-12">
+          <img alt="missing insta bot" className="h-auto w-96" src={'/no-insta-bot.png'} />
+          <h2 className="font-extrabold">You have no linked instabot</h2>
+          <h3 className="text-text-secondary items-center text-center">
+            Your account does not have any verified instabot. Complete the adding account process to see dashboard.
+          </h3>
+          <Link href="/accounts/create-account">
+            <Primary sizes={['s', 'l', 'l']} styleClassName="px-2">
+              <div className="flex flex-row items-center gap-2">
+                <PlusIcon className="h-6 w-6" />
+                <div className="">Add New Account</div>
+              </div>
+            </Primary>
+          </Link>
+        </div>
+      ) : (
+        <Tab
+          items={tabItems}
+          defaultActiveKey="1"
+          onKeyChange={onKeyChange}
+          scrollable={false}
+          className="mt-3 px-2 shadow-none md:px-4 md:pb-12 lg:px-24"
+        />
+      )}
     </div>
   )
 }

@@ -13,14 +13,14 @@ interface AvatarProps extends React.HTMLAttributes<HTMLDivElement> {
 // Define the styles for each avatar size
 const sizeStyles: Record<AvatarSize, string[]> = {
   small: ['w-4 h-4'],
-  medium: ['w-8 h-8'],
+  medium: ['w-7 h-7'],
   large: ['w-12 h-12'],
 }
 
 // Avatar component
 const Avatar = ({ src, alt = 'Avatar', size = 'small', className, fallbackSrc = '/logo_orange.png' }: AvatarProps) => {
   const sizeStyle = sizeStyles[size || 'medium']
-  const iconSize = size === 'small' ? 18 : size === 'large' ? 36 : 26
+  const iconSize = size === 'small' ? 18 : size === 'large' ? 36 : 28
 
   const [error, setError] = useState(null)
 
