@@ -69,9 +69,9 @@ const ReportLayout = (props: Prop) => {
             )}
           </div>
         </div>
-        <div className="flex flex-col justify-between gap-7 md:flex-row">
-          <div className="flex flex-row items-center gap-2">
-            <div className="flex">
+        <div className="flex w-full flex-col justify-between gap-7 md:flex-row">
+          <div className="flex w-full flex-row items-center gap-2">
+            <div className="w-1/10 flex">
               {selectedAccount && (
                 <Avatar
                   size={'medium'}
@@ -82,14 +82,13 @@ const ReportLayout = (props: Prop) => {
             </div>
 
             <h1 className="hidden text-text-secondary md:flex">{selectedAccount && '@' + selectedAccount.username}</h1>
-            <div className="w-full flex-auto overflow-hidden md:hidden">
+            <div className=" flex w-4/5 items-start md:hidden">
               <Dropdown
                 dropDownSizes={['full', 'l', 'l']}
                 onValueChange={onAccountChange}
                 value={selectedAccount?.id}
                 defaultValue={selectedAccount?.id}
                 options={instaBotList}
-                className=""
               />
             </div>
             <Link href={`https://www.instagram.com/${selectedAccount?.username}`} target="_blank" className="flex min-h-6 min-w-6">
@@ -207,8 +206,15 @@ const ReportLayout = (props: Prop) => {
               )}
             </div>
           </div>
-          <h3 className="font-extrabold">{mostRepeatedPost?.user.username && '@' + mostRepeatedPost?.user.username}</h3>
-          <div className="flex-wrap break-all">{isLoading ? <Skeleton /> : mostRepeatedPost ? mostRepeatedPost?.caption : ''}</div>
+          {mostRepeatedPost && (
+            <>
+              <h3 className="font-extrabold">{mostRepeatedPost?.user.username && '@' + mostRepeatedPost?.user.username}</h3>
+              <div className="flex-wrap break-all">{isLoading ? <Skeleton /> : mostRepeatedPost ? mostRepeatedPost?.caption : ''}</div>
+              <Link href={`https://www.instagram.com/p/${mostRepeatedPost?.shortcode}`} target="_blank">
+                <Image className="cursor-pointer" alt={'account share button'} src={'./external-link.svg'} width={24} height={24} />
+              </Link>
+            </>
+          )}
         </CardWithIgPost>
       </div>
     </div>

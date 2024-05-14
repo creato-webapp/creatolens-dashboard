@@ -65,6 +65,7 @@ const Dashboard = ({ botList }: Props) => {
 
   const { data: responseData, isLoading } = useMeta(metaAttributes, true)
 
+  
   const onKeyChange = (key: string) => {
     const targetItem = tabItems.find((item) => item.key === key)
     setMetaAttributes((pre) => ({
@@ -130,7 +131,7 @@ const Dashboard = ({ botList }: Props) => {
         <div className="flex w-full flex-col items-center justify-center gap-4 px-4 py-4 md:py-12">
           <img alt="missing insta bot" className="h-auto w-96" src={'/no-insta-bot.png'} />
           <h2 className="font-extrabold">You have no linked instabot</h2>
-          <h3 className="text-text-secondary items-center text-center">
+          <h3 className="items-center text-center text-text-secondary">
             Your account does not have any verified instabot. Complete the adding account process to see dashboard.
           </h3>
           <Link href="/accounts/create-account">

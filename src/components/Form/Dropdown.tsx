@@ -111,9 +111,8 @@ const Dropdown: React.FC<DropdownProps> = ({ name = '', options, defaultValue, o
   }, [isDropdownNotSelected])
 
   const { padding, caretSize, maxWidth } = generatePadding(dropDownSizes!)
-
   return (
-    <div ref={dropdownRef} className={`dropdown relative w-full justify-end overflow-hidden ${maxWidth}`}>
+    <div ref={dropdownRef} className={`dropdown justify-end relative h-full w-full  ${maxWidth}`}>
       <button
         className={`drowpdown-button w-full rounded-lg border-none ${color} ${padding} ${focusStyle} ${hoverStyle} ${activeStyle}`}
         onClick={handleToggleMenu}
@@ -126,8 +125,9 @@ const Dropdown: React.FC<DropdownProps> = ({ name = '', options, defaultValue, o
           />
         </div>
       </button>
+
       {isOpen && (
-        <ul className="absolute left-0 top-full z-10 mt-2 h-64 w-full overflow-hidden overflow-y-scroll rounded-md border border-gray-200 bg-white shadow-lg">
+        <ul className="z-100 absolute top-full mt-2 h-64 w-full overflow-y-scroll rounded-md border border-gray-200 bg-white shadow-lg">
           {options.map((option) => (
             <li
               key={option.value}
