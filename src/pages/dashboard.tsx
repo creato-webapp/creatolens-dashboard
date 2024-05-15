@@ -128,7 +128,7 @@ const Dashboard = ({ botList }: Props) => {
         </div>
       </Hero>
       {!botList || botList.length == 0 ? (
-        <div className="flex w-full flex-col items-center justify-center gap-4 px-4 py-4 md:py-12">
+        <div className="flex w-full flex-col items-center justify-center gap-4 px-4 py-4 md:pt-12 md:py-24">
           <img alt="missing insta bot" className="h-auto w-96" src={'/no-insta-bot.png'} />
           <h2 className="font-extrabold">You have no linked instabot</h2>
           <h3 className="items-center text-center text-text-secondary">
