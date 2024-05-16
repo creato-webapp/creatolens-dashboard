@@ -127,7 +127,7 @@ const Dropdown: React.FC<DropdownProps> = ({ name = '', options, defaultValue, o
       </button>
 
       {isOpen && (
-        <ul className="z-100 absolute top-full mt-2 h-64 w-full overflow-y-scroll rounded-md border border-gray-200 bg-white shadow-lg">
+        <ul className="z-10 absolute top-full mt-2 h-64 w-full overflow-y-scroll rounded-md border border-gray-200 bg-white shadow-lg">
           {options.map((option) => (
             <li
               key={option.value}

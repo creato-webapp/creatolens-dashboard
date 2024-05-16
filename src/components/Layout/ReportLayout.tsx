@@ -46,6 +46,7 @@ const ReportLayout = (props: Prop) => {
   const mostRepeatedPost = data?.mostRepeatedPost
   const [imageUrl, setImageUrl] = useState<string>('')
   const [avatarImageUrl, setAvatarImageUrl] = useState<string>('')
+  const [profileUrl, setProfileUrl] = useState<string>('')
 
   const instaBotList = useMemo(() => {
     if (!botList || botList.length <= 0) return []
@@ -63,6 +64,8 @@ const ReportLayout = (props: Prop) => {
       axios.get(apiUrl).then((res) => {
         setImageUrl(res.data)
       })
+    } else {
+      setImageUrl('')
     }
   }, [mostRepeatedPost])
 
@@ -74,6 +77,7 @@ const ReportLayout = (props: Prop) => {
     const apiUrl = `/api/dashboard/userImage?profile_id=${selectedAccount.profile_id}`
     axios.get(apiUrl).then((res) => {
       setAvatarImageUrl(res.data.data.image)
+      setProfileUrl(res.data.data.url)
     })
   }, [selectedAccount])
 
@@ -92,6 +96,7 @@ const ReportLayout = (props: Prop) => {
       </div>
     )
   }
+
 
   return (
     <div className="flex flex-col">
@@ -125,9 +130,11 @@ const ReportLayout = (props: Prop) => {
                 options={instaBotList}
               />
             </div>
-            <Link href={`https://www.instagram.com/${selectedAccount?.username}`} target="_blank" className="flex min-h-6 min-w-6">
-              <Image className="cursor-pointer" alt={'account share button'} src={'./external-link.svg'} width={24} height={24} />
-            </Link>
+            {profileUrl && (
+              <Link href={profileUrl} target="_blank" className="flex min-h-6 min-w-6">
+                <Image className="cursor-pointer" alt={'account share button'} src={'./external-link.svg'} width={24} height={24} />
+              </Link>
+            )}
           </div>
           <div className="flex flex-col">
             <div className="flex w-fit flex-col gap-3 md:flex-row md:gap-4">
