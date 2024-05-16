@@ -45,6 +45,7 @@ const ReportLayout = (props: Prop) => {
   const keywords = data?.keyword
   const mostRepeatedPost = data?.mostRepeatedPost
   const [imageUrl, setImageUrl] = useState<string>('')
+  const [avatarImageUrl, setAvatarImageUrl] = useState<string>('')
 
   const instaBotList = useMemo(() => {
     if (!botList || botList.length <= 0) return []
@@ -64,6 +65,17 @@ const ReportLayout = (props: Prop) => {
       })
     }
   }, [mostRepeatedPost])
+
+  useEffect(() => {
+    if (!selectedAccount?.profile_id) {
+      setAvatarImageUrl('')
+      return
+    }
+    const apiUrl = `/api/dashboard/userImage?profile_id=${selectedAccount.profile_id}`
+    axios.get(apiUrl).then((res) => {
+      setAvatarImageUrl(res.data.data.image)
+    })
+  }, [selectedAccount])
 
   if (!botList || botList.length == 0) {
     return (
@@ -100,13 +112,7 @@ const ReportLayout = (props: Prop) => {
         <div className="flex w-full flex-col justify-between gap-7 md:flex-row">
           <div className="flex w-full flex-row items-center gap-2">
             <div className="w-1/10 flex">
-              {selectedAccount && (
-                <Avatar
-                  size={'medium'}
-                  src={selectedAccount.profile_id ? `/api/dashboard/userImage?profile_id=${selectedAccount.profile_id!}` : 'insta-bot.svg'}
-                  fallbackSrc={'insta-bot.svg'}
-                />
-              )}
+              {selectedAccount && <Avatar size={'medium'} src={avatarImageUrl ? avatarImageUrl : 'insta-bot.svg'} fallbackSrc={'insta-bot.svg'} />}
             </div>
 
             <h1 className="hidden text-text-secondary md:flex">{selectedAccount && '@' + selectedAccount.username}</h1>
@@ -236,7 +242,7 @@ const ReportLayout = (props: Prop) => {
           </div>
           {mostRepeatedPost && (
             <>
-              <h3 className="font-extrabold">{mostRepeatedPost?.user.username && '@' + mostRepeatedPost?.user.username}</h3>
+              <h3 className="font-extrabold">{mostRepeatedPost?.user?.username && '@' + mostRepeatedPost?.user.username}</h3>
               <div className="flex-wrap break-all">{isLoading ? <Skeleton /> : mostRepeatedPost ? mostRepeatedPost?.caption : ''}</div>
               <Link href={`https://www.instagram.com/p/${mostRepeatedPost?.shortcode}`} target="_blank">
                 <Image className="cursor-pointer" alt={'account share button'} src={'./external-link.svg'} width={24} height={24} />
