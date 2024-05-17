@@ -29,21 +29,18 @@ interface Prop {
     id: string
     profile_id?: string
   } | null
-  data: {
-    keyword?: KeywordData[]
-    postCount?: number
-    mostRepeatedPost?: MostRepeatedPost
-  }
+  keyword?: KeywordData[]
+  postCount?: number
+  mostRepeatedPost?: MostRepeatedPost
 }
+
 const ReportLayout = (props: Prop) => {
-  const { data, days, isLoading, botList, onAccountChange, selectedAccount } = props
+  const { keyword, postCount, mostRepeatedPost, days, isLoading, botList, onAccountChange, selectedAccount } = props
   // dayFormat = MMM DD YYYY - MMM DD YYYY
   const today = new Date()
   const lastDate = new Date(today)
   lastDate.setDate(today.getDate() - days)
   const dateStr = `${lastDate.toDateString().split(' ').slice(1).join(' ')} - ${today.toDateString().split(' ').slice(1).join(' ')}`
-  const keywords = data?.keyword
-  const mostRepeatedPost = data?.mostRepeatedPost
   const [imageUrl, setImageUrl] = useState<string>('')
   const [avatarImageUrl, setAvatarImageUrl] = useState<string>('')
   const [profileUrl, setProfileUrl] = useState<string>('')
@@ -96,7 +93,6 @@ const ReportLayout = (props: Prop) => {
       </div>
     )
   }
-
 
   return (
     <div className="flex flex-col">
@@ -164,7 +160,7 @@ const ReportLayout = (props: Prop) => {
               <div>
                 <h2>Post Count</h2>
                 <div className="italic text-text-secondary">&quot;Total post fetched in this period &quot;</div>
-                {<h2 className="font-extrabold text-accent1-500">{isLoading ? <Skeleton /> : data?.postCount ? data.postCount : 0}</h2>}
+                {<h2 className="font-extrabold text-accent1-500">{isLoading ? <Skeleton /> : postCount ? postCount : 0}</h2>}
               </div>
             }
           </Card>
@@ -175,13 +171,13 @@ const ReportLayout = (props: Prop) => {
               <h2>Top 10 Keywords</h2>
               <div className="font-lato font-medium italic text-text-secondary">&quot;From hashtags, captions, locations&quot;</div>
               <div className="flex w-full flex-row flex-wrap text-xl">
-                {keywords ? (
-                  keywords.map((item: { term: string; count: number }, index: number) => {
+                {keyword ? (
+                  keyword.map((item: { term: string; count: number }, index: number) => {
                     return (
                       <div key={item.term} className="flex flex-row font-lato font-bold text-text-secondary">
                         {item.term}
                         <div className="mr-2 text-accent1-500">
-                          ({item.count}){keywords.length != index + 1 ? ',' : ''}
+                          ({item.count}){keyword.length != index + 1 ? ',' : ''}
                         </div>
                       </div>
                     )

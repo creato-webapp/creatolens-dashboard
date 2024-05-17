@@ -3,7 +3,7 @@ import ReportLayout from '@components/Layout/ReportLayout'
 import Tab from '@components/Tab'
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import { useMemo, useState } from 'react'
-import { useMeta } from 'src/hooks/useMeta'
+import { useKeyword, useMostRepeatedPost, usePostCount } from 'src/hooks/useMeta'
 import { getSession } from 'next-auth/react'
 import { getAccounts } from '@services/Account/Account'
 import { IAccount } from '@lib/Account/Account'
@@ -63,9 +63,10 @@ const Dashboard = ({ botList }: Props) => {
     return bot ? bot : null
   }, [botList, metaAttributes.accId])
 
-  const { data: responseData, isLoading } = useMeta(metaAttributes, true)
+  const { data: keywordData, keywordIsLoading } = useKeyword(metaAttributes, true)
+  const { data: postCountData, postCountIsLoading } = usePostCount(metaAttributes, true)
+  const { data: mostRepeatedPostData, mostRepeatedPostIsLoading } = useMostRepeatedPost(metaAttributes, true)
 
-  
   const onKeyChange = (key: string) => {
     const targetItem = tabItems.find((item) => item.key === key)
     setMetaAttributes((pre) => ({
@@ -92,9 +93,11 @@ const Dashboard = ({ botList }: Props) => {
           onAccountChange={onAccountChange}
           botList={botList || []}
           days={3}
-          data={responseData!}
-          isLoading={isLoading}
+          keyword={keywordData?.data}
+          postCount={postCountData?.data?.post_count}
+          mostRepeatedPost={mostRepeatedPostData}
           selectedAccount={selectedAccount}
+          isLoading={false}
         />
       ),
       days: 3,
@@ -105,11 +108,13 @@ const Dashboard = ({ botList }: Props) => {
       children: (
         <ReportLayout
           days={7}
-          data={responseData!}
-          isLoading={isLoading}
+          keyword={keywordData?.data}
+          postCount={postCountData?.data?.post_count}
+          mostRepeatedPost={mostRepeatedPostData}
           onAccountChange={onAccountChange}
           botList={botList || []}
           selectedAccount={selectedAccount}
+          isLoading={false}
         />
       ),
       days: 7,
@@ -128,7 +133,7 @@ const Dashboard = ({ botList }: Props) => {
         </div>
       </Hero>
       {!botList || botList.length == 0 ? (
-        <div className="flex w-full flex-col items-center justify-center gap-4 px-4 py-4 md:pt-12 md:py-24">
+        <div className="flex w-full flex-col items-center justify-center gap-4 px-4 py-4 md:py-24 md:pt-12">
           <img alt="missing insta bot" className="h-auto w-96" src={'/no-insta-bot.png'} />
           <h2 className="font-extrabold">You have no linked instabot</h2>
           <h3 className="items-center text-center text-text-secondary">

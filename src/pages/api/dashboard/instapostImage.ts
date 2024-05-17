@@ -17,6 +17,7 @@ export default async function dashboardPostPicQueryHandler(req: NextApiRequest, 
       },
     })
 
+
     return res.end(response.data) // Send the image data directly without converting to JSON
   } catch (error) {
     console.error('Failed to fetch image:', error)
