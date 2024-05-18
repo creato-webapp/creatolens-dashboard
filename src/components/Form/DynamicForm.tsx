@@ -1,9 +1,13 @@
 import { ReactNode } from 'react'
-import { Form } from '.'
-import { Button } from '..'
-import { FormLayoutProps, InputType } from './interface'
+
 import { Paragraph } from '@components/Typography'
-import dayjs from '@services/Dayjs'
+import dayjs from 'src/utils/dayjs'
+
+import { FormLayoutProps, InputType } from './interface'
+
+import { Button } from '..'
+
+import { Form } from '.'
 
 export type FormField = {
   type: InputType
@@ -34,7 +38,7 @@ const DynamicForm = <T,>(props: FormLayoutProps<T>) => {
     const target = event.target as typeof event.target & {
       [key: string]: { [key: string]: string }
     }
-    let values: { [key: string]: string | number | boolean } = {}
+    const values: { [key: string]: string | number | boolean } = {}
 
     fields.forEach((e) => {
       if (e.type === 'CustomItem') {
@@ -103,8 +107,7 @@ const DynamicForm = <T,>(props: FormLayoutProps<T>) => {
           <div className={`flex justify-end pb-4 `}>
             <Button.Primary
               sizes={buttonSizes}
-              styleClassName={buttonStyles}
-              className="md:w-full"
+              className={`md:w-full ${buttonStyles}`}
               disabled={!allowSubmit}
               type="submit"
               loading={loading}

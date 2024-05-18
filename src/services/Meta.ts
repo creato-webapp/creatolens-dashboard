@@ -1,5 +1,6 @@
-import { Fetcher } from './fetcher'
 import { AxiosRequestConfig } from 'axios'
+
+import { Fetcher } from './fetcher'
 
 export interface PostData {
   count: number
@@ -38,7 +39,6 @@ export async function getKeyword(
   },
   customConfig?: AxiosRequestConfig
 ): Promise<{ data: KeywordData[] }> {
-
   const keywordResponse = await Fetcher.GET<{
     data: KeywordData[]
   }>('/api/dashboard/keyword', {
@@ -60,7 +60,6 @@ export async function getPostCount(
   },
   customConfig?: AxiosRequestConfig
 ): Promise<{ data: { post_count: number } }> {
-
   const postCountResponse = await Fetcher.GET<{
     data: { post_count: number }
   }>('/api/dashboard/postCount', {
@@ -83,7 +82,6 @@ export async function getMostRepeatedPost(
   },
   customConfig?: AxiosRequestConfig
 ): Promise<MostRepeatedPost | undefined> {
-
   const response = await Fetcher.GET<{
     data: PostData[]
   }>('/api/dashboard/', {

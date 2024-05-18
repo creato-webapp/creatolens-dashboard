@@ -1,14 +1,15 @@
-import React, { HTMLAttributes } from 'react'
-import { Title } from '@components/Typography'
-import { Button } from './Button'
+import React from 'react'
+
 import Image from 'next/image'
 import Skeleton from 'react-loading-skeleton'
-interface CardProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'> {
-  title?: React.ReactNode
+
+import { Title } from '@components/Typography'
+
+import { Button } from './Button'
+interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   extra?: React.ReactNode
   number?: number
   accountName?: string
-  className?: string | undefined
   instaPost?: string
   subTitle?: string
   description?: string

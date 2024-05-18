@@ -1,51 +1,53 @@
-import React, { useEffect, useState } from 'react'
+import React, { ReactEventHandler, useState } from 'react'
+
+import Image from 'next/image'
+
 import UserIcon from '@components/Icon/UserIcon'
+import IMAGE from 'src/constants/image'
+import SIZE, { ISizeType } from 'src/constants/size'
 
-type AvatarSize = 'small' | 'medium' | 'large'
+type AvatarSize = ISizeType
 
-interface AvatarProps extends React.HTMLAttributes<HTMLDivElement> {
-  src?: string
-  alt?: string
+const sizeClassName = {
+  [SIZE.L]: ['w-4 h-4'],
+  [SIZE.M]: ['w-7 h-7'],
+  [SIZE.S]: ['w-12 h-12'],
+} as const
+
+const pixel = {
+  [SIZE.S]: 18,
+  [SIZE.M]: 28,
+  [SIZE.L]: 36,
+} as const
+
+const DEFAULT_SRC = IMAGE.LOGO_CREATO_ORANGE
+
+interface AvatarProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   size?: AvatarSize
   fallbackSrc?: string
 }
+const Avatar = ({ src: newSrc, alt = 'Avatar', size = SIZE.S, className, fallbackSrc = DEFAULT_SRC }: AvatarProps) => {
+  const [src, setSrc] = useState(newSrc)
 
-// Define the styles for each avatar size
-const sizeStyles: Record<AvatarSize, string[]> = {
-  small: ['w-4 h-4'],
-  medium: ['w-7 h-7'],
-  large: ['w-12 h-12'],
-}
-
-// Avatar component
-const Avatar = ({ src, alt = 'Avatar', size = 'small', className, fallbackSrc = '/logo_orange.png' }: AvatarProps) => {
-  const sizeStyle = sizeStyles[size || 'medium']
-  const iconSize = size === 'small' ? 18 : size === 'large' ? 36 : 28
-
-  const [error, setError] = useState(null)
-
-  useEffect(() => {
-    setError(null)
-  }, [src])
+  const onError: ReactEventHandler = () => {
+    setSrc(fallbackSrc)
+  }
 
   return (
-    <div className={`flex overflow-hidden rounded-full ${sizeStyle} bg-gray-300 ${className}`}>
+    <>
       {src ? (
-        <img
-          width={iconSize}
-          height={iconSize}
-          src={error ? '/logo_orange.png' : src}
-          onError={({ currentTarget }) => {
-            currentTarget.onerror = null
-            currentTarget.src = fallbackSrc
-          }}
+        <Image
+          src={src}
+          width={pixel[size]}
+          height={pixel[size]}
           alt={alt}
-          className="h-full w-full object-cover"
+          onError={onError}
+          className={`rounded-full bg-gray-300 object-cover ${sizeClassName[size]} ${className}`}
         />
       ) : (
-        <UserIcon size={iconSize} color="currentColor" className="m-auto" />
+        <UserIcon size={pixel[size]} fill="currentColor" className="m-auto" />
       )}
-    </div>
+    </>
   )
 }
 

@@ -1,4 +1,5 @@
-import { useState, type FC } from 'react'
+import { type FC, useState } from 'react'
+
 import { CheckBoxProps } from './interface'
 
 const Checkbox: FC<CheckBoxProps> = (props: CheckBoxProps) => {

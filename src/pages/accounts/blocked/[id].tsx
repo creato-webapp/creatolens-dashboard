@@ -1,13 +1,15 @@
 import React, { useState } from 'react'
-import Card from '@components/Card'
+
+import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import { useRouter } from 'next/router'
+
+import { IBlockedAccount } from '@components/Account/Account/interface'
+import Card from '@components/Card'
+import DynamicForm from '@components/Form/DynamicForm'
 import { IField } from '@components/Form/interface'
-import { IBlockedAccount } from '@lib/Account/Account/interface'
 import { getBlockedAccount } from '@services/Account/BlockAccount'
 import { useBlockAccount } from 'src/hooks/useBlockedAccount'
-import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
-import DynamicForm from '@components/Form/DynamicForm'
-import dayjs from '@services/Dayjs'
+import dayjs from 'src/utils/dayjs'
 
 type Props = {
   accountData: IBlockedAccount | undefined

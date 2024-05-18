@@ -1,6 +1,7 @@
 import type { FC } from 'react'
-import { DateTimePicker } from '../interface'
+
 import BaseInput from '../BaseInput'
+import { DateTimePicker } from '../interface'
 
 const DateTimePicker: FC<DateTimePicker> = (props: DateTimePicker) => {
   return (

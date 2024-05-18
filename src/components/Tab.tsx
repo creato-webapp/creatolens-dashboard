@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState } from 'react'
 
 export interface TabItem {
   key: string
@@ -52,7 +52,10 @@ const Tab: React.FC<TabProps> = ({
 
   return (
     <div className={`tabs relative flex h-auto flex-col items-center gap-4 shadow-lg md:items-start md:px-3 ${className ?? ''}`}>
-      <div className={`tabs-bar ${centered ? 'centered' : ''} -top-12 flex w-full md:w-auto overflow-hidden  md:absolute md:overflow-hidden`} style={tabBarStyle}>
+      <div
+        className={`tabs-bar ${centered ? 'centered' : ''} -top-12 flex w-full overflow-hidden md:absolute  md:w-auto md:overflow-hidden`}
+        style={tabBarStyle}
+      >
         {items.map((item) => (
           <button
             className={`disabled:text-text-disable flex h-8 min-w-[50%] flex-nowrap items-center  justify-center hover:bg-accent1-300 hover:text-text-white hover:underline hover:underline-offset-2 focus:bg-accent1-500 active:bg-accent1-500 disabled:bg-disabled md:h-12 md:min-w-[10rem] lg:min-w-[15rem] ${
@@ -72,10 +75,7 @@ const Tab: React.FC<TabProps> = ({
       <div className={`tab-content flex w-full justify-center bg-bg-white  ${scrollable ? 'overflow-auto' : ''}`}>
         {items.map((item) =>
           currentActiveKey === item.key ? (
-            <div
-              key={item.key}
-              className={`tab-pane ${currentActiveKey === item.key ? 'active' : ''}  flex min-w-full flex-col justify-center`}
-            >
+            <div key={item.key} className={`tab-pane ${currentActiveKey === item.key ? 'active' : ''}  flex min-w-full flex-col justify-center`}>
               {item.children}
             </div>
           ) : null

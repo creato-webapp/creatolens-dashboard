@@ -1,6 +1,7 @@
 import type { FC } from 'react'
-import { TimePickerProps } from '../interface'
+
 import BaseInput from '../BaseInput'
+import { TimePickerProps } from '../interface'
 
 const TimePicker: FC<TimePickerProps> = (props: TimePickerProps) => {
   return (

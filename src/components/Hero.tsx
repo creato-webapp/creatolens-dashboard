@@ -1,9 +1,7 @@
-import React, { ReactNode } from 'react'
+import React from 'react'
 
-interface HeroProps {
+interface HeroProps extends React.HTMLAttributes<HTMLElement>{
   backgroundImage: string
-  children: ReactNode
-  className?: string
   childrenStyle?: string
   mobileBackgroundImage?: boolean
 }

@@ -1,22 +1,26 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { useMemo } from 'react'
+
+import axios from 'axios'
+import Image from 'next/image'
+import Link from 'next/link'
+import Skeleton from 'react-loading-skeleton'
+
+import { IAccount } from '@components/Account/Account'
+import Avatar from '@components/Avatar'
+import { Badges } from '@components/Badges'
+import Primary from '@components/Button/Primary'
 import Card from '@components/Card'
 import CardWithIgPost from '@components/CardWithIgPost'
-import Primary from '@components/Button/PrimaryButton'
-import { useMemo } from 'react'
-import Image from 'next/image'
-import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 import Dropdown from '@components/Form/Dropdown'
-import Link from 'next/link'
-import { IAccount } from '@lib/Account/Account'
-import Avatar from '@components/Avatar'
-import PlusIcon from '@components/Icon/PlusIcon'
 import ClockIcon from '@components/Icon/ClockIcon'
-import { hoursAgo } from '@services/util'
+import PlusIcon from '@components/Icon/PlusIcon'
 import { KeywordData, MostRepeatedPost } from '@services/Meta'
-import Badges from '@components/Badges'
+import { hoursAgo } from '@services/util'
+import IMAGE from 'src/constants/image'
 import dayjs from 'src/utils/dayjs'
-import axios from 'axios'
+
 // generate fake data for this layout
 
 interface Prop {
@@ -86,8 +90,8 @@ const ReportLayout = (props: Prop) => {
     return (
       <div className="flex h-64 w-full flex-col items-center justify-center gap-4">
         <h2>No Account Available</h2>
-        <Link href="/accounts/create-account">
-          <Primary sizes={['s', 'l', 'l']} styleClassName="px-2">
+        <Link href="/accounts/create">
+          <Primary sizes={['s', 'l', 'l']} className="px-2">
             <div className="flex flex-row items-center gap-2">
               <PlusIcon className="h-6 w-6" />
               <div className="hidden md:flex">Create New Account</div>
@@ -117,7 +121,7 @@ const ReportLayout = (props: Prop) => {
         <div className="flex w-full flex-col justify-between gap-7 md:flex-row">
           <div className="flex w-full flex-row items-center gap-2">
             <div className="w-1/10 flex">
-              {selectedAccount && <Avatar size={'medium'} src={avatarImageUrl ? avatarImageUrl : 'insta-bot.svg'} fallbackSrc={'insta-bot.svg'} />}
+              {selectedAccount && <Avatar size={'medium'} src={avatarImageUrl ? avatarImageUrl : IMAGE.BOT_CREATO} fallbackSrc={IMAGE.BOT_CREATO} />}
             </div>
 
             <h1 className="hidden text-text-secondary md:flex">{selectedAccount && '@' + selectedAccount.username}</h1>
@@ -138,7 +142,7 @@ const ReportLayout = (props: Prop) => {
           </div>
           <div className="flex flex-col">
             <div className="flex w-fit flex-col gap-3 md:flex-row md:gap-4">
-              <Link href="/accounts/create-account">
+              <Link href="/accounts/create">
                 <Primary sizes={['m', 'l', 'l']} className="flex w-full">
                   <PlusIcon className="h-6 w-6" /> Add New Account
                 </Primary>
@@ -240,7 +244,7 @@ const ReportLayout = (props: Prop) => {
                   <ClockIcon />
                   {dayjs(mostRepeatedPost?.second_latest_created_at).format('YYYY-MM-DD HH:mm:ss') +
                     ' ' +
-                    hoursAgo(mostRepeatedPost?.second_latest_created_at!)}
+                    hoursAgo(mostRepeatedPost?.second_latest_created_at as string)}
                 </Badges>
               ) : (
                 ''
@@ -250,7 +254,9 @@ const ReportLayout = (props: Prop) => {
           {mostRepeatedPost && (
             <>
               <h3 className="font-extrabold">{mostRepeatedPost?.user?.username && '@' + mostRepeatedPost?.user.username}</h3>
-              <div className="flex-wrap break-all">{loading.mostRepeatedPostIsLoading ? <Skeleton /> : mostRepeatedPost ? mostRepeatedPost?.caption : ''}</div>
+              <div className="flex-wrap break-all">
+                {loading.mostRepeatedPostIsLoading ? <Skeleton /> : mostRepeatedPost ? mostRepeatedPost?.caption : ''}
+              </div>
               <Link href={`https://www.instagram.com/p/${mostRepeatedPost?.shortcode}`} target="_blank">
                 <Image className="cursor-pointer" alt={'account share button'} src={'./external-link.svg'} width={24} height={24} />
               </Link>

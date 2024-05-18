@@ -1,11 +1,13 @@
-import Header from './Header'
 import Body from './Body'
-import Row from './Row'
+import BodyCell from './BodyCell'
+import Header from './Header'
 import Layout from './Layout'
+import Row from './Row'
 
 export const Table = {
   Layout,
   Header,
   Body,
   Row,
+  BodyCell,
 }

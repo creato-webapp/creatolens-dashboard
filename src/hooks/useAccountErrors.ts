@@ -1,7 +1,8 @@
 import useSWR from 'swr'
+
+import { IAccountError } from '@components/Account/AccountErrors/interface'
 import { getErrorPagination } from '@services/Account/AccountErros'
-import { IAccountError } from '@lib/Account/AccountErrors/interface'
-import { PaginationMetadata, PaginationParams } from './usePagination'
+import { PaginationMetadata, PaginationParams } from '@services/Account/AccountInterface'
 
 export const useAccountErrorPagination = (
   paginationParams: PaginationParams,

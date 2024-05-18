@@ -1,17 +1,19 @@
 import { useState } from 'react'
+
 import useSWR from 'swr'
-import { IAccount } from '@lib/Account/Account'
+
+import { IAccount } from '@components/Account/Account'
 import {
-  getAccountsPagination,
   getAccount,
-  updateSession as updateSessionHelper,
+  getAccountsPagination,
   updateAccount as updateAccountHelper,
+  updateSession as updateSessionHelper,
 } from '@services/Account/Account'
 import { PaginationMetadata, PaginationParams } from '@services/Account/AccountInterface'
 
 export const useAccount = (id: string, defaultShouldFetch: boolean = true, fallbackData?: IAccount) => {
   const [shouldFetch, setShouldFetch] = useState(defaultShouldFetch)
-  const { data, error, isLoading, mutate, ...swr } = useSWR(shouldFetch ? id : null, (id) => getAccount(id), {
+  const { data, error, mutate, ...swr } = useSWR(shouldFetch ? id : null, (id) => getAccount(id), {
     refreshInterval: 0,
     fallbackData: fallbackData,
   })

@@ -1,7 +1,8 @@
 import useSWR from 'swr'
-import { IBlockedAccount } from '@lib/Account/Account/interface'
-import { getBlockedAccountsPagination, getBlockedAccount, updateBlockedAccount } from '@services/Account/BlockAccount'
-import { PaginationMetadata, PaginationParams } from './usePagination'
+
+import { IBlockedAccount } from '@components/Account/Account/interface'
+import { PaginationMetadata, PaginationParams } from '@services/Account/AccountInterface'
+import { getBlockedAccount, getBlockedAccountsPagination, updateBlockedAccount } from '@services/Account/BlockAccount'
 
 export const useBlockAccount = (id: string, shouldFetch: boolean = true, fallbackData?: IBlockedAccount) => {
   const { data, error, mutate, isLoading, ...swr } = useSWR(shouldFetch ? id : null, (id) => getBlockedAccount(id), {

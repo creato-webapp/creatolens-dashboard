@@ -1,8 +1,11 @@
 //TODO write Get, Gets, Update,
 import { AxiosRequestConfig } from 'axios'
+
+import { IAccountError } from '@components/Account/AccountErrors/interface'
+
+import { PaginationMetadata, PaginationParams } from './AccountInterface'
+
 import { Fetcher } from '../fetcher'
-import { IAccountError } from '@lib/Account/AccountErrors/interface'
-import { PaginationMetadata, PaginationParams } from '@hooks/usePagination'
 
 interface ExtendedPaginationParams extends PaginationParams {
   username?: string

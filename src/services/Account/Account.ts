@@ -1,9 +1,13 @@
 //TODO write Get, Gets, Update,
 import { AxiosRequestConfig } from 'axios'
-import { Fetcher } from '../fetcher'
-import { IAccount } from '@lib/Account/Account'
+
+import { IAccount } from '@components/Account/Account'
+import { IAccountStatusType } from 'src/constants/status'
+
+import { PaginationMetadata, PaginationParams } from './AccountInterface'
+
 import { CountryEnum } from '../../enums/CountryCodeEnums'
-import { PaginationParams, PaginationMetadata } from './AccountInterface'
+import { Fetcher } from '../fetcher'
 interface Cookies {
   [key: string]: string
 }
@@ -22,7 +26,7 @@ type PartialAccount = Partial<{
   post_scrapped_count: number
   pwd: string
   session_cookies: Cookies
-  status: 'active' | 'blocked' | 'banned' | 'retry' | 'test' | 'scrapping' | 'occupied'
+  status: IAccountStatusType
   updated_at: string
   created_by: string
 }>
@@ -76,7 +80,7 @@ function generateAccountFilter(account: PartialAccount): string {
 }
 
 export async function createAccount(username: string, password: string, customConfig?: AxiosRequestConfig) {
-  const response = await Fetcher.POST<IAccount>(
+  const response = await Fetcher.POST<IAccount, { username: string; password: string }>(
     `/api/accounts`,
     {
       username: username,

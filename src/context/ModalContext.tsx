@@ -1,7 +1,8 @@
 //TODO Create Modal https://trello.com/c/Tj61Pg6m/437-errormodal-using-provider-to-write-error-modal-for-error-handling-in-lens
 import React, { ReactNode, createContext, useState } from 'react'
-import { GenericModalOptions } from '@components/Modal/GenericModal'
 import { PropsWithChildren } from 'react'
+
+import { GenericModalOptions } from '@components/Modal/GenericModal'
 
 export enum ModalKeyEnum {
   DEFAULT = 'DEFAULT',
@@ -31,7 +32,7 @@ type IModalKey = keyof typeof ModalKeyEnum
 //
 export const ModalContext = createContext<ModalContextType | undefined>(undefined)
 
-type ModalProviderProps = {} & PropsWithChildren
+type ModalProviderProps = Record<string, unknown> & PropsWithChildren
 
 export const ModalProvider = ({ children }: ModalProviderProps) => {
   const [modal, setModal] = useState<IModalKey | null>(null)

@@ -1,15 +1,18 @@
+import { useMemo, useState } from 'react'
+
+import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
+import Link from 'next/link'
+import { getSession } from 'next-auth/react'
+
+import { IAccount } from '@components/Account/Account'
+import Primary from '@components/Button/Primary'
 import Hero from '@components/Hero'
+import PlusIcon from '@components/Icon/PlusIcon'
 import ReportLayout from '@components/Layout/ReportLayout'
 import Tab from '@components/Tab'
-import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
-import { useMemo, useState } from 'react'
-import { useKeyword, useMostRepeatedPost, usePostCount } from 'src/hooks/useMeta'
-import { getSession } from 'next-auth/react'
 import { getAccounts } from '@services/Account/Account'
-import { IAccount } from '@lib/Account/Account'
-import Link from 'next/link'
-import Primary from '@components/Button/PrimaryButton'
-import PlusIcon from '@components/Icon/PlusIcon'
+import ROUTE from 'src/constants/route'
+import { useKeyword, useMostRepeatedPost, usePostCount } from 'src/hooks/useMeta'
 
 type Props = {
   botList: IAccount[]
@@ -145,8 +148,8 @@ const Dashboard = ({ botList }: Props) => {
           <h3 className="items-center text-center text-text-secondary">
             Your account does not have any verified instabot. Complete the adding account process to see dashboard.
           </h3>
-          <Link href="/accounts/create-account">
-            <Primary sizes={['s', 'l', 'l']} styleClassName="px-2">
+          <Link href={ROUTE.ACCOUNT_BOT_CREATE}>
+            <Primary sizes={['s', 'l', 'l']} className="px-2">
               <div className="flex flex-row items-center gap-2">
                 <PlusIcon className="h-6 w-6" />
                 <div className="">Add New Account</div>

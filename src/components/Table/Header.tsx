@@ -1,4 +1,5 @@
 import { Column } from './Interface'
+
 import SortingIcon from '../Icon/SortingIcon'
 export interface HeaderProps extends React.TableHTMLAttributes<HTMLTableSectionElement> {
   columns: Column[]

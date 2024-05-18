@@ -1,4 +1,5 @@
 import useSWR from 'swr'
+
 import { getKeyword, getMostRepeatedPost, getPostCount } from '@services/Meta'
 
 export const useKeyword = (input: { accId?: string; days: number; profile_id?: string }) => {
@@ -21,7 +22,6 @@ export const usePostCount = (input: { accId?: string; days: number; profile_id?:
     refreshInterval: 0,
     revalidateOnFocus: false,
   })
-
 
   return {
     data,

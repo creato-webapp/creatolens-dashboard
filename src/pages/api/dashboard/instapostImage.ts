@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
+
 import MetaInstance from '@api/axiosInstance/Meta'
 
 export default async function dashboardPostPicQueryHandler(req: NextApiRequest, res: NextApiResponse) {
@@ -17,7 +18,7 @@ export default async function dashboardPostPicQueryHandler(req: NextApiRequest, 
       },
     })
 
-    return res.status(response.status).json(response.data)
+    return res.end(response.data) // Send the image data directly without converting to JSON
   } catch (error) {
     console.error('Failed to fetch image:', error)
     res.status(500).json({ error: 'Failed to fetch image' })

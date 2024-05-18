@@ -1,5 +1,6 @@
 // components/Collapse.tsx
 import React, { useState } from 'react'
+
 import { CaretDownIcon, CaretUpIcon } from './Icon'
 
 interface CollapseProps extends React.HTMLAttributes<HTMLDivElement> {

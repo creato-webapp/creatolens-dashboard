@@ -1,6 +1,10 @@
-import type { NextApiRequest, NextApiResponse } from 'next'
-import AccountInstance from '../../axiosInstance/Account'
 import { AxiosRequestConfig } from 'axios'
+import type { NextApiRequest, NextApiResponse } from 'next'
+
+import ENDPOINT_BACKEND from 'src/constants/endpoints/backend'
+
+import AccountInstance from '../../axiosInstance/Account'
+
 export default async function accountQueryHandler(req: NextApiRequest, res: NextApiResponse) {
   const {
     query: { username, pageNumber, pageSize, orderBy, isAsc },
@@ -16,10 +20,14 @@ export default async function accountQueryHandler(req: NextApiRequest, res: Next
       if (username) {
         params.params = {
           filter: `account == ${username}`,
+          'page_number':pageNumber,
+          'page_size': pageSize,
+          'orderby': orderBy,
+          isAsc,
         }
       }
       const response = await AccountInstance.get(
-        `/handlers?page_number=${pageNumber}&page_size=${pageSize}&orderby=${orderBy}&isAsc=${isAsc}`,
+        ENDPOINT_BACKEND.ACCOUNTS_ERROR,
         params
       )
       return res.status(response.status).json(response.data)

@@ -1,10 +1,15 @@
 import { useCallback } from 'react'
-import { Cookies } from '../../lib/Account/Account/interface'
-import { Button } from '@components/Button'
-import { GenericModal } from './GenericModal'
+
 import { useRouter } from 'next/router'
+
+import { Button } from '@components/Button'
+import { Status } from 'src/context/DialogueContext'
 import { useAccount } from 'src/hooks/useAccount'
-import { useDialogues, Status } from 'src/context/DialogueContext'
+import { useDialogues }  from 'src/hooks/useDialogues'
+
+import { GenericModal } from './GenericModal'
+
+import { Cookies } from '../Account/Account/interface'
 
 const dataItemToKeyValues = (item: Cookies) => {
   if (!item) return <></>
@@ -52,8 +57,13 @@ export const SessionModal = () => {
     <GenericModal options={modalOptions}>
       <div className=" space-y-3">
         <code className="prose-code:text-blue-600">
-          {isLoading ? 'Loading' :  <div className="flex flex-wrap">{data?.session_cookies ? dataItemToKeyValues(data.session_cookies) : 'This instabot do not have any cookies yet'}</div>}
-         
+          {isLoading ? (
+            'Loading'
+          ) : (
+            <div className="flex flex-wrap">
+              {data?.session_cookies ? dataItemToKeyValues(data.session_cookies) : 'This instabot do not have any cookies yet'}
+            </div>
+          )}
         </code>
         <div className="flex justify-center space-y-3">
           <Button.Primary loading={isLoading} onClick={handleUpdateSubmit}>

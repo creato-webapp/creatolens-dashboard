@@ -1,15 +1,18 @@
-import React, { useState, useCallback } from 'react'
-import Card from '@components/Card'
-import { Table } from '@components/Table'
-import { IAccountError } from '@lib/Account/AccountErrors/interface'
-import Link from 'next/link'
-import { Form } from '@components/Form'
-import { useAccountErrorPagination } from 'src/hooks/useAccountErrors'
-import { getErrorPagination } from '@services/Account/AccountErros'
-import Pagination from '@components/Pagination'
+import React, { useCallback, useState } from 'react'
+
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
-import dayjs from '@services/Dayjs'
-import { PaginationMetadata, usePagination } from '@hooks/usePagination'
+
+import { IAccountError } from '@components/Account/AccountErrors/interface'
+import Card from '@components/Card'
+import { Form } from '@components/Form'
+import Pagination from '@components/Pagination'
+import { Table } from '@components/Table'
+import { getErrorPagination } from '@services/Account/AccountErros'
+import { PaginationMetadata } from '@services/Account/AccountInterface'
+import ROUTE from 'src/constants/route'
+import { useAccountErrorPagination } from 'src/hooks/useAccountErrors'
+import dayjs from 'src/utils/dayjs'
+
 
 type Props = {
   paginationData: PaginationMetadata<IAccountError[]>
@@ -68,40 +71,22 @@ const AccountsErrorPage = (paginationData: PaginationMetadata<IAccountError[]>) 
     {
       title: 'document_id',
       dataIndex: 'document_id',
-      render: (e: string) => {
-        if (e === 'empty document_id') {
-          return ''
-        }
-        return (
-          <Link href="/accounts/[id]" as={`/accounts/${e}`} legacyBehavior>
-            <div style={{ color: '#0070f3', cursor: 'pointer' }}>{e}</div>
-          </Link>
-        )
-      },
     },
     {
       title: 'account',
       dataIndex: 'account',
-      render: (e: string) => {
-        return (
-          <Link href="/accounts/[id]" as={`/accounts/${e}`} legacyBehavior>
-            <div style={{ color: '#0070f3', cursor: 'pointer' }}>{e}</div>
-          </Link>
-        )
-      },
     },
     {
       title: 'occurred_at(HK Time)',
       dataIndex: 'occurred_at',
-      render: (e: string) => {
-        const date = dayjs(e, 'YYYY-MM-DD THH:mm:ss')
-        return dayjs.utc(date).local().format('YYYY-MM-DD HH:mm:ss')
-      },
-      sortAvailable: true,
     },
     { title: 'exception', dataIndex: 'exception' },
     { title: 'trace_id', dataIndex: 'trace_id' },
   ]
+
+  const formatDate = (datetimeStr: string) => {
+    return dayjs(datetimeStr, 'YYYY-MM-DDTHH:mm:ss').local().format('DD MMM YYYY')
+  }
 
   return (
     <Card title="Login Error History">
@@ -122,7 +107,12 @@ const AccountsErrorPage = (paginationData: PaginationMetadata<IAccountError[]>) 
           />
           <Table.Body>
             {accountError.map((e, index) => (
-              <Table.Row key={`account-error-${index}`} columns={columns} rowData={e} rowKey={index} />
+              <Table.Row key={`table-row-${e.account}-${index}`} className="text-sm">
+                <Table.BodyCell key={e.account}></Table.BodyCell>
+                <Table.BodyCell key={e.exception}></Table.BodyCell>
+                <Table.BodyCell key={`occurred_at-${e.account}`}>{formatDate(e.occurred_at)}</Table.BodyCell>
+                <Table.BodyCell key={e.trace_id}></Table.BodyCell>
+              </Table.Row>
             ))}
           </Table.Body>
         </Table.Layout>

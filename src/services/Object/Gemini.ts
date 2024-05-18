@@ -1,6 +1,8 @@
 import { AxiosRequestConfig } from 'axios'
-import { Fetcher } from '../fetcher'
+
 import { Labels } from './ImageBlob'
+
+import { Fetcher } from '../fetcher'
 
 export interface confidence {
   [key: string]: number

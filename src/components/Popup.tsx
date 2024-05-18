@@ -1,16 +1,15 @@
-import React, { useRef, useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
+
 import { Button } from './Button'
 import CrossIcon from './Icon/CrossIcon'
 
-interface PopupProps extends React.HTMLProps<HTMLDivElement> {
+interface PopupProps extends React.HTMLProps<HTMLDialogElement> {
   defaultShow?: boolean
-  title?: string
   footer?: string
   isDisabledScroll?: boolean
   withConfirmButton?: boolean
   withCloseButton?: boolean
   withCancelButton?: boolean
-  onConfirm?: () => void
   onClose?: () => void
 }
 
@@ -73,8 +72,8 @@ const Popup: React.FC<PopupProps> = ({
               </div>
             )}
           </div>
-          {title && <hr></hr>}
-          <div>{children}</div>
+          {title && <hr />}
+          {children}
           <div className="flex justify-center gap-6 self-center px-2 py-2">
             {withCancelButton && (
               <Button.Outline className="max-w-fit self-center" onClick={handleClose}>

@@ -1,8 +1,11 @@
 //TODO write Get, Gets, Update,
 import { AxiosRequestConfig } from 'axios'
+
+import { Cookies, IRetryAccount } from '@components/Account/Account/interface'
+
+import { PaginationMetadata, PaginationParams } from './AccountInterface'
+
 import { Fetcher } from '../fetcher'
-import { Cookies, IRetryAccount } from '@lib/Account/Account/interface'
-import { PaginationMetadata, PaginationParams } from '@hooks/usePagination'
 
 type PartialAccount = Partial<{
   id: string

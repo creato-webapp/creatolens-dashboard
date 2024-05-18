@@ -1,19 +1,18 @@
 import React, { useCallback } from 'react'
-import Card from '@components/Card'
-import { Table } from '@components/Table'
-import { Button } from '@components/Button'
-import { IRetryAccount } from '@lib/Account/Account/interface'
-import Link from 'next/link'
-import Tag from '@components/Tag'
-import Avatar from '@components/Avatar'
-import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/solid'
-import StatusTag, { Status } from '@lib/StatusTag'
-import Pagination from '@components/Pagination'
-import { useGetRetryAccountsPagination } from 'src/hooks/useRetryAccount'
-import { getRetryAccountsPagination } from '@services/Account/RetryAccount'
+
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
-import dayjs from '@services/Dayjs'
-import { PaginationMetadata, usePagination } from '@hooks/usePagination'
+import Link from 'next/link'
+
+import { IRetryAccount } from '@components/Account/Account/interface'
+import AccountBadges from '@components/Account/AccountBadges'
+import Card from '@components/Card'
+import EditIcon from '@components/Icon/EditIcon'
+import Pagination from '@components/Pagination'
+import { Table } from '@components/Table'
+import { PaginationMetadata } from '@services/Account/AccountInterface'
+import { getRetryAccountsPagination } from '@services/Account/RetryAccount'
+import { useGetRetryAccountsPagination } from 'src/hooks/useRetryAccount'
+import dayjs from 'src/utils/dayjs'
 
 type Props = {
   paginationData: PaginationMetadata<IRetryAccount[]>
@@ -66,69 +65,27 @@ const RetryAccountsPage = ({ paginationData }: Props) => {
     {
       title: 'Wait Until(HK Time)',
       dataIndex: 'wait_until',
-      render: (e: string) => {
-        const date = dayjs(e, 'YYYY-MM-DD THH:mm:ss')
-        return dayjs.utc(date).local().format('YYYY-MM-DD HH:mm:ss')
-      },
     },
-    { title: 'Post Scrapped', dataIndex: 'post_scrapped_count' },
     { title: 'Login Count', dataIndex: 'login_count' },
+    { title: 'Last Login Date', dataIndex: 'last_login_dt'},
     {
       title: 'Username',
       dataIndex: 'username',
-      render: (e: string) => {
-        return (
-          <Tag
-            label={
-              <div className="flex items-center gap-1">
-                <Avatar />
-                {e}
-              </div>
-            }
-            variant="outline"
-          />
-        )
-      },
     },
     {
       title: 'Status',
       dataIndex: 'status',
-      render: (e: Status) => {
-        return <StatusTag status={e} />
-      },
-    },
-    {
-      title: 'Is Occupied',
-      dataIndex: 'is_occupied',
-      render: (e: boolean) => {
-        return e ? <CheckCircleIcon className="h-6 w-6 text-successful-600" /> : <XCircleIcon className="h-6 w-6 text-error-500" />
-      },
-    },
-    {
-      title: 'Is Enabled',
-      dataIndex: 'enabled',
-      render: (e: boolean) => {
-        return e ? <CheckCircleIcon className="h-6 w-6 text-successful-600" /> : <XCircleIcon className="h-6 w-6 text-error-500" />
-      },
-    },
-    {
-      title: 'Is Auth',
-      dataIndex: 'is_authenticated',
-      render: (e: boolean) => {
-        return e ? <CheckCircleIcon className="h-6 w-6 text-successful-600" /> : <XCircleIcon className="h-6 w-6 text-error-500" />
-      },
     },
 
     {
       title: 'Account Info',
       dataIndex: 'id',
-      render: (e: string) => (
-        <Link href="/accounts/retry/[id]" as={`/accounts/retry/${e}`} legacyBehavior>
-          <Button.Text loading={false}>Edit</Button.Text>
-        </Link>
-      ),
     },
   ]
+
+  const formatDate = (datetimeStr: string) => {
+    return dayjs(datetimeStr, 'YYYY-MM-DDTHH:mm:ss').local().format('DD MMM YYYY')
+  }
 
   return (
     <Card title="Accounts Table">
@@ -142,10 +99,29 @@ const RetryAccountsPage = ({ paginationData }: Props) => {
             orderBy={pageParams.orderBy}
             updateSorting={updateSorting}
           />
-          <Table.Body>
-            {accounts?.map((e, index) => {
-              return <Table.Row key={`retry-account-table-${index}`} columns={columns} rowData={e} rowKey={index} />
-            })}
+          <Table.Header columns={columns} />
+          <Table.Body className="text-sm font-normal leading-5 text-black">
+            {accounts.map((e, index) => (
+              <Table.Row key={`table-row-${e.id}-${index}`} className="text-sm">
+                <Table.BodyCell key={`wait-until-${e.id}`}>{formatDate(e.wait_until)}</Table.BodyCell>
+                <Table.BodyCell key={`login-count-${e.id}`}>{e.login_count}</Table.BodyCell>
+                <Table.BodyCell key={`last-login-dt-${e.last_login_dt}`}></Table.BodyCell>
+                <Table.BodyCell key={`username-${e.id}`}>
+                  <div className="flex items-center text-nowrap text-accent1-600">{e.username}</div>
+                </Table.BodyCell>
+                <Table.BodyCell key={`status-${e.id}`}>
+                  <AccountBadges status={e.status}/>
+                </Table.BodyCell>
+                <Table.BodyCell key={e.id}>
+                  <Link href="/accounts/[id]" as={`/accounts/${e.id}`} legacyBehavior>
+                    <div className="flex w-full cursor-pointer flex-row items-center justify-center gap-2">
+                      <EditIcon size={16} className="fill-accent2-500" />
+                      <div className="font-semibold text-accent2-500">Edit</div>
+                    </div>
+                  </Link>
+                </Table.BodyCell>
+              </Table.Row>
+            ))}
           </Table.Body>
         </Table.Layout>
       </div>

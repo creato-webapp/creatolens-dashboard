@@ -1,4 +1,5 @@
-import React, { useEffect, useState, useRef, useCallback, useMemo, HTMLProps } from 'react'
+import React, { HTMLProps, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+
 import { CaretUpIcon } from '@components/Icon'
 
 export interface DropdownOption {
@@ -112,7 +113,7 @@ const Dropdown: React.FC<DropdownProps> = ({ name = '', options, defaultValue, o
 
   const { padding, caretSize, maxWidth } = generatePadding(dropDownSizes!)
   return (
-    <div ref={dropdownRef} className={`dropdown justify-end relative h-full w-full  ${maxWidth}`}>
+    <div ref={dropdownRef} className={`dropdown relative h-full w-full justify-end  ${maxWidth}`}>
       <button
         className={`drowpdown-button w-full rounded-lg border-none ${color} ${padding} ${focusStyle} ${hoverStyle} ${activeStyle}`}
         onClick={handleToggleMenu}
@@ -127,7 +128,7 @@ const Dropdown: React.FC<DropdownProps> = ({ name = '', options, defaultValue, o
       </button>
 
       {isOpen && (
-        <ul className="z-10 absolute top-full mt-2 h-64 w-full overflow-y-scroll rounded-md border border-gray-200 bg-white shadow-lg">
+        <ul className="absolute top-full z-10 mt-2 h-64 w-full overflow-y-scroll rounded-md border border-gray-200 bg-white shadow-lg">
           {options.map((option) => (
             <li
               key={option.value}

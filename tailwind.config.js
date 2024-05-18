@@ -3,7 +3,7 @@ module.exports = {
   fonts: [
     {
       family: 'Lato',
-      variants: ['300', '400',  '700',  '900'],
+      variants: ['300', '400', '700', '900'],
     },
   ],
   content: ['./src/pages/**/*.{js,ts,jsx,tsx}', './src/components/**/*.{js,ts,jsx,tsx}', './src/lib/**/*.{js,ts,jsx,tsx}'],

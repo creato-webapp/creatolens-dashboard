@@ -1,5 +1,6 @@
-import Card from '@components/Card'
 import React, { HTMLAttributes } from 'react'
+
+import Card from '@components/Card'
 
 interface HowItWorksProps extends HTMLAttributes<HTMLDivElement> {}
 
@@ -13,7 +14,7 @@ const HowItWorks = (props: HowItWorksProps) => {
   return (
     <>
       <h1 className="hidden text-center text-[2.125rem] font-extrabold text-text-secondary md:my-8 md:block">How It Works?</h1>
-      <div className={`${props.className} flex flex-col items-center space-y-8 py-1 md:flex-row md:justify-center md:space-y-0 md:space-x-4`}>
+      <div className={`${props.className} flex flex-col items-center space-y-8 py-1 md:flex-row md:justify-center md:space-x-4 md:space-y-0`}>
         <h1 className="space-x-4 text-center text-[2.125rem] font-extrabold text-text-secondary md:hidden">How It Works?</h1>
         {stepList.map((e, index) => (
           <Card
