@@ -22,8 +22,6 @@ import { formatDate } from '@services/util'
 import ROUTE from 'src/constants/route'
 import { useGetAccountsPagination } from 'src/hooks/useAccount'
 
-
-
 type Props = {
   paginationData: PaginationMetadata<IAccount[]>
 }
@@ -121,7 +119,6 @@ const AccountsPage = ({ paginationData }: Props) => {
       dataIndex: 'is_authenticated',
     },
   ]
-
 
 
   return (

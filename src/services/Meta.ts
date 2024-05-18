@@ -4,8 +4,6 @@ import { CountryEnum } from 'src/enums/CountryCodeEnums'
 
 import { Fetcher } from './fetcher'
 
-
-
 export interface PostData {
   count: number
   owner_username: string

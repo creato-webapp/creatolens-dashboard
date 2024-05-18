@@ -19,9 +19,6 @@ import { hoursAgo } from '@services/util'
 import IMAGE from 'src/constants/image'
 import dayjs from 'src/utils/dayjs'
 
-
-// generate fake data for this layout
-
 interface Prop {
   days: number
   loading: {
