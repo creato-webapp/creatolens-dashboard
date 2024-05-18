@@ -21,7 +21,11 @@ import axios from 'axios'
 
 interface Prop {
   days: number
-  isLoading: boolean
+  loading: {
+    keywordIsLoading: boolean
+    postCountIsLoading: boolean
+    mostRepeatedPostIsLoading: boolean
+  }
   botList: IAccount[]
   onAccountChange: (e: string | number) => void
   selectedAccount: {
@@ -35,7 +39,7 @@ interface Prop {
 }
 
 const ReportLayout = (props: Prop) => {
-  const { keyword, postCount, mostRepeatedPost, days, isLoading, botList, onAccountChange, selectedAccount } = props
+  const { keyword, postCount, mostRepeatedPost, days, loading, botList, onAccountChange, selectedAccount } = props
   // dayFormat = MMM DD YYYY - MMM DD YYYY
   const today = new Date()
   const lastDate = new Date(today)
@@ -160,7 +164,7 @@ const ReportLayout = (props: Prop) => {
               <div>
                 <h2>Post Count</h2>
                 <div className="italic text-text-secondary">&quot;Total post fetched in this period &quot;</div>
-                {<h2 className="font-extrabold text-accent1-500">{isLoading ? <Skeleton /> : postCount ? postCount : 0}</h2>}
+                {<h2 className="font-extrabold text-accent1-500">{loading.postCountIsLoading ? <Skeleton /> : postCount ? postCount : 0}</h2>}
               </div>
             }
           </Card>
@@ -182,7 +186,7 @@ const ReportLayout = (props: Prop) => {
                       </div>
                     )
                   })
-                ) : isLoading ? (
+                ) : loading.keywordIsLoading ? (
                   <div className="flex w-full">
                     <Skeleton count={2} containerClassName="flex-1" />
                   </div>
@@ -213,11 +217,11 @@ const ReportLayout = (props: Prop) => {
           className="col-span-2 w-full"
           instaPost={imageUrl}
           icon="./Repeat.svg"
-          isLoading={isLoading}
+          isLoading={loading.mostRepeatedPostIsLoading}
         >
           <div className="flex flex-wrap gap-2">
             <div>
-              {isLoading ? (
+              {loading.mostRepeatedPostIsLoading ? (
                 <Skeleton />
               ) : mostRepeatedPost ? (
                 <Badges size="sm" status="text-secondary">
@@ -229,7 +233,7 @@ const ReportLayout = (props: Prop) => {
               )}
             </div>
             <div>
-              {isLoading ? (
+              {loading.mostRepeatedPostIsLoading ? (
                 <Skeleton />
               ) : mostRepeatedPost ? (
                 <Badges size="sm" status="text-secondary">
@@ -246,7 +250,7 @@ const ReportLayout = (props: Prop) => {
           {mostRepeatedPost && (
             <>
               <h3 className="font-extrabold">{mostRepeatedPost?.user?.username && '@' + mostRepeatedPost?.user.username}</h3>
-              <div className="flex-wrap break-all">{isLoading ? <Skeleton /> : mostRepeatedPost ? mostRepeatedPost?.caption : ''}</div>
+              <div className="flex-wrap break-all">{loading.mostRepeatedPostIsLoading ? <Skeleton /> : mostRepeatedPost ? mostRepeatedPost?.caption : ''}</div>
               <Link href={`https://www.instagram.com/p/${mostRepeatedPost?.shortcode}`} target="_blank">
                 <Image className="cursor-pointer" alt={'account share button'} src={'./external-link.svg'} width={24} height={24} />
               </Link>

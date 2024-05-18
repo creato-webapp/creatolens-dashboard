@@ -63,9 +63,15 @@ const Dashboard = ({ botList }: Props) => {
     return bot ? bot : null
   }, [botList, metaAttributes.accId])
 
-  const { data: keywordData, keywordIsLoading } = useKeyword(metaAttributes, true)
-  const { data: postCountData, postCountIsLoading } = usePostCount(metaAttributes, true)
-  const { data: mostRepeatedPostData, mostRepeatedPostIsLoading } = useMostRepeatedPost(metaAttributes, true)
+  const { data: keywordData, isLoading: keywordIsLoading } = useKeyword(metaAttributes)
+  const { data: postCountData, isLoading: postCountIsLoading } = usePostCount(metaAttributes)
+  const { data: mostRepeatedPostData, isLoading: mostRepeatedPostIsLoading } = useMostRepeatedPost(metaAttributes)
+
+  const loadingStates = {
+    keywordIsLoading,
+    postCountIsLoading,
+    mostRepeatedPostIsLoading,
+  }
 
   const onKeyChange = (key: string) => {
     const targetItem = tabItems.find((item) => item.key === key)
@@ -97,7 +103,7 @@ const Dashboard = ({ botList }: Props) => {
           postCount={postCountData?.data?.post_count}
           mostRepeatedPost={mostRepeatedPostData}
           selectedAccount={selectedAccount}
-          isLoading={false}
+          loading={loadingStates}
         />
       ),
       days: 3,
@@ -114,7 +120,7 @@ const Dashboard = ({ botList }: Props) => {
           onAccountChange={onAccountChange}
           botList={botList || []}
           selectedAccount={selectedAccount}
-          isLoading={false}
+          loading={loadingStates}
         />
       ),
       days: 7,
