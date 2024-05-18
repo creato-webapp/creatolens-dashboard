@@ -1,5 +1,6 @@
 import { useModals } from '@hooks/useModal'
 import { ModalKeyEnum } from 'src/context/ModalContext'
+
 import { GenericModal } from './GenericModal'
 import { SessionModal } from './SessionModal'
 

@@ -1,5 +1,6 @@
-import { BodyProps } from './Interface'
 import React, { FC, ReactElement } from 'react'
+
+import { BodyProps } from './Interface'
 
 const Body: FC<BodyProps> = ({ children, ...res }): ReactElement => {
   return (

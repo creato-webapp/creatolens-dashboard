@@ -7,7 +7,7 @@ export interface PaginationParams {
 }
 
 export interface PaginationMetadata<T> {
-  data: T 
+  data: T
   has_next: boolean
   has_prev: boolean
   page: number

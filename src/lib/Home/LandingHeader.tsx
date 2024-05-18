@@ -1,10 +1,13 @@
-import { Button } from '@components/Button'
-
 import React from 'react'
-import LandingImageLogo from './LandingImageLogo'
+
+import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { signIn } from 'next-auth/react'
-import Image from 'next/image'
+
+import { Button } from '@components/Button'
+
+import LandingImageLogo from './LandingImageLogo'
+
 import arrow_right from '../../assets/icons/arrow-right.svg'
 interface LandingHeaderProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -35,9 +38,8 @@ export default function LandingHeader(props: LandingHeaderProps) {
             <Image src={arrow_right} alt="arrow_right" width={20} height={20} className="ml-2"></Image>
           </Button.Primary>
           <Button.Outline
-            className=" w-auto"
+            className=" w-auto !py-3 !px-6"
             sizes={['m', 'l', 'l']}
-            styleClassName="!py-3 !px-6"
             onClick={() => signIn('google', { callbackUrl: '/' })}
           >
             <h4>Sign In</h4>

@@ -1,24 +1,30 @@
-import React, { useState, useCallback } from 'react'
-import Card from '@components/Card'
-import { Table } from '@components/Table'
-import { Button } from '@components/Button'
-import { IBlockedAccount } from '@lib/Account/Account/interface'
-import Link from 'next/link'
-import Tag from '@components/Tag'
-import Avatar from '@components/Avatar'
+import React, { useCallback } from 'react'
+
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/solid'
-import StatusTag, { Status } from '@lib/StatusTag'
-import Pagination from '@components/Pagination'
-import { useGetBlockAccountsPagination } from 'src/hooks/useBlockedAccount'
-import { getBlockedAccountsPagination } from '@services/Account/BlockAccount'
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
+import Link from 'next/link'
+
+import Avatar from '@components/Avatar'
+import { Button } from '@components/Button'
+import Card from '@components/Card'
+import Pagination from '@components/Pagination'
+import { Table } from '@components/Table'
+import { usePagination } from '@hooks/usePagination'
 import { PaginationMetadata } from '@services/Account/AccountInterface'
-import dayjs from '@services/Dayjs'
+import { getBlockedAccountsPagination } from '@services/Account/BlockAccount'
+import { IAccountStatusType } from 'src/constants/status'
+import ROUTE from 'src/constants/route'
+import { useGetBlockAccountsPagination } from 'src/hooks/useBlockedAccount'
+import dayjs from 'src/utils/dayjs'
+
+
 
 type Props = {
   paginationData: PaginationMetadata<IBlockedAccount[]>
 }
-export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext): Promise<GetServerSidePropsResult<{}>> => {
+export const getServerSideProps: GetServerSideProps = async (
+  context: GetServerSidePropsContext
+): Promise<GetServerSidePropsResult<Record<string, unknown>>> => {
   const paginationProps = {
     pageNumber: 1,
     pageSize: 10,
@@ -33,8 +39,6 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
   })
   const paginationData: PaginationMetadata<IBlockedAccount[]> = {
     data: response?.data ?? [],
-    has_next: response?.has_next ?? false,
-    has_prev: response?.has_prev ?? false,
     page: response?.page ?? 1,
     size: response?.size ?? 0,
     total_items: response?.total_items ?? 0,
@@ -43,33 +47,17 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
 }
 
 const BlockedAccountsPage = ({ paginationData }: Props) => {
-  const [pageParams, setPageParams] = useState({
-    pageNumber: 1,
-    pageSize: 10,
-    orderBy: 'username',
-    isAsc: false,
-  })
-  const [shouldFetch, setShouldFetch] = useState(false)
-  const { accounts: responseData, error } = useGetBlockAccountsPagination(pageParams, shouldFetch, paginationData)
-  const accounts: IBlockedAccount[] = responseData?.data || []
-  const isLoading = !responseData && !error
+  // const [usernameFilter, setUsernameFilter] = useState('')
+  const { pageParams, onPageClick, updateSort, updateOrderBy, onNextClick, onPrevClick } = usePagination()
 
-  const onPageChange = (newPage: number) => {
-    setPageParams((prevParams) => ({
-      ...prevParams,
-      pageNumber: newPage,
-    }))
-    setShouldFetch(true)
-  }
+  const { accounts: responseData, isLoading, error } = useGetBlockAccountsPagination(pageParams, paginationData)
+  const accounts: IBlockedAccount[] = responseData?.data || []
 
   const updateSorting = useCallback(
     (orderBy: string, isAsc: boolean): React.MouseEventHandler<HTMLDivElement> =>
       () => {
-        setPageParams((prevParams) => ({
-          ...prevParams,
-          orderBy: orderBy,
-          isAsc: isAsc,
-        }))
+        updateSort(isAsc)
+        updateOrderBy(orderBy)
       },
     []
   )
@@ -97,22 +85,19 @@ const BlockedAccountsPage = ({ paginationData }: Props) => {
       dataIndex: 'username',
       render: (e: string) => {
         return (
-          <Tag
-            label={
-              <div className="flex items-center gap-1">
-                <Avatar />
-                {e}
-              </div>
-            }
-            variant="outline"
-          />
+          <Tag variant="outline">
+            <div className="flex items-center gap-1">
+              <Avatar />
+              {e}
+            </div>
+          </Tag>
         )
       },
     },
     {
       title: 'Status',
       dataIndex: 'status',
-      render: (e: Status) => {
+      render: (e: IAccountStatusType) => {
         return <StatusTag status={e} />
       },
     },
@@ -157,24 +142,49 @@ const BlockedAccountsPage = ({ paginationData }: Props) => {
             columns={columns}
             thClassName={'text-sm font-normal text-text-primary items-center justify-center'}
             className="capitalize"
-            pageParams={pageParams}
+            orderBy={pageParams.orderBy}
+            isAsc={pageParams.isAsc}
             updateSorting={updateSorting}
           />
           <Table.Body className="text-sm font-normal leading-5 text-black">
-            {accounts?.map((e, index) => (
-              <Table.Row key={`accounts-table-${index}`} columns={columns} className="text-sm" rowData={e} rowKey={index} />
+            {accounts.map((e, index) => (
+              <Table.Row key={`table-row-${e.id}-${index}`} className="text-sm">
+                <Table.BodyCell key={`blocked-at-${e.id}`}>{formatDate(e.blocked_at)}</Table.BodyCell>
+                <Table.BodyCell key={`created_at-${e.id}`}>{formatDate(e.created_at)}</Table.BodyCell>
+                <Table.BodyCell key={`blocked-count-${e.id}`}>{e.blocked_count}</Table.BodyCell>
+                <Table.BodyCell key={`last-login-dt-${e.last_login_dt}`}></Table.BodyCell>
+                <Table.BodyCell key={`username-${e.id}`}>
+                  <div className="flex items-center text-nowrap text-accent1-600">{e.username}</div>
+                </Table.BodyCell>
+                <Table.BodyCell key={`status-${e.id}`}>
+                  <AccountBadges status={e.status} />
+                </Table.BodyCell>
+                <Table.BodyCell key={e.id}>
+                  <Link
+                      href={{
+                        pathname: ROUTE.ACCOUNT_BOT_GET,
+                        query: { id: e.id },
+                      }}
+                      as="/accounts/bot"
+                      legacyBehavior
+                    >
+                    <div className="flex w-full cursor-pointer flex-row items-center justify-center gap-2">
+                      <EditIcon size={16} className="fill-accent2-500" />
+                      <div className="font-semibold text-accent2-500">Edit</div>
+                    </div>
+                  </Link>
+                </Table.BodyCell>
+              </Table.Row>
             ))}
           </Table.Body>
         </Table.Layout>
       </div>
-      <Pagination
+      <Pagination<IBlockedAccount[]>
         isLoading={isLoading}
-        page={responseData.page}
-        size={responseData.size}
-        totalItems={responseData.total_items}
-        hasNext={responseData.has_next}
-        hasPrev={responseData.has_prev}
-        onPageChange={onPageChange}
+        data={responseData}
+        onNextClick={onNextClick}
+        onPageClick={onPageClick}
+        onPrevClick={onPrevClick}
       />
     </Card>
   )

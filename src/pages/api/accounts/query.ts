@@ -1,5 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
+
+import ENDPOINT_BACKEND from 'src/constants/endpoints/backend'
+
 import AccountInstance from '../axiosInstance/Account'
+
 
 export default async function accountDashboardQueryHandler(req: NextApiRequest, res: NextApiResponse) {
   const {
@@ -14,7 +18,7 @@ export default async function accountDashboardQueryHandler(req: NextApiRequest, 
 
   switch (method) {
     case 'GET': {
-      const response = await AccountInstance.get(`/accounts/query`, {
+      const response = await AccountInstance.get(ENDPOINT_BACKEND.QUERY_ACCOUNTS, {
         params: { filter },
         ...cookieHeader,
       })

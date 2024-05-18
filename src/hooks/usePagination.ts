@@ -5,9 +5,18 @@ type PaginationProps = {
   pageSize?: number
   orderBy?: string
   isAsc?: boolean
+  hasNext?: boolean
+  hasPrev?: boolean
 }
 
-interface PaginationParams {
+export interface PaginationMetadata<T> {
+  data: T
+  total_items: number
+  size: number
+  page: number
+}
+
+export interface PaginationParams {
   pageNumber: number
   pageSize: number
   orderBy: string
@@ -24,8 +33,48 @@ export const usePagination = ({ pageNumber = 1, pageSize = 10, orderBy = 'create
     isAsc: isAsc,
   })
 
+
+  const updateOrderBy = (newOrderBy: string) => {
+    setPageParams((prevParams) => ({
+      ...prevParams,
+      orderBy: newOrderBy,
+    }))
+  }
+
+  const updateSort = (isAsc: boolean) => {
+    setPageParams((prevParams) => ({
+      ...prevParams,
+      isAsc: isAsc,
+    }))
+  }
+
+  const onNextClick = () => {
+    setPageParams((prevParams) => ({
+      ...prevParams,
+      pageNumber: prevParams.pageNumber + 1,
+    }))
+  }
+
+  const onPageClick = (newPage: number) => {
+    setPageParams((prevParams) => ({
+      ...prevParams,
+      pageNumber: newPage,
+    }))
+  }
+
+  const onPrevClick = () => {
+    setPageParams((prevParams) => ({
+      ...prevParams,
+      pageNumber: Math.max(prevParams.pageNumber - 1, 1),
+    }))
+  }
+
   return {
     pageParams,
-    setPageParams,
+    onNextClick,
+    onPageClick,
+    onPrevClick,
+    updateOrderBy,
+    updateSort,
   }
 }

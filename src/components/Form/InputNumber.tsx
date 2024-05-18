@@ -1,6 +1,7 @@
 import React, { FC } from 'react'
-import { NumberInputProps } from './interface'
+
 import BaseInput from './BaseInput'
+import { NumberInputProps } from './interface'
 
 const InputNumber: FC<NumberInputProps> = (props: NumberInputProps) => {
   const { id, placeholder, defaultValue, value } = props

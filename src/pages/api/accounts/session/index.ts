@@ -1,6 +1,10 @@
-import type { NextApiRequest, NextApiResponse } from 'next'
-import AccountInstance from '../../axiosInstance/Account'
 import { AxiosRequestConfig } from 'axios'
+import type { NextApiRequest, NextApiResponse } from 'next'
+
+import ENDPOINT_BACKEND_ACCOUNT_SESSION from 'src/constants/endpoints/backend'
+
+import AccountInstance from '../../axiosInstance/Account'
+
 export default async function accountQueryHandler(req: NextApiRequest, res: NextApiResponse) {
   const {
     query: { username, pageNumber, pageSize, orderBy, isAsc },
@@ -14,10 +18,16 @@ export default async function accountQueryHandler(req: NextApiRequest, res: Next
         },
       }
       if (username) {
-        params.params = { username }
+        params.params = { 
+          'page_number':pageNumber,
+          'page_size': pageSize,
+          'orderby': orderBy,
+          isAsc,
+          username
+        }
       }
       const response = await AccountInstance.get(
-        `/account-session?page_number=${pageNumber}&page_size=${pageSize}&orderby=${orderBy}&isAsc=${isAsc}`,
+        ENDPOINT_BACKEND_ACCOUNT_SESSION.ACCOUNT_SESSION,
         params
       )
 

@@ -1,17 +1,18 @@
-import React, { useState, useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
+
+import { Button } from '@components/Button'
 import Card from '@components/Card'
 import { Form } from '@components/Form'
-import MagnifyingGlassIcon from '@components/Icon/MagnifyingGlassIcon'
-import LoaderIcon from '@components/Icon/LoaderIcon'
+import CustomizeHashtagCard from '@components/Hashet/CustomizeHashtagCard'
+import TopAccHashtagCard from '@components/Hashet/TopAccHashtagCard'
+import TopRelatedHashtagCard from '@components/Hashet/TopRelatedHashtagCard'
+import Hero from '@components/Hero'
 import LightBulbIcon from '@components/Icon/LightBulbIcon'
-import TopRelatedHashtagCard from '@lib/Hashet/TopRelatedHashtagCard'
-import TopAccHashtagCard from '@lib/Hashet/TopAccHashtagCard'
-import { Button } from '@components/Button'
+import LoaderIcon from '@components/Icon/LoaderIcon'
+import MagnifyingGlassIcon from '@components/Icon/MagnifyingGlassIcon'
 import Popover from '@components/Popover'
 import Tab from '@components/Tab'
-import CustomizeHashtagCard from '@lib/Hashet/CustomizeHashtagCard'
 import { useGetHashtag } from 'src/hooks/useHashtag'
-import Hero from '@components/Hero'
 
 export interface IHashet extends Record<string, string | number | boolean> {
   hashtag: string
@@ -54,7 +55,7 @@ const RecommendationPage = () => {
       key: '1',
       title: 'Categories',
       children: (
-        <div className="flex gap-4 md:flex md:px-14 md:py-24 justify-center flex-col md:flex-row ">
+        <div className="flex flex-col justify-center gap-4 md:flex md:flex-row md:px-14 md:py-24 ">
           <TopRelatedHashtagCard hashtags={hashetData} />
           <TopAccHashtagCard hashtags={hashetData} />
         </div>

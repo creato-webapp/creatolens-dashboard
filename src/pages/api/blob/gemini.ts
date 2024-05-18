@@ -1,6 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-import BlobInstance from '../axiosInstance/Blob'
+
 import { LabelImageResponse } from '@services/Object/Gemini'
+
+import BlobInstance from '../axiosInstance/Blob'
 export const config = {
   api: {
     bodyParser: false,

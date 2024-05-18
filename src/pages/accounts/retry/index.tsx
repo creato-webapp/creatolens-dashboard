@@ -1,19 +1,18 @@
-import React, { useState, useCallback } from 'react'
-import Card from '@components/Card'
-import { Table } from '@components/Table'
-import { Button } from '@components/Button'
-import { IRetryAccount } from '@lib/Account/Account/interface'
-import Link from 'next/link'
-import Tag from '@components/Tag'
-import Avatar from '@components/Avatar'
-import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/solid'
-import StatusTag, { Status } from '@lib/StatusTag'
-import Pagination from '@components/Pagination'
-import { useGetRetryAccountsPagination } from 'src/hooks/useRetryAccount'
-import { getRetryAccountsPagination } from '@services/Account/RetryAccount'
+import React, { useCallback } from 'react'
+
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
+import Link from 'next/link'
+
+import { IRetryAccount } from '@components/Account/Account/interface'
+import AccountBadges from '@components/Account/AccountBadges'
+import Card from '@components/Card'
+import EditIcon from '@components/Icon/EditIcon'
+import Pagination from '@components/Pagination'
+import { Table } from '@components/Table'
 import { PaginationMetadata } from '@services/Account/AccountInterface'
-import dayjs from '@services/Dayjs'
+import { getRetryAccountsPagination } from '@services/Account/RetryAccount'
+import { useGetRetryAccountsPagination } from 'src/hooks/useRetryAccount'
+import dayjs from 'src/utils/dayjs'
 
 type Props = {
   paginationData: PaginationMetadata<IRetryAccount[]>
@@ -33,8 +32,6 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
   })
   const paginationData: PaginationMetadata<IRetryAccount[]> = {
     data: response?.data ?? [],
-    has_next: response?.has_next ?? false,
-    has_prev: response?.has_prev ?? false,
     page: response?.page ?? 1,
     size: response?.size ?? 0,
     total_items: response?.total_items ?? 0,
@@ -43,33 +40,16 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
 }
 
 const RetryAccountsPage = ({ paginationData }: Props) => {
-  const [pageParams, setPageParams] = useState({
-    pageNumber: 1,
-    pageSize: 10,
-    orderBy: 'username',
-    isAsc: false,
-  })
-  const [shouldFetch, setShouldFetch] = useState(false)
-  const { accounts: responseData, error } = useGetRetryAccountsPagination(pageParams, shouldFetch, paginationData)
-  const accounts: IRetryAccount[] = responseData?.data || []
-  const isLoading = !responseData && !error
+  const { pageParams, onPageClick, updateSort, updateOrderBy, onNextClick, onPrevClick } = usePagination()
 
-  const onPageChange = (newPage: number) => {
-    setPageParams((prevParams) => ({
-      ...prevParams,
-      pageNumber: newPage,
-    }))
-    setShouldFetch(true)
-  }
+  const { accounts: responseData, error, isLoading } = useGetRetryAccountsPagination(pageParams, paginationData)
+  const accounts: IRetryAccount[] = responseData?.data || []
 
   const updateSorting = useCallback(
     (orderBy: string, isAsc: boolean): React.MouseEventHandler<HTMLDivElement> =>
       () => {
-        setPageParams((prevParams) => ({
-          ...prevParams,
-          orderBy: orderBy,
-          isAsc: isAsc,
-        }))
+        updateSort(isAsc)
+        updateOrderBy(orderBy)
       },
     []
   )
@@ -85,69 +65,27 @@ const RetryAccountsPage = ({ paginationData }: Props) => {
     {
       title: 'Wait Until(HK Time)',
       dataIndex: 'wait_until',
-      render: (e: string) => {
-        const date = dayjs(e, 'YYYY-MM-DD THH:mm:ss')
-        return dayjs.utc(date).local().format('YYYY-MM-DD HH:mm:ss')
-      },
     },
-    { title: 'Post Scrapped', dataIndex: 'post_scrapped_count' },
     { title: 'Login Count', dataIndex: 'login_count' },
+    { title: 'Last Login Date', dataIndex: 'last_login_dt'},
     {
       title: 'Username',
       dataIndex: 'username',
-      render: (e: string) => {
-        return (
-          <Tag
-            label={
-              <div className="flex items-center gap-1">
-                <Avatar />
-                {e}
-              </div>
-            }
-            variant="outline"
-          />
-        )
-      },
     },
     {
       title: 'Status',
       dataIndex: 'status',
-      render: (e: Status) => {
-        return <StatusTag status={e} />
-      },
-    },
-    {
-      title: 'Is Occupied',
-      dataIndex: 'is_occupied',
-      render: (e: boolean) => {
-        return e ? <CheckCircleIcon className="h-6 w-6 text-successful-600" /> : <XCircleIcon className="h-6 w-6 text-error-500" />
-      },
-    },
-    {
-      title: 'Is Enabled',
-      dataIndex: 'enabled',
-      render: (e: boolean) => {
-        return e ? <CheckCircleIcon className="h-6 w-6 text-successful-600" /> : <XCircleIcon className="h-6 w-6 text-error-500" />
-      },
-    },
-    {
-      title: 'Is Auth',
-      dataIndex: 'is_authenticated',
-      render: (e: boolean) => {
-        return e ? <CheckCircleIcon className="h-6 w-6 text-successful-600" /> : <XCircleIcon className="h-6 w-6 text-error-500" />
-      },
     },
 
     {
       title: 'Account Info',
       dataIndex: 'id',
-      render: (e: string) => (
-        <Link href="/accounts/retry/[id]" as={`/accounts/retry/${e}`} legacyBehavior>
-          <Button.Text loading={false}>Edit</Button.Text>
-        </Link>
-      ),
     },
   ]
+
+  const formatDate = (datetimeStr: string) => {
+    return dayjs(datetimeStr, 'YYYY-MM-DDTHH:mm:ss').local().format('DD MMM YYYY')
+  }
 
   return (
     <Card title="Accounts Table">
@@ -157,26 +95,45 @@ const RetryAccountsPage = ({ paginationData }: Props) => {
             columns={columns}
             thClassName={'text-sm font-normal text-text-primary items-center justify-center'}
             className="capitalize"
-            pageParams={pageParams}
+            isAsc={pageParams.isAsc}
+            orderBy={pageParams.orderBy}
             updateSorting={updateSorting}
           />
           <Table.Header columns={columns} />
-          <Table.Body>
-            {accounts?.map((e, index) => {
-              return <Table.Row key={`retry-account-table-${index}`} columns={columns} rowData={e} rowKey={index} />
-            })}
+          <Table.Body className="text-sm font-normal leading-5 text-black">
+            {accounts.map((e, index) => (
+              <Table.Row key={`table-row-${e.id}-${index}`} className="text-sm">
+                <Table.BodyCell key={`wait-until-${e.id}`}>{formatDate(e.wait_until)}</Table.BodyCell>
+                <Table.BodyCell key={`login-count-${e.id}`}>{e.login_count}</Table.BodyCell>
+                <Table.BodyCell key={`last-login-dt-${e.last_login_dt}`}></Table.BodyCell>
+                <Table.BodyCell key={`username-${e.id}`}>
+                  <div className="flex items-center text-nowrap text-accent1-600">{e.username}</div>
+                </Table.BodyCell>
+                <Table.BodyCell key={`status-${e.id}`}>
+                  <AccountBadges status={e.status}/>
+                </Table.BodyCell>
+                <Table.BodyCell key={e.id}>
+                  <Link href="/accounts/[id]" as={`/accounts/${e.id}`} legacyBehavior>
+                    <div className="flex w-full cursor-pointer flex-row items-center justify-center gap-2">
+                      <EditIcon size={16} className="fill-accent2-500" />
+                      <div className="font-semibold text-accent2-500">Edit</div>
+                    </div>
+                  </Link>
+                </Table.BodyCell>
+              </Table.Row>
+            ))}
           </Table.Body>
         </Table.Layout>
       </div>
-      <Pagination
-        isLoading={isLoading}
-        page={responseData.page}
-        size={responseData.size}
-        totalItems={responseData.total_items}
-        hasNext={responseData.has_next}
-        hasPrev={responseData.has_prev}
-        onPageChange={onPageChange}
-      />
+      {responseData.total_items > responseData.size && (
+        <Pagination<IRetryAccount[]>
+          isLoading={isLoading}
+          data={responseData}
+          onNextClick={onNextClick}
+          onPageClick={onPageClick}
+          onPrevClick={onPrevClick}
+        />
+      )}
     </Card>
   )
 }

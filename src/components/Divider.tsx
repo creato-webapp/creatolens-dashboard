@@ -1,11 +1,7 @@
 // Create a divider component that can be used to separate content
 // The divider should have a height of 1px and a background color of #DDE5EA
-const Divider = ({ margin = '1px', className="" }) => {
-  return (
-    <div className={className}>
-      <div style={{ height: '1px', backgroundColor: '#DDE5EA', margin: margin }} />
-    </div>
-  )
+const Divider = ({ className, ...props }: React.HTMLAttributes<HTMLHRElement>) => {
+  return <hr className={`border-t-DDE5EA m-1 divide-solid border-t-2 ${className}`} {...props} />
 }
 
 export default Divider

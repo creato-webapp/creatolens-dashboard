@@ -1,15 +1,15 @@
-import React, { HTMLAttributes } from 'react'
+import React from 'react'
+
 import { Title } from '@components/Typography'
+
 import { Button } from './Button'
 
-interface CardProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'> {
-  title?: string | undefined
+interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   customTitle?: React.ReactNode
   extra?: React.ReactNode
   subExtra?: React.ReactNode
-  className?: string | undefined
   coverImage?: string
-  description?: string
+  description?: React.ReactNode
   isDropdown?: boolean
 }
 
@@ -23,7 +23,7 @@ export default function Card({
   subExtra,
   description,
   onClick,
-  isDropdown = false,
+  isDropdown,
 }: CardProps) {
   // const { title, children, extra, className, coverImage, subExtra, description, onClick } = props
   return (

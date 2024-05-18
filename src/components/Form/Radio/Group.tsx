@@ -1,4 +1,5 @@
-import React, { useState, HTMLAttributes } from 'react'
+import React, { HTMLAttributes, useState } from 'react'
+
 import { Radio } from './Radio'
 interface Option {
   value: string

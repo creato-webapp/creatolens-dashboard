@@ -1,7 +1,9 @@
-import React, { useState, useCallback } from 'react'
-import BaseInput, { IBaseInputProps } from './BaseInput'
+import React, { useCallback, useState } from 'react'
+
 import EyeIcon from '@components/Icon/EyeIcon'
 import EyeOffIcon from '@components/Icon/EyeOffIcon'
+
+import BaseInput, { IBaseInputProps } from './BaseInput'
 interface IInputPasswordProps extends IBaseInputProps {
   showToggle?: boolean
 }

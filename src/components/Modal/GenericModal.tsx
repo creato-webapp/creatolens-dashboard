@@ -1,7 +1,9 @@
 import React, { PropsWithChildren } from 'react'
+
+import { useModals } from 'src/hooks/useModal'
+
 import { Button } from '../Button'
 import CrossIcon from '../Icon/CrossIcon'
-import { useModals } from 'src/hooks/useModal'
 
 export type GenericModalOptions = {
   title?: string
@@ -16,9 +18,9 @@ export interface GenericModalInterface extends PropsWithChildren {
 }
 
 export const GenericModal = ({ children, options = {} }: GenericModalInterface) => {
-  const { onCallbacks, closeModal} = useModals()
+  const { onCallbacks, closeModal } = useModals()
   const { closeable, cancelable, confirmable, footer, title } = options
-  
+
   return (
     <div className="fixed inset-0 z-10 h-screen w-screen overflow-y-auto bg-gray-600 bg-opacity-50">
       <div className=" absolute left-1/2 top-1/2 mx-auto w-128 -translate-x-1/2 -translate-y-1/2 transform rounded-md border bg-white p-5 shadow-lg">

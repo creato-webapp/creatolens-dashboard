@@ -1,4 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
+
+import ENDPOINT_BACKEND_ACCOUNT_SESSION from 'src/constants/endpoints/backend'
+
 import AccountInstance from '../../axiosInstance/Account'
 
 export default function AccountHandler(req: NextApiRequest, res: NextApiResponse) {
@@ -10,7 +13,7 @@ export default function AccountHandler(req: NextApiRequest, res: NextApiResponse
 
   switch (method) {
     case 'POST': {
-      AccountInstance.post(`account-session/renewal/${id}`, body)
+      AccountInstance.post(`${ENDPOINT_BACKEND_ACCOUNT_SESSION.RENEW_SESSION}/${id}`, body)
         .then((response) => {
           res.status(200).json(response.data)
         })

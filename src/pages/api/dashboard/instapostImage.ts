@@ -1,4 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
+
 import MetaInstance from '@api/axiosInstance/Meta'
 
 export default async function dashboardPostPicQueryHandler(req: NextApiRequest, res: NextApiResponse) {
@@ -16,7 +17,6 @@ export default async function dashboardPostPicQueryHandler(req: NextApiRequest, 
         batch_id: batch_id, // Assuming you need the batch ID as a query parameter
       },
     })
-
 
     return res.end(response.data) // Send the image data directly without converting to JSON
   } catch (error) {

@@ -1,4 +1,4 @@
-import React, { ReactNode, createContext, useCallback, useContext, useState } from 'react'
+import React, { ReactNode, createContext, useCallback, useState } from 'react'
 
 // Assuming Status is correctly imported from '@components/Dialogue'
 
@@ -19,7 +19,7 @@ type DialogueContextType = {
   addDialogue: (message: string, status: Status) => void
 }
 
-const DialogueContext = createContext<DialogueContextType | undefined>(undefined)
+export const DialogueContext = createContext<DialogueContextType | undefined>(undefined)
 
 let idCounter = 0
 
@@ -37,12 +37,4 @@ export const DialogueProvider: React.FC<{ children: ReactNode }> = ({ children }
   }, [])
 
   return <DialogueContext.Provider value={{ dialogues, addDialogue }}>{children}</DialogueContext.Provider>
-}
-
-export const useDialogues = () => {
-  const context = useContext(DialogueContext)
-  if (context === undefined) {
-    throw new Error('useDialogues must be used within a DialogueProvider')
-  }
-  return context
 }
