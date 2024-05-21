@@ -47,7 +47,7 @@ const NavBar: React.FC<NavBarProps> = ({ logo, pages, isLoggedIn, onLogin, onLog
         )}
       </div>
       <Link href="/">
-        <div className="mx-8 my-auto shrink-0 md:mx-16">
+        <div className="mx-8 my-auto shrink-0 md:mx-2 lg:mx-16">
           <img src={logo} alt="Logo" className="h-12 md:h-16" />
         </div>
       </Link>
