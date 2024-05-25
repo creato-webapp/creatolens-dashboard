@@ -112,7 +112,14 @@ const AccountsErrorPage = (paginationData: PaginationMetadata<IAccountError[]>) 
       ></Form.BaseInput>
       <div className="flex gap-3">
         <Table.Layout>
-          <Table.Header columns={columns} />
+          <Table.Header
+            columns={columns}
+            thClassName={'text-sm font-normal text-text-primary items-center justify-center'}
+            className="capitalize"
+            orderBy={pageParams.orderBy}
+            isAsc={pageParams.isAsc}
+            updateSorting={updateSorting}
+          />
           <Table.Body>
             {accountError.map((e, index) => (
               <Table.Row key={`account-error-${index}`} columns={columns} rowData={e} rowKey={index} />

@@ -52,7 +52,7 @@ const RetryAccountsPage = ({ paginationData }: Props) => {
         updateSort(isAsc)
         updateOrderBy(orderBy)
       },
-    [updateOrderBy, updateSort]
+    []
   )
 
   if (error) {
@@ -138,10 +138,10 @@ const RetryAccountsPage = ({ paginationData }: Props) => {
             columns={columns}
             thClassName={'text-sm font-normal text-text-primary items-center justify-center'}
             className="capitalize"
-            pageParams={pageParams}
+            isAsc={pageParams.isAsc}
+            orderBy={pageParams.orderBy}
             updateSorting={updateSorting}
           />
-          <Table.Header columns={columns} />
           <Table.Body>
             {accounts?.map((e, index) => {
               return <Table.Row key={`retry-account-table-${index}`} columns={columns} rowData={e} rowKey={index} />

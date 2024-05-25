@@ -5,17 +5,12 @@ export interface HeaderProps extends React.TableHTMLAttributes<HTMLTableSectionE
   headerIcon?: React.ReactNode
   trClassName?: string
   thClassName?: string
-  sort?: 'asc' | 'desc'
-  pageParams?: {
-    pageNumber: number
-    pageSize: number
-    orderBy: string
-    isAsc: boolean
-  }
+  orderBy?: string
+  isAsc: boolean
   updateSorting?: (orderBy: string, isAsc: boolean) => React.MouseEventHandler<HTMLDivElement>
 }
 
-const Header: React.FC<HeaderProps> = ({ className, children, columns, trClassName, thClassName, pageParams, updateSorting, ...res }) => {
+const Header: React.FC<HeaderProps> = ({ className, children, columns, trClassName, thClassName, orderBy, isAsc, updateSorting, ...res }) => {
   return (
     <thead className={`bg-neutral-100 uppercase ${className}`} {...res}>
       <tr className={trClassName}>
@@ -29,22 +24,14 @@ const Header: React.FC<HeaderProps> = ({ className, children, columns, trClassNa
                   <div onClick={updateSorting(e.dataIndex, true)} className="cursor-pointer">
                     <SortingIcon
                       fillColor={`${
-                        pageParams?.orderBy === e.dataIndex
-                          ? pageParams.isAsc === true
-                            ? 'fill-accent1-500'
-                            : 'fill-interface-hover'
-                          : 'fill-interface-hover'
+                        orderBy === e.dataIndex ? (isAsc === true ? 'fill-accent1-500' : 'fill-interface-hover') : 'fill-interface-hover'
                       }`}
                     />
                   </div>
                   <div onClick={updateSorting(e.dataIndex, false)} className="cursor-pointer">
                     <SortingIcon
                       fillColor={`${
-                        pageParams?.orderBy === e.dataIndex
-                          ? pageParams.isAsc === false
-                            ? 'fill-accent1-500'
-                            : 'fill-interface-hover'
-                          : 'fill-interface-hover'
+                        orderBy === e.dataIndex ? (isAsc === false ? 'fill-accent1-500' : 'fill-interface-hover') : 'fill-interface-hover'
                       }`}
                       className="rotate-180"
                     />

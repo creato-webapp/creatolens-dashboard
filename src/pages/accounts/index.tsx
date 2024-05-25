@@ -191,13 +191,15 @@ const AccountsPage = ({ paginationData }: Props) => {
               columns={columns}
               thClassName={'text-sm font-normal text-text-primary items-center justify-center'}
               className="capitalize"
-              pageParams={pageParams}
-              updateSorting={() => updateSorting('created_at', createDateOrder === 'asc')}
+              orderBy={pageParams.orderBy}
+              isAsc={pageParams.isAsc}
+              updateSorting={updateSorting}
             />
-            <Table.Body className="text-sm font-normal leading-5 text-black">
-              {accounts.map((e, index) => (
-                <Table.Row key={`accounts-table-${index}`} columns={columns} className="text-sm" rowData={e} rowKey={index} />
-              ))}
+            <Table.Body className="w-full text-sm font-normal leading-5 text-black">
+              {!isLoading &&
+                accounts.map((e, index) => {
+                  return <Table.Row key={`accounts-table-${index}`} columns={columns} className="text-sm" rowData={e} rowKey={index} />
+                })}
             </Table.Body>
           </Table.Layout>
         </div>
@@ -224,9 +226,7 @@ const AccountsPage = ({ paginationData }: Props) => {
         </div>
 
         <div className="flex w-full flex-col justify-center gap-16 bg-none md:hidden">
-          {accounts?.map((e, index) => (
-            <ResponsiveAccountCard columns={columns} rowData={e} key={`account_data_${index}`} />
-          ))}
+          {!isLoading && accounts?.map((e, index) => <ResponsiveAccountCard columns={columns} rowData={e} key={`account_data_${index}`} />)}
         </div>
         {data && data.total_items > 10 && (
           <Pagination<IAccount[]> isLoading={isLoading} data={data} onNextClick={onNextClick} onPrevClick={onPrevClick} onPageClick={onPageClick} />

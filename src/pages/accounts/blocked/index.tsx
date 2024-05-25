@@ -137,7 +137,8 @@ const BlockedAccountsPage = ({ paginationData }: Props) => {
             columns={columns}
             thClassName={'text-sm font-normal text-text-primary items-center justify-center'}
             className="capitalize"
-            pageParams={pageParams}
+            orderBy={pageParams.orderBy}
+            isAsc={pageParams.isAsc}
             updateSorting={updateSorting}
           />
           <Table.Body className="text-sm font-normal leading-5 text-black">

@@ -110,7 +110,7 @@ const AccountsSessionPage = ({ paginationData }: Props) => {
       ></Form.BaseInput>
       <div className="flex gap-3">
         <Table.Layout>
-          <Table.Header columns={columns} />
+          <Table.Header columns={columns} isAsc={pageParams.isAsc} orderBy={pageParams.orderBy} />
           <Table.Body>
             {!isLoading && accountSession.map((e, index) => (
               <Table.Row key={`accountSession-table-row-${index}`} columns={columns} rowData={e} rowKey={index} />
