@@ -1,16 +1,17 @@
+import { PaginationMetadata } from '@hooks/usePagination'
 import React, { useCallback } from 'react'
-interface PaginationProps {
+interface PaginationProps<T> {
   isLoading: boolean
-  page: number
-  size: number
-  totalItems: number
-  hasNext: boolean
-  hasPrev: boolean
-  onPageChange: (page: number) => void
+  onPrevClick: () => void
+  onNextClick: () => void
+  onPageClick: (arg: number) => void
+  data: PaginationMetadata<T>
 }
 
-const Pagination: React.FC<PaginationProps> = ({ isLoading, page, size, totalItems, hasNext, hasPrev, onPageChange }) => {
-  const totalPages = size ? Math.ceil(totalItems / size) : 0
+const Pagination = <T,>({ data, onPrevClick, onNextClick, onPageClick }: PaginationProps<T>) => {
+  const { total_items, size, page } = data
+
+  const totalPages = size ? Math.ceil(total_items / size) : 0
   const pagesToShow = 4
 
   const generatePageNumbers = useCallback(() => {
@@ -21,41 +22,18 @@ const Pagination: React.FC<PaginationProps> = ({ isLoading, page, size, totalIte
     return pageNumbers
   }, [totalPages])
 
-  const handlePrevClick = useCallback(() => {
-    if (hasPrev) {
-      onPageChange(page - 1)
-    }
-  }, [hasPrev, onPageChange, page])
-
-  const handleNextClick = useCallback(() => {
-    if (hasNext) {
-      onPageChange(page + 1)
-    }
-  }, [hasNext, onPageChange, page])
-
-  const handlePageClick = useCallback(
-    (page: number) => () => {
-      onPageChange(page)
-    },
-    [onPageChange]
-  )
-
   const pageNumbers = generatePageNumbers()
 
-  if (isLoading) {
-    return <div>Loading...</div>
-  }
-
-  const renderPageButton = (pageNumber: number) => {
+  const renderPageButton = (arg: number) => {
     return (
       <button
-        key={pageNumber}
+        key={arg}
         className={`${
-          pageNumber === page ? 'bg-accent1-500 text-white ' : 'bg-bg-dark text-text-primary'
+          arg === page ? 'bg-accent1-500 text-white ' : 'bg-bg-dark text-text-primary'
         } aspect-square h-10 w-10 rounded-lg  hover:bg-interface-hover hover:text-text-secondary`}
-        onClick={handlePageClick(pageNumber)}
+        onClick={() => onPageClick(arg)}
       >
-        <h4>{pageNumber}</h4>
+        <h4>{arg}</h4>
       </button>
     )
   }
@@ -65,8 +43,9 @@ const Pagination: React.FC<PaginationProps> = ({ isLoading, page, size, totalIte
       <div className="flex flex-row gap-2">
         <button
           className={` h-10 w-10 rounded-lg bg-bg-dark text-text-primary disabled:bg-bg-disabled disabled:text-disabled `}
-          onClick={handlePrevClick}
+          onClick={onPrevClick}
           disabled={page <= 1}
+          key={`prev-${page}`}
         >
           {'<'}
         </button>
@@ -84,8 +63,9 @@ const Pagination: React.FC<PaginationProps> = ({ isLoading, page, size, totalIte
 
         <button
           className={`h-10 w-10 rounded-lg bg-bg-dark text-text-primary disabled:bg-bg-disabled disabled:text-disabled `}
-          onClick={handleNextClick}
+          onClick={onNextClick}
           disabled={page >= totalPages}
+          key={`next-${page}`}
         >
           {'>'}
         </button>

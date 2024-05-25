@@ -48,40 +48,18 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
 
 const AccountsPage = ({ paginationData }: Props) => {
   const [createDateOrder, setCreateDateOrder] = useState<'asc' | 'desc'>('desc')
-  const { pageParams, setPageParams } = usePagination()
-  const { data, isLoading, setShouldFetch } = useGetAccountsPagination(pageParams, false, paginationData)
+  const { pageParams, onPageClick, updateSort, updateOrderBy, onNextClick, onPrevClick } = usePagination()
+  const { data, isLoading } = useGetAccountsPagination(pageParams, false, paginationData)
   const accounts: IAccount[] = useMemo(() => data?.data || [], [data])
-  const responseData = data || {
-    data: [],
-    has_next: false,
-    has_prev: false,
-    page: 1,
-    size: 0,
-    total_items: 0,
-  }
-
-  const onPageChange = (newPage: number) => {
-    setPageParams((prevParams) => ({
-      ...prevParams,
-      pageNumber: newPage,
-    }))
-    setShouldFetch(true)
-  }
 
   const updateSorting = useCallback(
-    (orderBy: string, isAsc: boolean): React.MouseEventHandler<HTMLDivElement> =>
+    (orderBy: string): React.MouseEventHandler<HTMLDivElement> =>
       () => {
-        setPageParams((prevParams) => ({
-          ...prevParams,
-          orderBy: orderBy,
-          isAsc: isAsc,
-        }))
+        updateOrderBy(orderBy)
+        updateSort(!pageParams.isAsc)
       },
-    [setPageParams]
+    [pageParams.isAsc, updateOrderBy, updateSort]
   )
-  if (isLoading) {
-    return <div>Loading...</div>
-  }
 
   const IconRender = (e: boolean) => {
     return (
@@ -236,12 +214,9 @@ const AccountsPage = ({ paginationData }: Props) => {
               ]}
               onValueChange={(value) => {
                 setCreateDateOrder(value as 'asc' | 'desc')
-                setPageParams((prevParams) => ({
-                  ...prevParams,
-                  orderBy: 'created_at',
-                  isAsc: value === 'asc' ? true : false,
-                }))
-                onPageChange(1)
+                updateOrderBy('created_at')
+                updateSort(value === 'asc' ? true : false)
+                onPageClick(1)
               }}
               dropDownSizes={['m', 'm', 'm']}
             />
@@ -253,15 +228,9 @@ const AccountsPage = ({ paginationData }: Props) => {
             <ResponsiveAccountCard columns={columns} rowData={e} key={`account_data_${index}`} />
           ))}
         </div>
-        <Pagination
-          isLoading={isLoading}
-          page={responseData.page}
-          size={responseData.size}
-          totalItems={responseData.total_items}
-          hasNext={responseData.has_next}
-          hasPrev={responseData.has_prev}
-          onPageChange={onPageChange}
-        />
+        {data && data.total_items > 10 && (
+          <Pagination<IAccount[]> isLoading={isLoading} data={data} onNextClick={onNextClick} onPrevClick={onPrevClick} onPageClick={onPageClick} />
+        )}
       </Card>
     </div>
   )

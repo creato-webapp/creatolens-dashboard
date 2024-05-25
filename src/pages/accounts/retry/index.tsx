@@ -12,8 +12,8 @@ import Pagination from '@components/Pagination'
 import { useGetRetryAccountsPagination } from 'src/hooks/useRetryAccount'
 import { getRetryAccountsPagination } from '@services/Account/RetryAccount'
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
-import { PaginationMetadata } from '@services/Account/AccountInterface'
 import dayjs from '@services/Dayjs'
+import { PaginationMetadata, usePagination } from '@hooks/usePagination'
 
 type Props = {
   paginationData: PaginationMetadata<IRetryAccount[]>
@@ -43,35 +43,18 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
 }
 
 const RetryAccountsPage = ({ paginationData }: Props) => {
-  const [pageParams, setPageParams] = useState({
-    pageNumber: 1,
-    pageSize: 10,
-    orderBy: 'username',
-    isAsc: false,
-  })
-  const [shouldFetch, setShouldFetch] = useState(false)
-  const { accounts: responseData, error } = useGetRetryAccountsPagination(pageParams, shouldFetch, paginationData)
-  const accounts: IRetryAccount[] = responseData?.data || []
-  const isLoading = !responseData && !error
+  const { pageParams, onPageClick, updateSort, updateOrderBy, onNextClick, onPrevClick } = usePagination()
 
-  const onPageChange = (newPage: number) => {
-    setPageParams((prevParams) => ({
-      ...prevParams,
-      pageNumber: newPage,
-    }))
-    setShouldFetch(true)
-  }
+  const { accounts: responseData, error, isLoading } = useGetRetryAccountsPagination(pageParams, paginationData)
+  const accounts: IRetryAccount[] = responseData?.data || []
 
   const updateSorting = useCallback(
     (orderBy: string, isAsc: boolean): React.MouseEventHandler<HTMLDivElement> =>
       () => {
-        setPageParams((prevParams) => ({
-          ...prevParams,
-          orderBy: orderBy,
-          isAsc: isAsc,
-        }))
+        updateSort(isAsc)
+        updateOrderBy(orderBy)
       },
-    []
+    [updateOrderBy, updateSort]
   )
 
   if (error) {
@@ -168,15 +151,15 @@ const RetryAccountsPage = ({ paginationData }: Props) => {
           </Table.Body>
         </Table.Layout>
       </div>
-      <Pagination
-        isLoading={isLoading}
-        page={responseData.page}
-        size={responseData.size}
-        totalItems={responseData.total_items}
-        hasNext={responseData.has_next}
-        hasPrev={responseData.has_prev}
-        onPageChange={onPageChange}
-      />
+      {responseData.total_items > responseData.size && (
+        <Pagination<IRetryAccount[]>
+          isLoading={isLoading}
+          data={responseData}
+          onNextClick={onNextClick}
+          onPageClick={onPageClick}
+          onPrevClick={onPrevClick}
+        />
+      )}
     </Card>
   )
 }

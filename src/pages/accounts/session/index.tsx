@@ -3,13 +3,14 @@ import Card from '@components/Card'
 import { Table } from '@components/Table'
 import Link from 'next/link'
 import { useAccountSessionPagination } from 'src/hooks/useAccountSession'
-import { getSessionPagination, PaginationParams, PaginationMetadata } from '@services/Account/Session'
+import { getSessionPagination } from '@services/Account/Session'
 import { Form } from '@components/Form'
 import Pagination from '@components/Pagination'
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import { IGenericRowData } from '@components/Table/Row'
 import { Cookies } from '@lib/Account/Account/interface'
 import dayjs from '@services/Dayjs'
+import { PaginationMetadata, usePagination } from '@hooks/usePagination'
 
 type Props = {
   paginationData: PaginationMetadata<IAccountSession[]>
@@ -52,33 +53,13 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
 }
 
 const AccountsSessionPage = ({ paginationData }: Props) => {
-  const [pageParams, setPageParams] = useState<AccountSessionPaginationParams>({
-    username: null,
-    pageNumber: 1,
-    pageSize: 10,
-    orderBy: 'created_at',
-    isAsc: false,
-  })
-
+  const [filter, setFilter] = useState('')
   const onChange: React.ChangeEventHandler<HTMLInputElement> = useCallback((e) => {
-    setPageParams(() => ({
-      pageNumber: 1,
-      pageSize: 10,
-      orderBy: 'created_at',
-      isAsc: false,
-      username: e.target.value,
-    }))
+    if (!e.target.value || e.target.value === ' ') return
+    setFilter(e.target.value)
   }, [])
-  const [shouldFetch, setShouldFetch] = useState(false)
-  const { sessions: responseData, isLoading, error } = useAccountSessionPagination(pageParams, shouldFetch, paginationData)
-
-  const onPageChange = (newPage: number) => {
-    setPageParams((prevParams) => ({
-      ...prevParams,
-      pageNumber: newPage,
-    }))
-    setShouldFetch(true)
-  }
+  const { pageParams, onPageClick, onNextClick, onPrevClick } = usePagination()
+  const { sessions: responseData, isLoading, error } = useAccountSessionPagination(pageParams, filter, paginationData)
 
   const accountSession: IAccountSession[] = responseData?.data ? responseData.data : []
   if (error) {
@@ -142,14 +123,12 @@ const AccountsSessionPage = ({ paginationData }: Props) => {
           </Table.Body>
         </Table.Layout>
       </div>
-      <Pagination
+      <Pagination<IAccountSession[]>
         isLoading={isLoading}
-        page={responseData.page}
-        size={responseData.size}
-        totalItems={responseData.total_items}
-        hasNext={responseData.has_next}
-        hasPrev={responseData.has_prev}
-        onPageChange={onPageChange}
+        data={responseData}
+        onNextClick={onNextClick}
+        onPrevClick={onPrevClick}
+        onPageClick={onPageClick}
       />
     </Card>
   )
