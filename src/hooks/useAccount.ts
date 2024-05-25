@@ -11,7 +11,7 @@ import { PaginationMetadata, PaginationParams } from '@services/Account/AccountI
 
 export const useAccount = (id: string, defaultShouldFetch: boolean = true, fallbackData?: IAccount | null) => {
   const [shouldFetch, setShouldFetch] = useState(defaultShouldFetch)
-  const { data, error, mutate, ...swr } = useSWR(shouldFetch ? [id] : null, (id) => getAccount(id), {
+  const { data, error, isLoading, mutate, ...swr } = useSWR(shouldFetch ? id : null, (id) => getAccount(id), {
     refreshInterval: 0,
     fallbackData: fallbackData,
   })
@@ -30,8 +30,8 @@ export const useAccount = (id: string, defaultShouldFetch: boolean = true, fallb
 
   return {
     data,
-    isLoading: !error && !data,
     error,
+    isLoading: isLoading,
     updateAccount,
     updateSession,
     setShouldFetch,
@@ -46,14 +46,15 @@ export const useGetAccountsPagination = (
   fallbackData?: PaginationMetadata<IAccount[]>
 ) => {
   const [shouldFetch, setShouldFetch] = useState(defaultShouldFetch)
-  const { data, error, mutate, ...swr } = useSWR(shouldFetch ? [paginationParams] : null, getAccountsPagination, {
+  const { data, isLoading, error, mutate, ...swr } = useSWR(paginationParams, getAccountsPagination, {
     refreshInterval: 0,
     fallbackData: fallbackData,
+    revalidateOnMount: false,
   })
 
   return {
     data,
-    isLoading: !error && !data,
+    isLoading: isLoading,
     error,
     shouldFetch,
     setShouldFetch,

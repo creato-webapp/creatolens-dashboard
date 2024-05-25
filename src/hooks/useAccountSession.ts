@@ -7,14 +7,14 @@ export const useAccountSessionPagination = (
   shouldFetch: boolean = true,
   fallbackData?: PaginationMetadata<IAccountSession[]>
 ) => {
-  const { data, error, mutate, ...swr } = useSWR(shouldFetch ? [paginationParams] : null, getSessionPagination, {
+  const { data, error, mutate, isLoading, ...swr } = useSWR({ ...paginationParams, username }, getSessionPagination, {
     refreshInterval: 0,
     fallbackData: fallbackData,
   })
 
   return {
     sessions: data,
-    isLoading: !error && !data,
+    isLoading: isLoading,
     error: error,
     mutate,
     ...swr,

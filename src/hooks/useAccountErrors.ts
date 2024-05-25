@@ -1,21 +1,21 @@
 import useSWR from 'swr'
 import { getErrorPagination } from '@services/Account/AccountErros'
-import { PaginationMetadata, PaginationParams } from '@services/Account/AccountInterface'
 import { IAccountError } from '@lib/Account/AccountErrors/interface'
+import { PaginationMetadata, PaginationParams } from './usePagination'
 
 export const useAccountErrorPagination = (
   paginationParams: PaginationParams,
-  shouldFetch: boolean = true,
+  username?: string,
   fallbackData?: PaginationMetadata<IAccountError[]>
 ) => {
-  const { data, error, mutate, ...swr } = useSWR(shouldFetch ? [paginationParams] : null, getErrorPagination, {
+  const { data, error, mutate, isLoading, ...swr } = useSWR({ ...paginationParams, username }, getErrorPagination, {
     refreshInterval: 0,
     fallbackData: fallbackData,
   })
 
   return {
     errors: data,
-    isLoading: !error && !data,
+    isLoading: isLoading,
     error: error,
     mutate,
     ...swr,
