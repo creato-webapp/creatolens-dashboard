@@ -3,7 +3,7 @@ import { IBlockedAccount } from '@lib/Account/Account/interface'
 import { getBlockedAccountsPagination, getBlockedAccount, updateBlockedAccount } from '@services/Account/BlockAccount'
 import { PaginationMetadata, PaginationParams } from './usePagination'
 
-export const useBlockAccount = (id: string, shouldFetch: boolean = true, fallbackData?: IBlockedAccount | null) => {
+export const useBlockAccount = (id: string, shouldFetch: boolean = true, fallbackData?: IBlockedAccount) => {
   const { data, error, mutate, isLoading, ...swr } = useSWR(shouldFetch ? id : null, (id) => getBlockedAccount(id), {
     refreshInterval: 0,
     fallbackData: fallbackData,

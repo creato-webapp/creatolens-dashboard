@@ -112,7 +112,7 @@ const AccountsSessionPage = ({ paginationData }: Props) => {
         <Table.Layout>
           <Table.Header columns={columns} />
           <Table.Body>
-            {accountSession.map((e, index) => (
+            {!isLoading && accountSession.map((e, index) => (
               <Table.Row key={`accountSession-table-row-${index}`} columns={columns} rowData={e} rowKey={index} />
             ))}
           </Table.Body>

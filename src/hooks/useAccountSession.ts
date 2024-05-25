@@ -5,7 +5,7 @@ import { PaginationMetadata, PaginationParams } from './usePagination'
 
 export const useAccountSessionPagination = (
   paginationParams: PaginationParams,
-  shouldFetch: boolean = true,
+  username?: string,
   fallbackData?: PaginationMetadata<IAccountSession[]>
 ) => {
   const { data, error, mutate, isLoading, ...swr } = useSWR({ ...paginationParams, username }, getSessionPagination, {
