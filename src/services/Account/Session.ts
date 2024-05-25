@@ -2,22 +2,7 @@
 import { AxiosRequestConfig } from 'axios'
 import { Fetcher } from '../fetcher'
 import { IAccountSession } from 'src/pages/accounts/session'
-
-export interface PaginationParams {
-  pageNumber: number
-  pageSize: number
-  orderBy: string
-  isAsc: boolean
-}
-
-export interface PaginationMetadata<T> {
-  data?: T
-  has_next: boolean
-  has_prev: boolean
-  page: number
-  size: number
-  total_items: number
-}
+import { PaginationMetadata, PaginationParams } from '@hooks/usePagination'
 
 export async function getSessionPagination(
   params: PaginationParams,

@@ -2,7 +2,7 @@
 import { AxiosRequestConfig } from 'axios'
 import { Fetcher } from '../fetcher'
 import { Cookies, IRetryAccount } from '@lib/Account/Account/interface'
-import { PaginationParams, PaginationMetadata } from './AccountInterface'
+import { PaginationMetadata, PaginationParams } from '@hooks/usePagination'
 
 type PartialAccount = Partial<{
   id: string

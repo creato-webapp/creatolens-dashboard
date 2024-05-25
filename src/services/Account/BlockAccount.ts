@@ -3,7 +3,7 @@ import { AxiosRequestConfig } from 'axios'
 import { Fetcher } from '../fetcher'
 import { IBlockedAccount } from '@lib/Account/Account/interface'
 import { Cookies } from '@lib/Account/Account/interface'
-import { PaginationParams, PaginationMetadata } from './AccountInterface'
+import { PaginationMetadata, PaginationParams } from '@hooks/usePagination'
 
 type PartialAccount = Partial<{
   id: string
