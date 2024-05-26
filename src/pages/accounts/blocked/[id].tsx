@@ -10,7 +10,7 @@ import DynamicForm from '@components/Form/DynamicForm'
 import dayjs from '@services/Dayjs'
 
 type Props = {
-  accountData: IBlockedAccount | null
+  accountData: IBlockedAccount | undefined
 }
 
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext): Promise<GetServerSidePropsResult<Props>> => {

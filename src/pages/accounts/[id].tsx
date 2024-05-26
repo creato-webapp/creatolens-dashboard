@@ -12,7 +12,7 @@ import Image from 'next/image'
 import dayjs from '@services/Dayjs'
 
 type Props = {
-  accountData: IAccount | null
+  accountData: IAccount | undefined
   isCreate: boolean
 }
 
@@ -20,7 +20,7 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
   const id = context.query.id as string
   const isCreate = id === 'create-account'
   if (isCreate) {
-    return { props: { accountData: null, isCreate } }
+    return { props: { accountData: undefined, isCreate } }
   }
   const res = await getAccount(id, {
     headers: {

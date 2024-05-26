@@ -29,12 +29,13 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
 
 const AccountsRetryPage = ({ accountData }: Props) => {
   const [isLoading, setIsLoading] = useState(false)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [shouldFetch, setShouldFetch] = useState(false)
   const router = useRouter()
   const { id } = router.query
-  const isCreate = id === 'create-account'
+  // const isCreate = id === 'create-account'
 
-  const { data, error, updateRetryAccount: callUpdateAccount } = useRetryAccount(id as string, shouldFetch, isCreate ? undefined : accountData)
+  const { data, error, updateRetryAccount: callUpdateAccount } = useRetryAccount(id as string, accountData)
 
   if (error) {
     console.error(data)
