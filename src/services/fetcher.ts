@@ -22,7 +22,8 @@ instance.interceptors.response.use(
   function (error: AxiosError) {
     if (axios.isAxiosError(error)) {
       if (typeof window !== 'undefined') {
-        window.alert(error.message)
+        // window.alert(error.message)
+        console.error(error.message)
       }
 
       console.error(error.response?.data)
@@ -31,14 +32,52 @@ instance.interceptors.response.use(
   }
 )
 
+// export const Fetcher = {
+//   GET: <T>(url: string, customConfig?: AxiosRequestConfig) => FetcherInstance.get<T>(url, customConfig).then((res) => res.data),
+
+//   POST: <T, D = {}>(url: string, data?: D, customConfig?: AxiosRequestConfig) =>
+//     FetcherInstance.post<T>(url, data, customConfig).then((res) => res.data),
+
+//   PATCH: <T, D = {}>(url: string, data?: Partial<D>, customConfig?: AxiosRequestConfig) =>
+//     FetcherInstance.patch<T>(url, data, customConfig).then((res) => res.data),
+
+//   DELETE: <T>(url: string, customConfig?: AxiosRequestConfig) => FetcherInstance.delete<T>(url, customConfig).then((res) => res.data),
+// }
+
+export type CancellablePromise<T> = Promise<T> & {
+  cancel: () => void
+}
+
 export const Fetcher = {
-  GET: <T>(url: string, customConfig?: AxiosRequestConfig) => instance.get<T>(url, customConfig).then((res) => res.data),
+  GET: <T>(url: string, customConfig?: AxiosRequestConfig) => {
+    const controller = new AbortController()
+    const config = { ...customConfig, signal: controller.signal }
+    const promise = FetcherInstance.get<T>(url, config).then((res) => res.data)
+    ;(promise as CancellablePromise<T>).cancel = () => controller.abort()
+    return promise as CancellablePromise<T>
+  },
 
-  POST: <T, D = Record<string, unknown>>(url: string, data?: D, customConfig?: AxiosRequestConfig) =>
-    instance.post<T>(url, data, customConfig).then((res) => res.data),
+  POST: <T, D = {}>(url: string, data?: D, customConfig?: AxiosRequestConfig) => {
+    const controller = new AbortController()
+    const config = { ...customConfig, signal: controller.signal }
+    const promise = FetcherInstance.post<T>(url, data, config).then((res) => res.data)
+    ;(promise as CancellablePromise<T>).cancel = () => controller.abort()
+    return promise as CancellablePromise<T>
+  },
 
-  PATCH: <T, D = Record<string, unknown>>(url: string, data?: Partial<D>, customConfig?: AxiosRequestConfig) =>
-    instance.patch<T>(url, data, customConfig).then((res) => res.data),
+  PATCH: <T, D = {}>(url: string, data?: Partial<D>, customConfig?: AxiosRequestConfig) => {
+    const controller = new AbortController()
+    const config = { ...customConfig, signal: controller.signal }
+    const promise = FetcherInstance.patch<T>(url, data, config).then((res) => res.data)
+    ;(promise as CancellablePromise<T>).cancel = () => controller.abort()
+    return promise as CancellablePromise<T>
+  },
 
-  DELETE: <T>(url: string, customConfig?: AxiosRequestConfig) => instance.delete<T>(url, customConfig).then((res) => res.data),
+  DELETE: <T>(url: string, customConfig?: AxiosRequestConfig) => {
+    const controller = new AbortController()
+    const config = { ...customConfig, signal: controller.signal }
+    const promise = FetcherInstance.delete<T>(url, config).then((res) => res.data)
+    ;(promise as CancellablePromise<T>).cancel = () => controller.abort()
+    return promise as CancellablePromise<T>
+  },
 }

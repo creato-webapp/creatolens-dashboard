@@ -26,7 +26,7 @@ export interface MostRepeatedPost {
   second_latest_created_at?: string
   caption?: string
   shortcode?: string
-  user: UserProfile
+  username: string
   batch_id?: string
 }
 
@@ -84,7 +84,7 @@ export async function getMostRepeatedPost(
 ): Promise<MostRepeatedPost | undefined> {
   const response = await Fetcher.GET<{
     data: PostData[]
-  }>('/api/dashboard/', {
+  }>('/api/dashboard', {
     ...customConfig,
     params: {
       accId: data.args.accId,
@@ -101,7 +101,9 @@ export async function getMostRepeatedPost(
     )
 
     const maxCountImageResponse = await Fetcher.GET<{
-      user: UserProfile
+      data: {
+        username: string
+      }
     }>('/api/dashboard/instaProfile', {
       ...customConfig,
       params: {
@@ -111,7 +113,7 @@ export async function getMostRepeatedPost(
 
     mostRepeatedPost = {
       ...maxCountImage,
-      user: maxCountImageResponse.user,
+      username: maxCountImageResponse.data?.username,
     }
   }
   if (mostRepeatedPost) {

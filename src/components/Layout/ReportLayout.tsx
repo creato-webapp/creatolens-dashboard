@@ -52,6 +52,7 @@ const ReportLayout = (props: Prop) => {
   const [imageUrl, setImageUrl] = useState<string>('')
   const [avatarImageUrl, setAvatarImageUrl] = useState<string>('')
   const [profileUrl, setProfileUrl] = useState<string>('')
+  const prevProfileId = useRef<string | undefined>(undefined)
 
   const instaBotList = useMemo(() => {
     if (!botList || botList.length <= 0) return []
@@ -75,16 +76,26 @@ const ReportLayout = (props: Prop) => {
   }, [mostRepeatedPost])
 
   useEffect(() => {
-    if (!selectedAccount?.profile_id) {
-      setAvatarImageUrl('')
-      return
+    const fetchUserImage = async () => {
+      if (!selectedAccount?.profile_id) {
+        setAvatarImageUrl('')
+        return
+      }
+      if (prevProfileId.current !== selectedAccount.profile_id) {
+        const apiUrl = `/api/dashboard/userImage?profile_id=${selectedAccount.profile_id}`
+        try {
+          const res = await axios.get(apiUrl)
+          setAvatarImageUrl(res.data.data.image)
+          setProfileUrl(res.data.data.url)
+          prevProfileId.current = selectedAccount.profile_id
+        } catch (error) {
+          console.error('Error fetching user image:', error)
+        }
+      }
     }
-    const apiUrl = `/api/dashboard/userImage?profile_id=${selectedAccount.profile_id}`
-    axios.get(apiUrl).then((res) => {
-      setAvatarImageUrl(res.data.data.image)
-      setProfileUrl(res.data.data.url)
-    })
-  }, [selectedAccount])
+
+    fetchUserImage()
+  }, [selectedAccount?.profile_id])
 
   if (!botList || botList.length == 0) {
     return (
@@ -223,15 +234,17 @@ const ReportLayout = (props: Prop) => {
           icon="./Repeat.svg"
           isLoading={loading.mostRepeatedPostIsLoading}
         >
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-col flex-wrap gap-2">
             <div>
               {loading.mostRepeatedPostIsLoading ? (
                 <Skeleton />
               ) : mostRepeatedPost ? (
-                <Badges size="sm" status="text-secondary">
-                  <ClockIcon />
-                  {dayjs(mostRepeatedPost?.latest_created_at).format('YYYY-MM-DD HH:mm:ss') + ' ' + hoursAgo(mostRepeatedPost.latest_created_at!)}
-                </Badges>
+                <div>
+                  <Badges size="sm" status="text-secondary">
+                    <ClockIcon />
+                    {dayjs(mostRepeatedPost?.latest_created_at).format('YYYY-MM-DD HH:mm:ss') + ' ' + hoursAgo(mostRepeatedPost.latest_created_at!)}
+                  </Badges>
+                </div>
               ) : (
                 ''
               )}
@@ -253,7 +266,7 @@ const ReportLayout = (props: Prop) => {
           </div>
           {mostRepeatedPost && (
             <>
-              <h3 className="font-extrabold">{mostRepeatedPost?.user?.username && '@' + mostRepeatedPost?.user.username}</h3>
+              <h3 className="font-extrabold">{mostRepeatedPost?.username && mostRepeatedPost?.username}</h3>
               <div className="flex-wrap break-all">
                 {loading.mostRepeatedPostIsLoading ? <Skeleton /> : mostRepeatedPost ? mostRepeatedPost?.caption : ''}
               </div>
