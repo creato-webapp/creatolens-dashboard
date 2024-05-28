@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import Link from 'next/link'
 import Card from '@components/Card'
 import { IField } from '@components/Form/interface'
 import { IAccount } from '@lib/Account/Account'
@@ -76,8 +77,24 @@ const AccountCreateCard: React.FC<AccountCreateCardProps> = ({ isCreate }) => {
       id: 'custom',
       component: (
         <Paragraph size="sm">
-          By connecting your Instagram account, you agree to our terms and privacy policy. We may access your information for personalized features
-          and analysis. Your data is protected, but not 100% secure. Contact support for questions.
+          By connecting your Instagram account, you agree to our terms and privacy policy. We may access your information for personalized data
+          analyses and recommendation. Before using this app, you can review Creato&apos;s
+          <Link
+            className={'text-accent2-500'}
+            href={`https://hickory-fight-55b.notion.site/Creato-Privacy-Policy-3e9a90f983d74fed8b4734c0775d897e`}
+            target="_blank"
+          >
+            &nbsp;privacy policy
+          </Link>
+          &nbsp;and
+          <Link
+            className={'text-accent2-500'}
+            href={`https://hickory-fight-55b.notion.site/Creato-Terms-Conditions-62e6fbb474394483bda8f81cd73b0a2a`}
+            target="_blank"
+          >
+            &nbsp;terms of service
+          </Link>
+          . Please contact our team for support or questions.
         </Paragraph>
       ),
     },
