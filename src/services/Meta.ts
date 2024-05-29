@@ -30,6 +30,14 @@ export interface MostRepeatedPost {
   batch_id?: string
 }
 
+export interface IProfile {
+  description: string
+  image: string
+  title: string
+  url: string
+  username: string
+}
+
 export async function getKeyword(
   data: {
     args: {
@@ -81,7 +89,7 @@ export async function getMostRepeatedPost(
     }
   },
   customConfig?: AxiosRequestConfig
-): Promise<MostRepeatedPost | undefined> {
+): Promise<MostRepeatedPost | null> {
   const response = await Fetcher.GET<{
     data: PostData[]
   }>('/api/dashboard', {
@@ -92,7 +100,7 @@ export async function getMostRepeatedPost(
     },
   })
 
-  let mostRepeatedPost: MostRepeatedPost | undefined
+  let mostRepeatedPost: MostRepeatedPost | null = null
 
   if (response && response.data.length > 0) {
     const maxCountImage = response.data.reduce(
@@ -100,23 +108,62 @@ export async function getMostRepeatedPost(
       { count: -Infinity, owner_username: '' } as PostData
     )
 
-    const maxCountImageResponse = await Fetcher.GET<{
-      data: {
-        username: string
-      }
-    }>('/api/dashboard/instaProfile', {
-      ...customConfig,
-      params: {
-        profile_id: maxCountImage.owner_username,
-      },
-    })
+    try {
+      const maxCountImageResponse = await Fetcher.GET<{
+        data: {
+          username: string
+        }
+      }>('/api/dashboard/instaProfile', {
+        ...customConfig,
+        params: {
+          profile_id: maxCountImage.owner_username,
+        },
+      })
 
-    mostRepeatedPost = {
-      ...maxCountImage,
-      username: maxCountImageResponse.data?.username,
+      mostRepeatedPost = {
+        ...maxCountImage,
+        username: maxCountImageResponse.data?.username,
+      }
+    } catch (error) {
+      mostRepeatedPost = {
+        ...maxCountImage,
+        username: '',
+      }
     }
   }
-  if (mostRepeatedPost) {
-    return mostRepeatedPost
+  return mostRepeatedPost
+}
+
+export async function getMostRepeatedPostImage(data: {
+  args: {
+    shortcode: string
+    batch_id: string
   }
+}) {
+  if (!data.args.shortcode) return
+
+  const response = await Fetcher.GET<string>('/api/dashboard/instapostImage', {
+    params: {
+      shortcode: data.args.shortcode,
+      batch_id: data.args.batch_id,
+    },
+  })
+  return response
+}
+
+export async function getProfile(data: {
+  args: {
+    profile_id: string
+  }
+}) {
+  if (!data.args.profile_id) return
+  const response = await Fetcher.GET<{
+    data: IProfile
+  }>('/api/dashboard/userImage', {
+    params: {
+      profile_id: data.args.profile_id,
+    },
+  })
+
+  return response
 }

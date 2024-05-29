@@ -10,9 +10,11 @@ import Hero from '@components/Hero'
 import PlusIcon from '@components/Icon/PlusIcon'
 import ReportLayout from '@components/Layout/ReportLayout'
 import Tab from '@components/Tab'
-import { getAccounts } from '@services/Account/Account'
 import ROUTE from 'src/constants/route'
-import { useKeyword, useMostRepeatedPost, usePostCount } from 'src/hooks/useMeta'
+import { useKeyword, useMostRepeatedPost, useMostRepeatedPostImage, usePostCount, useProfile } from 'src/hooks/useMeta'
+
+
+
 
 type Props = {
   botList: IAccount[]
@@ -69,11 +71,21 @@ const Dashboard = ({ botList }: Props) => {
   const { data: keywordData, isLoading: keywordIsLoading } = useKeyword(metaAttributes)
   const { data: postCountData, isLoading: postCountIsLoading } = usePostCount(metaAttributes)
   const { data: mostRepeatedPostData, isLoading: mostRepeatedPostIsLoading } = useMostRepeatedPost(metaAttributes)
+  const { data: mostRepeatedPostImage, isLoading: mostRepeatedPostImageIsLoading } = useMostRepeatedPostImage({
+    shortcode: mostRepeatedPostData?.shortcode,
+    batch_id: mostRepeatedPostData?.batch_id,
+  })
+
+  const { data: profile, isLoading: profileIsLoading } = useProfile({
+    profile_id: selectedAccount?.profile_id as string,
+  })
 
   const loadingStates = {
     keywordIsLoading,
     postCountIsLoading,
+    mostRepeatedPostImageIsLoading,
     mostRepeatedPostIsLoading,
+    profileIsLoading,
   }
 
   const onKeyChange = (key: string) => {
@@ -107,6 +119,8 @@ const Dashboard = ({ botList }: Props) => {
           mostRepeatedPost={mostRepeatedPostData}
           selectedAccount={selectedAccount}
           loading={loadingStates}
+          mostRepeatedPostImage={mostRepeatedPostImage}
+          profile={profile}
         />
       ),
       days: 3,
@@ -124,6 +138,8 @@ const Dashboard = ({ botList }: Props) => {
           botList={botList || []}
           selectedAccount={selectedAccount}
           loading={loadingStates}
+          mostRepeatedPostImage={mostRepeatedPostImage}
+          profile={profile}
         />
       ),
       days: 7,
