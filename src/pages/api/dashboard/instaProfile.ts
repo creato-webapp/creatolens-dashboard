@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import MetaInstance from '@api/axiosInstance/Meta'
-export default async function dashboardKeywordQueryHandler(req: NextApiRequest, res: NextApiResponse) {
+export default async function instaProfileHandler(req: NextApiRequest, res: NextApiResponse) {
   const {
     query: { profile_id },
   } = req
