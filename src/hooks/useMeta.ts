@@ -1,5 +1,4 @@
 import useSWR from 'swr'
-
 import { cancelMiddleware } from '@api/middleware'
 import { getKeyword, getMostRepeatedPost,getMostRepeatedPostImage, getPostCount, getProfile } from '@services/Meta'
 import { CountryEnum } from 'src/enums/CountryCodeEnums';
@@ -43,8 +42,6 @@ export const useMostRepeatedPost = (input: { accId?: string; days: number; profi
     use: [cancelMiddleware],
   })
   
-
-
   return {
     data,
     error: error,
