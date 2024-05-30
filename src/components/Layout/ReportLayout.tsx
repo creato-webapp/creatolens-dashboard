@@ -121,6 +121,7 @@ const ReportLayout = (props: Prop) => {
           <div className="hidden md:flex">
             {instaBotList && (
               <Dropdown
+                className='md:min-w-40'
                 onValueChange={(e) => onAccountChange(e)}
                 value={selectedAccount?.id}
                 defaultValue={selectedAccount?.id}

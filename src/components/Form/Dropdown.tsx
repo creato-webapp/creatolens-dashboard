@@ -118,7 +118,7 @@ const Dropdown: React.FC<DropdownProps> = ({ name = '', options, defaultValue, o
         className={`drowpdown-button w-full rounded-lg border-none ${color} ${padding} ${focusStyle} ${hoverStyle} ${activeStyle}`}
         onClick={handleToggleMenu}
       >
-        <div className={`inline-flex w-full items-center justify-between gap-2.5 rounded-md text-md hover:shadow-sm`}>
+        <div className={`inline-flex w-full items-center justify-between gap-2.5 rounded-md text-md`}>
           <div className="truncate ">{mapSelectedValueToOptions}</div>
           <CaretUpIcon
             className={`pointer-events-none w-fit transform transition-all ${caretSize} ${!isOpen ? 'rotate-180 ' : ''}`}
