@@ -82,6 +82,7 @@ const ReportLayout = (props: Prop) => {
           <div className="hidden md:flex">
             {instaBotList && (
               <Dropdown
+                className='md:min-w-40'
                 onValueChange={(e) => onAccountChange(e)}
                 value={selectedAccount?.id}
                 defaultValue={selectedAccount?.id}
@@ -93,9 +94,7 @@ const ReportLayout = (props: Prop) => {
         <div className="flex w-full flex-col justify-between gap-7 md:flex-row">
           <div className="flex w-full flex-row items-center gap-2">
             <div className="w-1/10 flex">
-              {profile?.data?.image && (
                 <Avatar size={'medium'} src={profile?.data.image ? profile.data.image : 'insta-bot.svg'} fallbackSrc={'insta-bot.svg'} />
-              )}
             </div>
 
             <h1 className="hidden text-text-secondary md:flex">{selectedAccount && '@' + selectedAccount.username}</h1>
