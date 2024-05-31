@@ -199,29 +199,25 @@ const ReportLayout = (props: Prop) => {
             <div>
               {loading.mostRepeatedPostIsLoading ? (
                 <Skeleton />
-              ) : mostRepeatedPost ? (
+              ) : mostRepeatedPost && (
                 <div>
                   <Badges size="sm" status="text-secondary">
                     <ClockIcon />
                     {dayjs(mostRepeatedPost?.latest_created_at).format('YYYY-MM-DD HH:mm:ss') + ' ' + hoursAgo(mostRepeatedPost.latest_created_at!)}
                   </Badges>
                 </div>
-              ) : (
-                ''
-              )}
+              ) }
             </div>
             <div>
               {loading.mostRepeatedPostIsLoading ? (
                 <Skeleton />
-              ) : mostRepeatedPost ? (
+              ) : mostRepeatedPost && (
                 <Badges size="sm" status="text-secondary">
                   <ClockIcon />
                   {dayjs(mostRepeatedPost?.second_latest_created_at).format('YYYY-MM-DD HH:mm:ss') +
                     ' ' +
                     hoursAgo(mostRepeatedPost?.second_latest_created_at!)}
                 </Badges>
-              ) : (
-                ''
               )}
             </div>
           </div>
