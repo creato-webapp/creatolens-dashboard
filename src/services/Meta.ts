@@ -1,3 +1,4 @@
+import { CountryEnum } from 'src/enums/CountryCodeEnums'
 import { Fetcher } from './fetcher'
 import { AxiosRequestConfig } from 'axios'
 
@@ -85,6 +86,8 @@ export async function getMostRepeatedPost(
     args: {
       accId: string
       days: number
+      session_id?: string
+      location?: CountryEnum
     }
   },
   customConfig?: AxiosRequestConfig
@@ -116,6 +119,8 @@ export async function getMostRepeatedPost(
         ...customConfig,
         params: {
           profile_id: maxCountImage.owner_username,
+          session_id: data.args.session_id,
+          location: data.args.location,
         },
       })
 
@@ -152,15 +157,19 @@ export async function getMostRepeatedPostImage(data: {
 
 export async function getProfile(data: {
   args: {
-    profile_id: string
+    profile_id: string,
+    session_id: string,
+    location: CountryEnum
   }
 }) {
-  if (!data.args.profile_id) return
+  if (!data.args.profile_id || !data.args.session_id) return
   const response = await Fetcher.GET<{
     data: IProfile
-  }>('/api/dashboard/userImage', {
+  }>('/api/dashboard/instaProfile', {
     params: {
       profile_id: data.args.profile_id,
+      session_id: data.args.session_id,
+      location: data.args.location,
     },
   })
 
