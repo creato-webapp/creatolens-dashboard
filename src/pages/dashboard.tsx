@@ -11,7 +11,9 @@ import PlusIcon from '@components/Icon/PlusIcon'
 import ReportLayout from '@components/Layout/ReportLayout'
 import Tab from '@components/Tab'
 import ROUTE from 'src/constants/route'
+import { CountryEnum } from 'src/enums/CountryCodeEnums'
 import { useKeyword, useMostRepeatedPost, useMostRepeatedPostImage, usePostCount, useProfile } from 'src/hooks/useMeta'
+
 
 
 
@@ -55,6 +57,8 @@ const Dashboard = ({ botList }: Props) => {
     accId: string | undefined
     days: number
     profile_id: string | undefined
+    session_id?: string
+    location?: CountryEnum
   }>({
     accId: botList.length > 0 ? botList[0].id : undefined,
     days: 3,
@@ -70,7 +74,11 @@ const Dashboard = ({ botList }: Props) => {
 
   const { data: keywordData, isLoading: keywordIsLoading } = useKeyword(metaAttributes)
   const { data: postCountData, isLoading: postCountIsLoading } = usePostCount(metaAttributes)
-  const { data: mostRepeatedPostData, isLoading: mostRepeatedPostIsLoading } = useMostRepeatedPost(metaAttributes)
+  const { data: mostRepeatedPostData, isLoading: mostRepeatedPostIsLoading } = useMostRepeatedPost({
+    ...metaAttributes,
+    session_id: selectedAccount?.session_cookies?.sessionid as string,
+    location: CountryEnum[selectedAccount?.location as CountryEnum],
+  })
   const { data: mostRepeatedPostImage, isLoading: mostRepeatedPostImageIsLoading } = useMostRepeatedPostImage({
     shortcode: mostRepeatedPostData?.shortcode,
     batch_id: mostRepeatedPostData?.batch_id,
@@ -78,6 +86,8 @@ const Dashboard = ({ botList }: Props) => {
 
   const { data: profile, isLoading: profileIsLoading } = useProfile({
     profile_id: selectedAccount?.profile_id as string,
+    session_id: selectedAccount?.session_cookies?.sessionid as string,
+    location: CountryEnum[selectedAccount?.location as CountryEnum],
   })
 
   const loadingStates = {
@@ -102,6 +112,8 @@ const Dashboard = ({ botList }: Props) => {
       ...prev,
       profile_id: (targetAccount?.profile_id as string) || '',
       accId: typeof e === 'string' ? e : '',
+      session_id: targetAccount?.session_cookies?.sessionid,
+      location: CountryEnum[targetAccount?.location as CountryEnum],
     }))
   }
 
