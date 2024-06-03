@@ -1,6 +1,7 @@
 import useSWR from 'swr'
 import { getKeyword, getMostRepeatedPost, getPostCount, getMostRepeatedPostImage, getProfile } from '@services/Meta'
 import { cancelMiddleware } from '@api/middleware'
+import { CountryEnum } from 'src/enums/CountryCodeEnums';
 
 export const useKeyword = (input: { accId?: string; days: number; profile_id?: string }) => {
   const { data, error, mutate, ...swr } = useSWR({ url: 'api/dashboard/keyword', args: input }, getKeyword, {
@@ -35,12 +36,15 @@ export const usePostCount = (input: { accId?: string; days: number; profile_id?:
   }
 }
 
-export const useMostRepeatedPost = (input: { accId?: string; days: number; profile_id?: string }) => {
+export const useMostRepeatedPost = (input: { accId?: string; days: number; profile_id?: string, session_id:string, location:string }) => {
   const { data, error, mutate, ...swr } = useSWR({ url: 'api/dashboard/mostRepeatedPost', args: input }, getMostRepeatedPost, {
     refreshInterval: 0,
     revalidateOnFocus: false,
     use: [cancelMiddleware],
   })
+
+
+
   return {
     data,
     isLoading: !error && !data && data !== null,
@@ -66,7 +70,7 @@ export const useMostRepeatedPostImage = (input: { shortcode?: string; batch_id?:
   }
 }
 
-export const useProfile = (input: { profile_id?: string }) => {
+export const useProfile = (input: { profile_id?: string, session_id: string, location: CountryEnum }) => {
   const { data, error, mutate, ...swr } = useSWR({ url: 'api/dashboard/profileImage', args: input }, getProfile, {
     refreshInterval: 0,
     revalidateOnFocus: false,
