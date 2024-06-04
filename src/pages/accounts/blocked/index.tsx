@@ -16,9 +16,6 @@ import { formatDate } from '@services/util'
 import ROUTE from 'src/constants/route'
 import { useGetBlockAccountsPagination } from 'src/hooks/useBlockedAccount'
 
-
-
-
 type Props = {
   paginationData: PaginationMetadata<IBlockedAccount[]>
 }
