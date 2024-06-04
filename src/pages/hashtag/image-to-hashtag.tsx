@@ -1,10 +1,18 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import ProgressBar from '@components/Hashtag/ProgressBar'
-import Primary from '@components/Button/PrimaryButton'
-import ImageUpload from '@components/Hashtag/ImageUpload'
 import Link from 'next/link'
+import Step1 from '@components/Hashtag/ImageToHashtag/Step1'
+import Step2 from '@components/Hashtag/ImageToHashtag/Step2'
 const ImageToHashtag = () => {
   const [step, setStep] = useState<number>(1)
+
+  const StepComponent = useCallback(() => {
+    if (step === 1) {
+      return <Step1 step={step} setStep={setStep} />
+    } else if (step === 2) {
+      return <Step2 step={step} setStep={setStep} />
+    }
+  }, [step])
 
   return (
     <div className="mx-3">
@@ -23,13 +31,7 @@ const ImageToHashtag = () => {
         <div className="my-7">
           <ProgressBar total_step={3} current_step={step} />
         </div>
-        <h2 className="font-extrabold">Image Upload</h2>
-        <div className="mt-4"></div>
-
-        <ImageUpload />
-        <div className="mt-4 flex items-center justify-center">
-          <Primary sizes={['l', 'l', 'l']}>Annotate</Primary>
-        </div>
+        <StepComponent />
       </div>
     </div>
   )
