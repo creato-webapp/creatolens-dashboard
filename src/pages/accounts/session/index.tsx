@@ -19,7 +19,7 @@ type Props = {
   paginationData: PaginationMetadata<IAccountSession[]>
 }
 
-export interface IAccountSession extends IGenericRowData {
+export interface IAccountSession {
   account_id: string
   created_at: string
   trace_id: string
@@ -46,6 +46,8 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
     page: response?.page ?? 1,
     size: response?.size ?? 0,
     total_items: response?.total_items ?? 0,
+    has_next: response?.has_next ?? false,
+    has_prev: response?.has_prev ?? false,
   }
   return { props: { paginationData } }
 }

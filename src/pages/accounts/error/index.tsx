@@ -7,11 +7,12 @@ import Card from '@components/Card'
 import { Form } from '@components/Form'
 import Pagination from '@components/Pagination'
 import { Table } from '@components/Table'
+import { usePagination } from '@hooks/usePagination'
 import { getErrorPagination } from '@services/Account/AccountErros'
 import { PaginationMetadata } from '@services/Account/AccountInterface'
-import ROUTE from 'src/constants/route'
 import { useAccountErrorPagination } from 'src/hooks/useAccountErrors'
 import dayjs from 'src/utils/dayjs'
+
 
 
 type Props = {
@@ -35,6 +36,8 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
     page: response?.page ?? 1,
     size: response?.size ?? 0,
     total_items: response?.total_items ?? 0,
+    has_next: response?.has_next ?? false,
+    has_prev: response?.has_prev ?? false,
   }
   return { props: { paginationData } }
 }

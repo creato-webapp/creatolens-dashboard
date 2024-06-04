@@ -18,9 +18,11 @@ import { Table } from '@components/Table'
 import { usePagination } from '@hooks/usePagination'
 import { getAccountsPagination } from '@services/Account/Account'
 import { PaginationMetadata } from '@services/Account/AccountInterface'
+import { formatDate } from '@services/util'
 import ROUTE from 'src/constants/route'
 import { useGetAccountsPagination } from 'src/hooks/useAccount'
-import dayjs from 'src/utils/dayjs'
+
+
 
 type Props = {
   paginationData: PaginationMetadata<IAccount[]>
@@ -120,9 +122,7 @@ const AccountsPage = ({ paginationData }: Props) => {
     },
   ]
 
-  const formatDate = (datetimeStr: string) => {
-    return dayjs(datetimeStr, 'YYYY-MM-DDTHH:mm:ss').local().format('DD MMM YYYY')
-  }
+
 
   return (
     <div>
@@ -161,7 +161,7 @@ const AccountsPage = ({ paginationData }: Props) => {
             {/*for username Icon <Image alt="instagram" src="/account/InstagramLogo.svg" width={16} height={16} /> */}
             <Table.Body className="text-sm font-normal leading-5 text-black">
               {accounts.map((e, index) => (
-                <Table.Row key={`accounts-table-${index}`} className="text-sm" rowKey={index}>
+                <Table.Row key={`accounts-table-${index}`} className="text-sm">
                   <Table.BodyCell key={e.id}>
                     <Link
                         href={{

@@ -1,5 +1,7 @@
-import { PaginationMetadata } from '@hooks/usePagination'
 import React, { useCallback } from 'react'
+
+import { PaginationMetadata } from '@hooks/usePagination'
+
 interface PaginationProps<T> {
   isLoading: boolean
   onPrevClick: () => void

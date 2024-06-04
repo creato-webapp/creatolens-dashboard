@@ -1,23 +1,20 @@
 import React, { useCallback } from 'react'
 
-import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/solid'
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import Link from 'next/link'
 
-import Avatar from '@components/Avatar'
-import { Button } from '@components/Button'
+import { IBlockedAccount } from '@components/Account/Account/interface'
+import { AccountBadges } from '@components/Badges'
 import Card from '@components/Card'
+import EditIcon from '@components/Icon/EditIcon'
 import Pagination from '@components/Pagination'
 import { Table } from '@components/Table'
 import { usePagination } from '@hooks/usePagination'
 import { PaginationMetadata } from '@services/Account/AccountInterface'
 import { getBlockedAccountsPagination } from '@services/Account/BlockAccount'
-import { IAccountStatusType } from 'src/constants/status'
+import { formatDate } from '@services/util'
 import ROUTE from 'src/constants/route'
 import { useGetBlockAccountsPagination } from 'src/hooks/useBlockedAccount'
-import dayjs from 'src/utils/dayjs'
-
-
 
 type Props = {
   paginationData: PaginationMetadata<IBlockedAccount[]>
@@ -42,6 +39,8 @@ export const getServerSideProps: GetServerSideProps = async (
     page: response?.page ?? 1,
     size: response?.size ?? 0,
     total_items: response?.total_items ?? 0,
+    has_next: response?.has_next ?? false,
+    has_prev: response?.has_prev ?? false,
   }
   return { props: { paginationData } }
 }
@@ -59,7 +58,7 @@ const BlockedAccountsPage = ({ paginationData }: Props) => {
         updateSort(isAsc)
         updateOrderBy(orderBy)
       },
-    []
+    [updateSort, updateOrderBy]
   )
 
   if (error) {
@@ -73,64 +72,33 @@ const BlockedAccountsPage = ({ paginationData }: Props) => {
     {
       title: 'Blocked At(HK Time)',
       dataIndex: 'blocked_at',
-      render: (e: string) => {
-        const date = dayjs(e, 'YYYY-MM-DD THH:mm:ss')
-        return dayjs.utc(date).local().format('YYYY-MM-DD HH:mm:ss')
-      },
     },
     { title: 'Post Scrapped', dataIndex: 'post_scrapped_count' },
     { title: 'Login Count', dataIndex: 'login_count' },
     {
       title: 'Username',
       dataIndex: 'username',
-      render: (e: string) => {
-        return (
-          <Tag variant="outline">
-            <div className="flex items-center gap-1">
-              <Avatar />
-              {e}
-            </div>
-          </Tag>
-        )
-      },
     },
     {
       title: 'Status',
       dataIndex: 'status',
-      render: (e: IAccountStatusType) => {
-        return <StatusTag status={e} />
-      },
     },
     {
       title: 'Is Occupied',
       dataIndex: 'is_occupied',
-      render: (e: boolean) => {
-        return e ? <CheckCircleIcon className="h-6 w-6 text-successful-600" /> : <XCircleIcon className="h-6 w-6 text-error-500" />
-      },
     },
     {
       title: 'Is Enabled',
       dataIndex: 'enabled',
-      render: (e: boolean) => {
-        return e ? <CheckCircleIcon className="h-6 w-6 text-successful-600" /> : <XCircleIcon className="h-6 w-6 text-error-500" />
-      },
     },
     {
       title: 'Is Auth',
       dataIndex: 'is_authenticated',
-      render: (e: boolean) => {
-        return e ? <CheckCircleIcon className="h-6 w-6 text-successful-600" /> : <XCircleIcon className="h-6 w-6 text-error-500" />
-      },
     },
 
     {
       title: 'Account Info',
       dataIndex: 'id',
-      render: (e: string) => (
-        <Link href="/accounts/blocked/[id]" as={`/accounts/blocked/${e}`} legacyBehavior>
-          <Button.Text loading={false}>Edit</Button.Text>
-        </Link>
-      ),
     },
   ]
 

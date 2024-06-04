@@ -11,6 +11,8 @@ type PaginationProps = {
 
 export interface PaginationMetadata<T> {
   data: T
+  has_next: boolean
+  has_prev: boolean
   total_items: number
   size: number
   page: number

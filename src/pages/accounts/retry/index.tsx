@@ -9,10 +9,12 @@ import Card from '@components/Card'
 import EditIcon from '@components/Icon/EditIcon'
 import Pagination from '@components/Pagination'
 import { Table } from '@components/Table'
+import { usePagination } from '@hooks/usePagination'
 import { PaginationMetadata } from '@services/Account/AccountInterface'
 import { getRetryAccountsPagination } from '@services/Account/RetryAccount'
 import { useGetRetryAccountsPagination } from 'src/hooks/useRetryAccount'
 import dayjs from 'src/utils/dayjs'
+
 
 type Props = {
   paginationData: PaginationMetadata<IRetryAccount[]>
@@ -35,6 +37,8 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
     page: response?.page ?? 1,
     size: response?.size ?? 0,
     total_items: response?.total_items ?? 0,
+    has_next: response?.has_next ?? false,
+    has_prev: response?.has_prev ?? false,
   }
   return { props: { paginationData } }
 }
@@ -51,7 +55,7 @@ const RetryAccountsPage = ({ paginationData }: Props) => {
         updateSort(isAsc)
         updateOrderBy(orderBy)
       },
-    []
+    [updateSort, updateOrderBy]
   )
 
   if (error) {
@@ -67,7 +71,7 @@ const RetryAccountsPage = ({ paginationData }: Props) => {
       dataIndex: 'wait_until',
     },
     { title: 'Login Count', dataIndex: 'login_count' },
-    { title: 'Last Login Date', dataIndex: 'last_login_dt'},
+    { title: 'Last Login Date', dataIndex: 'last_login_dt' },
     {
       title: 'Username',
       dataIndex: 'username',
@@ -99,7 +103,14 @@ const RetryAccountsPage = ({ paginationData }: Props) => {
             orderBy={pageParams.orderBy}
             updateSorting={updateSorting}
           />
-          <Table.Header columns={columns} />
+          <Table.Header
+            columns={columns}
+            thClassName={'text-sm font-normal text-text-primary items-center justify-center'}
+            className="capitalize"
+            orderBy={pageParams.orderBy}
+            isAsc={pageParams.isAsc}
+            updateSorting={updateSorting}
+          />
           <Table.Body className="text-sm font-normal leading-5 text-black">
             {accounts.map((e, index) => (
               <Table.Row key={`table-row-${e.id}-${index}`} className="text-sm">
@@ -110,7 +121,7 @@ const RetryAccountsPage = ({ paginationData }: Props) => {
                   <div className="flex items-center text-nowrap text-accent1-600">{e.username}</div>
                 </Table.BodyCell>
                 <Table.BodyCell key={`status-${e.id}`}>
-                  <AccountBadges status={e.status}/>
+                  <AccountBadges status={e.status} />
                 </Table.BodyCell>
                 <Table.BodyCell key={e.id}>
                   <Link href="/accounts/[id]" as={`/accounts/${e.id}`} legacyBehavior>

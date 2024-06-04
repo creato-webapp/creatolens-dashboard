@@ -10,7 +10,6 @@ export const useGetHashtag = (input: string, shouldFetch: boolean = true, fallba
   })
   return {
     data,
-    isLoading: !error && !data,
     error: error,
     mutate,
     ...swr,

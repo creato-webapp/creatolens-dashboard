@@ -14,12 +14,11 @@ import 'react-loading-skeleton/dist/skeleton.css'
 import Dropdown from '@components/Form/Dropdown'
 import ClockIcon from '@components/Icon/ClockIcon'
 import PlusIcon from '@components/Icon/PlusIcon'
+import { IProfile, KeywordData, MostRepeatedPost } from '@services/Meta'
 import { hoursAgo } from '@services/util'
 import IMAGE from 'src/constants/image'
 import dayjs from 'src/utils/dayjs'
 
-
-import { IProfile, KeywordData, MostRepeatedPost } from '@services/Meta'
 
 // generate fake data for this layout
 
@@ -100,7 +99,7 @@ const ReportLayout = (props: Prop) => {
         <div className="flex w-full flex-col justify-between gap-7 md:flex-row">
           <div className="flex w-full flex-row items-center gap-2">
             <div className="w-1/10 flex">
-                <Avatar size={'medium'} src={profile?.data.image ? profile.data.image : 'insta-bot.svg'} fallbackSrc={'insta-bot.svg'} />
+                <Avatar size={'medium'} src={profile?.data.image ? profile.data.image : IMAGE.BOT_CREATO} fallbackSrc={IMAGE.BOT_CREATO} />
             </div>
 
             <h1 className="hidden text-text-secondary md:flex">{selectedAccount && '@' + selectedAccount.username}</h1>
