@@ -133,7 +133,7 @@ const ReportLayout = (props: Prop) => {
         <div className="flex w-full flex-col justify-between gap-7 md:flex-row">
           <div className="flex w-full flex-row items-center gap-2">
             <div className="w-1/10 flex">
-              {selectedAccount && <Avatar size={'medium'} src={avatarImageUrl ? avatarImageUrl : IMAGE.BOT_CREATO} fallbackSrc={IMAGE.BOT_CREATO} />}
+                <Avatar size={'medium'} src={avatarImageUrl ? avatarImageUrl : IMAGE.BOT_CREATO} fallbackSrc={IMAGE.BOT_CREATO} />
             </div>
 
             <h1 className="hidden text-text-secondary md:flex">{selectedAccount && '@' + selectedAccount.username}</h1>

@@ -18,9 +18,11 @@ import { Table } from '@components/Table'
 import { usePagination } from '@hooks/usePagination'
 import { getAccountsPagination } from '@services/Account/Account'
 import { PaginationMetadata } from '@services/Account/AccountInterface'
+import { formatDate } from '@services/util'
 import ROUTE from 'src/constants/route'
 import { useGetAccountsPagination } from 'src/hooks/useAccount'
-import dayjs from 'src/utils/dayjs'
+
+
 
 type Props = {
   paginationData: PaginationMetadata<IAccount[]>
@@ -120,9 +122,7 @@ const AccountsPage = ({ paginationData }: Props) => {
     },
   ]
 
-  const formatDate = (datetimeStr: string) => {
-    return dayjs(datetimeStr, 'YYYY-MM-DDTHH:mm:ss').local().format('DD MMM YYYY')
-  }
+
 
   return (
     <div>

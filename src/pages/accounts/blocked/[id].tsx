@@ -30,7 +30,7 @@ const AccountsBlockedPage = ({ accountData }: Props) => {
   const [shouldFetch, setShouldFetch] = useState(false)
   const router = useRouter()
   const { id } = router.query
-  const { data, error, updateBlockAccount: callUpdateAccount } = useBlockAccount(id as string, shouldFetch, accountData)
+  const { data, error, updateBlockAccount: callUpdateAccount } = useBlockAccount(id as string, shouldFetch, accountData as IBlockedAccount)
   if (!data) {
     console.error(data)
     return <div>Loading...</div>

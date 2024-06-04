@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+
 import { Middleware, SWRHook, unstable_serialize } from 'swr'
 
 export type CancellablePromise<T> = Promise<T> & {

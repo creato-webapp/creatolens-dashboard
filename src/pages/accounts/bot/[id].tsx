@@ -40,7 +40,7 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
 const BotPage = ({ account }: Props) => {
   const router = useRouter()
   const { id } = router.query
-  const { data } = useAccount(id as string, false, account)
+  const { data } = useAccount(id as string, false, account as IAccount)
 
   return (
     <div className="h-full bg-cover bg-center bg-no-repeat md:px-12 ">
