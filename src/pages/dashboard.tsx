@@ -12,7 +12,13 @@ import ReportLayout from '@components/Layout/ReportLayout'
 import Tab from '@components/Tab'
 import { getAccounts } from '@services/Account/Account'
 import ROUTE from 'src/constants/route'
-import { useKeyword, useMostRepeatedPost, usePostCount } from 'src/hooks/useMeta'
+import { CountryEnum } from 'src/enums/CountryCodeEnums'
+import { useKeyword, useMostRepeatedPost, useMostRepeatedPostImage, usePostCount, useProfile } from 'src/hooks/useMeta'
+
+
+
+
+
 
 type Props = {
   botList: IAccount[]
@@ -53,6 +59,8 @@ const Dashboard = ({ botList }: Props) => {
     accId: string | undefined
     days: number
     profile_id: string | undefined
+    session_id?: string
+    location?: CountryEnum
   }>({
     accId: botList.length > 0 ? botList[0].id : undefined,
     days: 3,
@@ -68,12 +76,28 @@ const Dashboard = ({ botList }: Props) => {
 
   const { data: keywordData, isLoading: keywordIsLoading } = useKeyword(metaAttributes)
   const { data: postCountData, isLoading: postCountIsLoading } = usePostCount(metaAttributes)
-  const { data: mostRepeatedPostData, isLoading: mostRepeatedPostIsLoading } = useMostRepeatedPost(metaAttributes)
+  const { data: mostRepeatedPostData, isLoading: mostRepeatedPostIsLoading } = useMostRepeatedPost({
+    ...metaAttributes,
+    session_id: selectedAccount?.session_cookies?.sessionid as string,
+    location: CountryEnum[selectedAccount?.location as CountryEnum],
+  })
+  const { data: mostRepeatedPostImage, isLoading: mostRepeatedPostImageIsLoading } = useMostRepeatedPostImage({
+    shortcode: mostRepeatedPostData?.shortcode,
+    batch_id: mostRepeatedPostData?.batch_id,
+  })
+
+  const { data: profile, isLoading: profileIsLoading } = useProfile({
+    profile_id: selectedAccount?.profile_id as string,
+    session_id: selectedAccount?.session_cookies?.sessionid as string,
+    location: CountryEnum[selectedAccount?.location as CountryEnum],
+  })
 
   const loadingStates = {
     keywordIsLoading,
     postCountIsLoading,
+    mostRepeatedPostImageIsLoading,
     mostRepeatedPostIsLoading,
+    profileIsLoading,
   }
 
   const onKeyChange = (key: string) => {
@@ -90,6 +114,8 @@ const Dashboard = ({ botList }: Props) => {
       ...prev,
       profile_id: (targetAccount?.profile_id as string) || '',
       accId: typeof e === 'string' ? e : '',
+      session_id: targetAccount?.session_cookies?.sessionid,
+      location: CountryEnum[targetAccount?.location as CountryEnum],
     }))
   }
 
@@ -107,6 +133,8 @@ const Dashboard = ({ botList }: Props) => {
           mostRepeatedPost={mostRepeatedPostData}
           selectedAccount={selectedAccount}
           loading={loadingStates}
+          mostRepeatedPostImage={mostRepeatedPostImage}
+          profile={profile}
         />
       ),
       days: 3,
@@ -124,6 +152,8 @@ const Dashboard = ({ botList }: Props) => {
           botList={botList || []}
           selectedAccount={selectedAccount}
           loading={loadingStates}
+          mostRepeatedPostImage={mostRepeatedPostImage}
+          profile={profile}
         />
       ),
       days: 7,
