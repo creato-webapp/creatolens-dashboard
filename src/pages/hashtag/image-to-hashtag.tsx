@@ -3,15 +3,17 @@ import ProgressBar from '@components/Hashtag/ProgressBar'
 import Link from 'next/link'
 import Step1 from '@components/Hashtag/ImageToHashtag/Step1'
 import Step2 from '@components/Hashtag/ImageToHashtag/Step2'
+import { useImageHashtagContext } from 'src/context/ImageToHashtagContext'
 const ImageToHashtag = () => {
   const [step, setStep] = useState<number>(1)
+  const {} = useImageHashtagContext()
 
   const StepComponent = useCallback(() => {
     if (step === 1) {
       return <Step1 step={step} setStep={setStep} />
     } else if (step === 2) {
       return <Step2 step={step} setStep={setStep} />
-    }
+    } else return <></>
   }, [step])
 
   return (

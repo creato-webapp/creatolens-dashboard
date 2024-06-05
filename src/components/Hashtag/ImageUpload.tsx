@@ -1,8 +1,9 @@
 import { useCallback, useRef, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
+import { useImageHashtagContext } from 'src/context/ImageToHashtagContext'
 
-const ImageUpload = () => {
-  const [uploadedImage, setUploadedImage] = useState<string | null>(null)
+const ImageUpload = (props) => {
+  const { uploadedImage, setUploadedImage } = props
   const fileInputRef = useRef<HTMLInputElement | null>(null)
 
   const handleBrowseClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
@@ -14,7 +15,7 @@ const ImageUpload = () => {
     accept: {
       'image/jpeg': ['.jpeg', '.png'],
     },
-    onDrop: (acceptedFiles) => {
+    onDrop: (acceptedFiles: Blob[]) => {
       if (acceptedFiles.length > 0) {
         const file = acceptedFiles[0]
         const reader = new FileReader()
@@ -31,11 +32,11 @@ const ImageUpload = () => {
     <div
       {...getRootProps()}
       style={{
-        border: '2px dashed #d3d3d3',
+        border: uploadedImage ? '' : '2px dashed #d3d3d3',
         borderRadius: '10px',
         padding: '40px',
         textAlign: 'center',
-        backgroundColor: isDragActive ? '#f0f0f0' : '#F5F6F6',
+        backgroundColor: isDragActive ? '#f0f0f0' : uploadedImage ? '' : '2px dashed #d3d3d3',
         color: '#666666',
         transition: 'background-color 0.2s ease-in-out',
         marginBottom: '20px',
