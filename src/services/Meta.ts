@@ -4,8 +4,6 @@ import { CountryEnum } from 'src/enums/CountryCodeEnums'
 
 import { Fetcher } from './fetcher'
 
-
-
 export interface PostData {
   count: number
   owner_username: string
@@ -95,7 +93,7 @@ export async function getMostRepeatedPost(
     }
   },
   customConfig?: AxiosRequestConfig
-): Promise<MostRepeatedPost | undefined> {
+): Promise<MostRepeatedPost | null> {
   const response = await Fetcher.GET<{
     data: PostData[]
   }>('/api/dashboard', {
@@ -106,7 +104,7 @@ export async function getMostRepeatedPost(
     },
   })
 
-  let mostRepeatedPost: MostRepeatedPost | undefined = undefined
+  let mostRepeatedPost: MostRepeatedPost | null = null
 
   if (response && response.data.length > 0) {
     const maxCountImage = response.data.reduce(

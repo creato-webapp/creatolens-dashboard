@@ -42,8 +42,6 @@ export const useMostRepeatedPost = (input: { accId?: string; days: number; profi
     revalidateOnFocus: false,
     use: [cancelMiddleware],
   })
-  
-
 
   return {
     data,
