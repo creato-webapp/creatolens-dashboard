@@ -95,7 +95,7 @@ export async function getMostRepeatedPost(
     }
   },
   customConfig?: AxiosRequestConfig
-): Promise<MostRepeatedPost | null> {
+): Promise<MostRepeatedPost | undefined> {
   const response = await Fetcher.GET<{
     data: PostData[]
   }>('/api/dashboard', {
@@ -106,7 +106,7 @@ export async function getMostRepeatedPost(
     },
   })
 
-  let mostRepeatedPost: MostRepeatedPost | null = null
+  let mostRepeatedPost: MostRepeatedPost | undefined = undefined
 
   if (response && response.data.length > 0) {
     const maxCountImage = response.data.reduce(

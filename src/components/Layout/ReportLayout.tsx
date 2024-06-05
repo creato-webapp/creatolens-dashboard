@@ -1,7 +1,5 @@
-import { useEffect, useState } from 'react'
 import { useMemo } from 'react'
 
-import axios from 'axios'
 import Image from 'next/image'
 import Link from 'next/link'
 import Skeleton from 'react-loading-skeleton'
@@ -16,10 +14,11 @@ import 'react-loading-skeleton/dist/skeleton.css'
 import Dropdown from '@components/Form/Dropdown'
 import ClockIcon from '@components/Icon/ClockIcon'
 import PlusIcon from '@components/Icon/PlusIcon'
-import { KeywordData, MostRepeatedPost } from '@services/Meta'
+import { IProfile, KeywordData, MostRepeatedPost } from '@services/Meta'
 import { hoursAgo } from '@services/util'
 import IMAGE from 'src/constants/image'
 import dayjs from 'src/utils/dayjs'
+
 
 // generate fake data for this layout
 
@@ -39,20 +38,20 @@ interface Prop {
   } | null
   keyword?: KeywordData[]
   postCount?: number
-  mostRepeatedPost?: MostRepeatedPost
+  mostRepeatedPost?: MostRepeatedPost | null
+  mostRepeatedPostImage?: string
+  profile?: {
+    data: IProfile
+  }
 }
 
 const ReportLayout = (props: Prop) => {
-  const { keyword, postCount, mostRepeatedPost, days, loading, botList, onAccountChange, selectedAccount } = props
+  const { keyword, mostRepeatedPostImage, postCount, mostRepeatedPost, days, loading, botList, onAccountChange, selectedAccount, profile } = props
   // dayFormat = MMM DD YYYY - MMM DD YYYY
   const today = new Date()
   const lastDate = new Date(today)
   lastDate.setDate(today.getDate() - days)
   const dateStr = `${lastDate.toDateString().split(' ').slice(1).join(' ')} - ${today.toDateString().split(' ').slice(1).join(' ')}`
-  const [imageUrl, setImageUrl] = useState<string>('')
-  const [avatarImageUrl, setAvatarImageUrl] = useState<string>('')
-  const [profileUrl, setProfileUrl] = useState<string>('')
-  const prevProfileId = useRef<string | undefined>(undefined)
 
   const instaBotList = useMemo(() => {
     if (!botList || botList.length <= 0) return []
@@ -63,39 +62,6 @@ const ReportLayout = (props: Prop) => {
       }
     })
   }, [botList])
-
-  useEffect(() => {
-    if (mostRepeatedPost) {
-      const apiUrl = `/api/dashboard/instapostImage?shortcode=${mostRepeatedPost.shortcode}&batch_id=${mostRepeatedPost.batch_id}`
-      axios.get(apiUrl).then((res) => {
-        setImageUrl(res.data)
-      })
-    } else {
-      setImageUrl('')
-    }
-  }, [mostRepeatedPost])
-
-  useEffect(() => {
-    const fetchUserImage = async () => {
-      if (!selectedAccount?.profile_id) {
-        setAvatarImageUrl('')
-        return
-      }
-      if (prevProfileId.current !== selectedAccount.profile_id) {
-        const apiUrl = `/api/dashboard/userImage?profile_id=${selectedAccount.profile_id}`
-        try {
-          const res = await axios.get(apiUrl)
-          setAvatarImageUrl(res.data.data.image)
-          setProfileUrl(res.data.data.url)
-          prevProfileId.current = selectedAccount.profile_id
-        } catch (error) {
-          console.error('Error fetching user image:', error)
-        }
-      }
-    }
-
-    fetchUserImage()
-  }, [selectedAccount?.profile_id])
 
   if (!botList || botList.length == 0) {
     return (
@@ -133,7 +99,7 @@ const ReportLayout = (props: Prop) => {
         <div className="flex w-full flex-col justify-between gap-7 md:flex-row">
           <div className="flex w-full flex-row items-center gap-2">
             <div className="w-1/10 flex">
-                <Avatar size={'medium'} src={avatarImageUrl ? avatarImageUrl : IMAGE.BOT_CREATO} fallbackSrc={IMAGE.BOT_CREATO} />
+                <Avatar size={'medium'} src={profile?.data.image ? profile.data.image : IMAGE.BOT_CREATO} fallbackSrc={IMAGE.BOT_CREATO} />
             </div>
 
             <h1 className="hidden text-text-secondary md:flex">{selectedAccount && '@' + selectedAccount.username}</h1>
@@ -146,8 +112,8 @@ const ReportLayout = (props: Prop) => {
                 options={instaBotList}
               />
             </div>
-            {profileUrl && (
-              <Link href={profileUrl} target="_blank" className="flex min-h-6 min-w-6">
+            {profile?.data?.url && (
+              <Link href={profile.data.url} target="_blank" className="flex min-h-6 min-w-6">
                 <Image className="cursor-pointer" alt={'account share button'} src={'./external-link.svg'} width={24} height={24} />
               </Link>
             )}
@@ -225,13 +191,12 @@ const ReportLayout = (props: Prop) => {
             </Primary>
           </div>
         </Card>
-
         <CardWithIgPost
           title="Most repeated post from Explore"
           description="“Most repeated post showing on explore during fetching”"
           number={mostRepeatedPost?.count || 0}
           className="col-span-2 w-full"
-          instaPost={imageUrl}
+          instaPost={mostRepeatedPostImage}
           icon="./Repeat.svg"
           isLoading={loading.mostRepeatedPostIsLoading}
         >
@@ -263,7 +228,7 @@ const ReportLayout = (props: Prop) => {
           </div>
           {mostRepeatedPost && (
             <>
-              <h3 className="font-extrabold">{mostRepeatedPost?.username && mostRepeatedPost?.username}</h3>
+              <h3 className="font-extrabold">{mostRepeatedPost?.username && `@` + mostRepeatedPost?.username}</h3>
               <div className="flex-wrap break-all">
                 {loading.mostRepeatedPostIsLoading ? <Skeleton /> : mostRepeatedPost ? mostRepeatedPost?.caption : ''}
               </div>

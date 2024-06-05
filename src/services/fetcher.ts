@@ -52,23 +52,23 @@ export const Fetcher = {
   GET: <T>(url: string, customConfig?: AxiosRequestConfig) => {
     const controller = new AbortController()
     const config = { ...customConfig, signal: controller.signal }
-    const promise = FetcherInstance.get<T>(url, config).then((res) => res.data)
+    const promise = instance.get<T>(url, config).then((res) => res.data)
     ;(promise as CancellablePromise<T>).cancel = () => controller.abort()
     return promise as CancellablePromise<T>
   },
 
-  POST: <T, D = {}>(url: string, data?: D, customConfig?: AxiosRequestConfig) => {
+  POST: <T, D = unknown>(url: string, data?: D, customConfig?: AxiosRequestConfig) => {
     const controller = new AbortController()
     const config = { ...customConfig, signal: controller.signal }
-    const promise = FetcherInstance.post<T>(url, data, config).then((res) => res.data)
+    const promise = instance.post<T>(url, data, config).then((res) => res.data)
     ;(promise as CancellablePromise<T>).cancel = () => controller.abort()
     return promise as CancellablePromise<T>
   },
 
-  PATCH: <T, D = {}>(url: string, data?: Partial<D>, customConfig?: AxiosRequestConfig) => {
+  PATCH: <T, D = unknown>(url: string, data?: Partial<D>, customConfig?: AxiosRequestConfig) => {
     const controller = new AbortController()
     const config = { ...customConfig, signal: controller.signal }
-    const promise = FetcherInstance.patch<T>(url, data, config).then((res) => res.data)
+    const promise = instance.patch<T>(url, data, config).then((res) => res.data)
     ;(promise as CancellablePromise<T>).cancel = () => controller.abort()
     return promise as CancellablePromise<T>
   },
@@ -76,7 +76,7 @@ export const Fetcher = {
   DELETE: <T>(url: string, customConfig?: AxiosRequestConfig) => {
     const controller = new AbortController()
     const config = { ...customConfig, signal: controller.signal }
-    const promise = FetcherInstance.delete<T>(url, config).then((res) => res.data)
+    const promise = instance.delete<T>(url, config).then((res) => res.data)
     ;(promise as CancellablePromise<T>).cancel = () => controller.abort()
     return promise as CancellablePromise<T>
   },

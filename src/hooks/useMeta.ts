@@ -2,6 +2,7 @@ import useSWR from 'swr'
 
 import { cancelMiddleware } from '@api/middleware'
 import { getKeyword, getMostRepeatedPost,getMostRepeatedPostImage, getPostCount, getProfile } from '@services/Meta'
+import { CountryEnum } from 'src/enums/CountryCodeEnums';
 
 
 export const useKeyword = (input: { accId?: string; days: number; profile_id?: string }) => {
@@ -29,7 +30,6 @@ export const usePostCount = (input: { accId?: string; days: number; profile_id?:
 
   return {
     data,
-    isLoading: isLoading,
     error: error,
     mutate,
     ...swr,
@@ -42,12 +42,11 @@ export const useMostRepeatedPost = (input: { accId?: string; days: number; profi
     revalidateOnFocus: false,
     use: [cancelMiddleware],
   })
-
+  
 
 
   return {
     data,
-    isLoading: !error && !data && data !== null,
     error: error,
     mutate,
     ...swr,
@@ -63,7 +62,6 @@ export const useMostRepeatedPostImage = (input: { shortcode?: string; batch_id?:
 
   return {
     data,
-    isLoading: !error && !data,
     error: error,
     mutate,
     ...swr,
@@ -79,7 +77,6 @@ export const useProfile = (input: { profile_id?: string, session_id: string, loc
 
   return {
     data,
-    isLoading: isLoading,
     error: error,
     mutate,
     ...swr,
