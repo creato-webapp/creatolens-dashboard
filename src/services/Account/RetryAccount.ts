@@ -1,23 +1,11 @@
 //TODO write Get, Gets, Update,
 import { AxiosRequestConfig } from 'axios'
+
+import { Cookies, IRetryAccount } from '@components/Account/Account/interface'
+
+import { PaginationMetadata, PaginationParams } from './AccountInterface'
+
 import { Fetcher } from '../fetcher'
-import { IRetryAccount } from '@lib/Account/Account/interface'
-
-export interface PaginationParams {
-  pageNumber: number
-  pageSize: number
-  orderBy: string
-  isAsc: boolean
-}
-
-export interface PaginationMetadata {
-  data: IRetryAccount[]
-  has_next: boolean
-  has_prev: boolean
-  page: number
-  size: number
-  total_items: number
-}
 
 type PartialAccount = Partial<{
   id: string
@@ -31,7 +19,7 @@ type PartialAccount = Partial<{
   login_count: number
   post_scrapped_count: number
   pwd: string
-  session_cookies?: any
+  session_cookies?: Cookies
   status: 'active' | 'blocked' | 'banned' | 'retry' | 'test' | 'scrapping' | 'occupied'
   updated_at: string
   wait_until: string
@@ -84,38 +72,35 @@ export function generateRetryAccountFilter(account: PartialAccount): string {
   return filters.join(' && ')
 }
 
-export async function GetRetryAccount(id: string, customConfig?: AxiosRequestConfig): Promise<IRetryAccount> {
-  const response = await Fetcher.GET(`/api/accounts/retry/${id}`, customConfig)
+export async function getRetryAccount(id: string, customConfig?: AxiosRequestConfig): Promise<IRetryAccount> {
+  const response = await Fetcher.GET<IRetryAccount>(`/api/accounts/retry/${id}`, customConfig)
   return response
 }
 
-export async function GetRetryAccounts(
-  account?: Partial<IRetryAccount>,
-  orderBy?: string,
-  isAsc?: boolean,
-  customConfig?: AxiosRequestConfig
-): Promise<IRetryAccount[]> {
-  const response = await Fetcher.GET(`/api/accounts/retry/query`, {
+export async function getRetryAccounts(account?: Partial<IRetryAccount>, orderBy?: string, isAsc?: boolean): Promise<IRetryAccount[]> {
+  const response = await Fetcher.GET<IRetryAccount[]>(`/api/accounts/retry/query`, {
     params: { filter: account ? generateRetryAccountFilter(account) : null, orderby: orderBy, isAsc: isAsc },
   })
   return response
 }
 
-export async function GetRetryAccountsPagination(params: PaginationParams, customConfig?: AxiosRequestConfig): Promise<PaginationMetadata> {
-  const response = await Fetcher.GET(
-    `/api/accounts/retry`,
-    {
+export async function getRetryAccountsPagination(
+  params: PaginationParams,
+  customConfig?: AxiosRequestConfig
+): Promise<PaginationMetadata<IRetryAccount[]>> {
+  const response = await Fetcher.GET<PaginationMetadata<IRetryAccount[]>>(`/api/accounts/retry`, {
+    ...customConfig,
+    params: {
       pageNumber: params.pageNumber,
       pageSize: params.pageSize,
       orderBy: params.orderBy,
       isAsc: params.isAsc,
     },
-    customConfig
-  )
+  })
   return response
 }
 
-export async function UpdateRetryAccount(id: string, updatedAccount: IRetryAccount, customConfig?: AxiosRequestConfig): Promise<IRetryAccount> {
-  const res = await Fetcher.PATCH(`/api/accounts/retry/${id}`, updatedAccount, { ...customConfig, params: { id: updatedAccount.id } })
+export async function updateRetryAccount(id: string, updatedAccount: IRetryAccount, customConfig?: AxiosRequestConfig): Promise<IRetryAccount> {
+  const res = await Fetcher.PATCH<IRetryAccount>(`/api/accounts/retry/${id}`, updatedAccount, { ...customConfig, params: { id: updatedAccount.id } })
   return res
 }

@@ -1,29 +1,29 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
+
+import ENDPOINT_BACKEND from 'src/constants/endpoints/backend'
+
 import AccountInstance from '../axiosInstance/Account'
-import axios from 'axios'
+
 export default async function AccountHandler(req: NextApiRequest, res: NextApiResponse) {
   const {
     query: { id },
     body,
     method,
   } = req
-  axios.defaults.headers.common['value1'] = 'value'
+  const cookieHeader = {
+    headers: {
+      Cookie: req.headers.cookie,
+    },
+  }
+  let response
+
   switch (method) {
     case 'GET': {
-      const response = await AccountInstance.get(`accounts/${id}`, {
-        headers: {
-          Cookie: req.headers.cookie,
-        },
-      })
+      response = await AccountInstance.get(`${ENDPOINT_BACKEND.ACCOUNTS}/${id}`, cookieHeader)
       return res.status(response.status).json(response.data)
     }
     case 'PATCH':
-      const response = await AccountInstance.patch(`accounts/update/${id}`, body, {
-        headers: {
-          Cookie: req.headers.cookie,
-        },
-      })
-
+      response = await AccountInstance.patch(`${ENDPOINT_BACKEND.UPDATE_ACCOUNT}/${id}`, body, cookieHeader)
       return res.status(response.status).json(response.data)
     default:
       res.setHeader('Allow', ['GET', 'PATCH'])

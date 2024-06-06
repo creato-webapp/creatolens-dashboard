@@ -1,4 +1,5 @@
-import React, { useEffect, useState, useRef, useCallback, useMemo, HTMLProps } from 'react'
+import React, { HTMLProps, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+
 import { CaretUpIcon } from '@components/Icon'
 
 export interface DropdownOption {
@@ -6,7 +7,7 @@ export interface DropdownOption {
   value: string | number
 }
 
-type DropdownSize = 's' | 'm' | 'l'
+type DropdownSize = 's' | 'm' | 'l' | 'full'
 interface DropdownProps extends HTMLProps<HTMLSelectElement> {
   name?: string
   options: DropdownOption[]
@@ -17,7 +18,7 @@ interface DropdownProps extends HTMLProps<HTMLSelectElement> {
   icon?: React.ReactNode
 }
 
-const Dropdown: React.FC<DropdownProps> = ({ name = '', options, defaultValue, disabled, onValueChange, dropDownSizes, icon }) => {
+const Dropdown: React.FC<DropdownProps> = ({ name = '', options, defaultValue, onValueChange, dropDownSizes, icon }) => {
   const [selectedValue, setSelectedValue] = useState(defaultValue || name)
   const [isDropdownNotSelected, setIsDropdownNotSelected] = useState(true)
   const [isOpen, setIsOpen] = useState(false)
@@ -26,10 +27,10 @@ const Dropdown: React.FC<DropdownProps> = ({ name = '', options, defaultValue, d
   const mapSelectedValueToOptions = useMemo(() => {
     const selectedOption = options.find((option) => option.value === selectedValue)
     return selectedOption ? selectedOption.label : selectedValue
-  }, [selectedValue])
+  }, [selectedValue, options])
 
   const handleOptionSelect = useCallback(
-    (value: string | number) => (event: React.MouseEvent<HTMLLIElement>) => {
+    (value: string | number) => () => {
       setSelectedValue(value)
       setIsOpen(false)
       setIsDropdownNotSelected(false)
@@ -87,6 +88,12 @@ const Dropdown: React.FC<DropdownProps> = ({ name = '', options, defaultValue, d
           maxWidth += ` ${breakpoint}max-w-[20rem]`
           caretSize += ` ${breakpoint}w-6 ${breakpoint}h-6`
           break
+
+        case 'full':
+          padding += ` ${breakpoint}px-6 ${breakpoint}py-3`
+          caretSize += ` ${breakpoint}w-6 ${breakpoint}h-6`
+          break
+
         default:
           padding = 'px-2 py-1 md:px-3 md:py-2 lg:py-3 lg:px-3'
           caretSize = 'w-6 h-6'
@@ -105,28 +112,27 @@ const Dropdown: React.FC<DropdownProps> = ({ name = '', options, defaultValue, d
   }, [isDropdownNotSelected])
 
   const { padding, caretSize, maxWidth } = generatePadding(dropDownSizes!)
-
   return (
-    <div ref={dropdownRef} className={`dropdown relative flex w-full justify-end ${maxWidth}`}>
+    <div ref={dropdownRef} className={`dropdown relative h-full w-full justify-end  ${maxWidth}`}>
       <button
         className={`drowpdown-button w-full rounded-lg border-none ${color} ${padding} ${focusStyle} ${hoverStyle} ${activeStyle}`}
         onClick={handleToggleMenu}
       >
-        <div className={`inline-flex w-full min-w-fit items-center justify-between gap-2.5 whitespace-nowrap rounded-md hover:shadow-sm`}>
-          {mapSelectedValueToOptions}
+        <div className={`inline-flex w-full items-center justify-between gap-2.5 rounded-md text-md`}>
+          <div className="truncate ">{mapSelectedValueToOptions}</div>
           <CaretUpIcon
-            className={`pointer-events-none transform transition-all ${caretSize} ${!isOpen ? 'rotate-180 ' : ''}`}
+            className={`pointer-events-none w-fit transform transition-all ${caretSize} ${!isOpen ? 'rotate-180 ' : ''}`}
             color={isOpen ? 'white' : isDropdownNotSelected ? 'black' : 'white'}
           />
         </div>
       </button>
+
       {isOpen && (
-        <ul className="absolute top-full left-0 z-10 mt-2 w-full rounded-md border border-gray-200 bg-white shadow-lg">
+        <ul className="absolute top-full z-10 mt-2 h-64 w-full overflow-y-scroll rounded-md border border-gray-200 bg-white shadow-lg">
           {options.map((option) => (
-            /* refractor the onClick function below */
             <li
               key={option.value}
-              className="flex cursor-pointer list-none items-center gap-2 whitespace-nowrap px-4 py-2 hover:bg-gray-100"
+              className="flex w-full cursor-pointer list-none flex-wrap items-center gap-2  px-4 py-2 hover:bg-gray-100"
               onClick={handleOptionSelect(option.value)}
             >
               {icon && icon}

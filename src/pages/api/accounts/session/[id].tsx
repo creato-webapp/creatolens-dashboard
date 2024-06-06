@@ -1,19 +1,20 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
+
+import ENDPOINT_BACKEND_ACCOUNT_SESSION from 'src/constants/endpoints/backend'
+
 import AccountInstance from '../../axiosInstance/Account'
 
 export default function AccountHandler(req: NextApiRequest, res: NextApiResponse) {
   const {
-    query: { id, name },
+    query: { id },
     body,
     method,
   } = req
 
   switch (method) {
     case 'POST': {
-      console.log(id, body)
-      AccountInstance.post(`account-session/renewal/${id}`, body)
+      AccountInstance.post(`${ENDPOINT_BACKEND_ACCOUNT_SESSION.RENEW_SESSION}/${id}`, body)
         .then((response) => {
-          console.log(response)
           res.status(200).json(response.data)
         })
         .catch((error) => {
@@ -28,11 +29,3 @@ export default function AccountHandler(req: NextApiRequest, res: NextApiResponse
       res.status(405).end(`Method ${method} Not Allowed`)
   }
 }
-
-// async function processInBackground(id: string, body: any) {
-//   // Perform the long-running task here
-//   const response = await AccountInstance.post(`account-session/renewal/${id}`, body)
-//   return response.data
-//   // You can handle the response here, such as storing it in a database or sending a notification
-//   // ...
-// }

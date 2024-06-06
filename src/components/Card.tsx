@@ -1,16 +1,15 @@
-import React, { HTMLAttributes } from 'react'
+import React from 'react'
+
 import { Title } from '@components/Typography'
-import Tag from './Tag'
+
 import { Button } from './Button'
 
-interface CardProps extends Omit<HTMLAttributes<HTMLDivElement>, 'title'> {
-  title?: string | undefined
+interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   customTitle?: React.ReactNode
   extra?: React.ReactNode
   subExtra?: React.ReactNode
-  className?: string | undefined
   coverImage?: string
-  description?: string
+  description?: React.ReactNode
   isDropdown?: boolean
 }
 
@@ -24,13 +23,12 @@ export default function Card({
   subExtra,
   description,
   onClick,
-  isDropdown = false,
+  isDropdown,
 }: CardProps) {
   // const { title, children, extra, className, coverImage, subExtra, description, onClick } = props
   return (
-    <div className={`flex h-fit w-full flex-col gap-6 rounded-xl border border-slate-300 p-6 shadow-lg ${className}`}>
-      {/* <div className="absolute top-0 right-0 px-6 py-6">{extra}</div> */}
-      {coverImage ? <img className="h-auto w-auto rounded-xl md:shrink-0" src={coverImage} /> : null}
+    <div className={`flex h-fit  w-full flex-col gap-6 rounded-xl border border-slate-300 p-6 shadow-lg ${className}`}>
+      {coverImage ? <img alt="card" className="h-auto w-auto rounded-xl md:shrink-0" src={coverImage} /> : null}
       {subExtra ? <div className="h-auto w-auto">{subExtra}</div> : null}
       {customTitle || description || extra ? (
         <div className="flex">

@@ -1,50 +1,63 @@
-import useSWR from 'swr'
-import { IAccount } from '@lib/Account/Account'
-import { GetAccountsPagination, GetAccount, UpdateSession, UpdateAccount, PaginationParams, PaginationMetadata } from '@services/Account/Account'
-import { useRef } from 'react'
+import { useState } from 'react'
 
-export const useAccount = (id: string, shouldFetch: boolean = true, fallbackData?: any) => {
-  const { data, error, mutate, ...swr } = useSWR(shouldFetch ? [id] : null, (id) => GetAccount(id), {
+import useSWR from 'swr'
+
+import { IAccount } from '@components/Account/Account'
+import {
+  getAccount,
+  getAccountsPagination,
+  updateAccount as updateAccountHelper,
+  updateSession as updateSessionHelper,
+} from '@services/Account/Account'
+import { PaginationMetadata, PaginationParams } from '@services/Account/AccountInterface'
+
+export const useAccount = (id: string, defaultShouldFetch: boolean = true, fallbackData?: IAccount) => {
+  const [shouldFetch, setShouldFetch] = useState(defaultShouldFetch)
+  const { data, error, mutate, ...swr } = useSWR(shouldFetch ? id : null, (id) => getAccount(id), {
     refreshInterval: 0,
     fallbackData: fallbackData,
   })
 
   const updateAccount = async (updatedAccount: IAccount) => {
-    const res = await UpdateAccount(id, updatedAccount)
+    const res = await updateAccountHelper(id, updatedAccount)
     mutate()
     return res
   }
 
   const updateSession = async (updatedAccount: IAccount) => {
-    const res = await UpdateSession(id, updatedAccount)
+    const res = await updateSessionHelper(id, updatedAccount)
     mutate()
     return res
   }
 
   return {
     data,
-    isLoading: !error && !data,
-    error: error,
+    error,
     updateAccount,
     updateSession,
+    setShouldFetch,
     mutate,
     ...swr,
   }
 }
 
-export const useGetAccountsPagination = (paginationParams: PaginationParams, shouldFetch?: true, fallbackData?: PaginationMetadata) => {
-  const mutableRef = useRef<PaginationMetadata>()
-  const { data, error, mutate, ...swr } = useSWR(shouldFetch ? [paginationParams] : null, GetAccountsPagination, {
+export const useGetAccountsPagination = (
+  paginationParams: PaginationParams,
+  defaultShouldFetch?: boolean,
+  fallbackData?: PaginationMetadata<IAccount[]>
+) => {
+  const [shouldFetch, setShouldFetch] = useState(defaultShouldFetch)
+  const { data, error, mutate, ...swr } = useSWR(paginationParams, getAccountsPagination, {
     refreshInterval: 0,
-    fallbackData: mutableRef.current ? mutableRef.current : undefined,
+    fallbackData: fallbackData,
+    revalidateOnMount: false,
   })
 
-  if (data !== undefined) mutableRef.current = data
-
   return {
-    accounts: data,
-    isLoading: !error && !data,
-    error: error,
+    data,
+    error,
+    shouldFetch,
+    setShouldFetch,
     mutate,
     ...swr,
   }

@@ -1,21 +1,22 @@
 import useSWR from 'swr'
-import { IRetryAccount } from '@lib/Account/Account/interface'
-import { GetRetryAccountsPagination, GetRetryAccount, UpdateRetryAccount, PaginationParams, PaginationMetadata } from '@services/Account/RetryAccount'
-export const useRetryAccount = (id: string, shouldFetch: boolean = true, fallbackData?: any) => {
-  const { data, error, mutate, ...swr } = useSWR(shouldFetch ? [id] : null, (id) => GetRetryAccount(id), {
+
+import { IRetryAccount } from '@components/Account/Account/interface'
+import { PaginationMetadata, PaginationParams } from '@services/Account/AccountInterface'
+import { getRetryAccount, getRetryAccountsPagination, updateRetryAccount as updateRetryAccountHelper } from '@services/Account/RetryAccount'
+export const useRetryAccount = (id: string, shouldFetch: boolean = true, fallbackData?: IRetryAccount) => {
+  const { data, error, mutate, ...swr } = useSWR(shouldFetch ? id : null, (id) => getRetryAccount(id), {
     refreshInterval: 0,
     fallbackData: fallbackData,
   })
 
   const updateRetryAccount = async (updatedAccount: IRetryAccount) => {
-    const res = await UpdateRetryAccount(id, updatedAccount)
+    const res = await updateRetryAccountHelper(id, updatedAccount)
     mutate()
     return res
   }
 
   return {
     data,
-    isLoading: !error && !data,
     error: error,
     updateRetryAccount,
     mutate,
@@ -23,14 +24,13 @@ export const useRetryAccount = (id: string, shouldFetch: boolean = true, fallbac
   }
 }
 
-export const useGetRetryAccountsPagination = (paginationParams: PaginationParams, shouldFetch?: true, fallbackData?: PaginationMetadata) => {
-  const { data, error, mutate, ...swr } = useSWR(shouldFetch ? [paginationParams] : null, GetRetryAccountsPagination, {
+export const useGetRetryAccountsPagination = (paginationParams: PaginationParams, fallbackData?: PaginationMetadata<IRetryAccount[]>) => {
+  const { data, error, mutate, ...swr } = useSWR(paginationParams, getRetryAccountsPagination, {
     refreshInterval: 0,
     fallbackData: fallbackData,
   })
   return {
     accounts: data,
-    isLoading: !error && !data,
     error: error,
     mutate,
     ...swr,

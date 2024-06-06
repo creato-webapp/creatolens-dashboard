@@ -1,11 +1,13 @@
-import { FC, useEffect } from 'react'
-import { useRouter } from 'next/router'
-import { useSession, signIn, signOut, getProviders } from 'next-auth/react'
-import Card from '@components/Card'
-import Link from 'next/link'
+import { FC } from 'react'
+
 import { deleteCookie } from 'cookies-next'
-import { ErrorCodes } from 'src/enums/ErrorCodeEnums'
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+import { getProviders, signIn, signOut, useSession } from 'next-auth/react'
+
 import { Button } from '@components/Button'
+import Card from '@components/Card'
+import { ErrorCodes } from 'src/enums/ErrorCodeEnums'
 interface loginProps {
   providers: Providers
 }
@@ -25,8 +27,8 @@ export async function getServerSideProps() {
   }
 }
 
-const login: FC<loginProps> = ({ providers }) => {
-  const { data: session, status } = useSession()
+const Login: FC<loginProps> = ({ providers }) => {
+  const { data: session } = useSession()
   const router = useRouter()
   const errorCode = router.query.error as ErrorCodes
   const errorMessages: Record<ErrorCodes, string> = {
@@ -85,4 +87,4 @@ const login: FC<loginProps> = ({ providers }) => {
     </Card>
   )
 }
-export default login
+export default Login

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 
 export interface IBaseInputProps extends React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
@@ -6,62 +7,59 @@ export interface IBaseInputProps extends React.DetailedHTMLProps<React.InputHTML
   error?: boolean
   message?: string
   iconClassName?: string
-  customFormItemProps?: any
   allowSpace?: boolean
   childrenPosition?: 'left' | 'right'
 }
 
 const BaseInput: React.FunctionComponent<IBaseInputProps> = ({
-  label,
-  error,
-  message,
-  iconClassName,
   id,
   name,
   value,
-  required,
   disabled,
   className,
-  onChange: onNewChange,
   allowSpace,
   children,
-  customFormItemProps,
   childrenPosition = 'right',
   ...props
 }) => {
-  const [state, setState] = useState<IBaseInputProps['value']>()
   const [errorMessage, setErrorMessage] = useState<string>('')
+  const [inputValue, setInputValue] = useState(value)
+
+  useEffect(() => {
+    setInputValue(value) // Sync state with prop
+  }, [value])
+
   const onChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-    if (allowSpace || e.target.value.indexOf(' ') === -1) {
-      const target = e.target as HTMLInputElement
-      setState(target.value)
-      onNewChange && onNewChange(e)
+    if (props.type === 'number') {
+      const validNumber = /^-?\d*\.?\d*$/
+      if (!validNumber.test(e.target.value) && value !== '') {
+        return
+      }
+    }
+    const { value: newValue } = e.target
+    if (allowSpace || !newValue.includes(' ')) {
       setErrorMessage('')
+      setInputValue(newValue)
     } else {
       setErrorMessage('Space input is not allowed!')
     }
+    props.onChange?.(e)
   }
-
-  useEffect(() => {
-    setState(value || '')
-  }, [value])
   return (
     <>
       <div className="relative flex w-full items-center rounded-md">
         {childrenPosition === 'left' && children}
         <input
-          {...customFormItemProps}
           {...props}
           id={id}
+          type={props.type}
           name={name}
-          value={value}
+          value={inputValue}
           onChange={onChange}
-          required={customFormItemProps?.required}
           disabled={disabled}
-          className={`base-input min-w-64 inline-flex rounded-md border border-gray-500 bg-neutral-50 p-2 font-semibold ${
+          className={`base-input inline-flex min-w-64 rounded-md border border-gray-500 bg-neutral-50 p-2 font-semibold ${
             errorMessage ? 'focus:border-0 focus:border-none focus:outline-error-600' : ''
           } ${className ? className : ''}`}
-          style={customFormItemProps?.style}
         />
         {childrenPosition === 'right' && children}
 
@@ -75,7 +73,7 @@ const BaseInput: React.FunctionComponent<IBaseInputProps> = ({
         </p>
       )}
       {props.type === 'text' && props?.maxLength && (
-        <p className="text-right italic text-neutral-400">{`(${state?.toString().length ?? 0}/${props?.maxLength} words)`}</p>
+        <p className="text-right italic text-neutral-400">{`(${inputValue?.toString().length ?? 0}/${props?.maxLength} words)`}</p>
       )}
     </>
   )

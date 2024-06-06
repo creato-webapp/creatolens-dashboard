@@ -1,10 +1,6 @@
-import type { FC } from 'react'
-
-interface WhyCreatoLensProps extends React.HtmlHTMLAttributes<HTMLDivElement> {}
-
-const WhyCreatoLens: React.FC = (props: WhyCreatoLensProps) => {
+const WhyCreatoLens = () => {
   return (
-    <div className="inline-flex h-auto w-full flex-col items-center justify-start bg-accent2-800 py-8 px-8 text-text-white">
+    <div className="inline-flex h-auto w-full flex-col items-center justify-start bg-accent2-800 px-8 py-8 text-text-white">
       <h1 className="mb-12 font-extrabold">Why Creato Lens?</h1>
       <div className="flex flex-col md:flex-row md:justify-around md:px-12">
         <div className="mb-3 md:w-2/5">

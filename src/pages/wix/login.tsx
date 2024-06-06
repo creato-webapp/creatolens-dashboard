@@ -1,6 +1,7 @@
-import { signIn, useSession } from 'next-auth/react'
 import { useEffect } from 'react'
+
 import { useRouter } from 'next/router'
+import { signIn, useSession } from 'next-auth/react'
 
 export default function WixSignin() {
   const router = useRouter()

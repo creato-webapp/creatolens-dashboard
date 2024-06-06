@@ -1,43 +1,28 @@
 import React, { useState } from 'react'
-import Card from '@components/Card'
+
+import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import { useRouter } from 'next/router'
-import { Form } from '@components/Form'
+
+import { IBlockedAccount } from '@components/Account/Account/interface'
+import Card from '@components/Card'
+import DynamicForm from '@components/Form/DynamicForm'
 import { IField } from '@components/Form/interface'
-import { IBlockedAccount } from '@lib/Account/Account/interface'
-import { getSession } from 'next-auth/react'
-import { GetBlockedAccount } from '@services/Account/BlockAccount'
+import { getBlockedAccount } from '@services/Account/BlockAccount'
 import { useBlockAccount } from 'src/hooks/useBlockedAccount'
+import dayjs from 'src/utils/dayjs'
 
 type Props = {
-  accountData: IBlockedAccount
+  accountData: IBlockedAccount | undefined
 }
 
-const dayjs = require('dayjs')
-const utc = require('dayjs/plugin/utc')
-dayjs.extend(utc)
-
-//TODO remove type any in context:any
-export const getServerSideProps = async (context: any) => {
-  //remove any
-
-  const session: any = await getSession(context)
-  if (!session) {
-    return {
-      redirect: {
-        destination: '/404',
-      },
-    }
-  }
-  const { params } = context
-  const res = await GetBlockedAccount(params.id, {
+export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext): Promise<GetServerSidePropsResult<Props>> => {
+  const id = context.params?.id as string
+  const res = await getBlockedAccount(id, {
     headers: {
       Cookie: context.req.headers.cookie,
     },
   })
-
-  // Pass data to the page via props
-  const accountData = res as IBlockedAccount
-  return { props: { accountData } }
+  return { props: { accountData: res } }
 }
 
 const AccountsBlockedPage = ({ accountData }: Props) => {
@@ -45,67 +30,76 @@ const AccountsBlockedPage = ({ accountData }: Props) => {
   const [shouldFetch, setShouldFetch] = useState(false)
   const router = useRouter()
   const { id } = router.query
-  const isCreate = id === 'create-account'
-
-  const {
-    data,
-    isLoading: loading,
-    error,
-    updateBlockAccount: useUpdateAccount,
-  } = useBlockAccount(id as string, shouldFetch, isCreate ? isCreate : accountData)
-
-  if (error) {
-    console.log(data)
-    console.log(error)
-    return <div>Failed to load users {id}</div>
-  }
+  const { data, error, updateBlockAccount: callUpdateAccount } = useBlockAccount(id as string, shouldFetch, accountData as IBlockedAccount)
   if (!data) {
-    console.log(data)
+    console.error(data)
     return <div>Loading...</div>
   }
 
   const account: IBlockedAccount = {
     ...data,
-    last_login_dt: dayjs(data?.last_login_dt, 'YYYY-MM-DD THH:mm:ss').format('YYYY-MM-DDTHH:mm'),
+    last_login_dt: dayjs(data.last_login_dt, 'YYYY-MM-DD THH:mm:ss').format('YYYY-MM-DDTHH:mm'),
   }
 
   const fields: IField[] = [
     {
       label: 'document_id',
-      type: 'Input',
+      type: 'text',
       name: 'id',
+      id: 'id',
+      value: account['id'],
     },
     {
       label: 'username',
-      type: 'Input',
+      type: 'text',
       name: 'username',
-      customFormItemProps: { required: true },
+      id: 'username',
+      required: true,
+      value: account['username'],
     },
     {
       label: 'pwd',
-      type: 'Input',
+      type: 'password',
       name: 'pwd',
-      customFormItemProps: { required: true },
+      id: 'pwd',
+      required: true,
+      value: account['pwd'],
     },
     {
       label: 'status',
-      type: 'Input',
+      type: 'text',
       name: 'status',
+      id: 'status',
+      value: account['status'],
+      disabled: true,
+    },
+    {
+      label: 'post_scraped_count',
+      type: 'number',
+      name: 'post_scraped_count',
+      id: 'post_scraped_count',
+      value: account['post_scrapped_count'],
     },
     {
       label: 'enabled',
-      type: 'Checkbox',
+      type: 'checkbox',
       name: 'enabled',
+      id: 'enabled',
+      checked: account['enabled'],
     },
     {
       label: 'is_occupied',
-      type: 'Checkbox',
+      type: 'checkbox',
       name: 'is_occupied',
+      id: 'is_occupied',
+      checked: account['is_occupied'],
     },
     {
       label: 'last_login_dt',
-      type: 'DateTimePicker',
+      type: 'datetime-local',
       name: 'last_login_dt',
+      id: 'last_login_dt',
+      value: account['last_login_dt'],
     },
   ]
 
@@ -116,7 +110,7 @@ const AccountsBlockedPage = ({ accountData }: Props) => {
       const res = await updateAccount(values)
       window.alert(res)
     } catch (error) {
-      console.log(error)
+      console.error(error)
       window.alert(error)
     } finally {
       setIsLoading(false)
@@ -129,18 +123,16 @@ const AccountsBlockedPage = ({ accountData }: Props) => {
       ...values,
       last_login_dt: dayjs(values.last_login_dt, 'YYYY-MM-DDTHH:mm').utc().local().format('YYYY-MM-DD THH:mm:ss'),
     }
-    await useUpdateAccount(newValues)
+    await callUpdateAccount(newValues)
+  }
+
+  if (error) {
+    return <div>Failed to load users {id}</div>
   }
 
   return (
     <Card title="Accounts Info">
-      <Form.Layout onSubmit={handleSubmit} Header={account.username} loading={isLoading} fields={fields}>
-        {fields.map((e: IField, index) => (
-          <Form.Item label={e.label} key={index} customFormItemProps={e.customFormItemProps}>
-            <Form.CustomItem id={e.name} defaultValue={account[e.name]} type={e.type} customFormItemProps={e.customFormItemProps} />
-          </Form.Item>
-        ))}
-      </Form.Layout>
+      <DynamicForm fields={fields} onSubmit={handleSubmit} Header={account.username} loading={isLoading} />
     </Card>
   )
 }

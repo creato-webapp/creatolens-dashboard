@@ -1,4 +1,5 @@
 import React, { createElement } from 'react'
+
 import { fontWeights } from './index'
 interface ParagraphProps extends React.HTMLAttributes<HTMLElement>, fontWeights {
   size?: 'xs' | 'sm' | 'md' | 'lg'
@@ -8,7 +9,7 @@ interface ParagraphProps extends React.HTMLAttributes<HTMLElement>, fontWeights 
   font?: string
 }
 
-const Paragraph: React.FC<ParagraphProps> = ({ size = 'sm', italic, children, bold, ...restProps }) => {
+const Paragraph: React.FC<ParagraphProps> = ({ italic, children, ...restProps }) => {
   const { extraLight, light, regular, medium, className, font } = restProps
   let fontWeights = ''
   if (extraLight) fontWeights = 'font-[275]'
@@ -22,7 +23,7 @@ const Paragraph: React.FC<ParagraphProps> = ({ size = 'sm', italic, children, bo
     font || 'p',
     {
       className: `${paragraphStyles}`,
-      restProps: restProps,
+      restprops: restProps,
     },
     children
   )

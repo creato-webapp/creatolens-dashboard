@@ -1,22 +1,15 @@
 //TODO write Get, Gets, Update,
 import { AxiosRequestConfig } from 'axios'
+
+import { IAccount } from '@components/Account/Account'
+import { IAccountStatusType } from 'src/constants/status'
+
+import { PaginationMetadata, PaginationParams } from './AccountInterface'
+
+import { CountryEnum } from '../../enums/CountryCodeEnums'
 import { Fetcher } from '../fetcher'
-import { IAccount } from '@lib/Account/Account'
-
-export interface PaginationParams {
-  pageNumber: number
-  pageSize: number
-  orderBy: string
-  isAsc: boolean
-}
-
-export interface PaginationMetadata {
-  data: IAccount[]
-  has_next: boolean
-  has_prev: boolean
-  page: number
-  size: number
-  total_items: number
+interface Cookies {
+  [key: string]: string
 }
 
 type PartialAccount = Partial<{
@@ -27,16 +20,18 @@ type PartialAccount = Partial<{
   is_authenticated: boolean
   is_occupied: boolean
   last_login_dt: string
+  location?: CountryEnum
   login_attempt_count: number
   login_count: number
   post_scrapped_count: number
   pwd: string
-  session_cookies: any
-  status: 'active' | 'blocked' | 'banned' | 'retry' | 'test' | 'scrapping' | 'occupied'
+  session_cookies: Cookies
+  status: IAccountStatusType
   updated_at: string
+  created_by: string
 }>
 
-export function generateAccountFilter(account: PartialAccount): string {
+function generateAccountFilter(account: PartialAccount): string {
   const filters = []
 
   if (account.id) {
@@ -78,59 +73,90 @@ export function generateAccountFilter(account: PartialAccount): string {
   if (account.updated_at) {
     filters.push(`updated_at = "${account.updated_at}"`)
   }
+  if (account.created_by) {
+    filters.push(`created_by == ${account.created_by}`)
+  }
   return filters.join(' && ')
 }
 
-export async function CreateAccount(account: IAccount, customConfig?: AxiosRequestConfig): Promise<IAccount> {
-  const response = await Fetcher.POST(`/api/accounts`, account, customConfig)
-  return response
-}
-
-export async function GetAccount(id: string, customConfig?: AxiosRequestConfig): Promise<IAccount> {
-  const response = await Fetcher.GET(`/api/accounts/${id}`, customConfig)
-  return response
-}
-
-export async function GetAccounts(
-  account?: Partial<IAccount>,
-  orderBy?: string,
-  isAsc?: boolean,
-  customConfig?: AxiosRequestConfig
-): Promise<IAccount[]> {
-  const response = await Fetcher.GET(`/api/accounts/query`, {
-    params: { filter: account ? generateAccountFilter(account) : null, orderby: orderBy, isAsc: isAsc },
-  })
-  return response
-}
-
-export async function GetAccountsPagination(params: PaginationParams, customConfig?: AxiosRequestConfig): Promise<PaginationMetadata> {
-  const response = await Fetcher.GET(
+export async function createAccount(username: string, password: string, customConfig?: AxiosRequestConfig) {
+  const response = await Fetcher.POST<IAccount, { username: string; password: string }>(
     `/api/accounts`,
     {
-      pageNumber: params.pageNumber,
-      pageSize: params.pageSize,
-      orderBy: params.orderBy,
-      isAsc: params.isAsc,
+      username: username,
+      password: password,
     },
     customConfig
   )
   return response
 }
 
-export async function UpdateAccount(id: string, updatedAccount: IAccount, customConfig?: AxiosRequestConfig): Promise<IAccount> {
-  const res = await Fetcher.PATCH(`/api/accounts/${id}`, updatedAccount, { ...customConfig, params: { id: updatedAccount.id } })
+export async function getAccount(id: string, customConfig?: AxiosRequestConfig): Promise<IAccount> {
+  const response = await Fetcher.GET<IAccount>(`/api/accounts/${id}`, customConfig)
+  return response
+}
+
+export async function getAccounts(
+  account?: Partial<IAccount>,
+  orderBy?: string,
+  isAsc?: boolean,
+  customConfig?: AxiosRequestConfig
+): Promise<IAccount[]> {
+  if (!account) return []
+  const filterData = generateAccountFilter(account)
+  const response = await Fetcher.GET<IAccount[]>(`/api/accounts/query`, {
+    ...customConfig,
+    params: {
+      orderBy: orderBy,
+      isAsc: isAsc,
+      filter: filterData,
+    },
+  })
+  return response
+}
+
+export async function getAccountsPagination(params: PaginationParams, customConfig?: AxiosRequestConfig) {
+  const response = await Fetcher.GET<PaginationMetadata<IAccount[]>>(`/api/accounts`, {
+    ...customConfig,
+    params: {
+      pageNumber: params.pageNumber,
+      pageSize: params.pageSize,
+      orderBy: params.orderBy,
+      isAsc: params.isAsc,
+    },
+  })
+  return response
+}
+
+interface SessionUpdateResponse {
+  success: boolean
+  message?: string
+  // Include other fields expected in the response
+}
+
+interface SessionUpdatePayload {
+  username: string
+  password: string
+  account_id: string
+}
+
+export async function updateAccount(id: string, updatedAccount: Partial<IAccount>, customConfig?: AxiosRequestConfig): Promise<IAccount> {
+  const res = await Fetcher.PATCH<IAccount, Partial<IAccount>>(`/api/accounts/${id}`, updatedAccount, {
+    ...customConfig,
+    params: { id: updatedAccount.id },
+  })
   return res
 }
 
-export async function UpdateSession(id: string, updatedAccount: IAccount, customConfig?: AxiosRequestConfig): Promise<any> {
-  const res = await Fetcher.POST(
+export async function updateSession(id: string, updatedAccount: IAccount, customConfig?: AxiosRequestConfig): Promise<SessionUpdateResponse> {
+  const res = await Fetcher.POST<SessionUpdateResponse, SessionUpdatePayload>(
     `/api/accounts/session/${id}`,
     {
       username: updatedAccount.username,
       password: updatedAccount.pwd,
       account_id: updatedAccount.id,
     },
-    { ...customConfig }
+    customConfig
   )
   return res
 }

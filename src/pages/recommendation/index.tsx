@@ -1,63 +1,46 @@
-import React, { useState, useCallback } from 'react'
-import Card from '@components/Card'
-import { getSession } from 'next-auth/react'
-import { Form } from '@components/Form'
-import Title from '@components/Typography/Title'
-import MagnifyingGlassIcon from '@components/Icon/MagnifyingGlassIcon'
-import LoaderIcon from '@components/Icon/LoaderIcon'
-import LightBulbIcon from '@components/Icon/LightBulbIcon'
-import TopRelatedHashtagCard from '@lib/Hashet/TopRelatedHashtagCard'
-import TopAccHashtagCard from '@lib/Hashet/TopAccHashtagCard'
+import React, { useCallback, useState } from 'react'
+
 import { Button } from '@components/Button'
+import Card from '@components/Card'
+import { Form } from '@components/Form'
+import CustomizeHashtagCard from '@components/Hashet/CustomizeHashtagCard'
+import TopAccHashtagCard from '@components/Hashet/TopAccHashtagCard'
+import TopRelatedHashtagCard from '@components/Hashet/TopRelatedHashtagCard'
+import Hero from '@components/Hero'
+import LightBulbIcon from '@components/Icon/LightBulbIcon'
+import LoaderIcon from '@components/Icon/LoaderIcon'
+import MagnifyingGlassIcon from '@components/Icon/MagnifyingGlassIcon'
 import Popover from '@components/Popover'
 import Tab from '@components/Tab'
-import CustomizeHashtagCard from '@lib/Hashet/CustomizeHashtagCard'
 import { useGetHashtag } from 'src/hooks/useHashtag'
-import Hero from '@components/Hero'
-interface IHashet extends Record<string, string | number | boolean> {
+
+export interface IHashet extends Record<string, string | number | boolean> {
   hashtag: string
   acc: number
 }
 
-type Props = {
+export type HashetProps = {
   hashetSessionData: IHashet[]
 }
 
-export const getServerSideProps = async (context: any) => {
-  const session = await getSession(context)
-  if (!session) {
-    return {
-      redirect: {
-        destination: '/auth/login',
-      },
-    }
-  }
-  const hashetSessionData = { data: [] }
-  return { props: { hashetSessionData } }
-}
-
-const RecommendationPage = ({ hashetSessionData }: Props) => {
-  //find better way to write fetch logic
+const RecommendationPage = () => {
   const [inputString, setInputString] = useState('')
   const [stringToSubmit, setStringToSubmit] = useState('')
   const onChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     setInputString(e.target.value)
   }
 
+  const { data, error, mutate: mutateHashet, isValidating } = useGetHashtag(stringToSubmit, !!stringToSubmit)
+
   const onSubmit = useCallback(async () => {
     setStringToSubmit(inputString)
     await mutateHashet()
-  }, [inputString])
+  }, [inputString, mutateHashet])
 
-  const { data, error, mutate: mutateHashet, isValidating } = useGetHashtag(stringToSubmit, stringToSubmit ? true : false, hashetSessionData)
   if (error) {
-    console.log(data)
-    console.log(error)
+    console.error(data)
+    console.error(error)
     return <div>Failed to load hashet error data</div>
-  }
-  if (!data) {
-    console.log(data)
-    return <div>Loading...</div>
   }
 
   const hashetData: IHashet[] = data?.data ? data.data : []
@@ -72,7 +55,7 @@ const RecommendationPage = ({ hashetSessionData }: Props) => {
       key: '1',
       title: 'Categories',
       children: (
-        <div className="flex flex-wrap gap-4 md:flex md:flex-nowrap md:py-24 md:px-14">
+        <div className="flex flex-col justify-center gap-4 md:flex md:flex-row md:px-14 md:py-24 ">
           <TopRelatedHashtagCard hashtags={hashetData} />
           <TopAccHashtagCard hashtags={hashetData} />
         </div>
@@ -119,6 +102,7 @@ const RecommendationPage = ({ hashetSessionData }: Props) => {
           <div className="flex w-full gap-2">
             <div className="flex w-full items-center rounded-3xl bg-bg-dark px-2 text-text-primary hover:rounded-3xl hover:outline-none focus:rounded-3xl focus:outline-none focus:ring-opacity-50 active:rounded-3xl">
               <Form.BaseInput
+                // TODO fix input element (cannot enter and submit)
                 allowSpace
                 hidden
                 disabled={isValidating}
@@ -133,14 +117,14 @@ const RecommendationPage = ({ hashetSessionData }: Props) => {
                 {isValidating ? <LoaderIcon className="animate-spin" /> : <MagnifyingGlassIcon />}
               </Form.BaseInput>
             </div>
-            <Button.Primary className="w-auto" sizes={['s', 'm', 'm']} onClick={() => onSubmit()} loading={isValidating}>
+            <Button.Primary className="w-auto" sizes={['s', 'm', 'm']} onClick={onSubmit} loading={isValidating}>
               Search
             </Button.Primary>
           </div>
         </div>
       </Hero>
       <Card className="min-h-full w-full rounded-none border-none bg-transparent px-4 py-0 shadow-none md:px-20 md:pb-28">
-        <Tab items={tabItems} defaultActiveKey="1" scrollable={false} className="shadow-none md:shadow-xl md:px-0" />
+        <Tab items={tabItems} defaultActiveKey="1" scrollable={false} className="shadow-none md:px-0 md:shadow-xl" />
       </Card>
     </div>
   )

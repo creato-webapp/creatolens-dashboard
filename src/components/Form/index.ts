@@ -1,24 +1,20 @@
-import Layout from './Layout'
-import Item from './Item'
-import TextInput from './TextInput'
 import BaseInput from './BaseInput'
-import InputNumber from './InputNumber'
 import Checkbox from './Checkbox'
-import { DatePicker, TimePicker, DateTimePicker } from './DatetimePicker'
-import CustomItem from './CustomItem'
+import { DatePicker, DateTimePicker, TimePicker } from './DatetimePicker'
 import Dropdown from './Dropdown'
+import InputNumber from './InputNumber'
+import InputPassword from './InputPassword'
+import TextInput from './TextInput'
 
 export const Form = {
-  Layout,
-  Item,
   TextInput,
+  InputPassword,
   BaseInput,
   Checkbox,
   DatePicker,
   Dropdown,
   TimePicker,
   DateTimePicker,
-  CustomItem,
   InputNumber,
 }
 

@@ -1,10 +1,12 @@
 import type { FC } from 'react'
-import { DatePickerProps } from './interface'
+
+import BaseInput from '../BaseInput'
+import { DatePickerProps } from '../interface'
 
 const DatePicker: FC<DatePickerProps> = (props: DatePickerProps) => {
   return (
     <div className="mb-4 flex items-center">
-      <input
+      <BaseInput
         name={props.id}
         defaultValue={props.defaultValue}
         id={props.id}
@@ -17,8 +19,7 @@ const DatePicker: FC<DatePickerProps> = (props: DatePickerProps) => {
         rounded-md
         border-gray-300
         shadow-sm
-        focus:border-accent2-300 focus:ring focus:ring-accent2-200 focus:ring-opacity-50
-        "
+        focus:border-accent2-300 focus:ring focus:ring-accent2-200 focus:ring-opacity-50"
       />
     </div>
   )

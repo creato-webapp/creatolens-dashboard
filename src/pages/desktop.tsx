@@ -1,13 +1,12 @@
 import React from 'react'
-import styles from '../styles/Desktop.module.css'
-import Card from '@components/Card'
+
 import type { NextPage } from 'next'
 
 const Desktop: NextPage = () => {
   return (
     <div className="relative h-96 w-96 bg-white">
       <div className="absolute left-[81px] top-[424px] inline-flex items-end justify-start gap-7">
-        <img className="h-56 w-96" src="https://via.placeholder.com/361x227" />
+        <img alt="Creato Lens" className="h-56 w-96" src="https://via.placeholder.com/361x227" />
         <div className="w-96 self-stretch text-8xl font-extrabold leading-10 tracking-widest text-accent1-500">Creato Lens</div>
       </div>
       <div className="absolute left-[953px] top-[363px] inline-flex flex-col items-center justify-start gap-6 rounded bg-neutral-50 px-9 py-16 shadow">
