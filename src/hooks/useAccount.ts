@@ -1,7 +1,5 @@
 import { useState } from 'react'
 
-import useSWR from 'swr'
-
 import { IAccount } from '@components/Account/Account'
 import {
   getAccount,
@@ -10,10 +8,11 @@ import {
   updateSession as updateSessionHelper,
 } from '@services/Account/Account'
 import { PaginationMetadata, PaginationParams } from '@services/Account/AccountInterface'
+import { useRequest } from '@services/fetcher'
 
 export const useAccount = (id: string, defaultShouldFetch: boolean = true, fallbackData?: IAccount) => {
   const [shouldFetch, setShouldFetch] = useState(defaultShouldFetch)
-  const { data, error, mutate, ...swr } = useSWR(shouldFetch ? id : null, (id) => getAccount(id), {
+  const { data, error, mutate, ...swr } = useRequest.READ(shouldFetch ? id : null, getAccount, {
     refreshInterval: 0,
     fallbackData: fallbackData,
   })
@@ -47,7 +46,7 @@ export const useGetAccountsPagination = (
   fallbackData?: PaginationMetadata<IAccount[]>
 ) => {
   const [shouldFetch, setShouldFetch] = useState(defaultShouldFetch)
-  const { data, error, mutate, ...swr } = useSWR(paginationParams, getAccountsPagination, {
+  const { data, error, mutate, ...swr } = useRequest.READ(paginationParams, () => getAccountsPagination(paginationParams), {
     refreshInterval: 0,
     fallbackData: fallbackData,
     revalidateOnMount: false,
