@@ -1,4 +1,6 @@
 import axios, { AxiosError, AxiosRequestConfig } from 'axios'
+import useSWR, { Fetcher, Key, SWRConfiguration, SWRResponse } from 'swr'
+import useSWRMutation, { SWRMutationConfiguration, SWRMutationResponse  } from 'swr/mutation'
 
 export const instance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_LOCAL_SERVER_URL,
@@ -32,48 +34,57 @@ instance.interceptors.response.use(
   }
 )
 
-// export const Fetcher = {
-//   GET: <T>(url: string, customConfig?: AxiosRequestConfig) => FetcherInstance.get<T>(url, customConfig).then((res) => res.data),
+enum Method {
+  POST = 'POST',
+  UPLOAD = 'UPLOAD',
+  GET = 'GET',
+  PUT = 'PUT',
+  PATCH = 'PATCH',
+  DELETE = 'DELETE',
+}
 
-//   POST: <T, D = {}>(url: string, data?: D, customConfig?: AxiosRequestConfig) =>
-//     FetcherInstance.post<T>(url, data, customConfig).then((res) => res.data),
-
-//   PATCH: <T, D = {}>(url: string, data?: Partial<D>, customConfig?: AxiosRequestConfig) =>
-//     FetcherInstance.patch<T>(url, data, customConfig).then((res) => res.data),
-
-//   DELETE: <T>(url: string, customConfig?: AxiosRequestConfig) => FetcherInstance.delete<T>(url, customConfig).then((res) => res.data),
-// }
 
 export type CancellablePromise<T> = Promise<T> & {
   cancel: () => void
 }
 
-export const Fetcher = {
-  GET: <T>(url: string, customConfig?: AxiosRequestConfig) => {
+export const CustomFetcher = {
+  [Method.GET]: <T>(url: string, customConfig?: AxiosRequestConfig) => {
     const controller = new AbortController()
     const config = { ...customConfig, signal: controller.signal }
     const promise = instance.get<T>(url, config).then((res) => res.data)
     ;(promise as CancellablePromise<T>).cancel = () => controller.abort()
     return promise as CancellablePromise<T>
   },
-
-  POST: <T, D = unknown>(url: string, data?: D, customConfig?: AxiosRequestConfig) => {
+  [Method.POST]: <T, D = unknown>(url: string, data?: D, customConfig?: AxiosRequestConfig) => {
     const controller = new AbortController()
     const config = { ...customConfig, signal: controller.signal }
     const promise = instance.post<T>(url, data, config).then((res) => res.data)
     ;(promise as CancellablePromise<T>).cancel = () => controller.abort()
     return promise as CancellablePromise<T>
   },
-
-  PATCH: <T, D = unknown>(url: string, data?: Partial<D>, customConfig?: AxiosRequestConfig) => {
+  [Method.UPLOAD]: <T, D = unknown>(url: string, data?: D, customConfig?: AxiosRequestConfig) => {
+    const controller = new AbortController()
+    const config = { ...customConfig, headers: { 'Content-Type': 'application/octet-stream' } }
+    const promise = instance.put<T>(url, data, config).then((res) => res.data)
+    ;(promise as CancellablePromise<T>).cancel = () => controller.abort()
+    return promise as CancellablePromise<T>
+  },
+  [Method.PATCH]: <T, D = unknown>(url: string, data?: Partial<D>, customConfig?: AxiosRequestConfig) => {
     const controller = new AbortController()
     const config = { ...customConfig, signal: controller.signal }
     const promise = instance.patch<T>(url, data, config).then((res) => res.data)
     ;(promise as CancellablePromise<T>).cancel = () => controller.abort()
     return promise as CancellablePromise<T>
   },
-
-  DELETE: <T>(url: string, customConfig?: AxiosRequestConfig) => {
+  [Method.PUT]: <T, D = unknown>(url: string, data?: Partial<D>, customConfig?: AxiosRequestConfig) => {
+    const controller = new AbortController()
+    const config = { ...customConfig, signal: controller.signal }
+    const promise = instance.put<T>(url, data, config).then((res) => res.data)
+    ;(promise as CancellablePromise<T>).cancel = () => controller.abort()
+    return promise as CancellablePromise<T>
+  },
+  [Method.DELETE]: <T>(url: string, customConfig?: AxiosRequestConfig) => {
     const controller = new AbortController()
     const config = { ...customConfig, signal: controller.signal }
     const promise = instance.delete<T>(url, config).then((res) => res.data)
@@ -81,3 +92,32 @@ export const Fetcher = {
     return promise as CancellablePromise<T>
   },
 }
+
+enum RequestType {
+  READ = 'READ',
+  WRITE = 'WRITE',
+}
+
+const useRequest = {
+  [RequestType.READ]: (key: Key, fetcher: Fetcher, options?: SWRConfiguration) => {
+    const { data, error, ...swr } = useSWR(key, fetcher, options)
+
+    return {
+      data,
+      error,
+      ...swr,
+    } as SWRResponse
+  },
+  [RequestType.WRITE]: <T>(key: Key, fetcher: Fetcher, options?: SWRMutationConfiguration<unknown, Error, Key, unknown, T>) => {
+    const { trigger, data, error, ...swr } = useSWRMutation(key, fetcher, options)
+
+    return { 
+      trigger,
+      data,
+      error,
+      ...swr,
+    } as SWRMutationResponse
+  },
+}
+
+export { CustomFetcher as Fetcher, useRequest, Method }
