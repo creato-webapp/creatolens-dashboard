@@ -50,9 +50,9 @@ const TestimonialCards: React.FC<TestimonialCardsProps> = ({ comments = testimon
         <span className="font-extrabold  tracking-wide text-accent1-500">Freelancers</span>
         <span className="font-medium  text-slate-600"> use Creato LENS for running their social media page </span>
       </h2>
-      <div className="grid-cols-3  md:mx-4 md:grid">
+      <div className="grid-cols-3  md:mx-4 md:flex">
         {comments?.map((comment, index) => (
-          <div key={index} className="m-4 inline rounded-lg border border-slate-300 bg-white p-4 text-center shadow-lg">
+          <div key={index} className="m-4 rounded-lg border border-slate-300 bg-white p-4 text-center shadow-lg">
             <div className="flex items-center space-x-3"></div>
             <h4 className="m-2 font-medium">
               <span>{comment.text[0]}</span>
