@@ -1,5 +1,6 @@
 import { AxiosRequestConfig } from 'axios'
 
+import ENDPOINT_FRONTEND from 'src/constants/endpoints/frontend'
 import { CountryEnum } from 'src/enums/CountryCodeEnums'
 
 import { Fetcher } from './fetcher'
@@ -51,7 +52,7 @@ export async function getKeyword(
 ): Promise<{ data: KeywordData[] }> {
   const keywordResponse = await Fetcher.GET<{
     data: KeywordData[]
-  }>('/api/dashboard/keyword', {
+  }>(ENDPOINT_FRONTEND.DASHBOARD_KEYWORDS, {
     ...customConfig,
     params: {
       accId: data.args.accId,
@@ -72,7 +73,7 @@ export async function getPostCount(
 ): Promise<{ data: { post_count: number } }> {
   const postCountResponse = await Fetcher.GET<{
     data: { post_count: number }
-  }>('/api/dashboard/postCount', {
+  }>(ENDPOINT_FRONTEND.DASHBOARD_POST_COUNT, {
     ...customConfig,
     params: {
       accId: data.args.accId,
@@ -96,7 +97,7 @@ export async function getMostRepeatedPost(
 ): Promise<MostRepeatedPost | null> {
   const response = await Fetcher.GET<{
     data: PostData[]
-  }>('/api/dashboard', {
+  }>(ENDPOINT_FRONTEND.DASHBOARD, {
     ...customConfig,
     params: {
       accId: data.args.accId,
@@ -117,7 +118,7 @@ export async function getMostRepeatedPost(
         data: {
           username: string
         }
-      }>('/api/dashboard/instaProfile', {
+      }>(ENDPOINT_FRONTEND.DASHBOARD_PROFILE, {
         ...customConfig,
         params: {
           profile_id: maxCountImage.owner_username,
@@ -148,7 +149,7 @@ export async function getMostRepeatedPostImage(data: {
 }) {
   if (!data.args.shortcode) return
 
-  const response = await Fetcher.GET<string>('/api/dashboard/instapostImage', {
+  const response = await Fetcher.GET<string>(ENDPOINT_FRONTEND.DASHBOARD_POST_IMAGE, {
     params: {
       shortcode: data.args.shortcode,
       batch_id: data.args.batch_id,
@@ -167,7 +168,7 @@ export async function getProfile(data: {
   if (!data.args.profile_id || !data.args.session_id) return
   const response = await Fetcher.GET<{
     data: IProfile
-  }>('/api/dashboard/instaProfile', {
+  }>(ENDPOINT_FRONTEND.DASHBOARD_PROFILE, {
     params: {
       profile_id: data.args.profile_id,
       session_id: data.args.session_id,
