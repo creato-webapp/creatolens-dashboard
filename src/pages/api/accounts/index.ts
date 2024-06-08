@@ -113,7 +113,7 @@ export default async function accountQueryHandler(req: NextApiRequest, res: Next
         : null
       const countryCode = geoResponse?.data.data.features[0].properties.country ?? 'HK'
       const response = await AccountInstance.patch(
-        `${ENDPOINT_BACKEND.CREATE_NEW_ACCOUNT}/${account.data.id}`,
+        `${ENDPOINT_BACKEND.UPDATE_ACCOUNT}/${account.data.id}`,
         {
           location: countryCode,
         },

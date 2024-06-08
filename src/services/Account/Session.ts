@@ -1,6 +1,7 @@
 //TODO write Get, Gets, Update,
 import { AxiosRequestConfig } from 'axios'
 
+import ENDPOINT_FRONTEND from 'src/constants/endpoints/frontend'
 import { IAccountSession } from 'src/pages/accounts/session'
 
 import { Fetcher } from '../fetcher'
@@ -25,7 +26,7 @@ export async function getSessionPagination(
   params: PaginationParams,
   customConfig?: AxiosRequestConfig
 ): Promise<PaginationMetadata<IAccountSession[]>> {
-  const response = await Fetcher.GET<PaginationMetadata<IAccountSession[]>>(`/api/accounts/session`, {
+  const response = await Fetcher.GET<PaginationMetadata<IAccountSession[]>>(ENDPOINT_FRONTEND.GET_ACCOUNT_SESSION_PAGINATION, {
     ...customConfig,
     params: {
       pageNumber: params.pageNumber,

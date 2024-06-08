@@ -2,6 +2,7 @@
 import { AxiosRequestConfig } from 'axios'
 
 import { IAccountError } from '@components/Account/AccountErrors/interface'
+import ENDPOINT_FRONTEND from 'src/constants/endpoints/frontend'
 
 import { PaginationMetadata, PaginationParams } from './AccountInterface'
 
@@ -11,7 +12,7 @@ interface ExtendedPaginationParams extends PaginationParams {
   username?: string
 }
 export async function getErrorPagination(params: ExtendedPaginationParams, customConfig?: AxiosRequestConfig) {
-  const response = await Fetcher.GET<PaginationMetadata<IAccountError[]>>(`/api/accounts/error`, {
+  const response = await Fetcher.GET<PaginationMetadata<IAccountError[]>>(ENDPOINT_FRONTEND.ACCOUNT_ERRORS, {
     ...customConfig,
     params: {
       username: params.username ?? undefined,
