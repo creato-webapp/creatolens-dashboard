@@ -1,18 +1,14 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import { IAccount } from '@components/Account/Account'
-import {
-  getAccount,
-  getAccountsPagination,
-  updateAccount as updateAccountHelper,
-  updateSession as updateSessionHelper,
-} from '@services/Account/Account'
+import { updateAccount as updateAccountHelper,updateSession as updateSessionHelper , } from '@services/Account/Account'
 import { PaginationMetadata, PaginationParams } from '@services/Account/AccountInterface'
-import { useRequest } from '@services/fetcher'
+import {  Method, useRequest } from '@services/fetcher'
+import ENDPOINT_FRONTEND from 'src/constants/endpoints/frontend'
 
 export const useAccount = (id: string, defaultShouldFetch: boolean = true, fallbackData?: IAccount) => {
   const [shouldFetch, setShouldFetch] = useState(defaultShouldFetch)
-  const { data, error, mutate, ...swr } = useRequest.READ(shouldFetch ? id : null, getAccount, {
+  const { data, error, mutate, ...swr } = useRequest<IAccount>(shouldFetch ? [ENDPOINT_FRONTEND.ACCOUNT + id] : null, Method.GET, {
     refreshInterval: 0,
     fallbackData: fallbackData,
   })
@@ -28,7 +24,6 @@ export const useAccount = (id: string, defaultShouldFetch: boolean = true, fallb
     mutate()
     return res
   }
-
   return {
     data,
     error,
@@ -46,11 +41,25 @@ export const useGetAccountsPagination = (
   fallbackData?: PaginationMetadata<IAccount[]>
 ) => {
   const [shouldFetch, setShouldFetch] = useState(defaultShouldFetch)
-  const { data, error, mutate, ...swr } = useRequest.READ(paginationParams, () => getAccountsPagination(paginationParams), {
-    refreshInterval: 0,
-    fallbackData: fallbackData,
-    revalidateOnMount: false,
-  })
+  const { data, error, mutate, ...swr } = useRequest<PaginationMetadata<IAccount[]>>(
+    shouldFetch
+      ? [
+          ENDPOINT_FRONTEND.GET_ACCOUNTS_PAGINATION,
+          {
+            params: paginationParams,
+          }
+        ]
+      : null,
+    Method.GET,
+    {
+      refreshInterval: 0,
+      fallbackData: fallbackData,
+      revalidateOnMount: false,
+    },
+  )
+  useEffect(() => {
+    mutate()
+  }, [paginationParams, mutate])
 
   return {
     data,

@@ -1,6 +1,5 @@
 import axios, { AxiosError, AxiosRequestConfig } from 'axios'
-import useSWR, { Fetcher, Key, SWRConfiguration, SWRResponse } from 'swr'
-import useSWRMutation, { SWRMutationConfiguration, SWRMutationResponse  } from 'swr/mutation'
+import useSWR, { SWRConfiguration } from 'swr'
 
 export const instance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_LOCAL_SERVER_URL,
@@ -27,8 +26,6 @@ instance.interceptors.response.use(
         // window.alert(error.message)
         console.error(error.message)
       }
-
-      console.error(error.response?.data)
     }
     return Promise.reject(error)
   }
@@ -43,15 +40,14 @@ enum Method {
   DELETE = 'DELETE',
 }
 
-
 export type CancellablePromise<T> = Promise<T> & {
   cancel: () => void
 }
 
 export const CustomFetcher = {
-  [Method.GET]: <T>(url: string, customConfig?: AxiosRequestConfig) => {
+  [Method.GET]: <T, D = unknown>(url: string, data?: D, customConfig?: AxiosRequestConfig) => {
     const controller = new AbortController()
-    const config = { ...customConfig, signal: controller.signal }
+    const config = { ...data ,...customConfig, signal: controller.signal }
     const promise = instance.get<T>(url, config).then((res) => res.data)
     ;(promise as CancellablePromise<T>).cancel = () => controller.abort()
     return promise as CancellablePromise<T>
@@ -70,21 +66,21 @@ export const CustomFetcher = {
     ;(promise as CancellablePromise<T>).cancel = () => controller.abort()
     return promise as CancellablePromise<T>
   },
-  [Method.PATCH]: <T, D = unknown>(url: string, data?: Partial<D>, customConfig?: AxiosRequestConfig) => {
+  [Method.PATCH]: <T, D = unknown>(url: string, data?: D, customConfig?: AxiosRequestConfig) => {
     const controller = new AbortController()
     const config = { ...customConfig, signal: controller.signal }
     const promise = instance.patch<T>(url, data, config).then((res) => res.data)
     ;(promise as CancellablePromise<T>).cancel = () => controller.abort()
     return promise as CancellablePromise<T>
   },
-  [Method.PUT]: <T, D = unknown>(url: string, data?: Partial<D>, customConfig?: AxiosRequestConfig) => {
+  [Method.PUT]: <T, D = unknown>(url: string, data?: D, customConfig?: AxiosRequestConfig) => {
     const controller = new AbortController()
     const config = { ...customConfig, signal: controller.signal }
     const promise = instance.put<T>(url, data, config).then((res) => res.data)
     ;(promise as CancellablePromise<T>).cancel = () => controller.abort()
     return promise as CancellablePromise<T>
   },
-  [Method.DELETE]: <T>(url: string, customConfig?: AxiosRequestConfig) => {
+  [Method.DELETE]: <T, D = unknown>(url: string, data?: D, customConfig?: AxiosRequestConfig) => {
     const controller = new AbortController()
     const config = { ...customConfig, signal: controller.signal }
     const promise = instance.delete<T>(url, config).then((res) => res.data)
@@ -93,31 +89,16 @@ export const CustomFetcher = {
   },
 }
 
-enum RequestType {
-  READ = 'READ',
-  WRITE = 'WRITE',
-}
+type Keys = [string, unknown?, AxiosRequestConfig?];
 
-const useRequest = {
-  [RequestType.READ]: (key: Key, fetcher: Fetcher, options?: SWRConfiguration) => {
-    const { data, error, ...swr } = useSWR(key, fetcher, options)
+const useRequest = <T>(key: Keys | null, method: keyof typeof Method, config?: SWRConfiguration) => {
+  const { data, error, ...swr } = useSWR<T>(key, (key) => CustomFetcher[method](...key), config);
 
-    return {
-      data,
-      error,
-      ...swr,
-    } as SWRResponse
-  },
-  [RequestType.WRITE]: <T>(key: Key, fetcher: Fetcher, options?: SWRMutationConfiguration<unknown, Error, Key, unknown, T>) => {
-    const { trigger, data, error, ...swr } = useSWRMutation(key, fetcher, options)
-
-    return { 
-      trigger,
-      data,
-      error,
-      ...swr,
-    } as SWRMutationResponse
-  },
-}
+  return {
+    data,
+    error,
+    ...swr,
+  };
+};
 
 export { CustomFetcher as Fetcher, useRequest, Method }

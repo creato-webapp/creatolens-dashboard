@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { PlusIcon } from '@heroicons/react/24/solid'
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
@@ -51,10 +51,8 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
 
 const AccountsPage = ({ paginationData }: Props) => {
   const [createDateOrder, setCreateDateOrder] = useState<'asc' | 'desc'>('desc')
-
   const { pageParams, onPageClick, updateSort, updateOrderBy, onNextClick, onPrevClick } = usePagination()
-  const { data, isLoading } = useGetAccountsPagination(pageParams, false, paginationData)
-
+  const { data, isLoading, setShouldFetch } = useGetAccountsPagination(pageParams, true, paginationData)
   const accounts: IAccount[] = useMemo(() => data?.data || [], [data])
 
   const updateSorting = useCallback(
@@ -65,6 +63,10 @@ const AccountsPage = ({ paginationData }: Props) => {
       },
     [pageParams.isAsc, updateOrderBy, updateSort]
   )
+
+  useEffect(() => {
+    setShouldFetch(true)
+  }, [pageParams, setShouldFetch])
 
   const IconRender = (e: boolean) => {
     return (

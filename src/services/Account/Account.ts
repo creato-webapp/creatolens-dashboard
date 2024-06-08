@@ -142,7 +142,6 @@ interface SessionUpdatePayload {
 }
 
 export async function updateAccount(id: string, updatedAccount: Partial<IAccount>, customConfig?: AxiosRequestConfig): Promise<IAccount> {
-  
   const res = await Fetcher.PATCH<IAccount, Partial<IAccount>>(`/api/accounts/${id}`, updatedAccount, {
     ...customConfig,
     params: { id: updatedAccount.id },
