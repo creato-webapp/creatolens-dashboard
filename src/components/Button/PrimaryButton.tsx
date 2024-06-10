@@ -12,8 +12,8 @@ const Primary: React.FC<ButtonProps> = ({ children, onClick, disabled = false, l
       disabled={loading || disabled}
       sizes={sizes}
       {...res}
-      className={`w-full rounded-lg md:w-auto ${res.className}`}
-      styleClassName={`border-2 border-transparent bg-accent1-500  text-white hover:bg-accent1-400 hover:shadow-sm focus:border-accent1-200 focus:outline-2 active:border-accent1-500 active:bg-white active:text-accent1-500 active:outline active:outline-2 active:outline-slate-300 ${
+      className={`rounded-lg ${res.className}`}
+      styleClassName={`border-2 border-transparent bg-accent1-500 text-white hover:bg-accent1-400 hover:shadow-sm focus:border-accent1-200 focus:outline-2 active:border-accent1-500 active:bg-white active:text-accent1-500 active:outline active:outline-2 active:outline-slate-300 ${
         isDisabled ? 'pointer-events-none border-gray-100 bg-gray-100 text-zinc-400' : ''
       } ${styleClassName}`}
     >

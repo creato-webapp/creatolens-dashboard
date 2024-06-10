@@ -1,74 +1,38 @@
-import React, { useEffect, useState, useRef, useCallback, useMemo, HTMLProps } from 'react'
+import React, { useState, useRef, useCallback, useMemo, HTMLProps } from 'react'
 import { CaretUpIcon } from '@components/Icon'
-import Outline from '@components/Button/OutlineButton'
-import Primary from '@components/Button/PrimaryButton'
 
-export interface DropdownOption {
+export interface DropdownCheckboxOption {
   label: string
   value: string | number
-  checked?: boolean
+  checked: boolean
 }
 
 type DropdownSize = 's' | 'm' | 'l' | 'full'
 interface DropdownProps extends HTMLProps<HTMLSelectElement> {
   name?: string
-  options: DropdownOption[]
-  defaultValue?: string | number
+  options: DropdownCheckboxOption[]
   disabled?: boolean
-  onValueChange?: (value: string | number | DropdownOption[]) => void
+  onValueChange?: (value: string | number) => void
   dropDownSizes?: [DropdownSize, DropdownSize, DropdownSize]
   icon?: React.ReactNode
-  isCheckbox?: boolean
 }
 
-const Dropdown: React.FC<DropdownProps> = ({ name = '', options, defaultValue, onValueChange, dropDownSizes, icon, isCheckbox = false }) => {
-  const [selectedValue, setSelectedValue] = useState(defaultValue)
-  const [selectedOptions, setSelectedOptions] = useState<DropdownOption[]>(options)
+const Dropdown: React.FC<DropdownProps> = ({ name = '', options, onValueChange, dropDownSizes, icon }) => {
   const [isDropdownNotSelected, setIsDropdownNotSelected] = useState(true)
   const [isOpen, setIsOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
-  const mapSelectedValueToOptions = useMemo(() => {
-    const selectedOption = selectedOptions.find((option) => option.value === selectedValue)
-    return selectedOption ? selectedOption.label : selectedValue
-  }, [selectedValue, selectedOptions])
-
   const handleOptionSelect = useCallback(
     (value: string | number) => () => {
-      if (isCheckbox) {
-        // setSelectedOptions((prevOptions) => prevOptions.map((option) => (option.value === value ? { ...option, checked: !option.checked } : option)))
-        if (onValueChange) {
-          const selected = selectedOptions.filter((option) => option.checked || option.value === value).map((option) => option.value)
-          if (selected) onValueChange(selected)
-        }
-      } else {
-        setSelectedValue(value)
-        setIsOpen(false)
-        setIsDropdownNotSelected(false)
-        if (onValueChange) {
-          onValueChange(value)
-        }
-      }
+      setIsDropdownNotSelected(false)
+      onValueChange && onValueChange(value)
     },
-    [onValueChange, isCheckbox, selectedOptions]
+    [onValueChange]
   )
 
   const handleToggleMenu = () => {
     setIsOpen((prev) => !prev)
   }
-
-  const handleClickOutside = (event: MouseEvent) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-      setIsOpen(false)
-    }
-  }
-
-  useEffect(() => {
-    document.addEventListener('click', handleClickOutside)
-    return () => {
-      document.removeEventListener('click', handleClickOutside)
-    }
-  }, [])
 
   const hoverStyle = ' hover:bg-interface-hover '
   const activeStyle = isOpen && ' !bg-accent1-500 !text-white'
@@ -131,8 +95,8 @@ const Dropdown: React.FC<DropdownProps> = ({ name = '', options, defaultValue, o
         className={`drowpdown-button w-full rounded-lg border-none ${color} ${padding} ${focusStyle} ${hoverStyle} ${activeStyle}`}
         onClick={handleToggleMenu}
       >
-        <div className={`inline-flex w-full items-center justify-between gap-2.5 rounded-md text-md hover:shadow-sm`}>
-          {isCheckbox ? <div className="flex">{isCheckbox && name}</div> : <div className="truncate ">{mapSelectedValueToOptions}</div>}
+        <div className={`sm inline-flex w-full items-center justify-between gap-2.5 rounded-md text-md`}>
+          {name}
           <CaretUpIcon
             className={`pointer-events-none w-fit transform transition-all ${caretSize} ${!isOpen ? 'rotate-180 ' : ''}`}
             color={isOpen ? 'white' : isDropdownNotSelected ? 'black' : 'white'}
@@ -140,28 +104,27 @@ const Dropdown: React.FC<DropdownProps> = ({ name = '', options, defaultValue, o
         </div>
       </button>
 
-      <div className={`${isOpen ? 'h-64' : 'h-0'} transition-all duration-300`}>
-        {isOpen && (
-          <ul className={`absolute z-10 mt-2 w-full overflow-y-scroll rounded-md border border-gray-200 bg-white shadow-lg`}>
-            {selectedOptions.map((option) => (
-              <li
-                key={option.value}
-                className="flex w-full cursor-pointer list-none flex-wrap items-center gap-2  px-4 py-2 hover:bg-gray-100"
+      <div className={`grid ${isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'} transition-all duration-300`}>
+        <ul className={`${isOpen ? '' : 'hidden'} z-10 mt-2 w-full overflow-y-scroll rounded-md border border-gray-200 bg-white shadow-lg`}>
+          {options.map((option) => (
+            <li
+              key={option.value}
+              className="flex w-full cursor-pointer list-none flex-wrap items-center gap-2  px-4 py-2 hover:bg-gray-100"
+              onClick={handleOptionSelect(option.value)}
+            >
+              <input
+                type="checkbox"
+                checked={option.checked || false}
+                className="mr-2 rounded border-2 border-stroke text-white checked:bg-accent1-500 focus:bg-transparent"
+                defaultChecked={option.checked || false}
                 onClick={handleOptionSelect(option.value)}
-              >
-                {isCheckbox && (
-                  <input
-                    type="checkbox"
-                    checked={option.checked || false}
-                    className="mr-2 rounded border-2 border-stroke text-white checked:bg-accent1-500 focus:bg-transparent"
-                  />
-                )}
-                {icon && icon}
-                {option.label}
-              </li>
-            ))}
-          </ul>
-        )}
+              />
+
+              {icon && icon}
+              {option.label}
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   )

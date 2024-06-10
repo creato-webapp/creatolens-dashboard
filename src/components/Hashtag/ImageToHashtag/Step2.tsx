@@ -3,13 +3,17 @@ import { StepProps } from './Step1'
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Badges from '@components/Badges'
+import Primary from '@components/Button/PrimaryButton'
+import Outline from '@components/Button/OutlineButton'
 
 const Step2 = (props: StepProps) => {
   const { setStep } = props
   const { images, currentImage } = useImageHashtagContext()
   const [imageURL, setImageURL] = useState<string | null>(null)
+  const [reAnnotateTimes, setReAnnotateTimes] = useState<number>(1)
 
   const exampleLabels = ['123', '231', '123123', 'haidf']
+  const [selectedLabel, setSelectedLabel] = useState<string[]>(exampleLabels)
 
   useEffect(() => {
     const currentImageObj = images[currentImage - 1]
@@ -24,6 +28,26 @@ const Step2 = (props: StepProps) => {
       }
     }
   }, [images, currentImage])
+
+  const onClose = (label: string) => {
+    setSelectedLabel((prevLabels) => prevLabels.filter((item) => item !== label))
+  }
+
+  const onSelected = (label: string) => {
+    setSelectedLabel((prevLabels) => {
+      if (!prevLabels.includes(label)) {
+        return [...prevLabels, label]
+      }
+      return prevLabels
+    })
+  }
+
+  const onReannotateClick = () => {
+    setReAnnotateTimes((pre) => pre + 1)
+  }
+  const onClickButton = () => {
+    setStep(3)
+  }
 
   return (
     <div>
@@ -42,14 +66,32 @@ const Step2 = (props: StepProps) => {
       </div>
       <div>Selected labels: {1 / 10}:</div>
       <div>
-        <div className="grid grid-cols-3">
+        <div className="flex flex-row flex-wrap gap-4">
           {exampleLabels.map((label) => {
             return (
-              <Badges key={`key-${label}`} className="grid" status={'primary'} rounded closeable>
+              <Badges
+                key={`key-${label}`}
+                rounded
+                closeable
+                isOutline={!selectedLabel.includes(label)}
+                onClose={() => onClose(label)}
+                onClick={() => onSelected(label)}
+                status={'primary'}
+              >
                 {label}
               </Badges>
             )
           })}
+        </div>
+      </div>
+      <div>
+        <div className="flex flex-col gap-6">
+          <Outline sizes={['l', 'l', 'l']} onClick={onReannotateClick}>
+            Re-Annotate({reAnnotateTimes})
+          </Outline>
+          <Primary sizes={['l', 'l', 'l']} onClick={onClickButton}>
+            Annotate
+          </Primary>
         </div>
       </div>
     </div>

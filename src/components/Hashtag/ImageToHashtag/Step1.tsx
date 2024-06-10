@@ -1,20 +1,38 @@
 import Primary from '@components/Button/PrimaryButton'
 import ImageUpload from '../ImageUpload'
 import { useState } from 'react'
-import { useImageHashtagContext } from 'src/context/ImageToHashtagContext'
-
+import { getImageUploadUrl } from '@services/Image'
+import axios from 'axios'
 export interface StepProps {
   step: number
   setStep: (arg: number) => void
 }
 const Step1 = (props: StepProps) => {
-  const { setStep } = props
-  const { addImage } = useImageHashtagContext()
+  const [uploading, setUploading] = useState<boolean>(false)
   const [uploadedImage, setUploadedImage] = useState<Blob | null>(null)
 
-  const onClickButton = () => {
-    setStep(2)
-    addImage(uploadedImage!, [])
+  const getImageUploadLink = async () => {
+    const filename = 'test.png'
+    const format = 'image/png'
+
+    const data = {
+      args: { filename, format },
+    }
+    const response = await getImageUploadUrl(data)
+    return response.data
+  }
+  const onClickButton = async () => {
+    // setStep(2)
+    setUploading(true)
+    const url = await getImageUploadLink()
+
+    const response = await axios.put(`${url}`, uploadedImage, {
+      headers: {
+        'Content-Type': '',
+      },
+    })
+
+    console.log('url', response)
   }
 
   return (
@@ -24,7 +42,7 @@ const Step1 = (props: StepProps) => {
 
       <ImageUpload uploadedImage={uploadedImage} setUploadedImage={setUploadedImage} />
       <div className="mt-4 flex items-center justify-center">
-        <Primary sizes={['l', 'l', 'l']} onClick={onClickButton}>
+        <Primary disabled={uploading} sizes={['full', 'full', 'full']} onClick={onClickButton}>
           Annotate
         </Primary>
       </div>

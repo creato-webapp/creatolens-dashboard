@@ -11,15 +11,15 @@ interface BadgesProps extends React.HTMLAttributes<HTMLDivElement> {
   rounded?: boolean
   status: Status
   onClose?: () => void
+  onClick?: () => void
 }
 
 const Badges = ({ ...props }: BadgesProps) => {
-  const { size = 'lg', children, isOutline, isDisabled, closeable, rounded, status, onClose, className } = props
-  const [isShow, setIsShow] = useState(true)
+  const { size = 'lg', children, onClick, isOutline, isDisabled, closeable, rounded, status, onClose, className } = props
   const roundedStyle = rounded ? 'rounded-full' : 'rounded'
   const solidBadgesStyles =
     status === 'primary'
-      ? 'bg-accent1-500 text-text-white'
+      ? 'border border-accent1-500 bg-accent1-500 text-text-white'
       : status === 'secondary'
       ? 'bg-accent2-500 text-text-white'
       : status === 'text-primary'
@@ -55,11 +55,10 @@ const Badges = ({ ...props }: BadgesProps) => {
       ? 'border border-error-600 text-error-600'
       : ''
 
-  const handleClose = () => {
-    setIsShow(false)
+  const handleClose = (e: React.MouseEvent) => {
+    e.stopPropagation()
     onClose && onClose()
   }
-
   const SmallBadges = () => {
     return (
       <div
@@ -68,6 +67,7 @@ const Badges = ({ ...props }: BadgesProps) => {
     ${isDisabled ? 'bg-bg-dark' : ''} ${className}
     ${closeable ? 'cursor-pointer' : ''}
     `}
+        onClick={onClick}
       >
         <h6 className="capitalize-first-letter flex flex-row items-center font-normal">{children}</h6>
         {closeable && (
@@ -82,11 +82,12 @@ const Badges = ({ ...props }: BadgesProps) => {
   const LargeBadges = () => {
     return (
       <div
-        className={`curs flex h-auto w-fit items-center justify-center px-2 py-1  ${roundedStyle}
+        className={`curs flex h-auto w-fit flex-row items-center justify-center px-2 py-1  ${roundedStyle}
     ${isOutline ? outlineBadgesStyles : solidBadgesStyles}
     ${isDisabled ? 'bg-bg-dark' : ''} ${className}
     ${closeable ? 'cursor-pointer' : ''}
     `}
+        onClick={onClick}
       >
         <h4 className="capitalize-first-letter flex flex-row items-center font-normal leading-7">{children}</h4>
         {closeable && (
@@ -98,7 +99,7 @@ const Badges = ({ ...props }: BadgesProps) => {
     )
   }
 
-  return isShow ? size === 'sm' ? <SmallBadges /> : <LargeBadges /> : null
+  return size === 'sm' ? <SmallBadges /> : <LargeBadges />
 }
 
 export default Badges
