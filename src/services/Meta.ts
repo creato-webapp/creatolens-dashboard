@@ -3,7 +3,7 @@ import { AxiosRequestConfig } from 'axios'
 import ENDPOINT_FRONTEND from 'src/constants/endpoints/frontend'
 import { CountryEnum } from 'src/enums/CountryCodeEnums'
 
-import { Fetcher } from './fetcher'
+import { fetcher } from '../helpers/fetcher'
 
 export interface PostData {
   count: number
@@ -50,7 +50,7 @@ export async function getKeyword(
   },
   customConfig?: AxiosRequestConfig
 ): Promise<{ data: KeywordData[] }> {
-  const keywordResponse = await Fetcher.GET<{
+  const keywordResponse = await fetcher.GET<{
     data: KeywordData[]
   }>(ENDPOINT_FRONTEND.DASHBOARD_KEYWORDS, {
     ...customConfig,
@@ -71,7 +71,7 @@ export async function getPostCount(
   },
   customConfig?: AxiosRequestConfig
 ): Promise<{ data: { post_count: number } }> {
-  const postCountResponse = await Fetcher.GET<{
+  const postCountResponse = await fetcher.GET<{
     data: { post_count: number }
   }>(ENDPOINT_FRONTEND.DASHBOARD_POST_COUNT, {
     ...customConfig,
@@ -95,7 +95,7 @@ export async function getMostRepeatedPost(
   },
   customConfig?: AxiosRequestConfig
 ): Promise<MostRepeatedPost | null> {
-  const response = await Fetcher.GET<{
+  const response = await fetcher.GET<{
     data: PostData[]
   }>(ENDPOINT_FRONTEND.DASHBOARD, {
     ...customConfig,
@@ -114,7 +114,7 @@ export async function getMostRepeatedPost(
     )
 
     try {
-      const maxCountImageResponse = await Fetcher.GET<{
+      const maxCountImageResponse = await fetcher.GET<{
         data: {
           username: string
         }
@@ -149,7 +149,7 @@ export async function getMostRepeatedPostImage(data: {
 }) {
   if (!data.args.shortcode) return
 
-  const response = await Fetcher.GET<string>(ENDPOINT_FRONTEND.DASHBOARD_POST_IMAGE, {
+  const response = await fetcher.GET<string>(ENDPOINT_FRONTEND.DASHBOARD_POST_IMAGE, {
     params: {
       shortcode: data.args.shortcode,
       batch_id: data.args.batch_id,
@@ -166,7 +166,7 @@ export async function getProfile(data: {
   }
 }) {
   if (!data.args.profile_id || !data.args.session_id) return
-  const response = await Fetcher.GET<{
+  const response = await fetcher.GET<{
     data: IProfile
   }>(ENDPOINT_FRONTEND.DASHBOARD_PROFILE, {
     params: {

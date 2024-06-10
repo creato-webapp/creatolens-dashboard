@@ -1,6 +1,6 @@
 import { AxiosRequestConfig } from 'axios'
 
-import { Fetcher } from '../fetcher'
+import { fetcher } from '../../helpers/fetcher'
 
 type hashtag = {
   acc: number
@@ -48,7 +48,7 @@ export async function uploadImage(file: File, customConfig?: AxiosRequestConfig)
       ...customConfig,
     }
 
-    const response: UploadImageResponse = await Fetcher.POST('/api/blob', formData, config)
+    const response: UploadImageResponse = await fetcher.POST('/api/blob', formData, config)
 
     return response
   } catch (error) {

@@ -3,8 +3,11 @@ import { useEffect, useState } from 'react'
 import { IAccount } from '@components/Account/Account'
 import { updateAccount as updateAccountHelper,updateSession as updateSessionHelper , } from '@services/Account/Account'
 import { PaginationMetadata, PaginationParams } from '@services/Account/AccountInterface'
-import {  Method, useRequest } from '@services/fetcher'
 import ENDPOINT_FRONTEND from 'src/constants/endpoints/frontend'
+
+import useRequest from './useRequest'
+
+import { Method } from '../helpers/fetcher'
 
 export const useAccount = (id: string, defaultShouldFetch: boolean = true, fallbackData?: IAccount) => {
   const [shouldFetch, setShouldFetch] = useState(defaultShouldFetch)

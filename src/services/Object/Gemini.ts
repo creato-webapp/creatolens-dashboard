@@ -2,7 +2,7 @@ import { AxiosRequestConfig } from 'axios'
 
 import { Labels } from './ImageBlob'
 
-import { Fetcher } from '../fetcher'
+import { fetcher } from '../../helpers/fetcher'
 
 export interface confidence {
   [key: string]: number
@@ -23,7 +23,7 @@ export interface LabelImageResponse {
 
 export async function LabelImage(gcsuri: string, customConfig?: AxiosRequestConfig): Promise<Labels[]> {
   try {
-    const response: LabelImageResponse = await Fetcher.POST('api/blob/gemini', { imageUrl: gcsuri, isGcsUri: true }, customConfig)
+    const response: LabelImageResponse = await fetcher.POST('api/blob/gemini', { imageUrl: gcsuri, isGcsUri: true }, customConfig)
 
     return response.data.data.labels
   } catch (error) {
