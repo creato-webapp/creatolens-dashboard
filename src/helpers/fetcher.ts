@@ -52,6 +52,7 @@ export type CancellablePromise<T> = Promise<T> & {
 }
 
 type Fetchers = Record<Method, <T, D=unknown>(url: string, data?: D, customConfig?: AxiosRequestConfig) => Promise<T>>
+// !!FIX type Fetchers = Record<Method, Fetcher>
 
 export const fetcher: Fetchers = {
   [Method.GET]: async <T, D = unknown>(url: string, data?: D, customConfig?: AxiosRequestConfig) => {
@@ -68,20 +69,17 @@ export const fetcher: Fetchers = {
     return response
   },
   [Method.PATCH]: async <T, D = unknown>(url: string, data?: D, customConfig?: AxiosRequestConfig) => {
-    const controller = new AbortController()
-    const config = { ...customConfig, signal: controller.signal }
+    const config = { ...customConfig }
     const response = await instance.patch<T>(url, data, config).then((res) => res.data)
     return response 
   },
   [Method.PUT]: async <T, D = unknown>(url: string, data?: D, customConfig?: AxiosRequestConfig) => {
-    const controller = new AbortController()
-    const config = { ...customConfig, signal: controller.signal }
+    const config = { ...customConfig }
     const response = await instance.put<T>(url, data, config).then((res) => res.data)
     return response 
   },
   [Method.DELETE]: async <T, D = unknown>(url: string, data?: D, customConfig?: AxiosRequestConfig) => {
-    const controller = new AbortController()
-    const config = { ...customConfig, signal: controller.signal }
+    const config = { ...customConfig, ...data }
     const response = await instance.delete<T>(url, config).then((res) => res.data)
     return response 
   },
