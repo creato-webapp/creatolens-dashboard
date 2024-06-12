@@ -3,7 +3,7 @@ import { useDropzone } from 'react-dropzone'
 import { useImageHashtagContext } from 'src/context/ImageToHashtagContext'
 
 const ImageUpload = (props) => {
-  const { uploadedImage, setUploadedImage } = props
+  const { uploadedImage, setUploadedImage, setImageDetails } = props
   const fileInputRef = useRef<HTMLInputElement | null>(null)
 
   const handleBrowseClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
@@ -23,6 +23,18 @@ const ImageUpload = (props) => {
           setUploadedImage(reader.result as string)
         }
         reader.readAsDataURL(file)
+        const filePath = file.path || ''
+
+        const fileFormat = file.type
+        // Get the file extension
+        const fileExtension = file.name.split('.').pop()
+        // If you want to save the file path and format to state or props
+        setImageDetails((prev) => ({
+          ...prev,
+          path: filePath,
+          format: fileFormat,
+          extension: fileExtension,
+        }))
       }
     },
     noClick: true,

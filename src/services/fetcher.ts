@@ -44,4 +44,7 @@ export const Fetcher = {
     FetcherInstance.patch<T>(url, data, customConfig).then((res) => res.data),
 
   DELETE: <T>(url: string, customConfig?: AxiosRequestConfig) => FetcherInstance.delete<T>(url, customConfig).then((res) => res.data),
+  
+  PUT: <T, D = {}>(url: string, data?: D, customConfig?: AxiosRequestConfig) =>
+    FetcherInstance.put<T>(url, data, customConfig).then((res) => res.data),
 }
