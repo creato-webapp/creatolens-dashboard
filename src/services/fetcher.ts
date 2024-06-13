@@ -1,4 +1,5 @@
 import axios, { AxiosError, AxiosRequestConfig } from 'axios'
+axios.defaults.withCredentials = true
 
 export const FetcherInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_LOCAL_SERVER_URL,
@@ -44,7 +45,7 @@ export const Fetcher = {
     FetcherInstance.patch<T>(url, data, customConfig).then((res) => res.data),
 
   DELETE: <T>(url: string, customConfig?: AxiosRequestConfig) => FetcherInstance.delete<T>(url, customConfig).then((res) => res.data),
-  
+
   PUT: <T, D = {}>(url: string, data?: D, customConfig?: AxiosRequestConfig) =>
     FetcherInstance.put<T>(url, data, customConfig).then((res) => res.data),
 }

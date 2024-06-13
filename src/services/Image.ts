@@ -49,13 +49,17 @@ export async function uploadImage(data: {
   const blob = base64ToBlob(data.args.file, data.args.format)
 
   const formData = new FormData()
-  formData.append('image', blob, 'upload.' + data.args.format.split('/')[1]) // Add file name with appropriate extension
+  formData.append('image', blob, 'upload.' + data.args.format.split('/')[1])
 
-  const response = await Fetcher.PUT(data.args.url, formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data', // Set the appropriate content type for form data
-    },
-  })
-
-  return response
+  try {
+    const response = await axios.put(data.args.url, data.args.file, {
+      headers: {
+        'Content-Type': data.args.format,
+      },
+    })
+    return response.data
+  } catch (error) {
+    console.error('Error uploading image:', error)
+    throw error
+  }
 }
