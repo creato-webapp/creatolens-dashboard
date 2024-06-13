@@ -1,5 +1,4 @@
 import axios, { AxiosError, AxiosRequestConfig } from 'axios'
-axios.defaults.withCredentials = true
 
 export const FetcherInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_LOCAL_SERVER_URL,

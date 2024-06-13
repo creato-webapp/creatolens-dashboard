@@ -1,7 +1,7 @@
 import { Fetcher } from './fetcher'
 import axios, { AxiosRequestConfig } from 'axios'
 
-function base64ToBlob(base64, mimeType) {
+function base64ToBlob(base64: string, mimeType: string) {
   const byteCharacters = atob(base64.split(',')[1])
   const byteArrays = []
 
@@ -48,11 +48,8 @@ export async function uploadImage(data: {
 }) {
   const blob = base64ToBlob(data.args.file, data.args.format)
 
-  const formData = new FormData()
-  formData.append('image', blob, 'upload.' + data.args.format.split('/')[1])
-
   try {
-    const response = await axios.put(data.args.url, data.args.file, {
+    const response = await axios.put(data.args.url, blob, {
       headers: {
         'Content-Type': data.args.format,
       },

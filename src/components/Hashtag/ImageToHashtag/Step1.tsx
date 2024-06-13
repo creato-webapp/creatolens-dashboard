@@ -15,8 +15,6 @@ const Step1 = (props: StepProps) => {
     extension?: string
   }>({})
 
-  console.log('data', imageDetails)
-
   const getImageUploadLink = async () => {
     const filename = imageDetails.path
     const format = imageDetails.format
@@ -24,7 +22,6 @@ const Step1 = (props: StepProps) => {
     const data = {
       args: { filename, format },
     }
-    console.log('data', data)
     const response = await getImageUploadUrl(data)
     return response.data
   }
@@ -41,10 +38,8 @@ const Step1 = (props: StepProps) => {
         args: { url, file: uploadedImage, format: imageDetails.format },
       }
       const uploadimageprocess = await uploadImage(data)
-      console.log('uploadimageprocess', uploadimageprocess)
       setUploading(false)
     } catch (e) {
-      window.alert(e.message)
       setUploading(false)
     }
   }
