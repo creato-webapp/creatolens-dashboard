@@ -51,11 +51,9 @@ export type CancellablePromise<T> = Promise<T> & {
   cancel: () => void
 }
 
-type Fetchers = Record<Method, <T, D=unknown>(url: string, data?: D, customConfig?: AxiosRequestConfig) => Promise<T>>
-
-export const fetcher: Fetchers = {
+const fetcher = {
   [Method.GET]: async <T, D = unknown>(url: string, data?: D, customConfig?: AxiosRequestConfig) => {
-    const response = await instance.get<T>(url, { ...customConfig, ...data }).then((res) => res.data)
+    const response = await instance.get<T>(url, { ...customConfig, data }).then((res) => res.data)
     return response
   },
   [Method.POST]: async <T, D = unknown>(url: string, data?: D, customConfig?: AxiosRequestConfig) => {
@@ -85,6 +83,8 @@ export const fetcher: Fetchers = {
     const response = await instance.delete<T>(url, config).then((res) => res.data)
     return response 
   },
-}
+} as const;
 
 export { Method }
+
+export default fetcher;

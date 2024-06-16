@@ -11,7 +11,7 @@ import { Method } from '../helpers/fetcher'
 
 export const useAccount = (id: string, defaultShouldFetch: boolean = true, fallbackData?: IAccount) => {
   const [shouldFetch, setShouldFetch] = useState(defaultShouldFetch)
-  const { data, error, mutate, ...swr } = useRequest<IAccount>(shouldFetch ? [ENDPOINT_FRONTEND.ACCOUNT + id] : null, Method.GET, {
+  const { data, error, mutate, ...swr } = useRequest(shouldFetch ? [ENDPOINT_FRONTEND.ACCOUNT + id] : null, Method.GET, {
     refreshInterval: 0,
     fallbackData: fallbackData,
   })
