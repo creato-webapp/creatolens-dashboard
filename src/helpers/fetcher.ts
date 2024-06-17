@@ -38,46 +38,46 @@ instance.interceptors.response.use(
   }
 )
 
-enum Method {
-  POST = 'POST',
-  UPLOAD = 'UPLOAD',
-  GET = 'GET',
-  PUT = 'PUT',
-  PATCH = 'PATCH',
-  DELETE = 'DELETE',
-}
+const METHOD = {
+  POST: 'POST',
+  UPLOAD: 'UPLOAD',
+  GET: 'GET',
+  PUT: 'PUT',
+  PATCH: 'PATCH',
+  DELETE: 'DELETE',
+} as const
 
 export type CancellablePromise<T> = Promise<T> & {
   cancel: () => void
 }
 
 const fetcher = {
-  [Method.GET]: async <T, D = unknown>(url: string, data?: D, customConfig?: AxiosRequestConfig) => {
+  [METHOD.GET]: async <T, D = unknown>(url: string, data?: D, customConfig?: AxiosRequestConfig) => {
     const response = await instance.get<T>(url, { ...customConfig, data }).then((res) => res.data)
     return response
   },
-  [Method.POST]: async <T, D = unknown>(url: string, data?: D, customConfig?: AxiosRequestConfig) => {
+  [METHOD.POST]: async <T, D = unknown>(url: string, data?: D, customConfig?: AxiosRequestConfig) => {
     const response = await instance.post<T>(url, data, customConfig).then((res) => res.data)
     return response
   },
-  [Method.UPLOAD]: async <T, D = unknown>(url: string, data?: D, customConfig?: AxiosRequestConfig) => {
+  [METHOD.UPLOAD]: async <T, D = unknown>(url: string, data?: D, customConfig?: AxiosRequestConfig) => {
     const config = { ...customConfig, headers: { 'Content-Type': 'application/octet-stream' } }
     const response = await instance.put<T>(url, data, config).then((res) => res.data)
     return response
   },
-  [Method.PATCH]: async <T, D = unknown>(url: string, data?: D, customConfig?: AxiosRequestConfig) => {
+  [METHOD.PATCH]: async <T, D = unknown>(url: string, data?: D, customConfig?: AxiosRequestConfig) => {
     const controller = new AbortController()
     const config = { ...customConfig, signal: controller.signal }
     const response = await instance.patch<T>(url, data, config).then((res) => res.data)
     return response 
   },
-  [Method.PUT]: async <T, D = unknown>(url: string, data?: D, customConfig?: AxiosRequestConfig) => {
+  [METHOD.PUT]: async <T, D = unknown>(url: string, data?: D, customConfig?: AxiosRequestConfig) => {
     const controller = new AbortController()
     const config = { ...customConfig, signal: controller.signal }
     const response = await instance.put<T>(url, data, config).then((res) => res.data)
     return response 
   },
-  [Method.DELETE]: async <T, D = unknown>(url: string, data?: D, customConfig?: AxiosRequestConfig) => {
+  [METHOD.DELETE]: async <T, D = unknown>(url: string, data?: D, customConfig?: AxiosRequestConfig) => {
     const controller = new AbortController()
     const config = { ...customConfig, signal: controller.signal }
     const response = await instance.delete<T>(url, config).then((res) => res.data)
@@ -85,6 +85,6 @@ const fetcher = {
   },
 } as const;
 
-export { Method }
+export { METHOD }
 
 export default fetcher;
