@@ -1,11 +1,25 @@
-import Outline from '@components/Button/OutlineButton'
-import Primary from '@components/Button/PrimaryButton'
+import Step1 from '@components/Hashtag/HashtagToImage/Step1'
+import Step2 from '@components/Hashtag/HashtagToImage/Step2'
+import Step3 from '@components/Hashtag/HashtagToImage/Step3'
 import ProgressBar from '@components/Hashtag/ProgressBar'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 
 const HashtagToImage = () => {
   const [step, setStep] = useState<number>(1)
+  const [selection, setSelection] = useState<{
+    imageStyle: string
+  }>({
+    imageStyle: '',
+  })
+
+  const StepComponent = useCallback(() => {
+    if (step === 1) {
+      return <Step1 step={step} setStep={setStep} />
+    } else if (step === 2) return <Step2 step={step} setStep={setStep} selection={selection} setSelection={setSelection} />
+    else if (step === 3) return <Step3 step={step} setStep={setStep} />
+    else return null
+  }, [selection, step])
 
   return (
     <div className="mx-3 mb-12">
@@ -22,16 +36,7 @@ const HashtagToImage = () => {
       <div className="my-7">
         <ProgressBar total_step={3} current_step={step} />
       </div>
-      <h2 className="font-extrabold">Keywords input</h2>
-      <div className="mt-4 flex items-center justify-center">
-        <Outline sizes={['l', 'l', 'l']}>+ Get Keywords from Image</Outline>
-      </div>
-      <div className="my-4 border-b"></div>
-      <h3 className="font-semibold text-text-primary">Describe the image you want and we’ll generate image for you.</h3>
-      <textarea className="mt-4 min-h-96 w-full border border-black p-5 text-text-disabled" placeholder="Input your own keyword" />
-      <div className="mt-4 flex items-center justify-center">
-        <Primary sizes={['m', 'm', 'm']}>Next</Primary>
-      </div>
+      <StepComponent />
     </div>
   )
 }

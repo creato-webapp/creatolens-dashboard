@@ -8,7 +8,7 @@ export default async function ImageQueryHandler(req: NextApiRequest, res: NextAp
 
   switch (method) {
     case 'GET': {
-      const response = await ImageInstance.get('/objects/get-signed-url?', {
+      const response = await ImageInstance.get('/api/image-tagen/get-url?', {
         params: { filename: filename, format: format, bucket: process.env.IMAGE_UPLOAD_BUCKET_NAME },
 
         headers: {

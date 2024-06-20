@@ -3,7 +3,7 @@ module.exports = {
   fonts: [
     {
       family: 'Lato',
-      variants: ['300', '400',  '700',  '900'],
+      variants: ['300', '400', '700', '900'],
     },
   ],
   content: ['./src/pages/**/*.{js,ts,jsx,tsx}', './src/components/**/*.{js,ts,jsx,tsx}', './src/lib/**/*.{js,ts,jsx,tsx}'],
@@ -14,6 +14,7 @@ module.exports = {
     {
       pattern: /text-(error|warning|successful)-(500|600|700)/,
     },
+    'aspect-[16/9]', 'aspect-[9/16]', 'aspect-[4/3]', 'aspect-[3/4]', 'aspect-[1/1]'
   ],
   theme: {
     fontFamily: {

@@ -132,7 +132,17 @@ const Dropdown: React.FC<DropdownProps> = ({ name = '', options, defaultValue, o
         onClick={handleToggleMenu}
       >
         <div className={`inline-flex w-full items-center justify-between gap-2.5 rounded-md text-md hover:shadow-sm`}>
-          {isCheckbox ? <div className="flex">{isCheckbox && name}</div> : <div className="truncate ">{mapSelectedValueToOptions}</div>}
+          {isCheckbox ? (
+            <div className="flex">{isCheckbox && name}</div>
+          ) : name ? (
+            mapSelectedValueToOptions ? (
+              mapSelectedValueToOptions
+            ) : (
+              name
+            )
+          ) : (
+            <div className="truncate ">{mapSelectedValueToOptions}</div>
+          )}
           <CaretUpIcon
             className={`pointer-events-none w-fit transform transition-all ${caretSize} ${!isOpen ? 'rotate-180 ' : ''}`}
             color={isOpen ? 'white' : isDropdownNotSelected ? 'black' : 'white'}
@@ -140,7 +150,7 @@ const Dropdown: React.FC<DropdownProps> = ({ name = '', options, defaultValue, o
         </div>
       </button>
 
-      <div className={`${isOpen ? 'h-64' : 'h-0'} transition-all duration-300`}>
+      {/* <div className={`${isOpen ? 'h-64' : 'h-0'} transition-all duration-300`}>
         {isOpen && (
           <ul className={`absolute z-10 mt-2 w-full overflow-y-scroll rounded-md border border-gray-200 bg-white shadow-lg`}>
             {selectedOptions.map((option) => (
@@ -162,6 +172,20 @@ const Dropdown: React.FC<DropdownProps> = ({ name = '', options, defaultValue, o
             ))}
           </ul>
         )}
+      </div> */}
+      <div className={`grid ${isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'} transition-all duration-300`}>
+        <ul className={`${isOpen ? '' : 'hidden'} z-10 mt-2 w-full overflow-y-scroll rounded-md border border-gray-200 bg-white shadow-lg`}>
+          {options.map((option) => (
+            <li
+              key={option.value}
+              className="flex w-full cursor-pointer list-none flex-wrap items-center gap-2  px-4 py-2 hover:bg-gray-100"
+              onClick={handleOptionSelect(option.value)}
+            >
+              {icon && icon}
+              {option.label}
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   )
