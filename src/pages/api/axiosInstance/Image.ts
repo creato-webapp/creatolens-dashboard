@@ -2,8 +2,6 @@ import axios, { AxiosError } from 'axios'
 
 const ImageInstance = axios.create({
   baseURL: process.env.MEDIA_SERVICE,
-  withCredentials: true,
-  headers: { 'Content-Type': 'application/json' },
   timeout: 50000,
 })
 

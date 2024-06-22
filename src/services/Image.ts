@@ -1,24 +1,7 @@
+import ImageInstance from '@api/axiosInstance/Image'
 import { Fetcher } from './fetcher'
 import axios, { AxiosRequestConfig } from 'axios'
-
-function base64ToBlob(base64: string, mimeType: string) {
-  const byteCharacters = atob(base64.split(',')[1])
-  const byteArrays = []
-
-  for (let offset = 0; offset < byteCharacters.length; offset += 512) {
-    const slice = byteCharacters.slice(offset, offset + 512)
-
-    const byteNumbers = new Array(slice.length)
-    for (let i = 0; i < slice.length; i++) {
-      byteNumbers[i] = slice.charCodeAt(i)
-    }
-
-    const byteArray = new Uint8Array(byteNumbers)
-    byteArrays.push(byteArray)
-  }
-
-  return new Blob(byteArrays, { type: mimeType })
-}
+import { base64ToBlob } from './util'
 
 export async function getImageUploadUrl(
   data: {
@@ -39,19 +22,30 @@ export async function getImageUploadUrl(
   return response
 }
 
-export async function uploadImage(data: {
-  args: {
-    url: string
-    format: string
-    file: string
-  }
-}) {
-  const blob = base64ToBlob(data.args.file, data.args.format)
-
+export async function uploadImage(
+  data: {
+    args: {
+      username: string
+      file: string
+      imageDetails: any // here is not string
+    }
+  },
+  customConfig?: AxiosRequestConfig
+) {
   try {
-    const response = await axios.put(data.args.url, blob, {
+    const { file, imageDetails, username } = data.args
+
+    const blobBody = base64ToBlob(file, imageDetails.format)
+
+    const formData = new FormData()
+
+    formData.append('file', blobBody, imageDetails.path)
+    formData.append('username', username)
+
+    const response = await Fetcher.POST('/api/image', formData, {
+      ...customConfig,
       headers: {
-        'Content-Type': data.args.format,
+        'Content-Type': 'multipart/form-data',
       },
     })
     return response.data
@@ -59,4 +53,15 @@ export async function uploadImage(data: {
     console.error('Error uploading image:', error)
     throw error
   }
+}
+
+export async function getImageLabel(data: {
+  args: {
+    file: string
+  }
+}) {
+  const image = data.args.file
+  const labelsResponse = await Fetcher.POST('/api/image/label')
+  console.log('label', labelsResponse)
+  return labelsResponse
 }

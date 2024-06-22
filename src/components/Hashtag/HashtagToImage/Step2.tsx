@@ -13,19 +13,19 @@ export interface StepProps {
 }
 const Step2 = (props: StepProps) => {
   const { step, setStep, setSelection, selection } = props
-  const [choice, setChoice] = useState('')
 
   const gotoNextStep = () => {
     setStep(3)
     return null
   }
 
-  const styleSelect = (value) => {
+  const styleSelect = useCallback((value: string, key: string) => {
+    console.log('selection', value, key, selection)
     setSelection((prevSelection) => ({
       ...prevSelection,
-      imageStyle: value,
+      [key]: value,
     }))
-  }
+  }, [])
 
   const ImageStyleSelection = useCallback(() => {
     return (
@@ -85,7 +85,12 @@ const Step2 = (props: StepProps) => {
     const options = Object.entries(IMAGE_ASPECT_RATIOS).map(([key, value]) => {
       return (
         <div className="flex w-full flex-col items-center justify-center rounded-xl" key={key}>
-          <div className="flex aspect-square h-auto w-full items-center border border-stroke bg-white px-8 py-4">
+          <div
+            className={`flex aspect-square h-auto w-full items-center rounded-xl bg-white px-8 py-4 ${
+              selection.aspectRatio == value.value ? 'border-4 border-accent1-500' : 'border border-stroke'
+            }`}
+            onClick={() => styleSelect(value.value, 'aspectRatio')}
+          >
             <div
               className="bg-[#D9D9D9] shadow-2xl"
               style={{

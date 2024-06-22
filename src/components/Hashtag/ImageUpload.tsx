@@ -23,7 +23,7 @@ const ImageUpload = (props) => {
           setUploadedImage(reader.result as string)
         }
         reader.readAsDataURL(file)
-        const filePath = file.path || ''
+        const filePath = file.name || ''
 
         const fileFormat = file.type
         // Get the file extension

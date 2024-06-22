@@ -8,7 +8,7 @@ import Outline from '@components/Button/OutlineButton'
 
 const Step2 = (props: StepProps) => {
   const { setStep } = props
-  const { images, currentImage } = useImageHashtagContext()
+  const { images, currentImage, getCurrentImageLabels } = useImageHashtagContext()
   const [imageURL, setImageURL] = useState<string | null>(null)
   const [reAnnotateTimes, setReAnnotateTimes] = useState<number>(1)
 
@@ -18,14 +18,13 @@ const Step2 = (props: StepProps) => {
   useEffect(() => {
     const currentImageObj = images[currentImage - 1]
     if (currentImageObj) {
-      if (currentImageObj.image instanceof Blob) {
-        const url = URL.createObjectURL(currentImageObj.image)
-        setImageURL(url)
-        // Cleanup function to revoke the object URL
-        return () => URL.revokeObjectURL(url)
-      } else if (typeof currentImageObj.image === 'string') {
-        setImageURL(currentImageObj.image)
+      setImageURL(currentImageObj.image)
+      console.log('currentImageObj.labels', currentImageObj.labels)
+      if (currentImageObj.labels.length <= 0) {
+        console.log('getting')
+        getCurrentImageLabels()
       }
+      // Cleanup function to revoke the object URL
     }
   }, [images, currentImage])
 

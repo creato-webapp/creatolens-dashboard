@@ -1,44 +1,41 @@
 import Primary from '@components/Button/PrimaryButton'
 import ImageUpload from '../ImageUpload'
-import { useEffect, useState } from 'react'
-import { getImageUploadUrl, uploadImage } from '@services/Image'
+import { useState } from 'react'
+import { uploadImage } from '@services/Image'
+import { useImageHashtagContext } from 'src/context/ImageToHashtagContext'
 export interface StepProps {
   step: number
   setStep: (arg: number) => void
 }
+
+type ImageDetailsType = {
+  path?: string
+  format?: string
+  extension?: string
+}
+
 const Step1 = (props: StepProps) => {
+  const { setStep } = props
   const [uploading, setUploading] = useState<boolean>(false)
   const [uploadedImage, setUploadedImage] = useState<Blob | null>(null)
-  const [imageDetails, setImageDetails] = useState<{
-    path?: string
-    format?: string
-    extension?: string
-  }>({})
+  const [imageDetails, setImageDetails] = useState<ImageDetailsType>({})
 
-  const getImageUploadLink = async () => {
-    const filename = imageDetails.path
-    const format = imageDetails.format
+  const { addImage } = useImageHashtagContext()
 
-    const data = {
-      args: { filename, format },
-    }
-    const response = await getImageUploadUrl(data)
-    return response.data
-  }
   const onClickButton = async () => {
-    // setStep(2)
     if (!uploadedImage) {
       return
     }
 
     setUploading(true)
     try {
-      const url = await getImageUploadLink()
       const data = {
-        args: { url, file: uploadedImage, format: imageDetails.format },
+        args: { username: 'timothy', file: uploadedImage, imageDetails },
       }
-      const uploadimageprocess = await uploadImage(data)
+      const uploadedImageResponse = await uploadImage(data)
+      addImage(uploadedImageResponse, [])
       setUploading(false)
+      setStep(2)
     } catch (e) {
       setUploading(false)
     }
