@@ -59,3 +59,8 @@ export async function uploadImage(
     throw error
   }
 }
+
+export async function getImageLabel() {
+  const labelsResponse: string[] = await Fetcher.POST('/api/image/label')
+  return labelsResponse
+}

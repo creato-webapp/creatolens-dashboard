@@ -11,9 +11,15 @@ import { RadioGroup } from '@components/Form/Radio/Group'
 export interface StepProps {
   step: number
   setStep: (arg: number) => void
-  setSelection: (arg: any) => void
-  selection: any
+  setSelection: (arg: Partial<Selection> | ((prevSelection: Selection) => Selection)) => void
+  selection: Selection
 }
+
+interface Selection {
+  imageStyle: string
+  aspectRatio: string
+}
+
 const Step2 = (props: StepProps) => {
   const { setStep, setSelection, selection } = props
 
@@ -22,13 +28,15 @@ const Step2 = (props: StepProps) => {
     return null
   }
 
-  const styleSelect = useCallback((key: string, value: string) => {
-    console.log('selection', key, value, selection)
-    setSelection((prevSelection) => ({
-      ...prevSelection,
-      [key]: value,
-    }))
-  }, [])
+  const styleSelect = useCallback(
+    (key: keyof Selection, value: string) => {
+      setSelection((prevSelection) => ({
+        ...prevSelection,
+        [key]: value,
+      }))
+    },
+    [setSelection]
+  )
 
   const ImageStyleSelection = useCallback(() => {
     return (
@@ -68,13 +76,7 @@ const Step2 = (props: StepProps) => {
 
         <div className="flex flex-row items-center justify-center gap-12">
           <div className="flex flex-row items-center gap-2">
-            <RadioGroup
-              defaultValue={Object.values(IMAGE_USAGE)[0]}
-              options={options}
-              onValueChange={function (value: string): void {
-                console.log('value', value)
-              }}
-            />
+            <RadioGroup defaultValue={Object.values(IMAGE_USAGE)[0]} options={options} onValueChange={function (): void {}} />
           </div>
         </div>
         <div>
@@ -117,7 +119,7 @@ const Step2 = (props: StepProps) => {
   }, [])
 
   const GeneralSelection = useCallback(() => {
-    const options = Object.entries(GENERAL).map(([key, value]) => {
+    const options = Object.entries(GENERAL).map(([, value]) => {
       return value
     })
     return (

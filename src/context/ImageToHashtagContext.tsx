@@ -1,5 +1,6 @@
+import { ReactNode, createContext, useCallback, useContext, useState } from 'react'
+
 import { getImageLabel } from '@services/Image'
-import { createContext, ReactNode, useCallback, useContext, useState } from 'react'
 
 type UploadStatus = 'pending' | 'uploading' | 'completed' | 'failed'
 
@@ -51,12 +52,12 @@ export const ImageHashtagProvider = ({ children }: ImageHashtagProviderProps) =>
   )
 
   const getCurrentImageLabels = async () => {
-    const data = {
-      args: {
-        file: images[currentImageIndex - 1]?.image,
-      },
-    }
-    const labels: string[] = await getImageLabel(data)
+    // const data = {
+    //   args: {
+    //     file: images[currentImageIndex - 1]?.image,
+    //   },
+    // }
+    const labels: string[] = await getImageLabel()
     if (labels && labels.length > 0) {
       setImages((prevImages) => {
         const updatedImages = [...prevImages]
