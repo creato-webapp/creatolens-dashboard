@@ -1,4 +1,4 @@
-type ButtonSize = 's' | 'm' | 'l'
+type ButtonSize = 's' | 'm' | 'l' | 'full'
 export interface ButtonProps extends React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement> {
   loading?: boolean
   sizes?: [ButtonSize, ButtonSize, ButtonSize]
