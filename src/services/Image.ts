@@ -1,7 +1,7 @@
-import ImageInstance from '@api/axiosInstance/Image'
 import { Fetcher } from './fetcher'
-import axios, { AxiosRequestConfig } from 'axios'
+import { AxiosRequestConfig, AxiosResponse } from 'axios'
 import { base64ToBlob } from './util'
+import { ImageDetailsType } from 'src/context/ImageToHashtagContext'
 
 export async function getImageUploadUrl(
   data: {
@@ -27,7 +27,7 @@ export async function uploadImage(
     args: {
       username: string
       file: string
-      imageDetails: any // here is not string
+      imageDetails: ImageDetailsType // here is not string
     }
   },
   customConfig?: AxiosRequestConfig
@@ -42,7 +42,7 @@ export async function uploadImage(
     formData.append('file', blobBody, imageDetails.path)
     formData.append('username', username)
 
-    const response = await Fetcher.POST('/api/image', formData, {
+    const response = await Fetcher.POST<AxiosResponse>('/api/image', formData, {
       ...customConfig,
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -53,15 +53,4 @@ export async function uploadImage(
     console.error('Error uploading image:', error)
     throw error
   }
-}
-
-export async function getImageLabel(data: {
-  args: {
-    file: string
-  }
-}) {
-  const image = data.args.file
-  const labelsResponse = await Fetcher.POST('/api/image/label')
-  console.log('label', labelsResponse)
-  return labelsResponse
 }

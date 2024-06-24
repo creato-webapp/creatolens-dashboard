@@ -1,5 +1,5 @@
 import Primary from '@components/Button/PrimaryButton'
-import { useCallback, useState } from 'react'
+import { useCallback } from 'react'
 import { IMAGE_STYLE, IMAGE_USAGE, SOCIAL_MEDIA_PLATFORMS, IMAGE_ASPECT_RATIOS, GENERAL } from '@components/constants/imageStyle'
 import Image from 'next/image'
 import { RadioGroup } from '@components/Form/Radio/Group'
@@ -12,15 +12,15 @@ export interface StepProps {
   selection: any
 }
 const Step2 = (props: StepProps) => {
-  const { step, setStep, setSelection, selection } = props
+  const { setStep, setSelection, selection } = props
 
   const gotoNextStep = () => {
     setStep(3)
     return null
   }
 
-  const styleSelect = useCallback((value: string, key: string) => {
-    console.log('selection', value, key, selection)
+  const styleSelect = useCallback((key: string, value: string) => {
+    console.log('selection', key, value, selection)
     setSelection((prevSelection) => ({
       ...prevSelection,
       [key]: value,
@@ -29,14 +29,14 @@ const Step2 = (props: StepProps) => {
 
   const ImageStyleSelection = useCallback(() => {
     return (
-      <div>
-        <h2 className="font-extrabold">Format</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4	">
+      <div className="flex flex-col gap-2">
+        <h2 className="h2 font-extrabold">Format</h2>
+        <div className="grid h-auto grid-cols-2 gap-4	md:grid-cols-4">
           {Object.entries(IMAGE_STYLE).map(([key, value]) => (
             <div
               key={key}
-              onClick={() => styleSelect(value.value)}
-              className={`flex aspect-square cursor-pointer flex-col items-center justify-center rounded-xl`}
+              onClick={() => styleSelect('imageStyle', value.value)}
+              className={`flex aspect-square cursor-pointer flex-col items-center rounded-xl`}
             >
               <div className={`${selection.imageStyle === value.value ? 'rounded-xl ring-2 ring-accent1-500' : ''} relative `}>
                 <Image src={value.image} alt={'style'} height={128} width={128} />
@@ -60,7 +60,7 @@ const Step2 = (props: StepProps) => {
       value: value,
     }))
     return (
-      <div>
+      <div className="flex flex-col gap-4">
         <h2>Usage</h2>
 
         <div className="flex flex-row items-center justify-center gap-12">
@@ -75,7 +75,7 @@ const Step2 = (props: StepProps) => {
           </div>
         </div>
         <div>
-          <Dropdown options={socialMediaOptions} />
+          <Dropdown name="Please Select" options={socialMediaOptions} />
         </div>
       </div>
     )
@@ -86,7 +86,7 @@ const Step2 = (props: StepProps) => {
       return (
         <div className="flex w-full flex-col items-center justify-center rounded-xl" key={key}>
           <div
-            className={`flex aspect-square h-auto w-full items-center rounded-xl bg-white px-8 py-4 ${
+            className={`flex aspect-square h-auto max-h-48 w-full max-w-48 items-center rounded-xl bg-white px-8 py-4 ${
               selection.aspectRatio == value.value ? 'border-4 border-accent1-500' : 'border border-stroke'
             }`}
             onClick={() => styleSelect(value.value, 'aspectRatio')}
@@ -104,10 +104,10 @@ const Step2 = (props: StepProps) => {
       )
     })
     return (
-      <div>
+      <div className="flex flex-col gap-4">
         <h2 className="font-extrabold">Aspect ratio</h2>
         <div className="flex w-full items-center justify-center">
-          <div className="grid aspect-square w-full grid-cols-2 gap-12">{options}</div>
+          <div className="grid aspect-square w-full grid-cols-2 gap-4">{options}</div>
         </div>
       </div>
     )
@@ -130,10 +130,8 @@ const Step2 = (props: StepProps) => {
   }, [])
 
   return (
-    <>
-      Step2
+    <div className="flex flex-col gap-2">
       <ImageStyleSelection />
-      <h3 className="font-semibold text-text-primary">Describe the image you want and we’ll generate image for you.</h3>
       <UsageSelection />
       <AspectRatioSelection />
       <GeneralSelection />
@@ -142,7 +140,7 @@ const Step2 = (props: StepProps) => {
           Generate Image
         </Primary>
       </div>
-    </>
+    </div>
   )
 }
 

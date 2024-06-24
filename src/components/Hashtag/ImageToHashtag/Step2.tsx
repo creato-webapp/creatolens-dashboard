@@ -1,6 +1,6 @@
 import { useImageHashtagContext } from 'src/context/ImageToHashtagContext'
 import { StepProps } from './Step1'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import Image from 'next/image'
 import Badges from '@components/Badges'
 import Primary from '@components/Button/PrimaryButton'
@@ -8,54 +8,42 @@ import Outline from '@components/Button/OutlineButton'
 
 const Step2 = (props: StepProps) => {
   const { setStep } = props
-  const { images, currentImage, getCurrentImageLabels } = useImageHashtagContext()
-  const [imageURL, setImageURL] = useState<string | null>(null)
+  const { images, currentImageIndex, getCurrentImageLabels, updateSelectedLabels } = useImageHashtagContext()
   const [reAnnotateTimes, setReAnnotateTimes] = useState<number>(1)
 
-  const exampleLabels = ['123', '231', '123123', 'haidf']
-  const [selectedLabel, setSelectedLabel] = useState<string[]>(exampleLabels)
-
   useEffect(() => {
-    const currentImageObj = images[currentImage - 1]
-    if (currentImageObj) {
-      setImageURL(currentImageObj.image)
-      console.log('currentImageObj.labels', currentImageObj.labels)
-      if (currentImageObj.labels.length <= 0) {
-        console.log('getting')
-        getCurrentImageLabels()
-      }
-      // Cleanup function to revoke the object URL
+    const currentImageObj = images[currentImageIndex]
+    if (currentImageObj && !currentImageObj.labels) {
+      getCurrentImageLabels()
     }
-  }, [images, currentImage])
+  }, [])
 
   const onClose = (label: string) => {
-    setSelectedLabel((prevLabels) => prevLabels.filter((item) => item !== label))
+    updateSelectedLabels(label)
   }
 
   const onSelected = (label: string) => {
-    setSelectedLabel((prevLabels) => {
-      if (!prevLabels.includes(label)) {
-        return [...prevLabels, label]
-      }
-      return prevLabels
-    })
+    updateSelectedLabels(label)
   }
 
   const onReannotateClick = () => {
     setReAnnotateTimes((pre) => pre + 1)
+    getCurrentImageLabels()
   }
   const onClickButton = () => {
     setStep(3)
   }
 
+  const currentImage = useMemo(() => {
+    return images[currentImageIndex]
+  }, [images, currentImageIndex])
   return (
-    <div>
-      <div>Image label annotation</div>
-      <div className="relative my-4 h-56 w-full">
-        {imageURL && (
+    <div className="flex w-full flex-col gap-4 md:flex-row">
+      <div className="relative my-4 flex w-full items-center justify-center md:w-1/2 h-48">
+        {currentImage.image && (
           <Image
             fill={true}
-            src={imageURL}
+            src={currentImage.image}
             objectFit="contain"
             className="rounded-3xl"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -63,34 +51,41 @@ const Step2 = (props: StepProps) => {
           />
         )}
       </div>
-      <div>Selected labels: {1 / 10}:</div>
-      <div>
-        <div className="flex flex-row flex-wrap gap-4">
-          {exampleLabels.map((label) => {
-            return (
-              <Badges
-                key={`key-${label}`}
-                rounded
-                closeable
-                isOutline={!selectedLabel.includes(label)}
-                onClose={() => onClose(label)}
-                onClick={() => onSelected(label)}
-                status={'primary'}
-              >
-                {label}
-              </Badges>
-            )
-          })}
+      <div className="flex w-full flex-col gap-2 md:w-1/2">
+        <h2 className="font-extrabold">Image label annotation</h2>
+        {currentImage.labels && (
+          <h3 className="font-semibold">Selected labels: {`${currentImage.selectedLabels.length} / ${currentImage.labels?.length}`}:</h3>
+        )}
+        <div>
+          <div className="flex flex-row flex-wrap gap-4">
+            {currentImage.labels &&
+              currentImage.labels.map((label) => {
+                return (
+                  <Badges
+                    key={`key-${label}`}
+                    rounded
+                    closeable
+                    isOutline={!currentImage.selectedLabels.includes(label)}
+                    onClose={() => onClose(label)}
+                    onClick={() => onSelected(label)}
+                    status={'primary'}
+                  >
+                    {label}
+                  </Badges>
+                )
+              })}
+          </div>
         </div>
-      </div>
-      <div>
-        <div className="flex flex-col gap-6">
-          <Outline sizes={['l', 'l', 'l']} onClick={onReannotateClick}>
-            Re-Annotate({reAnnotateTimes})
-          </Outline>
-          <Primary sizes={['l', 'l', 'l']} onClick={onClickButton}>
-            Annotate
-          </Primary>
+        <div>
+          <div className="flex flex-col gap-6">
+            <Outline sizes={['full', 'full', 'full']} onClick={onReannotateClick}>
+              <Image src="/arrows-clockwise.png" height={24} width={24} alt={'arrows clockwise'} />
+              Re-Annotate({reAnnotateTimes})
+            </Outline>
+            <Primary sizes={['full', 'full', 'full']} onClick={onClickButton}>
+              + Get Hashtag
+            </Primary>
+          </div>
         </div>
       </div>
     </div>

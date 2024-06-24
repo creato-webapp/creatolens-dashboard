@@ -1,6 +1,5 @@
-import { useCallback, useRef, useState } from 'react'
+import { useRef } from 'react'
 import { useDropzone } from 'react-dropzone'
-import { useImageHashtagContext } from 'src/context/ImageToHashtagContext'
 
 const ImageUpload = (props) => {
   const { uploadedImage, setUploadedImage, setImageDetails } = props
@@ -18,6 +17,10 @@ const ImageUpload = (props) => {
     onDrop: (acceptedFiles: Blob[]) => {
       if (acceptedFiles.length > 0) {
         const file = acceptedFiles[0]
+        setImageDetails((pre) => ({
+          ...pre,
+          size: file.size,
+        }))
         const reader = new FileReader()
         reader.onloadend = () => {
           setUploadedImage(reader.result as string)
@@ -48,17 +51,18 @@ const ImageUpload = (props) => {
         borderRadius: '10px',
         padding: '40px',
         textAlign: 'center',
-        backgroundColor: isDragActive ? '#f0f0f0' : uploadedImage ? '' : '2px dashed #d3d3d3',
-        color: '#666666',
+        backgroundColor: isDragActive ? '#f0f0f0' : uploadedImage ? '' : '#F5F5F6',
+        color: '#445F6F',
         transition: 'background-color 0.2s ease-in-out',
-        marginBottom: '20px',
+        // marginBottom: '20px',
       }}
+      className="flex aspect-square items-center justify-center"
     >
       <input {...getInputProps()} ref={fileInputRef} />
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <div style={{ display: 'flex', width: '100%', flexDirection: 'column', alignItems: 'center' }}>
         {uploadedImage ? (
           <div style={{ textAlign: 'center' }}>
-            <img src={uploadedImage} alt="Uploaded" style={{ maxWidth: '100%', maxHeight: '300px', borderRadius: '10px' }} />
+            <img src={uploadedImage} alt="Uploaded" style={{ maxWidth: '100%', maxHeight: 'auto', borderRadius: '10px' }} />
           </div>
         ) : (
           <img src="/file-input.png" alt="Upload Icon" style={{ width: '50px', marginBottom: '20px' }} />

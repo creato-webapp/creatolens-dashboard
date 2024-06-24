@@ -1,11 +1,18 @@
 import { getImageLabel } from '@services/Image'
-import { createContext, ReactNode, useContext, useState } from 'react'
+import { createContext, ReactNode, useCallback, useContext, useState } from 'react'
 
 type UploadStatus = 'pending' | 'uploading' | 'completed' | 'failed'
 
+export type ImageDetailsType = {
+  path?: string
+  format?: string
+  extension?: string
+  size?: number
+}
+
 type ImageType = {
   image: string | null
-  labels: string[]
+  labels?: string[]
   selectedLabels: string[]
   uploadStatus: UploadStatus
 }
@@ -13,8 +20,8 @@ type ImageType = {
 type ImageHashtagContextType = {
   images: ImageType[] // Corrected property name from 'dialoguese' to 'dialogues'
   addImage: (arg: string, labels: string[]) => void
-  currentImage: number
-  updateSelectedLabels: (arg: number, label: string) => void
+  currentImageIndex: number
+  updateSelectedLabels: (label: string) => void
   getCurrentImageLabels: () => void
 }
 
@@ -26,44 +33,76 @@ interface ImageHashtagProviderProps {
 
 export const ImageHashtagProvider = ({ children }: ImageHashtagProviderProps) => {
   const [images, setImages] = useState<ImageType[] | []>([])
-  const [currentImage, setCurrentImage] = useState<number>(0)
+  const [currentImageIndex, setCurrentImageIndex] = useState<number>(0)
 
-  const addImage = (image: string, labels: string[]) => {
-    setImages((prevImages) => [
-      ...prevImages,
-      {
-        image,
-        labels,
-        selectedLabels: [],
-        uploadStatus: 'pending',
-      },
-    ])
-    setCurrentImage((pre) => pre! + 1)
-  }
+  const addImage = useCallback(
+    (image: string) => {
+      setImages((prevImages) => [
+        ...prevImages,
+        {
+          image,
+          selectedLabels: [],
+          uploadStatus: 'pending',
+        },
+      ])
+      setCurrentImageIndex(() => images.length) // Set to the index of the new image
+    },
+    [images.length]
+  )
 
   const getCurrentImageLabels = async () => {
     const data = {
       args: {
-        file: currentImage,
+        file: images[currentImageIndex - 1]?.image,
       },
     }
-    const labels = await getImageLabel(data)
-    console.log('labels', labels)
+    const labels: string[] = await getImageLabel(data)
+    if (labels && labels.length > 0) {
+      setImages((prevImages) => {
+        const updatedImages = [...prevImages]
+        updatedImages[currentImageIndex] = {
+          ...updatedImages[currentImageIndex],
+          labels: labels,
+          selectedLabels: labels,
+          uploadStatus: 'completed',
+        }
+        return updatedImages
+      })
+    } else {
+      setImages((prevImages) => {
+        const updatedImages = [...prevImages]
+        updatedImages[currentImageIndex] = {
+          ...updatedImages[currentImageIndex],
+          uploadStatus: 'failed',
+        }
+        return updatedImages
+      })
+    }
   }
 
-  const updateSelectedLabels = (index: number, label: string) => {
-    setImages((prevImages) => {
-      const updatedImages = [...prevImages]
-      const selectedLabels = updatedImages[index]?.selectedLabels || []
-      if (!selectedLabels.includes(label)) {
-        updatedImages[index].selectedLabels = [...selectedLabels, label]
-      }
-      return updatedImages
-    })
-  }
+  const updateSelectedLabels = useCallback(
+    (label: string) => {
+      setImages((prevImages) => {
+        const updatedImages = prevImages.map((img, idx) => {
+          if (idx === currentImageIndex) {
+            const selectedLabels = img.selectedLabels.includes(label)
+              ? img.selectedLabels.filter((item) => item !== label)
+              : [...img.selectedLabels, label]
 
+            return {
+              ...img,
+              selectedLabels,
+            }
+          }
+          return img
+        })
+        return updatedImages
+      })
+    },
+    [currentImageIndex]
+  )
   return (
-    <ImageHashtagContext.Provider value={{ images, addImage, currentImage, updateSelectedLabels, getCurrentImageLabels }}>
+    <ImageHashtagContext.Provider value={{ images, addImage, currentImageIndex, updateSelectedLabels, getCurrentImageLabels }}>
       {children}
     </ImageHashtagContext.Provider>
   )

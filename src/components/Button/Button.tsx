@@ -24,8 +24,9 @@ const Button: React.FC<ButtonProps> = ({ children, onClick, disabled = false, lo
           padding += ` ${breakpoint}px-6 ${breakpoint}py-3`
           break
         case 'full':
-          padding += ''
+          padding += 'px-6 py-3'
           width = 'w-full'
+          break
         default:
           padding = 'px-2 py-1 md:px-3 md:py-2 lg:py-3 lg:px-3'
           break

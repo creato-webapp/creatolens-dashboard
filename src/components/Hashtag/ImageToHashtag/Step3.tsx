@@ -1,13 +1,13 @@
 import { useImageHashtagContext } from 'src/context/ImageToHashtagContext'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import Image from 'next/image'
 import Primary from '@components/Button/PrimaryButton'
 import Outline from '@components/Button/OutlineButton'
 import DropdownCheckbox from '@components/Form/DropdownCheckbox'
+import Badges from '@components/Badges'
 
 const Step3 = () => {
-  const { images, currentImage } = useImageHashtagContext()
-  const [imageURL, setImageURL] = useState<string | null>(null)
+  const { images, currentImageIndex } = useImageHashtagContext()
 
   const dropdownOptions = [
     {
@@ -95,28 +95,34 @@ const Step3 = () => {
     navigator.clipboard.writeText(selected.join(', '))
   }, [options])
 
-  useEffect(() => {
-    const currentImageObj = images[currentImage - 1]
-    if (currentImageObj) {
-      if (currentImageObj.image instanceof Blob) {
-        const url = URL.createObjectURL(currentImageObj.image)
-        setImageURL(url)
-        // Cleanup function to revoke the object URL
-        return () => URL.revokeObjectURL(url)
-      } else if (typeof currentImageObj.image === 'string') {
-        setImageURL(currentImageObj.image)
-      }
-    }
-  }, [images, currentImage])
+  const labelSection = useCallback(() => {
+    const label = images[currentImageIndex].labels
+    const selectedLabel = images[currentImageIndex].selectedLabels
+    return <DropdownCheckbox key={`${label}-dropdown`} options={[]} />
+    return { label, selectedLabel }
+  }, [])
 
+  const currentImage = useMemo(() => {
+    return images[currentImageIndex]
+  }, [images, currentImageIndex])
+
+  const LabelsDropdown = useCallback(() => {
+    if (!currentImage.labels) return null
+    const options = currentImage.labels.map((label) => ({
+      value: label,
+      label: label,
+      checked: currentImage.selectedLabels.includes(label),
+    }))
+    return <DropdownCheckbox key={`image-status-dropdown`} name={'Label'} options={options} onValueChange={onClickHashtag} />
+  }, [currentImage.labels, currentImage.selectedLabels, onClickHashtag])
   return (
     <div>
-      <div>Get hashtag recommendation</div>
+      <h2 className="font-extrabold">Get hashtag recommendation</h2>
       <div className="relative my-4 h-56 w-full">
-        {imageURL && (
+        {images[currentImageIndex] && images[currentImageIndex].image && (
           <Image
             fill={true}
-            src={imageURL}
+            src={images[currentImageIndex].image}
             objectFit="contain"
             className="rounded-3xl"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -124,13 +130,16 @@ const Step3 = () => {
           />
         )}
       </div>
+
       <div className="flex flex-col gap-4">
+        <LabelsDropdown />
+
         {options.map((option) => {
           return <DropdownCheckbox key={`${option.name}-dropdown`} name={option.name} options={option.options} onValueChange={onClickHashtag} />
         })}
       </div>
       <div className="my-4 flex flex-col gap-4">
-        <div className="flex flex-row gap-4">
+        <div className="flex flex-row flex-wrap gap-4">
           <Outline onClick={onClickClearAll} sizes={['full', 'full', 'full']}>
             Clear All
           </Outline>

@@ -1,5 +1,22 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 
+const generateRandomLabel = (): string => {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+  const length = 6 // Length of each random label
+  let result = ''
+  for (let i = 0; i < length; i++) {
+    result += characters.charAt(Math.floor(Math.random() * characters.length))
+  }
+  return result
+}
+
+const generateUniqueRandomLabels = (count: number): string[] => {
+  const labels = new Set<string>()
+  while (labels.size < count) {
+    labels.add(generateRandomLabel())
+  }
+  return Array.from(labels)
+}
 export default async function getImageLabel(req: NextApiRequest, res: NextApiResponse) {
   const { method } = req
 
@@ -13,7 +30,7 @@ export default async function getImageLabel(req: NextApiRequest, res: NextApiRes
         // })
 
         const response = {
-          data: ['label1', 'label2'],
+          data: generateUniqueRandomLabels(10), // Generate 3 random labels
         }
         return res.status(200).json(response.data)
       } catch (error) {

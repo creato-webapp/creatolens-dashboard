@@ -58,48 +58,202 @@ export const GENERAL = {
       },
       {
         value: 'ring light',
-        label: 'Right Light',
+        label: 'Ring Light',
+      },
+      {
+        value: 'neon',
+        label: 'Neon',
       },
     ],
   },
   ENVIRONMENT: {
     label: 'Environment',
-    options: [],
+    options: [
+      {
+        value: 'indoor',
+        label: 'Indoor',
+      },
+      {
+        value: 'outdoor',
+        label: 'Outdoor',
+      },
+      {
+        value: 'underwater',
+        label: 'Underwater',
+      },
+      {
+        value: 'in space',
+        label: 'In Space',
+      },
+    ],
   },
   COLOR_SCHEME: {
     label: 'Color Scheme',
-    options: [],
+    options: [
+      {
+        value: 'vibrant',
+        label: 'Vibrant',
+      },
+      {
+        value: 'dark',
+        label: 'Dark',
+      },
+      {
+        value: 'pastel',
+        label: 'Pastel',
+      },
+      {
+        value: 'bright',
+        label: 'Bright',
+      },
+    ],
   },
   POINT_OF_VIEW: {
     label: 'Point of View',
-    options: [],
+    options: [
+      {
+        value: 'front',
+        label: 'Front',
+      },
+      {
+        value: 'overhead',
+        label: 'Overhead',
+      },
+      {
+        value: 'side',
+        label: 'Side',
+      },
+    ],
   },
   CAMERA_ANGLE: {
     label: 'Camera Angle',
-    options: [],
+    options: [
+      {
+        value: 'full shot',
+        label: 'Full Shot',
+      },
+      {
+        value: 'close up',
+        label: 'Close Up',
+      },
+    ],
   },
   LENS_TYPE: {
-    label: 'Lens type',
-    options: [],
+    label: 'Lens Type',
+    options: [
+      {
+        value: 'macro lens',
+        label: 'Macro Lens',
+      },
+      {
+        value: 'wide angle',
+        label: 'Wide Angle',
+      },
+    ],
   },
   BACKGROUND: {
     label: 'Background',
-    options: [],
+    options: [
+      {
+        value: 'solid colour',
+        label: 'Solid Colour',
+      },
+      {
+        value: 'nebula',
+        label: 'Nebula',
+      },
+      {
+        value: 'forest',
+        label: 'Forest',
+      },
+    ],
   },
   MOOD: {
     label: 'Mood',
-    options: [],
+    options: [
+      {
+        value: 'energetic',
+        label: 'Energetic',
+      },
+      {
+        value: 'peaceful',
+        label: 'Peaceful',
+      },
+      {
+        value: 'joyful',
+        label: 'Joyful',
+      },
+      {
+        value: 'chaotic',
+        label: 'Chaotic',
+      },
+      {
+        value: 'aggressive',
+        label: 'Aggressive',
+      },
+      {
+        value: 'tense',
+        label: 'Tense',
+      },
+    ],
   },
   THEME: {
     label: 'Theme',
-    options: [],
+    options: [
+      {
+        value: 'film',
+        label: 'Film',
+      },
+      {
+        value: 'noir',
+        label: 'Noir',
+      },
+    ],
   },
   GENERAL: {
     label: 'General',
-    options: [],
+    options: [
+      {
+        value: 'masterpiece',
+        label: 'Masterpiece',
+      },
+      {
+        value: 'classic',
+        label: 'Classic',
+      },
+      {
+        value: 'cinematic',
+        label: 'Cinematic',
+      },
+    ],
   },
   ACTION_AND_MOVEMENT: {
     label: 'Action and Movement',
-    options: [],
+    options: [
+      {
+        value: 'cinematic action',
+        label: 'Cinematic Action',
+      },
+      {
+        value: 'flying',
+        label: 'Flying',
+      },
+      {
+        value: 'speeding',
+        label: 'Speeding',
+      },
+      {
+        value: 'running',
+        label: 'Running',
+      },
+      {
+        value: 'slow pan',
+        label: 'Slow Pan',
+      },
+      {
+        value: 'zoom',
+        label: 'Zoom',
+      },
+    ],
   },
 }

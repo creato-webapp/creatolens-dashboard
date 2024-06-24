@@ -33,10 +33,14 @@ const ImageToHashtag = () => {
         <div>
           <h1 className="font-extrabold">IMAGE TO HASHTAG</h1>
         </div>
-        <div className="my-7">
+        <div className="my-4 md:my-7">
           <ProgressBar total_step={3} current_step={step} />
         </div>
-        <StepComponent />
+        <div className="my-4 md:my-12 flex w-full items-center justify-center">
+          <div className="w-full max-w-[900px]">
+            <StepComponent />
+          </div>
+        </div>
       </div>
     </div>
   )
