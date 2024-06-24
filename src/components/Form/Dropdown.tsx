@@ -126,9 +126,8 @@ const Dropdown: React.FC<DropdownProps> = ({ name = '', options, defaultValue, o
           />
         </div>
       </button>
-
-      {isOpen && (
-        <ul className="absolute top-full z-10 mt-2 h-64 w-full overflow-y-scroll rounded-md border border-gray-200 bg-white shadow-lg">
+      <div className={`grid ${isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'} transition-all duration-300`}>
+        <ul className={`${isOpen ? '' : 'hidden'} z-10 mt-2 w-full overflow-y-scroll rounded-md border border-gray-200 bg-white shadow-lg`}>
           {options.map((option) => (
             <li
               key={option.value}
@@ -140,7 +139,7 @@ const Dropdown: React.FC<DropdownProps> = ({ name = '', options, defaultValue, o
             </li>
           ))}
         </ul>
-      )}
+      </div>
     </div>
   )
 }
