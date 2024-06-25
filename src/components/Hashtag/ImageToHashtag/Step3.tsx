@@ -5,6 +5,7 @@ import Image from 'next/image'
 import Outline from '@components/Button/Outline'
 import Primary from '@components/Button/Primary'
 import DropdownCheckbox from '@components/Form/DropdownCheckbox'
+import { getHashtag } from '@services/HashtagHelper'
 import { useImageHashtagContext } from 'src/context/ImageToHashtagContext'
 
 const Step3 = () => {
@@ -96,7 +97,7 @@ const Step3 = () => {
         {images[currentImageIndex] && images[currentImageIndex].image && (
           <Image
             fill={true}
-            src={images[currentImageIndex].image}
+            src={images[currentImageIndex].image as string}
             objectFit="contain"
             className="rounded-3xl"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -125,7 +126,14 @@ const Step3 = () => {
             Select All
           </Primary>
         </div>
-        <Primary sizes={['l', 'l', 'l']} className="w-full">
+        <Primary
+          sizes={['l', 'l', 'l']}
+          className="w-full"
+          onClick={async () => {
+            if (!currentImage.labels) return null
+            await getHashtag(currentImage.labels.join(', '))
+          }}
+        >
           + Use Result to Generate Image
         </Primary>
       </div>
