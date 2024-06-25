@@ -8,10 +8,12 @@ import Dropdown from '@components/Form/Dropdown'
 import { DropdownOption } from '@components/Form/Dropdown'
 import { RadioGroup } from '@components/Form/Radio/Group'
 
+type PartialSelection = { [P in keyof Selection]: Selection[P] }
+
 export interface StepProps {
   step: number
   setStep: (arg: number) => void
-  setSelection: (arg: Partial<Selection> | ((prevSelection: Selection) => Selection)) => void
+  setSelection: (arg: PartialSelection | ((prevSelection: Selection) => Selection)) => void
   selection: Selection
 }
 
@@ -94,7 +96,7 @@ const Step2 = (props: StepProps) => {
             className={`flex aspect-square h-auto max-h-48 w-full max-w-48 items-center rounded-xl bg-white px-8 py-4 ${
               selection.aspectRatio == value.value ? 'border-4 border-accent1-500' : 'border border-stroke'
             }`}
-            onClick={() => styleSelect(value.value, 'aspectRatio')}
+            onClick={() => styleSelect(value.value as keyof Selection, 'aspectRatio')}
           >
             <div
               className="bg-[#D9D9D9] shadow-2xl"

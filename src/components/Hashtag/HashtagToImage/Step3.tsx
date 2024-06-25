@@ -4,6 +4,7 @@ import Primary from '@components/Button/Primary'
 
 export interface StepProps {
   setStep: (arg: number) => void
+  step: number
 }
 const Step3 = (props: StepProps) => {
   const { setStep } = props

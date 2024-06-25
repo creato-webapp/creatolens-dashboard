@@ -11,8 +11,10 @@ const HashtagToImage = () => {
   const [step, setStep] = useState<number>(1)
   const [selection, setSelection] = useState<{
     imageStyle: string
+    aspectRatio: string
   }>({
     imageStyle: '',
+    aspectRatio: '3:4',
   })
 
   const StepComponent = useCallback(() => {

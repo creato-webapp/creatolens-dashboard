@@ -1,7 +1,5 @@
 import { useState } from 'react'
 
-import Image from 'next/image'
-
 import Primary from '@components/Button/Primary'
 import { uploadImage } from '@services/Image'
 import { ImageDetailsType, useImageHashtagContext } from 'src/context/ImageToHashtagContext'
