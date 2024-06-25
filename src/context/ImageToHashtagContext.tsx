@@ -52,12 +52,7 @@ export const ImageHashtagProvider = ({ children }: ImageHashtagProviderProps) =>
   )
 
   const getCurrentImageLabels = async () => {
-    // const data = {
-    //   args: {
-    //     file: images[currentImageIndex - 1]?.image,
-    //   },
-    // }
-    const labels: string[] = await getImageLabel()
+    const labels: string[] = await getImageLabel(images[currentImageIndex - 1]?.image as string)
     if (labels && labels.length > 0) {
       setImages((prevImages) => {
         const updatedImages = [...prevImages]
@@ -109,7 +104,7 @@ export const ImageHashtagProvider = ({ children }: ImageHashtagProviderProps) =>
   )
 }
 
-export const useImageHashtagContext = () => {
+export const useImageHashtagContext = () => { // move to useHook folder
   const context = useContext(ImageHashtagContext)
   if (!context) {
     throw new Error('useImageHashtagContext must be used within an ImageHashtagProvider')

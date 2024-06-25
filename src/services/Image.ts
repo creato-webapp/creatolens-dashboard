@@ -60,7 +60,21 @@ export async function uploadImage(
   }
 }
 
-export async function getImageLabel() {
-  const labelsResponse: string[] = await Fetcher.POST('/api/image/label')
-  return labelsResponse
+type ImageLabelResponseType = {
+  categories: string;
+  confidence: [{
+    [key: string]: number;
+  }];
+  labels: string[];
+}
+
+export async function getImageLabel(imagePath: string) {
+  const response: ImageLabelResponseType = await Fetcher.GET('/api/image/labels',
+    {
+      params: {
+        image_url: imagePath,
+      }
+    }
+  )
+  return response.labels
 }

@@ -1,32 +1,21 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-const generateRandomLabel = (): string => {
-  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-  const length = 6 // Length of each random label
-  let result = ''
-  for (let i = 0; i < length; i++) {
-    result += characters.charAt(Math.floor(Math.random() * characters.length))
-  }
-  return result
-}
-
-const generateUniqueRandomLabels = (count: number): string[] => {
-  const labels = new Set<string>()
-  while (labels.size < count) {
-    labels.add(generateRandomLabel())
-  }
-  return Array.from(labels)
-}
+import ImageInstance from '../axiosInstance/Image'
 
 export default async function getImageLabel(req: NextApiRequest, res: NextApiResponse) {
-  const { method } = req
+  const {
+    method,
+    query: { image_url },
+  } = req
 
   switch (method) {
-    case 'POST': {
+    case 'GET': {
       try {
-        const response = {
-          data: generateUniqueRandomLabels(10), // Generate 10 random labels
-        }
+        const response = await ImageInstance.get(`/api/image-tagen/labels`, {
+          params: {
+            image_url,
+          },
+        })
         return res.status(200).json(response.data)
       } catch (error) {
         console.error('Error generating labels:', error)
