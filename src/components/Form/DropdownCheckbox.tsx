@@ -36,7 +36,7 @@ const Dropdown: React.FC<DropdownProps> = ({ name = '', options, onValueChange, 
   }
 
   const hoverStyle = ' hover:bg-interface-hover '
-  const activeStyle = isOpen && ' !bg-accent1-500 !text-white'
+  const activeStyle = isOpen && ' !bg-accent1-500 !text-accent1'
   const focusStyle = !isOpen && ' focus:ring-2 focus:ring-stroke focus:ring-opacity-50'
 
   const generatePadding = useCallback((dropDownSizes: string[]): { padding: string; caretSize: string; maxWidth: string } => {
@@ -116,8 +116,9 @@ const Dropdown: React.FC<DropdownProps> = ({ name = '', options, onValueChange, 
               <input
                 type="checkbox"
                 checked={option.checked || false}
-                className="mr-2 rounded border-2 border-stroke text-white checked:bg-accent1-500 focus:bg-transparent"
+                className="mr-2 rounded  border-stroke text-accent1-500 checked:bg-accent1-500 focus:bg-transparent focus:ring-0"
                 defaultChecked={option.checked || false}
+                onChange={handleOptionSelect(option.value)}
                 onClick={handleOptionSelect(option.value)}
               />
 

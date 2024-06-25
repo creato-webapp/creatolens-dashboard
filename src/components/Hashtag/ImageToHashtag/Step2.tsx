@@ -81,11 +81,11 @@ const Step2 = (props: StepProps) => {
         </div>
         <div>
           <div className="flex flex-col gap-6">
-            <Outline sizes={['full', 'full', 'full']} onClick={onReannotateClick}>
+            <Outline sizes={['l', 'l', 'l']} onClick={onReannotateClick}>
               <Image src="/arrows-clockwise.png" height={24} width={24} alt={'arrows clockwise'} />
               Re-Annotate({reAnnotateTimes})
             </Outline>
-            <Primary sizes={['full', 'full', 'full']} onClick={onClickButton}>
+            <Primary sizes={['l', 'l', 'l']} onClick={onClickButton}>
               + Get Hashtag
             </Primary>
           </div>

@@ -134,17 +134,17 @@ const Step3 = () => {
       </div>
       <div className="my-4 flex flex-col gap-4">
         <div className="flex flex-row flex-wrap gap-4">
-          <Outline onClick={onClickClearAll} sizes={['full', 'full', 'full']}>
+          <Outline onClick={onClickClearAll} sizes={['l', 'l', 'l']}>
             Clear All
           </Outline>
-          <Primary onClick={onClickCopySelected} sizes={['full', 'full', 'full']}>
+          <Primary onClick={onClickCopySelected} sizes={['l', 'l', 'l']}>
             Copy Selected
           </Primary>
-          <Primary onClick={onClickSelectAll} sizes={['full', 'full', 'full']}>
+          <Primary onClick={onClickSelectAll} sizes={['l', 'l', 'l']}>
             Select All
           </Primary>
         </div>
-        <Primary sizes={['full', 'full', 'full']} className="w-full">
+        <Primary sizes={['l', 'l', 'l']} className="w-full">
           + Use Result to Generate Image
         </Primary>
       </div>
