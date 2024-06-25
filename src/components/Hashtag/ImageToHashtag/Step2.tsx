@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 
 import Image from 'next/image'
+import Skeleton from 'react-loading-skeleton'
 
 import { Badges } from '@components/Badges'
 import Outline from '@components/Button/Outline'
@@ -8,10 +9,11 @@ import Primary from '@components/Button/Primary'
 import { useImageHashtagContext } from 'src/context/ImageToHashtagContext'
 
 import { StepProps } from './Step1'
+import 'react-loading-skeleton/dist/skeleton.css'
 
 const Step2 = (props: StepProps) => {
   const { setStep } = props
-  const { images, currentImageIndex, getCurrentImageLabels, updateSelectedLabels } = useImageHashtagContext()
+  const { images, currentImageIndex, getCurrentImageLabels, updateSelectedLabels, loadingLabels } = useImageHashtagContext()
   const [reAnnotateTimes, setReAnnotateTimes] = useState<number>(1)
 
   useEffect(() => {
@@ -40,6 +42,7 @@ const Step2 = (props: StepProps) => {
   const currentImage = useMemo(() => {
     return images[currentImageIndex]
   }, [images, currentImageIndex])
+  
   return (
     <div className="flex w-full flex-col gap-4 md:flex-row">
       <div className="relative my-4 flex h-48 w-full items-center justify-center md:w-1/2">
@@ -60,8 +63,9 @@ const Step2 = (props: StepProps) => {
           <h3 className="font-semibold">Selected labels: {`${currentImage.selectedLabels.length} / ${currentImage.labels?.length}`}:</h3>
         )}
         <div>
-          <div className="flex flex-row flex-wrap gap-4">
-            {currentImage.labels &&
+          <div className="flex h-full w-full flex-row flex-wrap gap-4">
+            {!loadingLabels ? (
+              currentImage.labels &&
               currentImage.labels.map((label) => {
                 return (
                   <Badges
@@ -76,7 +80,10 @@ const Step2 = (props: StepProps) => {
                     {label}
                   </Badges>
                 )
-              })}
+              })
+            ) : (
+              <Skeleton count={3} style={{ height: 40 }} containerClassName="flex-1" />
+            )}
           </div>
         </div>
         <div>

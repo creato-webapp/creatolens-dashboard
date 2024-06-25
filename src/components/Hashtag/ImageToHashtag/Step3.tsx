@@ -8,34 +8,9 @@ import DropdownCheckbox from '@components/Form/DropdownCheckbox'
 import { useImageHashtagContext } from 'src/context/ImageToHashtagContext'
 
 const Step3 = () => {
-  const { images, currentImageIndex } = useImageHashtagContext()
+  const { images, currentImageIndex, updateSelectedLabels } = useImageHashtagContext()
 
   const dropdownOptions = [
-    {
-      name: 'Label',
-      options: [
-        {
-          label: '123',
-          value: 123,
-          checked: false,
-        },
-        {
-          label: '124',
-          value: 124,
-          checked: false,
-        },
-        {
-          label: '125',
-          value: 125,
-          checked: false,
-        },
-        {
-          label: '126',
-          value: 126,
-          checked: false,
-        },
-      ],
-    },
     {
       name: 'Larget Than 90% Related',
       options: [
@@ -82,6 +57,10 @@ const Step3 = () => {
     )
   }, [])
 
+  const onClickLabel = useCallback((value: string) => {
+    updateSelectedLabels(value)
+  }, [])
+
   const onClickClearAll = useCallback(() => {
     setOptions((prevOptions) =>
       prevOptions.map((option) => ({
@@ -100,15 +79,16 @@ const Step3 = () => {
     return images[currentImageIndex]
   }, [images, currentImageIndex])
 
-  const LabelsDropdown = useCallback(() => {
-    if (!currentImage.labels) return null
-    const options = currentImage.labels.map((label) => ({
+  const labelOptions = useMemo(() => {
+    if (!currentImage.labels || currentImage.labels.length === 0) return null
+
+    return currentImage.labels.map((label) => ({
       value: label,
-      label: label,
+      label,
       checked: currentImage.selectedLabels.includes(label),
     }))
-    return <DropdownCheckbox key={`image-status-dropdown`} name={'Label'} options={options} onValueChange={onClickHashtag} />
-  }, [currentImage.labels, currentImage.selectedLabels, onClickHashtag])
+  }, [currentImage.labels, currentImage.selectedLabels])
+
   return (
     <div>
       <h2 className="font-extrabold">Get hashtag recommendation</h2>
@@ -126,8 +106,9 @@ const Step3 = () => {
       </div>
 
       <div className="flex flex-col gap-4">
-        <LabelsDropdown />
-
+        {labelOptions && labelOptions?.length > 0 && (
+          <DropdownCheckbox key={`${'label'}-dropdown`} name={'Label'} options={labelOptions} onValueChange={(val) => onClickLabel(val as string)} />
+        )}
         {options.map((option) => {
           return <DropdownCheckbox key={`${option.name}-dropdown`} name={option.name} options={option.options} onValueChange={onClickHashtag} />
         })}

@@ -16,7 +16,7 @@ export interface StepProps {
 const Step1 = (props: StepProps) => {
   const { setStep } = props
   const [uploading, setUploading] = useState<boolean>(false)
-  const [uploadedImage, setUploadedImage] = useState<string>("")
+  const [uploadedImage, setUploadedImage] = useState<string>('')
   const [imageDetails, setImageDetails] = useState<ImageDetailsType>({})
 
   const { addImage } = useImageHashtagContext()
@@ -46,11 +46,11 @@ const Step1 = (props: StepProps) => {
       <div className="mt-4 w-full md:mt-0 md:w-1/2">
         <ImageUpload uploadedImage={uploadedImage} setUploadedImage={setUploadedImage} setImageDetails={setImageDetails} />
       </div>
-      <div className="flex w-full flex-col justify-between md:w-1/2">
+      <div className="flex w-full flex-col justify-center md:w-1/2 gap-4">
         <h2 className="hidden font-extrabold md:block">Image Upload</h2>
 
         <div className="flex flex-row flex-wrap items-center gap-x-4">
-          <Image src="/image-logo.png" alt="image logo" height={40} width={40} />
+          {/* <Image src="/image-logo.png" alt="image logo" height={40} width={40} /> */}
           <h3 className="text-text-secondary">{imageDetails.path}</h3>
           {imageDetails.size && imageDetails.size > 0 && (
             <h3 className="text-disabled">File size: {(imageDetails.size / 1024 / 1024).toFixed(2)} MB</h3>

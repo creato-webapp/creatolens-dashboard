@@ -24,6 +24,7 @@ type ImageHashtagContextType = {
   currentImageIndex: number
   updateSelectedLabels: (label: string) => void
   getCurrentImageLabels: () => void
+  loadingLabels: boolean
 }
 
 const ImageHashtagContext = createContext<ImageHashtagContextType | undefined>(undefined)
@@ -34,6 +35,7 @@ interface ImageHashtagProviderProps {
 
 export const ImageHashtagProvider = ({ children }: ImageHashtagProviderProps) => {
   const [images, setImages] = useState<ImageType[] | []>([])
+  const [loadingLabels, setloadingLabels] = useState<boolean>(false)
   const [currentImageIndex, setCurrentImageIndex] = useState<number>(0)
 
   const addImage = useCallback(
@@ -52,27 +54,33 @@ export const ImageHashtagProvider = ({ children }: ImageHashtagProviderProps) =>
   )
 
   const getCurrentImageLabels = async () => {
-    const labels: string[] = await getImageLabel(images[currentImageIndex - 1]?.image as string)
-    if (labels && labels.length > 0) {
-      setImages((prevImages) => {
-        const updatedImages = [...prevImages]
-        updatedImages[currentImageIndex] = {
-          ...updatedImages[currentImageIndex],
-          labels: labels,
-          selectedLabels: labels,
-          uploadStatus: 'completed',
-        }
-        return updatedImages
-      })
-    } else {
-      setImages((prevImages) => {
-        const updatedImages = [...prevImages]
-        updatedImages[currentImageIndex] = {
-          ...updatedImages[currentImageIndex],
-          uploadStatus: 'failed',
-        }
-        return updatedImages
-      })
+    setloadingLabels(true)
+    try {
+      const labels: string[] = await getImageLabel(images[currentImageIndex]?.image as string)
+      if (labels && labels.length > 0) {
+        setImages((prevImages) => {
+          const updatedImages = [...prevImages]
+          updatedImages[currentImageIndex] = {
+            ...updatedImages[currentImageIndex],
+            labels: labels,
+            selectedLabels: labels,
+            uploadStatus: 'completed',
+          }
+          return updatedImages
+        })
+      } else {
+        setImages((prevImages) => {
+          const updatedImages = [...prevImages]
+          updatedImages[currentImageIndex] = {
+            ...updatedImages[currentImageIndex],
+            uploadStatus: 'failed',
+          }
+          return updatedImages
+        })
+      }
+      setloadingLabels(false)
+    } catch {
+      setloadingLabels(false)
     }
   }
 
@@ -98,13 +106,14 @@ export const ImageHashtagProvider = ({ children }: ImageHashtagProviderProps) =>
     [currentImageIndex]
   )
   return (
-    <ImageHashtagContext.Provider value={{ images, addImage, currentImageIndex, updateSelectedLabels, getCurrentImageLabels }}>
+    <ImageHashtagContext.Provider value={{ images, addImage, currentImageIndex, updateSelectedLabels, getCurrentImageLabels, loadingLabels }}>
       {children}
     </ImageHashtagContext.Provider>
   )
 }
 
-export const useImageHashtagContext = () => { // move to useHook folder
+export const useImageHashtagContext = () => {
+  // move to useHook folder
   const context = useContext(ImageHashtagContext)
   if (!context) {
     throw new Error('useImageHashtagContext must be used within an ImageHashtagProvider')

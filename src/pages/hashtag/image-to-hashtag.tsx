@@ -15,7 +15,7 @@ const ImageToHashtag = () => {
     } else if (step === 2) {
       return <Step2 step={step} setStep={setStep} />
     } else if (step === 3) {
-      return <Step3 step={step} setStep={setStep} />
+      return <Step3 />
     } else return <></>
   }, [step])
 
@@ -36,7 +36,7 @@ const ImageToHashtag = () => {
         <div className="my-4 md:my-7">
           <ProgressBar total_step={3} current_step={step} />
         </div>
-        <div className="my-4 md:my-12 flex w-full items-center justify-center">
+        <div className="my-4 flex w-full items-center justify-center md:my-12">
           <div className="w-full max-w-[900px]">
             <StepComponent />
           </div>
