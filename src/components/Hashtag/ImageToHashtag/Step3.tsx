@@ -72,10 +72,10 @@ const Step3 = () => {
   }, [])
 
   const onClickCopySelected = useCallback(() => {
-    const selected = options.flatMap((option) => option.options.filter((opt) => opt.checked).map((opt) => opt.label))
+    const selected = options.flatMap((option) => option.options.filter((opt) => opt.checked).map((opt) => `#${opt.label}`))
     navigator.clipboard.writeText(selected.join(', '))
   }, [options])
-
+  
   const currentImage = useMemo(() => {
     return images[currentImageIndex]
   }, [images, currentImageIndex])

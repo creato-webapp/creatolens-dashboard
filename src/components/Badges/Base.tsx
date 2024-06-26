@@ -13,6 +13,7 @@ export interface BadgesProps extends React.HTMLAttributes<HTMLDivElement> {
   rounded?: boolean
   status: BadgesType
   onClose?: () => void
+  onClick?: () => void
 }
 
 const solidBadgesStyles: Record<BadgesType, string> = {
@@ -38,13 +39,19 @@ const outlineBadgesStyles: Record<BadgesType, string> = {
 } as const
 
 const Badges = ({ ...props }: BadgesProps) => {
-  const { size = 'lg', children, isOutline, isDisabled, closeable, rounded, status, onClose, className } = props
+  const { size = 'lg', children, isOutline, isDisabled, closeable, rounded, status, onClose, onClick, className } = props
   const isShow = true
   const roundedStyle = rounded ? 'rounded-full' : 'rounded'
 
-  const handleClose = () => {
+  const handleClose = (e: React.MouseEvent) => {
     // setIsShow(false)
+    e.stopPropagation()
+
     onClose && onClose()
+  }
+
+  const handleChoose = () => {
+    onClick && onClick()
   }
 
   const SmallBadges = () => {
@@ -55,6 +62,7 @@ const Badges = ({ ...props }: BadgesProps) => {
     ${isDisabled ? 'bg-bg-dark' : ''} ${className}
     ${closeable ? 'cursor-pointer' : ''}
     `}
+        onClick={handleChoose}
       >
         <h6 className="capitalize-first-letter flex flex-row items-center font-normal">{children}</h6>
         {closeable && (
@@ -74,6 +82,7 @@ const Badges = ({ ...props }: BadgesProps) => {
     ${isDisabled ? 'bg-bg-dark' : ''} ${className}
     ${closeable ? 'cursor-pointer' : ''}
     `}
+        onClick={handleChoose}
       >
         <h4 className="capitalize-first-letter flex flex-row items-center font-normal leading-7">{children}</h4>
         {closeable && (
