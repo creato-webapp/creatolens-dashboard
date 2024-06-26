@@ -93,16 +93,16 @@ const Step2 = (props: StepProps) => {
       return (
         <div className="flex w-full flex-col items-center justify-center rounded-xl" key={key}>
           <div
-            className={`flex aspect-square h-auto max-h-48 w-full max-w-48 items-center rounded-xl bg-white px-8 py-4 ${
+            className={`flex aspect-square h-auto max-h-48 w-full max-w-48 items-center justify-center rounded-xl bg-white px-8 py-4 ${
               selection.aspectRatio == value.value ? 'border-4 border-accent1-500' : 'border border-stroke'
             }`}
-            onClick={() => styleSelect(value.value as keyof Selection, 'aspectRatio')}
+            onClick={() => styleSelect('aspectRatio', value.value as keyof Selection)}
           >
             <div
               className="bg-[#D9D9D9] shadow-2xl"
               style={{
                 aspectRatio: `${value.width} / ${value.height}`,
-                width: '100%',
+                width: `${value.width === 9 && value.height === 16 ? '70%' : '100%'}`,
               }}
             ></div>
           </div>
@@ -118,7 +118,7 @@ const Step2 = (props: StepProps) => {
         </div>
       </div>
     )
-  }, [])
+  }, [selection.aspectRatio, styleSelect])
 
   const GeneralSelection = useCallback(() => {
     const options = Object.entries(GENERAL).map(([, value]) => {

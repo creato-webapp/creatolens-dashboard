@@ -48,13 +48,18 @@ const ImageUpload = (props: IImageUpload) => {
     noClick: true,
   })
 
+  const clearFile = () => {
+    setUploadedImage("")
+    setImageDetails({})
+  }
+
   return (
     <div
       {...getRootProps()}
       style={{
         border: uploadedImage ? '' : '2px dashed #d3d3d3',
         borderRadius: '10px',
-        padding: '40px',
+        padding: uploadedImage ? '5px' : '40px',
         textAlign: 'center',
         backgroundColor: isDragActive ? '#f0f0f0' : uploadedImage ? '' : '#F5F5F6',
         color: '#445F6F',
@@ -66,7 +71,10 @@ const ImageUpload = (props: IImageUpload) => {
       <input {...getInputProps()} ref={fileInputRef} />
       <div style={{ display: 'flex', width: '100%', flexDirection: 'column', alignItems: 'center' }}>
         {uploadedImage ? (
-          <div style={{ textAlign: 'center' }}>
+          <div style={{ textAlign: 'center' }} className=" relative">
+            <div className=" absolute h-12 w-12 right-5 top-5 flex cursor-pointer rounded-full bg-accent1-500 p-4 text-white" onClick={clearFile}>
+              <div className="flex w-full h-full items-center justify-center">X</div>
+            </div>
             <img src={uploadedImage} alt="Uploaded" style={{ maxWidth: '100%', maxHeight: 'auto', borderRadius: '10px' }} />
           </div>
         ) : (

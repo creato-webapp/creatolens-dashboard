@@ -9,7 +9,7 @@ import { getImageHashtag } from '@services/HashtagHelper'
 import { useImageHashtagContext } from 'src/context/ImageToHashtagContext'
 
 const Step3 = () => {
-  const { images, currentImageIndex, updateSelectedLabels, hashtags, setHashtags } = useImageHashtagContext()
+  const { images, currentImageIndex, updateSelectedLabels, hashtags, updateHashtag } = useImageHashtagContext()
 
   const dropdownOptions = [
     {
@@ -35,6 +35,21 @@ const Step3 = () => {
     ]
     setOptions(dropdownOptions)
   }, [hashtags])
+
+  useEffect(() => {
+    const fetchHashtags = async () => {
+      if (images[currentImageIndex] && images[currentImageIndex].selectedLabels) {
+        try {
+          const res = await getImageHashtag(images[currentImageIndex].selectedLabels.join(', '))
+          updateHashtag(res.data.map((item) => item.hashtag))
+        } catch (error) {
+          console.error('Error fetching hashtags:', error)
+        }
+      }
+    }
+
+    fetchHashtags()
+  }, [currentImageIndex, images, updateHashtag])
 
   const [options, setOptions] = useState(dropdownOptions)
 
@@ -70,10 +85,10 @@ const Step3 = () => {
   }, [])
 
   const onClickCopySelected = useCallback(() => {
-    const selected = options.flatMap((option) => option.options.filter((opt) => opt.checked).map((opt) => `#${opt.label}`))
+    const selected = options.flatMap((option) => option.options.filter((opt) => opt.checked).map((opt) => `${opt.label}`))
     navigator.clipboard.writeText(selected.join(', '))
   }, [options])
-  
+
   const currentImage = useMemo(() => {
     return images[currentImageIndex]
   }, [images, currentImageIndex])
@@ -113,14 +128,14 @@ const Step3 = () => {
         })}
       </div>
       <div className="my-4 flex flex-col gap-4">
-        <div className="flex flex-row flex-wrap gap-4">
-          <Outline onClick={onClickClearAll} sizes={['l', 'l', 'l']}>
+        <div className="flex flex-row gap-4">
+          <Outline onClick={onClickClearAll} sizes={['m', 'l', 'l']}>
             Clear All
           </Outline>
-          <Primary onClick={onClickCopySelected} sizes={['l', 'l', 'l']}>
+          <Primary onClick={onClickCopySelected} sizes={['m', 'l', 'l']}>
             Copy Selected
           </Primary>
-          <Primary onClick={onClickSelectAll} sizes={['l', 'l', 'l']}>
+          <Primary onClick={onClickSelectAll} sizes={['m', 'l', 'l']}>
             Select All
           </Primary>
         </div>
@@ -130,7 +145,7 @@ const Step3 = () => {
           onClick={async () => {
             if (!currentImage.labels) return null
             const res = await getImageHashtag(currentImage.labels.join(', '))
-            setHashtags(res.data.map((item) => item.hashtag))
+            updateHashtag(res.data.map((item) => item.hashtag))
             // console.log(res.data.map((item) => item.hashtag))
           }}
         >
