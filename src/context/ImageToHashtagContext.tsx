@@ -25,6 +25,9 @@ type ImageHashtagContextType = {
   updateSelectedLabels: (label: string) => void
   getCurrentImageLabels: () => void
   loadingLabels: boolean
+  //Below is for hashtag
+  hashtags: string[]
+  setHashtags: (arg: string[]) => void
 }
 
 const ImageHashtagContext = createContext<ImageHashtagContextType | undefined>(undefined)
@@ -37,6 +40,8 @@ export const ImageHashtagProvider = ({ children }: ImageHashtagProviderProps) =>
   const [images, setImages] = useState<ImageType[] | []>([])
   const [loadingLabels, setloadingLabels] = useState<boolean>(false)
   const [currentImageIndex, setCurrentImageIndex] = useState<number>(0)
+
+  const [hashtags, setHashtags] = useState<string[]>([])
 
   const addImage = useCallback(
     (image: string) => {
@@ -106,7 +111,9 @@ export const ImageHashtagProvider = ({ children }: ImageHashtagProviderProps) =>
     [currentImageIndex]
   )
   return (
-    <ImageHashtagContext.Provider value={{ images, addImage, currentImageIndex, updateSelectedLabels, getCurrentImageLabels, loadingLabels }}>
+    <ImageHashtagContext.Provider
+      value={{ images, addImage, currentImageIndex, updateSelectedLabels, getCurrentImageLabels, loadingLabels, hashtags, setHashtags }}
+    >
       {children}
     </ImageHashtagContext.Provider>
   )

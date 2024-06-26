@@ -1,43 +1,41 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import Image from 'next/image'
 
 import Outline from '@components/Button/Outline'
 import Primary from '@components/Button/Primary'
 import DropdownCheckbox from '@components/Form/DropdownCheckbox'
-import { getHashtag } from '@services/HashtagHelper'
+import { getImageHashtag } from '@services/HashtagHelper'
 import { useImageHashtagContext } from 'src/context/ImageToHashtagContext'
 
 const Step3 = () => {
-  const { images, currentImageIndex, updateSelectedLabels } = useImageHashtagContext()
+  const { images, currentImageIndex, updateSelectedLabels, hashtags, setHashtags } = useImageHashtagContext()
 
   const dropdownOptions = [
     {
       name: 'Larget Than 90% Related',
-      options: [
-        {
-          label: '123',
-          value: 123,
-          checked: false,
-        },
-        {
-          label: '124',
-          value: 124,
-          checked: false,
-        },
-        {
-          label: '125',
-          value: 125,
-          checked: false,
-        },
-        {
-          label: '126',
-          value: 126,
-          checked: false,
-        },
-      ],
+      options: hashtags.map((hashtag) => ({
+        label: hashtag,
+        value: hashtag,
+        checked: false,
+      })),
     },
   ]
+  
+  useEffect(() => {
+    const dropdownOptions = [
+      {
+        name: 'Larget Than 90% Related',
+        options: hashtags.map((hashtag) => ({
+          label: hashtag,
+          value: hashtag,
+          checked: false,
+        })),
+      },
+    ]
+    setOptions(dropdownOptions)
+  }, [hashtags])
+
   const [options, setOptions] = useState(dropdownOptions)
 
   const onClickSelectAll = useCallback(() => {
@@ -131,7 +129,9 @@ const Step3 = () => {
           className="w-full"
           onClick={async () => {
             if (!currentImage.labels) return null
-            await getHashtag(currentImage.labels.join(', '))
+            const res = await getImageHashtag(currentImage.labels.join(', '))
+            setHashtags(res.data.map((item) => item.hashtag))
+            // console.log(res.data.map((item) => item.hashtag))
           }}
         >
           + Use Result to Generate Image
