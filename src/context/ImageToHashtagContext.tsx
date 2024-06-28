@@ -15,6 +15,7 @@ type ImageType = {
   image: string | null
   labels?: string[]
   selectedLabels: string[]
+  hashtags?: string[]
   uploadStatus: UploadStatus
 }
 
@@ -27,7 +28,7 @@ type ImageHashtagContextType = {
   loadingLabels: boolean
   //Below is for hashtag
   hashtags: string[]
-  setHashtags: (arg: string[]) => void
+  updateHashtag: (arg: string[]) => void
 }
 
 const ImageHashtagContext = createContext<ImageHashtagContextType | undefined>(undefined)
@@ -110,9 +111,16 @@ export const ImageHashtagProvider = ({ children }: ImageHashtagProviderProps) =>
     },
     [currentImageIndex]
   )
+
+  const updateHashtag = useCallback(
+    (hashtag: string[]) => {
+      setHashtags(hashtag)
+    },
+    [setHashtags]
+  )
   return (
     <ImageHashtagContext.Provider
-      value={{ images, addImage, currentImageIndex, updateSelectedLabels, getCurrentImageLabels, loadingLabels, hashtags, setHashtags }}
+      value={{ images, addImage, currentImageIndex, updateSelectedLabels, getCurrentImageLabels, loadingLabels, hashtags, updateHashtag }}
     >
       {children}
     </ImageHashtagContext.Provider>

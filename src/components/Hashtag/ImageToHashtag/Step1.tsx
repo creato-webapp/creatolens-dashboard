@@ -55,7 +55,7 @@ const Step1 = (props: StepProps) => {
           )}
         </div>
         <div className="flex items-center justify-center">
-          <Primary loading={uploading} sizes={['full', 'full', 'full']} onClick={onClickButton}>
+        <Primary disabled={uploading} sizes={['m', 'm', 'm']} onClick={onClickButton}>
             Annotate
           </Primary>
         </div>
