@@ -21,7 +21,7 @@ const Step3 = () => {
       })),
     },
   ]
-  
+
   useEffect(() => {
     const dropdownOptions = [
       {
@@ -127,8 +127,8 @@ const Step3 = () => {
           return <DropdownCheckbox key={`${option.name}-dropdown`} name={option.name} options={option.options} onValueChange={onClickHashtag} />
         })}
       </div>
-      <div className="my-4 flex flex-col gap-4">
-        <div className="flex flex-row gap-4">
+      <div className="my-4 flex w-full flex-col gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-3 gap-4">
           <Outline onClick={onClickClearAll} sizes={['m', 'l', 'l']}>
             Clear All
           </Outline>
@@ -139,18 +139,19 @@ const Step3 = () => {
             Select All
           </Primary>
         </div>
-        <Primary
-          sizes={['l', 'l', 'l']}
-          className="w-full"
-          onClick={async () => {
-            if (!currentImage.labels) return null
-            const res = await getImageHashtag(currentImage.labels.join(', '))
-            updateHashtag(res.data.map((item) => item.hashtag))
-            // console.log(res.data.map((item) => item.hashtag))
-          }}
-        >
-          + Use Result to Generate Image
-        </Primary>
+        <div className="w-full">
+          <Primary
+            sizes={['m', 'l', 'l']}
+            onClick={async () => {
+              if (!currentImage.labels) return null
+              const res = await getImageHashtag(currentImage.labels.join(', '))
+              updateHashtag(res.data.map((item) => item.hashtag))
+              // console.log(res.data.map((item) => item.hashtag))
+            }}
+          >
+            + Use Result to Generate Image
+          </Primary>
+        </div>
       </div>
     </div>
   )
