@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useState  } from 'react'
 
 import Primary from '@components/Button/Primary'
 import { uploadImage } from '@services/Image'
@@ -19,7 +19,7 @@ const Step1 = (props: StepProps) => {
 
   const { addImage } = useImageHashtagContext()
 
-  const onClickButton = async () => {
+  const onClickButton = useCallback(async () => {
     if (!uploadedImage || !imageDetails.format || !imageDetails.path) {
       return
     }
@@ -37,14 +37,14 @@ const Step1 = (props: StepProps) => {
     } catch (e) {
       setUploading(false)
     }
-  }
+  }, [addImage, imageDetails, setStep, uploadedImage])
   return (
     <div className="flex flex-col gap-3 rounded-2xl md:flex-row md:p-12 md:shadow-lg">
       <h2 className="font-extrabold md:hidden">Image Upload</h2>
       <div className="mt-4 w-full md:mt-0 md:w-1/2">
         <ImageUpload uploadedImage={uploadedImage} setUploadedImage={setUploadedImage} setImageDetails={setImageDetails} />
       </div>
-      <div className="flex w-full flex-col justify-center md:w-1/2 gap-4">
+      <div className="flex w-full flex-col justify-center gap-4 md:w-1/2">
         <h2 className="hidden font-extrabold md:block">Image Upload</h2>
 
         <div className="flex flex-row flex-wrap items-center gap-x-4">
@@ -55,7 +55,7 @@ const Step1 = (props: StepProps) => {
           )}
         </div>
         <div className="flex items-center justify-center">
-          <Primary disabled={uploading} sizes={['full', 'full', 'full']} onClick={onClickButton}>
+          <Primary loading={uploading} sizes={['full', 'full', 'full']} onClick={onClickButton}>
             Annotate
           </Primary>
         </div>

@@ -2,11 +2,6 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 
 import ImageInstance from '../axiosInstance/Image'
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-}
 
 export default async function ImageUpload(req: NextApiRequest, res: NextApiResponse) {
   const { method } = req
@@ -14,7 +9,7 @@ export default async function ImageUpload(req: NextApiRequest, res: NextApiRespo
   switch (method) {
     case 'POST': {
       try {
-        const response = await ImageInstance.post(`/api/image-tagen`, req, {
+        const response = await ImageInstance.post(`/api/image-tagen`, req.body, {
           headers: {
             'Content-Type': req.headers['content-type'],
           },
@@ -22,7 +17,7 @@ export default async function ImageUpload(req: NextApiRequest, res: NextApiRespo
         return res.status(response.status).json(response.data)
       } catch (error) {
         console.error('Error uploading image:', error)
-        return res.status(500).json({ message: 'Internal Server Error', error })
+        return res.status(500).send({ message: 'Internal Server Error', error })
       }
     }
     default:
