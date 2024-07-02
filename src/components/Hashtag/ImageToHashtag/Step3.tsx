@@ -7,41 +7,67 @@ import Primary from '@components/Button/Primary'
 import DropdownCheckbox from '@components/Form/DropdownCheckbox'
 import { getImageHashtag } from '@services/HashtagHelper'
 import { useImageHashtagContext } from 'src/context/ImageToHashtagContext'
+import { IHashet } from 'src/pages/recommendation'
 
-const Step3 = () => {
+const Step3 = (props) => {
+  const { setStep } = props
   const { images, currentImageIndex, updateSelectedLabels, hashtags, updateHashtag } = useImageHashtagContext()
-
-  const dropdownOptions = [
+  const [options, setOptions] = useState<
     {
-      name: 'Larget Than 90% Related',
-      options: hashtags.map((hashtag) => ({
-        label: hashtag,
-        value: hashtag,
-        checked: false,
-      })),
-    },
-  ]
+      name: string
+      options: {
+        label: string
+        value: string
+        checked: boolean
+      }[]
+    }[]
+  >()
 
-  useEffect(() => {
-    const dropdownOptions = [
+  const categorizedOptions = useMemo(() => {
+    const highConfidence = hashtags.filter((hashtag) => hashtag.acc > 0.9)
+    const mediumConfidence = hashtags.filter((hashtag) => hashtag.acc > 0.8 && hashtag.acc <= 0.9)
+    const lowConfidence = hashtags.filter((hashtag) => hashtag.acc <= 0.8)
+
+    const options = [
       {
-        name: 'Larget Than 90% Related',
-        options: hashtags.map((hashtag) => ({
-          label: hashtag,
-          value: hashtag,
+        name: 'Greater Than 90% Related',
+        options: highConfidence.map((hashtag) => ({
+          label: hashtag.hashtag,
+          value: hashtag.hashtag,
+          checked: false,
+        })),
+      },
+      {
+        name: 'Greater Than 80% Related',
+        options: mediumConfidence.map((hashtag) => ({
+          label: hashtag.hashtag,
+          value: hashtag.hashtag,
+          checked: false,
+        })),
+      },
+      {
+        name: 'Less Than 80% Related',
+        options: lowConfidence.map((hashtag) => ({
+          label: hashtag.hashtag,
+          value: hashtag.hashtag,
           checked: false,
         })),
       },
     ]
-    setOptions(dropdownOptions)
+    return options.filter((category) => category.options.length > 0)
   }, [hashtags])
+
+  useEffect(() => {
+    setOptions(categorizedOptions)
+  }, [categorizedOptions])
 
   useEffect(() => {
     const fetchHashtags = async () => {
       if (images[currentImageIndex] && images[currentImageIndex].selectedLabels) {
         try {
           const res = await getImageHashtag(images[currentImageIndex].selectedLabels.join(', '))
-          updateHashtag(res.data.map((item) => item.hashtag))
+          const hashtagsArray: IHashet[] = res.data
+          updateHashtag(hashtagsArray)
         } catch (error) {
           console.error('Error fetching hashtags:', error)
         }
@@ -50,8 +76,6 @@ const Step3 = () => {
 
     fetchHashtags()
   }, [currentImageIndex, images, updateHashtag])
-
-  const [options, setOptions] = useState(dropdownOptions)
 
   const onClickSelectAll = useCallback(() => {
     setOptions((prevOptions) =>
@@ -85,9 +109,14 @@ const Step3 = () => {
   }, [])
 
   const onClickCopySelected = useCallback(() => {
-    const selected = options.flatMap((option) => option.options.filter((opt) => opt.checked).map((opt) => `${opt.label}`))
-    navigator.clipboard.writeText(selected.join(', '))
+    const selected = options?.flatMap((option) => option.options.filter((opt) => opt.checked).map((opt) => `${opt.label}`))
+    navigator.clipboard.writeText(selected!.join(', '))
   }, [options])
+
+  const goBack = () => {
+    setStep(2)
+    return null
+  }
 
   const currentImage = useMemo(() => {
     return images[currentImageIndex]
@@ -106,6 +135,8 @@ const Step3 = () => {
   return (
     <div>
       <h2 className="font-extrabold">Get hashtag recommendation</h2>
+      <div onClick={goBack}>back</div>
+
       <div className="relative my-4 h-56 w-full">
         {images[currentImageIndex] && images[currentImageIndex].image && (
           <Image
@@ -123,9 +154,10 @@ const Step3 = () => {
         {labelOptions && labelOptions?.length > 0 && (
           <DropdownCheckbox key={`${'label'}-dropdown`} name={'Label'} options={labelOptions} onValueChange={(val) => onClickLabel(val as string)} />
         )}
-        {options.map((option) => {
-          return <DropdownCheckbox key={`${option.name}-dropdown`} name={option.name} options={option.options} onValueChange={onClickHashtag} />
-        })}
+        {options &&
+          options.map((option) => {
+            return <DropdownCheckbox key={`${option.name}-dropdown`} name={option.name} options={option.options} onValueChange={onClickHashtag} />
+          })}
       </div>
       <div className="my-4 flex w-full flex-col gap-4">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 md:grid-cols-3">
@@ -139,19 +171,24 @@ const Step3 = () => {
             Select All
           </Primary>
         </div>
-        <div className="w-full">
-          <Primary
-            sizes={['m', 'l', 'l']}
-            onClick={async () => {
-              if (!currentImage.labels) return null
-              const res = await getImageHashtag(currentImage.labels.join(', '))
-              updateHashtag(res.data.map((item) => item.hashtag))
-              // console.log(res.data.map((item) => item.hashtag))
-            }}
-          >
-            + Use Result to Generate Image
-          </Primary>
-        </div>
+        <Primary
+          sizes={['l', 'l', 'l']}
+          className="w-full"
+          onClick={async () => {
+            if (!currentImage.labels) return null
+            const res = await getImageHashtag(currentImage.labels.join(', '))
+            updateHashtag(
+              res.data.map((item) => {
+                return {
+                  hashtag: item.hashtag,
+                  acc: item.acc,
+                }
+              })
+            )
+          }}
+        >
+          + Use Result to Generate Image
+        </Primary>
       </div>
     </div>
   )

@@ -19,7 +19,10 @@ const Step1 = (props: StepProps) => {
       </div>
       <div className="my-4 border-b"></div>
       <h3 className="font-semibold text-text-primary">Describe the image you want and we’ll generate image for you.</h3>
-      <textarea className="mt-4 min-h-96 w-full border border-black p-5 text-text-disabled" placeholder="Input your own keyword" />
+      <textarea
+        className="mt-4 min-h-96 w-full border border-black p-5 text-text-disabled ring-0  focus:border-accent1-500 focus:ring-accent1-500"
+        placeholder="Input your own keyword"
+      />
 
       <div className="mt-4 flex items-center justify-center">
         <Primary onClick={gotoNextStep} sizes={['l', 'l', 'l']}>

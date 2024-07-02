@@ -15,9 +15,17 @@ const ImageToHashtag = () => {
     } else if (step === 2) {
       return <Step2 step={step} setStep={setStep} />
     } else if (step === 3) {
-      return <Step3 />
+      return <Step3 setStep={setStep} />
     } else return <></>
   }, [step])
+
+  const goBack = () => {
+    if (step === 1) {
+      return
+    } else {
+      setStep((pre) => pre - 1)
+    }
+  }
 
   return (
     <div className="mx-3 my-4">
@@ -35,6 +43,11 @@ const ImageToHashtag = () => {
         </div>
         <div className="my-4 md:my-7">
           <ProgressBar total_step={3} current_step={step} />
+        </div>
+        <div className={`${step === 1 ? 'hidden' : 'flex'}`}>
+          <div className="w-fit rounded-full bg-accent1-500 px-4 py-2 text-white" onClick={goBack}>
+            Back
+          </div>
         </div>
         <div className="my-4 flex w-full items-center justify-center md:my-12">
           <div className="w-full max-w-[900px]">
