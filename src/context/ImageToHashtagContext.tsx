@@ -1,6 +1,7 @@
 import { ReactNode, createContext, useCallback, useContext, useState } from 'react'
 
 import { getImageLabel } from '@services/Image'
+import { IHashet } from 'src/pages/recommendation'
 
 type UploadStatus = 'pending' | 'uploading' | 'completed' | 'failed'
 
@@ -27,8 +28,8 @@ type ImageHashtagContextType = {
   getCurrentImageLabels: () => void
   loadingLabels: boolean
   //Below is for hashtag
-  hashtags: string[]
-  updateHashtag: (arg: string[]) => void
+  hashtags: IHashet[]
+  updateHashtag: (arg: IHashet[]) => void
 }
 
 const ImageHashtagContext = createContext<ImageHashtagContextType | undefined>(undefined)
@@ -42,7 +43,7 @@ export const ImageHashtagProvider = ({ children }: ImageHashtagProviderProps) =>
   const [loadingLabels, setloadingLabels] = useState<boolean>(false)
   const [currentImageIndex, setCurrentImageIndex] = useState<number>(0)
 
-  const [hashtags, setHashtags] = useState<string[]>([])
+  const [hashtags, setHashtags] = useState<IHashet[]>([])
 
   const addImage = useCallback(
     (image: string) => {
@@ -113,7 +114,7 @@ export const ImageHashtagProvider = ({ children }: ImageHashtagProviderProps) =>
   )
 
   const updateHashtag = useCallback(
-    (hashtag: string[]) => {
+    (hashtag: IHashet[]) => {
       setHashtags(hashtag)
     },
     [setHashtags]

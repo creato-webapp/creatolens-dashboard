@@ -20,6 +20,10 @@ export interface StepProps {
 interface Selection {
   imageStyle: string
   aspectRatio: string
+  usage: {
+    name: string
+    platform: string
+  }
 }
 
 const Step2 = (props: StepProps) => {
@@ -40,6 +44,31 @@ const Step2 = (props: StepProps) => {
     [setSelection]
   )
 
+  const usageSelect = useCallback(
+    (value: string) => {
+      setSelection((prevSelection) => ({
+        ...prevSelection,
+        usage: {
+          name: value,
+          platform: prevSelection.usage.platform,
+        },
+      }))
+    },
+    [setSelection]
+  )
+
+  const platformSelect = useCallback(
+    (value: string) => {
+      setSelection((prevSelection) => ({
+        ...prevSelection,
+        usage: {
+          name: prevSelection.usage.name,
+          platform: value,
+        },
+      }))
+    },
+    [setSelection]
+  )
   const ImageStyleSelection = useCallback(() => {
     return (
       <div className="flex flex-col gap-2">
@@ -78,15 +107,30 @@ const Step2 = (props: StepProps) => {
 
         <div className="flex flex-row items-center justify-center gap-12">
           <div className="flex flex-row items-center gap-2">
-            <RadioGroup defaultValue={Object.values(IMAGE_USAGE)[0]} options={options} onValueChange={function (): void {}} />
+            <RadioGroup
+              defaultValue={Object.values(IMAGE_USAGE)[0]}
+              options={options}
+              selectedValue={selection.usage.name}
+              onValueChange={(value) => {
+                usageSelect(value)
+              }}
+            />
           </div>
         </div>
         <div>
-          <Dropdown name="Please Select" options={socialMediaOptions} />
+          {selection.usage.name === IMAGE_USAGE.SOCIAL_MEDIA && (
+            <Dropdown
+              options={socialMediaOptions}
+              onValueChange={(value) => {
+                platformSelect(value as string)
+              }}
+              name={selection.usage.platform ? selection.usage.platform : 'Please Select'}
+            />
+          )}
         </div>
       </div>
     )
-  }, [])
+  }, [platformSelect, selection.usage.name, selection.usage.platform, usageSelect])
 
   const AspectRatioSelection = useCallback(() => {
     const options = Object.entries(IMAGE_ASPECT_RATIOS).map(([key, value]) => {
@@ -138,6 +182,7 @@ const Step2 = (props: StepProps) => {
 
   return (
     <div className="flex flex-col gap-2">
+      <div>back</div>
       <ImageStyleSelection />
       <UsageSelection />
       <AspectRatioSelection />

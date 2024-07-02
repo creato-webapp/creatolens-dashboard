@@ -8,7 +8,7 @@ export interface DropdownCheckboxOption {
   checked: boolean
 }
 
-type DropdownSize = 's' | 'm' | 'l' | 'full'
+type DropdownSize = 's' | 'm' | 'l'
 interface DropdownProps extends HTMLProps<HTMLSelectElement> {
   name?: string
   options: DropdownCheckboxOption[]
@@ -41,7 +41,6 @@ const Dropdown: React.FC<DropdownProps> = ({ name = '', options, onValueChange, 
 
   const generatePadding = useCallback((dropDownSizes: string[]): { padding: string; caretSize: string; maxWidth: string } => {
     let padding = ''
-    let maxWidth = ''
     let caretSize = ''
     if (!dropDownSizes) {
       return { padding: 'px-2 py-1 md:px-3 md:py-2 lg:py-3 lg:px-3', caretSize: 'w-6 h-6', maxWidth: '' }
@@ -52,21 +51,13 @@ const Dropdown: React.FC<DropdownProps> = ({ name = '', options, onValueChange, 
       switch (size) {
         case 's':
           padding += ` ${breakpoint}px-4 ${breakpoint}py-2`
-          maxWidth += ` ${breakpoint}max-w-[6rem]`
           caretSize += ` ${breakpoint}w-3 ${breakpoint}h-3`
           break
         case 'm':
           padding += ` ${breakpoint}px-4 ${breakpoint}py-2`
-          maxWidth += ` ${breakpoint}max-w-[11rem]`
           caretSize += ` ${breakpoint}w-6 ${breakpoint}h-6`
           break
         case 'l':
-          padding += ` ${breakpoint}px-6 ${breakpoint}py-3`
-          maxWidth += ` ${breakpoint}max-w-[20rem]`
-          caretSize += ` ${breakpoint}w-6 ${breakpoint}h-6`
-          break
-
-        case 'full':
           padding += ` ${breakpoint}px-6 ${breakpoint}py-3`
           caretSize += ` ${breakpoint}w-6 ${breakpoint}h-6`
           break
@@ -91,7 +82,7 @@ const Dropdown: React.FC<DropdownProps> = ({ name = '', options, onValueChange, 
   const { padding, caretSize, maxWidth } = generatePadding(dropDownSizes!)
 
   return (
-    <div ref={dropdownRef} className={`dropdown relative h-full w-full justify-end  ${maxWidth}`}>
+    <div ref={dropdownRef} className={`dropdown relative h-full w-full justify-end ${maxWidth}`}>
       <button
         className={`drowpdown-button w-full rounded-lg border-none ${color} ${padding} ${focusStyle} ${hoverStyle} ${activeStyle}`}
         onClick={handleToggleMenu}
@@ -106,22 +97,21 @@ const Dropdown: React.FC<DropdownProps> = ({ name = '', options, onValueChange, 
       </button>
 
       <div className={`grid ${isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'} transition-all duration-300`}>
-        <ul className={`${isOpen ? '' : 'hidden'} z-10 mt-2 w-full overflow-y-scroll rounded-md border border-gray-200 bg-white shadow-lg`}>
+        <ul className={`${isOpen ? '' : 'hidden'} z-10 mt-2 max-h-60 w-full overflow-y-auto rounded-md border border-gray-200 bg-white shadow-lg`}>
           {options.map((option) => (
             <li
               key={option.value}
-              className="flex w-full cursor-pointer list-none flex-wrap items-center gap-2  px-4 py-2 hover:bg-gray-100"
+              className="flex w-full cursor-pointer list-none flex-wrap items-center gap-2 px-4 py-2 hover:bg-gray-100"
               onClick={handleOptionSelect(option.value)}
             >
               <input
                 type="checkbox"
                 checked={option.checked || false}
-                className="mr-2 rounded  border-stroke text-accent1-500 checked:bg-accent1-500 focus:bg-transparent focus:ring-0"
+                className="mr-2 rounded border-stroke text-accent1-500 checked:bg-accent1-500 focus:bg-transparent focus:ring-0"
                 defaultChecked={option.checked || false}
                 onChange={handleOptionSelect(option.value)}
                 onClick={handleOptionSelect(option.value)}
               />
-
               {icon && icon}
               {option.label}
             </li>

@@ -16,8 +16,7 @@ const Step3 = (props: StepProps) => {
   }
   return (
     <>
-      <h2 className="font-extrabold">Result</h2>
-
+      <h2 className="font-extrabold">Result</h2> 
       <div className="mt-4 flex items-center justify-center">
         <div className="relative my-4 h-56 w-full">
           {imageURL && (
