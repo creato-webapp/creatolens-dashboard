@@ -11,6 +11,14 @@ import { useHashtagImageContext } from 'src/context/HashtagToImageContext'
 const HashtagToImage = () => {
   const { step } = useHashtagImageContext()
 
+  const goBack = () => {
+    if (step === 1) {
+      return
+    } else {
+      setStep((pre) => pre - 1)
+    }
+  }
+
   const StepComponent = useCallback(() => {
     if (step === 1) {
       return <Step1 />
@@ -33,6 +41,11 @@ const HashtagToImage = () => {
       </div>
       <div className="my-7">
         <ProgressBar total_step={3} current_step={step} />
+      </div>
+      <div className={`${step === 1 ? 'hidden' : 'flex'}`}>
+        <div className="w-fit rounded-full bg-accent1-500 px-4 py-2 text-white" onClick={goBack}>
+          Back
+        </div>
       </div>
       <div className="my-12 flex w-full items-center justify-center">
         <div className="w-full max-w-[900px]">

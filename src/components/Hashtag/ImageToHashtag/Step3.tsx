@@ -13,7 +13,7 @@ import { StepProps } from './Step1'
 
 const Step3 = (props: StepProps) => {
   const { setStep } = props
-  const { images, currentImageIndex, updateSelectedLabels, hashtags, updateHashtag, generateImageByHashtag } = useImageHashtagContext()
+  const { images, currentImageIndex, updateSelectedLabels, hashtags, updateHashtag } = useImageHashtagContext()
   const [options, setOptions] = useState<
     {
       name: string
