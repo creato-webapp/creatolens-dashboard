@@ -1,22 +1,16 @@
 import Image from 'next/image'
 
 import Primary from '@components/Button/Primary'
+import { useHashtagImageContext } from 'src/context/HashtagToImageContext'
 
-export interface StepProps {
-  setStep: (arg: number) => void
-  step: number
-}
-const Step3 = (props: StepProps) => {
-  const { setStep } = props
+const Step3 = () => {
+  const { goBack } = useHashtagImageContext()
   const imageURL = '/logo_orange.png'
 
-  const gotoBack = () => {
-    setStep(2)
-    return null
-  }
   return (
     <>
-      <h2 className="font-extrabold">Result</h2> 
+      <h2 className="font-extrabold">Result</h2>
+      <div onClick={goBack}>Back</div>
       <div className="mt-4 flex items-center justify-center">
         <div className="relative my-4 h-56 w-full">
           {imageURL && (
@@ -33,7 +27,7 @@ const Step3 = (props: StepProps) => {
       </div>
       <div className="flex flex-col">
         <h4>Here is the image based on your description. Re-organize input below to get new images.</h4>
-        <Primary onClick={gotoBack} sizes={['full', 'full', 'full']}>
+        <Primary onClick={goBack} sizes={['full', 'full', 'full']}>
           Re-Generate Image
         </Primary>
       </div>
