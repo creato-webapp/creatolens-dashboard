@@ -48,6 +48,10 @@ const Step2 = (props: StepProps) => {
   const onGoBack = () => {
     setStep(1)
   }
+
+  const onGoBack = () => {
+    setStep(1)
+  }
   const onClickButton = () => {
     setStep(3)
   }
