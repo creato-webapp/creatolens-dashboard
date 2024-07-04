@@ -12,6 +12,11 @@ export type ImageDetailsType = {
   size?: number
 }
 
+export interface StepProps {
+  step: number
+  setStep: (arg: number) => void
+}
+
 type ImageType = {
   image: string | null
   labels?: string[]
@@ -25,11 +30,13 @@ type ImageHashtagContextType = {
   addImage: (arg: string, labels: string[]) => void
   currentImageIndex: number
   updateSelectedLabels: (label: string) => void
+  selectAllLabels: () => void
   getCurrentImageLabels: () => void
   loadingLabels: boolean
   //Below is for hashtag
   hashtags: IHashet[]
   updateHashtag: (arg: IHashet[]) => void
+  reAnnotateLabels: (arg: string[]) => void
 }
 
 const ImageHashtagContext = createContext<ImageHashtagContextType | undefined>(undefined)
@@ -113,15 +120,47 @@ export const ImageHashtagProvider = ({ children }: ImageHashtagProviderProps) =>
     [currentImageIndex]
   )
 
+  const selectAllLabels = useCallback(() => {
+    setImages((prevImages) => {
+      const updatedImages = prevImages.map((img, idx) => {
+        if (idx === currentImageIndex && img.labels) {
+          return {
+            ...img,
+            selectedLabels: img.labels,
+          }
+        }
+        return img
+      })
+      return updatedImages
+    })
+  }, [currentImageIndex])
+
   const updateHashtag = useCallback(
     (hashtag: IHashet[]) => {
       setHashtags(hashtag)
     },
     [setHashtags]
   )
+
+  const reAnnotateLabels = useCallback(() => {
+    //TODO
+    console.log('re annotate function here')
+  }, [])
+
   return (
     <ImageHashtagContext.Provider
-      value={{ images, addImage, currentImageIndex, updateSelectedLabels, getCurrentImageLabels, loadingLabels, hashtags, updateHashtag }}
+      value={{
+        images,
+        addImage,
+        currentImageIndex,
+        selectAllLabels,
+        updateSelectedLabels,
+        getCurrentImageLabels,
+        reAnnotateLabels,
+        loadingLabels,
+        hashtags,
+        updateHashtag,
+      }}
     >
       {children}
     </ImageHashtagContext.Provider>
