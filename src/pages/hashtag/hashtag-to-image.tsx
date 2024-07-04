@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useCallback } from 'react'
 
 import Link from 'next/link'
 
@@ -6,40 +6,18 @@ import Step1 from '@components/Hashtag/HashtagToImage/Step1'
 import Step2 from '@components/Hashtag/HashtagToImage/Step2'
 import Step3 from '@components/Hashtag/HashtagToImage/Step3'
 import ProgressBar from '@components/Hashtag/ProgressBar'
+import { useHashtagImageContext } from 'src/context/HashtagToImageContext'
 
 const HashtagToImage = () => {
-  const [step, setStep] = useState<number>(1)
-  const [selection, setSelection] = useState<{
-    imageStyle: string
-    aspectRatio: string
-    usage: {
-      name: string
-      platform: string
-    }
-  }>({
-    imageStyle: '',
-    aspectRatio: '3:4',
-    usage: {
-      name: '',
-      platform: '',
-    },
-  })
-
-  const goBack = () => {
-    if (step === 1) {
-      return
-    } else {
-      setStep((pre) => pre - 1)
-    }
-  }
+  const { step } = useHashtagImageContext()
 
   const StepComponent = useCallback(() => {
     if (step === 1) {
-      return <Step1 step={step} setStep={setStep} />
-    } else if (step === 2) return <Step2 step={step} setStep={setStep} selection={selection} setSelection={setSelection} />
-    else if (step === 3) return <Step3 step={step} setStep={setStep} />
+      return <Step1 />
+    } else if (step === 2) return <Step2 />
+    else if (step === 3) return <Step3 />
     else return null
-  }, [selection, step])
+  }, [step])
 
   return (
     <div className="mx-3 mb-12">
@@ -55,11 +33,6 @@ const HashtagToImage = () => {
       </div>
       <div className="my-7">
         <ProgressBar total_step={3} current_step={step} />
-      </div>
-      <div className={`${step === 1 ? 'hidden' : 'flex'}`}>
-        <div className="w-fit rounded-full bg-accent1-500 px-4 py-2 text-white" onClick={goBack}>
-          Back
-        </div>
       </div>
       <div className="my-12 flex w-full items-center justify-center">
         <div className="w-full max-w-[900px]">
