@@ -1,3 +1,5 @@
+import { DropdownOption } from '@components/Form/DropdownV2'
+
 export const IMAGE_STYLE = {
   GRAPHIC_DESIGN: {
     name: 'Graphic Design',
@@ -44,7 +46,7 @@ export const IMAGE_ASPECT_RATIOS = {
   PORTRAIT_3_4: { label: 'Portrait 3:4', value: '3:4', width: 3, height: 4 },
 }
 
-export const GENERAL = {
+export const IMAGE_CATEGORY = {
   LIGHTING: {
     label: 'Lighting',
     options: [
@@ -256,4 +258,23 @@ export const GENERAL = {
       },
     ],
   },
+}
+
+type Category = {
+  label: string
+  options: DropdownOption[]
+}
+
+export type ImageCategoryType = {
+  LIGHTING?: Category
+  ENVIRONMENT?: Category
+  COLOR_SCHEME?: Category
+  POINT_OF_VIEW?: Category
+  CAMERA_ANGLE?: Category
+  LENS_TYPE?: Category
+  BACKGROUND?: Category
+  MOOD?: Category
+  THEME?: Category
+  GENERAL?: Category
+  ACTION_AND_MOVEMENT?: Category
 }
