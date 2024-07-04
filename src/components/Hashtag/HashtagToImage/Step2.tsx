@@ -3,72 +3,69 @@ import { useCallback } from 'react'
 import Image from 'next/image'
 
 import Primary from '@components/Button/Primary'
-import { GENERAL, IMAGE_ASPECT_RATIOS, IMAGE_STYLE, IMAGE_USAGE, SOCIAL_MEDIA_PLATFORMS } from '@components/constants/imageStyle'
-import Dropdown from '@components/Form/Dropdown'
 import { DropdownOption } from '@components/Form/Dropdown'
+import Dropdown from '@components/Form/DropdownV2'
 import { RadioGroup } from '@components/Form/Radio/Group'
+import { useHashtagImageContext } from 'src/context/HashtagToImageContext'
 
-type PartialSelection = { [P in keyof Selection]: Selection[P] }
+import {
+  IMAGE_ASPECT_RATIOS,
+  IMAGE_CATEGORY,
+  IMAGE_STYLE,
+  IMAGE_USAGE,
+  ImageCategoryType,
+  SOCIAL_MEDIA_PLATFORMS,
+} from '../../../constants/imageStyle'
 
-export interface StepProps {
-  step: number
-  setStep: (arg: number) => void
-  setSelection: (arg: PartialSelection | ((prevSelection: Selection) => Selection)) => void
-  selection: Selection
-}
+const Step2 = () => {
+  const { goForward, imageConfig, generateImage, updateImageConfig, updateImageCategory } = useHashtagImageContext()
 
-interface Selection {
-  imageStyle: string
-  aspectRatio: string
-  usage: {
-    name: string
-    platform: string
-  }
-}
-
-const Step2 = (props: StepProps) => {
-  const { setStep, setSelection, selection } = props
-
-  const gotoNextStep = () => {
-    setStep(3)
-    return null
+  const onClickNextStep = () => {
+    generateImage()
+    goForward()
+    return
   }
 
-  const styleSelect = useCallback(
-    (key: keyof Selection, value: string) => {
-      setSelection((prevSelection) => ({
-        ...prevSelection,
+  const imageConfigSelect = useCallback(
+    (key: string, value: string) => {
+      updateImageConfig({
         [key]: value,
-      }))
+      })
     },
-    [setSelection]
+    [updateImageConfig]
   )
 
   const usageSelect = useCallback(
     (value: string) => {
-      setSelection((prevSelection) => ({
-        ...prevSelection,
+      updateImageConfig({
         usage: {
+          platform: imageConfig.usage.platform,
           name: value,
-          platform: prevSelection.usage.platform,
         },
-      }))
+      })
     },
-    [setSelection]
+    [imageConfig.usage.platform, updateImageConfig]
   )
 
   const platformSelect = useCallback(
     (value: string) => {
-      setSelection((prevSelection) => ({
-        ...prevSelection,
+      updateImageConfig({
         usage: {
-          name: prevSelection.usage.name,
           platform: value,
+          name: imageConfig.usage.name,
         },
-      }))
+      })
     },
-    [setSelection]
+    [imageConfig.usage.name, updateImageConfig]
   )
+
+  const onGeneralSelected = useCallback(
+    (option: keyof ImageCategoryType, value: string | number) => {
+      updateImageCategory(option, value)
+    },
+    [updateImageCategory]
+  )
+
   const ImageStyleSelection = useCallback(() => {
     return (
       <div className="flex flex-col gap-2">
@@ -77,19 +74,19 @@ const Step2 = (props: StepProps) => {
           {Object.entries(IMAGE_STYLE).map(([key, value]) => (
             <div
               key={key}
-              onClick={() => styleSelect('imageStyle', value.value)}
+              onClick={() => imageConfigSelect('imageStyle', value.value)}
               className={`flex aspect-square cursor-pointer flex-col items-center rounded-xl`}
             >
-              <div className={`${selection.imageStyle === value.value ? 'rounded-xl ring-2 ring-accent1-500' : ''} relative `}>
+              <div className={`${imageConfig.imageStyle === value.value ? 'rounded-xl ring-2 ring-accent1-500' : ''} relative `}>
                 <Image src={value.image} alt={'style'} height={128} width={128} />
               </div>
-              <h3 className={`text-center font-bold ${selection.imageStyle === value.value ? 'text-accent1-500' : ''}`}>{value.name}</h3>
+              <h3 className={`text-center font-bold ${imageConfig.imageStyle === value.value ? 'text-accent1-500' : ''}`}>{value.name}</h3>
             </div>
           ))}
         </div>
       </div>
     )
-  }, [selection.imageStyle, styleSelect])
+  }, [imageConfig.imageStyle, imageConfigSelect])
 
   const UsageSelection = useCallback(() => {
     const options = Object.entries(IMAGE_USAGE).map(([, value]) => ({
@@ -110,7 +107,7 @@ const Step2 = (props: StepProps) => {
             <RadioGroup
               defaultValue={Object.values(IMAGE_USAGE)[0]}
               options={options}
-              selectedValue={selection.usage.name}
+              selectedValue={imageConfig.usage.name}
               onValueChange={(value) => {
                 usageSelect(value)
               }}
@@ -118,19 +115,19 @@ const Step2 = (props: StepProps) => {
           </div>
         </div>
         <div>
-          {selection.usage.name === IMAGE_USAGE.SOCIAL_MEDIA && (
+          {imageConfig.usage.name === IMAGE_USAGE.SOCIAL_MEDIA && (
             <Dropdown
               options={socialMediaOptions}
               onValueChange={(value) => {
                 platformSelect(value as string)
               }}
-              name={selection.usage.platform ? selection.usage.platform : 'Please Select'}
+              name={imageConfig.usage.platform ? imageConfig.usage.platform : 'Please Select'}
             />
           )}
         </div>
       </div>
     )
-  }, [platformSelect, selection.usage.name, selection.usage.platform, usageSelect])
+  }, [platformSelect, imageConfig?.usage.name, imageConfig?.usage.platform, usageSelect])
 
   const AspectRatioSelection = useCallback(() => {
     const options = Object.entries(IMAGE_ASPECT_RATIOS).map(([key, value]) => {
@@ -138,9 +135,9 @@ const Step2 = (props: StepProps) => {
         <div className="flex w-full flex-col items-center justify-center rounded-xl" key={key}>
           <div
             className={`flex aspect-square h-auto max-h-48 w-full max-w-48 items-center justify-center rounded-xl bg-white px-8 py-4 ${
-              selection.aspectRatio == value.value ? 'border-4 border-accent1-500' : 'border border-stroke'
+              imageConfig?.aspectRatio == value.value ? 'border-4 border-accent1-500' : 'border border-stroke'
             }`}
-            onClick={() => styleSelect('aspectRatio', value.value as keyof Selection)}
+            onClick={() => imageConfigSelect('aspectRatio', value.value as keyof Selection)}
           >
             <div
               className="bg-[#D9D9D9] shadow-2xl"
@@ -162,19 +159,25 @@ const Step2 = (props: StepProps) => {
         </div>
       </div>
     )
-  }, [selection.aspectRatio, styleSelect])
+  }, [imageConfig?.aspectRatio, imageConfigSelect])
 
-  const GeneralSelection = useCallback(() => {
-    const options = Object.entries(GENERAL).map(([, value]) => {
-      return value
-    })
+  const ImageCategorySelection = useCallback(() => {
+    const entries = Object.entries(IMAGE_CATEGORY)
+
     return (
       <div>
         <h2>General</h2>
         <div className="flex flex-col gap-4">
-          {options.map((option) => {
-            return <Dropdown name={option.label} key={option.label} options={option.options}></Dropdown>
-          })}
+          {entries.map(([key, value]) => (
+            <Dropdown
+              name={value.label}
+              key={key}
+              options={value.options}
+              onValueChange={(selectedValue) => {
+                onGeneralSelected(key as keyof ImageCategoryType, selectedValue)
+              }}
+            />
+          ))}
         </div>
       </div>
     )
@@ -182,13 +185,12 @@ const Step2 = (props: StepProps) => {
 
   return (
     <div className="flex flex-col gap-2">
-      <div>back</div>
       <ImageStyleSelection />
       <UsageSelection />
       <AspectRatioSelection />
-      <GeneralSelection />
+      <ImageCategorySelection />
       <div className="mt-4 flex w-full items-center justify-center">
-        <Primary onClick={gotoNextStep} sizes={['full', 'full', 'full']}>
+        <Primary onClick={onClickNextStep} sizes={['full', 'full', 'full']}>
           Generate Image
         </Primary>
       </div>

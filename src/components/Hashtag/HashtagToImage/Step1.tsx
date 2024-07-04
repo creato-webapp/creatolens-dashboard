@@ -1,16 +1,19 @@
+import { useState } from 'react'
+
 import Outline from '@components/Button/Outline'
 import Primary from '@components/Button/Primary'
-export interface StepProps {
-  step: number
-  setStep: (arg: number) => void
-}
-const Step1 = (props: StepProps) => {
-  const { setStep } = props
+import { useHashtagImageContext } from 'src/context/HashtagToImageContext'
+
+const Step1 = () => {
+  const { goForward, addKeywords } = useHashtagImageContext()
+  const [text, setText] = useState<string>('')
 
   const gotoNextStep = () => {
-    setStep(2)
+    addKeywords(text)
+    goForward()
     return null
   }
+
   return (
     <>
       <h2 className="font-extrabold">Keywords input</h2>
@@ -22,6 +25,8 @@ const Step1 = (props: StepProps) => {
       <textarea
         className="mt-4 min-h-96 w-full border border-black p-5 text-text-disabled ring-0  focus:border-accent1-500 focus:ring-accent1-500"
         placeholder="Input your own keyword"
+        value={text}
+        onChange={(e) => setText(e.target.value)} // ... and update the state variable on any edits!
       />
 
       <div className="mt-4 flex items-center justify-center">
