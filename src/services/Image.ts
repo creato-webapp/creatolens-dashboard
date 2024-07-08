@@ -47,19 +47,17 @@ export async function uploadImage(
     formData.append('file', blobBody, imageDetails.path)
     formData.append('username', username)
 
-
     const tempConfig = {
       maxBodyLength: 8 * 1024 * 1024,
       maxContentLength: 8 * 1024 * 1024,
       ...customConfig,
     }
 
-
     const response = await Fetcher.POST<AxiosResponse>('/api/image', formData, {
       ...tempConfig,
       headers: {
         'Content-Type': 'multipart/form-data',
-        'keepAlive': false,
+        keepAlive: false,
       },
     })
     return response.data
@@ -89,3 +87,16 @@ export async function getImageLabel(imagePath: string) {
   })
   return response.data.labels
 }
+
+export async function getImageByPrompt(prompt: string) {
+  const response = await Fetcher.POST<AxiosResponse>('/api/image-gen', prompt, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      keepAlive: false,
+    },
+  })
+
+  console.log('response', response)
+  return response
+}
+

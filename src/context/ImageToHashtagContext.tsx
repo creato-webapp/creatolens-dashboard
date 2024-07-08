@@ -36,7 +36,7 @@ type ImageHashtagContextType = {
   //Below is for hashtag
   hashtags: IHashet[]
   updateHashtag: (arg: IHashet[]) => void
-  reAnnotateLabels: (arg: string[]) => void
+  updateLabel: (arg: string[]) => void
 }
 
 const ImageHashtagContext = createContext<ImageHashtagContextType | undefined>(undefined)
@@ -141,11 +141,52 @@ export const ImageHashtagProvider = ({ children }: ImageHashtagProviderProps) =>
     },
     [setHashtags]
   )
+  const updateLabel = useCallback(
+    (newLabels: string[]) => {
+      setImages((prevImages) => {
+        const updatedImages = prevImages.map((img, idx) => {
+          if (idx === currentImageIndex && img.labels) {
+            // Check if all labels are selected
+            const allLabelsSelected = img.labels.length === img.selectedLabels.length
+            if (allLabelsSelected) {
+              return img // No need to replace if all labels are selected
+            }
 
-  const reAnnotateLabels = useCallback(() => {
-    //TODO
-    console.log('re annotate function here')
-  }, [])
+            const usedLabels = new Set<string>() // Set to keep track of used new labels
+            const newLabelsIterator = newLabels.values() // Create an iterator for new labels
+
+            const updatedLabels = img.labels.map((label) => {
+              if (img.selectedLabels.includes(label)) {
+                return label
+              } else {
+                let newLabel
+                do {
+                  const result = newLabelsIterator.next()
+                  newLabel = result.value
+                } while (newLabel && usedLabels.has(newLabel))
+
+                if (newLabel) {
+                  usedLabels.add(newLabel)
+                  return newLabel
+                } else {
+                  return label // Use the existing label if no new label is found
+                }
+              }
+            })
+
+            return {
+              ...img,
+              labels: updatedLabels,
+              selectedLabels: updatedLabels,
+            }
+          }
+          return img
+        })
+        return updatedImages
+      })
+    },
+    [currentImageIndex]
+  )
 
   return (
     <ImageHashtagContext.Provider
@@ -156,7 +197,7 @@ export const ImageHashtagProvider = ({ children }: ImageHashtagProviderProps) =>
         selectAllLabels,
         updateSelectedLabels,
         getCurrentImageLabels,
-        reAnnotateLabels,
+        updateLabel,
         loadingLabels,
         hashtags,
         updateHashtag,

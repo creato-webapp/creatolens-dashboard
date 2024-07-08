@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo } from 'react'
 
 import Image from 'next/image'
 import Skeleton from 'react-loading-skeleton'
@@ -7,6 +7,7 @@ import { Badges } from '@components/Badges'
 import Outline from '@components/Button/Outline'
 import OutlinePrimaryButton from '@components/Button/OutlinePrimary'
 import Primary from '@components/Button/Primary'
+import { reAnnotateLabel } from '@services/Label'
 import { useImageHashtagContext } from 'src/context/ImageToHashtagContext'
 
 import { StepProps } from './Step1'
@@ -14,7 +15,8 @@ import 'react-loading-skeleton/dist/skeleton.css'
 
 const Step2 = (props: StepProps) => {
   const { setStep } = props
-  const { images, currentImageIndex, getCurrentImageLabels, updateSelectedLabels, selectAllLabels, loadingLabels } = useImageHashtagContext()
+  const { images, currentImageIndex, getCurrentImageLabels, updateSelectedLabels, selectAllLabels, loadingLabels, updateLabel } =
+    useImageHashtagContext()
 
   useEffect(() => {
     const currentImageObj = images[currentImageIndex]
@@ -31,8 +33,16 @@ const Step2 = (props: StepProps) => {
     updateSelectedLabels(label)
   }
 
-  const onReannotateClick = () => {
-    getCurrentImageLabels()
+  const onReannotateClick = async () => {
+    if (!currentImage.labels || !images[currentImageIndex].image || !images[currentImageIndex].labels) return
+    const numberOfUnselectedLabels = currentImage.labels?.length - currentImage.selectedLabels.length
+    const data = {
+      image_url: images[currentImageIndex].image,
+      existing_labels: images[currentImageIndex].labels,
+      number: numberOfUnselectedLabels,
+    }
+    const newLabel = await reAnnotateLabel(data)
+    updateLabel(newLabel)
   }
 
   const onGoBack = () => {
@@ -47,28 +57,32 @@ const Step2 = (props: StepProps) => {
   }
 
   const currentImage = useMemo(() => {
+    console.log(images[currentImageIndex].selectedLabels)
     return images[currentImageIndex]
-  }, [images, currentImageIndex, images[currentImageIndex].selectedLabels])
+  }, [images, currentImageIndex, images[currentImageIndex]])
 
   return (
     <div className="flex w-full flex-col gap-4 md:flex-row">
-      <div className="flex flex-row">
-        <div className="w-fit items-center justify-center px-4 text-center text-2xl text-black" onClick={onGoBack}>
-          {'<'}
+      <div>
+        <div className="flex flex-row items-center">
+          <div className="w-fit items-center justify-center px-4 text-center text-2xl text-black" onClick={onGoBack}>
+            {'<'}
+          </div>
+          <h2 className="flex items-center font-extrabold">Image label annotation</h2>
         </div>
-        <h2 className="flex items-center font-extrabold">Image label annotation</h2>
-      </div>
-      <div className="relative my-4 flex h-48 w-full items-center justify-center md:w-1/2">
-        {currentImage.image && (
-          <Image
-            fill={true}
-            src={currentImage.image}
-            objectFit="contain"
-            className="rounded-3xl"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            alt="testing"
-          />
-        )}
+
+        <div className="relative my-4 flex h-48 w-full items-center justify-center md:w-1/2">
+          {currentImage.image && (
+            <Image
+              fill={true}
+              src={currentImage.image}
+              objectFit="contain"
+              className="rounded-3xl"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              alt="testing"
+            />
+          )}
+        </div>
       </div>
       <div className="my-4 border-b"></div>
       <div className="flex w-full flex-col gap-2 md:w-1/2">
