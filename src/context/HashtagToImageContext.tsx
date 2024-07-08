@@ -117,7 +117,6 @@ export const HashtagImageProvider = ({ children }: HashtagImageProviderProps) =>
       platform: imageConfig.usage.platform,
       usage: imageConfig.usage.name,
     }
-    console.log('data', data)
     // const prompt = promptGenerator(data)
   }, [])
 

@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { forwardRef } from 'react'
 
 import { useDropzone } from 'react-dropzone'
 
@@ -8,15 +8,10 @@ interface IImageUpload {
   uploadedImage: string
   setUploadedImage: (image: string) => void // Updated type
   setImageDetails: (arg: Partial<ImageDetailsType>) => void // Updated type
+  onClickBrowse?: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void
 }
-const ImageUpload = (props: IImageUpload) => {
+const ImageUpload = forwardRef<HTMLInputElement, IImageUpload>((props, fileInputRef) => {
   const { uploadedImage, setUploadedImage, setImageDetails } = props
-  const fileInputRef = useRef<HTMLInputElement | null>(null)
-
-  const handleBrowseClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-    e.preventDefault()
-    fileInputRef.current?.click()
-  }
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: {
@@ -66,7 +61,7 @@ const ImageUpload = (props: IImageUpload) => {
         transition: 'background-color 0.2s ease-in-out',
         // marginBottom: '20px',
       }}
-      className="flex aspect-square items-center justify-center"
+      className="flex items-center justify-center"
     >
       <input {...getInputProps()} ref={fileInputRef} />
       <div style={{ display: 'flex', width: '100%', flexDirection: 'column', alignItems: 'center' }}>
@@ -78,18 +73,15 @@ const ImageUpload = (props: IImageUpload) => {
             <img src={uploadedImage} alt="Uploaded" style={{ maxWidth: '100%', maxHeight: 'auto', borderRadius: '10px' }} />
           </div>
         ) : (
-          <img src="/file-input.png" alt="Upload Icon" style={{ width: '50px', marginBottom: '20px' }} />
+          <>
+            <img src="/file-input.png" alt="Upload Icon" style={{ width: '50px', marginBottom: '20px' }} />
+            <h4>File format accepted PNG, JPG, JPEG</h4>
+            <h4>Max. file size 5 MB</h4>
+          </>
         )}
-        <h4>
-          Drag and drop or{' '}
-          <a className="text-accent2-500 underline underline-offset-2" href="#" onClick={handleBrowseClick}>
-            browse
-          </a>{' '}
-          your files
-        </h4>
       </div>
     </div>
   )
-}
+})
 
 export default ImageUpload

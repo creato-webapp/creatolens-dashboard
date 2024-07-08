@@ -134,19 +134,28 @@ const Step3 = (props: StepProps) => {
     }))
   }, [currentImage.labels, currentImage.selectedLabels])
 
+  const hashtagsLength = useMemo(() => {
+    if (!options) return 0
+    return options.reduce((acc, option) => acc + option.options.length, 0)
+  }, [options])
+
   return (
     <div>
-      <h2 className="font-extrabold">Get hashtag recommendation</h2>
-      <div onClick={goBack}>back</div>
+      <h2 className="flex flex-row font-extrabold">
+        <div onClick={goBack} className="mr-2 cursor-pointer">
+          {'<'}
+        </div>
+        Get hashtag recommendation
+      </h2>
 
-      <div className="relative my-4 h-56 w-full">
-        {images[currentImageIndex] && images[currentImageIndex].image && (
+      <div className="relative my-4 flex h-64 w-full items-center justify-center rounded-full md:w-full">
+        {currentImage.image && (
           <Image
             fill={true}
-            src={images[currentImageIndex].image as string}
-            objectFit="contain"
-            className="rounded-3xl"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            src={currentImage.image}
+            objectFit="cover"
+            className="rounded-4xl"
+            // sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             alt="testing"
           />
         )}
@@ -154,11 +163,29 @@ const Step3 = (props: StepProps) => {
 
       <div className="flex flex-col gap-4">
         {labelOptions && labelOptions?.length > 0 && (
-          <DropdownCheckbox key={`${'label'}-dropdown`} name={'Label'} options={labelOptions} onValueChange={(val) => onClickLabel(val as string)} />
+          <DropdownCheckbox
+            dropDownSizes={['l', 'l', 'l']}
+            key={`${'label'}-dropdown`}
+            name={'Label'}
+            options={labelOptions}
+            onValueChange={(val) => onClickLabel(val as string)}
+          />
         )}
+      </div>
+      <div className="my-4 border-b"></div>
+      <h3 className="text-text-secondary">{`${hashtagsLength} hashtags discovered`}</h3>
+      <div>
         {options &&
           options.map((option) => {
-            return <DropdownCheckbox key={`${option.name}-dropdown`} name={option.name} options={option.options} onValueChange={onClickHashtag} />
+            return (
+              <DropdownCheckbox
+                dropDownSizes={['l', 'l', 'l']}
+                key={`${option.name}-dropdown`}
+                name={option.name}
+                options={option.options}
+                onValueChange={onClickHashtag}
+              />
+            )
           })}
       </div>
       <div className="my-4 flex w-full flex-col gap-4">
@@ -189,8 +216,11 @@ const Step3 = (props: StepProps) => {
             )
           }}
         >
-          + Use Result to Generate Image
+          + Generate Image
         </Primary>
+        <Outline sizes={['l', 'l', 'l']} className="w-full">
+          Restart
+        </Outline>
       </div>
     </div>
   )
