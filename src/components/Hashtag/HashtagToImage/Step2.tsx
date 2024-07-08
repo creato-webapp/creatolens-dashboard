@@ -7,7 +7,7 @@ import Primary from '@components/Button/Primary'
 import { DropdownOption } from '@components/Form/Dropdown'
 import Dropdown from '@components/Form/DropdownV2'
 import { RadioGroup } from '@components/Form/Radio/Group'
-import { useHashtagImageContext } from 'src/context/HashtagToImageContext'
+import { ImageConfigType, useHashtagImageContext } from 'src/context/HashtagToImageContext'
 
 import {
   IMAGE_ASPECT_RATIOS,
@@ -176,6 +176,7 @@ const Step2 = () => {
               key={key}
               options={value.options}
               onValueChange={(selectedValue) => {
+                console.log(key, selectedValue)
                 onGeneralSelected(key as keyof ImageCategoryType, selectedValue)
               }}
             />
