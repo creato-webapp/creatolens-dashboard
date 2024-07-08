@@ -1,4 +1,4 @@
-import { useCallback, useState  } from 'react'
+import { useCallback, useRef, useState } from 'react'
 
 import Primary from '@components/Button/Primary'
 import { uploadImage } from '@services/Image'
@@ -16,6 +16,7 @@ const Step1 = (props: StepProps) => {
   const [uploading, setUploading] = useState<boolean>(false)
   const [uploadedImage, setUploadedImage] = useState<string>('')
   const [imageDetails, setImageDetails] = useState<ImageDetailsType>({})
+  const fileInputRef = useRef<HTMLInputElement | null>(null)
 
   const { addImage } = useImageHashtagContext()
 
@@ -41,8 +42,25 @@ const Step1 = (props: StepProps) => {
   return (
     <div className="flex flex-col gap-3 rounded-2xl md:flex-row md:p-12 md:shadow-lg">
       <h2 className="font-extrabold md:hidden">Image Upload</h2>
+      <h4>
+        Drag and drop or{' '}
+        <a
+          className="cursor-pointer text-accent2-500 underline underline-offset-2"
+          onClick={() => {
+            fileInputRef.current?.click()
+          }}
+        >
+          browse
+        </a>{' '}
+        your files
+      </h4>
       <div className="mt-4 w-full md:mt-0 md:w-1/2">
-        <ImageUpload uploadedImage={uploadedImage} setUploadedImage={setUploadedImage} setImageDetails={setImageDetails} />
+        <ImageUpload
+          uploadedImage={uploadedImage}
+          setUploadedImage={setUploadedImage}
+          setImageDetails={setImageDetails}
+          ref={fileInputRef}
+        />
       </div>
       <div className="flex w-full flex-col justify-center gap-4 md:w-1/2">
         <h2 className="hidden font-extrabold md:block">Image Upload</h2>
@@ -55,7 +73,7 @@ const Step1 = (props: StepProps) => {
           )}
         </div>
         <div className="flex items-center justify-center">
-        <Primary disabled={uploading} sizes={['m', 'm', 'm']} onClick={onClickButton}>
+          <Primary disabled={uploading} sizes={['m', 'm', 'm']} onClick={onClickButton}>
             Annotate
           </Primary>
         </div>

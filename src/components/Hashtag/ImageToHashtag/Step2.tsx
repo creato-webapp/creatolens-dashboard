@@ -57,7 +57,6 @@ const Step2 = (props: StepProps) => {
   }
 
   const currentImage = useMemo(() => {
-    console.log(images[currentImageIndex].selectedLabels)
     return images[currentImageIndex]
   }, [images, currentImageIndex, images[currentImageIndex]])
 
@@ -71,17 +70,20 @@ const Step2 = (props: StepProps) => {
           <h2 className="flex items-center font-extrabold">Image label annotation</h2>
         </div>
 
-        <div className="relative my-4 flex h-48 w-full items-center justify-center md:w-1/2">
+        <div className="relative my-4 flex h-64 w-full items-center justify-center rounded-full md:w-full">
           {currentImage.image && (
             <Image
               fill={true}
               src={currentImage.image}
-              objectFit="contain"
-              className="rounded-3xl"
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              objectFit="cover"
+              className="rounded-4xl"
+              // sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               alt="testing"
             />
           )}
+          <div className=" absolute right-5 top-5 flex h-12 w-12 cursor-pointer rounded-full bg-accent1-500 p-4 text-white">
+            <div className="flex h-full w-full items-center justify-center">X</div>
+          </div>
         </div>
       </div>
       <div className="my-4 border-b"></div>
