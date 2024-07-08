@@ -1,4 +1,5 @@
-import { useCallback } from 'react'
+import React from 'react'
+import { useCallback, useMemo } from 'react'
 
 import Image from 'next/image'
 
@@ -6,7 +7,7 @@ import Primary from '@components/Button/Primary'
 import { DropdownOption } from '@components/Form/Dropdown'
 import Dropdown from '@components/Form/DropdownV2'
 import { RadioGroup } from '@components/Form/Radio/Group'
-import { useHashtagImageContext } from 'src/context/HashtagToImageContext'
+import { ImageConfigType, useHashtagImageContext } from 'src/context/HashtagToImageContext'
 
 import {
   IMAGE_ASPECT_RATIOS,
@@ -18,11 +19,11 @@ import {
 } from '../../../constants/imageStyle'
 
 const Step2 = () => {
-  const { goForward, imageConfig, generateImage, updateImageConfig, updateImageCategory } = useHashtagImageContext()
+  const { goBack, imageConfig, generateImage, updateImageConfig, updateImageCategory } = useHashtagImageContext()
 
   const onClickNextStep = () => {
     generateImage()
-    goForward()
+    // goForward()
     return
   }
 
@@ -66,27 +67,28 @@ const Step2 = () => {
     [updateImageCategory]
   )
 
-  const ImageStyleSelection = useCallback(() => {
-    return (
-      <div className="flex flex-col gap-2">
-        <h2 className="h2 font-extrabold">Format</h2>
-        <div className="grid h-auto grid-cols-2 gap-4	md:grid-cols-4">
-          {Object.entries(IMAGE_STYLE).map(([key, value]) => (
-            <div
-              key={key}
-              onClick={() => imageConfigSelect('imageStyle', value.value)}
-              className={`flex aspect-square cursor-pointer flex-col items-center rounded-xl`}
-            >
-              <div className={`${imageConfig.imageStyle === value.value ? 'rounded-xl ring-2 ring-accent1-500' : ''} relative `}>
-                <Image src={value.image} alt={'style'} height={128} width={128} />
-              </div>
-              <h3 className={`text-center font-bold ${imageConfig.imageStyle === value.value ? 'text-accent1-500' : ''}`}>{value.name}</h3>
-            </div>
-          ))}
-        </div>
-      </div>
-    )
-  }, [imageConfig.imageStyle, imageConfigSelect])
+  // const ImageStyleSelection = useMemo(() => {
+  //   return (
+  //     <div className="flex flex-col gap-2">
+  //       <h2 className="h2 font-extrabold">Format</h2>
+  //       <div className="grid h-auto grid-cols-2 gap-4	md:grid-cols-4">
+  //         {Object.entries(IMAGE_STYLE).map(([key, value]) => (
+  //           <div
+  //             key={key}
+  //             onClick={() => imageConfigSelect('imageStyle', value.value)}
+  //             className={`flex aspect-square cursor-pointer flex-col items-center rounded-xl`}
+  //           >
+  //             <div className={`${imageConfig.imageStyle === value.value ? 'rounded-xl ring-2 ring-accent1-500' : ''} relative h-full w-full`}>
+  //               {/* <Image src={value.image} alt={'style'} height={140} width={140} fill /> */}
+  //               <Image src={value.image} alt={'style'} fill />
+  //             </div>
+  //             <h3 className={`text-center font-bold ${imageConfig.imageStyle === value.value ? 'text-accent1-500' : ''}`}>{value.name}</h3>
+  //           </div>
+  //         ))}
+  //       </div>
+  //     </div>
+  //   )
+  // }, [imageConfig.imageStyle, imageConfigSelect])
 
   const UsageSelection = useCallback(() => {
     const options = Object.entries(IMAGE_USAGE).map(([, value]) => ({
@@ -174,6 +176,7 @@ const Step2 = () => {
               key={key}
               options={value.options}
               onValueChange={(selectedValue) => {
+                console.log(key, selectedValue)
                 onGeneralSelected(key as keyof ImageCategoryType, selectedValue)
               }}
             />
@@ -185,7 +188,26 @@ const Step2 = () => {
 
   return (
     <div className="flex flex-col gap-2">
-      <ImageStyleSelection />
+      <div className="flex flex-col gap-2">
+        <div onClick={goBack}>Back</div>
+
+        <h2 className="h2 font-extrabold">Format</h2>
+        <div className="grid h-auto grid-cols-2 gap-4	md:grid-cols-4">
+          {Object.entries(IMAGE_STYLE).map(([key, value]) => (
+            <div
+              key={key}
+              onClick={() => imageConfigSelect('imageStyle', value.value)}
+              className={`flex aspect-square cursor-pointer flex-col items-center rounded-xl`}
+            >
+              <div className={`${imageConfig.imageStyle === value.value ? 'rounded-xl ring-2 ring-accent1-500' : ''} relative h-full w-full`}>
+                {/* <Image src={value.image} alt={'style'} height={140} width={140} fill /> */}
+                <Image src={value.image} alt={'style'} fill />
+              </div>
+              <h3 className={`text-center font-bold ${imageConfig.imageStyle === value.value ? 'text-accent1-500' : ''}`}>{value.name}</h3>
+            </div>
+          ))}
+        </div>
+      </div>
       <UsageSelection />
       <AspectRatioSelection />
       <ImageCategorySelection />

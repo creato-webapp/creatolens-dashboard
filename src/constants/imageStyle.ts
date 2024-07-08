@@ -4,22 +4,22 @@ export const IMAGE_STYLE = {
   GRAPHIC_DESIGN: {
     name: 'Graphic Design',
     value: 'graphic_design',
-    image: '/logo_orange.png', // Update with actual path or URL
+    image: '/hashtag/graphic-design.png', // Update with actual path or URL
   },
   STOCK_IMAGE: {
     name: 'Stock Image',
     value: 'stock_image',
-    image: '/logo_orange.png', // Update with actual path or URL
+    image: '/hashtag/stock.png', // Update with actual path or URL
   },
   ARTISTIC: {
     name: 'Artistic',
     value: 'artistic',
-    image: '/logo_orange.png', // Update with actual path or URL
+    image: '/hashtag/artistic.png', // Update with actual path or URL
   },
   PHOTOGRAPHY: {
     name: 'Photography',
     value: 'photography',
-    image: '/logo_orange.png', // Update with actual path or URL
+    image: '/hashtag/photography.png', // Update with actual path or URL
   },
 } as const
 
