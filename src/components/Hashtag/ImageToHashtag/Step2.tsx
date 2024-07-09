@@ -64,20 +64,20 @@ const Step2 = (props: StepProps) => {
     <div className="flex w-full flex-col gap-4 md:flex-row">
       <div>
         <div className="flex flex-row items-center">
-          <div className="w-fit items-center justify-center px-4 text-center text-2xl text-black" onClick={onGoBack}>
-            {'<'}
+          <div className="required relative h-6 w-6 items-center justify-center px-4 text-center text-2xl text-black" onClick={onGoBack}>
+            <Image src={'/back.svg'} fill alt={'back'} />
           </div>
           <h2 className="flex items-center font-extrabold">Image label annotation</h2>
         </div>
 
-        <div className="relative my-4 flex h-64 w-full items-center justify-center rounded-full md:w-full">
+        <div className="relative my-4 flex h-full aspect-square w-full min-w-full items-center justify-center rounded-full">
           {currentImage.image && (
             <Image
               fill={true}
               src={currentImage.image}
-              objectFit="cover"
+              objectFit="contain"
               className="rounded-4xl"
-              // sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               alt="testing"
             />
           )}
@@ -86,7 +86,7 @@ const Step2 = (props: StepProps) => {
           </div>
         </div>
       </div>
-      <div className="my-4 border-b"></div>
+      <div className="my-4 border-b md:hidden"></div>
       <div className="flex w-full flex-col gap-2 md:w-1/2">
         {currentImage.labels && <h3 className="mb-4 font-semibold text-text-secondary">{`${currentImage.labels?.length}`} labels discovered</h3>}
         <div>
@@ -105,6 +105,8 @@ const Step2 = (props: StepProps) => {
                     onClose={() => onClose(label)}
                     onClick={() => onSelected(label)}
                   >
+                    {!currentImage.selectedLabels.includes(label) ? '' : <Image src={'/check.svg'} height={24} width={24} alt={'check logo'} />}
+
                     {label}
                   </Badges>
                 )
@@ -119,9 +121,13 @@ const Step2 = (props: StepProps) => {
             <OutlinePrimaryButton sizes={['l', 'l', 'l']} onClick={onClickSelectAll}>
               Select All
             </OutlinePrimaryButton>
-            <Outline sizes={['l', 'l', 'l']} onClick={onReannotateClick}>
+            <Outline
+              sizes={['l', 'l', 'l']}
+              onClick={onReannotateClick}
+              disabled={currentImage.selectedLabels.length === currentImage.labels?.length}
+            >
               <Image src="/arrows-clockwise.png" height={24} width={24} alt={'arrows clockwise'} />
-              Re-annotate unselected label
+              Re-annotate
             </Outline>
             <Primary sizes={['l', 'l', 'l']} onClick={onClickButton}>
               + Get Hashtag

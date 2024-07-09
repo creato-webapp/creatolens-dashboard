@@ -39,11 +39,11 @@ const Dropdown: React.FC<DropdownProps> = ({ name = '', options, onValueChange, 
   const activeStyle = isOpen && ' !bg-accent1-500 !text-accent1'
   const focusStyle = !isOpen && ' focus:ring-2 focus:ring-stroke focus:ring-opacity-50'
 
-  const generatePadding = useCallback((dropDownSizes: string[]): { padding: string; caretSize: string; maxWidth: string } => {
+  const generatePadding = useCallback((dropDownSizes: string[]): { padding: string; caretSize: string } => {
     let padding = ''
     let caretSize = ''
     if (!dropDownSizes) {
-      return { padding: 'px-2 py-1 md:px-3 md:py-2 lg:py-3 lg:px-3', caretSize: 'w-6 h-6', maxWidth: '' }
+      return { padding: 'px-2 py-1 md:px-3 md:py-2 lg:py-3 lg:px-3', caretSize: 'w-6 h-6' }
     }
     dropDownSizes.forEach((size: string, index: number) => {
       const breakpoint = index === 0 ? '' : index === 1 ? 'md:' : 'lg:'
@@ -68,7 +68,7 @@ const Dropdown: React.FC<DropdownProps> = ({ name = '', options, onValueChange, 
           break
       }
     })
-    return { padding, caretSize, maxWidth }
+    return { padding, caretSize }
   }, [])
 
   const color = useMemo(() => {
@@ -79,10 +79,10 @@ const Dropdown: React.FC<DropdownProps> = ({ name = '', options, onValueChange, 
     }
   }, [isDropdownNotSelected])
 
-  const { padding, caretSize, maxWidth } = generatePadding(dropDownSizes!)
+  const { padding, caretSize } = generatePadding(dropDownSizes!)
 
   return (
-    <div ref={dropdownRef} className={`dropdown relative h-full w-full justify-end ${maxWidth}`}>
+    <div ref={dropdownRef} className={`dropdown relative h-full w-full justify-end`}>
       <button
         className={`drowpdown-button w-full rounded-lg border-none ${color} ${padding} ${focusStyle} ${hoverStyle} ${activeStyle}`}
         onClick={handleToggleMenu}

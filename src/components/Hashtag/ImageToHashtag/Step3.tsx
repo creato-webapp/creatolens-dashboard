@@ -108,7 +108,7 @@ const Step3 = (props: StepProps) => {
         options: option.options.map((opt) => ({ ...opt, checked: false })),
       }))
     )
-  }, [])
+  }, [options])
 
   const onClickCopySelected = useCallback(() => {
     const selected = options?.flatMap((option) => option.options.filter((opt) => opt.checked).map((opt) => `${opt.label}`))
@@ -172,7 +172,7 @@ const Step3 = (props: StepProps) => {
           />
         )}
       </div>
-      <div className="my-4 border-b"></div>
+      <div className="my-4 border-b md:hidden"></div>
       <h3 className="text-text-secondary">{`${hashtagsLength} hashtags discovered`}</h3>
       <div>
         {options &&
