@@ -1,6 +1,7 @@
 import { ReactNode, createContext, useCallback, useContext, useState } from 'react'
 
-import { IMAGE_CATEGORY } from 'src/constants/imageStyle'
+import { renderPromptAndGenImage } from '@services/imagePromptsHelper'
+import { IImageUsageType, IMAGE_CATEGORY } from 'src/constants/imageStyle'
 import { IHashet } from 'src/pages/recommendation'
 
 export type ImageDetailsType = {
@@ -15,7 +16,7 @@ export type ImageConfigType = {
   aspectRatio: string
   usage: {
     name: string
-    platform: string
+    platform: IImageUsageType
   }
 }
 
@@ -70,7 +71,7 @@ export const HashtagImageProvider = ({ children }: HashtagImageProviderProps) =>
     aspectRatio: '3:4',
     usage: {
       name: '',
-      platform: '',
+      platform: 'Website',
     },
   })
 
@@ -107,7 +108,7 @@ export const HashtagImageProvider = ({ children }: HashtagImageProviderProps) =>
   }, [])
 
   /*  */
-  const generateImage = useCallback(() => {
+  const generateImage = useCallback(async () => {
     const data = {
       imageCategory: imageCategory,
       hashtags: hashtags,
@@ -117,6 +118,12 @@ export const HashtagImageProvider = ({ children }: HashtagImageProviderProps) =>
       platform: imageConfig.usage.platform,
       usage: imageConfig.usage.name,
     }
+    const websitePromptData = {
+      isWebsiteDesign: true,
+      labels: 'check mark icon',
+      hashtags: '#success',
+    }
+    const res = await renderPromptAndGenImage('Website', websitePromptData)
     // const prompt = promptGenerator(data)
   }, [])
 
