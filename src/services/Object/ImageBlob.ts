@@ -1,4 +1,5 @@
 import { AxiosRequestConfig } from 'axios'
+
 import { Fetcher } from '../fetcher'
 
 type hashtag = {

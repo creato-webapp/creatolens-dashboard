@@ -1,4 +1,5 @@
 import React, { createElement } from 'react'
+
 import { fontWeights } from './index'
 interface ParagraphProps extends React.HTMLAttributes<HTMLElement>, fontWeights {
   size?: 'xs' | 'sm' | 'md' | 'lg'

@@ -1,35 +1,21 @@
 import React, { useState } from 'react'
-import Card from '@components/Card'
+
+import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import { useRouter } from 'next/router'
+
+import { IRetryAccount } from '@components/Account/Account/interface'
+import Card from '@components/Card'
+import DynamicForm from '@components/Form/DynamicForm'
 import { IField } from '@components/Form/interface'
-import { IRetryAccount } from '@lib/Account/Account/interface'
-import { getSession } from 'next-auth/react'
 import { getRetryAccount } from '@services/Account/RetryAccount'
 import { useRetryAccount } from 'src/hooks/useRetryAccount'
-import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
-import DynamicForm from '@components/Form/DynamicForm'
-import dayjs from '@services/Dayjs'
+import dayjs from 'src/utils/dayjs'
 
 type Props = {
   accountData: IRetryAccount
 }
 
-export const getServerSideProps: GetServerSideProps = async (
-  context: GetServerSidePropsContext
-): Promise<
-  GetServerSidePropsResult<{
-    accountData: IRetryAccount
-  }>
-> => {
-  const session = await getSession(context)
-  if (!session) {
-    return {
-      redirect: {
-        destination: '/404',
-        permanent: false,
-      },
-    }
-  }
+export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext): Promise<GetServerSidePropsResult<Props>> => {
   const { params } = context
   if (!params || typeof params.id !== 'string') {
     return { redirect: { destination: '/404', permanent: false } }
@@ -45,12 +31,13 @@ export const getServerSideProps: GetServerSideProps = async (
 
 const AccountsRetryPage = ({ accountData }: Props) => {
   const [isLoading, setIsLoading] = useState(false)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [shouldFetch, setShouldFetch] = useState(false)
   const router = useRouter()
   const { id } = router.query
-  const isCreate = id === 'create-account'
+  // const isCreate = id === 'create-account'
 
-  const { data, error, updateRetryAccount: callUpdateAccount } = useRetryAccount(id as string, shouldFetch, isCreate ? undefined : accountData)
+  const { data, error, updateRetryAccount: callUpdateAccount } = useRetryAccount(id as string, shouldFetch, accountData)
 
   if (error) {
     console.error(data)

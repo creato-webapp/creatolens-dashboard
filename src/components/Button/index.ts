@@ -1,12 +1,13 @@
-import Primary from './PrimaryButton'
-import Text from './TextButton'
-import Outline from './OutlineButton'
-import IconButton from './IconButton'
-import DropdownButton from './DropdownButton'
+import BaseButton from './Base'
+import Icon from './Icon'
+import Outline from './Outline'
+import Primary from './Primary'
+import Text from './Text'
+
 export const Button = {
+  Base: BaseButton,
   Primary,
   Text,
   Outline,
-  IconButton,
-  DropdownButton,
+  Icon,
 }

@@ -1,16 +1,19 @@
+import { useState } from 'react'
+
 import useSWR from 'swr'
-import { IAccount } from '@lib/Account/Account'
+
+import { IAccount } from '@components/Account/Account'
 import {
-  getAccountsPagination,
   getAccount,
-  updateSession as updateSessionHelper,
+  getAccountsPagination,
   updateAccount as updateAccountHelper,
+  updateSession as updateSessionHelper,
 } from '@services/Account/Account'
-import { useRef } from 'react'
 import { PaginationMetadata, PaginationParams } from '@services/Account/AccountInterface'
 
-export const useAccount = (id: string, shouldFetch: boolean = true, fallbackData?: IAccount | null) => {
-  const { data, error, mutate, ...swr } = useSWR(shouldFetch ? [id] : null, (id) => getAccount(id), {
+export const useAccount = (id: string, defaultShouldFetch: boolean = true, fallbackData?: IAccount) => {
+  const [shouldFetch, setShouldFetch] = useState(defaultShouldFetch)
+  const { data, error, mutate, ...swr } = useSWR(shouldFetch ? id : null, (id) => getAccount(id), {
     refreshInterval: 0,
     fallbackData: fallbackData,
   })
@@ -29,28 +32,32 @@ export const useAccount = (id: string, shouldFetch: boolean = true, fallbackData
 
   return {
     data,
-    isLoading: !error && !data,
-    error: error,
+    error,
     updateAccount,
     updateSession,
+    setShouldFetch,
     mutate,
     ...swr,
   }
 }
 
-export const useGetAccountsPagination = (paginationParams: PaginationParams, shouldFetch?: true) => {
-  const mutableRef = useRef<PaginationMetadata<IAccount[]>>()
-  const { data, error, mutate, ...swr } = useSWR(shouldFetch ? [paginationParams] : null, getAccountsPagination, {
+export const useGetAccountsPagination = (
+  paginationParams: PaginationParams,
+  defaultShouldFetch?: boolean,
+  fallbackData?: PaginationMetadata<IAccount[]>
+) => {
+  const [shouldFetch, setShouldFetch] = useState(defaultShouldFetch)
+  const { data, error, mutate, ...swr } = useSWR(paginationParams, getAccountsPagination, {
     refreshInterval: 0,
-    fallbackData: mutableRef.current ? mutableRef.current : undefined,
+    fallbackData: fallbackData,
+    revalidateOnMount: false,
   })
 
-  if (data !== undefined) mutableRef.current = data
-
   return {
-    accounts: data,
-    isLoading: !error && !data,
-    error: error,
+    data,
+    error,
+    shouldFetch,
+    setShouldFetch,
     mutate,
     ...swr,
   }

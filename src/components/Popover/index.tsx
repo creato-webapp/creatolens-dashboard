@@ -1,4 +1,4 @@
-import React, { useState, ReactNode, useCallback } from 'react'
+import React, { ReactNode, useCallback, useState } from 'react'
 
 interface PopoverProps {
   trigger: ReactNode
@@ -23,7 +23,7 @@ const Popover: React.FC<PopoverProps> = ({ trigger, content, className }) => {
             right: '-5%',
           }}
         >
-          <button className="absolute top-0 right-0 cursor-pointer p-1" onClick={togglePopover}>
+          <button className="absolute right-0 top-0 cursor-pointer p-1" onClick={togglePopover}>
             <span className="pr-2 text-xl text-gray-500">×</span>
           </button>
           {content}

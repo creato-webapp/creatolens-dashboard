@@ -1,84 +1,70 @@
-import React, { useState, useEffect } from 'react'
-import Card from '@components/Card'
-import { Table } from '@components/Table'
-import { Button } from '@components/Button'
-import { IBlockedAccount } from '@lib/Account/Account/interface'
-import Link from 'next/link'
-import { getSession } from 'next-auth/react'
-import Tag from '@components/Tag'
-import Avatar from '@components/Avatar'
-import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/solid'
-import StatusTag, { Status } from '@lib/StatusTag'
-import Pagination from '@components/Pagination'
-import { useGetBlockAccountsPagination } from 'src/hooks/useBlockedAccount'
-import { getBlockedAccountsPagination } from '@services/Account/BlockAccount'
+import React, { useCallback } from 'react'
+
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
+import Link from 'next/link'
+
+import { IBlockedAccount } from '@components/Account/Account/interface'
+import { AccountBadges } from '@components/Badges'
+import Card from '@components/Card'
+import EditIcon from '@components/Icon/EditIcon'
+import Pagination from '@components/Pagination'
+import { Table } from '@components/Table'
+import { usePagination } from '@hooks/usePagination'
 import { PaginationMetadata } from '@services/Account/AccountInterface'
-import dayjs from '@services/Dayjs'
+import { getBlockedAccountsPagination } from '@services/Account/BlockAccount'
+import { formatDate } from '@services/util'
+import ROUTE from 'src/constants/route'
+import { useGetBlockAccountsPagination } from 'src/hooks/useBlockedAccount'
 
 type Props = {
   paginationData: PaginationMetadata<IBlockedAccount[]>
 }
-export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext): Promise<GetServerSidePropsResult<{}>> => {
-  const session = await getSession(context)
-  if (!session) {
-    return {
-      redirect: {
-        destination: '/auth/login',
-        permanent: false,
-      },
-    }
-  }
+export const getServerSideProps: GetServerSideProps = async (
+  context: GetServerSidePropsContext
+): Promise<GetServerSidePropsResult<Record<string, unknown>>> => {
   const paginationProps = {
     pageNumber: 1,
     pageSize: 10,
     orderBy: 'username',
     isAsc: false,
   }
-  const response = await getBlockedAccountsPagination(paginationProps)
-  const accountData: IBlockedAccount[] = response ? response.data : []
-
+  const cookies = context.req.headers.cookie
+  const response = await getBlockedAccountsPagination(paginationProps, {
+    headers: {
+      Cookie: cookies,
+    },
+  })
   const paginationData: PaginationMetadata<IBlockedAccount[]> = {
-    data: accountData,
-    has_next: response ? response.has_next : false,
-    has_prev: response ? response.has_prev : false,
-    page: response ? response.page : 1,
-    size: response ? response.size : 0,
-    total_items: response ? response.total_items : 0,
+    data: response?.data ?? [],
+    page: response?.page ?? 1,
+    size: response?.size ?? 0,
+    total_items: response?.total_items ?? 0,
+    has_next: response?.has_next ?? false,
+    has_prev: response?.has_prev ?? false,
   }
   return { props: { paginationData } }
 }
 
 const BlockedAccountsPage = ({ paginationData }: Props) => {
-  const [pageParams, setPageParams] = useState({
-    pageNumber: 1,
-    pageSize: 10,
-    orderBy: 'username',
-    isAsc: false,
-  })
-  const { accounts: responseData, error, mutate } = useGetBlockAccountsPagination(pageParams, true, paginationData)
-  const accounts: IBlockedAccount[] = responseData?.data || []
-  const isLoading = !responseData && !error
-  const onPageChange = (newPage: number) => {
-    setPageParams((prevParams) => ({
-      ...prevParams,
-      pageNumber: newPage,
-    }))
-  }
+  // const [usernameFilter, setUsernameFilter] = useState('')
+  const { pageParams, onPageClick, updateSort, updateOrderBy, onNextClick, onPrevClick } = usePagination()
 
-  useEffect(() => {
-    if (pageParams.pageNumber !== 1) {
-      mutate()
-    }
-  }, [pageParams])
+  const { accounts: responseData, isLoading, error } = useGetBlockAccountsPagination(pageParams, paginationData)
+  const accounts: IBlockedAccount[] = responseData?.data || []
+
+  const updateSorting = useCallback(
+    (orderBy: string, isAsc: boolean): React.MouseEventHandler<HTMLDivElement> =>
+      () => {
+        updateSort(isAsc)
+        updateOrderBy(orderBy)
+      },
+    [updateSort, updateOrderBy]
+  )
 
   if (error) {
-    console.error(responseData)
-    console.error(error)
-    return <div>Failed to load users</div>
+    throw new Error('Error fetching data')
   }
   if (!responseData) {
-    console.error(responseData)
     return <div>Loading...</div>
   }
 
@@ -86,118 +72,87 @@ const BlockedAccountsPage = ({ paginationData }: Props) => {
     {
       title: 'Blocked At(HK Time)',
       dataIndex: 'blocked_at',
-      render: (e: string) => {
-        const date = dayjs(e, 'YYYY-MM-DD THH:mm:ss')
-        return dayjs.utc(date).local().format('YYYY-MM-DD HH:mm:ss')
-      },
     },
     { title: 'Post Scrapped', dataIndex: 'post_scrapped_count' },
     { title: 'Login Count', dataIndex: 'login_count' },
     {
       title: 'Username',
       dataIndex: 'username',
-      render: (e: string) => {
-        return (
-          <Tag
-            label={
-              <div className="flex items-center gap-1">
-                <Avatar />
-                {e}
-              </div>
-            }
-            variant="outline"
-          />
-        )
-      },
     },
     {
       title: 'Status',
       dataIndex: 'status',
-      render: (e: Status) => {
-        return <StatusTag status={e} />
-      },
     },
     {
       title: 'Is Occupied',
       dataIndex: 'is_occupied',
-      render: (e: boolean) => {
-        return e ? <CheckCircleIcon className="h-6 w-6 text-successful-600" /> : <XCircleIcon className="h-6 w-6 text-error-500" />
-      },
     },
     {
       title: 'Is Enabled',
       dataIndex: 'enabled',
-      render: (e: boolean) => {
-        return e ? <CheckCircleIcon className="h-6 w-6 text-successful-600" /> : <XCircleIcon className="h-6 w-6 text-error-500" />
-      },
     },
     {
       title: 'Is Auth',
       dataIndex: 'is_authenticated',
-      render: (e: boolean) => {
-        return e ? <CheckCircleIcon className="h-6 w-6 text-successful-600" /> : <XCircleIcon className="h-6 w-6 text-error-500" />
-      },
     },
 
     {
       title: 'Account Info',
       dataIndex: 'id',
-      render: (e: string) => (
-        <Link href="/accounts/blocked/[id]" as={`/accounts/blocked/${e}`} legacyBehavior>
-          <Button.Text loading={false}>Edit</Button.Text>
-        </Link>
-      ),
     },
   ]
 
   return (
     <Card title="Accounts Table">
-      <div className="flex gap-3">
-        <Button.Primary
-          onClick={() => {
-            setPageParams({
-              pageNumber: 1,
-              pageSize: 10,
-              orderBy: 'username',
-              isAsc: true,
-            })
-          }}
-        >
-          Change order
-        </Button.Primary>
-        <Button.Primary
-          onClick={() => {
-            setPageParams({
-              pageNumber: 1,
-              pageSize: 10,
-              orderBy: 'username',
-              isAsc: false,
-            })
-          }}
-        >
-          Reset Params
-        </Button.Primary>
-      </div>
-      {/* desktop */}
-      <div className="flex">
+      <div className="hidden overflow-auto md:flex">
         <Table.Layout>
-          <Table.Header columns={columns} />
-
-          <Table.Body>
-            {accounts?.map((e, index) => (
-              <Table.Row key={`accounts-row-${index}`} columns={columns} rowData={e} rowKey={index} />
+          <Table.Header
+            columns={columns}
+            thClassName={'text-sm font-normal text-text-primary items-center justify-center'}
+            className="capitalize"
+            orderBy={pageParams.orderBy}
+            isAsc={pageParams.isAsc}
+            updateSorting={updateSorting}
+          />
+          <Table.Body className="text-sm font-normal leading-5 text-black">
+            {accounts.map((e, index) => (
+              <Table.Row key={`table-row-${e.id}-${index}`} className="text-sm">
+                <Table.BodyCell key={`blocked-at-${e.id}`}>{formatDate(e.blocked_at)}</Table.BodyCell>
+                <Table.BodyCell key={`created_at-${e.id}`}>{formatDate(e.created_at)}</Table.BodyCell>
+                <Table.BodyCell key={`blocked-count-${e.id}`}>{e.blocked_count}</Table.BodyCell>
+                <Table.BodyCell key={`last-login-dt-${e.last_login_dt}`}></Table.BodyCell>
+                <Table.BodyCell key={`username-${e.id}`}>
+                  <div className="flex items-center text-nowrap text-accent1-600">{e.username}</div>
+                </Table.BodyCell>
+                <Table.BodyCell key={`status-${e.id}`}>
+                  <AccountBadges status={e.status} />
+                </Table.BodyCell>
+                <Table.BodyCell key={e.id}>
+                  <Link
+                      href={{
+                        pathname: ROUTE.ACCOUNT_BOT_GET,
+                        query: { id: e.id },
+                      }}
+                      as="/accounts/bot"
+                      legacyBehavior
+                    >
+                    <div className="flex w-full cursor-pointer flex-row items-center justify-center gap-2">
+                      <EditIcon size={16} className="fill-accent2-500" />
+                      <div className="font-semibold text-accent2-500">Edit</div>
+                    </div>
+                  </Link>
+                </Table.BodyCell>
+              </Table.Row>
             ))}
           </Table.Body>
         </Table.Layout>
       </div>
-      <Pagination
+      <Pagination<IBlockedAccount[]>
         isLoading={isLoading}
-        page={responseData.page}
-        size={responseData.size}
-        totalItems={responseData.total_items}
-        hasNext={responseData.has_next}
-        hasPrev={responseData.has_prev}
-        onPageChange={onPageChange}
+        data={responseData}
+        onNextClick={onNextClick}
+        onPageClick={onPageClick}
+        onPrevClick={onPrevClick}
       />
     </Card>
   )

@@ -1,7 +1,9 @@
 import { FirestoreAdapter } from '@next-auth/firebase-adapter'
-import { getRoles } from '@services/util'
-import { Awaitable } from 'next-auth/index'
 import { AdapterUser } from 'next-auth/adapters'
+import { Awaitable } from 'next-auth/index'
+
+import { getRoles } from '@services/util'
+
 export interface FirestoreAdapterOptions {
   emulator?: {
     host?: string
@@ -29,7 +31,7 @@ export const FireStoreAdapterWrapper = (options: FirebaseConfig) => {
     const roles = await getRoles(user.email)
     const combinedUser = { ...(user as CombinedUser), roles: roles }
     if (FirestoreAdapter(options).createUser) {
-      return FirestoreAdapter(options).createUser?.(combinedUser) as Awaitable<AdapterUser>
+      return FirestoreAdapter(options).createUser(combinedUser) as Awaitable<AdapterUser>
     }
     return combinedUser
   }

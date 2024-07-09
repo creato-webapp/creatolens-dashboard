@@ -1,5 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
+
+import ENDPOINT_BACKEND from 'src/constants/endpoints/backend'
+
 import AccountInstance from '../axiosInstance/Account'
+
 export default async function AccountHandler(req: NextApiRequest, res: NextApiResponse) {
   const {
     query: { id },
@@ -11,14 +15,15 @@ export default async function AccountHandler(req: NextApiRequest, res: NextApiRe
       Cookie: req.headers.cookie,
     },
   }
+  let response
+
   switch (method) {
     case 'GET': {
-      const response = await AccountInstance.get(`accounts/${id}`, cookieHeader)
+      response = await AccountInstance.get(`${ENDPOINT_BACKEND.ACCOUNTS}/${id}`, cookieHeader)
       return res.status(response.status).json(response.data)
     }
     case 'PATCH':
-      const response = await AccountInstance.patch(`accounts/update/${id}`, body, cookieHeader)
-
+      response = await AccountInstance.patch(`${ENDPOINT_BACKEND.UPDATE_ACCOUNT}/${id}`, body, cookieHeader)
       return res.status(response.status).json(response.data)
     default:
       res.setHeader('Allow', ['GET', 'PATCH'])

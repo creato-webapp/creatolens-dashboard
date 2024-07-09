@@ -1,12 +1,15 @@
-import React, { useState, useCallback } from 'react'
-import { Labels, ModelResult } from '@services/Object/ImageBlob'
-import { LabelImage } from '@services/Object/Gemini'
+import React, { useCallback, useState } from 'react'
+
+import axios from 'axios'
+
 import { Button } from '@components/Button'
 import Dropzone from '@components/Dropzone'
-import CrossIcon from '@components/Icon/CrossIcon'
 import Checkbox from '@components/Form/Checkbox'
+import CrossIcon from '@components/Icon/CrossIcon'
+import { LabelImage } from '@services/Object/Gemini'
+import { Labels, ModelResult } from '@services/Object/ImageBlob'
 import { useFileUpload } from 'src/hooks/useFileUpload'
-import axios from 'axios'
+
 type hashtag = {
   acc: number
   hashtag: string
@@ -135,7 +138,7 @@ const ImageUpload: React.FC = () => {
             </button>
           </div>
         ) : (
-          <Dropzone onChange={handleFileChange} classNames="w-full" />
+          <Dropzone onFileChange={handleFileChange} className="w-full" />
         )}
       </div>
       <div className="flex items-center gap-6 p-4">

@@ -1,17 +1,18 @@
-import React, { useState, useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
+
+import { Button } from '@components/Button'
 import Card from '@components/Card'
 import { Form } from '@components/Form'
-import MagnifyingGlassIcon from '@components/Icon/MagnifyingGlassIcon'
-import LoaderIcon from '@components/Icon/LoaderIcon'
+import CustomizeHashtagCard from '@components/Hashet/CustomizeHashtagCard'
+import TopAccHashtagCard from '@components/Hashet/TopAccHashtagCard'
+import TopRelatedHashtagCard from '@components/Hashet/TopRelatedHashtagCard'
+import Hero from '@components/Hero'
 import LightBulbIcon from '@components/Icon/LightBulbIcon'
-import TopRelatedHashtagCard from '@lib/Hashet/TopRelatedHashtagCard'
-import TopAccHashtagCard from '@lib/Hashet/TopAccHashtagCard'
-import { Button } from '@components/Button'
+import LoaderIcon from '@components/Icon/LoaderIcon'
+import MagnifyingGlassIcon from '@components/Icon/MagnifyingGlassIcon'
 import Popover from '@components/Popover'
 import Tab from '@components/Tab'
-import CustomizeHashtagCard from '@lib/Hashet/CustomizeHashtagCard'
 import { useGetHashtag } from 'src/hooks/useHashtag'
-import Hero from '@components/Hero'
 
 export interface IHashet extends Record<string, string | number | boolean> {
   hashtag: string
@@ -22,7 +23,6 @@ export type HashetProps = {
   hashetSessionData: IHashet[]
 }
 
-
 const RecommendationPage = () => {
   const [inputString, setInputString] = useState('')
   const [stringToSubmit, setStringToSubmit] = useState('')
@@ -30,7 +30,7 @@ const RecommendationPage = () => {
     setInputString(e.target.value)
   }
 
-  const { data, error, mutate: mutateHashet, isValidating } = useGetHashtag(stringToSubmit, stringToSubmit ? true : false)
+  const { data, error, mutate: mutateHashet, isValidating } = useGetHashtag(stringToSubmit, !!stringToSubmit)
 
   const onSubmit = useCallback(async () => {
     setStringToSubmit(inputString)
@@ -41,10 +41,6 @@ const RecommendationPage = () => {
     console.error(data)
     console.error(error)
     return <div>Failed to load hashet error data</div>
-  }
-  if (!data) {
-    console.error(data)
-    return <div>Loading...</div>
   }
 
   const hashetData: IHashet[] = data?.data ? data.data : []
@@ -59,7 +55,7 @@ const RecommendationPage = () => {
       key: '1',
       title: 'Categories',
       children: (
-        <div className="flex flex-wrap gap-4 md:flex md:flex-nowrap md:px-14 md:py-24">
+        <div className="flex flex-col justify-center gap-4 md:flex md:flex-row md:px-14 md:py-24 ">
           <TopRelatedHashtagCard hashtags={hashetData} />
           <TopAccHashtagCard hashtags={hashetData} />
         </div>
@@ -121,7 +117,7 @@ const RecommendationPage = () => {
                 {isValidating ? <LoaderIcon className="animate-spin" /> : <MagnifyingGlassIcon />}
               </Form.BaseInput>
             </div>
-            <Button.Primary className="w-auto" sizes={['s', 'm', 'm']} onClick={() => onSubmit()} loading={isValidating}>
+            <Button.Primary className="w-auto" sizes={['s', 'm', 'm']} onClick={onSubmit} loading={isValidating}>
               Search
             </Button.Primary>
           </div>

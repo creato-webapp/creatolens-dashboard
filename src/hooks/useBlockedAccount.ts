@@ -1,10 +1,11 @@
 import useSWR from 'swr'
-import { IBlockedAccount } from '@lib/Account/Account/interface'
-import { getBlockedAccountsPagination, getBlockedAccount, updateBlockedAccount } from '@services/Account/BlockAccount'
+
+import { IBlockedAccount } from '@components/Account/Account/interface'
 import { PaginationMetadata, PaginationParams } from '@services/Account/AccountInterface'
+import { getBlockedAccount, getBlockedAccountsPagination, updateBlockedAccount } from '@services/Account/BlockAccount'
 
 export const useBlockAccount = (id: string, shouldFetch: boolean = true, fallbackData?: IBlockedAccount) => {
-  const { data, error, mutate, ...swr } = useSWR(shouldFetch ? [id] : null, (id) => getBlockedAccount(id), {
+  const { data, error, mutate, isLoading, ...swr } = useSWR(shouldFetch ? id : null, (id) => getBlockedAccount(id), {
     refreshInterval: 0,
     fallbackData: fallbackData,
   })
@@ -17,7 +18,7 @@ export const useBlockAccount = (id: string, shouldFetch: boolean = true, fallbac
 
   return {
     data,
-    isLoading: !error && !data,
+    isLoading: isLoading,
     error: error,
     updateBlockAccount,
     mutate,
@@ -25,18 +26,14 @@ export const useBlockAccount = (id: string, shouldFetch: boolean = true, fallbac
   }
 }
 
-export const useGetBlockAccountsPagination = (
-  paginationParams: PaginationParams,
-  shouldFetch?: true,
-  fallbackData?: PaginationMetadata<IBlockedAccount[]>
-) => {
-  const { data, error, mutate, ...swr } = useSWR(shouldFetch ? [paginationParams] : null, getBlockedAccountsPagination, {
+export const useGetBlockAccountsPagination = (paginationParams: PaginationParams, fallbackData?: PaginationMetadata<IBlockedAccount[]>) => {
+  const { data, error, mutate, isLoading, ...swr } = useSWR(paginationParams, getBlockedAccountsPagination, {
     refreshInterval: 0,
     fallbackData: fallbackData,
   })
   return {
     accounts: data,
-    isLoading: !error && !data,
+    isLoading: isLoading,
     error: error,
     mutate,
     ...swr,

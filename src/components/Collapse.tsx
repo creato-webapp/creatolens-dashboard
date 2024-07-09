@@ -1,5 +1,6 @@
 // components/Collapse.tsx
 import React, { useState } from 'react'
+
 import { CaretDownIcon, CaretUpIcon } from './Icon'
 
 interface CollapseProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -7,7 +8,7 @@ interface CollapseProps extends React.HTMLAttributes<HTMLDivElement> {
   defaultOpen?: boolean
 }
 
-const Collapse: React.FC<CollapseProps> = ({ defaultOpen, parent, children, className }: CollapseProps) => {
+const Collapse: React.FC<CollapseProps> = ({ defaultOpen, parent, children, className }) => {
   const [isOpen, setIsOpen] = useState(defaultOpen)
 
   const toggleMenu = () => {

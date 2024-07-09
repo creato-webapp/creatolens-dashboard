@@ -1,16 +1,15 @@
-import React, { useRef, useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
+
 import { Button } from './Button'
 import CrossIcon from './Icon/CrossIcon'
 
-interface PopupProps extends React.HTMLProps<HTMLDivElement> {
+interface PopupProps extends React.HTMLProps<HTMLDialogElement> {
   defaultShow?: boolean
-  title?: string
   footer?: string
   isDisabledScroll?: boolean
   withConfirmButton?: boolean
   withCloseButton?: boolean
   withCancelButton?: boolean
-  onConfirm?: () => void
   onClose?: () => void
 }
 
@@ -33,15 +32,14 @@ const Popup: React.FC<PopupProps> = ({
     onClose && onClose()
   }
 
-  const handleClickOutside = (event: MouseEvent) => {
-    if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
-      setIsShow(false)
-      onClose && onClose()
-    }
-  }
-
   useEffect(() => {
-    // Add when the component is mounted
+    const handleClickOutside = (event: MouseEvent) => {
+      if (popupRef.current && !popupRef.current.contains(event.target as Node)) {
+        setIsShow(false)
+        onClose && onClose()
+      }
+    }
+
     if (isDisabledScroll && isShow) {
       document.body.style.overflow = 'hidden'
     }
@@ -51,11 +49,11 @@ const Popup: React.FC<PopupProps> = ({
       document.removeEventListener('mousedown', handleClickOutside)
       document.body.style.overflow = 'auto'
     }
-  }, [isShow, isDisabledScroll, handleClickOutside])
+  }, [isShow, isDisabledScroll, onClose])
 
   useEffect(() => {
     setIsShow(defaultShow)
-  }, [])
+  }, [defaultShow])
 
   return isShow ? (
     <div className="fixed inset-0 h-full w-full overflow-y-auto bg-gray-600 bg-opacity-50">
@@ -63,7 +61,7 @@ const Popup: React.FC<PopupProps> = ({
         className="absolute left-1/2 top-1/2 mx-auto w-96 -translate-x-1/2 -translate-y-1/2 transform rounded-md border bg-white p-5 shadow-lg"
         ref={popupRef}
       >
-        <div className="flex flex-col justify-center space-y-3  ">
+        <div className="flex flex-col justify-center space-y-3">
           <div className="flex items-center justify-between">
             {title ? <h3 className="font-h3-bold">{title}</h3> : <div className="w-auto"></div>}
             {withCloseButton && (
@@ -74,8 +72,8 @@ const Popup: React.FC<PopupProps> = ({
               </div>
             )}
           </div>
-          {title && <hr></hr>}
-          <div>{children}</div>
+          {title && <hr />}
+          {children}
           <div className="flex justify-center gap-6 self-center px-2 py-2">
             {withCancelButton && (
               <Button.Outline className="max-w-fit self-center" onClick={handleClose}>

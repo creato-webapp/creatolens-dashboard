@@ -1,17 +1,20 @@
 import React from 'react'
-import { useRouter } from 'next/router'
+
 import type { NextPage } from 'next'
+import { useRouter } from 'next/router'
+
 import { Button } from '@components/Button'
-import PlusIcon from '@components/Icon/PlusIcon'
 import Card from '@components/Card'
 import Hero from '@components/Hero'
+import PlusIcon from '@components/Icon/PlusIcon'
+import ROUTE from 'src/constants/route'
 
 const Guide: NextPage = () => {
   const router = useRouter()
 
-  const handleNewAccountClick = () => {
+  const onClick = () => {
     // Redirect to the "accounts/create" page
-    router.push('/accounts/create-account')
+    router.push(ROUTE.ACCOUNT_BOT_CREATE)
   }
   return (
     <>
@@ -34,7 +37,7 @@ const Guide: NextPage = () => {
             </ul>
 
             <footer> We value your privacy, so please refrain from using your active account as the Instagram bot.</footer>
-            <Button.Primary onClick={handleNewAccountClick}>
+            <Button.Primary onClick={onClick}>
               <PlusIcon className="mr-2" />
               New Account
             </Button.Primary>

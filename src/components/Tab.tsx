@@ -40,32 +40,42 @@ const Tab: React.FC<TabProps> = ({
     }
   }
 
+  // useEffect(() => {
+  //   fetch()
+  //     .then((res) => {
+  //       return res.json()
+  //     })
+  //     .then((data: DashboardDataList) => {
+  //       console.error(data)
+  //     })
+  // }, [])
+
   return (
-    <div className={`tabs relative flex h-auto w-auto min-w-full flex-col items-center gap-4 shadow-lg md:items-start md:px-3 ${className ?? ''}`}>
-      <div className={`tabs-bar ${centered ? 'centered' : ''} -top-12 flex w-full md:absolute `} style={tabBarStyle}>
+    <div className={`tabs relative flex h-auto flex-col items-center gap-4 shadow-lg md:items-start md:px-3 ${className ?? ''}`}>
+      <div
+        className={`tabs-bar ${centered ? 'centered' : ''} -top-12 flex w-full overflow-hidden md:absolute  md:w-auto md:overflow-hidden`}
+        style={tabBarStyle}
+      >
         {items.map((item) => (
           <button
-            key={item.key}
-            className={`disabled:text-text-disable h-8 w-full hover:bg-accent1-300 hover:text-text-white hover:underline hover:underline-offset-2 focus:bg-accent1-500 active:bg-accent1-500 disabled:bg-disabled md:h-12 md:w-auto md:min-w-[12.5rem] ${
+            className={`disabled:text-text-disable flex h-8 min-w-[50%] flex-nowrap items-center  justify-center hover:bg-accent1-300 hover:text-text-white hover:underline hover:underline-offset-2 focus:bg-accent1-500 active:bg-accent1-500 disabled:bg-disabled md:h-12 md:min-w-[10rem] lg:min-w-[15rem] ${
               currentActiveKey == item.key ? 'bg-accent1-500 text-text-white' : 'bg-bg-dark text-text-primary'
             }`}
+            key={item.key}
             onClick={handleChange}
             data-key={item.key}
           >
-            <div className={`tab ${currentActiveKey === item.key ? 'active' : ''} ${size ?? ''} flex items-center justify-center`}>
-              <h4>{item.title}</h4>
+            <div key={item.key} className={`tab ${currentActiveKey === item.key ? 'active' : ''} ${size ?? ''} flex items-center justify-center `}>
+              <h4 className=" text-nowrap ">{item.title}</h4>
             </div>
           </button>
         ))}
         {tabBarExtraContent}
       </div>
-      <div className={`tab-content flex w-full justify-center bg-bg-white md:w-full ${scrollable ? 'overflow-auto' : ''}`}>
+      <div className={`tab-content flex w-full justify-center bg-bg-white  ${scrollable ? 'overflow-auto' : ''}`}>
         {items.map((item) =>
           currentActiveKey === item.key ? (
-            <div
-              key={item.key}
-              className={`tab-pane ${currentActiveKey === item.key ? 'active' : ''}  inline-block min-w-full flex-col justify-center`}
-            >
+            <div key={item.key} className={`tab-pane ${currentActiveKey === item.key ? 'active' : ''}  flex min-w-full flex-col justify-center`}>
               {item.children}
             </div>
           ) : null

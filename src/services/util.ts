@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { User } from 'next-auth'
 
+import dayjs from '../utils/dayjs'
 interface CombinedUser extends User {
   emailVerified: boolean
   roles: string[]
@@ -47,4 +48,21 @@ export const imageToBase64 = (file: File): Promise<string | null> => {
       resolve(null)
     }
   })
+}
+
+export function hoursAgo(dateString: string): string {
+  const pastDate = new Date(dateString)
+  const currentDate = new Date()
+
+  const diffInMilliseconds = currentDate.getTime() - pastDate.getTime()
+
+  const diffInHours = Math.floor(diffInMilliseconds / 1000 / 60 / 60)
+
+  return `${diffInHours}H ago`
+}
+
+
+
+export function formatDate(datetimeStr: string): string {
+  return dayjs(datetimeStr, 'YYYY-MM-DDTHH:mm:ss').local().format('DD MMM YYYY')
 }

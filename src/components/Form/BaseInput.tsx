@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 
 export interface IBaseInputProps extends React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement> {
@@ -42,6 +43,7 @@ const BaseInput: React.FunctionComponent<IBaseInputProps> = ({
     } else {
       setErrorMessage('Space input is not allowed!')
     }
+    props.onChange?.(e)
   }
   return (
     <>
@@ -55,7 +57,7 @@ const BaseInput: React.FunctionComponent<IBaseInputProps> = ({
           value={inputValue}
           onChange={onChange}
           disabled={disabled}
-          className={`base-input min-w-64 inline-flex rounded-md border border-gray-500 bg-neutral-50 p-2 font-semibold ${
+          className={`base-input inline-flex min-w-64 rounded-md border border-gray-500 bg-neutral-50 p-2 font-semibold ${
             errorMessage ? 'focus:border-0 focus:border-none focus:outline-error-600' : ''
           } ${className ? className : ''}`}
         />

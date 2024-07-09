@@ -1,25 +1,25 @@
-import React, { useState, useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
+
+import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
+
+import { Cookies } from '@components/Account/Account/interface'
 import Card from '@components/Card'
-import { Table } from '@components/Table'
-import { getSession } from 'next-auth/react'
-import Link from 'next/link'
-import { useAccountSessionPagination } from 'src/hooks/useAccountSession'
-import { getSessionPagination, PaginationParams, PaginationMetadata } from '@services/Account/Session'
 import { Form } from '@components/Form'
 import Pagination from '@components/Pagination'
-import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
-import { IGenericRowData } from '@components/Table/Row'
-import { Cookies } from '@lib/Account/Account/interface'
-import dayjs from '@services/Dayjs'
+import { Table } from '@components/Table'
+import { usePagination } from '@hooks/usePagination'
+import { PaginationMetadata, getSessionPagination } from '@services/Account/Session'
+import { useAccountSessionPagination } from 'src/hooks/useAccountSession'
+import dayjs from 'src/utils/dayjs'
+
+
+
 
 type Props = {
   paginationData: PaginationMetadata<IAccountSession[]>
 }
 
-interface AccountSessionPaginationParams extends PaginationParams {
-  username?: string | null
-}
-export interface IAccountSession extends IGenericRowData {
+export interface IAccountSession {
   account_id: string
   created_at: string
   trace_id: string
@@ -28,20 +28,7 @@ export interface IAccountSession extends IGenericRowData {
   session_cookies: Cookies
 }
 
-export const getServerSideProps: GetServerSideProps = async (
-  context: GetServerSidePropsContext
-): Promise<GetServerSidePropsResult<{ paginationData?: PaginationMetadata<IAccountSession[]> }>> => {
-  const session = await getSession(context)
-
-  if (!session) {
-    return {
-      redirect: {
-        destination: '/some-destination',
-        permanent: false,
-      },
-    }
-  }
-
+export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext): Promise<GetServerSidePropsResult<Props>> => {
   const paginationProps = {
     username: null,
     pageNumber: 1,
@@ -49,93 +36,58 @@ export const getServerSideProps: GetServerSideProps = async (
     orderBy: 'created_at',
     isAsc: false,
   }
-  const response = await getSessionPagination(paginationProps)
+  const response = await getSessionPagination(paginationProps, {
+    headers: {
+      Cookie: context.req.headers.cookie,
+    },
+  })
   const paginationData: PaginationMetadata<IAccountSession[]> = {
-    data: response ? response?.data : [],
-    has_next: response ? response.has_next : false,
-    has_prev: response ? response.has_prev : false,
-    page: response ? response.page : 1,
-    size: response ? response.size : 0,
-    total_items: response ? response.total_items : 0,
+    data: response?.data ?? [],
+    page: response?.page ?? 1,
+    size: response?.size ?? 0,
+    total_items: response?.total_items ?? 0,
+    has_next: response?.has_next ?? false,
+    has_prev: response?.has_prev ?? false,
   }
   return { props: { paginationData } }
 }
 
 const AccountsSessionPage = ({ paginationData }: Props) => {
-  const [pageParams, setPageParams] = useState<AccountSessionPaginationParams>({
-    username: null,
-    pageNumber: 1,
-    pageSize: 10,
-    orderBy: 'created_at',
-    isAsc: false,
-  })
-
-  const onPageChange = (newPage: number) => {
-    setPageParams((prevParams) => ({
-      ...prevParams,
-      pageNumber: newPage,
-    }))
-  }
-
+  const [filter, setFilter] = useState('')
   const onChange: React.ChangeEventHandler<HTMLInputElement> = useCallback((e) => {
-    setPageParams(() => ({
-      pageNumber: 1,
-      pageSize: 10,
-      orderBy: 'created_at',
-      isAsc: false,
-      username: e.target.value,
-    }))
+    if (!e.target.value || e.target.value === ' ') return
+    setFilter(e.target.value)
   }, [])
-
-  const { sessions: responseData, isLoading, error } = useAccountSessionPagination(pageParams, true, paginationData)
+  const { pageParams, onPageClick, onNextClick, onPrevClick } = usePagination()
+  const { sessions: responseData, isLoading, error } = useAccountSessionPagination(pageParams, filter, paginationData)
 
   const accountSession: IAccountSession[] = responseData?.data ? responseData.data : []
   if (error) {
-    console.error(responseData)
-    console.error(error)
     return <div>Failed to load account error data</div>
   }
   if (!responseData) {
-    console.error('No response data', responseData)
     return <div>Loading...</div>
   }
   const columns = [
     {
       title: 'account_id',
       dataIndex: 'account_id',
-      render: (e: string) => {
-        if (e === 'empty account_id') {
-          return ''
-        }
-        return (
-          <Link href="/accounts/[id]" as={`/accounts/${e}`} legacyBehavior>
-            <div style={{ color: '#0070f3', cursor: 'pointer' }}>{e}</div>
-          </Link>
-        )
-      },
     },
     {
       title: 'account',
       dataIndex: 'username',
-      render: (e: string) => {
-        return (
-          <Link href="/accounts/[id]" as={`/accounts/${e}`} legacyBehavior>
-            <div style={{ color: '#0070f3', cursor: 'pointer' }}>{e}</div>
-          </Link>
-        )
-      },
     },
     {
       title: 'created_at(HK Time)',
       dataIndex: 'created_at',
-      render: (e: string) => {
-        const date = dayjs(e, 'YYYY-MM-DD THH:mm:ss')
-        return dayjs.utc(date).local().format('YYYY-MM-DD HH:mm:ss')
-      },
     },
     { title: 'session', dataIndex: 'session_cookies.csrftoken' },
     { title: 'trace_id', dataIndex: 'trace_id' },
   ]
+
+  const formatDate = (datetimeStr: string) => {
+    return dayjs(datetimeStr, 'YYYY-MM-DDTHH:mm:ss').local().format('DD MMM YYYY')
+  }
 
   return (
     <Card title="Login Session History">
@@ -146,22 +98,26 @@ const AccountsSessionPage = ({ paginationData }: Props) => {
       ></Form.BaseInput>
       <div className="flex gap-3">
         <Table.Layout>
-          <Table.Header columns={columns} />
+          <Table.Header columns={columns} isAsc={pageParams.isAsc} orderBy={pageParams.orderBy} />
           <Table.Body>
             {accountSession.map((e, index) => (
-              <Table.Row key={`accountSession-table-row-${index}`} columns={columns} rowData={e} rowKey={index} />
+              <Table.Row key={`accountSession-table-row-${index}`}>
+                <Table.BodyCell key={`account_id-${e.account_id}`}>{e.account_id}</Table.BodyCell>
+                <Table.BodyCell key={`username-${e.username}`}>{e.username}</Table.BodyCell>
+                <Table.BodyCell key={`created_at-${e.created_at}`}>{formatDate(e.created_at)}</Table.BodyCell>
+                <Table.BodyCell key={`session-${e.session_cookies.csrftoken}`}>{e.session_cookies.csrftoken}</Table.BodyCell>
+                <Table.BodyCell key={`trace_id-${e.trace_id}`}>{e.trace_id}</Table.BodyCell>
+              </Table.Row>
             ))}
           </Table.Body>
         </Table.Layout>
       </div>
-      <Pagination
+      <Pagination<IAccountSession[]>
         isLoading={isLoading}
-        page={responseData.page}
-        size={responseData.size}
-        totalItems={responseData.total_items}
-        hasNext={responseData.has_next}
-        hasPrev={responseData.has_prev}
-        onPageChange={onPageChange}
+        data={responseData}
+        onNextClick={onNextClick}
+        onPrevClick={onPrevClick}
+        onPageClick={onPageClick}
       />
     </Card>
   )

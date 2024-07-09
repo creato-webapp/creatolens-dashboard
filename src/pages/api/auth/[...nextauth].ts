@@ -1,9 +1,11 @@
-import NextAuth from 'next-auth/next'
-import { User, NextAuthOptions } from 'next-auth/index'
-import GoogleProvider from 'next-auth/providers/google'
-import { FireStoreAdapterWrapper, FirebaseConfig } from '@services/customAdapter'
-import { NextApiRequest, NextApiResponse } from 'next'
 import { setCookie } from 'cookies-next'
+import { NextApiRequest, NextApiResponse } from 'next'
+import { NextAuthOptions, User } from 'next-auth/index'
+import NextAuth from 'next-auth/next'
+import GoogleProvider from 'next-auth/providers/google'
+
+import { FireStoreAdapterWrapper, FirebaseConfig } from '@services/customAdapter'
+
 
 type NextAuthOptionsCallback = (req: NextApiRequest, res: NextApiResponse) => NextAuthOptions
 

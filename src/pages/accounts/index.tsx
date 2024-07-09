@@ -1,87 +1,70 @@
-import React, { useState, useCallback } from 'react'
-import Card from '@components/Card'
-import { Table } from '@components/Table'
-import { Button } from '@components/Button'
-import { IAccount } from '@lib/Account/Account/interface'
-import { ResponsiveAccountCard } from '@lib/Account/ResponsiveAccountCard'
-import Link from 'next/link'
-import Pagination from '@components/Pagination'
-import { useGetAccountsPagination } from 'src/hooks/useAccount'
-import { getAccountsPagination } from '@services/Account/Account'
-import Image from 'next/image'
-import Badges, { Status } from '@components/Badges'
-import Hero from '@components/Hero'
+import React, { useCallback, useMemo, useState } from 'react'
+
 import { PlusIcon } from '@heroicons/react/24/solid'
-import Dropdown from '@components/Form/Dropdown'
-import EditIcon from '@components/Icon/EditIcon'
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
+import Image from 'next/image'
+import Link from 'next/link'
+
+import { IAccount } from '@components/Account/Account/interface'
+import { ResponsiveAccountCard } from '@components/Account/ResponsiveAccountCard'
+import { AccountBadges } from '@components/Badges'
+import { Button } from '@components/Button'
+import Card from '@components/Card'
+import Dropdown from '@components/Form/Dropdown'
+import Hero from '@components/Hero'
+import EditIcon from '@components/Icon/EditIcon'
+import Pagination from '@components/Pagination'
+import { Table } from '@components/Table'
+import { usePagination } from '@hooks/usePagination'
+import { getAccountsPagination } from '@services/Account/Account'
 import { PaginationMetadata } from '@services/Account/AccountInterface'
-import dayjs from '@services/Dayjs'
+import { formatDate } from '@services/util'
+import ROUTE from 'src/constants/route'
+import { useGetAccountsPagination } from 'src/hooks/useAccount'
 
-export const getServerSideProps: GetServerSideProps = async (
-  context: GetServerSidePropsContext
-): Promise<GetServerSidePropsResult<{ paginationData: PaginationMetadata<IAccount[]> }>> => {
-
-  const paginationProps = {
-    pageNumber: 1,
-    pageSize: 10,
-    orderBy: 'created_at',
-    isAsc: true,
-  }
-  const cookies = context.req.headers.cookie
-  const response = await getAccountsPagination(paginationProps, {
-    headers: {
-      Cookie: cookies, // Forward the cookies to the server-side request
-    },
-  })
-  const paginationData: PaginationMetadata<IAccount[]> = {
-    data: response?.data ?? [],
-    has_next: response?.has_next ?? false,
-    has_prev: response?.has_prev ?? false,
-    page: response?.page ?? 1,
-    size: response?.size ?? 0,
-    total_items: response?.total_items ?? 0,
-  }
-  return { props: { paginationData } }
+type Props = {
+  paginationData: PaginationMetadata<IAccount[]>
 }
 
-const AccountsPage = () => {
-  const [pageParams, setPageParams] = useState({
-    pageNumber: 1,
-    pageSize: 10,
-    orderBy: 'created_at',
-    isAsc: false,
-  })
-  const [createDateOrder, setCreateDateOrder] = useState<'asc' | 'desc'>('desc')
-  const { accounts: responseData, error } = useGetAccountsPagination(pageParams, true)
-  const accounts: IAccount[] = responseData?.data || []
-  const isLoading = !responseData && !error
-
-  const onPageChange = (newPage: number) => {
-    setPageParams((prevParams) => ({
-      ...prevParams,
-      pageNumber: newPage,
-    }))
+export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext): Promise<GetServerSidePropsResult<Props>> => {
+  const cookies = context.req.headers.cookie
+  const response = await getAccountsPagination(
+    {
+      pageNumber: 1,
+      pageSize: 10,
+      orderBy: 'created_at',
+      isAsc: false,
+    },
+    {
+      headers: {
+        Cookie: cookies,
+      },
+    }
+  )
+  if (!response) {
+    return {
+      notFound: true,
+    }
   }
+  return { props: { paginationData: response } }
+}
+
+const AccountsPage = ({ paginationData }: Props) => {
+  const [createDateOrder, setCreateDateOrder] = useState<'asc' | 'desc'>('desc')
+
+  const { pageParams, onPageClick, updateSort, updateOrderBy, onNextClick, onPrevClick } = usePagination()
+  const { data, isLoading } = useGetAccountsPagination(pageParams, false, paginationData)
+
+  const accounts: IAccount[] = useMemo(() => data?.data || [], [data])
 
   const updateSorting = useCallback(
-    (orderBy: string, isAsc: boolean): React.MouseEventHandler<HTMLDivElement> =>
+    (orderBy: string): React.MouseEventHandler<HTMLDivElement> =>
       () => {
-        setPageParams((prevParams) => ({
-          ...prevParams,
-          orderBy: orderBy,
-          isAsc: isAsc,
-        }))
+        updateOrderBy(orderBy)
+        updateSort(!pageParams.isAsc)
       },
-    []
+    [pageParams.isAsc, updateOrderBy, updateSort]
   )
-
-  if (error) {
-    return <div>Failed to load users</div>
-  }
-  if (!responseData) {
-    return <div>Loading...</div>
-  }
 
   const IconRender = (e: boolean) => {
     return (
@@ -99,39 +82,19 @@ const AccountsPage = () => {
     {
       title: 'Profile',
       dataIndex: 'id',
-      render: (e: string) => (
-        <Link href="/accounts/[id]" as={`/accounts/${e}`} legacyBehavior>
-          <div className="flex w-full cursor-pointer flex-row items-center justify-center gap-2">
-            <EditIcon size={16} className="fill-accent2-500" />
-            <div className="font-semibold text-accent2-500">Edit</div>
-          </div>
-        </Link>
-      ),
     },
     {
-      headerIcon: <Image alt="instagram" src="/account/InstagramLogo.svg" className="w-full" width={24} height={24}></Image>,
       title: 'Username',
       dataIndex: 'username',
-      render: (e: string) => {
-        return <div className="flex items-center text-accent1-600">{e}</div>
-      },
     },
     {
       title: 'Created On',
       dataIndex: 'created_at',
       sortAvailable: true,
-      render: (e: string) => {
-        const date = dayjs(e, 'YYYY-MM-DD THH:mm:ss')
-        return date.local().format('DD MMM YYYY')
-      },
     },
     {
       title: 'Created Time',
       dataIndex: 'created_at',
-      render: (e: string) => {
-        const date = dayjs(e, 'THH:mm:ss')
-        return date.local().format('hh:mm:ss')
-      },
     },
     {
       title: 'Created By',
@@ -142,47 +105,21 @@ const AccountsPage = () => {
     {
       title: 'Status',
       dataIndex: 'status',
-      render: (e: string) => {
-        const statusToVariantMap: Record<string, Status> = {
-          active: 'success',
-          retry: 'warning',
-          blocked: 'error',
-          disabled: 'disabled',
-          test: 'secondary',
-          banned: 'error',
-        }
-        const status: Status = statusToVariantMap[e]
-        return (
-          <div className="flex items-center justify-center">
-            <Badges size={'sm'} status={status} className="capitalize" rounded>
-              {e}
-            </Badges>
-          </div>
-        )
-      },
     },
     {
       title: 'Is Occupied',
       dataIndex: 'is_occupied',
-      render: (e: boolean) => {
-        return IconRender(e)
-      },
     },
     {
       title: 'Is Enabled',
       dataIndex: 'enabled',
-      render: (e: boolean) => {
-        return IconRender(e)
-      },
     },
     {
       title: 'Is Auth',
       dataIndex: 'is_authenticated',
-      render: (e: boolean) => {
-        return IconRender(e)
-      },
     },
   ]
+
 
   return (
     <div>
@@ -196,8 +133,8 @@ const AccountsPage = () => {
           <div>
             <h1 className="font-extrabold text-white">ACCOUNTS</h1>
           </div>
-          <Link href="/accounts/create-account">
-            <Button.Primary sizes={['s', 'l', 'l']} styleClassName="px-2">
+          <Link href={ROUTE.ACCOUNT_BOT_CREATE}>
+            <Button.Primary sizes={['s', 'l', 'l']} className="px-2">
               <div className="flex flex-row items-center gap-2">
                 <PlusIcon className="h-6 w-6" />
                 <div className="hidden md:flex">Create New Account</div>
@@ -206,6 +143,7 @@ const AccountsPage = () => {
           </Link>
         </div>
       </Hero>
+
       <Card title="Accounts Table" className="!shadow-none">
         <div className="hidden overflow-auto md:flex">
           <Table.Layout>
@@ -213,12 +151,50 @@ const AccountsPage = () => {
               columns={columns}
               thClassName={'text-sm font-normal text-text-primary items-center justify-center'}
               className="capitalize"
-              pageParams={pageParams}
+              orderBy={pageParams.orderBy}
+              isAsc={pageParams.isAsc}
               updateSorting={updateSorting}
             />
+            {/*for username Icon <Image alt="instagram" src="/account/InstagramLogo.svg" width={16} height={16} /> */}
             <Table.Body className="text-sm font-normal leading-5 text-black">
-              {accounts?.map((e, index) => (
-                <Table.Row key={`accounts-table-${index}`} columns={columns} className="text-sm" rowData={e} rowKey={index} />
+              {accounts.map((e, index) => (
+                <Table.Row key={`accounts-table-${index}`} className="text-sm">
+                  <Table.BodyCell key={e.id}>
+                    <Link
+                        href={{
+                          pathname: ROUTE.ACCOUNT_BOT_GET,
+                          query: { id: e.id },
+                        }} 
+                        as="/accounts/bot"
+                        legacyBehavior
+                      >
+                      <div className="flex w-full cursor-pointer flex-row items-center justify-center gap-2">
+                        <EditIcon size={16} className="fill-accent2-500" />
+                        <div className="font-semibold text-accent2-500">Edit</div>
+                      </div>
+                    </Link>
+                  </Table.BodyCell>
+                  <Table.BodyCell key={`username-${e.id}`}>
+                    <div className="flex items-center text-nowrap text-accent1-600">{e.username}</div>
+                  </Table.BodyCell>
+                  <Table.BodyCell key={`created_at-${e.id}`}>{formatDate(e.created_at)}</Table.BodyCell>
+                  <Table.BodyCell key={`updated_at-${e.id}`}>{formatDate(e.updated_at)}</Table.BodyCell>
+
+                  <Table.BodyCell key={`created_by-${e.id}`}>{e.created_by}</Table.BodyCell>
+
+                  <Table.BodyCell key={`post_scrapped_count-${e.id}`}>{e.post_scrapped_count}</Table.BodyCell>
+                  <Table.BodyCell key={`login_count-${e.id}`}>{e.login_count}</Table.BodyCell>
+                  <Table.BodyCell key={`status-${e.id}`}>
+                    {
+                      <div className="flex items-center justify-center">
+                        <AccountBadges status={e.status} />
+                      </div>
+                    }
+                  </Table.BodyCell>
+                  <Table.BodyCell key={`is_occupied-${e.id}`}>{IconRender(e.is_occupied)}</Table.BodyCell>
+                  <Table.BodyCell key={`enabled-${e.id}`}>{IconRender(e.enabled)}</Table.BodyCell>
+                  <Table.BodyCell key={`is-auth-${e.id}`}>{IconRender(e.is_authenticated)}</Table.BodyCell>
+                </Table.Row>
               ))}
             </Table.Body>
           </Table.Layout>
@@ -236,12 +212,9 @@ const AccountsPage = () => {
               ]}
               onValueChange={(value) => {
                 setCreateDateOrder(value as 'asc' | 'desc')
-                setPageParams((prevParams) => ({
-                  ...prevParams,
-                  orderBy: 'created_at',
-                  isAsc: value === 'asc' ? true : false,
-                }))
-                onPageChange(1)
+                updateOrderBy('created_at')
+                updateSort(value === 'asc' ? true : false)
+                onPageClick(1)
               }}
               dropDownSizes={['m', 'm', 'm']}
             />
@@ -249,19 +222,11 @@ const AccountsPage = () => {
         </div>
 
         <div className="flex w-full flex-col justify-center gap-16 bg-none md:hidden">
-          {accounts?.map((e, index) => (
-            <ResponsiveAccountCard columns={columns} rowData={e} key={`account_data_${index}`} />
-          ))}
+          {!isLoading && accounts?.map((e, index) => <ResponsiveAccountCard columns={columns} rowData={e} key={`account_data_${index}`} />)}
         </div>
-        <Pagination
-          isLoading={isLoading}
-          page={responseData.page}
-          size={responseData.size}
-          totalItems={responseData.total_items}
-          hasNext={responseData.has_next}
-          hasPrev={responseData.has_prev}
-          onPageChange={onPageChange}
-        />
+        {data && data.total_items > 10 && (
+          <Pagination<IAccount[]> isLoading={isLoading} data={data} onNextClick={onNextClick} onPrevClick={onPrevClick} onPageClick={onPageClick} />
+        )}
       </Card>
     </div>
   )
