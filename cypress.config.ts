@@ -1,4 +1,5 @@
 import { defineConfig } from 'cypress'
+
 const { GoogleSocialLogin } = require('cypress-social-logins').plugins
 
 export default defineConfig({
@@ -11,6 +12,7 @@ export default defineConfig({
     },
     baseUrl: 'http://localhost:3000',
     chromeWebSecurity: false,
-    experimentalModifyObstructiveThirdPartyCode: true
+    experimentalModifyObstructiveThirdPartyCode: true,
+    video:true
   },
 })

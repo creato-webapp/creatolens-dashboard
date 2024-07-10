@@ -45,7 +45,7 @@ interface ICookie {
   httpOnly?: boolean
   expiry?: number // Use 'expiry' to match Cypress's setCookie command
 }
-Cypress.Commands.add('google_login', (username = Cypress.env('GOOGLE_USER'), password = Cypress.env('GOOGLE_PW')) => {
+Cypress.Commands.add('google_login', (username = Cypress.env('GOOGLE_USER_NOT_IN_WHITELIST'), password = Cypress.env('GOOGLE_PW_NOT_IN_WHITELIST')) => {
   // Generate and set a valid cookie from the fixture that next-auth can decrypt
 
   cy.visit(Cypress.env('SITE_NAME'))
@@ -55,7 +55,7 @@ Cypress.Commands.add('google_login', (username = Cypress.env('GOOGLE_USER'), pas
     username,
     password,
     loginUrl,
-    headless: true,
+    headless: false,
     logs: true,
     isPopup: false,
     loginSelector: `button[id="login"]`,
