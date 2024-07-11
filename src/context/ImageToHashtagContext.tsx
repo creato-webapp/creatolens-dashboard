@@ -37,6 +37,7 @@ type ImageHashtagContextType = {
   hashtags: IHashet[]
   updateHashtag: (arg: IHashet[]) => void
   updateLabel: (arg: string[]) => void
+  generateImageByHashtag: () => void
 }
 
 const ImageHashtagContext = createContext<ImageHashtagContextType | undefined>(undefined)
@@ -141,6 +142,7 @@ export const ImageHashtagProvider = ({ children }: ImageHashtagProviderProps) =>
     },
     [setHashtags]
   )
+
   const updateLabel = useCallback(
     (newLabels: string[]) => {
       setImages((prevImages) => {
@@ -188,6 +190,12 @@ export const ImageHashtagProvider = ({ children }: ImageHashtagProviderProps) =>
     [currentImageIndex]
   )
 
+  const generateImageByHashtag = useCallback(() => {
+    console.log('hello')
+    console.log(images[currentImageIndex].selectedLabels)
+    console.log(images[currentImageIndex].hashtags)
+  }, [])
+
   return (
     <ImageHashtagContext.Provider
       value={{
@@ -201,6 +209,7 @@ export const ImageHashtagProvider = ({ children }: ImageHashtagProviderProps) =>
         loadingLabels,
         hashtags,
         updateHashtag,
+        generateImageByHashtag,
       }}
     >
       {children}

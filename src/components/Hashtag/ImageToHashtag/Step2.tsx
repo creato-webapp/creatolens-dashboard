@@ -98,6 +98,7 @@ const Step2 = (props: StepProps) => {
                   <Badges
                     key={`key-${label}`}
                     rounded
+                    className='cursor-pointer'
                     // isDisabled={currentImage.selectedLabels.includes(label)}
                     isOutline
                     // isOutline

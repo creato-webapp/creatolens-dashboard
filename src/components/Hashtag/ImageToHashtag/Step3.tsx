@@ -13,7 +13,7 @@ import { StepProps } from './Step1'
 
 const Step3 = (props: StepProps) => {
   const { setStep } = props
-  const { images, currentImageIndex, updateSelectedLabels, hashtags, updateHashtag } = useImageHashtagContext()
+  const { images, currentImageIndex, updateSelectedLabels, hashtags, updateHashtag, generateImageByHashtag } = useImageHashtagContext()
   const [options, setOptions] = useState<
     {
       name: string
@@ -77,7 +77,7 @@ const Step3 = (props: StepProps) => {
     }
 
     fetchHashtags()
-  }, [currentImageIndex, images, updateHashtag])
+  }, [currentImageIndex, updateHashtag])
 
   const onClickSelectAll = useCallback(() => {
     setOptions((prevOptions) =>
@@ -148,13 +148,13 @@ const Step3 = (props: StepProps) => {
         Get hashtag recommendation
       </h2>
 
-      <div className="relative my-4 flex aspect-square h-48  min-w-full md:min-w-fit items-center rounded-full md:justify-center">
+      <div className="relative my-4 flex aspect-square h-48  min-w-full items-center rounded-full md:min-w-fit md:justify-center">
         {currentImage.image && (
           <Image
             fill={true}
             src={currentImage.image}
             objectFit="contain"
-            className="rounded-4xl w-fit"
+            className="w-fit rounded-4xl"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             alt="testing"
           />
@@ -199,8 +199,8 @@ const Step3 = (props: StepProps) => {
           sizes={['l', 'l', 'l']}
           className="w-full"
           onClick={async () => {
-            if (!currentImage.labels) return null
-            const res = await getImageHashtag(currentImage.labels.join(', '))
+          //   if (!currentImage.labels) return null
+          //   const res = await getImageHashtag(currentImage.labels.join(', '))
             updateHashtag(
               res.data.map((item) => {
                 return {
