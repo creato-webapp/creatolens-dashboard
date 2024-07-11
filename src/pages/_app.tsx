@@ -17,7 +17,6 @@ import { ModalProvider } from 'src/context/ModalContext'
 
 import ErrorComponent from './error'
 
-
 function MyApp({
   Component,
   pageProps,

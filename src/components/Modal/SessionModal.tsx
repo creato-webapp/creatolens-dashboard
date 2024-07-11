@@ -5,7 +5,7 @@ import { useRouter } from 'next/router'
 import { Button } from '@components/Button'
 import { Status } from 'src/context/DialogueContext'
 import { useAccount } from 'src/hooks/useAccount'
-import { useDialogues }  from 'src/hooks/useDialogues'
+import { useDialogues } from 'src/hooks/useDialogues'
 
 import { GenericModal } from './GenericModal'
 

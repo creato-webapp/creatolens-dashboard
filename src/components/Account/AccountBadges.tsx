@@ -2,7 +2,6 @@ import { Badges } from '@components/Badges'
 import { BadgesType } from 'src/constants/badges'
 import STATUS, { IAccountStatusType } from 'src/constants/status'
 
-
 const STATUS_TO_VARIANT_MAP: Record<IAccountStatusType, BadgesType> = {
   [STATUS.active]: 'success',
   [STATUS.blocked]: 'error',

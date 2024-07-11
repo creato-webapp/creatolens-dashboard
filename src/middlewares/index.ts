@@ -1,2 +1,2 @@
-export * from './auth';
-export { default as rateLimitMiddleware } from './rateLimit';
+export * from './auth'
+export { default as rateLimitMiddleware } from './rateLimit'

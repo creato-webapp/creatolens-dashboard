@@ -12,10 +12,9 @@ import { Paragraph } from '@components/Typography'
 import { Status } from 'src/context/DialogueContext'
 import { ModalKeyEnum } from 'src/context/ModalContext'
 import { useAccount } from 'src/hooks/useAccount'
-import { useDialogues }  from 'src/hooks/useDialogues'
+import { useDialogues } from 'src/hooks/useDialogues'
 import { useModals } from 'src/hooks/useModal'
 import dayjs from 'src/utils/dayjs'
-
 
 interface AccountInfoCardProps {
   account: IAccount
@@ -125,7 +124,7 @@ const AccountInfoCard: React.FC<AccountInfoCardProps> = ({ account }) => {
           <Paragraph key={'0'} size={'lg'} bold className="font-bold">
             Status
           </Paragraph>
-          <AccountBadges status={account.status}/>
+          <AccountBadges status={account.status} />
         </div>
       ),
     },

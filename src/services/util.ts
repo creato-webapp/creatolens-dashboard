@@ -61,8 +61,6 @@ export function hoursAgo(dateString: string): string {
   return `${diffInHours}H ago`
 }
 
-
-
 export function formatDate(datetimeStr: string): string {
   return dayjs(datetimeStr, 'YYYY-MM-DDTHH:mm:ss').local().format('DD MMM YYYY')
 }

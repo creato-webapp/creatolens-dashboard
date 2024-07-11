@@ -6,7 +6,6 @@ import GoogleProvider from 'next-auth/providers/google'
 
 import { FireStoreAdapterWrapper, FirebaseConfig } from '@services/customAdapter'
 
-
 type NextAuthOptionsCallback = (req: NextApiRequest, res: NextApiResponse) => NextAuthOptions
 
 export interface CombinedUser extends User {

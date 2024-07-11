@@ -14,9 +14,9 @@ export default async function accountQueryHandler(req: NextApiRequest, res: Next
       const response = await AccountInstance.get(ENDPOINT_BACKEND.AVAILABLE_ACCOUNTS, {
         params: {
           filter: 'username != null',
-          'page_number':pageNumber,
-          'page_size': pageSize,
-          'orderby': orderBy,
+          page_number: pageNumber,
+          page_size: pageSize,
+          orderby: orderBy,
           isAsc,
         },
         headers: {
