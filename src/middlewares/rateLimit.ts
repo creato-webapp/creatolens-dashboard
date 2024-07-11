@@ -1,8 +1,11 @@
 import { Ratelimit } from '@upstash/ratelimit'
 import { kv } from '@vercel/kv'
+import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 import { NextRequest, NextResponse } from 'next/server'
 
 import ENDPOINT_API from '../constants/endpoints/api'
+
+const LOCAL_IP = '127.0.0.1'
 
 const ratelimit = new Ratelimit({
   redis: kv,
@@ -10,15 +13,13 @@ const ratelimit = new Ratelimit({
 })
 
 export default async function rateLimitMiddleware(request: NextRequest) {
-  if (!request.nextUrl.pathname.startsWith(ENDPOINT_API.LABEL_IMAGE)) {
-    return NextResponse.next()
-  }
+  if (request.nextUrl.pathname.startsWith(ENDPOINT_API.LABEL_IMAGE)) {
+    const ip = request.ip ?? LOCAL_IP
+    const { success } = await ratelimit.limit(ip)
 
-  const ip = request.ip ?? '127.0.0.1'
-  const { success } = await ratelimit.limit(ip)
-
-  if (!success) {
-    return new NextResponse('Too Many Requests', { status: 429 })
+    if (!success) {
+      return new NextResponse(ReasonPhrases.TOO_MANY_REQUESTS, { status: StatusCodes.TOO_MANY_REQUESTS })
+    }
   }
 
   return NextResponse.next()
