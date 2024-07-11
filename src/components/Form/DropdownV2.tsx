@@ -16,11 +16,13 @@ interface DropdownProps extends HTMLProps<HTMLSelectElement> {
   onValueChange?: (value: string | number) => void
   dropDownSizes?: [DropdownSize, DropdownSize, DropdownSize]
   icon?: React.ReactNode
+  selectedValue?: string
+  setSelectedValue?: (arg: string | number) => void
 }
 
-const Dropdown: React.FC<DropdownProps> = ({ name = '', options, defaultValue, onValueChange, dropDownSizes, icon }) => {
-  const [selectedValue, setSelectedValue] = useState(defaultValue || name)
+const Dropdown: React.FC<DropdownProps> = ({ name, options, onValueChange, dropDownSizes, icon }) => {
   const [isDropdownNotSelected, setIsDropdownNotSelected] = useState(true)
+  const [selectedValue, setSelectedValue] = useState<string | number>(name || '')
   const [isOpen, setIsOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
@@ -31,6 +33,7 @@ const Dropdown: React.FC<DropdownProps> = ({ name = '', options, defaultValue, o
 
   const handleOptionSelect = useCallback(
     (value: string | number) => () => {
+      if (!setSelectedValue) return
       setSelectedValue(value)
       setIsOpen(false)
       setIsDropdownNotSelected(false)
@@ -38,7 +41,7 @@ const Dropdown: React.FC<DropdownProps> = ({ name = '', options, defaultValue, o
         onValueChange(value)
       }
     },
-    [onValueChange]
+    [onValueChange, setSelectedValue]
   )
 
   const handleToggleMenu = () => {

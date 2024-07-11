@@ -51,7 +51,6 @@ const TopRelatedHashtagCard: React.FC<Props> = ({ hashtags }) => {
       isDropdown={true}
       extra={
         <Dropdown
-          name="numberOfHashes"
           options={DropdownOptions}
           defaultValue={numberOfHashes}
           onValueChange={(value) => setNumberOfHashes(value)}

@@ -14,6 +14,11 @@ module.exports = {
     {
       pattern: /text-(error|warning|successful)-(500|600|700)/,
     },
+    'aspect-[16/9]',
+    'aspect-[9/16]',
+    'aspect-[4/3]',
+    'aspect-[3/4]',
+    'aspect-[1/1]',
   ],
   theme: {
     fontFamily: {

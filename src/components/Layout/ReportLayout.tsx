@@ -84,7 +84,7 @@ const ReportLayout = (props: Prop) => {
           <div className="hidden md:flex">
             {instaBotList && (
               <Dropdown
-                className='md:min-w-40'
+                className="md:min-w-40"
                 onValueChange={(e) => onAccountChange(e)}
                 value={selectedAccount?.id}
                 defaultValue={selectedAccount?.id}
@@ -96,7 +96,7 @@ const ReportLayout = (props: Prop) => {
         <div className="flex w-full flex-col justify-between gap-7 md:flex-row">
           <div className="flex w-full flex-row items-center gap-2">
             <div className="w-1/10 flex">
-                <Avatar size={'medium'} src={profile?.data.image ? profile.data.image : IMAGE.BOT_CREATO} fallbackSrc={IMAGE.BOT_CREATO} />
+              <Avatar size={'medium'} src={profile?.data.image ? profile.data.image : IMAGE.BOT_CREATO} fallbackSrc={IMAGE.BOT_CREATO} />
             </div>
 
             <h1 className="hidden text-text-secondary md:flex">{selectedAccount && '@' + selectedAccount.username}</h1>
@@ -182,10 +182,12 @@ const ReportLayout = (props: Prop) => {
                 Search Hashtag by Text
               </Primary>
             </Link>
-            <Primary className="flex  justify-center">
-              <PlusIcon className="h-6 w-6" />
-              Search Hashtag By Image
-            </Primary>
+            <Link href={'/hashtag/hashtag-to-image'}>
+              <Primary className="flex justify-center">
+                <PlusIcon className="h-6 w-6" />
+                Search Hashtag By Image
+              </Primary>
+            </Link>
           </div>
         </Card>
         <CardWithIgPost
@@ -201,25 +203,29 @@ const ReportLayout = (props: Prop) => {
             <div>
               {loading.mostRepeatedPostIsLoading ? (
                 <Skeleton />
-              ) : mostRepeatedPost && (
-                <div>
-                  <Badges size="sm" status="text-secondary">
-                    <ClockIcon />
-                    {dayjs(mostRepeatedPost?.latest_created_at).format('YYYY-MM-DD HH:mm:ss') + ' ' + hoursAgo(mostRepeatedPost.latest_created_at!)}
-                  </Badges>
-                </div>
-              ) }
+              ) : (
+                mostRepeatedPost && (
+                  <div>
+                    <Badges size="sm" status="text-secondary">
+                      <ClockIcon />
+                      {dayjs(mostRepeatedPost?.latest_created_at).format('YYYY-MM-DD HH:mm:ss') + ' ' + hoursAgo(mostRepeatedPost.latest_created_at!)}
+                    </Badges>
+                  </div>
+                )
+              )}
             </div>
             <div>
               {loading.mostRepeatedPostIsLoading ? (
                 <Skeleton />
-              ) : mostRepeatedPost && (
-                <Badges size="sm" status="text-secondary">
-                  <ClockIcon />
-                  {dayjs(mostRepeatedPost?.second_latest_created_at).format('YYYY-MM-DD HH:mm:ss') +
-                    ' ' +
-                    hoursAgo(mostRepeatedPost?.second_latest_created_at as string)}
-                </Badges>
+              ) : (
+                mostRepeatedPost && (
+                  <Badges size="sm" status="text-secondary">
+                    <ClockIcon />
+                    {dayjs(mostRepeatedPost?.second_latest_created_at).format('YYYY-MM-DD HH:mm:ss') +
+                      ' ' +
+                      hoursAgo(mostRepeatedPost?.second_latest_created_at as string)}
+                  </Badges>
+                )
               )}
             </div>
           </div>

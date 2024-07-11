@@ -11,6 +11,8 @@ import { Layout } from '@components/Layout'
 import Modals from '@components/Modal'
 import Dialogue from 'src/components/Dialogue'
 import { DialogueProvider } from 'src/context/DialogueContext'
+import { HashtagImageProvider } from 'src/context/HashtagToImageContext'
+import { ImageHashtagProvider } from 'src/context/ImageToHashtagContext'
 import { ModalProvider } from 'src/context/ModalContext'
 
 import ErrorComponent from './error'
@@ -32,7 +34,11 @@ function MyApp({
         <ErrorBoundary errorComponent={ErrorComponent}>
           <DialogueProvider>
             <ModalProvider>
-              <Component {...pageProps} />
+              <ImageHashtagProvider>
+                <HashtagImageProvider>
+                  <Component {...pageProps} />
+                </HashtagImageProvider>
+              </ImageHashtagProvider>
               <Dialogue />
               <Modals />
             </ModalProvider>
