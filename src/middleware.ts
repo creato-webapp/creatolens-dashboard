@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse  } from 'next/server'
 
-import { authMiddleware } from './middlewares/authMiddleware'
-import rateLimitMiddleware from './middlewares/rateLimitMiddleware'
+import { authMiddleware, rateLimitMiddleware } from './middlewares'
 
 
 async function runMiddlewares(request: NextRequest, middlewares: CallableFunction[]) {
