@@ -42,7 +42,7 @@ const Step2 = (props: StepProps) => {
   const currentImage = useMemo(() => {
     return images[currentImageIndex]
   }, [images, currentImageIndex])
-  
+
   return (
     <div className="flex w-full flex-col gap-4 md:flex-row">
       <div className="relative my-4 flex h-48 w-full items-center justify-center md:w-1/2">

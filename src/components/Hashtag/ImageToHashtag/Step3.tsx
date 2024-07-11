@@ -128,7 +128,7 @@ const Step3 = () => {
         })}
       </div>
       <div className="my-4 flex w-full flex-col gap-4">
-        <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 md:grid-cols-3">
           <Outline onClick={onClickClearAll} sizes={['m', 'l', 'l']}>
             Clear All
           </Outline>

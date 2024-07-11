@@ -13,8 +13,6 @@ import { PaginationMetadata } from '@services/Account/AccountInterface'
 import { useAccountErrorPagination } from 'src/hooks/useAccountErrors'
 import dayjs from 'src/utils/dayjs'
 
-
-
 type Props = {
   paginationData: PaginationMetadata<IAccountError[]>
 }

@@ -35,7 +35,6 @@ export const usePagination = ({ pageNumber = 1, pageSize = 10, orderBy = 'create
     isAsc: isAsc,
   })
 
-
   const updateOrderBy = (newOrderBy: string) => {
     setPageParams((prevParams) => ({
       ...prevParams,

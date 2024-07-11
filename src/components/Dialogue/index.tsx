@@ -1,7 +1,7 @@
 import Image from 'next/image'
 
 import { Status } from 'src/context/DialogueContext'
-import { useDialogues }  from 'src/hooks/useDialogues'
+import { useDialogues } from 'src/hooks/useDialogues'
 
 const color = {
   [Status.FAILED]: {

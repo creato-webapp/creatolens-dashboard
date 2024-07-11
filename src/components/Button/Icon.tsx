@@ -1,10 +1,10 @@
 import React from 'react'
 
-import { ButtonProps } from './interface';
+import { ButtonProps } from './interface'
 import Outline from './Outline'
 import Primary from './Primary'
 
-const DEFAULT_CLASS_NAME = 'rounded-full shrink-0 grow-0 md:px-2 px-1';
+const DEFAULT_CLASS_NAME = 'rounded-full shrink-0 grow-0 md:px-2 px-1'
 interface IconButtonProps extends ButtonProps {
   outline?: boolean
 }

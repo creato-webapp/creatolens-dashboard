@@ -12,9 +12,6 @@ import { PaginationMetadata, getSessionPagination } from '@services/Account/Sess
 import { useAccountSessionPagination } from 'src/hooks/useAccountSession'
 import dayjs from 'src/utils/dayjs'
 
-
-
-
 type Props = {
   paginationData: PaginationMetadata<IAccountSession[]>
 }

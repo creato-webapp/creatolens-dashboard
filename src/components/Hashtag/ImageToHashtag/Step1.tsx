@@ -1,4 +1,4 @@
-import { useCallback, useState  } from 'react'
+import { useCallback, useState } from 'react'
 
 import Primary from '@components/Button/Primary'
 import { uploadImage } from '@services/Image'
@@ -55,7 +55,7 @@ const Step1 = (props: StepProps) => {
           )}
         </div>
         <div className="flex items-center justify-center">
-        <Primary disabled={uploading} sizes={['m', 'm', 'm']} onClick={onClickButton}>
+          <Primary disabled={uploading} sizes={['m', 'm', 'm']} onClick={onClickButton}>
             Annotate
           </Primary>
         </div>

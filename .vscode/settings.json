@@ -1,14 +1,15 @@
 {
   "cSpell.words": ["Firestore", "Hashet", "ratelimit"],
+  "editor.quickSuggestions": {
+    "strings": true
+  },
+  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
   "tailwindCSS.includeLanguages": {
     "html": "html",
     "javascript": "javascript",
     "css": "css",
     "typescript": "typescript",
     "plaintext": "typescript"
-  },
-  "editor.quickSuggestions": {
-    "strings": true
   },
   "tailwindCSS.experimental.classRegex": [
     ["Styles \\=([^;]*);", "'([^']*)'"],

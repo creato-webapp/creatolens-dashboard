@@ -47,19 +47,17 @@ export async function uploadImage(
     formData.append('file', blobBody, imageDetails.path)
     formData.append('username', username)
 
-
     const tempConfig = {
       maxBodyLength: 8 * 1024 * 1024,
       maxContentLength: 8 * 1024 * 1024,
       ...customConfig,
     }
 
-
     const response = await Fetcher.POST<AxiosResponse>('/api/image', formData, {
       ...tempConfig,
       headers: {
         'Content-Type': 'multipart/form-data',
-        'keepAlive': false,
+        keepAlive: false,
       },
     })
     return response.data

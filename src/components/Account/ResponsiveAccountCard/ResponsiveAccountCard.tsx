@@ -59,7 +59,7 @@ const ResponsiveAccountCard: FC<ResponsiveAccountCardProps> = ({ rowData }) => {
           href={{
             pathname: ROUTE.ACCOUNT_BOT_GET,
             query: { id: rowData.id },
-          }} 
+          }}
           as="/accounts/bot"
           legacyBehavior
         >

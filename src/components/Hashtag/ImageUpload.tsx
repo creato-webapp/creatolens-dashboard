@@ -49,7 +49,7 @@ const ImageUpload = (props: IImageUpload) => {
   })
 
   const clearFile = () => {
-    setUploadedImage("")
+    setUploadedImage('')
     setImageDetails({})
   }
 
@@ -72,8 +72,8 @@ const ImageUpload = (props: IImageUpload) => {
       <div style={{ display: 'flex', width: '100%', flexDirection: 'column', alignItems: 'center' }}>
         {uploadedImage ? (
           <div style={{ textAlign: 'center' }} className=" relative">
-            <div className=" absolute h-12 w-12 right-5 top-5 flex cursor-pointer rounded-full bg-accent1-500 p-4 text-white" onClick={clearFile}>
-              <div className="flex w-full h-full items-center justify-center">X</div>
+            <div className=" absolute right-5 top-5 flex h-12 w-12 cursor-pointer rounded-full bg-accent1-500 p-4 text-white" onClick={clearFile}>
+              <div className="flex h-full w-full items-center justify-center">X</div>
             </div>
             <img src={uploadedImage} alt="Uploaded" style={{ maxWidth: '100%', maxHeight: 'auto', borderRadius: '10px' }} />
           </div>

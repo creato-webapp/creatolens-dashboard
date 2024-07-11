@@ -129,13 +129,13 @@ const BlockedAccountsPage = ({ paginationData }: Props) => {
                 </Table.BodyCell>
                 <Table.BodyCell key={e.id}>
                   <Link
-                      href={{
-                        pathname: ROUTE.ACCOUNT_BOT_GET,
-                        query: { id: e.id },
-                      }}
-                      as="/accounts/bot"
-                      legacyBehavior
-                    >
+                    href={{
+                      pathname: ROUTE.ACCOUNT_BOT_GET,
+                      query: { id: e.id },
+                    }}
+                    as="/accounts/bot"
+                    legacyBehavior
+                  >
                     <div className="flex w-full cursor-pointer flex-row items-center justify-center gap-2">
                       <EditIcon size={16} className="fill-accent2-500" />
                       <div className="font-semibold text-accent2-500">Edit</div>

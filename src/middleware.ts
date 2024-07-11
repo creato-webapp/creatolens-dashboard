@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse  } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 
 import { authMiddleware, rateLimitMiddleware } from './middlewares'
 
@@ -17,12 +17,6 @@ export default async function middleware(request: NextRequest) {
   return await runMiddlewares(request, middlewares)
 }
 
-export const config = { 
-  matcher: [
-    '/accounts/:path*', 
-    '/recommendation', 
-    '/guide',
-    '/api/image/:path*',
-    '/api/hashtag/:path*',
-  ]
+export const config = {
+  matcher: ['/accounts/:path*', '/recommendation', '/guide', '/api/image/:path*', '/api/hashtag/:path*'],
 }
