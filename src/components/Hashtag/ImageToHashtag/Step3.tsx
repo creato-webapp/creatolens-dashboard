@@ -40,7 +40,7 @@ const Step3 = (props: StepProps) => {
         })),
       },
       {
-        name: 'Greater Than 80% Related',
+        name: '80-90% Related',
         options: mediumConfidence.map((hashtag) => ({
           label: hashtag.hashtag,
           value: hashtag.hashtag,
@@ -148,19 +148,18 @@ const Step3 = (props: StepProps) => {
         Get hashtag recommendation
       </h2>
 
-      <div className="relative my-4 flex h-64 w-full items-center justify-center rounded-full md:w-full">
+      <div className="relative my-4 flex aspect-square h-48  min-w-full md:min-w-fit items-center rounded-full md:justify-center">
         {currentImage.image && (
           <Image
             fill={true}
             src={currentImage.image}
-            objectFit="cover"
-            className="rounded-4xl"
-            // sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            objectFit="contain"
+            className="rounded-4xl w-fit"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             alt="testing"
           />
         )}
       </div>
-
       <div className="flex flex-col gap-4">
         {labelOptions && labelOptions?.length > 0 && (
           <DropdownCheckbox
@@ -173,18 +172,14 @@ const Step3 = (props: StepProps) => {
         )}
       </div>
       <div className="my-4 border-b md:hidden"></div>
-      <h3 className="text-text-secondary">{`${hashtagsLength} hashtags discovered`}</h3>
+      <h3 className="my-4 text-text-secondary">{`${hashtagsLength} hashtags discovered`}</h3>
       <div>
         {options &&
           options.map((option) => {
             return (
-              <DropdownCheckbox
-                dropDownSizes={['l', 'l', 'l']}
-                key={`${option.name}-dropdown`}
-                name={option.name}
-                options={option.options}
-                onValueChange={onClickHashtag}
-              />
+              <div key={`${option.name}-dropdown`} className="my-4">
+                <DropdownCheckbox dropDownSizes={['l', 'l', 'l']} name={option.name} options={option.options} onValueChange={onClickHashtag} />
+              </div>
             )
           })}
       </div>
