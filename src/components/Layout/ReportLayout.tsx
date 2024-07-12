@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { FC, useMemo } from 'react'
 
 import Image from 'next/image'
 import Link from 'next/link'
@@ -15,9 +15,8 @@ import Dropdown from '@components/Form/Dropdown'
 import ClockIcon from '@components/Icon/ClockIcon'
 import PlusIcon from '@components/Icon/PlusIcon'
 import { IProfile, KeywordData, MostRepeatedPost } from '@services/Meta'
-import { hoursAgo } from '@services/util'
 import IMAGE from 'src/constants/image'
-import dayjs from 'src/utils/dayjs'
+import dayjs, { DATE_FORMATE } from 'src/utils/dayjs'
 
 interface Prop {
   days: number
@@ -40,6 +39,19 @@ interface Prop {
   profile?: {
     data: IProfile
   }
+}
+
+const DateTimeLabel: FC<{ date: dayjs.ConfigType }> = ({ date }) => {
+  const targetDate = dayjs(date)
+  const currentDate = dayjs()
+  const hourDiff = currentDate.diff(targetDate, 'hour')
+
+  return (
+    <Badges size="sm" status="text-secondary">
+      <ClockIcon className="pr-1" />
+      {`\r${targetDate.format(DATE_FORMATE.YYYYMMDD_HHMMSS)} ${hourDiff}H ago`}
+    </Badges>
+  )
 }
 
 const ReportLayout = (props: Prop) => {
@@ -201,31 +213,13 @@ const ReportLayout = (props: Prop) => {
         >
           <div className="flex flex-col flex-wrap gap-2">
             <div>
-              {loading.mostRepeatedPostIsLoading ? (
-                <Skeleton />
-              ) : (
-                mostRepeatedPost && (
-                  <div>
-                    <Badges size="sm" status="text-secondary">
-                      <ClockIcon />
-                      {dayjs(mostRepeatedPost?.latest_created_at).format('YYYY-MM-DD HH:mm:ss') + ' ' + hoursAgo(mostRepeatedPost.latest_created_at!)}
-                    </Badges>
-                  </div>
-                )
-              )}
+              {loading.mostRepeatedPostIsLoading ? <Skeleton /> : mostRepeatedPost && <DateTimeLabel date={mostRepeatedPost?.latest_created_at} />}
             </div>
             <div>
               {loading.mostRepeatedPostIsLoading ? (
                 <Skeleton />
               ) : (
-                mostRepeatedPost && (
-                  <Badges size="sm" status="text-secondary">
-                    <ClockIcon />
-                    {dayjs(mostRepeatedPost?.second_latest_created_at).format('YYYY-MM-DD HH:mm:ss') +
-                      ' ' +
-                      hoursAgo(mostRepeatedPost?.second_latest_created_at as string)}
-                  </Badges>
-                )
+                mostRepeatedPost && <DateTimeLabel date={mostRepeatedPost?.second_latest_created_at} />
               )}
             </div>
           </div>
