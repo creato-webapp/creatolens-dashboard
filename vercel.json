@@ -1,0 +1,13 @@
+{
+  "framework": "nextjs",
+  "installCommand": "npm install",
+  "git": {
+    "deploymentEnabled": {
+      "main": false,
+      "sit": true
+    }
+  },
+  "github": {
+    "autoJobCancelation": true
+  }
+}
