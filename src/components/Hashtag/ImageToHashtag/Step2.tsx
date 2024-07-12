@@ -70,7 +70,7 @@ const Step2 = (props: StepProps) => {
           <h2 className="flex items-center font-extrabold">Image label annotation</h2>
         </div>
 
-        <div className="relative my-4 flex h-full aspect-square w-full min-w-full items-center justify-center rounded-full">
+        <div className="relative my-4 flex aspect-square h-full w-full min-w-full items-center justify-center rounded-full">
           {currentImage.image && (
             <Image
               fill={true}
@@ -98,7 +98,7 @@ const Step2 = (props: StepProps) => {
                   <Badges
                     key={`key-${label}`}
                     rounded
-                    className='cursor-pointer'
+                    className="cursor-pointer"
                     // isDisabled={currentImage.selectedLabels.includes(label)}
                     isOutline
                     // isOutline

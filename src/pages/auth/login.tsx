@@ -5,9 +5,10 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { getProviders, signIn, signOut, useSession } from 'next-auth/react'
 
-import { Button } from '@components/Button'
+import PrimaryButton from '@components/Button/Primary'
 import Card from '@components/Card'
 import { ErrorCodes } from 'src/enums/ErrorCodeEnums'
+
 interface loginProps {
   providers: Providers
 }
@@ -59,6 +60,7 @@ const Login: FC<loginProps> = ({ providers }) => {
             </div>
             <div>
               <button
+                id="logout-button"
                 onClick={() => {
                   deleteCookie('idToken')
                   signOut()
@@ -75,9 +77,9 @@ const Login: FC<loginProps> = ({ providers }) => {
             {Object.values(providers).map((provider) => (
               <div key={provider.name} className="flex justify-center">
                 {provider.name === 'Google' && (
-                  <Button.Text loading={false} onClick={() => signIn(provider.id)} className="">
+                  <PrimaryButton id={'login'} loading={false} onClick={() => signIn(provider.id)}>
                     Sign in
-                  </Button.Text>
+                  </PrimaryButton>
                 )}
               </div>
             ))}
