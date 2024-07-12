@@ -1,9 +1,9 @@
 //TODO write Get, Gets, Update,
 import { AxiosRequestConfig } from 'axios'
 
-import { IAccountSession } from 'src/pages/accounts/session'
+import { IAccountSession } from 'pages/accounts/session'
 
-import { Fetcher } from '../fetcher'
+import { Fetcher } from '../../helpers/fetcher'
 
 export interface PaginationParams {
   pageNumber: number

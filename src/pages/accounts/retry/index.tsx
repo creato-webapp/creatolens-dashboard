@@ -10,11 +10,10 @@ import EditIcon from '@components/Icon/EditIcon'
 import Pagination from '@components/Pagination'
 import { Table } from '@components/Table'
 import { usePagination } from '@hooks/usePagination'
+import { useGetRetryAccountsPagination } from '@hooks/useRetryAccount'
 import { PaginationMetadata } from '@services/Account/AccountInterface'
 import { getRetryAccountsPagination } from '@services/Account/RetryAccount'
-import { useGetRetryAccountsPagination } from 'src/hooks/useRetryAccount'
-import dayjs from 'src/utils/dayjs'
-
+import dayjs from '@utils/dayjs'
 
 type Props = {
   paginationData: PaginationMetadata<IRetryAccount[]>

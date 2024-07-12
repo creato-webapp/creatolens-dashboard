@@ -1,5 +1,7 @@
 import { useMemo } from 'react'
 
+import IMAGE from '@constants/image'
+import dayjs from '@utils/dayjs'
 import Image from 'next/image'
 import Link from 'next/link'
 import Skeleton from 'react-loading-skeleton'
@@ -16,8 +18,6 @@ import ClockIcon from '@components/Icon/ClockIcon'
 import PlusIcon from '@components/Icon/PlusIcon'
 import { IProfile, KeywordData, MostRepeatedPost } from '@services/Meta'
 import { hoursAgo } from '@services/util'
-import IMAGE from 'src/constants/image'
-import dayjs from 'src/utils/dayjs'
 
 interface Prop {
   days: number
@@ -84,7 +84,7 @@ const ReportLayout = (props: Prop) => {
           <div className="hidden md:flex">
             {instaBotList && (
               <Dropdown
-                className='md:min-w-40'
+                className="md:min-w-40"
                 onValueChange={(e) => onAccountChange(e)}
                 value={selectedAccount?.id}
                 defaultValue={selectedAccount?.id}
@@ -96,7 +96,7 @@ const ReportLayout = (props: Prop) => {
         <div className="flex w-full flex-col justify-between gap-7 md:flex-row">
           <div className="flex w-full flex-row items-center gap-2">
             <div className="w-1/10 flex">
-                <Avatar size={'medium'} src={profile?.data.image ? profile.data.image : IMAGE.BOT_CREATO} fallbackSrc={IMAGE.BOT_CREATO} />
+              <Avatar size={'medium'} src={profile?.data.image ? profile.data.image : IMAGE.BOT_CREATO} fallbackSrc={IMAGE.BOT_CREATO} />
             </div>
 
             <h1 className="hidden text-text-secondary md:flex">{selectedAccount && '@' + selectedAccount.username}</h1>
@@ -201,25 +201,29 @@ const ReportLayout = (props: Prop) => {
             <div>
               {loading.mostRepeatedPostIsLoading ? (
                 <Skeleton />
-              ) : mostRepeatedPost && (
-                <div>
-                  <Badges size="sm" status="text-secondary">
-                    <ClockIcon />
-                    {dayjs(mostRepeatedPost?.latest_created_at).format('YYYY-MM-DD HH:mm:ss') + ' ' + hoursAgo(mostRepeatedPost.latest_created_at!)}
-                  </Badges>
-                </div>
-              ) }
+              ) : (
+                mostRepeatedPost && (
+                  <div>
+                    <Badges size="sm" status="text-secondary">
+                      <ClockIcon />
+                      {dayjs(mostRepeatedPost?.latest_created_at).format('YYYY-MM-DD HH:mm:ss') + ' ' + hoursAgo(mostRepeatedPost.latest_created_at!)}
+                    </Badges>
+                  </div>
+                )
+              )}
             </div>
             <div>
               {loading.mostRepeatedPostIsLoading ? (
                 <Skeleton />
-              ) : mostRepeatedPost && (
-                <Badges size="sm" status="text-secondary">
-                  <ClockIcon />
-                  {dayjs(mostRepeatedPost?.second_latest_created_at).format('YYYY-MM-DD HH:mm:ss') +
-                    ' ' +
-                    hoursAgo(mostRepeatedPost?.second_latest_created_at as string)}
-                </Badges>
+              ) : (
+                mostRepeatedPost && (
+                  <Badges size="sm" status="text-secondary">
+                    <ClockIcon />
+                    {dayjs(mostRepeatedPost?.second_latest_created_at).format('YYYY-MM-DD HH:mm:ss') +
+                      ' ' +
+                      hoursAgo(mostRepeatedPost?.second_latest_created_at as string)}
+                  </Badges>
+                )
               )}
             </div>
           </div>

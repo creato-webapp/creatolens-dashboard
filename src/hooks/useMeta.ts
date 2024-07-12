@@ -1,9 +1,8 @@
 import useSWR from 'swr'
 
 import { cancelMiddleware } from '@api/middleware'
-import { getKeyword, getMostRepeatedPost,getMostRepeatedPostImage, getPostCount, getProfile } from '@services/Meta'
-import { CountryEnum } from 'src/enums/CountryCodeEnums';
-
+import { getKeyword, getMostRepeatedPost, getMostRepeatedPostImage, getPostCount, getProfile } from '@services/Meta'
+import { CountryEnum } from 'enums/CountryCodeEnums'
 
 export const useKeyword = (input: { accId?: string; days: number; profile_id?: string }) => {
   const { data, error, isLoading, mutate, ...swr } = useSWR({ url: 'api/dashboard/keyword', args: input }, getKeyword, {
@@ -36,13 +35,13 @@ export const usePostCount = (input: { accId?: string; days: number; profile_id?:
   }
 }
 
-export const useMostRepeatedPost = (input: { accId?: string; days: number; profile_id?: string, session_id:string, location:string }) => {
+export const useMostRepeatedPost = (input: { accId?: string; days: number; profile_id?: string; session_id: string; location: string }) => {
   const { data, error, mutate, ...swr } = useSWR({ url: 'api/dashboard/mostRepeatedPost', args: input }, getMostRepeatedPost, {
     refreshInterval: 0,
     revalidateOnFocus: false,
     use: [cancelMiddleware],
   })
-  
+
   return {
     data,
     error: error,
@@ -66,7 +65,7 @@ export const useMostRepeatedPostImage = (input: { shortcode?: string; batch_id?:
   }
 }
 
-export const useProfile = (input: { profile_id?: string, session_id: string, location: CountryEnum }) => {
+export const useProfile = (input: { profile_id?: string; session_id: string; location: CountryEnum }) => {
   const { data, error, mutate, ...swr } = useSWR({ url: 'api/dashboard/profileImage', args: input }, getProfile, {
     refreshInterval: 0,
     revalidateOnFocus: false,

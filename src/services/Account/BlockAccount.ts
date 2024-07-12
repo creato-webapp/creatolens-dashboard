@@ -6,7 +6,7 @@ import { Cookies } from '@components/Account/Account/interface'
 
 import { PaginationMetadata, PaginationParams } from './AccountInterface'
 
-import { Fetcher } from '../fetcher'
+import { Fetcher } from '../../helpers/fetcher'
 
 type PartialAccount = Partial<{
   id: string

@@ -1,4 +1,4 @@
-import { CountryEnum } from 'src/enums/CountryCodeEnums'
+import { CountryEnum } from 'enums/CountryCodeEnums'
 
 export interface Cookies {
   [key: string]: string

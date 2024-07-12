@@ -1,8 +1,8 @@
 import { AxiosRequestConfig } from 'axios'
 
-import { CountryEnum } from 'src/enums/CountryCodeEnums'
+import { CountryEnum } from 'enums/CountryCodeEnums'
 
-import { Fetcher } from './fetcher'
+import { Fetcher } from '../helpers/fetcher'
 
 export interface PostData {
   count: number
@@ -159,8 +159,8 @@ export async function getMostRepeatedPostImage(data: {
 
 export async function getProfile(data: {
   args: {
-    profile_id: string,
-    session_id: string,
+    profile_id: string
+    session_id: string
     location: CountryEnum
   }
 }) {

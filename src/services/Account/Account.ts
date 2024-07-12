@@ -1,13 +1,13 @@
 //TODO write Get, Gets, Update,
+import { IAccountStatusType } from '@constants/status'
 import { AxiosRequestConfig } from 'axios'
 
 import { IAccount } from '@components/Account/Account'
-import { IAccountStatusType } from 'src/constants/status'
 
 import { PaginationMetadata, PaginationParams } from './AccountInterface'
 
 import { CountryEnum } from '../../enums/CountryCodeEnums'
-import { Fetcher } from '../fetcher'
+import { Fetcher } from '../../helpers/fetcher'
 interface Cookies {
   [key: string]: string
 }

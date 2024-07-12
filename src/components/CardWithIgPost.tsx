@@ -35,7 +35,7 @@ export default function CardWithIgPost({
     <div className={`flex  w-full flex-col items-center gap-6 border border-slate-300 p-6 shadow-lg md:flex-row ${className}`}>
       <div className="relative flex min-h-64  w-full items-center justify-center md:min-h-128">
         {isLoading && !instaPost ? (
-          <Skeleton containerClassName='w-full h-full' />
+          <Skeleton containerClassName="w-full h-full" />
         ) : (
           <img
             // sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"

@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
 
-import BADGES, { BadgesType } from 'src/constants/badges'
+import BADGES, { BadgesType } from '@constants/badges'
 
 import XCircleIcon from '../Icon/XCircleIcon'
-
 
 export interface BadgesProps extends React.HTMLAttributes<HTMLDivElement> {
   size?: 'lg' | 'sm'

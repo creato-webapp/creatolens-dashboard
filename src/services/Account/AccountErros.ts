@@ -5,7 +5,7 @@ import { IAccountError } from '@components/Account/AccountErrors/interface'
 
 import { PaginationMetadata, PaginationParams } from './AccountInterface'
 
-import { Fetcher } from '../fetcher'
+import { Fetcher } from '../../helpers/fetcher'
 
 interface ExtendedPaginationParams extends PaginationParams {
   username?: string

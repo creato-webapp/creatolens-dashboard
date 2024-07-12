@@ -9,13 +9,12 @@ import Card from '@components/Card'
 import DynamicForm from '@components/Form/DynamicForm'
 import { IField } from '@components/Form/interface'
 import { Paragraph } from '@components/Typography'
-import { Status } from 'src/context/DialogueContext'
-import { ModalKeyEnum } from 'src/context/ModalContext'
-import { useAccount } from 'src/hooks/useAccount'
-import { useDialogues }  from 'src/hooks/useDialogues'
-import { useModals } from 'src/hooks/useModal'
-import dayjs from 'src/utils/dayjs'
-
+import { Status } from '@context/DialogueContext'
+import { ModalKeyEnum } from '@context/ModalContext'
+import { useAccount } from '@hooks/useAccount'
+import { useDialogues } from '@hooks/useDialogues'
+import { useModals } from '@hooks/useModal'
+import dayjs from '@utils/dayjs'
 
 interface AccountInfoCardProps {
   account: IAccount
@@ -125,7 +124,7 @@ const AccountInfoCard: React.FC<AccountInfoCardProps> = ({ account }) => {
           <Paragraph key={'0'} size={'lg'} bold className="font-bold">
             Status
           </Paragraph>
-          <AccountBadges status={account.status}/>
+          <AccountBadges status={account.status} />
         </div>
       ),
     },
