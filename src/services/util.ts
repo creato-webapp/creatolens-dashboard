@@ -1,7 +1,6 @@
 import axios from 'axios'
 import { User } from 'next-auth'
 
-import dayjs from '../utils/dayjs'
 interface CombinedUser extends User {
   emailVerified: boolean
   roles: string[]
@@ -48,10 +47,6 @@ export const imageToBase64 = (file: File): Promise<string | null> => {
       resolve(null)
     }
   })
-}
-
-export function formatDate(datetimeStr: string): string {
-  return dayjs(datetimeStr, 'YYYY-MM-DDTHH:mm:ss').local().format('DD MMM YYYY')
 }
 
 export function base64ToBlob(base64: string, mimeType: string) {

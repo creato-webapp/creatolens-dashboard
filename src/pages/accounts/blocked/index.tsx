@@ -12,7 +12,6 @@ import { Table } from '@components/Table'
 import { usePagination } from '@hooks/usePagination'
 import { PaginationMetadata } from '@services/Account/AccountInterface'
 import { getBlockedAccountsPagination } from '@services/Account/BlockAccount'
-import { formatDate } from '@services/util'
 import ROUTE from 'src/constants/route'
 import { useGetBlockAccountsPagination } from 'src/hooks/useBlockedAccount'
 
@@ -117,8 +116,8 @@ const BlockedAccountsPage = ({ paginationData }: Props) => {
           <Table.Body className="text-sm font-normal leading-5 text-black">
             {accounts.map((e, index) => (
               <Table.Row key={`table-row-${e.id}-${index}`} className="text-sm">
-                <Table.BodyCell key={`blocked-at-${e.id}`}>{formatDate(e.blocked_at)}</Table.BodyCell>
-                <Table.BodyCell key={`created_at-${e.id}`}>{formatDate(e.created_at)}</Table.BodyCell>
+                <Table.DateTimeCell key={`blocked-at-${e.id}`} date={e.blocked_at} />
+                <Table.DateTimeCell key={`created_at-${e.id}`} date={e.created_at} />
                 <Table.BodyCell key={`blocked-count-${e.id}`}>{e.blocked_count}</Table.BodyCell>
                 <Table.BodyCell key={`last-login-dt-${e.last_login_dt}`}></Table.BodyCell>
                 <Table.BodyCell key={`username-${e.id}`}>

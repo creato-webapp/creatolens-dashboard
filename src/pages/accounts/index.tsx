@@ -18,7 +18,6 @@ import { Table } from '@components/Table'
 import { usePagination } from '@hooks/usePagination'
 import { getAccountsPagination } from '@services/Account/Account'
 import { PaginationMetadata } from '@services/Account/AccountInterface'
-import { formatDate } from '@services/util'
 import ROUTE from 'src/constants/route'
 import { useGetAccountsPagination } from 'src/hooks/useAccount'
 
@@ -176,9 +175,8 @@ const AccountsPage = ({ paginationData }: Props) => {
                   <Table.BodyCell key={`username-${e.id}`}>
                     <div className="flex items-center text-nowrap text-accent1-600">{e.username}</div>
                   </Table.BodyCell>
-                  <Table.BodyCell key={`created_at-${e.id}`}>{formatDate(e.created_at)}</Table.BodyCell>
-                  <Table.BodyCell key={`updated_at-${e.id}`}>{formatDate(e.updated_at)}</Table.BodyCell>
-
+                  <Table.DateTimeCell key={`created_at-${e.id}`} date={e.created_at} />
+                  <Table.DateTimeCell key={`updated_at-${e.id}`} date={e.updated_at} />
                   <Table.BodyCell key={`created_by-${e.id}`}>{e.created_by}</Table.BodyCell>
 
                   <Table.BodyCell key={`post_scrapped_count-${e.id}`}>{e.post_scrapped_count}</Table.BodyCell>

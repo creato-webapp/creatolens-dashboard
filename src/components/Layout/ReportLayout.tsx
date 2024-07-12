@@ -16,7 +16,7 @@ import ClockIcon from '@components/Icon/ClockIcon'
 import PlusIcon from '@components/Icon/PlusIcon'
 import { IProfile, KeywordData, MostRepeatedPost } from '@services/Meta'
 import IMAGE from 'src/constants/image'
-import dayjs, { DATE_FORMATE } from 'src/utils/dayjs'
+import dayjs, { DATE_FORMAT } from 'src/utils/dayjs'
 
 interface Prop {
   days: number
@@ -49,7 +49,7 @@ const DateTimeLabel: FC<{ date: dayjs.ConfigType }> = ({ date }) => {
   return (
     <Badges size="sm" status="text-secondary">
       <ClockIcon className="pr-1" />
-      {`\r${targetDate.format(DATE_FORMATE.YYYYMMDD_HHMMSS)} ${hourDiff}H ago`}
+      {`\r${targetDate.format(DATE_FORMAT.YYYYMMDD_HHMMSS)} ${hourDiff}H ago`}
     </Badges>
   )
 }
