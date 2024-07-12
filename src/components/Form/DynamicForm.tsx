@@ -105,13 +105,7 @@ const DynamicForm = <T,>(props: FormLayoutProps<T>) => {
               </div>
             ))}
           <div className={`flex justify-end pb-4 `}>
-            <Button.Primary
-              sizes={buttonSizes}
-              className={`md:w-full ${buttonStyles}`}
-              disabled={!allowSubmit}
-              type="submit"
-              loading={loading}
-            >
+            <Button.Primary sizes={buttonSizes} className={`md:w-full ${buttonStyles}`} disabled={!allowSubmit} type="submit" loading={loading}>
               <h4 className="font-medium">{buttonText}</h4>
             </Button.Primary>
           </div>

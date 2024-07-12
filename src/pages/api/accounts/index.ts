@@ -76,9 +76,9 @@ export default async function accountQueryHandler(req: NextApiRequest, res: Next
           Cookie: req.headers.cookie,
         },
         params: {
-          'page_number':pageNumber,
-          'page_size': pageSize,
-          'orderby': orderBy,
+          page_number: pageNumber,
+          page_size: pageSize,
+          orderby: orderBy,
           isAsc,
         },
       })

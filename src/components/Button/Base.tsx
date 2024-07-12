@@ -39,7 +39,7 @@ const BaseButton: React.FC<ButtonProps> = ({ children, onClick, disabled = false
       type={type}
       onClick={onClick}
       disabled={loading || disabled}
-      className={`flex w-full min-w-fit items-center justify-center gap-2.5 whitespace-nowrap rounded-lg border-2 hover:shadow-sm md:w-auto ${padding} ${className}`}
+      className={`flex w-full min-w-fit items-center justify-center gap-2.5 whitespace-nowrap rounded-lg border-2 hover:shadow-sm ${padding} ${className}`}
       {...res}
     >
       <Spinner loading={loading} />

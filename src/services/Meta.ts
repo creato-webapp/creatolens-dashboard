@@ -160,8 +160,8 @@ export async function getMostRepeatedPostImage(data: {
 
 export async function getProfile(data: {
   args: {
-    profile_id: string,
-    session_id: string,
+    profile_id: string
+    session_id: string
     location: CountryEnum
   }
 }) {

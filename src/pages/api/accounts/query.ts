@@ -4,7 +4,6 @@ import ENDPOINT_BACKEND from 'src/constants/endpoints/backend'
 
 import AccountInstance from '../axiosInstance/Account'
 
-
 export default async function accountDashboardQueryHandler(req: NextApiRequest, res: NextApiResponse) {
   const {
     query: { filter },

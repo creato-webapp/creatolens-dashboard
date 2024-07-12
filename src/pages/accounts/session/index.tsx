@@ -10,10 +10,6 @@ import { Table } from '@components/Table'
 import { usePagination } from '@hooks/usePagination'
 import { PaginationMetadata, getSessionPagination } from '@services/Account/Session'
 import { useAccountSessionPagination } from 'src/hooks/useAccountSession'
-import dayjs from 'src/utils/dayjs'
-
-
-
 
 type Props = {
   paginationData: PaginationMetadata<IAccountSession[]>
@@ -85,10 +81,6 @@ const AccountsSessionPage = ({ paginationData }: Props) => {
     { title: 'trace_id', dataIndex: 'trace_id' },
   ]
 
-  const formatDate = (datetimeStr: string) => {
-    return dayjs(datetimeStr, 'YYYY-MM-DDTHH:mm:ss').local().format('DD MMM YYYY')
-  }
-
   return (
     <Card title="Login Session History">
       <Form.BaseInput
@@ -104,7 +96,7 @@ const AccountsSessionPage = ({ paginationData }: Props) => {
               <Table.Row key={`accountSession-table-row-${index}`}>
                 <Table.BodyCell key={`account_id-${e.account_id}`}>{e.account_id}</Table.BodyCell>
                 <Table.BodyCell key={`username-${e.username}`}>{e.username}</Table.BodyCell>
-                <Table.BodyCell key={`created_at-${e.created_at}`}>{formatDate(e.created_at)}</Table.BodyCell>
+                <Table.DateTimeCell key={`created_at-${e.created_at}`} date={e.created_at} />
                 <Table.BodyCell key={`session-${e.session_cookies.csrftoken}`}>{e.session_cookies.csrftoken}</Table.BodyCell>
                 <Table.BodyCell key={`trace_id-${e.trace_id}`}>{e.trace_id}</Table.BodyCell>
               </Table.Row>

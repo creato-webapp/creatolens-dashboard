@@ -18,18 +18,15 @@ export default async function accountQueryHandler(req: NextApiRequest, res: Next
         },
       }
       if (username) {
-        params.params = { 
-          'page_number':pageNumber,
-          'page_size': pageSize,
-          'orderby': orderBy,
+        params.params = {
+          page_number: pageNumber,
+          page_size: pageSize,
+          orderby: orderBy,
           isAsc,
-          username
+          username,
         }
       }
-      const response = await AccountInstance.get(
-        ENDPOINT_BACKEND_ACCOUNT_SESSION.ACCOUNT_SESSION,
-        params
-      )
+      const response = await AccountInstance.get(ENDPOINT_BACKEND_ACCOUNT_SESSION.ACCOUNT_SESSION, params)
 
       return res.status(response.status).json(response.data)
     }

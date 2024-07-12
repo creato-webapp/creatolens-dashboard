@@ -22,8 +22,13 @@
       "@services/*": ["src/services/*"],
       "@api/*": ["src/pages/api/*"],
       "@hooks/*": ["src/hooks/*"]
-    }
+    },
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "types/**/*.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "types/**/*.ts", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]
 }

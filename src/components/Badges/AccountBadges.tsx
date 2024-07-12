@@ -1,9 +1,9 @@
 import React from 'react'
 
 import { BadgesType } from 'src/constants/badges'
-import STATUS,{ IAccountStatusType } from 'src/constants/status'
+import STATUS, { IAccountStatusType } from 'src/constants/status'
 
-import Badges, { BadgesProps, } from './Base'
+import Badges, { BadgesProps } from './Base'
 
 interface IAccountBadges extends Omit<BadgesProps, 'status'> {
   status: IAccountStatusType

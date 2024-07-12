@@ -34,11 +34,7 @@ export default function LandingHeader(props: LandingHeaderProps) {
           <Button.Primary className=" w-auto" sizes={['m', 'l', 'l']} onClick={handleClick}>
             <h4>Free Trial &gt;&gt;</h4>
           </Button.Primary>
-          <Button.Outline
-            className=" w-auto !py-3 !px-6"
-            sizes={['m', 'l', 'l']}
-            onClick={() => signIn('google', { callbackUrl: '/' })}
-          >
+          <Button.Outline className=" w-auto !px-6 !py-3" sizes={['m', 'l', 'l']} onClick={() => signIn('google', { callbackUrl: '/' })}>
             <h4>Sign In</h4>
           </Button.Outline>
         </div>

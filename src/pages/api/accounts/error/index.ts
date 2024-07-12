@@ -20,16 +20,13 @@ export default async function accountQueryHandler(req: NextApiRequest, res: Next
       if (username) {
         params.params = {
           filter: `account == ${username}`,
-          'page_number':pageNumber,
-          'page_size': pageSize,
-          'orderby': orderBy,
+          page_number: pageNumber,
+          page_size: pageSize,
+          orderby: orderBy,
           isAsc,
         }
       }
-      const response = await AccountInstance.get(
-        ENDPOINT_BACKEND.ACCOUNTS_ERROR,
-        params
-      )
+      const response = await AccountInstance.get(ENDPOINT_BACKEND.ACCOUNTS_ERROR, params)
       return res.status(response.status).json(response.data)
     }
     default:

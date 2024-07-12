@@ -1,4 +1,4 @@
-export interface IAccountError{
+export interface IAccountError {
   account: string
   exception: string
   occurred_at: string
