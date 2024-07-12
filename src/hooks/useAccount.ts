@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
 import { IAccount } from '@components/Account/Account'
-import { updateAccount as updateAccountHelper,updateSession as updateSessionHelper , } from '@services/Account/Account'
+import { updateAccount as updateAccountHelper, updateSession as updateSessionHelper } from '@services/Account/Account'
 import { PaginationMetadata, PaginationParams } from '@services/Account/AccountInterface'
 import ENDPOINT_FRONTEND from 'src/constants/endpoints/frontend'
 
@@ -50,15 +50,15 @@ export const useGetAccountsPagination = (
           ENDPOINT_FRONTEND.GET_ACCOUNTS_PAGINATION,
           {
             params: paginationParams,
-          }
+          },
         ]
       : null,
-      METHOD.GET,
+    METHOD.GET,
     {
       refreshInterval: 0,
       fallbackData: fallbackData,
       revalidateOnMount: false,
-    },
+    }
   )
   useEffect(() => {
     mutate()

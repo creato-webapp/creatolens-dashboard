@@ -5,27 +5,27 @@ export const instance = axios.create({
   timeout: 100000,
 })
 
-const abortControllers = new Map();
+const abortControllers = new Map()
 
 instance.interceptors.request.use(
   function (config) {
-    const controller = new AbortController();
-    config.signal = controller.signal;
+    const controller = new AbortController()
+    config.signal = controller.signal
 
-    abortControllers.set(config.url, controller);
-    return config;
+    abortControllers.set(config.url, controller)
+    return config
   },
   function (error) {
-    return Promise.reject(error);
+    return Promise.reject(error)
   }
-);
+)
 instance.interceptors.response.use(
   function (response) {
-    abortControllers.delete(response.config.url);
+    abortControllers.delete(response.config.url)
     return response
   },
   function (error: AxiosError) {
-    abortControllers.delete(error.config?.url);
+    abortControllers.delete(error.config?.url)
 
     if (axios.isAxiosError(error)) {
       if (typeof window !== 'undefined') {
@@ -68,22 +68,22 @@ const fetcher = {
     const controller = new AbortController()
     const config = { ...customConfig, signal: controller.signal }
     const response = await instance.patch<T>(url, data, config).then((res) => res.data)
-    return response 
+    return response
   },
   [METHOD.PUT]: async <T, D = unknown>(url: string, data?: D, customConfig?: AxiosRequestConfig) => {
     const controller = new AbortController()
     const config = { ...customConfig, signal: controller.signal }
     const response = await instance.put<T>(url, data, config).then((res) => res.data)
-    return response 
+    return response
   },
   [METHOD.DELETE]: async <T, D = unknown>(url: string, data?: D, customConfig?: AxiosRequestConfig) => {
     const controller = new AbortController()
     const config = { ...customConfig, signal: controller.signal }
     const response = await instance.delete<T>(url, config).then((res) => res.data)
-    return response 
+    return response
   },
-} as const;
+} as const
 
 export { METHOD }
 
-export default fetcher;
+export default fetcher

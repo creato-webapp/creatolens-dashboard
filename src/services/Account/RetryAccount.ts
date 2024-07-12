@@ -102,6 +102,9 @@ export async function getRetryAccountsPagination(
 }
 
 export async function updateRetryAccount(id: string, updatedAccount: IRetryAccount, customConfig?: AxiosRequestConfig): Promise<IRetryAccount> {
-  const res = await fetcher.PATCH<IRetryAccount>(ENDPOINT_FRONTEND.AVAILABLE_ACCOUNT + id, updatedAccount, { ...customConfig, params: { id: updatedAccount.id } })
+  const res = await fetcher.PATCH<IRetryAccount>(ENDPOINT_FRONTEND.AVAILABLE_ACCOUNT + id, updatedAccount, {
+    ...customConfig,
+    params: { id: updatedAccount.id },
+  })
   return res
 }
