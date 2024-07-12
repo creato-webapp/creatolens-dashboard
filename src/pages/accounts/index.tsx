@@ -15,11 +15,11 @@ import Hero from '@components/Hero'
 import EditIcon from '@components/Icon/EditIcon'
 import Pagination from '@components/Pagination'
 import { Table } from '@components/Table'
+import ROUTE from '@constants/route'
+import { useGetAccountsPagination } from '@hooks/useAccount'
 import { usePagination } from '@hooks/usePagination'
 import { getAccountsPagination } from '@services/Account/Account'
 import { PaginationMetadata } from '@services/Account/AccountInterface'
-import ROUTE from 'src/constants/route'
-import { useGetAccountsPagination } from 'src/hooks/useAccount'
 
 type Props = {
   paginationData: PaginationMetadata<IAccount[]>

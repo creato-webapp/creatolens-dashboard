@@ -2,7 +2,7 @@
 import { AxiosRequestConfig } from 'axios'
 
 import { Cookies, IRetryAccount } from '@components/Account/Account/interface'
-import ENDPOINT_FRONTEND from 'src/constants/endpoints/frontend'
+import ENDPOINT_FRONTEND from '@constants/endpoints/frontend'
 
 import { PaginationMetadata, PaginationParams } from './AccountInterface'
 

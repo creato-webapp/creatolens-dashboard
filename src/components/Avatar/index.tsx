@@ -1,10 +1,10 @@
 import React, { ReactEventHandler, useState } from 'react'
 
+import IMAGE from '@constants/image'
+import SIZE, { ISizeType } from '@constants/size'
 import Image from 'next/image'
 
 import UserIcon from '@components/Icon/UserIcon'
-import IMAGE from 'src/constants/image'
-import SIZE, { ISizeType } from 'src/constants/size'
 
 type AvatarSize = ISizeType
 

@@ -7,9 +7,9 @@ import Card from '@components/Card'
 import { Form } from '@components/Form'
 import Pagination from '@components/Pagination'
 import { Table } from '@components/Table'
+import { useAccountSessionPagination } from '@hooks/useAccountSession'
 import { usePagination } from '@hooks/usePagination'
 import { PaginationMetadata, getSessionPagination } from '@services/Account/Session'
-import { useAccountSessionPagination } from 'src/hooks/useAccountSession'
 
 type Props = {
   paginationData: PaginationMetadata<IAccountSession[]>

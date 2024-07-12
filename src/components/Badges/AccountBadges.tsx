@@ -1,7 +1,7 @@
 import React from 'react'
 
-import { BadgesType } from 'src/constants/badges'
-import STATUS, { IAccountStatusType } from 'src/constants/status'
+import { BadgesType } from '@constants/badges'
+import STATUS, { IAccountStatusType } from '@constants/status'
 
 import Badges, { BadgesProps } from './Base'
 

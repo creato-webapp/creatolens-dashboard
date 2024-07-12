@@ -2,8 +2,8 @@
 import { AxiosRequestConfig } from 'axios'
 
 import { IAccount } from '@components/Account/Account'
-import ENDPOINT_FRONTEND from 'src/constants/endpoints/frontend'
-import { IAccountStatusType } from 'src/constants/status'
+import ENDPOINT_FRONTEND from '@constants/endpoints/frontend'
+import { IAccountStatusType } from '@constants/status'
 
 import { PaginationMetadata, PaginationParams } from './AccountInterface'
 

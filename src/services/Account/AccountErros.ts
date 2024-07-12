@@ -2,7 +2,7 @@
 import { AxiosRequestConfig } from 'axios'
 
 import { IAccountError } from '@components/Account/AccountErrors/interface'
-import ENDPOINT_FRONTEND from 'src/constants/endpoints/frontend'
+import ENDPOINT_FRONTEND from '@constants/endpoints/frontend'
 
 import { PaginationMetadata, PaginationParams } from './AccountInterface'
 

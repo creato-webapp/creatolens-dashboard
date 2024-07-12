@@ -1,8 +1,8 @@
 //TODO write Get, Gets, Update,
 import { AxiosRequestConfig } from 'axios'
 
-import ENDPOINT_FRONTEND from 'src/constants/endpoints/frontend'
-import { IAccountSession } from 'src/pages/accounts/session'
+import ENDPOINT_FRONTEND from '@constants/endpoints/frontend'
+import { IAccountSession } from 'pages/accounts/session'
 
 import fetcher from '../../helpers/fetcher'
 
