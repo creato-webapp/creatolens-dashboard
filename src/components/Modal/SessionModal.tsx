@@ -9,7 +9,7 @@ import { useDialogues } from 'src/hooks/useDialogues'
 
 import { GenericModal } from './GenericModal'
 
-import { Cookies } from '../Account/Account/interface'
+import { Cookies, IAccount } from '../Account/Account/interface'
 
 const dataItemToKeyValues = (item: Cookies) => {
   if (!item) return <></>
@@ -36,7 +36,7 @@ export const SessionModal = () => {
         addDialogue(`Account session aborted`, Status.FAILED)
         return
       }
-      await updateSession(data)
+      await updateSession(data as IAccount)
       addDialogue(`Account session started update`, Status.SUCCESS)
     } catch (err) {
       if (err && err instanceof Error) {
