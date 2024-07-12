@@ -3,7 +3,7 @@ import { AxiosRequestConfig } from 'axios'
 import ENDPOINT_FRONTEND from 'src/constants/endpoints/frontend'
 import { CountryEnum } from 'src/enums/CountryCodeEnums'
 
-import { fetcher } from '../helpers/fetcher'
+import fetcher from '../helpers/fetcher'
 
 export interface PostData {
   count: number

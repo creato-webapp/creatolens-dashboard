@@ -1,32 +1,31 @@
 import axios, { AxiosError, AxiosRequestConfig } from 'axios'
-import { Fetcher } from 'swr'
 export const instance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_LOCAL_SERVER_URL,
   withCredentials: true,
   timeout: 100000,
 })
 
-const abortControllers = new Map()
+const abortControllers = new Map();
 
 instance.interceptors.request.use(
   function (config) {
-    const controller = new AbortController()
-    config.signal = controller.signal
+    const controller = new AbortController();
+    config.signal = controller.signal;
 
-    abortControllers.set(config.url, controller)
-    return config
+    abortControllers.set(config.url, controller);
+    return config;
   },
   function (error) {
-    return Promise.reject(error)
+    return Promise.reject(error);
   }
-)
+);
 instance.interceptors.response.use(
   function (response) {
-    abortControllers.delete(response.config.url)
+    abortControllers.delete(response.config.url);
     return response
   },
   function (error: AxiosError) {
-    abortControllers.delete(error.config?.url)
+    abortControllers.delete(error.config?.url);
 
     if (axios.isAxiosError(error)) {
       if (typeof window !== 'undefined') {
@@ -38,42 +37,53 @@ instance.interceptors.response.use(
   }
 )
 
-enum Method {
-  POST = 'POST',
-  GET = 'GET',
-  PUT = 'PUT',
-  PATCH = 'PATCH',
-  DELETE = 'DELETE',
-}
+const METHOD = {
+  POST: 'POST',
+  UPLOAD: 'UPLOAD',
+  GET: 'GET',
+  PUT: 'PUT',
+  PATCH: 'PATCH',
+  DELETE: 'DELETE',
+} as const
 
 export type CancellablePromise<T> = Promise<T> & {
   cancel: () => void
 }
 
-type Fetchers = Record<Method, Fetcher>
+const fetcher = {
+  [METHOD.GET]: async <T, D = unknown>(url: string, data?: D, customConfig?: AxiosRequestConfig) => {
+    const response = await instance.get<T>(url, { ...customConfig, data }).then((res) => res.data)
+    return response
+  },
+  [METHOD.POST]: async <T, D = unknown>(url: string, data?: D, customConfig?: AxiosRequestConfig) => {
+    const response = await instance.post<T>(url, data, customConfig).then((res) => res.data)
+    return response
+  },
+  [METHOD.UPLOAD]: async <T, D = unknown>(url: string, data?: D, customConfig?: AxiosRequestConfig) => {
+    const config = { ...customConfig, headers: { 'Content-Type': 'application/octet-stream' } }
+    const response = await instance.put<T>(url, data, config).then((res) => res.data)
+    return response
+  },
+  [METHOD.PATCH]: async <T, D = unknown>(url: string, data?: D, customConfig?: AxiosRequestConfig) => {
+    const controller = new AbortController()
+    const config = { ...customConfig, signal: controller.signal }
+    const response = await instance.patch<T>(url, data, config).then((res) => res.data)
+    return response 
+  },
+  [METHOD.PUT]: async <T, D = unknown>(url: string, data?: D, customConfig?: AxiosRequestConfig) => {
+    const controller = new AbortController()
+    const config = { ...customConfig, signal: controller.signal }
+    const response = await instance.put<T>(url, data, config).then((res) => res.data)
+    return response 
+  },
+  [METHOD.DELETE]: async <T, D = unknown>(url: string, data?: D, customConfig?: AxiosRequestConfig) => {
+    const controller = new AbortController()
+    const config = { ...customConfig, signal: controller.signal }
+    const response = await instance.delete<T>(url, config).then((res) => res.data)
+    return response 
+  },
+} as const;
 
-export const fetcher: Fetchers = {
-  [Method.GET]: async <T>(...key: [string, AxiosRequestConfig?]) => {
-    const response = await instance.get<T>(...key).then((res) => res.data)
-    return response
-  },
-  [Method.POST]: async <T, D = unknown>(...key: [string, D?, AxiosRequestConfig?]) => {
-    const [url, data, config] = key
-    const response = await instance.post<T>(url, data, config).then((res) => res.data)
-    return response
-  },
-  [Method.PATCH]: async <T, D = unknown>(...key: [string, D?, AxiosRequestConfig?]) => {
-    const response = await instance.patch<T>(...key).then((res) => res.data)
-    return response
-  },
-  [Method.PUT]: async <T, D = unknown>(...key: [string, D?, AxiosRequestConfig?]) => {
-    const response = await instance.put<T>(...key).then((res) => res.data)
-    return response
-  },
-  [Method.DELETE]: async <T>(...key: [string, AxiosRequestConfig?]) => {
-    const response = await instance.delete<T>(...key).then((res) => res.data)
-    return response
-  },
-}
+export { METHOD }
 
-export { Method }
+export default fetcher;

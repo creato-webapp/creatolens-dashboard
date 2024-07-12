@@ -1,6 +1,6 @@
 import { AxiosRequestConfig } from 'axios'
 
-import { fetcher } from '../../helpers/fetcher'
+import fetcher from '../../helpers/fetcher'
 
 type hashtag = {
   acc: number
