@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { PlusIcon } from '@heroicons/react/24/solid'
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
@@ -15,12 +15,11 @@ import Hero from '@components/Hero'
 import EditIcon from '@components/Icon/EditIcon'
 import Pagination from '@components/Pagination'
 import { Table } from '@components/Table'
+import ROUTE from '@constants/route'
+import { useGetAccountsPagination } from '@hooks/useAccount'
 import { usePagination } from '@hooks/usePagination'
 import { getAccountsPagination } from '@services/Account/Account'
 import { PaginationMetadata } from '@services/Account/AccountInterface'
-import { formatDate } from '@services/util'
-import ROUTE from 'src/constants/route'
-import { useGetAccountsPagination } from 'src/hooks/useAccount'
 
 type Props = {
   paginationData: PaginationMetadata<IAccount[]>
@@ -51,10 +50,8 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
 
 const AccountsPage = ({ paginationData }: Props) => {
   const [createDateOrder, setCreateDateOrder] = useState<'asc' | 'desc'>('desc')
-
   const { pageParams, onPageClick, updateSort, updateOrderBy, onNextClick, onPrevClick } = usePagination()
-  const { data, isLoading } = useGetAccountsPagination(pageParams, false, paginationData)
-
+  const { data, isLoading, setShouldFetch } = useGetAccountsPagination(pageParams, true, paginationData)
   const accounts: IAccount[] = useMemo(() => data?.data || [], [data])
 
   const updateSorting = useCallback(
@@ -65,6 +62,10 @@ const AccountsPage = ({ paginationData }: Props) => {
       },
     [pageParams.isAsc, updateOrderBy, updateSort]
   )
+
+  useEffect(() => {
+    setShouldFetch(true)
+  }, [pageParams, setShouldFetch])
 
   const IconRender = (e: boolean) => {
     return (
@@ -120,7 +121,6 @@ const AccountsPage = ({ paginationData }: Props) => {
     },
   ]
 
-
   return (
     <div>
       <Hero
@@ -161,13 +161,13 @@ const AccountsPage = ({ paginationData }: Props) => {
                 <Table.Row key={`accounts-table-${index}`} className="text-sm">
                   <Table.BodyCell key={e.id}>
                     <Link
-                        href={{
-                          pathname: ROUTE.ACCOUNT_BOT_GET,
-                          query: { id: e.id },
-                        }} 
-                        as="/accounts/bot"
-                        legacyBehavior
-                      >
+                      href={{
+                        pathname: ROUTE.ACCOUNT_BOT_GET,
+                        query: { id: e.id },
+                      }}
+                      as="/accounts/bot"
+                      legacyBehavior
+                    >
                       <div className="flex w-full cursor-pointer flex-row items-center justify-center gap-2">
                         <EditIcon size={16} className="fill-accent2-500" />
                         <div className="font-semibold text-accent2-500">Edit</div>
@@ -177,9 +177,8 @@ const AccountsPage = ({ paginationData }: Props) => {
                   <Table.BodyCell key={`username-${e.id}`}>
                     <div className="flex items-center text-nowrap text-accent1-600">{e.username}</div>
                   </Table.BodyCell>
-                  <Table.BodyCell key={`created_at-${e.id}`}>{formatDate(e.created_at)}</Table.BodyCell>
-                  <Table.BodyCell key={`updated_at-${e.id}`}>{formatDate(e.updated_at)}</Table.BodyCell>
-
+                  <Table.DateTimeCell key={`created_at-${e.id}`} date={e.created_at} />
+                  <Table.DateTimeCell key={`updated_at-${e.id}`} date={e.updated_at} />
                   <Table.BodyCell key={`created_by-${e.id}`}>{e.created_by}</Table.BodyCell>
 
                   <Table.BodyCell key={`post_scrapped_count-${e.id}`}>{e.post_scrapped_count}</Table.BodyCell>

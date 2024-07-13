@@ -11,32 +11,38 @@ const Dropzone: React.FC<DropzoneProps> = ({ className, onFileChange }) => {
     return file.type.startsWith('image/')
   }
 
-  const handleDrop = useCallback((event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault()
-    const file = event.dataTransfer.files[0]
-    if (!validateImage(file)) {
-      setIsValidImage(false)
-      return
-    }
-    setIsValidImage(true)
-    if (onFileChange) {
-      onFileChange(file)
-    }
-  },[onFileChange])
-
-  const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = e.target.files?.[0]
-    if (selectedFile) {
-      if (!validateImage(selectedFile)) {
+  const handleDrop = useCallback(
+    (event: React.DragEvent<HTMLDivElement>) => {
+      event.preventDefault()
+      const file = event.dataTransfer.files[0]
+      if (!validateImage(file)) {
         setIsValidImage(false)
         return
       }
       setIsValidImage(true)
       if (onFileChange) {
-        onFileChange(selectedFile)
+        onFileChange(file)
       }
-    }
-  }, [onFileChange])
+    },
+    [onFileChange]
+  )
+
+  const handleChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      const selectedFile = e.target.files?.[0]
+      if (selectedFile) {
+        if (!validateImage(selectedFile)) {
+          setIsValidImage(false)
+          return
+        }
+        setIsValidImage(true)
+        if (onFileChange) {
+          onFileChange(selectedFile)
+        }
+      }
+    },
+    [onFileChange]
+  )
 
   const dropZonePreventDefault = useCallback((event: DragEvent<HTMLDivElement>) => {
     event.preventDefault()

@@ -1,43 +1,89 @@
-// import { Fetcher } from './fetcher'
-// import { AxiosRequestConfig } from 'axios'
+import { AxiosRequestConfig, AxiosResponse } from 'axios'
 
-// export async function getMetaImage(
-//   data: {
-//     profile_id?: string
-//   },
-//   customConfig?: AxiosRequestConfig
-// ): Promise<{
-//   // response data is image
-//   image: string
-// }> {
-//   const response = await Fetcher.GET(
-//     '/api/dashboard/userImage',
-//     {
-//       ...customConfig,
-//       params: {
-//         profile_id: data.profile_id,
-//       },
-//     },
-//   )
+import { ImageDetailsType } from '@context/ImageToHashtagContext'
+import fetcher from '@helpers/fetcher'
 
-//   return response
-// }
+import { base64ToBlob } from './util'
 
-// export async function getMetaPostImage(
-//   data: {
-//     shortcode?: string
-//   },
-//   customConfig?: AxiosRequestConfig
-// ): Promise<{
-//   image: string
-// }> {
-//   const response = await Fetcher.GET(
-//     '/api/dashboard/instapostImage',
-//     {
-//       shortcode: data.shortcode,
-//     },
-//     { ...customConfig }
-//   )
+export async function getImageUploadUrl(
+  data: {
+    args: {
+      filename: string
+      format: string
+    }
+  },
+  customConfig?: AxiosRequestConfig
+) {
+  const response = await fetcher.GET('/api/image', {
+    ...customConfig,
+    params: {
+      filename: data.args.filename,
+      format: data.args.format,
+    },
+  })
+  return response
+}
 
-//   return response
-// }
+export async function uploadImage(
+  data: {
+    args: {
+      username: string
+      file: string
+      imageDetails: ImageDetailsType // here is not string
+    }
+  },
+  customConfig?: AxiosRequestConfig
+) {
+  try {
+    const { file, imageDetails, username } = data.args
+
+    if (!imageDetails.format) {
+      throw new Error('Image format is required.')
+    }
+
+    const blobBody = base64ToBlob(file, imageDetails.format)
+
+    const formData = new FormData()
+    formData.append('file', blobBody, imageDetails.path)
+    formData.append('username', username)
+
+    const tempConfig = {
+      maxBodyLength: 8 * 1024 * 1024,
+      maxContentLength: 8 * 1024 * 1024,
+      ...customConfig,
+    }
+
+    const response = await fetcher.POST<AxiosResponse>('/api/image', formData, {
+      ...tempConfig,
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        keepAlive: false,
+      },
+    })
+    return response.data
+  } catch (error) {
+    console.error('Error uploading image:', error)
+    throw error
+  }
+}
+
+type ImageLabelResponseType = {
+  data: {
+    categories: string
+    confidence: [
+      {
+        [key: string]: number
+      }
+    ]
+    labels: string[]
+  }
+}
+
+export async function getImageLabel(imagePath: string) {
+  const response: ImageLabelResponseType = await fetcher.GET('/api/image/labels', {
+    params: {
+      image_url: imagePath,
+    },
+  })
+  return response.data.labels
+}

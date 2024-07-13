@@ -1,6 +1,6 @@
 import React from 'react'
 
-interface HeroProps extends React.HTMLAttributes<HTMLElement>{
+interface HeroProps extends React.HTMLAttributes<HTMLElement> {
   backgroundImage: string
   childrenStyle?: string
   mobileBackgroundImage?: boolean

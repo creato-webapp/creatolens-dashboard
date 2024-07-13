@@ -10,11 +10,9 @@ import EditIcon from '@components/Icon/EditIcon'
 import Pagination from '@components/Pagination'
 import { Table } from '@components/Table'
 import { usePagination } from '@hooks/usePagination'
+import { useGetRetryAccountsPagination } from '@hooks/useRetryAccount'
 import { PaginationMetadata } from '@services/Account/AccountInterface'
 import { getRetryAccountsPagination } from '@services/Account/RetryAccount'
-import { useGetRetryAccountsPagination } from 'src/hooks/useRetryAccount'
-import dayjs from 'src/utils/dayjs'
-
 
 type Props = {
   paginationData: PaginationMetadata<IRetryAccount[]>
@@ -87,10 +85,6 @@ const RetryAccountsPage = ({ paginationData }: Props) => {
     },
   ]
 
-  const formatDate = (datetimeStr: string) => {
-    return dayjs(datetimeStr, 'YYYY-MM-DDTHH:mm:ss').local().format('DD MMM YYYY')
-  }
-
   return (
     <Card title="Accounts Table">
       <div className="hidden  md:flex">
@@ -114,7 +108,7 @@ const RetryAccountsPage = ({ paginationData }: Props) => {
           <Table.Body className="text-sm font-normal leading-5 text-black">
             {accounts.map((e, index) => (
               <Table.Row key={`table-row-${e.id}-${index}`} className="text-sm">
-                <Table.BodyCell key={`wait-until-${e.id}`}>{formatDate(e.wait_until)}</Table.BodyCell>
+                <Table.DateTimeCell key={`wait-until-${e.id}`} date={e.wait_until} />
                 <Table.BodyCell key={`login-count-${e.id}`}>{e.login_count}</Table.BodyCell>
                 <Table.BodyCell key={`last-login-dt-${e.last_login_dt}`}></Table.BodyCell>
                 <Table.BodyCell key={`username-${e.id}`}>

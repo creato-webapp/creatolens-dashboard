@@ -13,18 +13,7 @@ interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   isDropdown?: boolean
 }
 
-export default function Card({
-  title,
-  children,
-  customTitle,
-  extra,
-  className,
-  coverImage,
-  subExtra,
-  description,
-  onClick,
-  isDropdown,
-}: CardProps) {
+export default function Card({ title, children, customTitle, extra, className, coverImage, subExtra, description, onClick, isDropdown }: CardProps) {
   // const { title, children, extra, className, coverImage, subExtra, description, onClick } = props
   return (
     <div className={`flex h-fit  w-full flex-col gap-6 rounded-xl border border-slate-300 p-6 shadow-lg ${className}`}>

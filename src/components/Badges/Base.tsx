@@ -1,9 +1,8 @@
-import React, { useState } from 'react'
+import React from 'react'
 
-import BADGES, { BadgesType } from 'src/constants/badges'
+import BADGES, { BadgesType } from '@constants/badges'
 
 import XCircleIcon from '../Icon/XCircleIcon'
-
 
 export interface BadgesProps extends React.HTMLAttributes<HTMLDivElement> {
   size?: 'lg' | 'sm'
@@ -14,17 +13,18 @@ export interface BadgesProps extends React.HTMLAttributes<HTMLDivElement> {
   rounded?: boolean
   status: BadgesType
   onClose?: () => void
+  onClick?: () => void
 }
 
 const solidBadgesStyles: Record<BadgesType, string> = {
-  [BADGES.primary]: 'bg-accent1-500 text-text-white',
-  [BADGES.secondary]: 'bg-accent2-500 text-text-white',
-  [BADGES['text-primary']]: 'bg-text-primary text-text-white',
-  [BADGES['text-secondary']]: 'bg-text-secondary text-text-white',
-  [BADGES.disabled]: 'bg-text-disabled text-text-white',
-  [BADGES.success]: 'bg-successful-600 text-text-white border-successful-500 border',
-  [BADGES.warning]: 'bg-warning-500 text-warning-800 border-warning-300 border',
-  [BADGES.error]: 'bg-error-600 text-text-white',
+  [BADGES.primary]: 'bg-accent1-500 text-text-white border border-accent1-500',
+  [BADGES.secondary]: 'bg-accent2-500 text-text-white border border-accent2-500',
+  [BADGES['text-primary']]: 'bg-text-primary text-text-white border border-text-primary',
+  [BADGES['text-secondary']]: 'bg-text-secondary text-text-white border border-text-secondary',
+  [BADGES.disabled]: 'bg-text-disabled text-text-white border border-text-disabled',
+  [BADGES.success]: 'bg-successful-600 text-text-white border-successful-500 border border-successful-500',
+  [BADGES.warning]: 'bg-warning-500 text-warning-800 border-warning-300 border border-warning-500',
+  [BADGES.error]: 'bg-error-600 text-text-white border-error-600',
 } as const
 
 const outlineBadgesStyles: Record<BadgesType, string> = {
@@ -39,13 +39,19 @@ const outlineBadgesStyles: Record<BadgesType, string> = {
 } as const
 
 const Badges = ({ ...props }: BadgesProps) => {
-  const { size = 'lg', children, isOutline, isDisabled, closeable, rounded, status, onClose, className } = props
-  const [isShow, setIsShow] = useState(true)
+  const { size = 'lg', children, isOutline, isDisabled, closeable, rounded, status, onClose, onClick, className } = props
+  const isShow = true
   const roundedStyle = rounded ? 'rounded-full' : 'rounded'
 
-  const handleClose = () => {
-    setIsShow(false)
+  const handleClose = (e: React.MouseEvent) => {
+    // setIsShow(false)
+    e.stopPropagation()
+
     onClose && onClose()
+  }
+
+  const handleChoose = () => {
+    onClick && onClick()
   }
 
   const SmallBadges = () => {
@@ -56,6 +62,7 @@ const Badges = ({ ...props }: BadgesProps) => {
     ${isDisabled ? 'bg-bg-dark' : ''} ${className}
     ${closeable ? 'cursor-pointer' : ''}
     `}
+        onClick={handleChoose}
       >
         <h6 className="capitalize-first-letter flex flex-row items-center font-normal">{children}</h6>
         {closeable && (
@@ -75,6 +82,7 @@ const Badges = ({ ...props }: BadgesProps) => {
     ${isDisabled ? 'bg-bg-dark' : ''} ${className}
     ${closeable ? 'cursor-pointer' : ''}
     `}
+        onClick={handleChoose}
       >
         <h4 className="capitalize-first-letter flex flex-row items-center font-normal leading-7">{children}</h4>
         {closeable && (

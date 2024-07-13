@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-import ENDPOINT_BACKEND from 'src/constants/endpoints/backend'
+import ENDPOINT_BACKEND from '@constants/endpoints/backend'
 
 import AccountInstance from '../../axiosInstance/Account'
 export default async function accountQueryHandler(req: NextApiRequest, res: NextApiResponse) {
@@ -14,9 +14,9 @@ export default async function accountQueryHandler(req: NextApiRequest, res: Next
       const response = await AccountInstance.get(ENDPOINT_BACKEND.BLOCKED_ACCOUNTS, {
         params: {
           filter: 'username != null',
-          'page_number':pageNumber,
-          'page_size': pageSize,
-          'orderby': orderBy,
+          page_number: pageNumber,
+          page_size: pageSize,
+          orderby: orderBy,
           isAsc,
         },
         headers: {

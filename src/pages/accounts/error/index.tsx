@@ -7,13 +7,10 @@ import Card from '@components/Card'
 import { Form } from '@components/Form'
 import Pagination from '@components/Pagination'
 import { Table } from '@components/Table'
+import { useAccountErrorPagination } from '@hooks/useAccountErrors'
 import { usePagination } from '@hooks/usePagination'
 import { getErrorPagination } from '@services/Account/AccountErros'
 import { PaginationMetadata } from '@services/Account/AccountInterface'
-import { useAccountErrorPagination } from 'src/hooks/useAccountErrors'
-import dayjs from 'src/utils/dayjs'
-
-
 
 type Props = {
   paginationData: PaginationMetadata<IAccountError[]>
@@ -87,10 +84,6 @@ const AccountsErrorPage = (paginationData: PaginationMetadata<IAccountError[]>) 
     { title: 'trace_id', dataIndex: 'trace_id' },
   ]
 
-  const formatDate = (datetimeStr: string) => {
-    return dayjs(datetimeStr, 'YYYY-MM-DDTHH:mm:ss').local().format('DD MMM YYYY')
-  }
-
   return (
     <Card title="Login Error History">
       <Form.BaseInput
@@ -113,7 +106,7 @@ const AccountsErrorPage = (paginationData: PaginationMetadata<IAccountError[]>) 
               <Table.Row key={`table-row-${e.account}-${index}`} className="text-sm">
                 <Table.BodyCell key={e.account}></Table.BodyCell>
                 <Table.BodyCell key={e.exception}></Table.BodyCell>
-                <Table.BodyCell key={`occurred_at-${e.account}`}>{formatDate(e.occurred_at)}</Table.BodyCell>
+                <Table.DateTimeCell key={`occurred_at-${e.account}`} date={e.occurred_at} />
                 <Table.BodyCell key={e.trace_id}></Table.BodyCell>
               </Table.Row>
             ))}

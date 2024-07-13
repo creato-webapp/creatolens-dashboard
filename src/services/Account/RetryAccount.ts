@@ -2,10 +2,11 @@
 import { AxiosRequestConfig } from 'axios'
 
 import { Cookies, IRetryAccount } from '@components/Account/Account/interface'
+import ENDPOINT_FRONTEND from '@constants/endpoints/frontend'
 
 import { PaginationMetadata, PaginationParams } from './AccountInterface'
 
-import { Fetcher } from '../fetcher'
+import fetcher from '../../helpers/fetcher'
 
 type PartialAccount = Partial<{
   id: string
@@ -73,12 +74,12 @@ export function generateRetryAccountFilter(account: PartialAccount): string {
 }
 
 export async function getRetryAccount(id: string, customConfig?: AxiosRequestConfig): Promise<IRetryAccount> {
-  const response = await Fetcher.GET<IRetryAccount>(`/api/accounts/retry/${id}`, customConfig)
+  const response = await fetcher.GET<IRetryAccount>(ENDPOINT_FRONTEND.AVAILABLE_ACCOUNT + id, customConfig)
   return response
 }
 
 export async function getRetryAccounts(account?: Partial<IRetryAccount>, orderBy?: string, isAsc?: boolean): Promise<IRetryAccount[]> {
-  const response = await Fetcher.GET<IRetryAccount[]>(`/api/accounts/retry/query`, {
+  const response = await fetcher.GET<IRetryAccount[]>(ENDPOINT_FRONTEND.GET_AVAILABLE_ACCOUNTS, {
     params: { filter: account ? generateRetryAccountFilter(account) : null, orderby: orderBy, isAsc: isAsc },
   })
   return response
@@ -88,7 +89,7 @@ export async function getRetryAccountsPagination(
   params: PaginationParams,
   customConfig?: AxiosRequestConfig
 ): Promise<PaginationMetadata<IRetryAccount[]>> {
-  const response = await Fetcher.GET<PaginationMetadata<IRetryAccount[]>>(`/api/accounts/retry`, {
+  const response = await fetcher.GET<PaginationMetadata<IRetryAccount[]>>(ENDPOINT_FRONTEND.GET_AVAILABLE_ACCOUNTS_PAGINATION, {
     ...customConfig,
     params: {
       pageNumber: params.pageNumber,
@@ -101,6 +102,9 @@ export async function getRetryAccountsPagination(
 }
 
 export async function updateRetryAccount(id: string, updatedAccount: IRetryAccount, customConfig?: AxiosRequestConfig): Promise<IRetryAccount> {
-  const res = await Fetcher.PATCH<IRetryAccount>(`/api/accounts/retry/${id}`, updatedAccount, { ...customConfig, params: { id: updatedAccount.id } })
+  const res = await fetcher.PATCH<IRetryAccount>(ENDPOINT_FRONTEND.AVAILABLE_ACCOUNT + id, updatedAccount, {
+    ...customConfig,
+    params: { id: updatedAccount.id },
+  })
   return res
 }

@@ -6,9 +6,9 @@ import { Button } from '@components/Button'
 import Dropzone from '@components/Dropzone'
 import Checkbox from '@components/Form/Checkbox'
 import CrossIcon from '@components/Icon/CrossIcon'
+import { useFileUpload } from '@hooks/useFileUpload'
 import { LabelImage } from '@services/Object/Gemini'
 import { Labels, ModelResult } from '@services/Object/ImageBlob'
-import { useFileUpload } from 'src/hooks/useFileUpload'
 
 type hashtag = {
   acc: number
