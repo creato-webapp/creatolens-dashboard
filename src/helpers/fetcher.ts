@@ -1,3 +1,4 @@
+import METHOD from '@constants/method'
 import axios, { AxiosError, AxiosRequestConfig } from 'axios'
 
 export const instance = axios.create({
@@ -37,15 +38,6 @@ instance.interceptors.response.use(
   }
 )
 
-const METHOD = {
-  POST: 'POST',
-  UPLOAD: 'UPLOAD',
-  GET: 'GET',
-  PUT: 'PUT',
-  PATCH: 'PATCH',
-  DELETE: 'DELETE',
-} as const
-
 export type CancellablePromise<T> = Promise<T> & {
   cancel: () => void
 }
@@ -81,5 +73,4 @@ const fetcher = {
   },
 } as const
 
-export { METHOD }
 export default fetcher
