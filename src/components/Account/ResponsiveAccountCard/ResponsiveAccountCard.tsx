@@ -8,8 +8,8 @@ import { AccountBadges } from '@components/Badges'
 import CheckIcon from '@components/Icon/CheckIcon'
 import EditIcon from '@components/Icon/EditIcon'
 import XCircleIcon from '@components/Icon/XCircleIcon'
-import ROUTE from 'src/constants/route'
-import dayjs from 'src/utils/dayjs'
+import ROUTE from '@constants/route'
+import dayjs from '@utils/dayjs'
 
 import { IAccount } from '../Account'
 

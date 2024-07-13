@@ -1,5 +1,7 @@
 import React, { useCallback, useState } from 'react'
 
+import IMAGE from '@constants/image'
+import ROUTE from '@constants/route'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
@@ -9,8 +11,6 @@ import LogoutIcon from '@components/Icon/LogOutIcon'
 import MenuIcon from '@components/Icon/MenuIcon'
 import { Title } from '@components/Typography'
 import { useAuth } from '@hooks/useAuth'
-import IMAGE from 'src/constants/image'
-import ROUTE from 'src/constants/route'
 
 import { Button } from '..'
 

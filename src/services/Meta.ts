@@ -1,7 +1,7 @@
 import { AxiosRequestConfig } from 'axios'
 
-import ENDPOINT_FRONTEND from 'src/constants/endpoints/frontend'
-import { CountryEnum } from 'src/enums/CountryCodeEnums'
+import ENDPOINT_FRONTEND from '@constants/endpoints/frontend'
+import { CountryEnum } from 'enums/CountryCodeEnums'
 
 import fetcher from '../helpers/fetcher'
 

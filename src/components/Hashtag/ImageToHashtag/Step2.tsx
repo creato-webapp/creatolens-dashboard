@@ -6,7 +6,7 @@ import Skeleton from 'react-loading-skeleton'
 import { Badges } from '@components/Badges'
 import Outline from '@components/Button/Outline'
 import Primary from '@components/Button/Primary'
-import { useImageHashtagContext } from 'src/context/ImageToHashtagContext'
+import { useImageHashtagContext } from '@context/ImageToHashtagContext'
 
 import { StepProps } from './Step1'
 import 'react-loading-skeleton/dist/skeleton.css'

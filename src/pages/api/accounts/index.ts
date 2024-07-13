@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import requestIp from 'request-ip'
 
 import { IAccount } from '@components/Account/Account'
-import ENDPOINT_BACKEND from 'src/constants/endpoints/backend'
+import ENDPOINT_BACKEND from '@constants/endpoints/backend'
 
 import AccountInstance from '../axiosInstance/Account'
 

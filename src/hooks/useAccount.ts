@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { IAccount } from '@components/Account/Account'
 import { updateAccount as updateAccountHelper, updateSession as updateSessionHelper } from '@services/Account/Account'
 import { PaginationMetadata, PaginationParams } from '@services/Account/AccountInterface'
-import ENDPOINT_FRONTEND from 'src/constants/endpoints/frontend'
+import ENDPOINT_FRONTEND from '@constants/endpoints/frontend'
 
 import useRequest from './useRequest'
 

@@ -1,13 +1,13 @@
 import React, { useCallback } from 'react'
 
+import IMAGE from '@constants/image'
+import ROUTE from '@constants/route'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 
 import AccountCreateCard from '@components/Account/AccountCreateCard'
 import Paragraph from '@components/Typography/Paragraph'
 import Title from '@components/Typography/Title'
-import IMAGE from 'src/constants/image'
-import ROUTE from 'src/constants/route'
 
 const NewBotPage = () => {
   const router = useRouter()
