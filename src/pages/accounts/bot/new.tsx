@@ -6,8 +6,8 @@ import { useRouter } from 'next/router'
 import AccountCreateCard from '@components/Account/AccountCreateCard'
 import Paragraph from '@components/Typography/Paragraph'
 import Title from '@components/Typography/Title'
-import IMAGE from 'src/constants/image'
-import ROUTE from 'src/constants/route'
+import IMAGE from '@constants/image'
+import ROUTE from '@constants/route'
 
 const NewBotPage = () => {
   const router = useRouter()

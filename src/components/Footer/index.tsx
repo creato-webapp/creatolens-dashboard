@@ -3,8 +3,8 @@ import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 
-import IMAGE from 'src/constants/image'
-import dayjs from 'src/utils/dayjs'
+import IMAGE from '@constants/image'
+import dayjs from 'utils/dayjs'
 
 const FOOTER_LINKS = [
   {

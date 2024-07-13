@@ -7,7 +7,7 @@ import { Button } from '@components/Button'
 import Card from '@components/Card'
 import Hero from '@components/Hero'
 import PlusIcon from '@components/Icon/PlusIcon'
-import ROUTE from 'src/constants/route'
+import ROUTE from '@constants/route'
 
 const Guide: NextPage = () => {
   const router = useRouter()

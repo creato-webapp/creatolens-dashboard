@@ -8,7 +8,7 @@ import Checkbox from '@components/Form/Checkbox'
 import CrossIcon from '@components/Icon/CrossIcon'
 import { LabelImage } from '@services/Object/Gemini'
 import { Labels, ModelResult } from '@services/Object/ImageBlob'
-import { useFileUpload } from 'src/hooks/useFileUpload'
+import { useFileUpload } from 'hooks/useFileUpload'
 
 type hashtag = {
   acc: number

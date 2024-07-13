@@ -10,7 +10,7 @@ import { Table } from '@components/Table'
 import { usePagination } from '@hooks/usePagination'
 import { getErrorPagination } from '@services/Account/AccountErros'
 import { PaginationMetadata } from '@services/Account/AccountInterface'
-import { useAccountErrorPagination } from 'src/hooks/useAccountErrors'
+import { useAccountErrorPagination } from 'hooks/useAccountErrors'
 
 type Props = {
   paginationData: PaginationMetadata<IAccountError[]>

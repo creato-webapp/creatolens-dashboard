@@ -6,8 +6,8 @@ import { useRouter } from 'next/router'
 import { IAccount } from '@components/Account/Account/interface'
 import AccountInfoCard from '@components/Account/AccountInfoCard'
 import { getAccount } from '@services/Account/Account'
-import { useAccount } from 'src/hooks/useAccount'
-import dayjs from 'src/utils/dayjs'
+import { useAccount } from 'hooks/useAccount'
+import dayjs from 'utils/dayjs'
 
 type Props = {
   account: IAccount | null

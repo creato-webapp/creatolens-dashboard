@@ -10,10 +10,10 @@ import Hero from '@components/Hero'
 import PlusIcon from '@components/Icon/PlusIcon'
 import ReportLayout from '@components/Layout/ReportLayout'
 import Tab from '@components/Tab'
+import ROUTE from '@constants/route'
 import { getAccounts } from '@services/Account/Account'
-import ROUTE from 'src/constants/route'
-import { CountryEnum } from 'src/enums/CountryCodeEnums'
-import { useKeyword, useMostRepeatedPost, useMostRepeatedPostImage, usePostCount, useProfile } from 'src/hooks/useMeta'
+import { CountryEnum } from 'enums/CountryCodeEnums'
+import { useKeyword, useMostRepeatedPost, useMostRepeatedPostImage, usePostCount, useProfile } from 'hooks/useMeta'
 
 type Props = {
   botList: IAccount[]

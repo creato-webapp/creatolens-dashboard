@@ -9,11 +9,11 @@ import Card from '@components/Card'
 import EditIcon from '@components/Icon/EditIcon'
 import Pagination from '@components/Pagination'
 import { Table } from '@components/Table'
+import ROUTE from '@constants/route'
 import { usePagination } from '@hooks/usePagination'
 import { PaginationMetadata } from '@services/Account/AccountInterface'
 import { getBlockedAccountsPagination } from '@services/Account/BlockAccount'
-import ROUTE from 'src/constants/route'
-import { useGetBlockAccountsPagination } from 'src/hooks/useBlockedAccount'
+import { useGetBlockAccountsPagination } from 'hooks/useBlockedAccount'
 
 type Props = {
   paginationData: PaginationMetadata<IBlockedAccount[]>

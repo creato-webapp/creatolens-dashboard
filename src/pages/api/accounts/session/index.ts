@@ -1,7 +1,7 @@
 import { AxiosRequestConfig } from 'axios'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-import ENDPOINT_BACKEND_ACCOUNT_SESSION from 'src/constants/endpoints/backend'
+import ENDPOINT_BACKEND_ACCOUNT_SESSION from '@constants/endpoints/backend'
 
 import AccountInstance from '../../axiosInstance/Account'
 

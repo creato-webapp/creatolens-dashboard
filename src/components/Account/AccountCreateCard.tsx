@@ -9,8 +9,8 @@ import DynamicForm from '@components/Form/DynamicForm'
 import { IField } from '@components/Form/interface'
 import { Paragraph } from '@components/Typography'
 import { createAccount } from '@services/Account/Account'
-import { Status } from 'src/context/DialogueContext'
-import { useDialogues } from 'src/hooks/useDialogues'
+import { Status } from 'context/DialogueContext'
+import { useDialogues } from 'hooks/useDialogues'
 interface AccountCreateCardProps {
   isCreate: boolean
 }

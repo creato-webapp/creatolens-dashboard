@@ -1,7 +1,7 @@
 import useSWR from 'swr'
 
 import { getKeyword, getMostRepeatedPost, getMostRepeatedPostImage, getPostCount, getProfile } from '@services/Meta'
-import { CountryEnum } from 'src/enums/CountryCodeEnums'
+import { CountryEnum } from 'enums/CountryCodeEnums'
 
 export const useKeyword = (input: { accId?: string; days: number; profile_id?: string }) => {
   const { data, error, isLoading, mutate, ...swr } = useSWR({ url: 'api/dashboard/keyword', args: input }, getKeyword, {

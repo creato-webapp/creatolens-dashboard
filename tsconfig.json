@@ -15,13 +15,18 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "baseUrl": ".",
+    "baseUrl": "src",
     "paths": {
-      "@components/*": ["src/components/*"],
-      "@lib/*": ["src/lib/*"],
-      "@services/*": ["src/services/*"],
-      "@api/*": ["src/pages/api/*"],
-      "@hooks/*": ["src/hooks/*"]
+      "@components/*": ["components/*"],
+      "@constants/*": ["constants/*"],
+      "@context/*": ["context/*"],
+      "@helpers/*": ["helpers/*"],
+      "@hooks/*": ["hooks/*"],
+      "@lib/*": ["lib/*"],
+      "@middlewares/*": ["middlewares/*"],
+      "@services/*": ["services/*"],
+      "@api/*": ["pages/api/*"],
+      "@utils/*": ["utils/*"]
     },
     "plugins": [
       {

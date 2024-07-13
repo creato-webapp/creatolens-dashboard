@@ -14,9 +14,9 @@ import 'react-loading-skeleton/dist/skeleton.css'
 import Dropdown from '@components/Form/Dropdown'
 import ClockIcon from '@components/Icon/ClockIcon'
 import PlusIcon from '@components/Icon/PlusIcon'
+import IMAGE from '@constants/image'
 import { IProfile, KeywordData, MostRepeatedPost } from '@services/Meta'
-import IMAGE from 'src/constants/image'
-import dayjs, { DATE_FORMAT } from 'src/utils/dayjs'
+import dayjs, { DATE_FORMAT } from 'utils/dayjs'
 
 interface Prop {
   days: number

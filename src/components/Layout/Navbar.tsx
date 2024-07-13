@@ -8,9 +8,9 @@ import LoginIcon from '@components/Icon/LoginIcon'
 import LogoutIcon from '@components/Icon/LogOutIcon'
 import MenuIcon from '@components/Icon/MenuIcon'
 import { Title } from '@components/Typography'
+import IMAGE from '@constants/image'
+import ROUTE from '@constants/route'
 import { useAuth } from '@hooks/useAuth'
-import IMAGE from 'src/constants/image'
-import ROUTE from 'src/constants/route'
 
 import { Button } from '..'
 

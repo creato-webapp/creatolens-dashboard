@@ -1,7 +1,7 @@
 import { AxiosRequestConfig, AxiosResponse } from 'axios'
 
-import { ImageDetailsType } from 'src/context/ImageToHashtagContext'
-import fetcher from 'src/helpers/fetcher'
+import { ImageDetailsType } from 'context/ImageToHashtagContext'
+import fetcher from 'helpers/fetcher'
 
 import { base64ToBlob } from './util'
 

@@ -9,10 +9,10 @@ import { SessionProvider } from 'next-auth/react'
 
 import { Layout } from '@components/Layout'
 import Modals from '@components/Modal'
-import Dialogue from 'src/components/Dialogue'
-import { DialogueProvider } from 'src/context/DialogueContext'
-import { ImageHashtagProvider } from 'src/context/ImageToHashtagContext'
-import { ModalProvider } from 'src/context/ModalContext'
+import Dialogue from 'components/Dialogue'
+import { DialogueProvider } from 'context/DialogueContext'
+import { ImageHashtagProvider } from 'context/ImageToHashtagContext'
+import { ModalProvider } from 'context/ModalContext'
 
 import ErrorComponent from './error'
 
