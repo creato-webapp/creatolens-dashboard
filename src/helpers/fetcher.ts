@@ -1,4 +1,5 @@
 import axios, { AxiosError, AxiosRequestConfig } from 'axios'
+
 export const instance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_LOCAL_SERVER_URL,
   withCredentials: true,
@@ -26,7 +27,6 @@ instance.interceptors.response.use(
   },
   function (error: AxiosError) {
     abortControllers.delete(error.config?.url)
-
     if (axios.isAxiosError(error)) {
       if (typeof window !== 'undefined') {
         // window.alert(error.message)
@@ -37,40 +37,49 @@ instance.interceptors.response.use(
   }
 )
 
-enum Method {
-  POST = 'POST',
-  GET = 'GET',
-  PUT = 'PUT',
-  PATCH = 'PATCH',
-  DELETE = 'DELETE',
-}
+const METHOD = {
+  POST: 'POST',
+  UPLOAD: 'UPLOAD',
+  GET: 'GET',
+  PUT: 'PUT',
+  PATCH: 'PATCH',
+  DELETE: 'DELETE',
+} as const
 
 export type CancellablePromise<T> = Promise<T> & {
   cancel: () => void
 }
 
-export const fetcher = {
-  [Method.GET]: async <T>(...key: [string, AxiosRequestConfig?]) => {
-    const response = await instance.get<T>(...key).then((res) => res.data)
+const fetcher = {
+  [METHOD.GET]: async <T>(url: string, customConfig?: AxiosRequestConfig) => {
+    const response = await instance.get<T>(url, customConfig).then((res) => res.data)
     return response
   },
-  [Method.POST]: async <T, D = unknown>(...key: [string, D?, AxiosRequestConfig?]) => {
-    const [url, data, config] = key
-    const response = await instance.post<T>(url, data, config).then((res) => res.data)
+  [METHOD.POST]: async <T, D = unknown>(url: string, data?: D, customConfig?: AxiosRequestConfig) => {
+    const response = await instance.post<T>(url, data, customConfig).then((res) => res.data)
     return response
   },
-  [Method.PATCH]: async <T, D = unknown>(...key: [string, D?, AxiosRequestConfig?]) => {
-    const response = await instance.patch<T>(...key).then((res) => res.data)
+  [METHOD.UPLOAD]: async <T, D = unknown>(url: string, data?: D, customConfig?: AxiosRequestConfig) => {
+    const config = { ...customConfig, headers: { 'Content-Type': 'application/octet-stream' } }
+    const response = await instance.put<T>(url, data, config).then((res) => res.data)
     return response
   },
-  [Method.PUT]: async <T, D = unknown>(...key: [string, D?, AxiosRequestConfig?]) => {
-    const response = await instance.put<T>(...key).then((res) => res.data)
+  [METHOD.PATCH]: async <T, D = unknown>(url: string, data?: D, customConfig?: AxiosRequestConfig) => {
+    const config = { ...customConfig }
+    const response = await instance.patch<T>(url, data, config).then((res) => res.data)
     return response
   },
-  [Method.DELETE]: async <T>(...key: [string, AxiosRequestConfig?]) => {
-    const response = await instance.delete<T>(...key).then((res) => res.data)
+  [METHOD.PUT]: async <T, D = unknown>(url: string, data?: D, customConfig?: AxiosRequestConfig) => {
+    const config = { ...customConfig }
+    const response = await instance.put<T>(url, data, config).then((res) => res.data)
     return response
   },
-}
+  [METHOD.DELETE]: async <T>(url: string, customConfig?: AxiosRequestConfig) => {
+    const config = { ...customConfig }
+    const response = await instance.delete<T>(url, config).then((res) => res.data)
+    return response
+  },
+} as const
 
-export { Method }
+export { METHOD }
+export default fetcher
