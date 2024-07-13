@@ -6,8 +6,7 @@ import { PaginationMetadata, PaginationParams } from '@services/Account/AccountI
 import ENDPOINT_FRONTEND from '@constants/endpoints/frontend'
 
 import useRequest from './useRequest'
-
-import { METHOD } from '../helpers/fetcher'
+import METHOD from '@constants/method'
 
 export const useAccount = (id: string, defaultShouldFetch: boolean = true, fallbackData?: IAccount) => {
   const [shouldFetch, setShouldFetch] = useState(defaultShouldFetch)
