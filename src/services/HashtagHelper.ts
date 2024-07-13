@@ -16,7 +16,7 @@ export async function getHashtag(input: string, customConfig?: AxiosRequestConfi
 }
 
 export async function getImageHashtag(input: string, customConfig?: AxiosRequestConfig): Promise<{ data: IHashet[] }> {
-  const response = await Fetcher.GET<{ data: IHashet[] }>(`/api/blob`, {
+  const response = await fetcher.GET<{ data: IHashet[] }>(`/api/blob`, {
     ...customConfig,
     params: {
       input,
