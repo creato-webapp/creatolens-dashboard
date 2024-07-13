@@ -1,9 +1,9 @@
 import useSWR, { Key, SWRConfiguration } from 'swr'
 
-import fetcher, { METHOD } from '../helpers/fetcher'
+import { Method, fetcher } from '../helpers/fetcher'
 
-const useRequest = <T>(key: Key, method: keyof typeof METHOD, config?: SWRConfiguration) => {
-  const { data, error, ...swr } = useSWR<T>(key, fetcher[method], config)
+const useRequest = <T>(key: Key, method: keyof typeof Method, config?: SWRConfiguration) => {
+  const { data, error, ...swr } = useSWR<T>(key, (key) => <T>fetcher[method](...key), config)
 
   return {
     data,

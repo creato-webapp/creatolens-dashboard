@@ -7,7 +7,7 @@ import ENDPOINT_FRONTEND from 'src/constants/endpoints/frontend'
 
 import { PaginationMetadata, PaginationParams } from './AccountInterface'
 
-import fetcher from '../../helpers/fetcher'
+import { fetcher } from '../../helpers/fetcher'
 
 type PartialAccount = Partial<{
   id: string

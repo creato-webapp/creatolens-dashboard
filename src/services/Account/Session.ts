@@ -4,7 +4,7 @@ import { AxiosRequestConfig } from 'axios'
 import ENDPOINT_FRONTEND from 'src/constants/endpoints/frontend'
 import { IAccountSession } from 'src/pages/accounts/session'
 
-import fetcher from '../../helpers/fetcher'
+import { fetcher } from '../../helpers/fetcher'
 
 export interface PaginationParams {
   pageNumber: number

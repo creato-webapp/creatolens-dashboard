@@ -8,7 +8,7 @@ import { IAccountStatusType } from 'src/constants/status'
 import { PaginationMetadata, PaginationParams } from './AccountInterface'
 
 import { CountryEnum } from '../../enums/CountryCodeEnums'
-import fetcher from '../../helpers/fetcher'
+import { fetcher } from '../../helpers/fetcher'
 
 interface Cookies {
   [key: string]: string

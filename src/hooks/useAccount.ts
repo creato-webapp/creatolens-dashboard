@@ -7,11 +7,11 @@ import ENDPOINT_FRONTEND from 'src/constants/endpoints/frontend'
 
 import useRequest from './useRequest'
 
-import { METHOD } from '../helpers/fetcher'
+import { Method } from '../helpers/fetcher'
 
 export const useAccount = (id: string, defaultShouldFetch: boolean = true, fallbackData?: IAccount) => {
   const [shouldFetch, setShouldFetch] = useState(defaultShouldFetch)
-  const { data, error, mutate, ...swr } = useRequest<IAccount>(shouldFetch ? [ENDPOINT_FRONTEND.ACCOUNT + id] : null, METHOD.GET, {
+  const { data, error, mutate, ...swr } = useRequest<IAccount>(shouldFetch ? [ENDPOINT_FRONTEND.ACCOUNT + id] : null, Method.GET, {
     refreshInterval: 0,
     fallbackData: fallbackData,
   })
@@ -37,7 +37,6 @@ export const useAccount = (id: string, defaultShouldFetch: boolean = true, fallb
     ...swr,
   }
 }
-
 export const useGetAccountsPagination = (
   paginationParams: PaginationParams,
   defaultShouldFetch?: boolean,
@@ -53,7 +52,7 @@ export const useGetAccountsPagination = (
           },
         ]
       : null,
-    METHOD.GET,
+    Method.GET,
     {
       refreshInterval: 0,
       fallbackData: fallbackData,
