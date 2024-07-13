@@ -2,8 +2,9 @@ import { AxiosRequestConfig, AxiosResponse } from 'axios'
 
 import { ImageDetailsType } from 'src/context/ImageToHashtagContext'
 
-import { Fetcher } from './fetcher'
 import { base64ToBlob } from './util'
+
+import { Fetcher } from '../helpers/fetcher'
 
 export async function getImageUploadUrl(
   data: {
