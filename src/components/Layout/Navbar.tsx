@@ -50,7 +50,7 @@ const NavBar: React.FC = () => {
         )}
       </div>
       <Link href="/">
-        <div className="mx-8 my-auto shrink-0 md:mx-16">
+        <div className="my-auto shrink-0">
           <img src={LOGO_SRC} alt="Logo" className="h-12 md:h-16" />
         </div>
       </Link>
