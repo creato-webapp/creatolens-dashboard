@@ -1,4 +1,5 @@
-import METHOD, { IMethodType } from '@constants/method'
+import METHOD, { IMethodsType } from '@constants/method'
+import { StatusCodes } from 'http-status-codes'
 import { NextApiRequest, NextApiResponse } from 'next'
 
 function errorHandler(err: Error, res: NextApiResponse) {
@@ -12,20 +13,27 @@ function errorHandler(err: Error, res: NextApiResponse) {
   return res.status(500).json({ message: err.message })
 }
 
-type IHandlerType = Partial<Record<IMethodType, (req: NextApiRequest, res: NextApiResponse) => Promise<unknown>>>
+type IApiHandlerType = (req: NextApiRequest, res: NextApiResponse) => Promise<void>
 
-function apiHandler(handler: IHandlerType) {
+type IHandlersType = {
+  [key in Extract<IMethodsType, typeof METHOD.GET>]: IApiHandlerType
+} & Partial<{
+  [key in Exclude<IMethodsType, typeof METHOD.GET>]: IApiHandlerType
+}>
+
+function apiHandler(handlers: IHandlersType) {
   return async (req: NextApiRequest, res: NextApiResponse) => {
-    try {
-      const method = req.method!.toUpperCase() as keyof typeof METHOD
+    const method = req.method!.toUpperCase() as keyof typeof METHOD
+    const handler = handlers[method]
 
-      // check handler supports HTTP method
-      if (!handler[method]) return res.status(405).end(`Method ${req.method} Not Allowed`)
+    if (!method || !handler) return res.status(StatusCodes.METHOD_NOT_ALLOWED).end(`Method ${method} Not Allowed`)
+
+    try {
       // global middleware
       // await jwtMiddleware(req, res)
 
       // route handler
-      await handler[method](req, res)
+      await handler(req, res)
     } catch (err) {
       // global error handler
       errorHandler(err as Error, res)

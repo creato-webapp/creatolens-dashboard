@@ -7,6 +7,6 @@ const METHOD = {
   DELETE: 'DELETE',
 } as const
 
-export type IMethodType = (typeof METHOD)[keyof typeof METHOD]
+export type IMethodsType = (typeof METHOD)[keyof typeof METHOD]
 
 export default METHOD
