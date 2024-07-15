@@ -14,7 +14,7 @@ import { ModalKeyEnum } from '@context/ModalContext'
 import { useAccount } from '@hooks/useAccount'
 import { useDialogues } from '@hooks/useDialogues'
 import { useModals } from '@hooks/useModal'
-import dayjs from '@utils/dayjs'
+import dayjs from '@helpers/dayjs'
 
 interface AccountInfoCardProps {
   account: IAccount

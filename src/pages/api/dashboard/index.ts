@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-import MetaInstance from '@api/axiosInstance/Meta'
+import MetaInstance from '@helpers/axios/Meta'
 export default async function dashboardQueryHandler(req: NextApiRequest, res: NextApiResponse) {
   const {
     query: { accId, days },

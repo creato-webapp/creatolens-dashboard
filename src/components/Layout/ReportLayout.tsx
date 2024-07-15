@@ -16,7 +16,7 @@ import Dropdown from '@components/Form/Dropdown'
 import ClockIcon from '@components/Icon/ClockIcon'
 import PlusIcon from '@components/Icon/PlusIcon'
 import { IProfile, KeywordData, MostRepeatedPost } from '@services/Meta'
-import dayjs, { DATE_FORMAT } from '@utils/dayjs'
+import dayjs, { DATE_FORMAT } from '@helpers/dayjs'
 
 interface Prop {
   days: number

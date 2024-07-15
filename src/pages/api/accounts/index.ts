@@ -5,7 +5,7 @@ import requestIp from 'request-ip'
 import { IAccount } from '@components/Account/Account'
 import ENDPOINT_BACKEND from '@constants/endpoints/backend'
 
-import AccountInstance from '../axiosInstance/Account'
+import AccountInstance from '../../../helpers/axios/Account'
 import handlers from '@helpers/api/handlers'
 import METHOD from '@constants/method'
 
