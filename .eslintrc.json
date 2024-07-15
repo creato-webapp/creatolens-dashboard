@@ -75,7 +75,12 @@
         "argsIgnorePattern": "^_"
       }
     ],
-
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto"
+      }
+    ],
     "@next/next/no-img-element": "off",
     "no-console": ["error", { "allow": ["warn", "error"] }]
   }

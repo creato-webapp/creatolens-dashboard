@@ -93,4 +93,6 @@ const authHandler = (req: NextApiRequest, res: NextApiResponse) => {
   return NextAuth(req, res, nextAuthOptions(req, res))
 }
 
-export default authHandler
+export default async function handler(...params: any[]) {
+  await authHandler(...params)
+}

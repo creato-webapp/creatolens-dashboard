@@ -33,15 +33,18 @@ const Dropdown: React.FC<DropdownProps> = ({ name, options, onValueChange, dropD
 
   const handleOptionSelect = useCallback(
     (value: string | number) => () => {
-      if (!setSelectedValue) return
+      if (!setSelectedValue) {
+        return
+      }
       setSelectedValue(value)
+
       setIsOpen(false)
       setIsDropdownNotSelected(false)
       if (onValueChange) {
         onValueChange(value)
       }
     },
-    [onValueChange, setSelectedValue]
+    [onValueChange]
   )
 
   const handleToggleMenu = () => {

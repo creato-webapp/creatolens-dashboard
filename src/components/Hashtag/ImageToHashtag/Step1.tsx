@@ -6,19 +6,13 @@ import { ImageDetailsType, useImageHashtagContext } from 'src/context/ImageToHas
 
 import ImageUpload from '../ImageUpload'
 
-export interface StepProps {
-  step: number
-  setStep: (arg: number) => void
-}
-
-const Step1 = (props: StepProps) => {
-  const { setStep } = props
+const Step1 = () => {
   const [uploading, setUploading] = useState<boolean>(false)
   const [uploadedImage, setUploadedImage] = useState<string>('')
   const [imageDetails, setImageDetails] = useState<ImageDetailsType>({})
   const fileInputRef = useRef<HTMLInputElement | null>(null)
 
-  const { addImage } = useImageHashtagContext()
+  const { addImage, goForward } = useImageHashtagContext()
 
   const onClickButton = useCallback(async () => {
     if (!uploadedImage || !imageDetails.format || !imageDetails.path) {
@@ -34,11 +28,11 @@ const Step1 = (props: StepProps) => {
       const uploadedImageResponse = await uploadImage(data)
       addImage(uploadedImageResponse, [])
       setUploading(false)
-      setStep(2)
+      goForward()
     } catch (e) {
       setUploading(false)
     }
-  }, [addImage, imageDetails, setStep, uploadedImage])
+  }, [addImage, imageDetails, uploadedImage])
   return (
     <div className="flex flex-col gap-3 rounded-2xl  ">
       <div className="w-full">

@@ -9,8 +9,12 @@ const Step3 = () => {
 
   return (
     <>
-      <h2 className="font-extrabold">Result</h2>
-      <div onClick={goBack}>Back</div>
+      <div className="flex flex-row items-center">
+        <div className="required relative h-6 w-6 cursor-pointer items-center justify-center px-4 text-center text-2xl text-black" onClick={goBack}>
+          <Image src={'/back.svg'} fill alt={'back'} />
+        </div>
+        <h2 className="font-extrabold">Result</h2>
+      </div>
       <div className="mt-4 flex items-center justify-center">
         <div className="relative my-4 h-56 w-full">
           {imageURL && (

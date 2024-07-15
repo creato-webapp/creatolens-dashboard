@@ -25,7 +25,10 @@ type ImageType = {
   uploadStatus: UploadStatus
 }
 
-type ImageHashtagContextType = {
+type ImageHashtagContextType = {  step: number
+  updateStep: (arg: number) => void
+  goBack: () => void
+  goForward: () => void
   images: ImageType[] // Corrected property name from 'dialoguese' to 'dialogues'
   addImage: (arg: string, labels: string[]) => void
   currentImageIndex: number
@@ -47,11 +50,26 @@ interface ImageHashtagProviderProps {
 }
 
 export const ImageHashtagProvider = ({ children }: ImageHashtagProviderProps) => {
+  const [step, setStep] = useState<number>(1)
+
   const [images, setImages] = useState<ImageType[] | []>([])
   const [loadingLabels, setloadingLabels] = useState<boolean>(false)
   const [currentImageIndex, setCurrentImageIndex] = useState<number>(0)
 
   const [hashtags, setHashtags] = useState<IHashet[]>([])
+
+
+  const updateStep = useCallback((arg: number) => {
+    setStep(arg)
+  }, [])
+  const goBack = useCallback(() => {
+    setStep((prev) => Math.max(prev - 1, 1)) // Ensures step doesn't go below 1
+  }, [])
+
+  const goForward = useCallback(() => {
+    setStep((prev) => prev + 1)
+  }, [])
+
 
   const addImage = useCallback(
     (image: string) => {
@@ -210,6 +228,10 @@ export const ImageHashtagProvider = ({ children }: ImageHashtagProviderProps) =>
         hashtags,
         updateHashtag,
         generateImageByHashtag,
+        step,
+        updateStep,
+        goBack,
+        goForward,
       }}
     >
       {children}

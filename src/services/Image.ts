@@ -95,8 +95,5 @@ export async function getImageByPrompt(prompt: string) {
       keepAlive: false,
     },
   })
-
-  console.log('response', response)
   return response
 }
-

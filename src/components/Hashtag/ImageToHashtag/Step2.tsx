@@ -10,12 +10,10 @@ import Primary from '@components/Button/Primary'
 import { reAnnotateLabel } from '@services/Label'
 import { useImageHashtagContext } from 'src/context/ImageToHashtagContext'
 
-import { StepProps } from './Step1'
 import 'react-loading-skeleton/dist/skeleton.css'
 
-const Step2 = (props: StepProps) => {
-  const { setStep } = props
-  const { images, currentImageIndex, getCurrentImageLabels, updateSelectedLabels, selectAllLabels, loadingLabels, updateLabel } =
+const Step2 = () => {
+  const { images, currentImageIndex, getCurrentImageLabels, updateSelectedLabels, selectAllLabels, loadingLabels, updateLabel, goBack, goForward } =
     useImageHashtagContext()
 
   useEffect(() => {
@@ -45,33 +43,27 @@ const Step2 = (props: StepProps) => {
     updateLabel(newLabel)
   }
 
-  const onGoBack = () => {
-    setStep(1)
-  }
-  const onClickButton = () => {
-    setStep(3)
-  }
-
   const onClickSelectAll = () => {
     selectAllLabels()
   }
 
   const currentImage = useMemo(() => {
     return images[currentImageIndex]
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [images, currentImageIndex, images[currentImageIndex]])
 
   return (
     <div className="flex w-full flex-col gap-4 md:flex-row">
       <div>
         <div className="flex flex-row items-center">
-          <div className="required relative h-6 w-6 items-center justify-center px-4 text-center text-2xl text-black" onClick={onGoBack}>
+          <div className="required relative h-6 w-6 cursor-pointer items-center justify-center px-4 text-center text-2xl text-black" onClick={goBack}>
             <Image src={'/back.svg'} fill alt={'back'} />
           </div>
           <h2 className="flex items-center font-extrabold">Image label annotation</h2>
         </div>
 
         <div className="relative my-4 flex aspect-square h-full w-full min-w-full items-center justify-center rounded-full">
-          {currentImage.image && (
+          {currentImage?.image && (
             <Image
               fill={true}
               src={currentImage.image}
@@ -88,11 +80,11 @@ const Step2 = (props: StepProps) => {
       </div>
       <div className="my-4 border-b md:hidden"></div>
       <div className="flex w-full flex-col gap-2 md:w-1/2">
-        {currentImage.labels && <h3 className="mb-4 font-semibold text-text-secondary">{`${currentImage.labels?.length}`} labels discovered</h3>}
+        {currentImage?.labels && <h3 className="mb-4 font-semibold text-text-secondary">{`${currentImage.labels?.length}`} labels discovered</h3>}
         <div>
           <div className="flex h-full w-full flex-row flex-wrap gap-4">
             {!loadingLabels ? (
-              currentImage.labels &&
+              currentImage?.labels &&
               currentImage.labels.map((label) => {
                 return (
                   <Badges
@@ -125,12 +117,12 @@ const Step2 = (props: StepProps) => {
             <Outline
               sizes={['l', 'l', 'l']}
               onClick={onReannotateClick}
-              disabled={currentImage.selectedLabels.length === currentImage.labels?.length}
+              disabled={currentImage?.selectedLabels.length === currentImage?.labels?.length}
             >
               <Image src="/arrows-clockwise.png" height={24} width={24} alt={'arrows clockwise'} />
               Re-annotate
             </Outline>
-            <Primary sizes={['l', 'l', 'l']} onClick={onClickButton}>
+            <Primary sizes={['l', 'l', 'l']} onClick={goForward}>
               + Get Hashtag
             </Primary>
           </div>

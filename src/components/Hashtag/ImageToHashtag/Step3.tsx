@@ -9,11 +9,8 @@ import { getImageHashtag } from '@services/HashtagHelper'
 import { useImageHashtagContext } from 'src/context/ImageToHashtagContext'
 import { IHashet } from 'src/pages/recommendation'
 
-import { StepProps } from './Step1'
-
-const Step3 = (props: StepProps) => {
-  const { setStep } = props
-  const { images, currentImageIndex, updateSelectedLabels, hashtags, updateHashtag } = useImageHashtagContext()
+const Step3 = () => {
+  const { images, currentImageIndex, updateSelectedLabels, hashtags, updateHashtag, goBack } = useImageHashtagContext()
   const [options, setOptions] = useState<
     {
       name: string
@@ -115,24 +112,19 @@ const Step3 = (props: StepProps) => {
     navigator.clipboard.writeText(selected!.join(', '))
   }, [options])
 
-  const goBack = () => {
-    setStep(2)
-    return null
-  }
-
   const currentImage = useMemo(() => {
     return images[currentImageIndex]
   }, [images, currentImageIndex])
 
   const labelOptions = useMemo(() => {
-    if (!currentImage.labels || currentImage.labels.length === 0) return null
+    if (!currentImage || !currentImage.labels || currentImage.labels.length === 0) return null
 
     return currentImage.labels.map((label) => ({
       value: label,
       label,
       checked: currentImage.selectedLabels.includes(label),
     }))
-  }, [currentImage.labels, currentImage.selectedLabels])
+  }, [currentImage?.labels, currentImage?.selectedLabels])
 
   const hashtagsLength = useMemo(() => {
     if (!options) return 0
@@ -141,15 +133,15 @@ const Step3 = (props: StepProps) => {
 
   return (
     <div>
-      <h2 className="flex flex-row font-extrabold">
-        <div onClick={goBack} className="mr-2 cursor-pointer">
-          {'<'}
+      <h2 className="flex flex-row items-center font-extrabold">
+        <div className="required relative h-6 w-6 cursor-pointer items-center justify-center px-4 text-center text-2xl text-black" onClick={goBack}>
+          <Image src={'/back.svg'} fill alt={'back'} />
         </div>
-        Get hashtag recommendation
+        <h2 className="flex items-center font-extrabold"> Get hashtag recommendation</h2>
       </h2>
 
       <div className="relative my-4 flex aspect-square h-48  min-w-full items-center rounded-full md:min-w-fit md:justify-center">
-        {currentImage.image && (
+        {currentImage?.image && (
           <Image
             fill={true}
             src={currentImage.image}
@@ -199,8 +191,8 @@ const Step3 = (props: StepProps) => {
           sizes={['l', 'l', 'l']}
           className="w-full"
           onClick={async () => {
-          //   if (!currentImage.labels) return null
-          //   const res = await getImageHashtag(currentImage.labels.join(', '))
+            //   if (!currentImage.labels) return null
+            //   const res = await getImageHashtag(currentImage.labels.join(', '))
             updateHashtag(
               res.data.map((item) => {
                 return {

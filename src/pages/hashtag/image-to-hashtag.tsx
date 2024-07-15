@@ -8,24 +8,25 @@ import Step1 from '@components/Hashtag/ImageToHashtag/Step1'
 import Step2 from '@components/Hashtag/ImageToHashtag/Step2'
 import Step3 from '@components/Hashtag/ImageToHashtag/Step3'
 import ProgressBar from '@components/Hashtag/ProgressBar'
+import { useHashtagImageContext } from 'src/context/HashtagToImageContext'
 
 const ImageToHashtag = () => {
-  const [step, setStep] = useState<number>(1)
+  const { step } = useHashtagImageContext()
   const [isDetailPagesOpen, setIsDetailsPageOpen] = useState<boolean>(false)
 
   const StepComponent = useCallback(() => {
     if (step === 1) {
-      return <Step1 step={step} setStep={setStep} />
+      return <Step1 />
     } else if (step === 2) {
-      return <Step2 step={step} setStep={setStep} />
+      return <Step2 />
     } else if (step === 3) {
-      return <Step3 setStep={setStep} step={step} />
+      return <Step3 />
     } else return <></>
   }, [step])
 
   if (isDetailPagesOpen)
     return (
-      <div className="mx-3 my-4 flex items-center justify-center ">
+      <div className="mx-3 my-4 flex cursor-pointer items-center justify-center">
         <Details setIsDetailsPageOpen={() => setIsDetailsPageOpen((pre) => !pre)} />
       </div>
     )

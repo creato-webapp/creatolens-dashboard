@@ -11,14 +11,6 @@ import { useHashtagImageContext } from 'src/context/HashtagToImageContext'
 const HashtagToImage = () => {
   const { step } = useHashtagImageContext()
 
-  const goBack = () => {
-    if (step === 1) {
-      return
-    } else {
-      setStep((pre) => pre - 1)
-    }
-  }
-
   const StepComponent = useCallback(() => {
     if (step === 1) {
       return <Step1 />
