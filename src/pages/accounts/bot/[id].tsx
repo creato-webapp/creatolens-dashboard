@@ -7,7 +7,7 @@ import { IAccount } from '@components/Account/Account/interface'
 import AccountInfoCard from '@components/Account/AccountInfoCard'
 import { useAccount } from '@hooks/useAccount'
 import { getAccount } from '@services/Account/Account'
-import dayjs from '@utils/dayjs'
+import dayjs from '@helpers/dayjs'
 
 type Props = {
   account: IAccount | null

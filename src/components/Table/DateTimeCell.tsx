@@ -1,6 +1,6 @@
 import { FC } from 'react'
 
-import dayjs, { DATE_FORMAT } from '@utils/dayjs'
+import dayjs, { DATE_FORMAT } from '@helpers/dayjs'
 
 import BodyCell, { BodyCellProps } from './BodyCell'
 

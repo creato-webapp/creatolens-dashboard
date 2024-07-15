@@ -4,7 +4,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 
 import fs from 'fs'
 
-import ImageInstance from '../axiosInstance/Image'
+import ImageInstance from '../../../helpers/axios/Image'
 
 export const config = {
   api: {

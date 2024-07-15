@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-import MetaInstance from '@api/axiosInstance/Meta'
+import MetaInstance from '@helpers/axios/Meta'
 
 export default async function instaProfileHandler(req: NextApiRequest, res: NextApiResponse) {
   const {

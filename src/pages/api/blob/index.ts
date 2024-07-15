@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 
 import { UploadImageResponse } from '@services/Object/ImageBlob'
 
-import BlobInstance from '../axiosInstance/Blob'
+import BlobInstance from '../../../helpers/axios/Blob'
 export const config = {
   api: {
     bodyParser: false,

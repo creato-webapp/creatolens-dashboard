@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 
 import ENDPOINT_BACKEND_ACCOUNT_SESSION from '@constants/endpoints/backend'
 
-import AccountInstance from '../../axiosInstance/Account'
+import AccountInstance from '../../../../helpers/axios/Account'
 
 export default async function accountQueryHandler(req: NextApiRequest, res: NextApiResponse) {
   const {

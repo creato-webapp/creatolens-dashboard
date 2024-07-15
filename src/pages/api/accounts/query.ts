@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 
 import ENDPOINT_BACKEND from '@constants/endpoints/backend'
 
-import AccountInstance from '../axiosInstance/Account'
+import AccountInstance from '../../../helpers/axios/Account'
 
 export default async function accountDashboardQueryHandler(req: NextApiRequest, res: NextApiResponse) {
   const {

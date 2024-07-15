@@ -9,7 +9,7 @@ import DynamicForm from '@components/Form/DynamicForm'
 import { IField } from '@components/Form/interface'
 import { useRetryAccount } from '@hooks/useRetryAccount'
 import { getRetryAccount } from '@services/Account/RetryAccount'
-import dayjs from '@utils/dayjs'
+import dayjs from '@helpers/dayjs'
 
 type Props = {
   accountData: IRetryAccount
