@@ -1,6 +1,6 @@
 import { AxiosRequestConfig } from 'axios'
 
-import ENDPOINT_FRONTEND from '@constants/endpoints/frontend'
+import XAPI from '@constants/endpoints/xapi'
 import { CountryEnum } from 'enums/CountryCodeEnums'
 
 import fetcher from '../helpers/fetcher'
@@ -52,7 +52,7 @@ export async function getKeyword(
 ): Promise<{ data: KeywordData[] }> {
   const keywordResponse = await fetcher.GET<{
     data: KeywordData[]
-  }>(ENDPOINT_FRONTEND.DASHBOARD_KEYWORDS, {
+  }>(XAPI.DASHBOARD_KEYWORDS, {
     ...customConfig,
     params: {
       accId: data.args.accId,
@@ -73,7 +73,7 @@ export async function getPostCount(
 ): Promise<{ data: { post_count: number } }> {
   const postCountResponse = await fetcher.GET<{
     data: { post_count: number }
-  }>(ENDPOINT_FRONTEND.DASHBOARD_POST_COUNT, {
+  }>(XAPI.DASHBOARD_POST_COUNT, {
     ...customConfig,
     params: {
       accId: data.args.accId,
@@ -97,7 +97,7 @@ export async function getMostRepeatedPost(
 ): Promise<MostRepeatedPost | null> {
   const response = await fetcher.GET<{
     data: PostData[]
-  }>(ENDPOINT_FRONTEND.DASHBOARD, {
+  }>(XAPI.DASHBOARD, {
     ...customConfig,
     params: {
       accId: data.args.accId,
@@ -118,7 +118,7 @@ export async function getMostRepeatedPost(
         data: {
           username: string
         }
-      }>(ENDPOINT_FRONTEND.DASHBOARD_PROFILE, {
+      }>(XAPI.DASHBOARD_PROFILE, {
         ...customConfig,
         params: {
           profile_id: maxCountImage.owner_username,
@@ -149,7 +149,7 @@ export async function getMostRepeatedPostImage(data: {
 }) {
   if (!data.args.shortcode) return
 
-  const response = await fetcher.GET<string>(ENDPOINT_FRONTEND.DASHBOARD_POST_IMAGE, {
+  const response = await fetcher.GET<string>(XAPI.DASHBOARD_POST_IMAGE, {
     params: {
       shortcode: data.args.shortcode,
       batch_id: data.args.batch_id,
@@ -168,7 +168,7 @@ export async function getProfile(data: {
   if (!data.args.profile_id || !data.args.session_id) return
   const response = await fetcher.GET<{
     data: IProfile
-  }>(ENDPOINT_FRONTEND.DASHBOARD_PROFILE, {
+  }>(XAPI.DASHBOARD_PROFILE, {
     params: {
       profile_id: data.args.profile_id,
       session_id: data.args.session_id,

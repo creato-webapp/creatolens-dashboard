@@ -9,7 +9,7 @@ import CheckIcon from '@components/Icon/CheckIcon'
 import EditIcon from '@components/Icon/EditIcon'
 import XCircleIcon from '@components/Icon/XCircleIcon'
 import ROUTE from '@constants/route'
-import dayjs from '@helpers/dayjs'
+import dayjs from '@utils/dayjs'
 
 import { IAccount } from '../Account'
 

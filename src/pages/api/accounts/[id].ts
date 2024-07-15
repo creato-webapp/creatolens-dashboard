@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-import ENDPOINT_BACKEND from '@constants/endpoints/backend'
+import PAPI from '@constants/endpoints/papi'
 
 import AccountInstance from '../../../helpers/axios/Account'
 
@@ -19,11 +19,11 @@ export default async function AccountHandler(req: NextApiRequest, res: NextApiRe
 
   switch (method) {
     case 'GET': {
-      response = await AccountInstance.get(`${ENDPOINT_BACKEND.ACCOUNTS}/${id}`, cookieHeader)
+      response = await AccountInstance.get(`${PAPI.ACCOUNTS}/${id}`, cookieHeader)
       return res.status(response.status).json(response.data)
     }
     case 'PATCH':
-      response = await AccountInstance.patch(`${ENDPOINT_BACKEND.UPDATE_ACCOUNT}/${id}`, body, cookieHeader)
+      response = await AccountInstance.patch(`${PAPI.UPDATE_ACCOUNT}/${id}`, body, cookieHeader)
       return res.status(response.status).json(response.data)
     default:
       res.setHeader('Allow', ['GET', 'PATCH'])

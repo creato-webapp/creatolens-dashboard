@@ -4,7 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 import IMAGE from '@constants/image'
-import dayjs from '@helpers/dayjs'
+import dayjs from '@utils/dayjs'
 
 const FOOTER_LINKS = [
   {

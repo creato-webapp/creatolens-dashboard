@@ -2,7 +2,7 @@
 import { AxiosRequestConfig } from 'axios'
 
 import { IAccount } from '@components/Account/Account'
-import ENDPOINT_FRONTEND from '@constants/endpoints/frontend'
+import XAPI from '@constants/endpoints/xapi'
 import { IAccountStatusType } from '@constants/status'
 
 import { PaginationMetadata, PaginationParams } from './AccountInterface'
@@ -94,7 +94,7 @@ export async function createAccount(username: string, password: string, customCo
 }
 
 export async function getAccount(id: string, customConfig?: AxiosRequestConfig): Promise<IAccount> {
-  const response = await fetcher.GET<IAccount>(ENDPOINT_FRONTEND.ACCOUNT + id, customConfig)
+  const response = await fetcher.GET<IAccount>(XAPI.ACCOUNT + id, customConfig)
   return response
 }
 
@@ -106,7 +106,7 @@ export async function getAccounts(
 ): Promise<IAccount[]> {
   if (!account) return []
   const filterData = generateAccountFilter(account)
-  const response = await fetcher.GET<IAccount[]>(ENDPOINT_FRONTEND.GET_ACCOUNTS, {
+  const response = await fetcher.GET<IAccount[]>(XAPI.GET_ACCOUNTS, {
     ...customConfig,
     params: {
       orderBy: orderBy,
@@ -118,7 +118,7 @@ export async function getAccounts(
 }
 
 export async function getAccountsPagination(params: PaginationParams, customConfig?: AxiosRequestConfig) {
-  const response = await fetcher.GET<PaginationMetadata<IAccount[]>>(ENDPOINT_FRONTEND.ACCOUNT, {
+  const response = await fetcher.GET<PaginationMetadata<IAccount[]>>(XAPI.ACCOUNT, {
     ...customConfig,
     params: {
       pageNumber: params.pageNumber,
@@ -143,7 +143,7 @@ interface SessionUpdatePayload {
 }
 
 export async function updateAccount(id: string, updatedAccount: Partial<IAccount>, customConfig?: AxiosRequestConfig): Promise<IAccount> {
-  const res = await fetcher.PATCH<IAccount, Partial<IAccount>>(ENDPOINT_FRONTEND.ACCOUNT + id, updatedAccount, {
+  const res = await fetcher.PATCH<IAccount, Partial<IAccount>>(XAPI.ACCOUNT + id, updatedAccount, {
     ...customConfig,
     params: { id: updatedAccount.id },
   })
@@ -152,7 +152,7 @@ export async function updateAccount(id: string, updatedAccount: Partial<IAccount
 
 export async function updateSession(id: string, updatedAccount: IAccount, customConfig?: AxiosRequestConfig): Promise<SessionUpdateResponse> {
   const res = await fetcher.POST<SessionUpdateResponse, SessionUpdatePayload>(
-    ENDPOINT_FRONTEND.ACCOUNT_SESSION + id,
+    XAPI.ACCOUNT_SESSION + id,
     {
       username: updatedAccount.username,
       password: updatedAccount.pwd,

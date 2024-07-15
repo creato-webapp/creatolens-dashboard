@@ -1,7 +1,7 @@
 import { ReactNode } from 'react'
 
 import { Paragraph } from '@components/Typography'
-import dayjs from '@helpers/dayjs'
+import dayjs from '@utils/dayjs'
 
 import { FormLayoutProps, InputType } from './interface'
 

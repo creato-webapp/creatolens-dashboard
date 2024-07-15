@@ -9,7 +9,7 @@ import DynamicForm from '@components/Form/DynamicForm'
 import { IField } from '@components/Form/interface'
 import { useBlockAccount } from '@hooks/useBlockedAccount'
 import { getBlockedAccount } from '@services/Account/BlockAccount'
-import dayjs from '@helpers/dayjs'
+import dayjs from '@utils/dayjs'
 
 type Props = {
   accountData: IBlockedAccount | undefined
