@@ -3,7 +3,7 @@ import { kv } from '@vercel/kv'
 import { ReasonPhrases, StatusCodes } from 'http-status-codes'
 import { NextRequest, NextResponse } from 'next/server'
 
-import ENDPOINT_API from '../constants/endpoints/api'
+import PAPI from '@constants/endpoints/papi'
 
 const LOCAL_IP = '127.0.0.1'
 
@@ -13,7 +13,7 @@ const ratelimit = new Ratelimit({
 })
 
 export default async function rateLimitMiddleware(request: NextRequest) {
-  if (request.nextUrl.pathname.startsWith(ENDPOINT_API.LABEL_IMAGE)) {
+  if (request.nextUrl.pathname.startsWith(PAPI.LABEL_IMAGE)) {
     const ip = request.ip ?? LOCAL_IP
     const { success } = await ratelimit.limit(ip)
 

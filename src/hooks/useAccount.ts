@@ -3,14 +3,14 @@ import { useEffect, useState } from 'react'
 import { IAccount } from '@components/Account/Account'
 import { updateAccount as updateAccountHelper, updateSession as updateSessionHelper } from '@services/Account/Account'
 import { PaginationMetadata, PaginationParams } from '@services/Account/AccountInterface'
-import ENDPOINT_FRONTEND from '@constants/endpoints/frontend'
+import XAPI from '@constants/endpoints/xapi'
 
 import useRequest from './useRequest'
 import METHOD from '@constants/method'
 
 export const useAccount = (id: string, defaultShouldFetch: boolean = true, fallbackData?: IAccount) => {
   const [shouldFetch, setShouldFetch] = useState(defaultShouldFetch)
-  const { data, error, mutate, ...swr } = useRequest<IAccount>(shouldFetch ? [ENDPOINT_FRONTEND.ACCOUNT + id] : null, METHOD.GET, {
+  const { data, error, mutate, ...swr } = useRequest<IAccount>(shouldFetch ? [XAPI.ACCOUNT + id] : null, METHOD.GET, {
     refreshInterval: 0,
     fallbackData: fallbackData,
   })
@@ -45,7 +45,7 @@ export const useGetAccountsPagination = (
   const { data, error, mutate, ...swr } = useRequest<PaginationMetadata<IAccount[]>>(
     shouldFetch
       ? [
-          ENDPOINT_FRONTEND.GET_ACCOUNTS_PAGINATION,
+          XAPI.GET_ACCOUNTS_PAGINATION,
           {
             params: paginationParams,
           },
