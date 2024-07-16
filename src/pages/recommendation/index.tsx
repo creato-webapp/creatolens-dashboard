@@ -117,9 +117,11 @@ const RecommendationPage = () => {
                 {isValidating ? <LoaderIcon className="animate-spin" /> : <MagnifyingGlassIcon />}
               </Form.BaseInput>
             </div>
-            <Button.Primary className="w-auto" sizes={['s', 'm', 'm']} onClick={onSubmit} loading={isValidating}>
-              Search
-            </Button.Primary>
+            <div className="w-1/5">
+              <Button.Primary className="w-auto" sizes={['s', 'm', 'm']} onClick={onSubmit} loading={isValidating}>
+                Search
+              </Button.Primary>
+            </div>
           </div>
         </div>
       </Hero>
