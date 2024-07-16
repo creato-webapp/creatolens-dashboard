@@ -14,8 +14,8 @@ const config = {
   messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID!,
 }
 
-export const useRemoteConfig = (key: string, refetchInterval: number = 180000) => {
-  const [configValue, setConfigValue] = useState<string | null>(null)
+export const useRemoteConfig = <T>(key: string, refetchInterval: number = 180000) => {
+  const [configValue, setConfigValue] = useState<T | null>(null)
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
@@ -30,7 +30,6 @@ export const useRemoteConfig = (key: string, refetchInterval: number = 180000) =
           await fetchAndActivate(remoteConfig)
 
           const value = getValue(remoteConfig, key).asString()
-
           setConfigValue(JSON.parse(value))
         } catch (err) {
           setError('Error fetching remote config')
@@ -38,7 +37,6 @@ export const useRemoteConfig = (key: string, refetchInterval: number = 180000) =
         }
       }
     }
-
     initConfig()
   }, [key, refetchInterval])
 

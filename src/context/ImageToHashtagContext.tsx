@@ -25,7 +25,8 @@ type ImageType = {
   uploadStatus: UploadStatus
 }
 
-type ImageHashtagContextType = {  step: number
+type ImageHashtagContextType = {
+  step: number
   updateStep: (arg: number) => void
   goBack: () => void
   goForward: () => void
@@ -58,7 +59,6 @@ export const ImageHashtagProvider = ({ children }: ImageHashtagProviderProps) =>
 
   const [hashtags, setHashtags] = useState<IHashet[]>([])
 
-
   const updateStep = useCallback((arg: number) => {
     setStep(arg)
   }, [])
@@ -69,7 +69,6 @@ export const ImageHashtagProvider = ({ children }: ImageHashtagProviderProps) =>
   const goForward = useCallback(() => {
     setStep((prev) => prev + 1)
   }, [])
-
 
   const addImage = useCallback(
     (image: string) => {
