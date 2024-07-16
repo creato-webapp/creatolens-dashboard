@@ -10,9 +10,9 @@ import EditIcon from '@components/Icon/EditIcon'
 import Pagination from '@components/Pagination'
 import { Table } from '@components/Table'
 import { usePagination } from '@hooks/usePagination'
+import { useGetRetryAccountsPagination } from '@hooks/useRetryAccount'
 import { PaginationMetadata } from '@services/Account/AccountInterface'
 import { getRetryAccountsPagination } from '@services/Account/RetryAccount'
-import { useGetRetryAccountsPagination } from 'src/hooks/useRetryAccount'
 
 type Props = {
   paginationData: PaginationMetadata<IRetryAccount[]>
@@ -118,7 +118,12 @@ const RetryAccountsPage = ({ paginationData }: Props) => {
                   <AccountBadges status={e.status} />
                 </Table.BodyCell>
                 <Table.BodyCell key={e.id}>
-                  <Link href="/accounts/[id]" as={`/accounts/${e.id}`} legacyBehavior>
+                  <Link
+                    href={{
+                      pathname: '/accounts/[id]',
+                      query: { id: e.id },
+                    }}
+                  >
                     <div className="flex w-full cursor-pointer flex-row items-center justify-center gap-2">
                       <EditIcon size={16} className="fill-accent2-500" />
                       <div className="font-semibold text-accent2-500">Edit</div>

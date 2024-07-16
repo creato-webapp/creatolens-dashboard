@@ -7,10 +7,10 @@ import Card from '@components/Card'
 import { Form } from '@components/Form'
 import Pagination from '@components/Pagination'
 import { Table } from '@components/Table'
+import { useAccountErrorPagination } from '@hooks/useAccountErrors'
 import { usePagination } from '@hooks/usePagination'
 import { getErrorPagination } from '@services/Account/AccountErros'
 import { PaginationMetadata } from '@services/Account/AccountInterface'
-import { useAccountErrorPagination } from 'src/hooks/useAccountErrors'
 
 type Props = {
   paginationData: PaginationMetadata<IAccountError[]>

@@ -1,8 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-import ENDPOINT_BACKEND from 'src/constants/endpoints/backend'
+import PAPI from '@constants/endpoints/papi'
 
-import AccountInstance from '../../axiosInstance/Account'
+import AccountInstance from '../../../../helpers/axios/Account'
 export default async function accountQueryHandler(req: NextApiRequest, res: NextApiResponse) {
   const {
     query: { pageNumber, pageSize, orderBy, isAsc },
@@ -11,7 +11,7 @@ export default async function accountQueryHandler(req: NextApiRequest, res: Next
   } = req
   switch (method) {
     case 'GET': {
-      const response = await AccountInstance.get(ENDPOINT_BACKEND.BLOCKED_ACCOUNTS, {
+      const response = await AccountInstance.get(PAPI.BLOCKED_ACCOUNTS, {
         params: {
           filter: 'username != null',
           page_number: pageNumber,
@@ -27,7 +27,7 @@ export default async function accountQueryHandler(req: NextApiRequest, res: Next
     }
     case 'POST': {
       try {
-        const response = await AccountInstance.post(ENDPOINT_BACKEND.CREATE_BLOCKED_ACCOUNT, body, {
+        const response = await AccountInstance.post(PAPI.CREATE_BLOCKED_ACCOUNT, body, {
           headers: {
             Cookie: req.headers.cookie,
           },

@@ -9,11 +9,11 @@ import Card from '@components/Card'
 import EditIcon from '@components/Icon/EditIcon'
 import Pagination from '@components/Pagination'
 import { Table } from '@components/Table'
+import ROUTE from '@constants/route'
+import { useGetBlockAccountsPagination } from '@hooks/useBlockedAccount'
 import { usePagination } from '@hooks/usePagination'
 import { PaginationMetadata } from '@services/Account/AccountInterface'
 import { getBlockedAccountsPagination } from '@services/Account/BlockAccount'
-import ROUTE from 'src/constants/route'
-import { useGetBlockAccountsPagination } from 'src/hooks/useBlockedAccount'
 
 type Props = {
   paginationData: PaginationMetadata<IBlockedAccount[]>
@@ -132,8 +132,6 @@ const BlockedAccountsPage = ({ paginationData }: Props) => {
                       pathname: ROUTE.ACCOUNT_BOT_GET,
                       query: { id: e.id },
                     }}
-                    as="/accounts/bot"
-                    legacyBehavior
                   >
                     <div className="flex w-full cursor-pointer flex-row items-center justify-center gap-2">
                       <EditIcon size={16} className="fill-accent2-500" />

@@ -1,7 +1,7 @@
 import useSWR from 'swr'
 
 import { getSessionPagination } from '@services/Account/Session'
-import { IAccountSession } from 'src/pages/accounts/session'
+import { IAccountSession } from 'pages/accounts/session'
 
 import { PaginationMetadata, PaginationParams } from './usePagination'
 

@@ -3,7 +3,7 @@ import { AxiosRequestConfig } from 'axios'
 
 import { IBlockedAccount } from '@components/Account/Account/interface'
 import { Cookies } from '@components/Account/Account/interface'
-import ENDPOINT_FRONTEND from 'src/constants/endpoints/frontend'
+import XAPI from '@constants/endpoints/xapi'
 
 import { PaginationMetadata, PaginationParams } from './AccountInterface'
 
@@ -76,12 +76,12 @@ export function generateBlockedAccountFilter(account: PartialAccount): string {
 }
 
 export async function getBlockedAccount(id: string, customConfig?: AxiosRequestConfig): Promise<IBlockedAccount> {
-  const response = await fetcher.GET<IBlockedAccount>(ENDPOINT_FRONTEND.BLOCKED_ACCOUNT + id, customConfig)
+  const response = await fetcher.GET<IBlockedAccount>(XAPI.BLOCKED_ACCOUNT + id, customConfig)
   return response
 }
 
 export async function getBlockedAccounts(account?: Partial<IBlockedAccount>, orderBy?: string, isAsc?: boolean): Promise<IBlockedAccount[]> {
-  const response = await fetcher.GET<IBlockedAccount[]>(ENDPOINT_FRONTEND.GET_BLOCKED_ACCOUNTS, {
+  const response = await fetcher.GET<IBlockedAccount[]>(XAPI.GET_BLOCKED_ACCOUNTS, {
     params: { filter: account ? generateBlockedAccountFilter(account) : null, orderby: orderBy, isAsc: isAsc },
   })
   return response
@@ -91,7 +91,7 @@ export async function getBlockedAccountsPagination(
   params: PaginationParams,
   customConfig?: AxiosRequestConfig
 ): Promise<PaginationMetadata<IBlockedAccount[]>> {
-  const response = await fetcher.GET<PaginationMetadata<IBlockedAccount[]>>(ENDPOINT_FRONTEND.BLOCKED_ACCOUNT, {
+  const response = await fetcher.GET<PaginationMetadata<IBlockedAccount[]>>(XAPI.BLOCKED_ACCOUNT, {
     ...customConfig,
     params: { pageNumber: params.pageNumber, pageSize: params.pageSize, orderBy: params.orderBy, isAsc: params.isAsc },
   })
@@ -99,7 +99,7 @@ export async function getBlockedAccountsPagination(
 }
 
 export async function updateBlockedAccount(id: string, updatedAccount: IBlockedAccount, customConfig?: AxiosRequestConfig): Promise<IBlockedAccount> {
-  const res = await fetcher.PATCH<IBlockedAccount>(ENDPOINT_FRONTEND.BLOCKED_ACCOUNT + id, updatedAccount, {
+  const res = await fetcher.PATCH<IBlockedAccount>(XAPI.BLOCKED_ACCOUNT + id, updatedAccount, {
     ...customConfig,
     params: { id: updatedAccount.id },
   })

@@ -2,7 +2,7 @@
 import { AxiosRequestConfig } from 'axios'
 
 import { Cookies, IRetryAccount } from '@components/Account/Account/interface'
-import ENDPOINT_FRONTEND from 'src/constants/endpoints/frontend'
+import XAPI from '@constants/endpoints/xapi'
 
 import { PaginationMetadata, PaginationParams } from './AccountInterface'
 
@@ -74,12 +74,12 @@ export function generateRetryAccountFilter(account: PartialAccount): string {
 }
 
 export async function getRetryAccount(id: string, customConfig?: AxiosRequestConfig): Promise<IRetryAccount> {
-  const response = await fetcher.GET<IRetryAccount>(ENDPOINT_FRONTEND.AVAILABLE_ACCOUNT + id, customConfig)
+  const response = await fetcher.GET<IRetryAccount>(XAPI.AVAILABLE_ACCOUNT + id, customConfig)
   return response
 }
 
 export async function getRetryAccounts(account?: Partial<IRetryAccount>, orderBy?: string, isAsc?: boolean): Promise<IRetryAccount[]> {
-  const response = await fetcher.GET<IRetryAccount[]>(ENDPOINT_FRONTEND.GET_AVAILABLE_ACCOUNTS, {
+  const response = await fetcher.GET<IRetryAccount[]>(XAPI.GET_AVAILABLE_ACCOUNTS, {
     params: { filter: account ? generateRetryAccountFilter(account) : null, orderby: orderBy, isAsc: isAsc },
   })
   return response
@@ -89,7 +89,7 @@ export async function getRetryAccountsPagination(
   params: PaginationParams,
   customConfig?: AxiosRequestConfig
 ): Promise<PaginationMetadata<IRetryAccount[]>> {
-  const response = await fetcher.GET<PaginationMetadata<IRetryAccount[]>>(ENDPOINT_FRONTEND.GET_AVAILABLE_ACCOUNTS_PAGINATION, {
+  const response = await fetcher.GET<PaginationMetadata<IRetryAccount[]>>(XAPI.GET_AVAILABLE_ACCOUNTS_PAGINATION, {
     ...customConfig,
     params: {
       pageNumber: params.pageNumber,
@@ -102,7 +102,7 @@ export async function getRetryAccountsPagination(
 }
 
 export async function updateRetryAccount(id: string, updatedAccount: IRetryAccount, customConfig?: AxiosRequestConfig): Promise<IRetryAccount> {
-  const res = await fetcher.PATCH<IRetryAccount>(ENDPOINT_FRONTEND.AVAILABLE_ACCOUNT + id, updatedAccount, {
+  const res = await fetcher.PATCH<IRetryAccount>(XAPI.AVAILABLE_ACCOUNT + id, updatedAccount, {
     ...customConfig,
     params: { id: updatedAccount.id },
   })

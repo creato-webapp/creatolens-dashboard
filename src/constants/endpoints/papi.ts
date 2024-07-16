@@ -1,4 +1,4 @@
-const ENDPOINT_BACKEND = {
+const PAPI = {
   ACCOUNTS: '/accounts',
   CREATE_NEW_ACCOUNT: '/accounts/create',
   QUERY_ACCOUNTS: '/accounts/query',
@@ -18,6 +18,9 @@ const ENDPOINT_BACKEND = {
 
   ACCOUNTS_ERROR: '/handlers',
   QUERY_ACCOUNTS_ERROR: '/handlers/query',
+
+  //label
+  LABEL_IMAGE: '/api/image/labels',
 } as const
 
-export default ENDPOINT_BACKEND
+export default PAPI

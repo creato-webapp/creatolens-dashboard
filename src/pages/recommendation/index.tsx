@@ -12,7 +12,7 @@ import LoaderIcon from '@components/Icon/LoaderIcon'
 import MagnifyingGlassIcon from '@components/Icon/MagnifyingGlassIcon'
 import Popover from '@components/Popover'
 import Tab from '@components/Tab'
-import { useGetHashtag } from 'src/hooks/useHashtag'
+import { useGetHashtag } from '@hooks/useHashtag'
 
 export interface IHashet extends Record<string, string | number | boolean> {
   hashtag: string

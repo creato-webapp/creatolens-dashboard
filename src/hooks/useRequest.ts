@@ -1,12 +1,14 @@
 import useSWR, { Key, SWRConfiguration } from 'swr'
 
-import fetcher, { METHOD } from '../helpers/fetcher'
+import fetcher from '../helpers/fetcher'
+import { IMethodsType } from '@constants/method'
 
-const useRequest = <T>(key: Key, method: keyof typeof METHOD, config?: SWRConfiguration) => {
-  const { data, error, ...swr } = useSWR<T>(key, fetcher[method], config)
+// TODO: using mapper to replace below if else logic, separate into readFunction and writeFunctions
+const useRequest = <T = unknown>(key: Key, method: IMethodsType, config?: SWRConfiguration) => {
+  const { data, error, ...swr } = useSWR(key, fetcher[method], config)
 
   return {
-    data,
+    data: data as T | undefined,
     error,
     ...swr,
   }

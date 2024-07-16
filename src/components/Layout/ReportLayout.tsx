@@ -1,5 +1,6 @@
 import { FC, useMemo } from 'react'
 
+import IMAGE from '@constants/image'
 import Image from 'next/image'
 import Link from 'next/link'
 import Skeleton from 'react-loading-skeleton'
@@ -15,8 +16,7 @@ import Dropdown from '@components/Form/Dropdown'
 import ClockIcon from '@components/Icon/ClockIcon'
 import PlusIcon from '@components/Icon/PlusIcon'
 import { IProfile, KeywordData, MostRepeatedPost } from '@services/Meta'
-import IMAGE from 'src/constants/image'
-import dayjs, { DATE_FORMAT } from 'src/utils/dayjs'
+import dayjs, { DATE_FORMAT } from '@utils/dayjs'
 
 interface Prop {
   days: number

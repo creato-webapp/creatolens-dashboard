@@ -15,11 +15,11 @@ import Hero from '@components/Hero'
 import EditIcon from '@components/Icon/EditIcon'
 import Pagination from '@components/Pagination'
 import { Table } from '@components/Table'
+import ROUTE from '@constants/route'
+import { useGetAccountsPagination } from '@hooks/useAccount'
 import { usePagination } from '@hooks/usePagination'
 import { getAccountsPagination } from '@services/Account/Account'
 import { PaginationMetadata } from '@services/Account/AccountInterface'
-import ROUTE from 'src/constants/route'
-import { useGetAccountsPagination } from 'src/hooks/useAccount'
 
 type Props = {
   paginationData: PaginationMetadata<IAccount[]>
@@ -161,12 +161,11 @@ const AccountsPage = ({ paginationData }: Props) => {
                 <Table.Row key={`accounts-table-${index}`} className="text-sm">
                   <Table.BodyCell key={e.id}>
                     <Link
+                      key={e.id}
                       href={{
                         pathname: ROUTE.ACCOUNT_BOT_GET,
                         query: { id: e.id },
                       }}
-                      as="/accounts/bot"
-                      legacyBehavior
                     >
                       <div className="flex w-full cursor-pointer flex-row items-center justify-center gap-2">
                         <EditIcon size={16} className="fill-accent2-500" />
