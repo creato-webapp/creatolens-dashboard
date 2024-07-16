@@ -8,10 +8,9 @@ import Step1 from '@components/Hashtag/ImageToHashtag/Step1'
 import Step2 from '@components/Hashtag/ImageToHashtag/Step2'
 import Step3 from '@components/Hashtag/ImageToHashtag/Step3'
 import ProgressBar from '@components/Hashtag/ProgressBar'
-import { useHashtagImageContext } from '@context/HashtagToImageContext'
-
+import { useImageHashtagContext } from '@context/ImageToHashtagContext'
 const ImageToHashtag = () => {
-  const { step } = useHashtagImageContext()
+  const { step } = useImageHashtagContext()
   const [isDetailPagesOpen, setIsDetailsPageOpen] = useState<boolean>(false)
 
   const StepComponent = useCallback(() => {

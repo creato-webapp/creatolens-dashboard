@@ -5,7 +5,6 @@ import { CombinedUser } from '@api/auth/[...nextauth]'
 
 import ImageInstance from '../axiosInstance/Image'
 
-
 export default async function postImagePrompt(req: NextApiRequest, res: NextApiResponse) {
   const { method } = req
 

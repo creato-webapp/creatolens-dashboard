@@ -1,5 +1,3 @@
-import { useEffect, useState } from 'react'
-
 import { useRemoteConfig } from './useRemoteConfig'
 
 type PromptModifier = {
@@ -18,9 +16,6 @@ export const usePromptTemplate = () => {
   const { configValue: ImageStyles } = useRemoteConfig<PromptModifier>('IMAGE_STYLE')
   const { configValue: ImageUsages } = useRemoteConfig<PromptModifier>('IMAGE_USAGE')
   const { configValue: SocialMediaPlatforms } = useRemoteConfig<PromptModifier>('SOCIAL_MEDIA_PLATFORMS')
-  
-  
-
 
   return { ImageAspectRatios, ImageCategories, ImageStyles, ImageUsages, SocialMediaPlatforms }
 }

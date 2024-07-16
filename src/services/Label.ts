@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios'
 
-import { Fetcher } from './fetcher'
+import Fetcher from '@helpers/fetcher'
 
 type ReAnnotateLabelType = {
   existing_labels: string[]
