@@ -1,8 +1,8 @@
 import Mustache from 'mustache'
 
-import { IMAGE_USAGE } from 'src/constants/imageStyle'
+import { IMAGE_USAGE } from '@constants/imageStyle'
 
-import { Fetcher } from './fetcher'
+import fetcher from '@helpers/fetcher'
 
 import { PROMPT_TEMPLATE } from '../constants/promptTemplate'
 
@@ -16,7 +16,7 @@ interface PromptData {
 }
 
 type ApiResponse = {
-    signed_urls: string[]
+  signed_urls: string[]
 }
 
 export const USAGE_PROMPT_MAP = {
@@ -29,7 +29,7 @@ export async function renderPromptAndGenImage(promptType: keyof typeof USAGE_PRO
     const template = USAGE_PROMPT_MAP[promptType]
     const renderedPrompt = Mustache.render(template, { ...data })
 
-    const response = await Fetcher.POST<ApiResponse>('/api/image/generate', { prompt: renderedPrompt })
+    const response = await fetcher.POST<ApiResponse>('/api/image/generate', { prompt: renderedPrompt })
 
     return response
   } catch (error) {

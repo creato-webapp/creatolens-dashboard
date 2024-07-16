@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import Outline from '@components/Button/Outline'
 import Primary from '@components/Button/Primary'
-import { useHashtagImageContext } from 'src/context/HashtagToImageContext'
+import { useHashtagImageContext } from '@context/HashtagToImageContext'
 
 const Step1 = () => {
   const { goForward, addKeywords } = useHashtagImageContext()

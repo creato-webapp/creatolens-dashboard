@@ -8,7 +8,7 @@ import Step1 from '@components/Hashtag/ImageToHashtag/Step1'
 import Step2 from '@components/Hashtag/ImageToHashtag/Step2'
 import Step3 from '@components/Hashtag/ImageToHashtag/Step3'
 import ProgressBar from '@components/Hashtag/ProgressBar'
-import { useHashtagImageContext } from 'src/context/HashtagToImageContext'
+import { useHashtagImageContext } from '@context/HashtagToImageContext'
 
 const ImageToHashtag = () => {
   const { step } = useHashtagImageContext()

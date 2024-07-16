@@ -1,7 +1,7 @@
 import Image from 'next/image'
 
 import Primary from '@components/Button/Primary'
-import { useHashtagImageContext } from 'src/context/HashtagToImageContext'
+import { useHashtagImageContext } from '@context/HashtagToImageContext'
 
 const Step3 = () => {
   const { goBack } = useHashtagImageContext()

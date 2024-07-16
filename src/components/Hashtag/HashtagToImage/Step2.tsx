@@ -7,7 +7,7 @@ import Primary from '@components/Button/Primary'
 import { DropdownOption } from '@components/Form/Dropdown'
 import Dropdown from '@components/Form/DropdownV2'
 import { RadioGroup } from '@components/Form/Radio/Group'
-import { useHashtagImageContext } from 'src/context/HashtagToImageContext'
+import { useHashtagImageContext } from '@context/HashtagToImageContext'
 
 import {
   IImageUsageType,
