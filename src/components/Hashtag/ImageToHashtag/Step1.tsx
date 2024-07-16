@@ -2,7 +2,7 @@ import { useCallback, useRef, useState } from 'react'
 
 import Primary from '@components/Button/Primary'
 import { uploadImage } from '@services/Image'
-import { ImageDetailsType, useImageHashtagContext } from 'src/context/ImageToHashtagContext'
+import { ImageDetailsType, useImageHashtagContext } from '@context/ImageToHashtagContext'
 
 import ImageUpload from '../ImageUpload'
 

@@ -8,7 +8,7 @@ import Outline from '@components/Button/Outline'
 import OutlinePrimaryButton from '@components/Button/OutlinePrimary'
 import Primary from '@components/Button/Primary'
 import { reAnnotateLabel } from '@services/Label'
-import { useImageHashtagContext } from 'src/context/ImageToHashtagContext'
+import { useImageHashtagContext } from '@context/ImageToHashtagContext'
 
 import 'react-loading-skeleton/dist/skeleton.css'
 
@@ -49,8 +49,7 @@ const Step2 = () => {
 
   const currentImage = useMemo(() => {
     return images[currentImageIndex]
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [images, currentImageIndex, images[currentImageIndex]])
+  }, [images, currentImageIndex])
 
   return (
     <div className="flex w-full flex-col gap-4 md:flex-row">

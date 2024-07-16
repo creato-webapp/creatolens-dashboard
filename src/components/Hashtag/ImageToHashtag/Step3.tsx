@@ -6,8 +6,8 @@ import Outline from '@components/Button/Outline'
 import Primary from '@components/Button/Primary'
 import DropdownCheckbox from '@components/Form/DropdownCheckbox'
 import { getImageHashtag } from '@services/HashtagHelper'
-import { useImageHashtagContext } from 'src/context/ImageToHashtagContext'
-import { IHashet } from 'src/pages/recommendation'
+import { useImageHashtagContext } from '@context/ImageToHashtagContext'
+import { IHashet } from 'pages/recommendation'
 
 const Step3 = () => {
   const { images, currentImageIndex, updateSelectedLabels, hashtags, updateHashtag, goBack } = useImageHashtagContext()

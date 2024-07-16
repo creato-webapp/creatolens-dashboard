@@ -12,7 +12,7 @@ import LoaderIcon from '@components/Icon/LoaderIcon'
 import MagnifyingGlassIcon from '@components/Icon/MagnifyingGlassIcon'
 import Popover from '@components/Popover'
 import Tab from '@components/Tab'
-import { useGetHashtag } from 'src/hooks/useHashtag'
+import { useGetHashtag } from '@hooks/useHashtag'
 
 export interface IHashet extends Record<string, string | number | boolean> {
   hashtag: string
@@ -117,9 +117,11 @@ const RecommendationPage = () => {
                 {isValidating ? <LoaderIcon className="animate-spin" /> : <MagnifyingGlassIcon />}
               </Form.BaseInput>
             </div>
-            <Button.Primary className="w-auto" sizes={['s', 'm', 'm']} onClick={onSubmit} loading={isValidating}>
-              Search
-            </Button.Primary>
+            <div className="w-1/5">
+              <Button.Primary className="w-auto" sizes={['s', 'm', 'm']} onClick={onSubmit} loading={isValidating}>
+                Search
+              </Button.Primary>
+            </div>
           </div>
         </div>
       </Hero>

@@ -1,6 +1,6 @@
 import React from 'react'
 
-import BADGES, { BadgesType } from 'src/constants/badges'
+import BADGES, { BadgesType } from '@constants/badges'
 
 import XCircleIcon from '../Icon/XCircleIcon'
 

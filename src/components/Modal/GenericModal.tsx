@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from 'react'
 
-import { useModals } from 'src/hooks/useModal'
+import { useModals } from '@hooks/useModal'
 
 import { Button } from '../Button'
 import CrossIcon from '../Icon/CrossIcon'

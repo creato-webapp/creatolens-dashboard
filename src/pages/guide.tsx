@@ -1,5 +1,6 @@
 import React from 'react'
 
+import ROUTE from '@constants/route'
 import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
 
@@ -7,7 +8,6 @@ import { Button } from '@components/Button'
 import Card from '@components/Card'
 import Hero from '@components/Hero'
 import PlusIcon from '@components/Icon/PlusIcon'
-import ROUTE from 'src/constants/route'
 
 const Guide: NextPage = () => {
   const router = useRouter()

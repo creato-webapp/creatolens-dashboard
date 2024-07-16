@@ -7,13 +7,13 @@ import Head from 'next/head'
 import { Session } from 'next-auth/core/types'
 import { SessionProvider } from 'next-auth/react'
 
+import Dialogue from '@components/Dialogue'
 import { Layout } from '@components/Layout'
 import Modals from '@components/Modal'
-import Dialogue from 'src/components/Dialogue'
-import { DialogueProvider } from 'src/context/DialogueContext'
-import { HashtagImageProvider } from 'src/context/HashtagToImageContext'
-import { ImageHashtagProvider } from 'src/context/ImageToHashtagContext'
-import { ModalProvider } from 'src/context/ModalContext'
+import { DialogueProvider } from '@context/DialogueContext'
+import { ModalProvider } from '@context/ModalContext'
+import { HashtagImageProvider } from '@context/HashtagToImageContext'
+import { ImageHashtagProvider } from '@context/ImageToHashtagContext'
 
 import ErrorComponent from './error'
 

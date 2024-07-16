@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-import ImageInstance from '../axiosInstance/Image'
+import ImageInstance from '../../../helpers/axios/Image'
 
 export default async function getImageLabel(req: NextApiRequest, res: NextApiResponse) {
   const {

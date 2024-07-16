@@ -1,8 +1,9 @@
 import { AxiosRequestConfig } from 'axios'
 
-import { CountryEnum } from 'src/enums/CountryCodeEnums'
+import XAPI from '@constants/endpoints/xapi'
+import { CountryEnum } from 'enums/CountryCodeEnums'
 
-import { Fetcher } from './fetcher'
+import fetcher from '../helpers/fetcher'
 
 export interface PostData {
   count: number
@@ -49,9 +50,9 @@ export async function getKeyword(
   },
   customConfig?: AxiosRequestConfig
 ): Promise<{ data: KeywordData[] }> {
-  const keywordResponse = await Fetcher.GET<{
+  const keywordResponse = await fetcher.GET<{
     data: KeywordData[]
-  }>('/api/dashboard/keyword', {
+  }>(XAPI.DASHBOARD_KEYWORDS, {
     ...customConfig,
     params: {
       accId: data.args.accId,
@@ -70,9 +71,9 @@ export async function getPostCount(
   },
   customConfig?: AxiosRequestConfig
 ): Promise<{ data: { post_count: number } }> {
-  const postCountResponse = await Fetcher.GET<{
+  const postCountResponse = await fetcher.GET<{
     data: { post_count: number }
-  }>('/api/dashboard/postCount', {
+  }>(XAPI.DASHBOARD_POST_COUNT, {
     ...customConfig,
     params: {
       accId: data.args.accId,
@@ -94,9 +95,9 @@ export async function getMostRepeatedPost(
   },
   customConfig?: AxiosRequestConfig
 ): Promise<MostRepeatedPost | null> {
-  const response = await Fetcher.GET<{
+  const response = await fetcher.GET<{
     data: PostData[]
-  }>('/api/dashboard', {
+  }>(XAPI.DASHBOARD, {
     ...customConfig,
     params: {
       accId: data.args.accId,
@@ -113,11 +114,11 @@ export async function getMostRepeatedPost(
     )
 
     try {
-      const maxCountImageResponse = await Fetcher.GET<{
+      const maxCountImageResponse = await fetcher.GET<{
         data: {
           username: string
         }
-      }>('/api/dashboard/instaProfile', {
+      }>(XAPI.DASHBOARD_PROFILE, {
         ...customConfig,
         params: {
           profile_id: maxCountImage.owner_username,
@@ -148,7 +149,7 @@ export async function getMostRepeatedPostImage(data: {
 }) {
   if (!data.args.shortcode) return
 
-  const response = await Fetcher.GET<string>('/api/dashboard/instapostImage', {
+  const response = await fetcher.GET<string>(XAPI.DASHBOARD_POST_IMAGE, {
     params: {
       shortcode: data.args.shortcode,
       batch_id: data.args.batch_id,
@@ -165,9 +166,9 @@ export async function getProfile(data: {
   }
 }) {
   if (!data.args.profile_id || !data.args.session_id) return
-  const response = await Fetcher.GET<{
+  const response = await fetcher.GET<{
     data: IProfile
-  }>('/api/dashboard/instaProfile', {
+  }>(XAPI.DASHBOARD_PROFILE, {
     params: {
       profile_id: data.args.profile_id,
       session_id: data.args.session_id,

@@ -2,7 +2,7 @@ import { forwardRef } from 'react'
 
 import { useDropzone } from 'react-dropzone'
 
-import { ImageDetailsType } from 'src/context/ImageToHashtagContext'
+import { ImageDetailsType } from '@context/ImageToHashtagContext'
 
 interface IImageUpload {
   uploadedImage: string

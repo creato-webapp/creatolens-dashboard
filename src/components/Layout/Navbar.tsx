@@ -1,5 +1,7 @@
 import React, { useCallback, useState } from 'react'
 
+import IMAGE from '@constants/image'
+import ROUTE from '@constants/route'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
@@ -9,8 +11,6 @@ import LogoutIcon from '@components/Icon/LogOutIcon'
 import MenuIcon from '@components/Icon/MenuIcon'
 import { Title } from '@components/Typography'
 import { useAuth } from '@hooks/useAuth'
-import IMAGE from 'src/constants/image'
-import ROUTE from 'src/constants/route'
 
 import { Button } from '..'
 
@@ -50,7 +50,7 @@ const NavBar: React.FC = () => {
         )}
       </div>
       <Link href="/">
-        <div className="mx-8 my-auto shrink-0 md:mx-16">
+        <div className="my-auto shrink-0">
           <img src={LOGO_SRC} alt="Logo" className="h-12 md:h-16" />
         </div>
       </Link>

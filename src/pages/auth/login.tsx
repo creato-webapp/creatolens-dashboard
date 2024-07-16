@@ -7,8 +7,7 @@ import { getProviders, signIn, signOut, useSession } from 'next-auth/react'
 
 import PrimaryButton from '@components/Button/Primary'
 import Card from '@components/Card'
-import { ErrorCodes } from 'src/enums/ErrorCodeEnums'
-
+import { ErrorCodes } from 'enums/ErrorCodeEnums'
 interface loginProps {
   providers: Providers
 }
