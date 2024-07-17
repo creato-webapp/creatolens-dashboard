@@ -9,18 +9,12 @@ import Dropdown from '@components/Form/DropdownV2'
 import { RadioGroup } from '@components/Form/Radio/Group'
 import { useHashtagImageContext } from '@context/HashtagToImageContext'
 
-import {
-  IImageUsageType,
-  IMAGE_ASPECT_RATIOS,
-  IMAGE_CATEGORY,
-  IMAGE_STYLE,
-  IMAGE_USAGE,
-  ImageCategoryType,
-  SOCIAL_MEDIA_PLATFORMS,
-} from '../../../constants/imageStyle'
+import { IImageUsageType, IMAGE_STYLE, ImageCategoryType } from '@constants/imageStyle'
+import { usePromptTemplate } from '@hooks/usePromptTemplate'
 
 const Step2 = () => {
   const { goBack, imageConfig, generateImage, updateImageConfig, updateImageCategory } = useHashtagImageContext()
+  const { ImageAspectRatios, ImageCategories, ImageUsages, SocialMediaPlatforms } = usePromptTemplate()
 
   const onClickNextStep = () => {
     generateImage()
@@ -69,12 +63,13 @@ const Step2 = () => {
   )
 
   const UsageSelection = useCallback(() => {
-    const options = Object.entries(IMAGE_USAGE).map(([, value]) => ({
+    if (!ImageUsages) return null
+    const options = Object.entries(ImageUsages).map(([, value]) => ({
       value: value,
       label: value,
     }))
-
-    const socialMediaOptions: DropdownOption[] = Object.entries(SOCIAL_MEDIA_PLATFORMS).map(([, value]) => ({
+    if (!SocialMediaPlatforms) return null
+    const socialMediaOptions: DropdownOption[] = Object.entries(SocialMediaPlatforms).map(([, value]) => ({
       label: value,
       value: value,
     }))
@@ -85,7 +80,7 @@ const Step2 = () => {
         <div className="flex flex-row items-center justify-center gap-12">
           <div className="flex flex-row items-center gap-2">
             <RadioGroup
-              defaultValue={Object.values(IMAGE_USAGE)[0]}
+              defaultValue={Object.values(ImageUsages)[0]}
               options={options}
               selectedValue={imageConfig.usage.name}
               onValueChange={(value) => {
@@ -95,7 +90,7 @@ const Step2 = () => {
           </div>
         </div>
         <div>
-          {imageConfig.usage.name === IMAGE_USAGE.SOCIAL_MEDIA && (
+          {imageConfig.usage.name === ImageUsages.SOCIAL_MEDIA && (
             <Dropdown
               key={'usage dropdown'}
               options={socialMediaOptions}
@@ -108,10 +103,12 @@ const Step2 = () => {
         </div>
       </div>
     )
-  }, [platformSelect, imageConfig?.usage.name, imageConfig?.usage.platform, usageSelect])
+  }, [platformSelect, imageConfig?.usage.name, imageConfig?.usage.platform, usageSelect, ImageUsages])
 
   const AspectRatioSelection = useCallback(() => {
-    const options = Object.entries(IMAGE_ASPECT_RATIOS).map(([key, value]) => {
+    if (!ImageAspectRatios) return null
+
+    const options = Object.entries(ImageAspectRatios).map(([key, value]) => {
       return (
         <div className="flex w-full flex-col items-center justify-center rounded-xl" key={key}>
           <div
@@ -140,10 +137,11 @@ const Step2 = () => {
         </div>
       </div>
     )
-  }, [imageConfig?.aspectRatio, imageConfigSelect])
+  }, [imageConfig?.aspectRatio, imageConfigSelect, ImageAspectRatios])
 
   const ImageCategorySelection = useCallback(() => {
-    const entries = Object.entries(IMAGE_CATEGORY)
+    if (!ImageCategories) return null
+    const entries = Object.entries(ImageCategories)
 
     return (
       <div>
@@ -162,7 +160,7 @@ const Step2 = () => {
         </div>
       </div>
     )
-  }, [])
+  }, [ImageCategories, onGeneralSelected])
 
   return (
     <div className="flex flex-col gap-2">

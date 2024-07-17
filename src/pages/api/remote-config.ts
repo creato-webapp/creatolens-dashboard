@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-import PROMPT_TYPE, { IPromptType } from 'src/constants/prompt'
+import PROMPT_TYPE, { IPromptType } from '@constants/prompt'
 
 import { remoteConfig } from '../../utils/backend/firebaseAdmin'
 

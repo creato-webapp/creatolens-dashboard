@@ -9,6 +9,7 @@ import CrossIcon from '@components/Icon/CrossIcon'
 import { useFileUpload } from '@hooks/useFileUpload'
 import { LabelImage } from '@services/Object/Gemini'
 import { Labels, ModelResult } from '@services/Object/ImageBlob'
+import { usePromptTemplate } from '@hooks/usePromptTemplate'
 
 type hashtag = {
   acc: number
@@ -27,6 +28,10 @@ const ImageUpload: React.FC = () => {
     maxBodyLength: 8 * 1024 * 1024,
     maxContentLength: 8 * 1024 * 1024,
   })
+
+  const { ImageAspectRatios, ImageCategories, ImageStyles, ImageUsages, SocialMediaPlatforms } = usePromptTemplate()
+  console.log(ImageAspectRatios, ImageCategories, ImageStyles, ImageUsages, SocialMediaPlatforms)
+
   const toggleCheckbox = useCallback(
     (hashtag: string) => {
       setSelectedHashtags((prevSelected) =>
@@ -126,6 +131,27 @@ const ImageUpload: React.FC = () => {
     }
   }, [file, uploadImage, response, error])
 
+  const AspectRatioSelection = useCallback(() => {
+    if (!ImageAspectRatios) return null
+    const options = Object.entries(ImageAspectRatios).map(([key, value]) => {
+      console.log({key, value})
+      return (
+        <div className="flex flex-col items-center justify-center rounded-xl" key={key}>
+          <div
+            className="bg-[#D9D9D9] shadow-2xl"
+            style={{
+              aspectRatio: `${value.width} / ${value.height}`,
+              width: `${value.width === 9 && value.height === 16 ? '70%' : '100%'}`,
+            }}
+          >
+            <div>{value.label}</div>
+          </div>
+        </div>
+      )
+    })
+    return options
+  }, [ImageAspectRatios])
+
   return (
     <div className="flex flex-col items-center justify-center p-4">
       <h1>Image Upload (mvp for internal use only)</h1>
@@ -152,6 +178,7 @@ const ImageUpload: React.FC = () => {
           {!labels?.length ? 'Get Keywords' : 'Get Keywords With Labels...'}
         </Button.Primary>
       </div>
+      <>{AspectRatioSelection()}</>
 
       <div className="mb-4 flex flex-col">
         <h4>Images Uploaded</h4>

@@ -1,6 +1,6 @@
 import { AxiosResponse } from 'axios'
 
-import Fetcher from '@helpers/fetcher'
+import fetcher from '@helpers/fetcher'
 
 type ReAnnotateLabelType = {
   existing_labels: string[]
@@ -9,7 +9,7 @@ type ReAnnotateLabelType = {
 }
 export async function reAnnotateLabel(data: ReAnnotateLabelType) {
   const { existing_labels, image_url, number } = data
-  const response = await Fetcher.POST<AxiosResponse>('/api/image/labels', {
+  const response = await fetcher.POST<AxiosResponse>('/api/image/labels', {
     existing_labels: existing_labels,
     image_url: image_url,
   })
