@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 
 import { IAccount } from '@components/Account/Account'
 import { updateAccount as updateAccountHelper, updateSession as updateSessionHelper } from '@services/Account/Account'
@@ -9,8 +9,8 @@ import useRequest from './useRequest'
 import METHOD from '@constants/method'
 
 export const useAccount = (id: string, defaultShouldFetch: boolean = true, fallbackData?: IAccount) => {
-  const [shouldFetch, setShouldFetch] = useState(defaultShouldFetch)
-  const { data, error, mutate, ...swr } = useRequest<IAccount>(shouldFetch ? [XAPI.ACCOUNT + id] : null, METHOD.GET, {
+  const { data, error, mutate, ...swr } = useRequest<IAccount>([XAPI.ACCOUNT + id], METHOD.GET, {
+    shouldFetch: defaultShouldFetch,
     refreshInterval: 0,
     fallbackData: fallbackData,
   })
@@ -31,28 +31,26 @@ export const useAccount = (id: string, defaultShouldFetch: boolean = true, fallb
     error,
     updateAccount,
     updateSession,
-    setShouldFetch,
     mutate,
     ...swr,
   }
 }
+
 export const useGetAccountsPagination = (
   paginationParams: PaginationParams,
   defaultShouldFetch?: boolean,
   fallbackData?: PaginationMetadata<IAccount[]>
 ) => {
-  const [shouldFetch, setShouldFetch] = useState(defaultShouldFetch)
   const { data, error, mutate, ...swr } = useRequest<PaginationMetadata<IAccount[]>>(
-    shouldFetch
-      ? [
-          XAPI.GET_ACCOUNTS_PAGINATION,
-          {
-            params: paginationParams,
-          },
-        ]
-      : null,
+    [
+      XAPI.GET_ACCOUNTS_PAGINATION,
+      {
+        params: paginationParams,
+      },
+    ],
     METHOD.GET,
     {
+      shouldFetch: defaultShouldFetch,
       refreshInterval: 0,
       fallbackData: fallbackData,
       revalidateOnMount: false,
@@ -65,8 +63,6 @@ export const useGetAccountsPagination = (
   return {
     data,
     error,
-    shouldFetch,
-    setShouldFetch,
     mutate,
     ...swr,
   }
