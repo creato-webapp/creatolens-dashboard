@@ -2,6 +2,8 @@ import { AxiosRequestConfig } from 'axios'
 
 import fetcher from '../../helpers/fetcher'
 
+// TODO: to be deleted
+
 type hashtag = {
   acc: number
   hashtag: string
