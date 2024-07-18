@@ -6,9 +6,9 @@ import { Button } from '@components/Button'
 import Dropzone from '@components/Dropzone'
 import Checkbox from '@components/Form/Checkbox'
 import CrossIcon from '@components/Icon/CrossIcon'
-import { useFileUpload } from '@hooks/useFileUpload'
 import { LabelImage } from '@services/Object/Gemini'
 import { Labels, ModelResult } from '@services/Object/ImageBlob'
+import useImageUploader from '@hooks/useImageUploader'
 
 type hashtag = {
   acc: number
@@ -22,10 +22,13 @@ const ImageUpload: React.FC = () => {
   const [labels, setLabels] = useState<Labels[]>([])
   const [uploadedUrl, setUploadedUrl] = useState<string>('')
   const [selectedHashtags, setSelectedHashtags] = useState<string[]>([])
-  const { uploadImage, isLoading, response, error } = useFileUpload({
+  const {
+    uploadImage,
+    loading: isLoading,
+    response,
+    error,
+  } = useImageUploader({
     timeout: 30000,
-    maxBodyLength: 8 * 1024 * 1024,
-    maxContentLength: 8 * 1024 * 1024,
   })
   const toggleCheckbox = useCallback(
     (hashtag: string) => {
