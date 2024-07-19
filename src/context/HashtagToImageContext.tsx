@@ -1,8 +1,8 @@
 import { ReactNode, createContext, useCallback, useContext, useState } from 'react'
 
 import { renderPromptAndGenImage } from '@services/imagePromptsHelper'
-import { IImageUsageType, IMAGE_CATEGORY } from 'src/constants/imageStyle'
-import { IHashet } from 'src/pages/recommendation'
+import { IMAGE_CATEGORY, ImageUsageType, SOCIAL_MEDIA_PLATFORMS } from '@constants/imageStyle'
+import { IHashet } from 'pages/recommendation'
 
 export type ImageDetailsType = {
   path?: string
@@ -15,8 +15,8 @@ export type ImageConfigType = {
   imageStyle: string
   aspectRatio: string
   usage: {
-    name: string
-    platform: IImageUsageType
+    name: keyof ImageUsageType
+    platform: keyof typeof SOCIAL_MEDIA_PLATFORMS
   }
 }
 
@@ -43,7 +43,7 @@ type HashtagImageContextType = {
   updateHashtags: (arg: IHashet[]) => void
   imageConfig: ImageConfigType
   updateImageConfig: (config: Partial<ImageConfigType>) => void
-  updateImageCategory: (category: keyof GeneralType, option: string) => void
+  updateImageCategory: (category: string, option: string) => void
   generateImage: () => void
 }
 
@@ -70,8 +70,8 @@ export const HashtagImageProvider = ({ children }: HashtagImageProviderProps) =>
     imageStyle: '',
     aspectRatio: '3:4',
     usage: {
-      name: '',
-      platform: 'Website',
+      name: 'GENERAL',
+      platform: 'Facebook',
     },
   })
 
@@ -118,14 +118,9 @@ export const HashtagImageProvider = ({ children }: HashtagImageProviderProps) =>
       platform: imageConfig.usage.platform,
       usage: imageConfig.usage.name,
     }
-    const websitePromptData = {
-      isWebsiteDesign: true,
-      labels: 'check mark icon',
-      hashtags: '#success',
-    }
-    const res = await renderPromptAndGenImage('Website', websitePromptData)
+    const res = await renderPromptAndGenImage(data.usage, data)
     // const prompt = promptGenerator(data)
-  }, [])
+  }, [keywords, imageConfig, imageCategory, hashtags])
 
   const updateImageConfig = useCallback((config: Partial<ImageConfigType>) => {
     setImageConfig((prev) => ({
@@ -134,12 +129,12 @@ export const HashtagImageProvider = ({ children }: HashtagImageProviderProps) =>
     }))
   }, [])
 
-  const updateImageCategory = (category: keyof GeneralType, option: string) => {
+  const updateImageCategory = useCallback((category: keyof GeneralType, option: string) => {
     setImageCategory((prev) => ({
       ...prev,
       [category]: option,
     }))
-  }
+  }, [])
 
   return (
     <HashtagImageContext.Provider
