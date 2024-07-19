@@ -35,9 +35,9 @@ const Step2 = () => {
     if (!currentImage.labels || !images[currentImageIndex].image || !images[currentImageIndex].labels) return
     const numberOfUnselectedLabels = currentImage.labels?.length - currentImage.selectedLabels.length
     const data = {
-      image_url: images[currentImageIndex].image,
-      existing_labels: images[currentImageIndex].labels,
-      number: numberOfUnselectedLabels,
+      image_url: images[currentImageIndex].image!,
+      existing_labels: images[currentImageIndex].labels!,
+      number: numberOfUnselectedLabels!,
     }
     const newLabel = await reAnnotateLabel(data)
     updateLabel(newLabel)

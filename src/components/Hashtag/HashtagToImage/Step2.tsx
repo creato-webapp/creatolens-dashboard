@@ -9,12 +9,12 @@ import Dropdown from '@components/Form/DropdownV2'
 import { RadioGroup } from '@components/Form/Radio/Group'
 import { useHashtagImageContext } from '@context/HashtagToImageContext'
 
-import { IImageUsageType, IMAGE_STYLE, ImageCategoryType } from '@constants/imageStyle'
+import { ImageCategoryType, ImageUsageTypeKey, SOCIAL_MEDIA_PLATFORMS } from '@constants/imageStyle'
 import { usePromptTemplate } from '@hooks/usePromptTemplate'
 
 const Step2 = () => {
   const { goBack, imageConfig, generateImage, updateImageConfig, updateImageCategory } = useHashtagImageContext()
-  const { ImageAspectRatios, ImageCategories, ImageUsages, SocialMediaPlatforms } = usePromptTemplate()
+  const { ImageAspectRatios, ImageCategories, ImageStyles, ImageUsages, SocialMediaPlatforms } = usePromptTemplate()
 
   const onClickNextStep = () => {
     generateImage()
@@ -36,7 +36,7 @@ const Step2 = () => {
       updateImageConfig({
         usage: {
           platform: imageConfig.usage.platform,
-          name: value,
+          name: value as ImageUsageTypeKey,
         },
       })
     },
@@ -44,10 +44,10 @@ const Step2 = () => {
   )
 
   const platformSelect = useCallback(
-    (value: string) => {
+    (value: keyof typeof SOCIAL_MEDIA_PLATFORMS) => {
       updateImageConfig({
         usage: {
-          platform: value as IImageUsageType,
+          platform: value,
           name: imageConfig.usage.name,
         },
       })
@@ -56,8 +56,8 @@ const Step2 = () => {
   )
 
   const onGeneralSelected = useCallback(
-    (option: keyof ImageCategoryType, value: string | number) => {
-      updateImageCategory(option, value as keyof ImageCategoryType)
+    (option: keyof ImageCategoryType, value: string) => {
+      updateImageCategory(option as string, value)
     },
     [updateImageCategory]
   )
@@ -90,12 +90,12 @@ const Step2 = () => {
           </div>
         </div>
         <div>
-          {imageConfig.usage.name === ImageUsages.SOCIAL_MEDIA && (
+          {imageConfig.usage.name === 'SOCIAL_MEDIA' && (
             <Dropdown
               key={'usage dropdown'}
               options={socialMediaOptions}
               onValueChange={(value) => {
-                platformSelect(value as string)
+                platformSelect(value as keyof typeof SOCIAL_MEDIA_PLATFORMS)
               }}
               name={imageConfig.usage.platform ? imageConfig.usage.platform : 'Please Select'}
             />
@@ -103,7 +103,7 @@ const Step2 = () => {
         </div>
       </div>
     )
-  }, [platformSelect, imageConfig?.usage.name, imageConfig?.usage.platform, usageSelect, ImageUsages])
+  }, [platformSelect, imageConfig?.usage.name, imageConfig?.usage.platform, usageSelect, ImageUsages, SocialMediaPlatforms])
 
   const AspectRatioSelection = useCallback(() => {
     if (!ImageAspectRatios) return null
@@ -147,20 +147,44 @@ const Step2 = () => {
       <div>
         <h2>General</h2>
         <div className="flex flex-col gap-4">
-          {entries.map(([key, value]) => (
-            <Dropdown
-              name={value.label}
-              key={key}
-              options={value.options}
-              onValueChange={(selectedValue) => {
-                onGeneralSelected(key as keyof ImageCategoryType, selectedValue as string)
-              }}
-            />
-          ))}
+          {entries.map(([key, value]) => {
+            return (
+              value.templateType.includes(imageConfig.usage.name) && (
+                <Dropdown
+                  name={value.label}
+                  key={key}
+                  options={value.options.map((option) => ({ label: option.label, value: option.value }))}
+                  onValueChange={(selectedValue) => {
+                    onGeneralSelected(key, selectedValue as string)
+                  }}
+                />
+              )
+            )
+          })}
         </div>
       </div>
     )
-  }, [ImageCategories, onGeneralSelected])
+  }, [ImageCategories, onGeneralSelected, imageConfig])
+
+  const ImageStyleSelection = useCallback(() => {
+    if (!ImageStyles) return null
+    return (
+      <div className="grid h-auto grid-cols-2 gap-4	md:grid-cols-4">
+        {Object.entries(ImageStyles).map(([key, value]) => (
+          <div
+            key={key}
+            onClick={() => imageConfigSelect('imageStyle', value.value)}
+            className="flex aspect-square cursor-pointer flex-col items-center rounded-xl"
+          >
+            <div className={`${imageConfig.imageStyle === value.value ? 'rounded-xl ring-2 ring-accent1-500' : ''} relative h-full w-full`}>
+              <Image src={value.image} alt={'style'} fill />
+            </div>
+            <h3 className={`text-center font-bold ${imageConfig.imageStyle === value.value ? 'text-accent1-500' : ''}`}>{value.name}</h3>
+          </div>
+        ))}
+      </div>
+    )
+  }, [ImageStyles, imageConfig, imageConfigSelect])
 
   return (
     <div className="flex flex-col gap-2">
@@ -174,21 +198,7 @@ const Step2 = () => {
           </div>
           <h2 className="h2 font-extrabold">Format</h2>
         </div>
-        <div className="grid h-auto grid-cols-2 gap-4	md:grid-cols-4">
-          {Object.entries(IMAGE_STYLE).map(([key, value]) => (
-            <div
-              key={key}
-              onClick={() => imageConfigSelect('imageStyle', value.value)}
-              className={`flex aspect-square cursor-pointer flex-col items-center rounded-xl`}
-            >
-              <div className={`${imageConfig.imageStyle === value.value ? 'rounded-xl ring-2 ring-accent1-500' : ''} relative h-full w-full`}>
-                {/* <Image src={value.image} alt={'style'} height={140} width={140} fill /> */}
-                <Image src={value.image} alt={'style'} fill />
-              </div>
-              <h3 className={`text-center font-bold ${imageConfig.imageStyle === value.value ? 'text-accent1-500' : ''}`}>{value.name}</h3>
-            </div>
-          ))}
-        </div>
+        <ImageStyleSelection />
       </div>
       <UsageSelection />
       <AspectRatioSelection />
