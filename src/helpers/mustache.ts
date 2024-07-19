@@ -1,7 +1,7 @@
 import Mustache from 'mustache'
 
 export type MustacheVariable = {
-  [key: string]: string
+  [key: string]: string | string[] | number
 }
 
 export function renderTemplate(template: string, variable: MustacheVariable): string {

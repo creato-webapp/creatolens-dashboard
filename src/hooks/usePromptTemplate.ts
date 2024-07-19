@@ -1,15 +1,6 @@
 import { useRemoteConfig } from './useRemoteConfig'
-import { ImageCategoryType } from 'src/constants/imageStyle';
 
-type PromptModifier = {
-  [key: string]: {
-    label: string
-    options: Array<{
-      label: string
-      value: string | number
-    }>
-  }
-}
+import { ImageCategoryType, ImageUsageType } from '@constants/imageStyle'
 
 type ImageAspectRatioType = {
   [key: string]: {
@@ -20,18 +11,12 @@ type ImageAspectRatioType = {
   }
 }
 
-type ImageCategoryType = {
+type ImageStyleType = {
   [key: string]: {
-    label: string
-    options: Array<{
-      label: string
-      value: string
-    }>
+    name: string
+    value: string
+    image: string
   }
-}
-
-type ImageUsageType = {
-  [key: string]: string
 }
 
 type SocialMediaPlatformsType = Array<string>
@@ -39,7 +24,7 @@ type SocialMediaPlatformsType = Array<string>
 export const usePromptTemplate = () => {
   const { configValue: ImageAspectRatios } = useRemoteConfig<ImageAspectRatioType>('IMAGE_ASPECT_RATIOS')
   const { configValue: ImageCategories } = useRemoteConfig<ImageCategoryType>('IMAGE_CATEGORY')
-  const { configValue: ImageStyles } = useRemoteConfig<PromptModifier>('IMAGE_STYLE')
+  const { configValue: ImageStyles } = useRemoteConfig<ImageStyleType>('IMAGE_STYLE')
   const { configValue: ImageUsages } = useRemoteConfig<ImageUsageType>('IMAGE_USAGE')
   const { configValue: SocialMediaPlatforms } = useRemoteConfig<SocialMediaPlatformsType>('SOCIAL_MEDIA_PLATFORMS')
 
