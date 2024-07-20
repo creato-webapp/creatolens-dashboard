@@ -4,8 +4,11 @@ const Details = (props: { setIsDetailsPageOpen: () => void }) => {
   const { setIsDetailsPageOpen } = props
   return (
     <div className="">
-      <div className="flex gap-4">
-        <div className="required relative h-6 w-6 items-center justify-center px-4 text-center text-2xl text-black" onClick={setIsDetailsPageOpen}>
+      <div className="flex items-center gap-4">
+        <div
+          className="required relative flex h-6 w-6 cursor-pointer items-center justify-center px-4 text-center text-2xl text-black"
+          onClick={setIsDetailsPageOpen}
+        >
           <Image src={'/back.svg'} fill alt={'back'} />
         </div>
         <h1 className="font-extrabold">DETAILS</h1>

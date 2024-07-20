@@ -25,10 +25,11 @@ const ImageToHashtag = () => {
 
   if (isDetailPagesOpen)
     return (
-      <div className="mx-3 my-4 flex cursor-pointer items-center justify-center">
+      <div className="mx-3 my-4 flex items-center justify-center">
         <Details setIsDetailsPageOpen={() => setIsDetailsPageOpen((pre) => !pre)} />
       </div>
     )
+
   return (
     <div className="mx-3 my-4 flex items-center justify-center">
       <div className="w-full max-w-screen-lg">
@@ -43,8 +44,15 @@ const ImageToHashtag = () => {
         <div>
           <div className="flex">
             <h1 className="font-extrabold">IMAGE TO HASHTAG</h1>
-            <Image className="mx-3" src="/help-circle.svg" alt={'help'} width={34} height={34}></Image>
-            <Image onClick={() => setIsDetailsPageOpen((pre) => !pre)} src="/history.svg" alt={'history'} width={34} height={34}></Image>
+            <Image
+              onClick={() => setIsDetailsPageOpen((pre) => !pre)}
+              className="mx-3 cursor-pointer"
+              src="/help-circle.svg"
+              alt={'help'}
+              width={34}
+              height={34}
+            ></Image>
+            <Image src="/history.svg" alt={'history'} width={34} height={34}></Image>
           </div>
           <div className="my-4 md:my-7">
             <ProgressBar total_step={3} current_step={step} />

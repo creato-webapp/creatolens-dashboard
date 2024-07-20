@@ -3,7 +3,7 @@ import { decode } from 'next-auth/jwt'
 
 import { CombinedUser } from '@api/auth/[...nextauth]'
 
-import ImageInstance from '../axiosInstance/Image'
+import ImageInstance from '@helpers/axios/Image'
 
 export default async function postImagePrompt(req: NextApiRequest, res: NextApiResponse) {
   const { method } = req

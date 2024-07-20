@@ -145,7 +145,7 @@ const Step3 = () => {
           <Image
             fill={true}
             src={currentImage.image}
-            objectFit="contain"
+            objectFit="cover"
             className="w-fit rounded-4xl"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             alt="testing"
@@ -193,14 +193,14 @@ const Step3 = () => {
           onClick={async () => {
             //   if (!currentImage.labels) return null
             //   const res = await getImageHashtag(currentImage.labels.join(', '))
-            updateHashtag(
-              res.data.map((item) => {
-                return {
-                  hashtag: item.hashtag,
-                  acc: item.acc,
-                }
-              })
-            )
+            // updateHashtag(
+            //   res.data.map((item) => {
+            //     return {
+            //       hashtag: item.hashtag,
+            //       acc: item.acc,
+            //     }
+            //   })
+            // )
           }}
         >
           + Generate Image
