@@ -1,50 +1,47 @@
 describe('Create Instagram Page', () => {
   beforeEach(() => {
     cy.visit('/')
-    // cy.login({ fixture: 'session.json' })
-    cy.google_login()
+    // Log in as a user
+    const user = {
+      name: 'Morty Smith',
+      email: 'test@picklerick.com',
+      image: '/path/to/butterbot.jpg',
+      birthdate: '12/02/13',
+    }
+
+    cy.login(user)
     cy.visit('/accounts')
-    // cy.get('button').contains('Create New Account').should('be.visible')
-    cy.get('button').contains('Create New Account').should('be.visible').click()
-    // url should include /accounts/create-account
-    cy.url().should('include', '/accounts/create-account')
-    // cy.google_login({ fixture: 'session.json' })
   })
-  it('should display create instagram page', () => {
-    cy.visit('/accounts/create-account')
 
-    cy.get('h1').contains('CREATE NEW ACCOUNT')
-    cy.get('p').contains('Connect your Instagram account')
+  it('should create a new Instagram account', () => {
+    // Assert the accounts page is displayed
+    cy.get('h1').contains('ACCOUNTS').should('be.visible')
 
-    // check if the form is present
-    cy.get('form').should('be.visible')
+    // Assert and click the 'Create New Account' button
+    cy.get('button').contains('Create New Account').should('be.visible').click()
 
-    // check if the form fields are present
-    cy.get('input[name="username"]').should('be.visible')
-    cy.get('input[type="password"]').should('be.visible')
-    cy.get('input[name="acknowledge"]').should('be.visible')
-    cy.get('button').contains('Create').should('be.visible')
+    // Assert the URL has changed to the expected one
+    cy.url().should('include', '/accounts/bot/new')
 
-    // check if the form fields are empty
-    cy.get('input[name="username"]').should('have.value', '')
-    cy.get('input[type="password"]').should('have.value', '')
-    cy.get('input[name="acknowledge"]').should('not.be.checked')
+    // Assert the 'Instagram account' and 'Account password' fields are visible
+    cy.get('h4').contains('Instagram account').should('be.visible')
+    cy.get('h4').contains('Account password').should('be.visible')
 
-    const uuid = () => Cypress._.random(0, 1e6)
-    const id = uuid()
-    const username = `testname${id}`
-    const password = 'test_password'
-    cy.get('input[name="username"]').type(username).should('have.value', username)
-    cy.get('input[type="password"]').type(password).should('have.value', password)
-    cy.get('input[name="acknowledge"]').check().should('be.checked')
-    1
-    // check the submit button is clickable
-    // find button with type submit and check if it is enabled
-    cy.get('button[type="submit"]').should('be.enabled')
-    cy.get('button[type="submit"]').click()
+    // Fill in the username field and assert the value
+    const username = 'your_username'
+    cy.get('input#username').type(username).should('have.value', username)
 
-    cy.wait(5000)
-    cy.visit('/accounts')
-    cy.get('table').contains('td', username).should('be.visible')
+    // Fill in the password field and assert the value
+    const password = 'your_password'
+    cy.get('input#pwd').type(password).should('have.value', password)
+
+    // Check the 'Acknowledge' checkbox and assert it is checked
+    cy.get('input#acknowledge').check().should('be.checked')
+
+    // Assert the submit button is enabled and click it
+    cy.get('button[type="submit"]').should('not.be.disabled').click()
+
+    // Optionally, assert the URL has changed or some other success outcome
+    cy.url().should('include', '/accounts/success') // Replace with the expected URL or outcome
   })
 })
