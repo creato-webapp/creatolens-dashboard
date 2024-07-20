@@ -1,35 +1,28 @@
-import Mustache from 'mustache'
-
-import { IMAGE_USAGE } from '@constants/imageStyle'
+import { ImageUsageType, SOCIAL_MEDIA_PLATFORMS } from '@constants/imageStyle'
 
 import fetcher from '@helpers/fetcher'
-
-import { PROMPT_TEMPLATE } from '../constants/promptTemplate'
+import { IHashet } from 'pages/recommendation'
 
 interface PromptData {
-  Stock_image_modifier?: string
-  labels: string
-  hashtags?: string
-  General_Modifiers?: string
-  social_mediaType?: string
-  Presentation_Modifiers?: string
+  hashtags: IHashet[]
+  keywords: string
+  imageStyle: string
+  aspectRatio: string
+  platform: keyof typeof SOCIAL_MEDIA_PLATFORMS
+  usage: keyof ImageUsageType
 }
 
 type ApiResponse = {
   signed_urls: string[]
 }
 
-export const USAGE_PROMPT_MAP = {
-  [IMAGE_USAGE.SOCIAL_MEDIA]: PROMPT_TEMPLATE.SOCIAL_MEDIA_PLATFORMS,
-  [IMAGE_USAGE.WEBSITE]: PROMPT_TEMPLATE.WEBSITE_DESIGN,
-}
-
-export async function renderPromptAndGenImage(promptType: keyof typeof USAGE_PROMPT_MAP, data: PromptData): Promise<{ signed_urls: string[] }> {
+export async function renderPromptAndGenImage(prompt: keyof ImageUsageType, data: PromptData): Promise<{ signed_urls: string[] }> {
   try {
-    const template = USAGE_PROMPT_MAP[promptType]
-    const renderedPrompt = Mustache.render(template, { ...data })
-
-    const response = await fetcher.POST<ApiResponse>('/api/image/generate', { prompt: renderedPrompt })
+    const response = await fetcher.POST<ApiResponse>('/api/image/prompt', data, {
+      params: {
+        prompt_type: prompt,
+      },
+    })
 
     return response
   } catch (error) {

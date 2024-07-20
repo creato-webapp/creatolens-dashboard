@@ -6,10 +6,16 @@ const serviceAccount = {
   privateKey: process.env.FIREBASE_ADMIN_PRIVATE_KEY,
 } as ServiceAccount
 
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-})
+let app = admin.apps.length ? admin.app('server') : null
+if (!app) {
+  app = admin.initializeApp(
+    {
+      credential: admin.credential.cert(serviceAccount),
+    },
+    'server'
+  )
+}
 
-export const remoteConfig = admin.remoteConfig()
+export const remoteConfig = app && app.remoteConfig()
 
 module.exports = { remoteConfig }

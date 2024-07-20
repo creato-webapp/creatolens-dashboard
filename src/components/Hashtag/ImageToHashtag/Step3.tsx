@@ -20,7 +20,7 @@ const Step3 = () => {
         checked: boolean
       }[]
     }[]
-  >()
+  >([])
 
   const categorizedOptions = useMemo(() => {
     const highConfidence = hashtags.filter((hashtag) => hashtag.acc > 0.9)
@@ -127,7 +127,7 @@ const Step3 = () => {
   }, [currentImage?.labels, currentImage?.selectedLabels])
 
   const hashtagsLength = useMemo(() => {
-    if (!options) return 0
+    if (options.length <= 0) return 0
     return options.reduce((acc, option) => acc + option.options.length, 0)
   }, [options])
 
@@ -191,16 +191,16 @@ const Step3 = () => {
           sizes={['l', 'l', 'l']}
           className="w-full"
           onClick={async () => {
-            //   if (!currentImage.labels) return null
-            //   const res = await getImageHashtag(currentImage.labels.join(', '))
-            // updateHashtag(
-            //   res.data.map((item) => {
-            //     return {
-            //       hashtag: item.hashtag,
-            //       acc: item.acc,
-            //     }
-            //   })
-            // )
+            if (!currentImage.labels) return null
+            const res = await getImageHashtag(currentImage.labels.join(', '))
+            updateHashtag(
+              res.data.map((item) => {
+                return {
+                  hashtag: item.hashtag,
+                  acc: item.acc,
+                }
+              })
+            )
           }}
         >
           + Generate Image

@@ -14,7 +14,7 @@ const config = {
   messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID!,
 }
 
-export const useRemoteConfig = <T>(key: string, refetchInterval: number = 180000) => {
+export const useRemoteConfig = <T>(key: string, refetchInterval: number = 10000) => {
   const [configValue, setConfigValue] = useState<T | null>(null)
   const [error, setError] = useState<string | null>(null)
 
@@ -22,7 +22,7 @@ export const useRemoteConfig = <T>(key: string, refetchInterval: number = 180000
     const initConfig = async () => {
       if (typeof window !== 'undefined') {
         try {
-          const app = initializeApp(config)
+          const app = initializeApp(config, 'client')
 
           const remoteConfig = getRemoteConfig(app)
           remoteConfig.settings.minimumFetchIntervalMillis = refetchInterval

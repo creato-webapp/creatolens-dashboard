@@ -1,5 +1,7 @@
 import { DropdownOption } from '@components/Form/DropdownV2'
 
+import { PromptTemplate } from './prompt'
+
 export const IMAGE_STYLE = {
   GRAPHIC_DESIGN: {
     name: 'Graphic Design',
@@ -30,13 +32,25 @@ export type IImageStyleType =
   | typeof IMAGE_STYLE.PHOTOGRAPHY
 
 export const IMAGE_USAGE = {
-  SOCIAL_MEDIA: 'Social Media',
-  WEBSITE: 'Website',
+  GENERAL: PromptTemplate.PROMPT_TEMPLATE_GENERAL,
+  SOCIAL_MEDIA: PromptTemplate.PROMPT_TEMPLATE_SOCIAL_MEDIA,
+  LOGO_DESIGN: PromptTemplate.PROMPT_TEMPLATE_LOGO_DESIGN,
+  STOCK_IMAGE: PromptTemplate.PROMPT_TEMPLATE_STOCK_IMAGE,
+  WEBSITE_DESIGN: PromptTemplate.PROMPT_TEMPLATE_WEBSITE_DESIGN,
 } as const
 
-export const SOCIAL_MEDIA_PLATFORMS = ['Facebook', 'Twitter', 'Instagram', 'LinkedIn', 'TikTok', 'Snapchat']
+export type ImageUsageType = typeof IMAGE_USAGE
 
-export type IImageUsageType = typeof IMAGE_USAGE.SOCIAL_MEDIA | typeof IMAGE_USAGE.WEBSITE
+export type ImageUsageTypeKey = keyof typeof IMAGE_USAGE
+
+export enum SOCIAL_MEDIA_PLATFORMS {
+  Facebook = 'Facebook',
+  Twitter = 'Twitter',
+  Instagram = 'Instagram',
+  LinkedIn = 'LinkedIn',
+  TikTok = 'TikTok',
+  Snapchat = 'Snapchat',
+}
 
 export const IMAGE_ASPECT_RATIOS = {
   SQUARE: { label: 'Square', value: '1:1', width: 1, height: 1 },
@@ -46,8 +60,9 @@ export const IMAGE_ASPECT_RATIOS = {
   PORTRAIT_3_4: { label: 'Portrait 3:4', value: '3:4', width: 3, height: 4 },
 }
 
-export const IMAGE_CATEGORY = {
+export const IMAGE_CATEGORY: ImageCategoryType = {
   LIGHTING: {
+    templateType: ['GENERAL'],
     label: 'Lighting',
     options: [
       {
@@ -69,6 +84,7 @@ export const IMAGE_CATEGORY = {
     ],
   },
   ENVIRONMENT: {
+    templateType: ['GENERAL'],
     label: 'Environment',
     options: [
       {
@@ -90,6 +106,7 @@ export const IMAGE_CATEGORY = {
     ],
   },
   COLOR_SCHEME: {
+    templateType: ['GENERAL'],
     label: 'Color Scheme',
     options: [
       {
@@ -111,6 +128,7 @@ export const IMAGE_CATEGORY = {
     ],
   },
   POINT_OF_VIEW: {
+    templateType: ['GENERAL'],
     label: 'Point of View',
     options: [
       {
@@ -128,6 +146,7 @@ export const IMAGE_CATEGORY = {
     ],
   },
   CAMERA_ANGLE: {
+    templateType: ['GENERAL'],
     label: 'Camera Angle',
     options: [
       {
@@ -141,6 +160,7 @@ export const IMAGE_CATEGORY = {
     ],
   },
   LENS_TYPE: {
+    templateType: ['GENERAL'],
     label: 'Lens Type',
     options: [
       {
@@ -154,6 +174,7 @@ export const IMAGE_CATEGORY = {
     ],
   },
   BACKGROUND: {
+    templateType: ['GENERAL'],
     label: 'Background',
     options: [
       {
@@ -171,6 +192,7 @@ export const IMAGE_CATEGORY = {
     ],
   },
   MOOD: {
+    templateType: ['GENERAL'],
     label: 'Mood',
     options: [
       {
@@ -200,6 +222,7 @@ export const IMAGE_CATEGORY = {
     ],
   },
   THEME: {
+    templateType: ['GENERAL'],
     label: 'Theme',
     options: [
       {
@@ -213,6 +236,7 @@ export const IMAGE_CATEGORY = {
     ],
   },
   GENERAL: {
+    templateType: ['GENERAL'],
     label: 'General',
     options: [
       {
@@ -230,6 +254,7 @@ export const IMAGE_CATEGORY = {
     ],
   },
   ACTION_AND_MOVEMENT: {
+    templateType: ['GENERAL'],
     label: 'Action and Movement',
     options: [
       {
@@ -263,18 +288,9 @@ export const IMAGE_CATEGORY = {
 type Category = {
   label: string
   options: DropdownOption[]
+  templateType: ImageUsageTypeKey[]
 }
 
 export type ImageCategoryType = {
-  LIGHTING?: Category
-  ENVIRONMENT?: Category
-  COLOR_SCHEME?: Category
-  POINT_OF_VIEW?: Category
-  CAMERA_ANGLE?: Category
-  LENS_TYPE?: Category
-  BACKGROUND?: Category
-  MOOD?: Category
-  THEME?: Category
-  GENERAL?: Category
-  ACTION_AND_MOVEMENT?: Category
+  [key: string]: Category
 }
