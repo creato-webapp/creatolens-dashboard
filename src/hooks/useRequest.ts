@@ -2,7 +2,7 @@ import useSWR, { Key, KeyedMutator, SWRConfiguration } from 'swr'
 
 import fetcher from '../helpers/fetcher'
 import { IMethodsType } from '@constants/method'
-import { useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 
 type IRequestConfig = SWRConfiguration & {
   shouldFetch?: boolean
@@ -13,18 +13,24 @@ const useRequest = <T = unknown>(key: Key, method: IMethodsType, config?: IReque
   const [shouldFetch, setShouldFetch] = useState(config?.shouldFetch)
   const { data, error, mutate: onMutate, ...swr } = useSWR(shouldFetch ? key : null, fetcher[method], config)
 
-  const mutate: KeyedMutator<unknown> = async (data, opts) => {
-    setShouldFetch(true)
-    await onMutate(data, opts)
-  }
+  const mutate: KeyedMutator<unknown> = useCallback(
+    async (data, opts) => {
+      setShouldFetch(true)
+      await onMutate(data, opts)
+    },
+    [onMutate]
+  )
 
-  return {
-    setShouldFetch,
-    data: data as T | undefined,
-    error,
-    mutate,
-    ...swr,
-  }
+  return useMemo(
+    () => ({
+      setShouldFetch,
+      data: data as T | undefined,
+      error,
+      mutate,
+      ...swr,
+    }),
+    [data, error, mutate, swr]
+  )
 }
 
 export default useRequest

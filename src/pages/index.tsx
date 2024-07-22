@@ -9,8 +9,9 @@ import WhyCreatoLens from '@lib/Home/WhyCreatoLens'
 
 export const getServerSideProps: GetServerSideProps = async (
   context: GetServerSidePropsContext
-): Promise<GetServerSidePropsResult<Record<string, never>>> => {
+): Promise<GetServerSidePropsResult<Record<string, unknown>>> => {
   const session = await getSession(context)
+
   if (session) {
     return {
       redirect: {
@@ -19,10 +20,12 @@ export const getServerSideProps: GetServerSideProps = async (
       },
     }
   }
-  return { props: {} }
+  return {
+    props: {},
+  }
 }
 
-const Home: NextPage = () => {
+const Index: NextPage = () => {
   return (
     <>
       <div className="pb-6">
@@ -35,4 +38,4 @@ const Home: NextPage = () => {
   )
 }
 
-export default Home
+export default Index
