@@ -5,8 +5,6 @@ import fetcher from '@helpers/fetcher'
 
 import { base64ToBlob } from './util'
 
-import { Fetcher } from '../helpers/fetcher'
-
 export async function getImageUploadUrl(
   data: {
     args: {

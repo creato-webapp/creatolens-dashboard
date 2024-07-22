@@ -103,6 +103,7 @@
 
 import { JWTPayload } from 'jose'
 import { encode } from 'next-auth/jwt'
+import 'cypress-file-upload'
 
 Cypress.Commands.add('login', (userObj: JWTPayload) => {
   // Generate and set a valid cookie from the fixture that next-auth can decrypt

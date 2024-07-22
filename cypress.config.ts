@@ -9,12 +9,6 @@ export default defineConfig({
       on('task', {
         GoogleSocialLogin: GoogleSocialLogin,
       })
-      on('before:browser:launch', (browser, launchOptions) => {
-        console.log(launchOptions.args)
-        let removeFlags = ['--enable-automation']
-        launchOptions.args = launchOptions.args.filter((value) => !removeFlags.includes(value))
-        return launchOptions
-      })
     },
     baseUrl: 'http://localhost:3000',
     chromeWebSecurity: false,

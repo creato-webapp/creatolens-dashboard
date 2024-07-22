@@ -3,15 +3,9 @@ describe('Login page', () => {
     cy.visit('/')
     // cy.login({ fixture: 'session.json' })
     // cy.google_login(¸)
-
-    const user = {
-      name: 'Morty Smith',
-      email: 'test@picklerick.com',
-      image: '/path/to/butterbot.jpg',
-      birthdate: '12/02/13',
-    }
-
-    cy.login(user)
+    cy.fixture('users').then((users) => {
+      cy.login(users)
+    })
 
     cy.visit('/accounts')
   })
