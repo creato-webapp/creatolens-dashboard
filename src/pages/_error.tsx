@@ -3,8 +3,14 @@ import React from 'react'
 import { useRouter } from 'next/router'
 
 import { Button } from '@components/Button'
+import { StatusCodes } from 'http-status-codes'
+import { NextPageContext } from 'next'
 
-const ErrorPage: React.FC = () => {
+type IPageProps = {
+  statusCode: (typeof StatusCodes)[keyof typeof StatusCodes]
+}
+
+const Error = ({ statusCode }: IPageProps) => {
   const router = useRouter()
 
   const goBack = () => {
@@ -21,6 +27,7 @@ const ErrorPage: React.FC = () => {
           <div className="flex flex-col gap-12 md:items-start">
             <h1 className="text-7xl font-extrabold text-accent1-500">ERROR</h1>
             <h4 className="font-semibold">We are working on fixing the problem. Be back soon.</h4>
+            <p>{statusCode ? `An error ${statusCode} occurred on server` : 'An error occurred on client'}</p>
             <Button.Primary onClick={goBack}>Go Back</Button.Primary>
           </div>
           <img className="absolute -right-36 -z-50 hidden w-1/2 shrink-0 md:-top-36 md:block" src={'./500.svg'} alt="500 Image" />
@@ -30,4 +37,9 @@ const ErrorPage: React.FC = () => {
   )
 }
 
-export default ErrorPage
+Error.getInitialProps = ({ res, err }: NextPageContext) => {
+  const statusCode = res ? res.statusCode : err ? err.statusCode : StatusCodes.NOT_FOUND
+  return { statusCode }
+}
+
+export default Error

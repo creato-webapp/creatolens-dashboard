@@ -5,8 +5,16 @@ import React from 'react'
 import { useRouter } from 'next/router'
 
 import { Button } from '@components/Button'
+import { useTranslation } from 'next-i18next'
+import { GetStaticProps } from 'next'
+import { getLocaleProps } from '@services/locale'
 
-const ErrorPage: React.FC = () => {
+export const getStaticProps: GetStaticProps = async (context) => {
+  return getLocaleProps(context)
+}
+
+const NOT_FOUND: React.FC = () => {
+  const { t } = useTranslation('error')
   const router = useRouter()
 
   const goBack = () => {
@@ -22,7 +30,7 @@ const ErrorPage: React.FC = () => {
         <div className="flex h-full w-full flex-row items-center justify-center">
           <div className="flex items-center md:w-1/2 md:pl-16 lg:pl-32">
             <div className="flex flex-col justify-center gap-12 md:items-start">
-              <h1 className="text-7xl font-extrabold text-accent1-500">ERROR 404</h1>
+              <h1 className="text-7xl font-extrabold uppercase text-accent1-500">{t('title', { statusCode: 400 })}</h1>
               <h1 className="text-5xl font-extrabold">PAGE NOT FOUND</h1>
               <h4 className="font-semibold">We are working on fixing the problem. Be back soon.</h4>
               <Button.Primary onClick={goBack}>Go Back</Button.Primary>
@@ -37,4 +45,4 @@ const ErrorPage: React.FC = () => {
   )
 }
 
-export default ErrorPage
+export default NOT_FOUND

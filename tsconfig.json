@@ -21,6 +21,7 @@
       "@constants/*": ["constants/*"],
       "@context/*": ["context/*"],
       "@lib/*": ["lib/*"],
+      "@locales/*": ["public/locales/*"],
       "@services/*": ["services/*"],
       "@api/*": ["pages/api/*"],
       "@helpers/*": ["helpers/*"],
