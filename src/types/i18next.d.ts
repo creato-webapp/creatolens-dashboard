@@ -8,11 +8,11 @@
 import 'i18next'
 
 // locales.ts file is generated with `npm run toc`
-import locales from '@constants/locales'
+import LOCALE from '@constants/locales'
 
 declare module 'i18next' {
   interface CustomTypeOptions {
     defaultNS: 'common'
-    locales: typeof locales
+    locales: typeof LOCALE
   }
 }

@@ -1,11 +1,15 @@
-// import common from '../../public/locales/en/common.json'
+import common from '../../public/locales/en/common.json'
 import error from '../../public/locales/en/error.json'
 // import footer from '../../public/locales/en/footer.json'
 
-const locale = {
-  // common,
+const LOCALE = {
+  common,
   error,
   // footer,
 } as const
 
-export default locale
+export const LOCAL_NAME_SPACE = Object.keys(LOCALE)
+
+export const LANGUAGE = ['en', 'zh-HK']
+
+export default LOCALE
