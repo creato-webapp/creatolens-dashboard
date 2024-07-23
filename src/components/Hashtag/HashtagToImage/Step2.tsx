@@ -131,9 +131,13 @@ const Step2 = () => {
         </div>
         <ImageStyleSelection />
       </div>
-      <Primary onClick={onClickNextStep} sizes={['full', 'full', 'full']}>
-        Generate Image
-      </Primary>
+      <AspectRatioSelection />
+      <ImageCategorySelection />
+      <div className="mt-4 flex w-full items-center justify-center">
+        <Primary onClick={onClickNextStep} sizes={['full', 'full', 'full']}>
+          Generate Image
+        </Primary>
+      </div>
     </div>
   )
 }
