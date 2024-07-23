@@ -4,17 +4,15 @@ import { useCallback } from 'react'
 import Image from 'next/image'
 
 import Primary from '@components/Button/Primary'
-import { DropdownOption } from '@components/Form/Dropdown'
 import Dropdown from '@components/Form/DropdownV2'
-import { RadioGroup } from '@components/Form/Radio/Group'
 import { useHashtagImageContext } from '@context/HashtagToImageContext'
 
-import { ImageCategoryType, ImageUsageTypeKey, SOCIAL_MEDIA_PLATFORMS } from '@constants/imageStyle'
+import { ImageCategoryType } from '@constants/imageStyle'
 import { usePromptTemplate } from '@hooks/usePromptTemplate'
 
 const Step2 = () => {
   const { goBack, imageConfig, generateImage, updateImageConfig, updateImageCategory } = useHashtagImageContext()
-  const { ImageAspectRatios, ImageCategories, ImageStyles, ImageUsages, SocialMediaPlatforms } = usePromptTemplate()
+  const { ImageAspectRatios, ImageCategories, ImageStyles } = usePromptTemplate()
 
   const onClickNextStep = () => {
     generateImage()
@@ -31,79 +29,12 @@ const Step2 = () => {
     [updateImageConfig]
   )
 
-  const usageSelect = useCallback(
-    (value: string) => {
-      updateImageConfig({
-        usage: {
-          platform: imageConfig.usage.platform,
-          name: value as ImageUsageTypeKey,
-        },
-      })
-    },
-    [imageConfig.usage.platform, updateImageConfig]
-  )
-
-  const platformSelect = useCallback(
-    (value: keyof typeof SOCIAL_MEDIA_PLATFORMS) => {
-      updateImageConfig({
-        usage: {
-          platform: value,
-          name: imageConfig.usage.name,
-        },
-      })
-    },
-    [imageConfig.usage.name, updateImageConfig]
-  )
-
   const onGeneralSelected = useCallback(
     (option: keyof ImageCategoryType, value: string) => {
       updateImageCategory(option as string, value)
     },
     [updateImageCategory]
   )
-
-  const UsageSelection = useCallback(() => {
-    if (!ImageUsages) return null
-    const options = Object.entries(ImageUsages).map(([, value]) => ({
-      value: value,
-      label: value,
-    }))
-    if (!SocialMediaPlatforms) return null
-    const socialMediaOptions: DropdownOption[] = Object.entries(SocialMediaPlatforms).map(([, value]) => ({
-      label: value,
-      value: value,
-    }))
-    return (
-      <div className="flex flex-col gap-4">
-        <h2>Usage</h2>
-
-        <div className="flex flex-row items-center justify-center gap-12">
-          <div className="flex flex-row items-center gap-2">
-            <RadioGroup
-              defaultValue={Object.values(ImageUsages)[0]}
-              options={options}
-              selectedValue={imageConfig.usage.name}
-              onValueChange={(value) => {
-                usageSelect(value)
-              }}
-            />
-          </div>
-        </div>
-        <div>
-          {imageConfig.usage.name === 'SOCIAL_MEDIA' && (
-            <Dropdown
-              key={'usage dropdown'}
-              options={socialMediaOptions}
-              onValueChange={(value) => {
-                platformSelect(value as keyof typeof SOCIAL_MEDIA_PLATFORMS)
-              }}
-              name={imageConfig.usage.platform ? imageConfig.usage.platform : 'Please Select'}
-            />
-          )}
-        </div>
-      </div>
-    )
-  }, [platformSelect, imageConfig?.usage.name, imageConfig?.usage.platform, usageSelect, ImageUsages, SocialMediaPlatforms])
 
   const AspectRatioSelection = useCallback(() => {
     if (!ImageAspectRatios) return null
@@ -149,7 +80,7 @@ const Step2 = () => {
         <div className="flex flex-col gap-4">
           {entries.map(([key, value]) => {
             return (
-              value.templateType.includes(imageConfig.usage.name) && (
+              value.templateType.includes(imageConfig.imageStyle) && (
                 <Dropdown
                   name={value.label}
                   key={key}
@@ -200,14 +131,9 @@ const Step2 = () => {
         </div>
         <ImageStyleSelection />
       </div>
-      <UsageSelection />
-      <AspectRatioSelection />
-      <ImageCategorySelection />
-      <div className="mt-4 flex w-full items-center justify-center">
-        <Primary onClick={onClickNextStep} sizes={['full', 'full', 'full']}>
-          Generate Image
-        </Primary>
-      </div>
+      <Primary onClick={onClickNextStep} sizes={['full', 'full', 'full']}>
+        Generate Image
+      </Primary>
     </div>
   )
 }
