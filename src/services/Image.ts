@@ -89,7 +89,7 @@ export async function getImageLabel(imagePath: string) {
 }
 
 export async function getImageByPrompt(prompt: string) {
-  const response = await Fetcher.POST<AxiosResponse>('/api/image-gen', prompt, {
+  const response = await fetcher.POST<AxiosResponse>('/api/image-gen', prompt, {
     headers: {
       'Content-Type': 'multipart/form-data',
       keepAlive: false,
