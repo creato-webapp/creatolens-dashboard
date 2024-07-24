@@ -10,6 +10,20 @@ describe('Create Instagram Page', () => {
     }
 
     cy.login(user)
+    // cy.intercept('*', (req) => {
+    //   req.headers['X-Test-Auth-Token'] = Cypress.env('X-Test-Auth-Token')
+    // })
+    cy.intercept('*', (req) => {
+      req.headers['X-Test-Auth-Token'] = Cypress.env('X-Test-Auth-Token')
+
+      // Log the request to the console
+      console.log('Request intercepted:', req)
+
+      req.continue((res) => {
+        // Log the response to the console
+        console.log('Response received:', res)
+      })
+    }).as('allRequests')
     cy.visit('/accounts')
   })
 

@@ -2,9 +2,9 @@ describe('Create Instagram Page', () => {
   beforeEach(() => {
     cy.visit('/')
     // Log in as a user
-    // cy.fixture('users').then((users) => {
-    //   cy.login(users)
-    // })
+    cy.fixture('user').then((user) => {
+      cy.login(user)
+    })
 
     cy.visit('/hashtag/image-to-hashtag')
   })
@@ -28,7 +28,7 @@ describe('Create Instagram Page', () => {
 
     cy.get('h1').contains('IMAGE TO HASHTAG').should('be.visible')
     cy.wait(1000) // Custom wait
-    cy.get('h2').contains('Image label annotation').should('be.visible')
+    cy.get('h2', { timeout: 30000 }).contains('Image label annotation').should('be.visible')
     cy.wait(1000) // Custom wait
     // cy.get('h2').contains('labels discovered').should('be.visible')
 
@@ -38,5 +38,7 @@ describe('Create Instagram Page', () => {
     cy.get('h3', { timeout: 30000 }).contains('labels discovered', { timeout: 30000 }).should('be.visible')
 
     cy.get('button').contains('Get Hashtag').click()
+
+    cy.get('h2', { timeout: 30000 }).contains('Get hashtag recommendation').should('be.visible')
   })
 })
