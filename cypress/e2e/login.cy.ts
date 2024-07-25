@@ -3,9 +3,7 @@ describe('Login page', () => {
     cy.visit('/')
     // cy.login({ fixture: 'session.json' })
     // cy.google_login(¸)
-    cy.fixture('users').then((users) => {
-      cy.login(users)
-    })
+    cy.login()
 
     cy.visit('/accounts')
   })
