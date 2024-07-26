@@ -52,10 +52,6 @@ const fetcher = {
     const response = await instance.post<T>(url, data, config).then((res) => res.data)
     return response
   },
-  [METHOD.UPLOAD]: async <T, D = unknown>(url: string, data?: D, config?: AxiosRequestConfig) => {
-    const response = await instance.put<T>(url, data, { ...config, headers: { 'Content-Type': 'application/octet-stream' } }).then((res) => res.data)
-    return response
-  },
   [METHOD.PATCH]: async <T, D = unknown>(url: string, data?: D, config?: AxiosRequestConfig) => {
     const response = await instance.patch<T>(url, data, config).then((res) => res.data)
     return response

@@ -17,6 +17,7 @@ export default function useImageUploader(
 ) {
   const { data, error, isMutating, trigger } = useMutation('/api/blob', METHOD.POST, {
     request: {
+      headers: { 'Content-Type': 'multipart/form-data' },
       ...REQUEST_CONFIG,
       ...config,
     },
