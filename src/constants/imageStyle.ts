@@ -47,8 +47,9 @@ export const IMAGE_ASPECT_RATIOS = {
 
 export const IMAGE_CATEGORY: ImageCategoryType = {
   LIGHTING: {
-    templateType: ['GENERAL'],
+    templateType: ['GENERAL', 'GRAPHIC_DESIGN', 'STOCK_IMAGE', 'WEBSITE_DESIGN'],
     label: 'Lighting',
+    key: 'lighting',
     options: [
       {
         value: 'soft',
@@ -69,8 +70,9 @@ export const IMAGE_CATEGORY: ImageCategoryType = {
     ],
   },
   ENVIRONMENT: {
-    templateType: ['GENERAL'],
+    templateType: ['GENERAL', 'WEBSITE_DESIGN'],
     label: 'Environment',
+    key: 'environment',
     options: [
       {
         value: 'indoor',
@@ -91,8 +93,9 @@ export const IMAGE_CATEGORY: ImageCategoryType = {
     ],
   },
   COLOR_SCHEME: {
-    templateType: ['GENERAL'],
+    templateType: ['GENERAL', 'GRAPHIC_DESIGN', 'STOCK_IMAGE', 'WEBSITE_DESIGN'],
     label: 'Color Scheme',
+    key: 'color_scheme',
     options: [
       {
         value: 'vibrant',
@@ -113,8 +116,9 @@ export const IMAGE_CATEGORY: ImageCategoryType = {
     ],
   },
   POINT_OF_VIEW: {
-    templateType: ['GENERAL'],
+    templateType: ['GENERAL', 'GRAPHIC_DESIGN', 'STOCK_IMAGE'],
     label: 'Point of View',
+    key: 'point_of_view',
     options: [
       {
         value: 'front',
@@ -131,8 +135,9 @@ export const IMAGE_CATEGORY: ImageCategoryType = {
     ],
   },
   CAMERA_ANGLE: {
-    templateType: ['GENERAL'],
+    templateType: ['GENERAL', 'GRAPHIC_DESIGN', 'STOCK_IMAGE'],
     label: 'Camera Angle',
+    key: 'camera_angle',
     options: [
       {
         value: 'full shot',
@@ -145,8 +150,9 @@ export const IMAGE_CATEGORY: ImageCategoryType = {
     ],
   },
   LENS_TYPE: {
-    templateType: ['GENERAL'],
+    templateType: ['GENERAL', 'GRAPHIC_DESIGN', 'STOCK_IMAGE', 'WEBSITE_DESIGN'],
     label: 'Lens Type',
+    key: 'lens_type',
     options: [
       {
         value: 'macro lens',
@@ -159,8 +165,9 @@ export const IMAGE_CATEGORY: ImageCategoryType = {
     ],
   },
   BACKGROUND: {
-    templateType: ['GENERAL'],
+    templateType: ['GENERAL', 'GRAPHIC_DESIGN', 'STOCK_IMAGE', 'WEBSITE_DESIGN'],
     label: 'Background',
+    key: 'background',
     options: [
       {
         value: 'solid colour',
@@ -177,8 +184,9 @@ export const IMAGE_CATEGORY: ImageCategoryType = {
     ],
   },
   MOOD: {
-    templateType: ['GENERAL'],
+    templateType: ['GENERAL', 'GRAPHIC_DESIGN', 'STOCK_IMAGE', 'WEBSITE_DESIGN'],
     label: 'Mood',
+    key: 'mood',
     options: [
       {
         value: 'energetic',
@@ -207,8 +215,9 @@ export const IMAGE_CATEGORY: ImageCategoryType = {
     ],
   },
   THEME: {
-    templateType: ['GENERAL'],
+    templateType: ['GENERAL', 'GRAPHIC_DESIGN', 'STOCK_IMAGE', 'WEBSITE_DESIGN'],
     label: 'Theme',
+    key: 'theme',
     options: [
       {
         value: 'film',
@@ -223,6 +232,7 @@ export const IMAGE_CATEGORY: ImageCategoryType = {
   GENERAL: {
     templateType: ['GENERAL'],
     label: 'General',
+    key: 'general',
     options: [
       {
         value: 'masterpiece',
@@ -239,8 +249,9 @@ export const IMAGE_CATEGORY: ImageCategoryType = {
     ],
   },
   ACTION_AND_MOVEMENT: {
-    templateType: ['GENERAL'],
+    templateType: ['GENERAL', 'WEBSITE_DESIGN'],
     label: 'Action and Movement',
+    key: 'action_and_movement',
     options: [
       {
         value: 'cinematic action',
@@ -274,6 +285,7 @@ type Modifier = {
   label: string
   options: DropdownOption[]
   templateType: ImageStyleKeys[]
+  key: string
 }
 
 export type ImageCategoryType = {
