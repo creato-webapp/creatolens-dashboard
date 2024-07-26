@@ -6,7 +6,7 @@ import { IAccount } from '@components/Account/Account'
 import PAPI from '@constants/endpoints/papi'
 
 import { AccountInstance } from '@helpers/axios'
-import handlers from '@helpers/api/handlers'
+import handler from '@helpers/api/handlers'
 import METHOD from '@constants/method'
 
 interface IGeoResponse {
@@ -60,7 +60,7 @@ interface Geometry {
 
 const GEO_CODER_API = process.env.GEO_CODER_API
 
-export default handlers.api({
+export default handler.api({
   [METHOD.GET]: async (req: NextApiRequest, res: NextApiResponse) => {
     const {
       query: { pageNumber, pageSize, orderBy, isAsc },
