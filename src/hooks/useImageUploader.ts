@@ -1,6 +1,5 @@
 import { AxiosError, AxiosRequestConfig } from 'axios'
 
-import { UploadImageResponse } from '@services/Object/ImageBlob'
 import METHOD from '@constants/method'
 import useMutation from './useMutation'
 import { useEffect } from 'react'
@@ -10,12 +9,16 @@ const REQUEST_CONFIG = {
   maxContentLength: 8 * 1024 * 1024,
 }
 
+export interface ImageUploaderResponse {
+  path: string
+}
+
 export default function useImageUploader(
   config?: AxiosRequestConfig,
-  onCompleted?: (response: UploadImageResponse) => void,
+  onCompleted?: (response: ImageUploaderResponse) => void,
   onError?: (error: AxiosError) => void
 ) {
-  const { data, error, isMutating, trigger } = useMutation('/api/blob', METHOD.POST, {
+  const { data, error, isMutating, trigger } = useMutation('/api/image', METHOD.POST, {
     request: {
       headers: { 'Content-Type': 'multipart/form-data' },
       ...REQUEST_CONFIG,
@@ -28,7 +31,7 @@ export default function useImageUploader(
       if (error) {
         onError && onError(error)
       } else {
-        onCompleted && onCompleted(data as UploadImageResponse)
+        onCompleted && onCompleted(data as ImageUploaderResponse)
       }
     }
   }, [isMutating])
@@ -41,5 +44,5 @@ export default function useImageUploader(
     return trigger({ formData })
   }
 
-  return { response: data as UploadImageResponse, error, loading: isMutating, uploadImage }
+  return { response: data as ImageUploaderResponse, error, loading: isMutating, uploadImage }
 }
