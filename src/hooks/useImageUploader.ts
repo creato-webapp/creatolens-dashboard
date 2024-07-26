@@ -9,6 +9,11 @@ const REQUEST_CONFIG = {
   maxContentLength: 8 * 1024 * 1024,
 }
 
+const FORM_DATA_HEADER = {
+  'Content-Type': 'multipart/form-data',
+  keepAlive: false,
+}
+
 export interface ImageUploaderResponse {
   path: string
 }
@@ -20,7 +25,7 @@ export default function useImageUploader(
 ) {
   const { data, error, isMutating, trigger } = useMutation('/api/image', METHOD.POST, {
     request: {
-      headers: { 'Content-Type': 'multipart/form-data' },
+      headers: FORM_DATA_HEADER,
       ...REQUEST_CONFIG,
       ...config,
     },
