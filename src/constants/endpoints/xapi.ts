@@ -4,7 +4,6 @@ const XAPI = {
   CREATE_NEW_ACCOUNT: `${XAPI_PREFIX}accounts`,
   ACCOUNT: `${XAPI_PREFIX}accounts/`,
   GET_ACCOUNTS: `${XAPI_PREFIX}accounts/query`,
-  GET_ACCOUNTS_PAGINATION: `${XAPI_PREFIX}accounts`,
 
   ACCOUNT_SESSION: `${XAPI_PREFIX}accounts/session/`,
   GET_ACCOUNT_SESSION_PAGINATION: `${XAPI_PREFIX}accounts/session`,

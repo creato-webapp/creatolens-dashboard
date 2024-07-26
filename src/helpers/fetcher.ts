@@ -44,23 +44,23 @@ export const instance = createInstance(
 )
 
 const fetcher = {
-  [METHOD.GET]: async <T>(url: string, config?: AxiosRequestConfig) => {
+  [METHOD.GET]: async <T, D = unknown>(url: string, config?: AxiosRequestConfig<D>) => {
     const response = await instance.get<T>(url, config).then((res) => res.data)
     return response
   },
-  [METHOD.POST]: async <T, D = unknown>(url: string, data?: D, config?: AxiosRequestConfig) => {
+  [METHOD.POST]: async <T, D = unknown>(url: string, data?: D, config?: AxiosRequestConfig<D>) => {
     const response = await instance.post<T>(url, data, config).then((res) => res.data)
     return response
   },
-  [METHOD.PATCH]: async <T, D = unknown>(url: string, data?: D, config?: AxiosRequestConfig) => {
+  [METHOD.PATCH]: async <T, D = unknown>(url: string, data?: D, config?: AxiosRequestConfig<D>) => {
     const response = await instance.patch<T>(url, data, config).then((res) => res.data)
     return response
   },
-  [METHOD.PUT]: async <T, D = unknown>(url: string, data?: D, config?: AxiosRequestConfig) => {
+  [METHOD.PUT]: async <T, D = unknown>(url: string, data?: D, config?: AxiosRequestConfig<D>) => {
     const response = await instance.put<T>(url, data, config).then((res) => res.data)
     return response
   },
-  [METHOD.DELETE]: async <T>(url: string, config?: AxiosRequestConfig) => {
+  [METHOD.DELETE]: async <T, D = unknown>(url: string, config?: AxiosRequestConfig<D>) => {
     const response = await instance.delete<T>(url, config).then((res) => res.data)
     return response
   },

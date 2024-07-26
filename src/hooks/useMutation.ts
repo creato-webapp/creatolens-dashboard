@@ -14,16 +14,16 @@ type IMutationConfig<T> = {
   swr?: SWRMutationConfiguration<Awaited<T>, AxiosError>
 }
 
-const useMutation = <T>(key: Key, method: IMethodsType, config?: IMutationConfig<T>) => {
+const useMutation = <T, A = undefined>(key: Key, method: IMethodsType, config?: IMutationConfig<T>) => {
   const { data, error, ...swr } = useSWRMutation<Awaited<T>, AxiosError, Key, Arguments>(
     key,
     async (url: string, { arg }: IRequestArgument): Promise<Awaited<T>> => {
       switch (method) {
         case METHOD.GET:
         case METHOD.DELETE:
-          return await fetcher[method](url, { params: arg, ...config?.request })
+          return await fetcher[method]<T>(url, { params: arg as A, ...config?.request })
         default:
-          return await fetcher[method](url, arg, config?.request)
+          return await fetcher[method]<T>(url, arg as A, config?.request)
       }
     },
     {
