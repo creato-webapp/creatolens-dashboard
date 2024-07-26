@@ -2,7 +2,6 @@ const PAPI = {
   ACCOUNTS: '/accounts',
   CREATE_NEW_ACCOUNT: '/accounts/create',
   QUERY_ACCOUNTS: '/accounts/query',
-  ACCOUNTS_PAGINATION: '/accounts',
   UPDATE_ACCOUNT: '/accounts/update',
 
   ACCOUNT_SESSION: '/account-session',

@@ -5,7 +5,7 @@ import requestIp from 'request-ip'
 import { IAccount } from '@components/Account/Account'
 import PAPI from '@constants/endpoints/papi'
 
-import AccountInstance from '../../../helpers/axios/Account'
+import { AccountInstance } from '@helpers/axios'
 import handlers from '@helpers/api/handlers'
 import METHOD from '@constants/method'
 
@@ -65,7 +65,7 @@ export default handlers.api({
     const {
       query: { pageNumber, pageSize, orderBy, isAsc },
     } = req
-    const response = await AccountInstance.get(PAPI.ACCOUNTS_PAGINATION, {
+    const response = await AccountInstance.get(PAPI.ACCOUNTS, {
       headers: {
         Cookie: req.headers.cookie,
       },
