@@ -45,7 +45,7 @@ export default async function postImagePrompt(req: NextApiRequest, res: NextApiR
           return res.status(404).json({ error: 'Prompt template not found' })
         }
 
-        const renderedPrompt = renderTemplate(promptTemplate, body.imageCategory)
+        const renderedPrompt = renderTemplate(promptTemplate, { labels: body.keywords, ...body.imageCategory })
 
         const response = await ImageInstance.post<string>(`/api/image-tagen/prompt/image`, {
           prompt: renderedPrompt,

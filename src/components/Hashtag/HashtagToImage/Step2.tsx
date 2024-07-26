@@ -86,7 +86,7 @@ const Step2 = () => {
                   key={key}
                   options={value.options.map((option) => ({ label: option.label, value: option.value }))}
                   onValueChange={(selectedValue) => {
-                    onGeneralSelected(key, selectedValue as string)
+                    onGeneralSelected(value.key, selectedValue as string)
                   }}
                 />
               )
