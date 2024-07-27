@@ -18,7 +18,7 @@ const Step1 = () => {
     <>
       <h2 className="font-extrabold">Keywords input</h2>
       <div className="mt-4 flex items-center justify-center">
-        <Outline sizes={['l', 'l', 'l']}>+ Get Keywords from Image</Outline>
+        <Outline sizes={['l', 'l', 'l']}>+ Get Keywords from Image</Outline> {/* Go to image to hashtag first page.*/}
       </div>
       <div className="my-4 border-b"></div>
       <h3 className="font-semibold text-text-primary">Describe the image you want and we’ll generate image for you.</h3>

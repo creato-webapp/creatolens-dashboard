@@ -29,9 +29,7 @@ const ImageUpload: React.FC = () => {
     maxContentLength: 8 * 1024 * 1024,
   })
 
-  const { ImageAspectRatios, ImageCategories, ImageStyles, ImageUsages, SocialMediaPlatforms } = usePromptTemplate()
-  console.error(ImageAspectRatios, ImageCategories, ImageStyles, ImageUsages, SocialMediaPlatforms)
-
+  const { ImageAspectRatios } = usePromptTemplate()
   const toggleCheckbox = useCallback(
     (hashtag: string) => {
       setSelectedHashtags((prevSelected) =>

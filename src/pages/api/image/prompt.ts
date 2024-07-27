@@ -5,7 +5,6 @@ import { CombinedUser } from '@api/auth/[...nextauth]'
 
 import ImageInstance from '@helpers/axios/Image'
 import fetcher from '@helpers/fetcher'
-import { IMAGE_USAGE, ImageUsageTypeKey } from '@constants/imageStyle'
 import { renderTemplate } from '@helpers/mustache'
 
 type PromptData = {
@@ -40,11 +39,15 @@ export default async function postImagePrompt(req: NextApiRequest, res: NextApiR
         })
         const user = decoded?.user as CombinedUser
 
-        const promptTemplate = await fetcher.GET<string>(`/api/remote-config?prompt_type=${IMAGE_USAGE[prompt_type as ImageUsageTypeKey]}`)
+        const promptTemplate = await fetcher.GET<string>(`/api/remote-config?prompt_type=${prompt_type}`)
 
-        const renderedPrompt = renderTemplate(promptTemplate, { ...body, ...body.imageCategory })
+        if (!promptTemplate) {
+          return res.status(404).json({ error: 'Prompt template not found' })
+        }
 
-        const response = await ImageInstance.post(`/api/image-tagen/prompt/image`, {
+        const renderedPrompt = renderTemplate(promptTemplate, { labels: body.keywords, ...body.imageCategory })
+
+        const response = await ImageInstance.post<string>(`/api/image-tagen/prompt/image`, {
           prompt: renderedPrompt,
           user_id: user.id,
         })

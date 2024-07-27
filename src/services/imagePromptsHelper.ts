@@ -1,26 +1,25 @@
-import { ImageUsageType, SOCIAL_MEDIA_PLATFORMS } from '@constants/imageStyle'
+import { ImageStyleKeys } from '@constants/imageStyle'
 
 import fetcher from '@helpers/fetcher'
 import { IHashet } from 'pages/recommendation'
 
 interface PromptData {
-  hashtags: IHashet[]
-  keywords: string
-  imageStyle: string
   aspectRatio: string
-  platform: keyof typeof SOCIAL_MEDIA_PLATFORMS
-  usage: keyof ImageUsageType
+  hashtags: IHashet[]
+  imageCategory: { [key: string]: string }
+  keywords: string
+  imageStyle: ImageStyleKeys
 }
 
-type ApiResponse = {
-  signed_urls: string[]
-}
-
-export async function renderPromptAndGenImage(prompt: keyof ImageUsageType, data: PromptData): Promise<{ signed_urls: string[] }> {
+export async function renderPromptAndGenImage(data: PromptData): Promise<string> {
   try {
-    const response = await fetcher.POST<ApiResponse>('/api/image/prompt', data, {
+    if (!data.imageStyle) {
+      throw new Error('No image style selected')
+    }
+
+    const response = await fetcher.POST<string>('/api/image/prompt', data, {
       params: {
-        prompt_type: prompt,
+        prompt_type: data.imageStyle,
       },
     })
 

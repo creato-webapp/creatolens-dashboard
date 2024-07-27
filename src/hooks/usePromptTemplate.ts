@@ -1,6 +1,6 @@
 import { useRemoteConfig } from './useRemoteConfig'
 
-import { ImageCategoryType, ImageUsageType } from '@constants/imageStyle'
+import { ImageCategoryType } from '@constants/imageStyle'
 
 type ImageAspectRatioType = {
   [key: string]: {
@@ -25,8 +25,7 @@ export const usePromptTemplate = () => {
   const { configValue: ImageAspectRatios } = useRemoteConfig<ImageAspectRatioType>('IMAGE_ASPECT_RATIOS')
   const { configValue: ImageCategories } = useRemoteConfig<ImageCategoryType>('IMAGE_CATEGORY')
   const { configValue: ImageStyles } = useRemoteConfig<ImageStyleType>('IMAGE_STYLE')
-  const { configValue: ImageUsages } = useRemoteConfig<ImageUsageType>('IMAGE_USAGE')
   const { configValue: SocialMediaPlatforms } = useRemoteConfig<SocialMediaPlatformsType>('SOCIAL_MEDIA_PLATFORMS')
 
-  return { ImageAspectRatios, ImageCategories, ImageStyles, ImageUsages, SocialMediaPlatforms }
+  return { ImageAspectRatios, ImageCategories, ImageStyles, SocialMediaPlatforms }
 }

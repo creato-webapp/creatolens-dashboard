@@ -1,8 +1,8 @@
 import { ReactNode, createContext, useCallback, useContext, useState } from 'react'
 
-import { renderPromptAndGenImage } from '@services/imagePromptsHelper'
-import { IMAGE_CATEGORY, ImageUsageType, SOCIAL_MEDIA_PLATFORMS } from '@constants/imageStyle'
 import { IHashet } from 'pages/recommendation'
+import { ImageStyleKeys } from '@constants/imageStyle'
+import { renderPromptAndGenImage } from '@services/imagePromptsHelper'
 
 export type ImageDetailsType = {
   path?: string
@@ -12,12 +12,8 @@ export type ImageDetailsType = {
 }
 
 export type ImageConfigType = {
-  imageStyle: string
+  imageStyle: ImageStyleKeys
   aspectRatio: string
-  usage: {
-    name: keyof ImageUsageType
-    platform: keyof typeof SOCIAL_MEDIA_PLATFORMS
-  }
 }
 
 export interface StepProps {
@@ -45,6 +41,7 @@ type HashtagImageContextType = {
   updateImageConfig: (config: Partial<ImageConfigType>) => void
   updateImageCategory: (category: string, option: string) => void
   generateImage: () => void
+  generatedImageUri: string | null
 }
 
 const HashtagImageContext = createContext<HashtagImageContextType | undefined>(undefined)
@@ -53,11 +50,11 @@ interface HashtagImageProviderProps {
   children: ReactNode
 }
 
-type GeneralType = {
-  [key in keyof typeof IMAGE_CATEGORY]?: string
+type ImageModifier = {
+  [key: string]: string
 }
 
-const initialGeneral: GeneralType = {}
+const initialGeneral: ImageModifier = {}
 
 export const HashtagImageProvider = ({ children }: HashtagImageProviderProps) => {
   const [step, setStep] = useState<number>(1)
@@ -65,15 +62,12 @@ export const HashtagImageProvider = ({ children }: HashtagImageProviderProps) =>
   const [keywords, setKeywords] = useState<string>('')
   const [currentImageIndex, setCurrentImageIndex] = useState<number>(0)
   const [hashtags, setHashtags] = useState<IHashet[]>([])
-  const [imageCategory, setImageCategory] = useState<GeneralType>(initialGeneral)
+  const [imageCategory, setImageCategory] = useState<ImageModifier>(initialGeneral)
   const [imageConfig, setImageConfig] = useState<ImageConfigType>({
-    imageStyle: '',
+    imageStyle: 'GENERAL',
     aspectRatio: '3:4',
-    usage: {
-      name: 'GENERAL',
-      platform: 'Facebook',
-    },
   })
+  const [generatedImageUri, setGeneratedImageUri] = useState<string | null>(null)
 
   const updateStep = useCallback((arg: number) => {
     setStep(arg)
@@ -110,17 +104,14 @@ export const HashtagImageProvider = ({ children }: HashtagImageProviderProps) =>
   /*  */
   const generateImage = useCallback(async () => {
     const data = {
-      imageCategory: imageCategory,
-      hashtags: hashtags,
-      keywords: keywords,
-      imageStyle: imageConfig.imageStyle,
       aspectRatio: imageConfig.aspectRatio,
-      platform: imageConfig.usage.platform,
-      usage: imageConfig.usage.name,
+      hashtags: hashtags,
+      imageCategory: imageCategory,
+      imageStyle: imageConfig.imageStyle,
+      keywords: keywords,
     }
-    const res = await renderPromptAndGenImage(data.usage, data)
-    console.error(res)
-    // const prompt = promptGenerator(data)
+    const uri = await renderPromptAndGenImage(data)
+    setGeneratedImageUri(uri)
   }, [keywords, imageConfig, imageCategory, hashtags])
 
   const updateImageConfig = useCallback((config: Partial<ImageConfigType>) => {
@@ -130,7 +121,7 @@ export const HashtagImageProvider = ({ children }: HashtagImageProviderProps) =>
     }))
   }, [])
 
-  const updateImageCategory = useCallback((category: keyof GeneralType, option: string) => {
+  const updateImageCategory = useCallback((category: string, option: string) => {
     setImageCategory((prev) => ({
       ...prev,
       [category]: option,
@@ -152,6 +143,7 @@ export const HashtagImageProvider = ({ children }: HashtagImageProviderProps) =>
         updateHashtags,
         step,
         updateStep,
+        generatedImageUri,
         goBack,
         goForward,
         generateImage,

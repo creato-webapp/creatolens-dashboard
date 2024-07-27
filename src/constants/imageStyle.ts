@@ -1,56 +1,41 @@
 import { DropdownOption } from '@components/Form/DropdownV2'
 
-import { PromptTemplate } from './prompt'
-
 export const IMAGE_STYLE = {
+  GENERAL: {
+    name: 'General',
+    value: 'GENERAL',
+    image: '/hashtag/general.png', // Update with actual path or URL
+  },
   GRAPHIC_DESIGN: {
     name: 'Graphic Design',
-    value: 'graphic_design',
+    value: 'GRAPHIC_DESIGN',
     image: '/hashtag/graphic-design.png', // Update with actual path or URL
   },
   STOCK_IMAGE: {
     name: 'Stock Image',
-    value: 'stock_image',
+    value: 'STOCK_IMAGE',
     image: '/hashtag/stock.png', // Update with actual path or URL
   },
-  ARTISTIC: {
-    name: 'Artistic',
-    value: 'artistic',
-    image: '/hashtag/artistic.png', // Update with actual path or URL
+  WEBSITE_DESIGN: {
+    name: 'Website Design',
+    value: 'WEBSITE_DESIGN',
+    image: '/hashtag/website-design.png', // Update with actual path or URL
   },
   PHOTOGRAPHY: {
     name: 'Photography',
-    value: 'photography',
+    value: 'PHOTOGRAPHY',
     image: '/hashtag/photography.png', // Update with actual path or URL
   },
 } as const
 
+export type ImageStyleKeys = keyof typeof IMAGE_STYLE
+
 export type IImageStyleType =
+  | typeof IMAGE_STYLE.GENERAL
   | typeof IMAGE_STYLE.GRAPHIC_DESIGN
   | typeof IMAGE_STYLE.STOCK_IMAGE
-  | typeof IMAGE_STYLE.ARTISTIC
+  | typeof IMAGE_STYLE.WEBSITE_DESIGN
   | typeof IMAGE_STYLE.PHOTOGRAPHY
-
-export const IMAGE_USAGE = {
-  GENERAL: PromptTemplate.PROMPT_TEMPLATE_GENERAL,
-  SOCIAL_MEDIA: PromptTemplate.PROMPT_TEMPLATE_SOCIAL_MEDIA,
-  LOGO_DESIGN: PromptTemplate.PROMPT_TEMPLATE_LOGO_DESIGN,
-  STOCK_IMAGE: PromptTemplate.PROMPT_TEMPLATE_STOCK_IMAGE,
-  WEBSITE_DESIGN: PromptTemplate.PROMPT_TEMPLATE_WEBSITE_DESIGN,
-} as const
-
-export type ImageUsageType = typeof IMAGE_USAGE
-
-export type ImageUsageTypeKey = keyof typeof IMAGE_USAGE
-
-export enum SOCIAL_MEDIA_PLATFORMS {
-  Facebook = 'Facebook',
-  Twitter = 'Twitter',
-  Instagram = 'Instagram',
-  LinkedIn = 'LinkedIn',
-  TikTok = 'TikTok',
-  Snapchat = 'Snapchat',
-}
 
 export const IMAGE_ASPECT_RATIOS = {
   SQUARE: { label: 'Square', value: '1:1', width: 1, height: 1 },
@@ -62,8 +47,9 @@ export const IMAGE_ASPECT_RATIOS = {
 
 export const IMAGE_CATEGORY: ImageCategoryType = {
   LIGHTING: {
-    templateType: ['GENERAL'],
+    templateType: ['GENERAL', 'GRAPHIC_DESIGN', 'STOCK_IMAGE', 'WEBSITE_DESIGN'],
     label: 'Lighting',
+    key: 'lighting',
     options: [
       {
         value: 'soft',
@@ -84,8 +70,9 @@ export const IMAGE_CATEGORY: ImageCategoryType = {
     ],
   },
   ENVIRONMENT: {
-    templateType: ['GENERAL'],
+    templateType: ['GENERAL', 'WEBSITE_DESIGN'],
     label: 'Environment',
+    key: 'environment',
     options: [
       {
         value: 'indoor',
@@ -106,8 +93,9 @@ export const IMAGE_CATEGORY: ImageCategoryType = {
     ],
   },
   COLOR_SCHEME: {
-    templateType: ['GENERAL'],
+    templateType: ['GENERAL', 'GRAPHIC_DESIGN', 'STOCK_IMAGE', 'WEBSITE_DESIGN'],
     label: 'Color Scheme',
+    key: 'color_scheme',
     options: [
       {
         value: 'vibrant',
@@ -128,8 +116,9 @@ export const IMAGE_CATEGORY: ImageCategoryType = {
     ],
   },
   POINT_OF_VIEW: {
-    templateType: ['GENERAL'],
+    templateType: ['GENERAL', 'GRAPHIC_DESIGN', 'STOCK_IMAGE'],
     label: 'Point of View',
+    key: 'point_of_view',
     options: [
       {
         value: 'front',
@@ -146,8 +135,9 @@ export const IMAGE_CATEGORY: ImageCategoryType = {
     ],
   },
   CAMERA_ANGLE: {
-    templateType: ['GENERAL'],
+    templateType: ['GENERAL', 'GRAPHIC_DESIGN', 'STOCK_IMAGE'],
     label: 'Camera Angle',
+    key: 'camera_angle',
     options: [
       {
         value: 'full shot',
@@ -160,8 +150,9 @@ export const IMAGE_CATEGORY: ImageCategoryType = {
     ],
   },
   LENS_TYPE: {
-    templateType: ['GENERAL'],
+    templateType: ['GENERAL', 'GRAPHIC_DESIGN', 'STOCK_IMAGE', 'WEBSITE_DESIGN'],
     label: 'Lens Type',
+    key: 'lens_type',
     options: [
       {
         value: 'macro lens',
@@ -174,8 +165,9 @@ export const IMAGE_CATEGORY: ImageCategoryType = {
     ],
   },
   BACKGROUND: {
-    templateType: ['GENERAL'],
+    templateType: ['GENERAL', 'GRAPHIC_DESIGN', 'STOCK_IMAGE', 'WEBSITE_DESIGN'],
     label: 'Background',
+    key: 'background',
     options: [
       {
         value: 'solid colour',
@@ -192,8 +184,9 @@ export const IMAGE_CATEGORY: ImageCategoryType = {
     ],
   },
   MOOD: {
-    templateType: ['GENERAL'],
+    templateType: ['GENERAL', 'GRAPHIC_DESIGN', 'STOCK_IMAGE', 'WEBSITE_DESIGN'],
     label: 'Mood',
+    key: 'mood',
     options: [
       {
         value: 'energetic',
@@ -222,8 +215,9 @@ export const IMAGE_CATEGORY: ImageCategoryType = {
     ],
   },
   THEME: {
-    templateType: ['GENERAL'],
+    templateType: ['GENERAL', 'GRAPHIC_DESIGN', 'STOCK_IMAGE', 'WEBSITE_DESIGN'],
     label: 'Theme',
+    key: 'theme',
     options: [
       {
         value: 'film',
@@ -238,6 +232,7 @@ export const IMAGE_CATEGORY: ImageCategoryType = {
   GENERAL: {
     templateType: ['GENERAL'],
     label: 'General',
+    key: 'general',
     options: [
       {
         value: 'masterpiece',
@@ -254,8 +249,9 @@ export const IMAGE_CATEGORY: ImageCategoryType = {
     ],
   },
   ACTION_AND_MOVEMENT: {
-    templateType: ['GENERAL'],
+    templateType: ['GENERAL', 'WEBSITE_DESIGN'],
     label: 'Action and Movement',
+    key: 'action_and_movement',
     options: [
       {
         value: 'cinematic action',
@@ -285,12 +281,13 @@ export const IMAGE_CATEGORY: ImageCategoryType = {
   },
 }
 
-type Category = {
+type Modifier = {
   label: string
   options: DropdownOption[]
-  templateType: ImageUsageTypeKey[]
+  templateType: ImageStyleKeys[]
+  key: string
 }
 
 export type ImageCategoryType = {
-  [key: string]: Category
+  [key: string]: Modifier
 }

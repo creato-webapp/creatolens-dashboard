@@ -3,7 +3,6 @@ import { ReactNode, createContext, useCallback, useContext, useState } from 'rea
 import { getImageLabel } from '@services/Image'
 import { IHashet } from 'pages/recommendation'
 import { reAnnotateLabel } from '@services/Label'
-import { uploadImage } from '@services/Image'
 
 type UploadStatus = 'pending' | 'uploading' | 'completed' | 'failed'
 
@@ -214,9 +213,7 @@ export const ImageHashtagProvider = ({ children }: ImageHashtagProviderProps) =>
   )
 
   const generateImageByHashtag = useCallback(() => {
-    console.log('hello')
-    console.log(images[currentImageIndex].selectedLabels)
-    console.log(images[currentImageIndex].hashtags)
+    // Generate image by hashtags
   }, [])
 
   return (
