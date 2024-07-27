@@ -121,7 +121,7 @@ const Dropdown: React.FC<DropdownProps> = ({ name, options, onValueChange, dropD
   return (
     <div ref={dropdownRef} className={`dropdown relative h-full w-full justify-end  ${maxWidth}`}>
       <button
-        className={`drowpdown-button w-full rounded-lg border-none ${color} ${padding} ${focusStyle} ${hoverStyle} ${activeStyle}`}
+        className={`dropdown-button w-full rounded-lg border-none ${color} ${padding} ${focusStyle} ${hoverStyle} ${activeStyle}`}
         onClick={handleToggleMenu}
       >
         <div className={`inline-flex w-full items-center justify-between gap-2.5 rounded-md text-md`}>

@@ -101,18 +101,19 @@
 //   cy.clearCookie('next-auth.session-token')
 // })
 
-import { JWTPayload } from 'jose'
 import { encode } from 'next-auth/jwt'
 import 'cypress-file-upload'
 
-Cypress.Commands.add('login', (userObj: JWTPayload) => {
+Cypress.Commands.add('login', () => {
   // Generate and set a valid cookie from the fixture that next-auth can decrypt
-  cy.wrap(null)
-    .then(() => {
-      return encode({
-        token: userObj,
-        secret: Cypress.env('NEXTAUTH_JWT_SECRET'),
+  cy.fixture('user').then((user) => {
+    cy.wrap(null)
+      .then(() => {
+        return encode({
+          token: user,
+          secret: Cypress.env('NEXTAUTH_JWT_SECRET'),
+        })
       })
-    })
-    .then((encryptedToken) => cy.setCookie('next-auth.session-token', encryptedToken))
+      .then((encryptedToken) => cy.setCookie('next-auth.session-token', encryptedToken))
+  })
 })

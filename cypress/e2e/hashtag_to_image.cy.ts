@@ -1,6 +1,16 @@
 // cypress/integration/homepage_spec.js
 
 describe('Hashtag to Image', () => {
+  beforeEach(() => {
+    cy.visit('/')
+
+    // Log in as a user
+    cy.fixture('user').then((user) => {
+      cy.login(user)
+    })
+
+    cy.visit('/hashtag/image-to-hashtag')
+  })
   it('successfully loads', () => {
     cy.visit('/') // Change '/' to your Next.js local dev URL, e.g., 'http://localhost:3000'
   })

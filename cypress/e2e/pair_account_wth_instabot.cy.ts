@@ -2,14 +2,8 @@ describe('Create Instagram Page', () => {
   beforeEach(() => {
     cy.visit('/')
     // Log in as a user
-    const user = {
-      name: 'Morty Smith',
-      email: 'test@picklerick.com',
-      image: '/path/to/butterbot.jpg',
-      birthdate: '12/02/13',
-    }
-
-    cy.login(user)
+    /*  */
+    cy.login()
     cy.visit('/accounts')
   })
 
