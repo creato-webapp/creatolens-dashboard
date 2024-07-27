@@ -1,7 +1,9 @@
 import { ReactNode, createContext, useCallback, useContext, useState } from 'react'
 
 import { getImageLabel } from '@services/Image'
-import { IHashet } from 'src/pages/recommendation'
+import { IHashet } from 'pages/recommendation'
+import { reAnnotateLabel } from '@services/Label'
+import { uploadImage } from '@services/Image'
 
 type UploadStatus = 'pending' | 'uploading' | 'completed' | 'failed'
 
@@ -40,7 +42,7 @@ type ImageHashtagContextType = {
   //Below is for hashtag
   hashtags: IHashet[]
   updateHashtag: (arg: IHashet[]) => void
-  updateLabel: (arg: string[]) => void
+  updateLabel: (arg: { image_url: string; existing_labels: string[]; number: number }) => void
   generateImageByHashtag: () => void
 }
 
@@ -161,7 +163,10 @@ export const ImageHashtagProvider = ({ children }: ImageHashtagProviderProps) =>
   )
 
   const updateLabel = useCallback(
-    (newLabels: string[]) => {
+    async (data: { image_url: string; existing_labels: string[]; number: number }) => {
+      setloadingLabels(true)
+      const newLabels: string[] = await reAnnotateLabel(data)
+
       setImages((prevImages) => {
         const updatedImages = prevImages.map((img, idx) => {
           if (idx === currentImageIndex && img.labels) {
@@ -201,6 +206,7 @@ export const ImageHashtagProvider = ({ children }: ImageHashtagProviderProps) =>
           }
           return img
         })
+        setloadingLabels(false)
         return updatedImages
       })
     },

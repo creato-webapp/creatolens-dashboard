@@ -3,7 +3,7 @@ import Image from 'next/image'
 const Details = (props: { setIsDetailsPageOpen: () => void }) => {
   const { setIsDetailsPageOpen } = props
   return (
-    <div className="">
+    <div className="md:max-w-128">
       <div className="flex items-center gap-4">
         <div
           className="required relative flex h-6 w-6 cursor-pointer items-center justify-center px-4 text-center text-2xl text-black"

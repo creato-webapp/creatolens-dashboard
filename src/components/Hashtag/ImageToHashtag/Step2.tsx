@@ -1,62 +1,84 @@
-import { useEffect, useMemo } from 'react'
-
+import React, { useEffect, useMemo, useCallback } from 'react'
 import Image from 'next/image'
 import Skeleton from 'react-loading-skeleton'
+import 'react-loading-skeleton/dist/skeleton.css'
 
 import { Badges } from '@components/Badges'
 import Outline from '@components/Button/Outline'
 import OutlinePrimaryButton from '@components/Button/OutlinePrimary'
 import Primary from '@components/Button/Primary'
-import { reAnnotateLabel } from '@services/Label'
 import { useImageHashtagContext } from '@context/ImageToHashtagContext'
 
-import 'react-loading-skeleton/dist/skeleton.css'
+const BACK_ICON = '/back.svg'
+const CHECK_ICON = '/check.svg'
+const ARROWS_CLOCKWISE_ICON = '/arrows-clockwise.png'
 
 const Step2 = () => {
   const { images, currentImageIndex, getCurrentImageLabels, updateSelectedLabels, selectAllLabels, loadingLabels, updateLabel, goBack, goForward } =
     useImageHashtagContext()
 
+  const currentImage = useMemo(() => images[currentImageIndex], [images, currentImageIndex])
+
   useEffect(() => {
-    const currentImageObj = images[currentImageIndex]
-    if (currentImageObj && !currentImageObj.labels) {
+    if (currentImage && !currentImage.labels) {
       getCurrentImageLabels()
     }
-  }, [])
+  }, [currentImage, getCurrentImageLabels])
 
-  const onClose = (label: string) => {
-    updateSelectedLabels(label)
-  }
+  const onClose = useCallback(
+    (label: string) => {
+      updateSelectedLabels(label)
+    },
+    [updateSelectedLabels]
+  )
 
-  const onSelected = (label: string) => {
-    updateSelectedLabels(label)
-  }
+  const onSelected = useCallback(
+    (label: string) => {
+      updateSelectedLabels(label)
+    },
+    [updateSelectedLabels]
+  )
 
-  const onReannotateClick = async () => {
-    if (!currentImage.labels || !images[currentImageIndex].image || !images[currentImageIndex].labels) return
-    const numberOfUnselectedLabels = currentImage.labels?.length - currentImage.selectedLabels.length
+  const onReannotateClick = useCallback(async () => {
+    if (!currentImage.labels || !currentImage.image) return
+    const numberOfUnselectedLabels = currentImage.labels.length - currentImage.selectedLabels.length
     const data = {
-      image_url: images[currentImageIndex].image!,
-      existing_labels: images[currentImageIndex].labels!,
-      number: numberOfUnselectedLabels!,
+      image_url: currentImage.image,
+      existing_labels: currentImage.labels,
+      number: numberOfUnselectedLabels,
     }
-    const newLabel = await reAnnotateLabel(data)
-    updateLabel(newLabel)
-  }
+    updateLabel(data)
+  }, [currentImage, updateLabel])
 
-  const onClickSelectAll = () => {
-    selectAllLabels()
-  }
+  const renderLabels = useMemo(() => {
+    if (loadingLabels) {
+      return <Skeleton count={3} style={{ height: 40 }} containerClassName="flex-1" />
+    }
 
-  const currentImage = useMemo(() => {
-    return images[currentImageIndex]
-  }, [images, currentImageIndex])
+    return currentImage?.labels?.map((label) => (
+      <Badges
+        key={`key-${label}`}
+        rounded
+        className="cursor-pointer"
+        isOutline
+        status={!currentImage.selectedLabels.includes(label) ? 'text-secondary' : 'primary'}
+        onClose={() => onClose(label)}
+        onClick={() => onSelected(label)}
+      >
+        {currentImage.selectedLabels.includes(label) && (
+          <Image src={CHECK_ICON} id="check-icon" key="check" height={24} width={24} alt="check logo" />
+        )}
+        {label}
+      </Badges>
+    ))
+  }, [currentImage, loadingLabels, onClose, onSelected])
 
   return (
     <div className="flex w-full flex-col gap-4 md:flex-row">
       <div>
         <div className="flex flex-row items-center">
           <div className="required relative h-6 w-6 cursor-pointer items-center justify-center px-4 text-center text-2xl text-black" onClick={goBack}>
-            <Image src={'/back.svg'} fill alt={'back'} />
+            <Image src={BACK_ICON} fill alt="back" />
           </div>
           <h2 className="flex items-center font-extrabold">Image label annotation</h2>
         </div>
@@ -64,7 +86,7 @@ const Step2 = () => {
         <div className="relative my-4 flex aspect-square h-full w-full min-w-full items-center justify-center rounded-full">
           {currentImage?.image && (
             <Image
-              fill={true}
+              fill
               src={currentImage.image}
               objectFit="contain"
               className="rounded-4xl"
@@ -72,45 +94,17 @@ const Step2 = () => {
               alt="testing"
             />
           )}
-          <div className=" absolute right-5 top-5 flex h-12 w-12 cursor-pointer rounded-full bg-accent1-500 p-4 text-white">
-            <div className="flex h-full w-full items-center justify-center">X</div>
-          </div>
         </div>
       </div>
       <div className="my-4 border-b md:hidden"></div>
       <div className="flex w-full flex-col gap-2 md:w-1/2">
-        {currentImage?.labels && <h3 className="mb-4 font-semibold text-text-secondary">{`${currentImage.labels?.length}`} labels discovered</h3>}
+        {currentImage?.labels && <h3 className="mb-4 font-semibold text-text-secondary">{`${currentImage.labels.length}`} labels discovered</h3>}
         <div>
-          <div className="flex h-full w-full flex-row flex-wrap gap-4">
-            {!loadingLabels ? (
-              currentImage?.labels &&
-              currentImage.labels.map((label) => {
-                return (
-                  <Badges
-                    key={`key-${label}`}
-                    rounded
-                    className="cursor-pointer"
-                    // isDisabled={currentImage.selectedLabels.includes(label)}
-                    isOutline
-                    // isOutline
-                    status={!currentImage.selectedLabels.includes(label) ? 'text-secondary' : 'primary'}
-                    onClose={() => onClose(label)}
-                    onClick={() => onSelected(label)}
-                  >
-                    {!currentImage.selectedLabels.includes(label) ? '' : <Image src={'/check.svg'} height={24} width={24} alt={'check logo'} />}
-
-                    {label}
-                  </Badges>
-                )
-              })
-            ) : (
-              <Skeleton count={3} style={{ height: 40 }} containerClassName="flex-1" />
-            )}
-          </div>
+          <div className="flex h-full w-full flex-row flex-wrap gap-4">{renderLabels}</div>
         </div>
         <div>
           <div className="flex flex-col gap-4">
-            <OutlinePrimaryButton sizes={['l', 'l', 'l']} onClick={onClickSelectAll}>
+            <OutlinePrimaryButton sizes={['l', 'l', 'l']} onClick={selectAllLabels}>
               Select All
             </OutlinePrimaryButton>
             <Outline
@@ -118,7 +112,7 @@ const Step2 = () => {
               onClick={onReannotateClick}
               disabled={currentImage?.selectedLabels.length === currentImage?.labels?.length}
             >
-              <Image src="/arrows-clockwise.png" height={24} width={24} alt={'arrows clockwise'} />
+              <Image src={ARROWS_CLOCKWISE_ICON} height={24} width={24} alt="arrows clockwise" />
               Re-annotate
             </Outline>
             <Primary sizes={['l', 'l', 'l']} onClick={goForward}>
@@ -131,4 +125,4 @@ const Step2 = () => {
   )
 }
 
-export default Step2
+export default React.memo(Step2)

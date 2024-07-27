@@ -32,7 +32,7 @@ const ImageToHashtag = () => {
 
   return (
     <div className="mx-3 my-4 flex items-center justify-center">
-      <div className="w-full max-w-screen-lg">
+      <div className="w-full max-w-screen-md">
         <div className="mt-4 grid grid-cols-3 items-center text-text-secondary">
           <h2 className="flex justify-center">Image</h2>
           <Link href="/hashtag/hashtag-to-image" className="flex justify-center">
