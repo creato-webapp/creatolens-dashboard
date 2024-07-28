@@ -40,3 +40,4 @@ launch.json
 
 #cypress
 cypress.env.json
+cypress/screenshots*

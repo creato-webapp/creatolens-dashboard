@@ -1,5 +1,8 @@
 import { defineConfig } from 'cypress'
 import plugin from './cypress/plugins/index'
+import { config } from 'dotenv'
+
+config()
 
 export default defineConfig({
   // These settings apply everywhere unless overridden
@@ -13,7 +16,7 @@ export default defineConfig({
     },
   },
   e2e: {
-    baseUrl: 'http://localhost:3001',
+    baseUrl: 'http://localhost:3003',
     defaultCommandTimeout: 10000,
     setupNodeEvents(on, config) {
       return plugin(on, config)
@@ -21,5 +24,8 @@ export default defineConfig({
   },
   env: {
     mobileViewportWidthBreakpoint: 425,
+    googleRefreshToken: process.env.GOOGLE_REFRESH_TOKEN,
+    googleClientId: process.env.GOOGLE_CLIENT_ID,
+    googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
   },
 })
