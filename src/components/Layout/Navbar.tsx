@@ -10,7 +10,7 @@ import LoginIcon from '@components/Icon/LoginIcon'
 import LogoutIcon from '@components/Icon/LogOutIcon'
 import MenuIcon from '@components/Icon/MenuIcon'
 import { Title } from '@components/Typography'
-import { useAuth } from '@hooks/useAuth'
+import useAuth from '@hooks/useAuth'
 
 import { Button } from '..'
 

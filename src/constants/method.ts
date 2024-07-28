@@ -1,6 +1,5 @@
 const METHOD = {
   POST: 'POST',
-  UPLOAD: 'UPLOAD',
   GET: 'GET',
   PUT: 'PUT',
   PATCH: 'PATCH',

@@ -44,31 +44,23 @@ export const instance = createInstance(
 )
 
 const fetcher = {
-  [METHOD.GET]: async <T>(url: string, customConfig?: AxiosRequestConfig) => {
-    const response = await instance.get<T>(url, customConfig).then((res) => res.data)
+  [METHOD.GET]: async <T, D = unknown>(url: string, config?: AxiosRequestConfig<D>) => {
+    const response = await instance.get<T>(url, config).then((res) => res.data)
     return response
   },
-  [METHOD.POST]: async <T, D = unknown>(url: string, data?: D, customConfig?: AxiosRequestConfig) => {
-    const response = await instance.post<T>(url, data, customConfig).then((res) => res.data)
+  [METHOD.POST]: async <T, D = unknown>(url: string, data?: D, config?: AxiosRequestConfig<D>) => {
+    const response = await instance.post<T>(url, data, config).then((res) => res.data)
     return response
   },
-  [METHOD.UPLOAD]: async <T, D = unknown>(url: string, data?: D, customConfig?: AxiosRequestConfig) => {
-    const config = { ...customConfig, headers: { 'Content-Type': 'application/octet-stream' } }
-    const response = await instance.put<T>(url, data, config).then((res) => res.data)
-    return response
-  },
-  [METHOD.PATCH]: async <T, D = unknown>(url: string, data?: D, customConfig?: AxiosRequestConfig) => {
-    const config = { ...customConfig }
+  [METHOD.PATCH]: async <T, D = unknown>(url: string, data?: D, config?: AxiosRequestConfig<D>) => {
     const response = await instance.patch<T>(url, data, config).then((res) => res.data)
     return response
   },
-  [METHOD.PUT]: async <T, D = unknown>(url: string, data?: D, customConfig?: AxiosRequestConfig) => {
-    const config = { ...customConfig }
+  [METHOD.PUT]: async <T, D = unknown>(url: string, data?: D, config?: AxiosRequestConfig<D>) => {
     const response = await instance.put<T>(url, data, config).then((res) => res.data)
     return response
   },
-  [METHOD.DELETE]: async <T>(url: string, customConfig?: AxiosRequestConfig) => {
-    const config = { ...customConfig }
+  [METHOD.DELETE]: async <T, D = unknown>(url: string, config?: AxiosRequestConfig<D>) => {
     const response = await instance.delete<T>(url, config).then((res) => res.data)
     return response
   },

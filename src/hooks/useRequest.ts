@@ -1,17 +1,35 @@
-import useSWR, { Key, SWRConfiguration } from 'swr'
+import useSWR, { Key, KeyedMutator, SWRConfiguration } from 'swr'
 
 import fetcher from '../helpers/fetcher'
 import { IMethodsType } from '@constants/method'
+import { useCallback, useMemo, useState } from 'react'
 
-// TODO: using mapper to replace below if else logic, separate into readFunction and writeFunctions
-const useRequest = <T = unknown>(key: Key, method: IMethodsType, config?: SWRConfiguration) => {
-  const { data, error, ...swr } = useSWR(key, fetcher[method], config)
+type IRequestConfig = SWRConfiguration & {
+  shouldFetch?: boolean
+}
 
-  return {
-    data: data as T | undefined,
-    error,
-    ...swr,
-  }
+const useRequest = <T = unknown>(key: Key, method: IMethodsType, config?: IRequestConfig) => {
+  const [shouldFetch, setShouldFetch] = useState(config?.shouldFetch)
+  const { data, error, mutate: onMutate, ...swr } = useSWR(shouldFetch ? key : null, fetcher[method], config)
+
+  const mutate: KeyedMutator<unknown> = useCallback(
+    async (data, opts) => {
+      setShouldFetch(true)
+      await onMutate(data, opts)
+    },
+    [onMutate]
+  )
+
+  return useMemo(
+    () => ({
+      setShouldFetch,
+      data: data as T | undefined,
+      error,
+      mutate,
+      ...swr,
+    }),
+    [data, error, mutate, swr]
+  )
 }
 
 export default useRequest

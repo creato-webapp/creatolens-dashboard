@@ -12,7 +12,7 @@ import ReportLayout from '@components/Layout/ReportLayout'
 import Tab from '@components/Tab'
 import ROUTE from '@constants/route'
 import { useKeyword, useMostRepeatedPost, useMostRepeatedPostImage, usePostCount, useProfile } from '@hooks/useMeta'
-import { getAccounts } from '@services/Account/Account'
+import { getFilteredAccounts } from '@services/Account/Account'
 import { CountryEnum } from 'enums/CountryCodeEnums'
 
 type Props = {
@@ -41,7 +41,7 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
 
   const user = session.user
 
-  const botList = await getAccounts({
+  const botList = await getFilteredAccounts({
     created_by: user.email!,
   })
 
