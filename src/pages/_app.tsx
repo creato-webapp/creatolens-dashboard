@@ -15,6 +15,7 @@ import { ModalProvider } from '@context/ModalContext'
 
 import { appWithTranslation } from 'next-i18next'
 import nextI18NextConfig from '../../next-i18next.config'
+import ErrorBoundary from '@components/common/ErrorBoundary'
 
 type PageProps = {
   session: Session
@@ -32,15 +33,17 @@ function App({ Component, pageProps }: Props) {
         <title>Creato Lens | AI Hashtag Maker</title>
       </Head>
       <Layout>
-        <DialogueProvider>
-          <ModalProvider>
-            <ImageHashtagProvider>
-              <Component {...pageProps} />
-            </ImageHashtagProvider>
-            <Dialogue />
-            <Modals />
-          </ModalProvider>
-        </DialogueProvider>
+        <ErrorBoundary>
+          <DialogueProvider>
+            <ModalProvider>
+              <ImageHashtagProvider>
+                <Component {...pageProps} />
+              </ImageHashtagProvider>
+              <Dialogue />
+              <Modals />
+            </ModalProvider>
+          </DialogueProvider>
+        </ErrorBoundary>
       </Layout>
       <Analytics />
       <SpeedInsights />
