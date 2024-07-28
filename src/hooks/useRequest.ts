@@ -8,7 +8,6 @@ type IRequestConfig = SWRConfiguration & {
   shouldFetch?: boolean
 }
 
-// TODO: using mapper to replace below if else logic, separate into readFunction and writeFunctions
 const useRequest = <T = unknown>(key: Key, method: IMethodsType, config?: IRequestConfig) => {
   const [shouldFetch, setShouldFetch] = useState(config?.shouldFetch)
   const { data, error, mutate: onMutate, ...swr } = useSWR(shouldFetch ? key : null, fetcher[method], config)

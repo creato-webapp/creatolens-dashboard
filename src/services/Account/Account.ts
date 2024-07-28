@@ -36,46 +36,46 @@ type PartialAccount = Partial<{
 function generateAccountFilter(account: PartialAccount): string {
   const filters = []
 
-  if (account.id) {
+  if (account?.id) {
     filters.push(`id = "${account.id}"`)
   }
-  if (account.username) {
+  if (account?.username) {
     filters.push(`username = "${account.username}"`)
   }
-  if (account.created_at) {
+  if (account?.created_at) {
     filters.push(`created_at = "${account.created_at}"`)
   }
-  if (account.enabled !== undefined) {
+  if (account?.enabled !== undefined) {
     filters.push(`enabled = ${account.enabled}`)
   }
-  if (account.is_authenticated !== undefined) {
+  if (account?.is_authenticated !== undefined) {
     filters.push(`is_authenticated = ${account.is_authenticated}`)
   }
-  if (account.is_occupied !== undefined) {
+  if (account?.is_occupied !== undefined) {
     filters.push(`is_occupied = ${account.is_occupied}`)
   }
-  if (account.last_login_dt) {
+  if (account?.last_login_dt) {
     filters.push(`last_login_dt = "${account.last_login_dt}"`)
   }
-  if (account.login_attempt_count !== undefined) {
+  if (account?.login_attempt_count !== undefined) {
     filters.push(`login_attempt_count = ${account.login_attempt_count}`)
   }
-  if (account.login_count !== undefined) {
+  if (account?.login_count !== undefined) {
     filters.push(`login_count = ${account.login_count}`)
   }
-  if (account.post_scrapped_count !== undefined) {
+  if (account?.post_scrapped_count !== undefined) {
     filters.push(`post_scrapped_count = ${account.post_scrapped_count}`)
   }
-  if (account.pwd) {
+  if (account?.pwd) {
     filters.push(`pwd = "${account.pwd}"`)
   }
-  if (account.status) {
+  if (account?.status) {
     filters.push(`status = "${account.status}"`)
   }
-  if (account.updated_at) {
+  if (account?.updated_at) {
     filters.push(`updated_at = "${account.updated_at}"`)
   }
-  if (account.created_by) {
+  if (account?.created_by) {
     filters.push(`created_by == ${account.created_by}`)
   }
   return filters.join(' && ')
@@ -98,7 +98,7 @@ export async function getAccount(id: string, customConfig?: AxiosRequestConfig):
   return response
 }
 
-export async function getAccounts(
+export async function getFilteredAccounts(
   account?: Partial<IAccount>,
   orderBy?: string,
   isAsc?: boolean,
@@ -117,7 +117,7 @@ export async function getAccounts(
   return response
 }
 
-export async function getAccountsPagination(params: PaginationParams, customConfig?: AxiosRequestConfig) {
+export async function getAccounts(params: PaginationParams, customConfig?: AxiosRequestConfig) {
   const response = await fetcher.GET<PaginationMetadata<IAccount[]>>(XAPI.ACCOUNT, {
     ...customConfig,
     params: {
@@ -128,37 +128,4 @@ export async function getAccountsPagination(params: PaginationParams, customConf
     },
   })
   return response
-}
-
-interface SessionUpdateResponse {
-  success: boolean
-  message?: string
-  // Include other fields expected in the response
-}
-
-interface SessionUpdatePayload {
-  username: string
-  password: string
-  account_id: string
-}
-
-export async function updateAccount(id: string, updatedAccount: Partial<IAccount>, customConfig?: AxiosRequestConfig): Promise<IAccount> {
-  const res = await fetcher.PATCH<IAccount, Partial<IAccount>>(XAPI.ACCOUNT + id, updatedAccount, {
-    ...customConfig,
-    params: { id: updatedAccount.id },
-  })
-  return res
-}
-
-export async function updateSession(id: string, updatedAccount: IAccount, customConfig?: AxiosRequestConfig): Promise<SessionUpdateResponse> {
-  const res = await fetcher.POST<SessionUpdateResponse, SessionUpdatePayload>(
-    XAPI.ACCOUNT_SESSION + id,
-    {
-      username: updatedAccount.username,
-      password: updatedAccount.pwd,
-      account_id: updatedAccount.id,
-    },
-    customConfig
-  )
-  return res
 }

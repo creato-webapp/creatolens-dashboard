@@ -16,18 +16,18 @@ import EditIcon from '@components/Icon/EditIcon'
 import Pagination from '@components/Pagination'
 import { Table } from '@components/Table'
 import ROUTE from '@constants/route'
-import { useGetAccountsPagination } from '@hooks/useAccount'
 import { usePagination } from '@hooks/usePagination'
-import { getAccountsPagination } from '@services/Account/Account'
+import { getAccounts } from '@services/Account/Account'
 import { PaginationMetadata } from '@services/Account/AccountInterface'
+import useAccounts from '@hooks/useAccounts'
 
 type Props = {
-  paginationData: PaginationMetadata<IAccount[]>
+  data: PaginationMetadata<IAccount[]>
 }
 
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext): Promise<GetServerSidePropsResult<Props>> => {
   const cookies = context.req.headers.cookie
-  const response = await getAccountsPagination(
+  const response = await getAccounts(
     {
       pageNumber: 1,
       pageSize: 10,
@@ -45,14 +45,14 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
       notFound: true,
     }
   }
-  return { props: { paginationData: response } }
+  return { props: { data: response } }
 }
 
-const AccountsPage = ({ paginationData }: Props) => {
+const AccountsPage = ({ data }: Props) => {
   const [createDateOrder, setCreateDateOrder] = useState<'asc' | 'desc'>('desc')
   const { pageParams, onPageClick, updateSort, updateOrderBy, onNextClick, onPrevClick } = usePagination()
-  const { data, isLoading, setShouldFetch } = useGetAccountsPagination(pageParams, true, paginationData)
-  const accounts: IAccount[] = useMemo(() => data?.data || [], [data])
+  const { response, isLoading, setShouldFetch } = useAccounts(pageParams, true, data)
+  const accounts: IAccount[] = useMemo(() => response?.data || [], [response])
 
   const updateSorting = useCallback(
     (orderBy: string): React.MouseEventHandler<HTMLDivElement> =>
@@ -122,7 +122,7 @@ const AccountsPage = ({ paginationData }: Props) => {
   ]
 
   return (
-    <div>
+    <>
       <Hero
         backgroundImage="./GuideHero.svg"
         className="flex h-full flex-col justify-between md:h-52"
@@ -226,7 +226,7 @@ const AccountsPage = ({ paginationData }: Props) => {
           <Pagination<IAccount[]> isLoading={isLoading} data={data} onNextClick={onNextClick} onPrevClick={onPrevClick} onPageClick={onPageClick} />
         )}
       </Card>
-    </div>
+    </>
   )
 }
 
