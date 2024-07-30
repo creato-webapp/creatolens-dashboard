@@ -10,7 +10,7 @@ export default defineConfig({
         GoogleSocialLogin: GoogleSocialLogin,
       })
     },
-    baseUrl: 'http://localhost:3000',
+    baseUrl: 'http://localhost:3003',
     chromeWebSecurity: false,
     experimentalModifyObstructiveThirdPartyCode: true,
     testIsolation: false,
