@@ -2,10 +2,10 @@ import { useState } from 'react'
 
 import Outline from '@components/Button/Outline'
 import Primary from '@components/Button/Primary'
-import { useHashtagImageContext } from '@context/HashtagToImageContext'
+import { useHashtagToImage } from '@hooks/useHashtagToImage'
 
 const Step1 = () => {
-  const { goForward, addKeywords } = useHashtagImageContext()
+  const { goForward, addKeywords } = useHashtagToImage()
   const [text, setText] = useState<string>('')
 
   const gotoNextStep = () => {

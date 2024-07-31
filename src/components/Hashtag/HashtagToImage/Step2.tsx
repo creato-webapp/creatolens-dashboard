@@ -5,13 +5,13 @@ import Image from 'next/image'
 
 import Primary from '@components/Button/Primary'
 import Dropdown from '@components/Form/DropdownV2'
-import { useHashtagImageContext } from '@context/HashtagToImageContext'
+import { useHashtagToImage } from '@hooks/useHashtagToImage'
 
 import { ImageCategoryType } from '@constants/imageStyle'
 import { usePromptTemplate } from '@hooks/usePromptTemplate'
 
 const Step2 = () => {
-  const { goBack, imageConfig, generateImage, updateImageConfig, updateImageCategory } = useHashtagImageContext()
+  const { goBack, imageConfig, generateImage, updateImageConfig, updateImageCategory } = useHashtagToImage()
   const { ImageAspectRatios, ImageCategories, ImageStyles } = usePromptTemplate()
 
   const onClickNextStep = () => {
