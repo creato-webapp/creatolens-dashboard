@@ -6,10 +6,10 @@ import Step1 from '@components/Hashtag/HashtagToImage/Step1'
 import Step2 from '@components/Hashtag/HashtagToImage/Step2'
 import Step3 from '@components/Hashtag/HashtagToImage/Step3'
 import ProgressBar from '@components/Hashtag/ProgressBar'
-import { useHashtagImageContext } from '@context/HashtagToImageContext'
+import { useHashtagToImage } from '@hooks/useHashtagToImage'
 
 const HashtagToImage = () => {
-  const { step } = useHashtagImageContext()
+  const { step } = useHashtagToImage()
 
   const StepComponent = useCallback(() => {
     if (step === 1) {

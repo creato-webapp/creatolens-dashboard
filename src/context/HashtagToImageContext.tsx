@@ -1,4 +1,4 @@
-import { ReactNode, createContext, useCallback, useContext, useState } from 'react'
+import { ReactNode, createContext, useCallback, useState } from 'react'
 
 import { IHashet } from 'pages/recommendation'
 import { ImageStyleKeys } from '@constants/imageStyle'
@@ -44,7 +44,7 @@ type HashtagImageContextType = {
   generatedImageUri: string | null
 }
 
-const HashtagImageContext = createContext<HashtagImageContextType | undefined>(undefined)
+export const HashtagImageContext = createContext<HashtagImageContextType | undefined>(undefined)
 
 interface HashtagImageProviderProps {
   children: ReactNode
@@ -152,12 +152,4 @@ export const HashtagImageProvider = ({ children }: HashtagImageProviderProps) =>
       {children}
     </HashtagImageContext.Provider>
   )
-}
-
-export const useHashtagImageContext = () => {
-  const context = useContext(HashtagImageContext)
-  if (!context) {
-    throw new Error('useHashtagImageContext must be used within a HashtagImageProvider')
-  }
-  return context
 }

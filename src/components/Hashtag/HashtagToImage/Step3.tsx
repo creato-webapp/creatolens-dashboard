@@ -1,10 +1,10 @@
 import Image from 'next/image'
 
 import Primary from '@components/Button/Primary'
-import { useHashtagImageContext } from '@context/HashtagToImageContext'
+import { useHashtagToImage } from '@hooks/useHashtagToImage'
 
 const Step3 = () => {
-  const { goBack } = useHashtagImageContext()
+  const { goBack } = useHashtagToImage()
   const imageURL = '/logo_orange.png'
 
   return (
