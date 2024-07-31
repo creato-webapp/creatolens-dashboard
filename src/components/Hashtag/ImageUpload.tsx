@@ -1,37 +1,47 @@
-import { forwardRef } from 'react'
+import { forwardRef, useState } from 'react'
 
 import { useDropzone } from 'react-dropzone'
 
 import { ImageDetailsType } from '@context/ImageToHashtagContext'
 
 interface IImageUpload {
-  uploadedImage: string
-  setUploadedImage: (image: string) => void // Updated type
+  uploadedImage?: File | null
+  setUploadedImage: (image: File | null) => void // Updated type
   setImageDetails: (arg: Partial<ImageDetailsType>) => void // Updated type
   onClickBrowse?: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void
 }
 const ImageUpload = forwardRef<HTMLInputElement, IImageUpload>((props, fileInputRef) => {
   const { uploadedImage, setUploadedImage, setImageDetails } = props
+  const [imagePreview, setImagePreview] = useState<string | null>(null)
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: {
       'image/jpeg': ['.jpeg', '.png'],
     },
-    onDrop: (acceptedFiles: Blob[]) => {
+    onDrop: (acceptedFiles: File[]) => {
       if (acceptedFiles.length > 0) {
         const file = acceptedFiles[0]
+        setUploadedImage(file)
+
+        // const reader = new FileReader()
+        // reader.onloadend = () => {
+        //   setUploadedImage(reader.result as string)
+        // }
+        // reader.readAsDataURL(file)
 
         const reader = new FileReader()
         reader.onloadend = () => {
-          setUploadedImage(reader.result as string)
+          setImagePreview(reader.result as string)
         }
         reader.readAsDataURL(file)
+
         const filePath = file.name || ''
 
         const fileFormat = file.type
         // Get the file extension
         const fileExtension = file.name.split('.').pop()
         // If you want to save the file path and format to state or props
+
         setImageDetails({
           size: file.size,
           path: filePath,
@@ -44,7 +54,8 @@ const ImageUpload = forwardRef<HTMLInputElement, IImageUpload>((props, fileInput
   })
 
   const clearFile = () => {
-    setUploadedImage('')
+    setUploadedImage(null)
+    setImagePreview(null)
     setImageDetails({})
   }
 
@@ -65,12 +76,12 @@ const ImageUpload = forwardRef<HTMLInputElement, IImageUpload>((props, fileInput
     >
       <input {...getInputProps()} ref={fileInputRef} />
       <div style={{ display: 'flex', width: '100%', flexDirection: 'column', alignItems: 'center' }}>
-        {uploadedImage ? (
+        {imagePreview ? (
           <div style={{ textAlign: 'center' }} className=" relative h-full w-full">
             <div className=" absolute right-5 top-5 flex h-12 w-12 cursor-pointer rounded-full bg-accent1-500 p-4 text-white" onClick={clearFile}>
               <div className="flex h-full w-full items-center justify-center">X</div>
             </div>
-            <img src={uploadedImage} alt="Uploaded" style={{ width: '100%', maxWidth: '100%', maxHeight: 'auto', borderRadius: '10px' }} />
+            <img src={imagePreview} alt="Uploaded" style={{ width: '100%', maxWidth: '100%', maxHeight: 'auto', borderRadius: '10px' }} />
           </div>
         ) : (
           <>

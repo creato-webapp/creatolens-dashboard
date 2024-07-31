@@ -1,9 +1,11 @@
 import axios from 'axios'
 import type { NextApiRequest, NextApiResponse } from 'next'
+import fs from 'fs'
 
-import { UploadImageResponse } from '@services/Object/ImageBlob'
+import formidable from 'formidable'
+import { parseForm } from '@api/image'
+import { ImageInstance } from '@helpers/axios'
 
-import BlobInstance from '../../../helpers/axios/Blob'
 export const config = {
   api: {
     bodyParser: false,
@@ -34,23 +36,28 @@ export default async function CloudStorage(req: NextApiRequest, res: NextApiResp
       }
     case 'POST':
       try {
-        if (!req.headers.cookie) {
-          return res.status(401).json({ message: 'Unauthorized' })
-        }
-        const response = await BlobInstance.post<UploadImageResponse>(`/cloud-vision`, req, {
+        const { fields, files } = await parseForm(req)
+
+        const fileArray = files.file as formidable.File[]
+        const usernameArray = fields.username as string[]
+
+        const file = fileArray[0] as formidable.File
+        const fileStream = fs.createReadStream(file.filepath)
+
+        const formData = new FormData()
+
+        formData.append('file', fileStream, file.originalFilename as string)
+        formData.append('username', usernameArray[0] as string)
+
+        const response = await ImageInstance.post(`/api/image-tagen`, formData, {
           headers: {
-            'Content-Type': req.headers['content-type'],
+            'Content-Type': 'multipart/form-data',
           },
         })
-        if (response.status !== 200) {
-          return res.status(response.status).json({ message: 'Cannot store the image' })
-        }
-        if (!response.data) {
-          return res.status(400).json({ message: 'Invalid request' })
-        }
-        return res.status(200).json(response.data)
+        return res.status(response.status).json(response.data)
       } catch (error) {
-        return res.status(500).json({ message: 'Something went wrong in uploading stage', error: error })
+        console.error('Error uploading image:', error)
+        return res.status(500).send({ message: 'Internal Server Error', error })
       }
     default:
       res.setHeader('Allow', ['GET', 'POST'])

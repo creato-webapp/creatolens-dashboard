@@ -1,19 +1,29 @@
 import { useCallback, useRef, useState } from 'react'
 
 import Primary from '@components/Button/Primary'
-import { uploadImage } from '@services/Image'
 import { ImageDetailsType, useImageHashtagContext } from '@context/ImageToHashtagContext'
 
 import ImageUpload from '../ImageUpload'
+import useImageUploader from '@hooks/useImageUploader'
+import { imageToBase64 } from '@services/util'
+import { uploadImage } from '@services/Image'
 
 const Step1 = () => {
   const [uploading, setUploading] = useState<boolean>(false)
-  const [uploadedImage, setUploadedImage] = useState<string>('')
+  const [uploadedImage, setUploadedImage] = useState<File | null>()
   const [imageDetails, setImageDetails] = useState<ImageDetailsType>({})
   const fileInputRef = useRef<HTMLInputElement | null>(null)
 
-  const { addImage, goForward } = useImageHashtagContext()
+  const {
+    uploadImage,
+    loading: isLoading,
+    response,
+    error,
+  } = useImageUploader({
+    timeout: 30000,
+  })
 
+  const { addImage, goForward } = useImageHashtagContext()
   const onClickButton = useCallback(async () => {
     if (!uploadedImage || !imageDetails.format || !imageDetails.path) {
       return
@@ -21,18 +31,23 @@ const Step1 = () => {
 
     setUploading(true)
     try {
-      const data = {
-        args: { username: 'timothy', file: uploadedImage, imageDetails },
-      }
+      const imageString = await imageToBase64(uploadedImage)
+      if (imageString == null) return
 
-      const uploadedImageResponse = await uploadImage(data)
-      addImage(uploadedImageResponse, [])
+      const uploadResponse = await uploadImage(uploadedImage)
+      if (uploadResponse && uploadResponse.data) {
+        console.log('response', response.data)
+        addImage(uploadResponse.data, [])
+      } else {
+        console.error('Upload response is missing data')
+      }
       setUploading(false)
       goForward()
     } catch (e) {
+      console.error('Error uploading image:', e)
       setUploading(false)
     }
-  }, [addImage, goForward, imageDetails, uploadedImage])
+  }, [addImage, goForward, imageDetails.format, imageDetails.path, uploadImage, uploadedImage])
 
   const triggerFileInput = useCallback(() => fileInputRef.current?.click(), [])
 
