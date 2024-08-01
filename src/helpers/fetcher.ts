@@ -49,17 +49,7 @@ const fetcher = {
     return response
   },
   [METHOD.POST]: async <T, D = unknown>(url: string, data?: D, config?: AxiosRequestConfig<D>) => {
-    let finalConfig = config
-    if (data instanceof FormData) {
-      finalConfig = {
-        ...config,
-        headers: {
-          ...config?.headers,
-          'Content-Type': 'multipart/form-data',
-        },
-      }
-    }
-    const response = await instance.post<T>(url, data, finalConfig).then((res) => res.data)
+    const response = await instance.post<T>(url, data, config).then((res) => res.data)
     return response
   },
   [METHOD.PATCH]: async <T, D = unknown>(url: string, data?: D, config?: AxiosRequestConfig<D>) => {

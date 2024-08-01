@@ -6,7 +6,6 @@ import { ImageDetailsType, useImageHashtagContext } from '@context/ImageToHashta
 import ImageUpload from '../ImageUpload'
 import useImageUploader from '@hooks/useImageUploader'
 import { imageToBase64 } from '@services/util'
-import { uploadImage } from '@services/Image'
 
 const Step1 = () => {
   const [uploading, setUploading] = useState<boolean>(false)
@@ -14,12 +13,7 @@ const Step1 = () => {
   const [imageDetails, setImageDetails] = useState<ImageDetailsType>({})
   const fileInputRef = useRef<HTMLInputElement | null>(null)
 
-  const {
-    uploadImage,
-    loading: isLoading,
-    response,
-    error,
-  } = useImageUploader({
+  const { uploadImage, error } = useImageUploader({
     timeout: 30000,
   })
 
@@ -36,13 +30,12 @@ const Step1 = () => {
 
       const uploadResponse = await uploadImage(uploadedImage)
       if (uploadResponse && uploadResponse.data) {
-        console.log('response', response.data)
         addImage(uploadResponse.data, [])
+        goForward()
       } else {
         console.error('Upload response is missing data')
       }
       setUploading(false)
-      goForward()
     } catch (e) {
       console.error('Error uploading image:', e)
       setUploading(false)
@@ -77,6 +70,7 @@ const Step1 = () => {
             <Primary disabled={uploading} sizes={['m', 'm', 'm']} onClick={onClickButton}>
               Annotate
             </Primary>
+            {error && <div>{error?.message}</div>}
           </div>
         </div>
       </div>

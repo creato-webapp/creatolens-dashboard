@@ -23,16 +23,6 @@ const useMutation = <T, A = undefined>(key: Key, method: IMethodsType, config?: 
         case METHOD.DELETE:
           return await fetcher[method]<T>(url, { params: arg as A, ...config?.request })
         default:
-          if (arg instanceof FormData) {
-            return await fetcher[method]<T>(url, arg, {
-              ...config?.request,
-              headers: {
-                ...config?.request?.headers,
-                'Content-Type': 'multipart/form-data',
-              },
-            })
-          }
-          // return await fetcher[method]<T>(url, arg as A, config?.request)
           return await fetcher[method]<T>(url, arg as A, config?.request)
       }
     },

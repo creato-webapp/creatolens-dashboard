@@ -1,9 +1,10 @@
-import { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios'
+import { AxiosError, AxiosRequestConfig } from 'axios'
 
 import { UploadImageResponse } from '@services/Object/ImageBlob'
 import METHOD from '@constants/method'
 import useMutation from './useMutation'
 import { useEffect } from 'react'
+import { useSession } from 'next-auth/react'
 
 const REQUEST_CONFIG = {
   maxBodyLength: 8 * 1024 * 1024,
@@ -15,6 +16,8 @@ export default function useImageUploader(
   onCompleted?: (response: UploadImageResponse) => void,
   onError?: (error: AxiosError) => void
 ) {
+  const { data: session } = useSession()
+
   const { data, error, isMutating, trigger } = useMutation('/api/image', METHOD.POST, {
     request: {
       headers: {
@@ -38,8 +41,11 @@ export default function useImageUploader(
   const uploadImage = async (file: File) => {
     const formData = new FormData()
     formData.append('file', file)
-    formData.append('username', 'username')
-    // return response.data
+    if (session?.user?.name) {
+      formData.append('username', session?.user?.name)
+    } else {
+      formData.append('username', 'null')
+    }
 
     return trigger(formData)
   }
