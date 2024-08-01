@@ -42,7 +42,7 @@ const Step3 = () => {
       </div>
       <div className="flex flex-col gap-4">
         <h4>Here is the image based on your description. Re-organize input below to get new images.</h4>
-        <Primary onClick={handleRegenerate} sizes={['full', 'full', 'full']} disabled={isLoading || isRegenerating}>
+        <Primary onClick={handleRegenerate} sizes={['l', 'l', 'l']} disabled={isLoading || isRegenerating}>
           {isRegenerating ? 'Regenerating...' : 'Re-Generate Image'}
         </Primary>
       </div>
