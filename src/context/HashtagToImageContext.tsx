@@ -42,6 +42,8 @@ type HashtagImageContextType = {
   updateImageCategory: (category: string, option: string) => void
   generateImage: () => void
   generatedImageUri: string | null
+  isLoading: boolean
+  error: string | null
 }
 
 export const HashtagImageContext = createContext<HashtagImageContextType | undefined>(undefined)
@@ -68,6 +70,8 @@ export const HashtagImageProvider = ({ children }: HashtagImageProviderProps) =>
     aspectRatio: '3:4',
   })
   const [generatedImageUri, setGeneratedImageUri] = useState<string | null>(null)
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [error, setError] = useState<string | null>(null)
 
   const updateStep = useCallback((arg: number) => {
     setStep(arg)
@@ -103,15 +107,23 @@ export const HashtagImageProvider = ({ children }: HashtagImageProviderProps) =>
 
   /*  */
   const generateImage = useCallback(async () => {
-    const data = {
-      aspectRatio: imageConfig.aspectRatio,
-      hashtags: hashtags,
-      imageCategory: imageCategory,
-      imageStyle: imageConfig.imageStyle,
-      keywords: keywords,
+    setIsLoading(true)
+    setError(null)
+    try {
+      const data = {
+        aspectRatio: imageConfig.aspectRatio,
+        hashtags: hashtags,
+        imageCategory: imageCategory,
+        imageStyle: imageConfig.imageStyle,
+        keywords: keywords,
+      }
+      const uri = await renderPromptAndGenImage(data)
+      setGeneratedImageUri(uri)
+    } catch (err) {
+      setError('Failed to generate image. Please try again.')
+    } finally {
+      setIsLoading(false)
     }
-    const uri = await renderPromptAndGenImage(data)
-    setGeneratedImageUri(uri)
   }, [keywords, imageConfig, imageCategory, hashtags])
 
   const updateImageConfig = useCallback((config: Partial<ImageConfigType>) => {
@@ -147,6 +159,8 @@ export const HashtagImageProvider = ({ children }: HashtagImageProviderProps) =>
         goBack,
         goForward,
         generateImage,
+        isLoading,
+        error,
       }}
     >
       {children}

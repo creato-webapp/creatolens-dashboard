@@ -11,12 +11,12 @@ import { ImageCategoryType } from '@constants/imageStyle'
 import { usePromptTemplate } from '@hooks/usePromptTemplate'
 
 const Step2 = () => {
-  const { goBack, imageConfig, generateImage, updateImageConfig, updateImageCategory } = useHashtagToImage()
+  const { goBack, goForward, imageConfig, generateImage, updateImageConfig, updateImageCategory } = useHashtagToImage()
   const { ImageAspectRatios, ImageCategories, ImageStyles } = usePromptTemplate()
 
   const onClickNextStep = () => {
     generateImage()
-    // goForward()
+    goForward()
     return
   }
 
