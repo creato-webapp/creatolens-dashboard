@@ -150,17 +150,35 @@ Cypress.Commands.add('loginByGoogleApi', () => {
         },
       }
 
-      cy.request({
-        method: 'POST',
-        url: '/api/auth/cypress-login',
-        body: userItem,
-      }).then(({ body }) => {
-        cy.log(body)
-        cy.window().then((win) => {
-          win.localStorage.setItem('nextauth.session-token', JSON.stringify(body.session))
-          cy.visit('/')
-        })
-      })
+      window.localStorage.setItem('googleCypress', JSON.stringify(userItem))
+      window.localStorage.setItem('idToken', JSON.stringify(id_token))
+      cy.visit('/')
     })
   })
 })
+//
+//
+// -- This is a child command --
+// Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })
+//
+//
+// -- This is a dual command --
+// Cypress.Commands.add('dismiss', { prevSubject: 'optional'}, (subject, options) => { ... })
+//
+//
+// -- This will overwrite an existing command --
+// Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
+//
+declare global {
+  namespace Cypress {
+    interface Chainable {
+      login(): Chainable<void>
+      // drag(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
+      // dismiss(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
+      // visit(originalFn: CommandOriginalFn, url: string, options: Partial<VisitOptions>): Chainable<Element>
+    }
+  }
+}
+
+// Prevent TypeScript from reading file as legacy script
+export {}
