@@ -21,11 +21,6 @@ export const IMAGE_STYLE = {
     value: 'WEBSITE_DESIGN',
     image: '/hashtag/website-design.png', // Update with actual path or URL
   },
-  PHOTOGRAPHY: {
-    name: 'Photography',
-    value: 'PHOTOGRAPHY',
-    image: '/hashtag/photography.png', // Update with actual path or URL
-  },
 } as const
 
 export type ImageStyleKeys = keyof typeof IMAGE_STYLE

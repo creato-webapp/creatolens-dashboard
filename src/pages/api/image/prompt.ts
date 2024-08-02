@@ -50,6 +50,7 @@ export default async function postImagePrompt(req: NextApiRequest, res: NextApiR
         const response = await ImageInstance.post<string>(`/api/image-tagen/prompt/image`, {
           prompt: renderedPrompt,
           user_id: user.id,
+          aspect_ratio: body.aspectRatio,
         })
 
         return res.status(200).json(response.data)
