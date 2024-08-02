@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 
 import { IPromptType, PROMPT_TEMPLATE } from '@constants/prompt'
 
-import { remoteConfig } from '@utils/backend/firebaseAdmin'
+import firebase from '@helpers/firebase'
 
 const INITIAL_CONFIG = {
   defaultConfig: PROMPT_TEMPLATE,
@@ -23,7 +23,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         if (!promptType) {
           return res.status(400).send({ error: 'Prompt type is required' })
         }
-        const template = remoteConfig.initServerTemplate(INITIAL_CONFIG)
+        const template = firebase.admin.remoteConfig.initServerTemplate(INITIAL_CONFIG)
         await template.load()
         const serverConfig = template.evaluate()
         const promptMapperString = serverConfig.getString(MAPPER_TEMPLATE_TYPE)
