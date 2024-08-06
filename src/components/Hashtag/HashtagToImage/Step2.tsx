@@ -25,7 +25,7 @@ const Step2 = () => {
 
   const onGeneralSelected = useCallback(
     (option: keyof ImageCategoryType, value: string) => {
-      updateImageCategory(option, value)
+      updateImageCategory(option.toString(), value)
     },
     [updateImageCategory]
   )
