@@ -7,7 +7,7 @@ import { Badges } from '@components/Badges'
 import Outline from '@components/Button/Outline'
 import OutlinePrimaryButton from '@components/Button/OutlinePrimary'
 import Primary from '@components/Button/Primary'
-import { useImageHashtagContext } from '@context/ImageToHashtagContext'
+import { useImageHashtagContext } from '@hooks/UseImagetoHashtag'
 
 const BACK_ICON = '/back.svg'
 const CHECK_ICON = '/check.svg'

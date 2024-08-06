@@ -1,9 +1,10 @@
 import React, { useCallback, useRef, useState, useMemo } from 'react'
 import Primary from '@components/Button/Primary'
-import { ImageDetailsType, useImageHashtagContext } from '@context/ImageToHashtagContext'
+import { ImageDetailsType } from '@context/ImageToHashtagContext'
 import ImageUpload from '../ImageUpload'
 import useImageUploader from '@hooks/useImageUploader'
 import { imageToBase64 } from '@services/util'
+import { useImageHashtagContext } from '@hooks/UseImagetoHashtag'
 
 const Step1 = () => {
   const [uploading, setUploading] = useState<boolean>(false)
@@ -22,10 +23,10 @@ const Step1 = () => {
       const imageString = await imageToBase64(uploadedImage)
       if (!imageString) throw new Error('Failed to convert image to base64')
 
-      const uploadResponse = await uploadImage(uploadedImage)
-      if (!uploadResponse?.data) throw new Error('Upload response is missing data')
+      // const uploadResponse = await uploadImage(uploadedImage)
+      // if (!uploadResponse?.data) throw new Error('Upload response is missing data')
 
-      addImage(uploadResponse.data, [])
+      // addImage(uploadResponse.data, [])
       goForward()
     } catch (e) {
       console.error('Error uploading image:', e)

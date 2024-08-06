@@ -5,7 +5,7 @@ import Outline from '@components/Button/Outline'
 import Primary from '@components/Button/Primary'
 import DropdownCheckbox from '@components/Form/DropdownCheckbox'
 import { getImageHashtag } from '@services/HashtagHelper'
-import { useImageHashtagContext } from '@context/ImageToHashtagContext'
+import { useImageHashtagContext } from '@hooks/UseImagetoHashtag'
 import { IHashet } from 'pages/recommendation'
 
 interface Option {
