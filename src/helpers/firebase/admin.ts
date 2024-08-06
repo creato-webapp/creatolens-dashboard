@@ -1,5 +1,4 @@
-import { cert, initializeApp } from 'firebase-admin/app'
-import { getRemoteConfig } from 'firebase-admin/remote-config'
+import admin from 'firebase-admin'
 
 const serviceAccount = {
   projectId: process.env.FIREBASE_ADMIN_PROJECT_ID,
@@ -7,13 +6,10 @@ const serviceAccount = {
   privateKey: process.env.FIREBASE_ADMIN_PRIVATE_KEY,
 }
 
-const app = initializeApp(
-  {
-    credential: cert(serviceAccount),
-  },
-  'server'
-)
+const app = admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+})
 
-export const remoteConfig = getRemoteConfig(app)
+export const remoteConfig = admin.remoteConfig()
 
 export default app

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 
 import { fetchAndActivate, getValue } from 'firebase/remote-config'
-import firebase from '@helpers/firebase'
+import { remoteConfig } from '@helpers/firebase/client'
 
 export const useRemoteConfig = <T>(key: string, refetchInterval: number = 10000) => {
   const [configValue, setConfigValue] = useState<T | null>(null)
@@ -11,11 +11,11 @@ export const useRemoteConfig = <T>(key: string, refetchInterval: number = 10000)
     const initConfig = async () => {
       if (typeof window !== 'undefined') {
         try {
-          firebase.client.remoteConfig.settings.minimumFetchIntervalMillis = refetchInterval
+          remoteConfig.settings.minimumFetchIntervalMillis = refetchInterval
 
-          await fetchAndActivate(firebase.client.remoteConfig)
+          await fetchAndActivate(remoteConfig)
 
-          const value = getValue(firebase.client.remoteConfig, key).asString()
+          const value = getValue(remoteConfig, key).asString()
           setConfigValue(JSON.parse(value))
         } catch (err) {
           setError('Error fetching remote config')

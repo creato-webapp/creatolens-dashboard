@@ -1,12 +1,25 @@
-import { initializeApp } from 'firebase/app'
-import { getAnalytics } from 'firebase/analytics'
-import { getRemoteConfig } from 'firebase/remote-config'
+import { FirebaseApp } from 'firebase/app'
+import { Analytics } from 'firebase/analytics'
+import { RemoteConfig } from 'firebase/remote-config'
 
 import firebaseConfig from './config'
 
-const app = initializeApp(firebaseConfig, 'client')
+let analytics: Analytics
+let remoteConfig: RemoteConfig
+let app: FirebaseApp
 
-export const analytics = getAnalytics(app)
-export const remoteConfig = getRemoteConfig(app)
+if (typeof window !== 'undefined') {
+  const initFirebase = async () => {
+    const { initializeApp } = await import('firebase/app')
+    const { getAnalytics } = await import('firebase/analytics')
+    const { getRemoteConfig } = await import('firebase/remote-config')
 
-export default app
+    app = initializeApp(firebaseConfig, 'client')
+    analytics = getAnalytics(app)
+    remoteConfig = getRemoteConfig(app)
+  }
+
+  initFirebase()
+}
+
+export { analytics, remoteConfig, app }
