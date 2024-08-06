@@ -2,8 +2,9 @@ import axios from 'axios'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import fs from 'fs'
 
+import FormData from 'form-data'
 import formidable from 'formidable'
-import { parseForm } from '@api/image'
+import { parseForm } from '@helpers/form'
 import { ImageInstance } from '@helpers/axios'
 
 export const config = {

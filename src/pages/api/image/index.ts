@@ -4,22 +4,13 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 
 import fs from 'fs'
 
+import { parseForm } from '@helpers/form'
 import ImageInstance from '../../../helpers/axios/Image'
 
 export const config = {
   api: {
     bodyParser: false, // Disable the default body parser
   },
-}
-
-const parseForm = (req: NextApiRequest): Promise<{ fields: formidable.Fields; files: formidable.Files }> => {
-  return new Promise((resolve, reject) => {
-    const form = formidable({ multiples: true })
-    form.parse(req, (err, fields, files) => {
-      if (err) reject(err)
-      resolve({ fields, files })
-    })
-  })
 }
 
 export default async function ImageUpload(req: NextApiRequest, res: NextApiResponse) {
