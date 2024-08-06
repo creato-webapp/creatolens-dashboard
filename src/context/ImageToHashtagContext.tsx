@@ -1,4 +1,4 @@
-import { ReactNode, createContext, useCallback, useContext, useState } from 'react'
+import { ReactNode, createContext, useCallback, useState } from 'react'
 
 import { getImageLabel } from '@services/Image'
 import { IHashet } from 'pages/recommendation'
@@ -45,7 +45,7 @@ type ImageHashtagContextType = {
   generateImageByHashtag: () => void
 }
 
-const ImageHashtagContext = createContext<ImageHashtagContextType | undefined>(undefined)
+export const ImageHashtagContext = createContext<ImageHashtagContextType | undefined>(undefined)
 
 interface ImageHashtagProviderProps {
   children: ReactNode
@@ -239,13 +239,4 @@ export const ImageHashtagProvider = ({ children }: ImageHashtagProviderProps) =>
       {children}
     </ImageHashtagContext.Provider>
   )
-}
-
-export const useImageHashtagContext = () => {
-  // move to useHook folder
-  const context = useContext(ImageHashtagContext)
-  if (!context) {
-    throw new Error('useImageHashtagContext must be used within an ImageHashtagProvider')
-  }
-  return context
 }
