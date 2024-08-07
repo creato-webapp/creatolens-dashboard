@@ -11,14 +11,10 @@ const REQUEST_CONFIG = {
   maxContentLength: 8 * 1024 * 1024,
 }
 
-export default function useImageUploader(
-  config?: AxiosRequestConfig,
-  onCompleted?: (response: UploadImageResponse) => void,
-  onError?: (error: AxiosError) => void
-) {
+export default function useImageUploader(config?: AxiosRequestConfig, onCompleted?: (path: string) => void, onError?: (error: AxiosError) => void) {
   const { data: session } = useSession()
 
-  const { data, error, isMutating, trigger } = useMutation('/api/image', METHOD.POST, {
+  const { data, error, isMutating, trigger } = useMutation<UploadImageResponse>('/api/image', METHOD.POST, {
     request: {
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -32,11 +28,11 @@ export default function useImageUploader(
     if (isMutating) {
       if (error) {
         onError && onError(error)
-      } else {
-        onCompleted && onCompleted(data as UploadImageResponse)
+      } else if (data) {
+        onCompleted && onCompleted(data.data)
       }
     }
-  }, [isMutating])
+  }, [isMutating, error, data, onCompleted, onError])
 
   const uploadImage = async (file: File) => {
     const formData = new FormData()

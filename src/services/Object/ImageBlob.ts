@@ -19,7 +19,8 @@ export type ModelResult = {
 }
 
 export interface UploadImageResponse {
-  path: string
+  code: number
+  data: string
 }
 
 function validateImage(file: File, maxSize: number, validTypes: string[]): boolean {
