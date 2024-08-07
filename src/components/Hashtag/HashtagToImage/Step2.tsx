@@ -8,13 +8,13 @@ import { usePromptTemplate } from '@hooks/usePromptTemplate'
 import { ImageCategoryType } from '@constants/imageStyle'
 
 const Step2 = () => {
-  const { goBack, goForward, imageConfig, generateImage, updateImageConfig, updateImageCategory } = useHashtagToImage()
+  const { goBack, goForward, imageConfig, generateImageWithKeywords, updateImageConfig, updateImageCategory } = useHashtagToImage()
   const { ImageAspectRatios, ImageCategories, ImageStyles } = usePromptTemplate()
 
   const onClickNextStep = useCallback(() => {
-    generateImage()
+    generateImageWithKeywords()
     goForward()
-  }, [generateImage, goForward])
+  }, [generateImageWithKeywords, goForward])
 
   const imageConfigSelect = useCallback(
     (key: string, value: string) => {

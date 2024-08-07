@@ -2,7 +2,7 @@ import { ReactNode, createContext, useCallback, useState } from 'react'
 
 import { IHashet } from 'pages/recommendation'
 import { ImageStyleKeys } from '@constants/imageStyle'
-import { renderPromptAndGenImage } from '@services/imagePromptsHelper'
+import { useGenerateImage } from '@hooks/useGenerateImage'
 
 export type ImageDetailsType = {
   path?: string
@@ -40,7 +40,7 @@ type HashtagImageContextType = {
   imageConfig: ImageConfigType
   updateImageConfig: (config: Partial<ImageConfigType>) => void
   updateImageCategory: (category: string, option: string) => void
-  generateImage: () => void
+  generateImageWithKeywords: () => void
   generatedImageUri: string | null
   isLoading: boolean
   error: string | null
@@ -69,9 +69,7 @@ export const HashtagImageProvider = ({ children }: HashtagImageProviderProps) =>
     imageStyle: 'GENERAL',
     aspectRatio: '3:4',
   })
-  const [generatedImageUri, setGeneratedImageUri] = useState<string | null>(null)
-  const [isLoading, setIsLoading] = useState<boolean>(false)
-  const [error, setError] = useState<string | null>(null)
+  const { generatedImageUri, isLoading, error, generateImage } = useGenerateImage()
 
   const updateStep = useCallback((arg: number) => {
     setStep(arg)
@@ -106,25 +104,16 @@ export const HashtagImageProvider = ({ children }: HashtagImageProviderProps) =>
   }, [])
 
   /*  */
-  const generateImage = useCallback(async () => {
-    setIsLoading(true)
-    setError(null)
-    try {
-      const data = {
-        aspectRatio: imageConfig.aspectRatio,
-        hashtags: hashtags,
-        imageCategory: imageCategory,
-        imageStyle: imageConfig.imageStyle,
-        keywords: keywords,
-      }
-      const uri = await renderPromptAndGenImage(data)
-      setGeneratedImageUri(uri)
-    } catch (err) {
-      setError('Failed to generate image. Please try again.')
-    } finally {
-      setIsLoading(false)
+  const generateImageWithKeywords = useCallback(async () => {
+    const data = {
+      aspectRatio: imageConfig.aspectRatio,
+      hashtags: hashtags,
+      imageCategory: imageCategory,
+      imageStyle: imageConfig.imageStyle,
+      keywords: keywords,
     }
-  }, [keywords, imageConfig, imageCategory, hashtags])
+    await generateImage(data)
+  }, [keywords, imageConfig, imageCategory, hashtags, generateImage])
 
   const updateImageConfig = useCallback((config: Partial<ImageConfigType>) => {
     setImageConfig((prev) => ({
@@ -158,7 +147,7 @@ export const HashtagImageProvider = ({ children }: HashtagImageProviderProps) =>
         generatedImageUri,
         goBack,
         goForward,
-        generateImage,
+        generateImageWithKeywords,
         isLoading,
         error,
       }}
