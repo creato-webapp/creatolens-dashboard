@@ -23,10 +23,10 @@ const Step1 = () => {
       const imageString = await imageToBase64(uploadedImage)
       if (!imageString) throw new Error('Failed to convert image to base64')
 
-      // const uploadResponse = await uploadImage(uploadedImage)
-      // if (!uploadResponse?.data) throw new Error('Upload response is missing data')
+      const uploadResponse = await uploadImage(uploadedImage)
+      if (!uploadResponse?.data) throw new Error('Upload response is missing data')
 
-      // addImage(uploadResponse.data, [])
+      addImage(uploadResponse.data, [])
       goForward()
     } catch (e) {
       console.error('Error uploading image:', e)

@@ -30,7 +30,6 @@ export type IImageStyleType =
   | typeof IMAGE_STYLE.GRAPHIC_DESIGN
   | typeof IMAGE_STYLE.STOCK_IMAGE
   | typeof IMAGE_STYLE.WEBSITE_DESIGN
-  | typeof IMAGE_STYLE.PHOTOGRAPHY
 
 export const IMAGE_ASPECT_RATIOS = {
   SQUARE: { label: 'Square', value: '1:1', width: 1, height: 1 },
