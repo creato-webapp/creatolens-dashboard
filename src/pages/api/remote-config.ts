@@ -23,8 +23,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         if (!promptType) {
           return res.status(400).send({ error: 'Prompt type is required' })
         }
-        const template = remoteConfig.initServerTemplate(INITIAL_CONFIG)
-        await template.load()
+        const template = await remoteConfig.getServerTemplate(INITIAL_CONFIG)
+
         const serverConfig = template.evaluate()
         const promptMapperString = serverConfig.getString(MAPPER_TEMPLATE_TYPE)
         const promptMapper: mapper = JSON.parse(promptMapperString)
