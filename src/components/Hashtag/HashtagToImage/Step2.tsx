@@ -6,10 +6,11 @@ import Dropdown from '@components/Form/DropdownV2'
 import { useHashtagToImage } from '@hooks/useHashtagToImage'
 import { usePromptTemplate } from '@hooks/usePromptTemplate'
 import { ImageCategoryType } from '@constants/imageStyle'
+import ImageAspectSelector from '../ImageGen/ImageAspect'
 
 const Step2 = () => {
   const { goBack, goForward, imageConfig, generateImageWithKeywords, updateImageConfig, updateImageCategory } = useHashtagToImage()
-  const { ImageAspectRatios, ImageCategories, ImageStyles } = usePromptTemplate()
+  const { ImageCategories, ImageStyles } = usePromptTemplate()
 
   const onClickNextStep = useCallback(() => {
     generateImageWithKeywords()
@@ -23,44 +24,19 @@ const Step2 = () => {
     [updateImageConfig]
   )
 
+  const updateImageAspect = useCallback(
+    (aspectRatio: string) => {
+      imageConfigSelect('aspectRatio', aspectRatio)
+    },
+    [imageConfigSelect]
+  )
+
   const onGeneralSelected = useCallback(
     (option: keyof ImageCategoryType, value: string) => {
       updateImageCategory(option.toString(), value)
     },
     [updateImageCategory]
   )
-
-  const AspectRatioSelection = useMemo(() => {
-    if (!ImageAspectRatios) return null
-
-    return (
-      <div className="flex flex-col gap-4">
-        <h2 className="font-extrabold">Aspect ratio</h2>
-        <div className="grid aspect-square w-full grid-cols-2 gap-4">
-          {Object.entries(ImageAspectRatios).map(([key, value]) => (
-            <div className="flex w-full flex-col items-center justify-center rounded-xl" key={key}>
-              <div
-                className={`flex aspect-square h-auto max-h-48 w-full max-w-48 items-center justify-center rounded-xl bg-white px-8 py-4 ${
-                  imageConfig?.aspectRatio === value.value ? 'border-4 border-accent1-500' : 'border border-stroke'
-                }`}
-                onClick={() => imageConfigSelect('aspectRatio', value.value)}
-              >
-                <div
-                  className="bg-[#D9D9D9] shadow-2xl"
-                  style={{
-                    aspectRatio: `${value.width} / ${value.height}`,
-                    width: `${value.width === 9 && value.height === 16 ? '70%' : '100%'}`,
-                  }}
-                />
-              </div>
-              <div>{value.label}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-    )
-  }, [ImageAspectRatios, imageConfig?.aspectRatio, imageConfigSelect])
-
   const ImageCategorySelection = useMemo(() => {
     if (!ImageCategories) return null
 
@@ -117,7 +93,7 @@ const Step2 = () => {
         </div>
         {ImageStyleSelection}
       </div>
-      {AspectRatioSelection}
+      <ImageAspectSelector aspectRatio={imageConfig.aspectRatio} setAspectRatio={updateImageAspect} />
       {ImageCategorySelection}
       <div className="mt-4 flex w-full items-center justify-center">
         <Primary onClick={onClickNextStep} sizes={['l', 'l', 'l']}>
