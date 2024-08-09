@@ -1,4 +1,4 @@
-import { useRemoteConfig } from '@hooks/useRemoteConfig'
+import { useRemoteStringConfig } from '@hooks/useRemoteConfig'
 
 export type ImageAspectRatioListType = {
   [key: string]: ImageAspectRatioType
@@ -18,15 +18,15 @@ interface ImageAspectSelectorProps extends React.DetailedHTMLProps<React.HTMLAtt
 const IMAGE_ASPECT_KEY = 'IMAGE_ASPECT_RATIOS'
 
 const ImageAspectSelector = ({ aspectRatio, setAspectRatio }: ImageAspectSelectorProps) => {
-  const { configValue: ImageAspectRatios } = useRemoteConfig<ImageAspectRatioListType>(IMAGE_ASPECT_KEY)
+  const { config: imageAspectRatios } = useRemoteStringConfig<ImageAspectRatioListType>(IMAGE_ASPECT_KEY)
 
-  if (!ImageAspectRatios) return null
+  if (!imageAspectRatios) return null
 
   return (
     <div className="flex flex-col gap-4">
       <h2 className="font-extrabold">Aspect ratio</h2>
       <div className="grid aspect-square w-full grid-cols-2 gap-4">
-        {Object.entries(ImageAspectRatios).map(([key, value]) => (
+        {Object.entries(imageAspectRatios).map(([key, value]) => (
           <div className="flex w-full flex-col items-center justify-center rounded-xl" key={key}>
             <div
               className={`flex aspect-square h-auto max-h-48 w-full max-w-48 items-center justify-center rounded-xl bg-white px-8 py-4 ${

@@ -10,7 +10,7 @@ import ImageAspectSelector from '../ImageGen/ImageAspect'
 
 const Step2 = () => {
   const { goBack, goForward, imageConfig, generateImageWithKeywords, updateImageConfig, updateImageCategory } = useHashtagToImage()
-  const { ImageCategories, ImageStyles } = usePromptTemplate()
+  const { imageCategories, imageStyles } = usePromptTemplate()
 
   const onClickNextStep = useCallback(() => {
     generateImageWithKeywords()
@@ -38,13 +38,13 @@ const Step2 = () => {
     [updateImageCategory]
   )
   const ImageCategorySelection = useMemo(() => {
-    if (!ImageCategories) return null
+    if (!imageCategories) return null
 
     return (
       <div>
         <h2>General</h2>
         <div className="flex flex-col gap-4">
-          {Object.entries(ImageCategories).map(
+          {Object.entries(imageCategories).map(
             ([key, value]) =>
               value.templateType.includes(imageConfig.imageStyle) && (
                 <Dropdown
@@ -59,14 +59,14 @@ const Step2 = () => {
         </div>
       </div>
     )
-  }, [ImageCategories, imageConfig.imageStyle, onGeneralSelected])
+  }, [imageCategories, imageConfig.imageStyle, onGeneralSelected])
 
   const ImageStyleSelection = useMemo(() => {
-    if (!ImageStyles) return null
+    if (!imageStyles) return null
 
     return (
       <div className="grid h-auto grid-cols-2 gap-4 md:grid-cols-4">
-        {Object.entries(ImageStyles).map(([key, value]) => (
+        {Object.entries(imageStyles).map(([key, value]) => (
           <div
             key={key}
             onClick={() => imageConfigSelect('imageStyle', value.value)}
@@ -80,7 +80,7 @@ const Step2 = () => {
         ))}
       </div>
     )
-  }, [ImageStyles, imageConfig.imageStyle, imageConfigSelect])
+  }, [imageStyles, imageConfig.imageStyle, imageConfigSelect])
 
   return (
     <div className="flex flex-col gap-2">
