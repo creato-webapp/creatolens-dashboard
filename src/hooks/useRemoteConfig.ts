@@ -16,6 +16,7 @@ export const useRemoteConfig = <T>(key: string, refetchInterval: number = 10000)
           await fetchAndActivate(remoteConfig)
 
           const value = getValue(remoteConfig, key).asString()
+
           setConfigValue(JSON.parse(value))
         } catch (err) {
           setError('Error fetching remote config')
