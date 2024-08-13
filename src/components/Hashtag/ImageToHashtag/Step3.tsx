@@ -69,17 +69,16 @@ const Step3: React.FC = () => {
 
   useEffect(() => {
     fetchHashtags()
-  }, [fetchHashtags])
+  })
 
-  const updateOptions = useCallback(
-    (updateFn: (opt: Option) => Option) => {
-      return categorizedOptions.map((option) => ({
-        ...option,
-        options: option.options.map(updateFn),
+  const updateOptions = useCallback((updateFn: (opt: Option) => Option) => {
+    setCategorizedOptions((prevOptions) =>
+      prevOptions.map((category) => ({
+        ...category,
+        options: category.options.map(updateFn),
       }))
-    },
-    [categorizedOptions]
-  )
+    )
+  }, [])
 
   const onClickSelectAll = useCallback(() => updateOptions((opt) => ({ ...opt, checked: true })), [updateOptions])
   const onClickHashtag = useCallback(
