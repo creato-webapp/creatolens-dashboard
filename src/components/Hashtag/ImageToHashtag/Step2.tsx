@@ -83,7 +83,7 @@ const Step2 = () => {
           <h2 className="flex items-center font-extrabold">Image label annotation</h2>
         </div>
 
-        <div className="relative my-4 flex aspect-square h-full w-full min-w-full items-center justify-center rounded-full">
+        <div className="relative my-4 flex aspect-square h-full w-full min-w-full rounded-full">
           {currentImage?.image && (
             <Image
               fill
@@ -91,7 +91,7 @@ const Step2 = () => {
               objectFit="contain"
               className="rounded-4xl"
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-              alt="testing"
+              alt="image uploaded"
             />
           )}
         </div>

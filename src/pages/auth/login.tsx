@@ -34,7 +34,7 @@ const Login: FC<loginProps> = ({ providers }) => {
   const errorMessages: Record<ErrorCodes, string> = {
     [ErrorCodes.OAuthSignin]: 'Error in constructing an authorization URL.',
     [ErrorCodes.OAuthCallback]: 'Error in handling the response from the OAuth provider.',
-    [ErrorCodes.OAuthCreateAccount]: 'User not in white list. Please Contact',
+    [ErrorCodes.OAuthCreateAccount]: 'User not in white list. Please Contact our team for support or questions',
     [ErrorCodes.EmailCreateAccount]: 'Could not create email provider user in the database.',
     [ErrorCodes.Callback]: 'Error in the OAuth callback handler route.',
     [ErrorCodes.OAuthAccountNotLinked]: 'The email on the account is already linked, but not with this OAuth account.',
@@ -73,15 +73,16 @@ const Login: FC<loginProps> = ({ providers }) => {
           <div>
             <p>You are not signed in.</p>
             {errorCode && <div className="error-message">{OAuthErrorMessage}</div>}
-            {Object.values(providers).map((provider) => (
-              <div key={provider.name} className="flex justify-center">
-                {provider.name === 'Google' && (
-                  <PrimaryButton id={'login'} loading={false} onClick={() => signIn(provider.id)}>
-                    Sign in
-                  </PrimaryButton>
-                )}
-              </div>
-            ))}
+            {providers &&
+              Object.values(providers).map((provider) => (
+                <div key={provider.name} className="flex justify-center">
+                  {provider.name === 'Google' && (
+                    <PrimaryButton id={'login'} loading={false} onClick={() => signIn(provider.id)}>
+                      Sign in
+                    </PrimaryButton>
+                  )}
+                </div>
+              ))}
           </div>
         )}
       </div>

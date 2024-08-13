@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import Image from 'next/image'
 
 import Outline from '@components/Button/Outline'
@@ -8,6 +8,7 @@ import { getImageHashtag } from '@services/HashtagHelper'
 import { useImageHashtagContext } from '@hooks/UseImagetoHashtag'
 import { IHashet } from 'pages/recommendation'
 import router from 'next/router'
+import { CONFIDENCE_LEVELS } from '@constants/imageStyle'
 
 interface Option {
   label: string
@@ -20,25 +21,14 @@ interface CategoryOption {
   options: Option[]
 }
 
-interface ConfidenceLevel {
-  name: string
-  threshold?: number
-  thresholdLow?: number
-  thresholdHigh?: number
-}
-
-const CONFIDENCE_LEVELS: Record<string, ConfidenceLevel> = {
-  HIGH: { name: 'Greater Than 90% Related', threshold: 0.9 },
-  MEDIUM: { name: '80-90% Related', thresholdLow: 0.8, thresholdHigh: 0.9 },
-  LOW: { name: 'Less Than 80% Related', threshold: 0.8 },
-}
-
 const Step3: React.FC = () => {
   const { images, currentImageIndex, updateSelectedLabels, hashtags, updateHashtag, goBack } = useImageHashtagContext()
 
   const currentImage = useMemo(() => images[currentImageIndex], [images, currentImageIndex])
 
-  const categorizedOptions = useMemo<CategoryOption[]>(() => {
+  const [categorizedOptions, setCategorizedOptions] = useState<CategoryOption[]>([])
+
+  useEffect(() => {
     const categorizeHashtags = (hashtags: IHashet[], confidenceLevel: { filter: (h: IHashet) => boolean }) =>
       hashtags.filter(confidenceLevel.filter).map((hashtag) => ({
         label: hashtag.hashtag,
@@ -46,7 +36,7 @@ const Step3: React.FC = () => {
         checked: false,
       }))
 
-    return [
+    const categorized = [
       {
         name: CONFIDENCE_LEVELS.HIGH.name,
         options: categorizeHashtags(hashtags, { filter: (h) => h.acc > CONFIDENCE_LEVELS.HIGH.threshold! }),
@@ -62,6 +52,8 @@ const Step3: React.FC = () => {
         options: categorizeHashtags(hashtags, { filter: (h) => h.acc <= CONFIDENCE_LEVELS.LOW.threshold! }),
       },
     ].filter((category) => category.options.length > 0)
+
+    setCategorizedOptions(categorized)
   }, [hashtags])
 
   const fetchHashtags = useCallback(async () => {
@@ -167,13 +159,13 @@ const Step3: React.FC = () => {
 
       <div className="my-4 flex w-full flex-col gap-4">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 md:grid-cols-3">
-          <Outline onClick={onClickClearAll} sizes={['m', 'l', 'l']}>
+          <Outline onClick={onClickClearAll} sizes={['s', 'l', 'l']}>
             Clear All
           </Outline>
-          <Primary onClick={onClickCopySelected} sizes={['m', 'l', 'l']}>
+          <Primary onClick={onClickCopySelected} sizes={['s', 'l', 'l']}>
             Copy Selected
           </Primary>
-          <Primary onClick={onClickSelectAll} sizes={['m', 'l', 'l']}>
+          <Primary onClick={onClickSelectAll} sizes={['s', 'l', 'l']}>
             Select All
           </Primary>
         </div>

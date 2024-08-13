@@ -3,7 +3,7 @@ import { useCallback, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 
-import Details from '@components/Hashtag/ImageToHashtag/Details'
+import Details from '@components/Hashtag/Details'
 import Step1 from '@components/Hashtag/ImageToHashtag/Step1'
 import Step2 from '@components/Hashtag/ImageToHashtag/Step2'
 import Step3 from '@components/Hashtag/ImageToHashtag/Step3'
