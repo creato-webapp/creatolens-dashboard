@@ -285,3 +285,16 @@ type Modifier = {
 export type ImageCategoryType = {
   [key: string]: Modifier
 }
+
+interface ConfidenceLevel {
+  name: string
+  threshold?: number
+  thresholdLow?: number
+  thresholdHigh?: number
+}
+
+export const CONFIDENCE_LEVELS: Record<string, ConfidenceLevel> = {
+  HIGH: { name: 'Greater Than 90% Related', threshold: 0.9 },
+  MEDIUM: { name: '80-90% Related', thresholdLow: 0.8, thresholdHigh: 0.9 },
+  LOW: { name: 'Less Than 80% Related', threshold: 0.8 },
+}
