@@ -1,20 +1,30 @@
 import Image from 'next/image'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
+import { useDialogues } from '@hooks/useDialogues'
 
 import Primary from '@components/Button/Primary'
 import { useHashtagToImage } from '@hooks/useHashtagToImage'
+import { Status } from '@context/DialogueContext'
 
 const Step3 = () => {
-  const { goBack, generatedImageUri, generateImage, isLoading, error } = useHashtagToImage()
+  const { goBack, generatedImageUri, generateImageWithKeywords, isLoading, error } = useHashtagToImage()
+  const { addDialogue } = useDialogues()
+
   const [isRegenerating, setIsRegenerating] = useState(false)
 
   const handleRegenerate = async () => {
     setIsRegenerating(true)
-    await generateImage()
+    await generateImageWithKeywords()
     setIsRegenerating(false)
   }
+
+  useEffect(() => {
+    if (error) {
+      addDialogue(error, Status.FAILED)
+    }
+  }, [addDialogue, error, generatedImageUri])
 
   return (
     <>
