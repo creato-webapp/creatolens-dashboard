@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useMemo } from 'react'
+import React, { useState, useCallback, useMemo, useEffect } from 'react'
 
 import Outline from '@components/Button/Outline'
 import Primary from '@components/Button/Primary'
@@ -18,6 +18,17 @@ const Step1 = () => {
   }, [])
 
   const isNextDisabled = useMemo(() => text.trim().length === 0, [text])
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const currentUrl = window.location.href
+    const urlParams = new URLSearchParams(new URL(currentUrl).search)
+    const hashtags = urlParams.get('hashtags')?.split(',')
+    // Each hashtag remove leading space
+    const trimmedHashtags = hashtags?.map((tag: string) => tag.trim().replace(/^_/, '#'))
+    const hashtag = trimmedHashtags ? trimmedHashtags.join(', ') : null
+    setText(hashtag || '')
+  }, [])
 
   return (
     <>

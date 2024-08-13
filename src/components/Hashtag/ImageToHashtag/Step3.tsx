@@ -7,6 +7,7 @@ import DropdownCheckbox from '@components/Form/DropdownCheckbox'
 import { getImageHashtag } from '@services/HashtagHelper'
 import { useImageHashtagContext } from '@hooks/UseImagetoHashtag'
 import { IHashet } from 'pages/recommendation'
+import router from 'next/router'
 
 interface Option {
   label: string
@@ -101,6 +102,21 @@ const Step3: React.FC = () => {
     navigator.clipboard.writeText(selected.join(', '))
   }, [categorizedOptions])
 
+  const generateImageByHashtag = useCallback(async () => {
+    if (categorizedOptions) {
+      try {
+        const checkedOptions = categorizedOptions.flatMap((option) =>
+          option.options.filter((opt) => opt.checked).map((opt) => opt.label.replace(/#/g, '_'))
+        )
+        if (checkedOptions.length > 0) {
+          router.push(`/hashtag/hashtag-to-image?hashtags=${checkedOptions.join(', ')}`)
+        }
+      } catch (error) {
+        console.error('Error fetching hashtags:', error)
+      }
+    }
+  }, [categorizedOptions])
+
   const labelOptions = useMemo(() => {
     if (!currentImage?.labels) return null
     return currentImage.labels.map((label) => ({
@@ -161,7 +177,7 @@ const Step3: React.FC = () => {
             Select All
           </Primary>
         </div>
-        <Primary sizes={['l', 'l', 'l']} className="w-full" onClick={fetchHashtags}>
+        <Primary sizes={['l', 'l', 'l']} className="w-full" onClick={generateImageByHashtag}>
           + Generate Image
         </Primary>
         <Outline sizes={['l', 'l', 'l']} className="w-full">
