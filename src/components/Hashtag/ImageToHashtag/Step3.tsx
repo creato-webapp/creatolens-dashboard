@@ -69,7 +69,7 @@ const Step3: React.FC = () => {
 
   useEffect(() => {
     fetchHashtags()
-  })
+  }, [])
 
   const updateOptions = useCallback((updateFn: (opt: Option) => Option) => {
     setCategorizedOptions((prevOptions) =>
