@@ -1,26 +1,27 @@
 // cypress/integration/homepage_spec.js
+import 'cypress-file-upload'
 
 describe('Hashtag to Image', () => {
   beforeEach(() => {
     cy.visit('/')
-
-    // Log in as a user
-    cy.fixture('user').then((user) => {
-      cy.login(user)
-    })
-
-    cy.visit('/hashtag/image-to-hashtag')
-  })
-  it('successfully loads', () => {
-    cy.visit('/') // Change '/' to your Next.js local dev URL, e.g., 'http://localhost:3000'
+    cy.login('google')
+    cy.visit('/hashtag/hashtag-to-image')
   })
 
   it('contains the correct title', () => {
-    cy.visit('/')
-    cy.contains('Get Your Content Seen') // Replace 'Your Page Title Here' with a title or text present on your homepage
-    cy.contains("Elevate your content's visibility with 100% personalised hashtag trend recommendations.") // Replace 'Your Page Title Here' with a title or text present on your homepage
+    cy.get('h1').contains('HASHTAG TO IMAGE')
+    cy.get('h2').contains('Keywords input')
+    cy.get('textarea').should('be.visible')
+    // input text in textarea
+    cy.get('textarea').type('Happy Cat playing with a Dog')
+    cy.get('button').contains('Next').click()
+    cy.get('h2').contains('Format')
+    cy.get('h2').contains('Aspect ratio')
+    cy.get('h2').contains('General')
 
-    // Check button is present and clickable
-    cy.get('button').contains('Free Trial').click()
+    cy.get('button').contains('Generate Image').click()
+
+    cy.get('.react-loading-skeleton').should('exist')
+    cy.get('h4').contains('Here is the image based on your description. Re-organize input below to get new images.')
   })
 })

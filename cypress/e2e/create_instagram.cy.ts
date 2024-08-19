@@ -2,11 +2,7 @@ describe('Create Instagram Page', () => {
   beforeEach(() => {
     cy.visit('/')
     // Log in as a user
-    cy.login()
-
-    cy.intercept('*', (req) => {
-      req.headers['X-Test-Auth-Token'] = Cypress.env('X_Test_Auth_Token')
-    }).as('allRequests')
+    cy.login('google')
   })
 
   it('should create a new Instagram account', () => {
@@ -27,14 +23,17 @@ describe('Create Instagram Page', () => {
 
     // Fill in the username field and assert the value
     const username = generateRandomUsername()
-    cy.get('input#username').type(username).should('have.value', username)
+    cy.get('input#username').type(username)
+    cy.get('input#username').should('have.value', username)
 
     // Fill in the password field and assert the value
     const password = 'oskdpfI@OJ#OJd'
-    cy.get('input#pwd').type(password).should('have.value', password)
+    cy.get('input#pwd').type(password)
+    cy.get('input#pwd').should('have.value', password)
 
     // Check the 'Acknowledge' checkbox and assert it is checked
-    cy.get('input#acknowledge').check().should('be.checked')
+    cy.get('input#acknowledge').check()
+    cy.get('input#acknowledge').should('be.checked')
 
     // Assert the submit button is enabled and click it
     cy.get('button[type="submit"]').should('not.be.disabled').click()
