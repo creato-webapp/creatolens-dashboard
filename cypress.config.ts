@@ -1,7 +1,6 @@
 import { defineConfig } from 'cypress'
 import plugin from './cypress/plugins/index'
 import { config } from 'dotenv'
-import fs from 'fs'
 
 config()
 
@@ -28,17 +27,8 @@ export default defineConfig({
         const removeFlags = ['--enable-automation']
         launchOptions.args = launchOptions.args.filter((value) => !removeFlags.includes(value))
         return launchOptions
-      }),
-        on('after:spec', (spec: Cypress.Spec, results: CypressCommandLine.RunResult) => {
-          if (results && results.video) {
-            // Do we have failures for any retry attempts?
-            const failures = results.tests.some((test) => test.attempts.some((attempt) => attempt.state === 'failed'))
-            if (!failures) {
-              // delete the video if the spec passed and no tests retried
-              fs.unlinkSync(results.video)
-            }
-          }
-        })
+      })
+
       return plugin(on, config)
     },
   },
