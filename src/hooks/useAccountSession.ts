@@ -10,7 +10,7 @@ export const useAccountSessionPagination = (
   username?: string,
   fallbackData?: PaginationMetadata<IAccountSession[]>
 ) => {
-  const { data, error, mutate, isLoading, ...swr } = useRequest(
+  const { data, error, mutate, isLoading, ...swr } = useRequest<PaginationMetadata<IAccountSession[]>>(
     [XAPI.GET_ACCOUNT_SESSION_PAGINATION, { ...paginationParams, username }],
     METHOD.GET,
     {

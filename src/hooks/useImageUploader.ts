@@ -1,6 +1,5 @@
 import { AxiosError, AxiosRequestConfig } from 'axios'
 
-import { UploadImageResponse } from '@services/Object/ImageBlob'
 import METHOD from '@constants/method'
 import useMutation from './useMutation'
 import { useEffect } from 'react'
@@ -9,6 +8,11 @@ import { useSession } from 'next-auth/react'
 const REQUEST_CONFIG = {
   maxBodyLength: 8 * 1024 * 1024,
   maxContentLength: 8 * 1024 * 1024,
+}
+
+interface UploadImageResponse {
+  code: number
+  data: string
 }
 
 export default function useImageUploader(config?: AxiosRequestConfig, onCompleted?: (path: string) => void, onError?: (error: AxiosError) => void) {

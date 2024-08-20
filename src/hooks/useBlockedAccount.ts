@@ -8,7 +8,7 @@ import METHOD from '@constants/method'
 import XAPI from '@constants/endpoints/xapi'
 
 export const useBlockAccount = (id: string, shouldFetch: boolean = true, fallbackData?: IBlockedAccount) => {
-  const { data, error, mutate, isLoading, ...swr } = useRequest([XAPI.BLOCKED_ACCOUNT + id], METHOD.GET, {
+  const { data, error, mutate, isLoading, ...swr } = useRequest<IBlockedAccount>([XAPI.BLOCKED_ACCOUNT + id], METHOD.GET, {
     shouldFetch,
     refreshInterval: 0,
     fallbackData: fallbackData,

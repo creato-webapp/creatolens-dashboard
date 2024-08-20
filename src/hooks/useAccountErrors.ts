@@ -9,7 +9,7 @@ export const useAccountErrorPagination = (
   username?: string,
   fallbackData?: PaginationMetadata<IAccountError[]>
 ) => {
-  const { data, error, mutate, isLoading, ...swr } = useRequest(
+  const { data, error, mutate, isLoading, ...swr } = useRequest<PaginationMetadata<IAccountError[]>>(
     [
       XAPI.ACCOUNT_ERRORS,
       {

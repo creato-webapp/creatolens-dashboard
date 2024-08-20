@@ -2,7 +2,7 @@ import { AxiosResponse } from 'axios'
 
 import fetcher from '@helpers/fetcher'
 
-import { Labels } from './Object/ImageBlob'
+import { Labels } from './Object/Gemini'
 
 type ReAnnotateLabelType = {
   existing_labels: string[]
