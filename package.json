@@ -10,6 +10,7 @@
     "lint": "next lint",
     "cy:open": "npm run test & cypress open",
     "cy:run": "npm run test & cypress run",
+    "video:record": "cypress run --no-runner-ui",
     "lint:fix": "next lint --fix",
     "format:fix": "prettier --write --ignore-path .gitignore .",
     "prepare": "husky"
