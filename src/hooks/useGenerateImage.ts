@@ -26,16 +26,18 @@ export function useGenerateImage(): UseGenerateImageResult {
   const generateImage = useCallback(async (data: ImageGenerationData) => {
     setIsLoading(true)
     setError(null)
+    setGeneratedImageUri(null)
     try {
       const uri = await renderPromptAndGenImage(data)
       setGeneratedImageUri(uri)
     } catch (err) {
-      setError('Failed to generate image. Please try again.')
+      if (err instanceof Error) {
+        setError(err.message)
+      }
     } finally {
       setIsLoading(false)
     }
   }, [])
-
   return {
     generatedImageUri,
     isLoading,

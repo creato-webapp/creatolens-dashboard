@@ -37,7 +37,13 @@ const Step3 = () => {
       <div className="mt-4 flex items-center justify-center">
         <div className="relative my-4 h-56 w-full">
           {(isLoading || isRegenerating) && <Skeleton height="100%" width="100%" className="rounded-3xl" />}
-          {error && <p className="text-center text-red-500">{error}</p>}
+          {error && (
+            <div className="flex flex-col items-center justify-center gap-4">
+              <Image src={'/failed-icon.svg'} height={48} width={48} alt={'help-circle'} />
+
+              <p className="text-center text-3xl font-bold text-red-500">{error}</p>
+            </div>
+          )}
           {!isLoading && !isRegenerating && !error && generatedImageUri && (
             <Image
               fill={true}
