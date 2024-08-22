@@ -104,7 +104,7 @@ const Step2 = () => {
         </div>
         <div>
           <div className="flex flex-col gap-4">
-            <OutlinePrimaryButton sizes={['l', 'l', 'l']} onClick={selectAllLabels}>
+            <OutlinePrimaryButton sizes={['l', 'l', 'l']} onClick={selectAllLabels} disabled={loadingLabels}>
               Select All
             </OutlinePrimaryButton>
             <Outline
@@ -115,7 +115,7 @@ const Step2 = () => {
               <Image src={ARROWS_CLOCKWISE_ICON} height={24} width={24} alt="arrows clockwise" />
               Re-annotate
             </Outline>
-            <Primary sizes={['l', 'l', 'l']} onClick={goForward}>
+            <Primary sizes={['l', 'l', 'l']} onClick={goForward} disabled={loadingLabels}>
               + Get Hashtag
             </Primary>
           </div>

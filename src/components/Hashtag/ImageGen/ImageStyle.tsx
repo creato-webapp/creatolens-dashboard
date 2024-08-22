@@ -16,7 +16,7 @@ const ImageStyle = ({ imageConfigStyles, imageConfigSelect }: ImageStyleProps) =
   if (!imageStyles) return null
 
   return (
-    <div className="grid1cols-2 grid h-auto gap-4 md:grid-cols-4">
+    <div className="grid h-auto grid-cols-2 gap-4 md:grid-cols-4">
       {Object.entries(imageStyles).map(([key, value]) => (
         <div
           key={key}

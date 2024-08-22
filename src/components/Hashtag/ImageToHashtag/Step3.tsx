@@ -29,6 +29,8 @@ const Step3: React.FC = () => {
   const [categorizedOptions, setCategorizedOptions] = useState<CategoryOption[]>([])
 
   useEffect(() => {
+    if (!hashtags) return
+
     const categorizeHashtags = (hashtags: IHashet[], confidenceLevel: { filter: (h: IHashet) => boolean }) =>
       hashtags.filter(confidenceLevel.filter).map((hashtag) => ({
         label: hashtag.hashtag,
