@@ -45,24 +45,50 @@ export const instance = createInstance(
 
 const fetcher = {
   [METHOD.GET]: async <T, D = unknown>(url: string, config?: AxiosRequestConfig<D>) => {
-    const response = await instance.get<T>(url, config).then((res) => res.data)
-    return response
+    try {
+      console.log('config',config)
+      const response = await instance.get<T>(url, config).then((res) => res.data)
+      return response
+    } catch (error) {
+      console.error('GET request failed:', error)
+      throw error
+    }
   },
   [METHOD.POST]: async <T, D = unknown>(url: string, data?: D, config?: AxiosRequestConfig<D>) => {
-    const response = await instance.post<T>(url, data, config).then((res) => res.data)
-    return response
+    try {
+      const response = await instance.post<T>(url, data, config).then((res) => res.data)
+      return response
+    } catch (error) {
+      console.error('POST request failed:', error)
+      throw error
+    }
   },
   [METHOD.PATCH]: async <T, D = unknown>(url: string, data?: D, config?: AxiosRequestConfig<D>) => {
-    const response = await instance.patch<T>(url, data, config).then((res) => res.data)
-    return response
+    try {
+      const response = await instance.patch<T>(url, data, config).then((res) => res.data)
+      return response
+    } catch (error) {
+      console.error('PATCH request failed:', error)
+      throw error
+    }
   },
   [METHOD.PUT]: async <T, D = unknown>(url: string, data?: D, config?: AxiosRequestConfig<D>) => {
-    const response = await instance.put<T>(url, data, config).then((res) => res.data)
-    return response
+    try {
+      const response = await instance.put<T>(url, data, config).then((res) => res.data)
+      return response
+    } catch (error) {
+      console.error('PUT request failed:', error)
+      throw error
+    }
   },
   [METHOD.DELETE]: async <T, D = unknown>(url: string, config?: AxiosRequestConfig<D>) => {
-    const response = await instance.delete<T>(url, config).then((res) => res.data)
-    return response
+    try {
+      const response = await instance.delete<T>(url, config).then((res) => res.data)
+      return response
+    } catch (error) {
+      console.error('DELETE request failed:', error)
+      throw error
+    }
   },
 } as const
 

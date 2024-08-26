@@ -1,11 +1,5 @@
 import axios from 'axios'
 import type { NextApiRequest, NextApiResponse } from 'next'
-import fs from 'fs'
-
-import FormData from 'form-data'
-import formidable from 'formidable'
-import { parseForm } from '@helpers/form'
-import { ImageInstance } from '@helpers/axios'
 
 export const config = {
   api: {
@@ -35,33 +29,9 @@ export default async function CloudStorage(req: NextApiRequest, res: NextApiResp
       } catch (error) {
         return res.status(500).json({ message: 'Something went wrong in recommendation stage', error: error })
       }
-    case 'POST':
-      try {
-        const { fields, files } = await parseForm(req)
 
-        const fileArray = files.file as formidable.File[]
-        const usernameArray = fields.username as string[]
-
-        const file = fileArray[0] as formidable.File
-        const fileStream = fs.createReadStream(file.filepath)
-
-        const formData = new FormData()
-
-        formData.append('file', fileStream, file.originalFilename as string)
-        formData.append('username', usernameArray[0] as string)
-
-        const response = await ImageInstance.post(`/api/image-tagen`, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        })
-        return res.status(response.status).json(response.data)
-      } catch (error) {
-        console.error('Error uploading image:', error)
-        return res.status(500).send({ message: 'Internal Server Error', error })
-      }
     default:
-      res.setHeader('Allow', ['GET', 'POST'])
+      res.setHeader('Allow', ['GET'])
       res.status(405).end(`Method ${method} Not Allowed`)
   }
 }

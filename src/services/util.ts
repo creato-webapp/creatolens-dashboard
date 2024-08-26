@@ -1,3 +1,4 @@
+import { PaginationParams } from '@hooks/usePagination'
 import axios from 'axios'
 import { User } from 'next-auth'
 
@@ -58,4 +59,16 @@ export function base64ToBlob(base64: string, mimeType: string) {
   }
 
   return new Blob(byteArrays, { type: mimeType })
+}
+
+export const buildUrlWithParams = (url: string, params: PaginationParams) => {
+  const queryString = Object.keys(params)
+    .filter((key) => params[key as keyof PaginationParams] !== null && params[key as keyof PaginationParams] !== undefined) // Filter out null and undefined values
+    .map((key) => {
+      const value = params[key as keyof PaginationParams]
+      return `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`
+    })
+    .join('&')
+
+  return queryString ? `${url}?${queryString}` : url
 }

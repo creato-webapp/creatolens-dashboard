@@ -10,7 +10,7 @@ import EditIcon from '@components/Icon/EditIcon'
 import Pagination from '@components/Pagination'
 import { Table } from '@components/Table'
 import { usePagination } from '@hooks/usePagination'
-import { useGetRetryAccountsPagination } from '@hooks/useRetryAccount'
+import { useRetryAccounts } from '@hooks/useRetryAccount'
 import { PaginationMetadata } from '@services/Account/AccountInterface'
 import { getRetryAccountsPagination } from '@services/Account/RetryAccount'
 
@@ -44,7 +44,7 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
 const RetryAccountsPage = ({ paginationData }: Props) => {
   const { pageParams, onPageClick, updateSort, updateOrderBy, onNextClick, onPrevClick } = usePagination()
 
-  const { accounts: responseData, error, isLoading } = useGetRetryAccountsPagination(pageParams, paginationData)
+  const { accounts: responseData, error, isLoading } = useRetryAccounts(pageParams, true, paginationData)
   const accounts: IRetryAccount[] = responseData?.data || []
 
   const updateSorting = useCallback(

@@ -62,62 +62,72 @@ const GEO_CODER_API = process.env.GEO_CODER_API
 
 export default handler.api({
   [METHOD.GET]: async (req: NextApiRequest, res: NextApiResponse) => {
-    const {
-      query: { pageNumber, pageSize, orderBy, isAsc },
-    } = req
-    const response = await AccountInstance.get(PAPI.ACCOUNTS, {
-      headers: {
-        Cookie: req.headers.cookie,
-      },
-      params: {
-        page_number: pageNumber,
-        page_size: pageSize,
-        orderby: orderBy,
-        isAsc,
-      },
-    })
-    return res.status(response.status).json(response.data)
+    try {
+      const {
+        query: { pageNumber, pageSize, orderBy, isAsc },
+      } = req
+
+      const response = await AccountInstance.get(PAPI.ACCOUNTS, {
+        headers: {
+          Cookie: req.headers.cookie,
+        },
+        params: {
+          page_number: pageNumber,
+          page_size: pageSize,
+          orderby: orderBy,
+          isAsc,
+        },
+      })
+      return res.status(response.status).json(response.data)
+    } catch (error) {
+      console.error('error', error)
+      return res.status(500).json({ message: 'Error fetching accounts', error })
+    }
   },
   [METHOD.POST]: async (req: NextApiRequest, res: NextApiResponse) => {
-    const { body } = req
-    const cookieHeader = {
-      headers: {
-        Cookie: req.headers.cookie,
-      },
-    }
-    const account = await AccountInstance.post<IAccount>(
-      PAPI.CREATE_NEW_ACCOUNT,
-      {
-        username: body.username,
-        pwd: body.password,
-      },
-      cookieHeader
-    )
+    try {
+      const { body } = req
+      const cookieHeader = {
+        headers: {
+          Cookie: req.headers.cookie,
+        },
+      }
+      const account = await AccountInstance.post<IAccount>(
+        PAPI.CREATE_NEW_ACCOUNT,
+        {
+          username: body.username,
+          pwd: body.password,
+        },
+        cookieHeader
+      )
 
-    if (account.data.id === undefined) {
-      return res.status(account.status).json(account.data)
-    }
+      if (account.data.id === undefined) {
+        return res.status(account.status).json(account.data)
+      }
 
-    const clientIp = requestIp.getClientIp(req)
-    if (clientIp === null) {
-      return res.status(400).json({ message: 'Client IP not found' })
+      const clientIp = requestIp.getClientIp(req)
+      if (clientIp === null) {
+        return res.status(400).json({ message: 'Client IP not found' })
+      }
+      const geoResponse = GEO_CODER_API
+        ? await axios.get<IGeoResponse>(GEO_CODER_API, {
+            ...cookieHeader,
+            params: {
+              ip: clientIp,
+            },
+          })
+        : null
+      const countryCode = geoResponse?.data.data.features[0].properties.country ?? 'HK'
+      const response = await AccountInstance.patch(
+        `${PAPI.UPDATE_ACCOUNT}/${account.data.id}`,
+        {
+          location: countryCode,
+        },
+        cookieHeader
+      )
+      return res.status(response.status).json(response.data)
+    } catch (error) {
+      return res.status(500).json({ message: 'Error processing request', error })
     }
-    const geoResponse = GEO_CODER_API
-      ? await axios.get<IGeoResponse>(GEO_CODER_API, {
-          ...cookieHeader,
-          params: {
-            ip: clientIp,
-          },
-        })
-      : null
-    const countryCode = geoResponse?.data.data.features[0].properties.country ?? 'HK'
-    const response = await AccountInstance.patch(
-      `${PAPI.UPDATE_ACCOUNT}/${account.data.id}`,
-      {
-        location: countryCode,
-      },
-      cookieHeader
-    )
-    return res.status(response.status).json(response.data)
   },
 })
