@@ -27,7 +27,6 @@ export async function renderPromptAndGenImage(data: PromptData): Promise<string>
         prompt_type: data.imageStyle,
       },
     })
-
     if (typeof response === 'string') {
       return response
     }
@@ -39,6 +38,10 @@ export async function renderPromptAndGenImage(data: PromptData): Promise<string>
         throw new Error(`Unexpected error code: ${response.err_code}`)
     }
   } catch (error) {
-    throw new Error(`Error generating image`)
+    if (error instanceof Error) {
+      throw new Error(`Error generating image: ${error.message}`)
+    } else {
+      throw new Error('Error generating image')
+    }
   }
 }

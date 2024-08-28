@@ -3,25 +3,21 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import PAPI from '@constants/endpoints/papi'
 
 import AccountInstance from '../../../../helpers/axios/Account'
+import METHOD from '@constants/method'
+import handler from '@helpers/api/handlers'
 
-export default async function accountQueryHandler(req: NextApiRequest, res: NextApiResponse) {
-  const {
-    query: { username },
-    method,
-  } = req
-  switch (method) {
-    case 'GET': {
-      const response = await AccountInstance.get(PAPI.QUERY_ACCOUNTS_ERROR, {
-        params: {
-          filter: `document_id == ${username}`,
-          orderby: 'occurred_at',
-          isAsc: false,
-        },
-      })
-      return res.status(response.status).json(response.data)
-    }
-    default:
-      res.setHeader('Allow', ['GET'])
-      res.status(405).end(`Method ${method} Not Allowed`)
-  }
-}
+export default handler.api({
+  [METHOD.GET]: async (req: NextApiRequest, res: NextApiResponse) => {
+    const {
+      query: { username },
+    } = req
+    const response = await AccountInstance.get(PAPI.QUERY_ACCOUNTS_ERROR, {
+      params: {
+        filter: `document_id == ${username}`,
+        orderby: 'occurred_at',
+        isAsc: false,
+      },
+    })
+    return res.status(response.status).json(response.data)
+  },
+})

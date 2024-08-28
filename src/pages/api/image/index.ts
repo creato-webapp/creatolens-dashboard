@@ -6,6 +6,8 @@ import fs from 'fs'
 
 import { parseForm } from '@helpers/form'
 import ImageInstance from '../../../helpers/axios/Image'
+import handler from '@helpers/api/handlers'
+import METHOD from '@constants/method'
 
 export const config = {
   api: {
@@ -13,38 +15,26 @@ export const config = {
   },
 }
 
-export default async function ImageUpload(req: NextApiRequest, res: NextApiResponse) {
-  const { method } = req
+export default handler.api({
+  [METHOD.POST]: async (req: NextApiRequest, res: NextApiResponse) => {
+    const { fields, files } = await parseForm(req)
 
-  switch (method) {
-    case 'POST': {
-      try {
-        const { fields, files } = await parseForm(req)
+    const fileArray = files.file as formidable.File[]
+    const usernameArray = fields.username as string[]
 
-        const fileArray = files.file as formidable.File[]
-        const usernameArray = fields.username as string[]
+    const file = fileArray[0] as formidable.File
+    const fileStream = fs.createReadStream(file.filepath)
 
-        const file = fileArray[0] as formidable.File
-        const fileStream = fs.createReadStream(file.filepath)
+    const formData = new FormData()
 
-        const formData = new FormData()
+    formData.append('file', fileStream, file.originalFilename as string)
+    formData.append('username', usernameArray[0] as string)
 
-        formData.append('file', fileStream, file.originalFilename as string)
-        formData.append('username', usernameArray[0] as string)
-
-        const response = await ImageInstance.post(`/api/image-tagen`, formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        })
-        return res.status(response.status).json(response.data)
-      } catch (error) {
-        console.error('Error uploading image:', error)
-        return res.status(500).send({ message: 'Internal Server Error', error })
-      }
-    }
-    default:
-      res.setHeader('Allow', ['POST'])
-      return res.status(405).end(`Method ${method} Not Allowed`)
-  }
-}
+    const response = await ImageInstance.post(`/api/image-tagen`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+    return res.status(response.status).json(response.data)
+  },
+})

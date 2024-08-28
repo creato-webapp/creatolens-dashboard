@@ -1,3 +1,3 @@
 export enum ImageGenErrorCodeEnums {
-  SensitiveContentError = 4300,
+  SensitiveContentError = 4504,
 }

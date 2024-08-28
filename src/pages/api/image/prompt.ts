@@ -6,6 +6,8 @@ import { CombinedUser } from '@api/auth/[...nextauth]'
 import ImageInstance from '@helpers/axios/Image'
 import fetcher from '@helpers/fetcher'
 import { renderTemplate } from '@helpers/mustache'
+import handler from '@helpers/api/handlers'
+import METHOD from '@constants/method'
 
 type PromptData = {
   imageCategory: {
@@ -19,48 +21,36 @@ type PromptData = {
   usage: string
 }
 
-export default async function postImagePrompt(req: NextApiRequest, res: NextApiResponse) {
-  const { method } = req
+export default handler.api({
+  [METHOD.POST]: async (req: NextApiRequest, res: NextApiResponse) => {
+    const { prompt_type } = req.query
 
-  switch (method) {
-    case 'POST': {
-      try {
-        const { prompt_type } = req.query
-
-        if (!prompt_type) {
-          return res.status(400).json({ error: 'Prompt type is required' })
-        }
-
-        const body = req.body as PromptData
-
-        const decoded = await decode({
-          token: req.cookies['next-auth.session-token'] ?? req.cookies['__Secure-next-auth.session-token'],
-          secret: process.env.JWT_SECRET as string,
-        })
-        const user = decoded?.user as CombinedUser
-
-        const promptTemplate = await fetcher.GET<string>(`/api/remote-config?prompt_type=${prompt_type}`)
-
-        if (!promptTemplate) {
-          return res.status(404).json({ error: 'Prompt template not found' })
-        }
-
-        const renderedPrompt = renderTemplate(promptTemplate, { labels: body.keywords, ...body.imageCategory })
-
-        const response = await ImageInstance.post<string>(`/api/image-tagen/prompt/image`, {
-          prompt: renderedPrompt,
-          user_id: user.id,
-          aspect_ratio: body.aspectRatio,
-        })
-
-        return res.status(200).json(response.data)
-      } catch (error) {
-        console.error('Error generating labels:', error)
-        return res.status(500).json({ message: 'Internal Server Error', error: (error as Error).message })
-      }
+    if (!prompt_type) {
+      return res.status(400).json({ error: 'Prompt type is required' })
     }
-    default:
-      res.setHeader('Allow', ['POST'])
-      return res.status(405).end(`Method ${method} Not Allowed`)
-  }
-}
+
+    const body = req.body as PromptData
+
+    const decoded = await decode({
+      token: req.cookies['next-auth.session-token'] ?? req.cookies['__Secure-next-auth.session-token'],
+      secret: process.env.JWT_SECRET as string,
+    })
+    const user = decoded?.user as CombinedUser
+
+    const promptTemplate = await fetcher.GET<string>(`/api/remote-config?prompt_type=${prompt_type}`)
+
+    if (!promptTemplate) {
+      return res.status(404).json({ error: 'Prompt template not found' })
+    }
+
+    const renderedPrompt = renderTemplate(promptTemplate, { labels: body.keywords, ...body.imageCategory })
+
+    const response = await ImageInstance.post<string>(`/api/image-tagen/prompt/image`, {
+      prompt: renderedPrompt,
+      user_id: user.id,
+      aspect_ratio: body.aspectRatio,
+    })
+
+    return res.status(200).json(response.data)
+  },
+})
