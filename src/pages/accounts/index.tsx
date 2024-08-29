@@ -20,7 +20,7 @@ import { usePagination } from '@hooks/usePagination'
 import { getAccounts } from '@services/Account/Account'
 import { PaginationMetadata } from '@services/Account/AccountInterface'
 import useAccounts from '@hooks/useAccounts'
-
+import { DATE_FORMAT } from '@utils/dayjs'
 type Props = {
   data: PaginationMetadata<IAccount[]>
 }
@@ -94,8 +94,8 @@ const AccountsPage = ({ data }: Props) => {
       sortAvailable: true,
     },
     {
-      title: 'Created Time',
-      dataIndex: 'created_at',
+      title: 'Updated Time',
+      dataIndex: 'updated_at',
     },
     {
       title: 'Created By',
@@ -177,7 +177,7 @@ const AccountsPage = ({ data }: Props) => {
                     <div className="flex items-center text-nowrap text-accent1-600">{e.username}</div>
                   </Table.BodyCell>
                   <Table.DateTimeCell key={`created_at-${e.id}`} date={e.created_at} />
-                  <Table.DateTimeCell key={`updated_at-${e.id}`} date={e.updated_at} />
+                  <Table.DateTimeCell format={DATE_FORMAT.YYYYMMDD_HHMMSS} key={`updated_at-${e.id}`} date={e.updated_at} />
                   <Table.BodyCell key={`created_by-${e.id}`}>{e.created_by}</Table.BodyCell>
 
                   <Table.BodyCell key={`post_scrapped_count-${e.id}`}>{e.post_scrapped_count}</Table.BodyCell>
@@ -222,8 +222,14 @@ const AccountsPage = ({ data }: Props) => {
         <div className="flex w-full flex-col justify-center gap-16 bg-none md:hidden">
           {!isLoading && accounts?.map((e, index) => <ResponsiveAccountCard columns={columns} rowData={e} key={`account_data_${index}`} />)}
         </div>
-        {data && data.total_items > 10 && (
-          <Pagination<IAccount[]> isLoading={isLoading} data={data} onNextClick={onNextClick} onPrevClick={onPrevClick} onPageClick={onPageClick} />
+        {response && response.total_items > 10 && (
+          <Pagination<IAccount[]>
+            isLoading={isLoading}
+            data={response}
+            onNextClick={onNextClick}
+            onPrevClick={onPrevClick}
+            onPageClick={onPageClick}
+          />
         )}
       </Card>
     </>

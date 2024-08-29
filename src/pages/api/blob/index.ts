@@ -1,11 +1,6 @@
 import axios from 'axios'
 import type { NextApiRequest, NextApiResponse } from 'next'
-// import fs from 'fs'
 
-// import FormData from 'form-data'
-// import formidable from 'formidable'
-// import { parseForm } from '@helpers/form'
-// import { ImageInstance } from '@helpers/axios'
 import handler from '@helpers/api/handlers'
 import METHOD from '@constants/method'
 
