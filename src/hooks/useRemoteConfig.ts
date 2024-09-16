@@ -21,11 +21,18 @@ const getAllRemoteConfig = async () => {
 }
 
 const DEFAULT_REFETCH_INTERVAL = 10000
-const DEFAULT_REMOTE_CONFIG_VALUE = await getAllRemoteConfig()
 
 const useRemoteConfig = (key: string, refetchInterval: number | undefined = DEFAULT_REFETCH_INTERVAL) => {
-  const [configValue, setConfigValue] = useState<Value>(DEFAULT_REMOTE_CONFIG_VALUE[key])
+  const [configValue, setConfigValue] = useState<Value | undefined>(undefined)
   const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    const fetchConfigValue = async () => {
+      const defaultConfig = await getAllRemoteConfig()
+      setConfigValue(defaultConfig[key])
+    }
+    fetchConfigValue()
+  }, [key])
 
   useEffect(() => {
     remoteConfig.settings.minimumFetchIntervalMillis = refetchInterval || DEFAULT_REFETCH_INTERVAL

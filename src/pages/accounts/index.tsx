@@ -134,7 +134,7 @@ const AccountsPage = ({ data }: Props) => {
             <h1 className="font-extrabold text-white">ACCOUNTS</h1>
           </div>
           <Link href={ROUTE.ACCOUNT_BOT_CREATE}>
-            <Button.Primary sizes={['s', 'l', 'l']} className="px-2">
+            <Button.Primary sizes={['s', 'l', 'l']} className="px-2" id="create-new-account-button">
               <div className="flex flex-row items-center gap-2">
                 <PlusIcon className="h-6 w-6" />
                 <div className="hidden md:flex">Create New Account</div>
@@ -176,7 +176,7 @@ const AccountsPage = ({ data }: Props) => {
                   <Table.BodyCell key={`username-${e.id}`}>
                     <div className="flex items-center text-nowrap text-accent1-600">{e.username}</div>
                   </Table.BodyCell>
-                  <Table.DateTimeCell key={`created_at-${e.id}`} date={e.created_at} />
+                  <Table.DateTimeCell key={`created_at-${e.id}`} format={DATE_FORMAT.YYYYMMDD_HHMMSS} date={e.created_at} />
                   <Table.DateTimeCell format={DATE_FORMAT.YYYYMMDD_HHMMSS} key={`updated_at-${e.id}`} date={e.updated_at} />
                   <Table.BodyCell key={`created_by-${e.id}`}>{e.created_by}</Table.BodyCell>
 

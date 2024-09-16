@@ -2,14 +2,13 @@ import axios, { AxiosError } from 'axios'
 
 const AccountInstance = axios.create({
   baseURL: process.env.ACCOUNT_SERVICE + '/',
-  // withCredentials: true,
+  withCredentials: true,
   headers: { 'Content-Type': 'application/json' },
   timeout: 5000,
 })
 
 AccountInstance.interceptors.request.use(
   function (config) {
-    // Do something before request is sent
     return config
   },
   function (error) {

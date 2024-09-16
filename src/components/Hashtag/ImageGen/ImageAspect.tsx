@@ -29,7 +29,9 @@ const ImageAspectSelector = ({ aspectRatio, setAspectRatio }: ImageAspectSelecto
         {Object.entries(imageAspectRatios).map(([key, value]) => (
           <div className="flex w-full flex-col items-center justify-center rounded-xl" key={key}>
             <div
-              className={`flex aspect-square h-auto max-h-48 w-full max-w-48 items-center justify-center rounded-xl bg-white px-8 py-4 ${
+              className={`${
+                value.value
+              } flex aspect-square h-auto max-h-48 w-full max-w-48 items-center justify-center rounded-xl bg-white px-8 py-4 ${
                 aspectRatio === value.value ? 'border-4 border-accent1-500' : 'border border-stroke'
               }`}
               onClick={() => setAspectRatio(value.value)}

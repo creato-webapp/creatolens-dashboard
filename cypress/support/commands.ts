@@ -35,7 +35,7 @@ function logIntoGoogle(username: string, password: string) {
     cy.contains('Next').click()
     cy.get('input[type="password"]').type(password, { log: false })
     cy.contains('Next').click()
-    cy.contains('Allow', { timeout: 50000 }).click()
+    cy.contains('Continue', { timeout: 50000 }).click()
   })
   // Return to the original site and verify login success
   cy.get('button[id="login"]').click()
