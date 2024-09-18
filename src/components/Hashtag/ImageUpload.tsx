@@ -81,7 +81,11 @@ const ImageUpload = forwardRef<HTMLInputElement, IImageUpload>((props, fileInput
             <div className=" absolute right-5 top-5 flex h-12 w-12 cursor-pointer rounded-full bg-accent1-500 p-4 text-white" onClick={clearFile}>
               <div className="flex h-full w-full items-center justify-center">X</div>
             </div>
-            <img src={imagePreview} alt="Uploaded" style={{ width: '100%', maxWidth: '100%', maxHeight: 'auto', borderRadius: '10px' }} />
+            <img
+              src={imagePreview}
+              alt="Uploaded"
+              style={{ width: '100%', maxWidth: '100%', maxHeight: '400px', borderRadius: '10px', objectFit: 'contain' }}
+            />
           </div>
         ) : (
           <>
