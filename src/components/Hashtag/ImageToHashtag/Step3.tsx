@@ -9,6 +9,8 @@ import { useImageHashtagContext } from '@hooks/UseImagetoHashtag'
 import { IHashet } from 'pages/recommendation'
 import router from 'next/router'
 import { CONFIDENCE_LEVELS } from '@constants/imageStyle'
+import { useDialogues } from '@hooks/useDialogues'
+import { Status } from '@context/DialogueContext'
 
 interface Option {
   label: string
@@ -23,6 +25,7 @@ interface CategoryOption {
 
 const Step3: React.FC = () => {
   const { images, currentImageIndex, updateSelectedLabels, hashtags, updateHashtag, goBack } = useImageHashtagContext()
+  const { addDialogue } = useDialogues()
 
   const currentImage = useMemo(() => images[currentImageIndex], [images, currentImageIndex])
 
@@ -93,7 +96,8 @@ const Step3: React.FC = () => {
   const onClickCopySelected = useCallback(() => {
     const selected = categorizedOptions.flatMap((option) => option.options.filter((opt) => opt.checked).map((opt) => opt.label))
     navigator.clipboard.writeText(selected.join(', '))
-  }, [categorizedOptions])
+    addDialogue('Copied Successfully', Status.SUCCESS)
+  }, [addDialogue, categorizedOptions])
 
   const generateImageByHashtag = useCallback(async () => {
     if (categorizedOptions) {
