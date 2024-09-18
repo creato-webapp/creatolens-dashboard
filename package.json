@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "test": "PORT=3003 NODE_OPTIONS='--inspect' next dev",
+    "test": "PORT=3003 NODE_ENV=test NODE_OPTIONS='--inspect' next dev",
     "dev": "NODE_OPTIONS='--inspect' next dev",
     "build": "next build",
     "start": "next start",

@@ -20,6 +20,7 @@ export default defineConfig({
   },
   e2e: {
     baseUrl: 'http://localhost:3003',
+    slowTestThreshold: 50000,
     defaultCommandTimeout: 10000,
     setupNodeEvents(on, config) {
       // Remove --enable-automation flag
