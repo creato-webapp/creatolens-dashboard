@@ -1,8 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-import ImageInstance from '../../../helpers/axios/Image'
 import handler from '@helpers/api/handlers'
 import METHOD from '@constants/method'
+import { ImageInstance } from '@helpers/axios'
 
 export default handler.api({
   [METHOD.GET]: async (req: NextApiRequest, res: NextApiResponse) => {

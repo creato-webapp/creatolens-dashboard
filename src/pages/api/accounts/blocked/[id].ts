@@ -2,9 +2,9 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 
 import PAPI from '@constants/endpoints/papi'
 
-import AccountInstance from '../../../../helpers/axios/Account'
 import handler from '@helpers/api/handlers'
 import METHOD from '@constants/method'
+import { AccountInstance } from '@helpers/axios'
 
 export default handler.api({
   [METHOD.GET]: async (req: NextApiRequest, res: NextApiResponse) => {

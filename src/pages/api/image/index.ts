@@ -5,9 +5,9 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import fs from 'fs'
 
 import { parseForm } from '@helpers/form'
-import ImageInstance from '../../../helpers/axios/Image'
 import handler from '@helpers/api/handlers'
 import METHOD from '@constants/method'
+import { ImageInstance } from '@helpers/axios'
 
 export const config = {
   api: {

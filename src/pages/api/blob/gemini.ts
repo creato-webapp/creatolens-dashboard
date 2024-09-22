@@ -2,10 +2,9 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 
 import { LabelImageResponse } from '@services/Object/Gemini'
 
-import BlobInstance from '../../../helpers/axios/Blob'
-
 import handler from '@helpers/api/handlers'
 import METHOD from '@constants/method'
+import { BlobInstance } from '@helpers/axios'
 
 export const config = {
   api: {

@@ -3,11 +3,11 @@ import { decode } from 'next-auth/jwt'
 
 import { CombinedUser } from '@api/auth/[...nextauth]'
 
-import ImageInstance from '@helpers/axios/Image'
 import fetcher from '@helpers/fetcher'
 import { renderTemplate } from '@helpers/mustache'
 import handler from '@helpers/api/handlers'
 import METHOD from '@constants/method'
+import { ImageInstance } from '@helpers/axios'
 
 type PromptData = {
   imageCategory: {
