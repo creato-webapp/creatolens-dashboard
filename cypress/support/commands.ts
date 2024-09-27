@@ -1,78 +1,54 @@
-/* eslint-disable @typescript-eslint/no-namespace */
-/// <reference types="cypress" />
-// ***********************************************
-// This example commands.ts shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
-//
-//
-// -- This is a parent command --
-// Cypress.Commands.add('login', (email, password) => { ... })
-Cypress.Commands.add('login', () => {
-  cy.log('Logging in to Google')
-  cy.request({
-    method: 'POST',
-    url: 'https://www.googleapis.com/oauth2/v4/token',
-    body: {
-      grant_type: 'refresh_token',
-      client_id: Cypress.env('googleClientId'),
-      client_secret: Cypress.env('googleClientSecret'),
-      refresh_token: Cypress.env('googleRefreshToken'),
-    },
-  }).then(({ body }) => {
-    const { access_token, id_token } = body
-
-    cy.request({
-      method: 'GET',
-      url: 'https://www.googleapis.com/oauth2/v3/userinfo',
-      headers: { Authorization: `Bearer ${access_token}` },
-    }).then(({ body }) => {
-      cy.log(body)
-      const userItem = {
-        token: id_token,
-        user: {
-          googleId: body.sub,
-          email: body.email,
-          givenName: body.given_name,
-          familyName: body.family_name,
-          imageUrl: body.picture,
-        },
-      }
-
-      window.localStorage.setItem('googleCypress', JSON.stringify(userItem))
-      window.localStorage.setItem('idToken', JSON.stringify(id_token))
-      cy.visit('/')
-    })
-  })
+Cypress.Commands.add('logout', () => {
+  cy.clearCookie('next-auth.session-token')
 })
-//
-//
-// -- This is a child command --
-// Cypress.Commands.add('drag', { prevSubject: 'element'}, (subject, options) => { ... })
-//
-//
-// -- This is a dual command --
-// Cypress.Commands.add('dismiss', { prevSubject: 'optional'}, (subject, options) => { ... })
-//
-//
-// -- This will overwrite an existing command --
-// Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
-//
-declare global {
-  namespace Cypress {
-    interface Chainable {
-      login(): Chainable<void>
-      // drag(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-      // dismiss(subject: string, options?: Partial<TypeOptions>): Chainable<Element>
-      // visit(originalFn: CommandOriginalFn, url: string, options: Partial<VisitOptions>): Chainable<Element>
-    }
+
+Cypress.Commands.add('login', (SOCIAL_PROVIDER: 'google') => {
+  const log = Cypress.log({
+    displayName: 'Social LOGIN',
+    message: [`🔐 Authenticating | ${SOCIAL_PROVIDER}`],
+    autoEnd: false,
+  })
+  log.snapshot('before')
+
+  switch (SOCIAL_PROVIDER) {
+    case 'google':
+      logIntoGoogle(Cypress.env('GOOGLE_USERNAME'), Cypress.env('GOOGLE_PASSWORD'))
+      break
+
+    default:
+      throw new Error('no social provider configured!')
   }
+
+  log.snapshot('after')
+  log.end()
+})
+
+function logIntoGoogle(username: string, password: string) {
+  Cypress.on('uncaught:exception', (err) => !err.message.includes('ResizeObserver loop') && !err.message.includes('Error in protected function'))
+  cy.visit(Cypress.env('SITE_NAME') + '/auth/login')
+  cy.get('button[id="login"]').click()
+  cy.origin('https://accounts.google.com', { args: { username, password } }, ({ username, password }) => {
+    Cypress.on('uncaught:exception', (err) => !err.message.includes('ResizeObserver loop') && !err.message.includes('Error in protected function'))
+
+    // Perform login on Google page
+    cy.get('input[type="email"]').type(username, { log: false })
+    cy.contains('Next').click()
+    cy.get('input[type="password"]').type(password, { log: false })
+    cy.contains('Next').click()
+    cy.contains('Continue', { timeout: 50000 }).click()
+  })
+  // Return to the original site and verify login success
+  cy.get('button[id="login"]').click()
+  cy.contains('Logout').should('be.visible')
 }
 
-// Prevent TypeScript from reading file as legacy script
-export {}
+function logIntoGoogleSecondTime() {
+  Cypress.on('uncaught:exception', (err) => !err.message.includes('ResizeObserver loop') && !err.message.includes('Error in protected function'))
+  cy.visit(Cypress.env('SITE_NAME') + '/auth/login')
+  cy.get('button[id="login"]').click()
+  cy.contains('Logout').should('be.visible')
+}
+
+Cypress.Commands.add('login_google_second_time', () => {
+  logIntoGoogleSecondTime()
+})

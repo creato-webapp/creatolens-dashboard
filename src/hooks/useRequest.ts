@@ -10,7 +10,9 @@ type IRequestConfig = SWRConfiguration & {
 
 const useRequest = <T = unknown>(key: Key, method: IMethodsType, config?: IRequestConfig) => {
   const [shouldFetch, setShouldFetch] = useState(config?.shouldFetch)
-  const { data, error, mutate: onMutate, ...swr } = useSWR(shouldFetch ? key : null, fetcher[method], config)
+
+  // @ts-expect-error tuple type from key cannot pass correctly into fetcher
+  const { data, error, mutate: onMutate, ...swr } = useSWR(shouldFetch ? key : null, (key) => fetcher[method](...key), config)
 
   const mutate: KeyedMutator<unknown> = useCallback(
     async (data, opts) => {

@@ -1,66 +1,73 @@
-import { useCallback, useState } from 'react'
-
+import React, { useCallback, useRef, useState, useMemo } from 'react'
 import Primary from '@components/Button/Primary'
-import { uploadImage } from '@services/Image'
-import { ImageDetailsType, useImageHashtagContext } from '@context/ImageToHashtagContext'
-
+import { ImageDetailsType } from '@context/ImageToHashtagContext'
 import ImageUpload from '../ImageUpload'
+import useImageUploader from '@hooks/useImageUploader'
+import { imageToBase64 } from '@services/util'
+import { useImageHashtagContext } from '@hooks/UseImagetoHashtag'
 
-export interface StepProps {
-  step: number
-  setStep: (arg: number) => void
-}
-
-const Step1 = (props: StepProps) => {
-  const { setStep } = props
+const Step1 = () => {
   const [uploading, setUploading] = useState<boolean>(false)
-  const [uploadedImage, setUploadedImage] = useState<string>('')
+  const [uploadedImage, setUploadedImage] = useState<File | null>(null)
   const [imageDetails, setImageDetails] = useState<ImageDetailsType>({})
+  const fileInputRef = useRef<HTMLInputElement | null>(null)
 
-  const { addImage } = useImageHashtagContext()
+  const { uploadImage, error } = useImageUploader({ timeout: 30000 })
+  const { addImage, goForward } = useImageHashtagContext()
 
   const onClickButton = useCallback(async () => {
-    if (!uploadedImage || !imageDetails.format || !imageDetails.path) {
-      return
-    }
+    if (!uploadedImage || !imageDetails.format || !imageDetails.path) return
 
     setUploading(true)
     try {
-      const data = {
-        args: { username: 'timothy', file: uploadedImage, imageDetails },
-      }
+      const imageString = await imageToBase64(uploadedImage)
+      if (!imageString) throw new Error('Failed to convert image to base64')
 
-      const uploadedImageResponse = await uploadImage(data)
-      addImage(uploadedImageResponse, [])
-      setUploading(false)
-      setStep(2)
+      const uploadResponse = await uploadImage(uploadedImage)
+      if (!uploadResponse?.data) throw new Error('Upload response is missing data')
+
+      addImage(uploadResponse.data, [])
+      goForward()
     } catch (e) {
+      console.error('Error uploading image:', e)
+    } finally {
       setUploading(false)
     }
-  }, [addImage, imageDetails, setStep, uploadedImage])
-  return (
-    <div className="flex flex-col gap-3 rounded-2xl md:flex-row md:p-12 md:shadow-lg">
-      <h2 className="font-extrabold md:hidden">Image Upload</h2>
-      <div className="mt-4 w-full md:mt-0 md:w-1/2">
-        <ImageUpload uploadedImage={uploadedImage} setUploadedImage={setUploadedImage} setImageDetails={setImageDetails} />
-      </div>
-      <div className="flex w-full flex-col justify-center gap-4 md:w-1/2">
-        <h2 className="hidden font-extrabold md:block">Image Upload</h2>
+  }, [addImage, goForward, imageDetails.format, imageDetails.path, uploadImage, uploadedImage])
 
-        <div className="flex flex-row flex-wrap items-center gap-x-4">
-          {/* <Image src="/image-logo.png" alt="image logo" height={40} width={40} /> */}
-          <h3 className="text-text-secondary">{imageDetails.path}</h3>
-          {imageDetails.size && imageDetails.size > 0 && (
-            <h3 className="text-disabled">File size: {(imageDetails.size / 1024 / 1024).toFixed(2)} MB</h3>
-          )}
-        </div>
-        <div className="flex items-center justify-center">
-          <Primary disabled={uploading} sizes={['m', 'm', 'm']} onClick={onClickButton}>
-            Annotate
-          </Primary>
+  const triggerFileInput = useCallback(() => fileInputRef.current?.click(), [])
+
+  const fileSizeInMB = useMemo(() => (imageDetails.size ? (imageDetails.size / (1024 * 1024)).toFixed(2) : null), [imageDetails.size])
+
+  return (
+    <div className="flex flex-col gap-3 rounded-2xl">
+      <div className="w-full">
+        <h2 className="font-extrabold md:block">Image Upload</h2>
+        <h4 className="my-4 text-text-secondary">
+          Drag and drop or{' '}
+          <span className="cursor-pointer text-accent2-500 underline underline-offset-2" onClick={triggerFileInput}>
+            browse
+          </span>{' '}
+          your files
+        </h4>
+        <div className="flex flex-col items-center justify-center">
+          <div className="mt-4 h-full w-full items-center md:mt-0">
+            <ImageUpload uploadedImage={uploadedImage} setUploadedImage={setUploadedImage} setImageDetails={setImageDetails} ref={fileInputRef} />
+          </div>
+          <div className="flex w-full flex-col justify-center gap-4 md:w-1/2">
+            <div className="flex flex-row flex-wrap items-center gap-x-4">
+              <h3 className="text-text-secondary">{imageDetails.path}</h3>
+              {fileSizeInMB && <h3 className="text-disabled">File size: {fileSizeInMB} MB</h3>}
+            </div>
+            <Primary disabled={uploading} sizes={['m', 'm', 'm']} onClick={onClickButton}>
+              Annotate
+            </Primary>
+            {error && <div>{error.message}</div>}
+          </div>
         </div>
       </div>
     </div>
   )
 }
-export default Step1
+
+export default React.memo(Step1)

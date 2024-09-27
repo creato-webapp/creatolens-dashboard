@@ -1,160 +1,188 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
-
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import Image from 'next/image'
 
 import Outline from '@components/Button/Outline'
 import Primary from '@components/Button/Primary'
 import DropdownCheckbox from '@components/Form/DropdownCheckbox'
 import { getImageHashtag } from '@services/HashtagHelper'
-import { useImageHashtagContext } from '@context/ImageToHashtagContext'
+import { useImageHashtagContext } from '@hooks/UseImagetoHashtag'
+import { IHashet } from 'pages/recommendation'
+import router from 'next/router'
+import { CONFIDENCE_LEVELS } from '@constants/imageStyle'
+import { useDialogues } from '@hooks/useDialogues'
+import { Status } from '@context/DialogueContext'
 
-const Step3 = () => {
-  const { images, currentImageIndex, updateSelectedLabels, hashtags, updateHashtag } = useImageHashtagContext()
+interface Option {
+  label: string
+  value: string
+  checked: boolean
+}
 
-  const dropdownOptions = [
-    {
-      name: 'Larget Than 90% Related',
-      options: hashtags.map((hashtag) => ({
-        label: hashtag,
-        value: hashtag,
-        checked: false,
-      })),
-    },
-  ]
+interface CategoryOption {
+  name: string
+  options: Option[]
+}
+
+const Step3: React.FC = () => {
+  const { images, currentImageIndex, updateSelectedLabels, hashtags, updateHashtag, goBack } = useImageHashtagContext()
+  const { addDialogue } = useDialogues()
+
+  const currentImage = useMemo(() => images[currentImageIndex], [images, currentImageIndex])
+
+  const [categorizedOptions, setCategorizedOptions] = useState<CategoryOption[]>([])
 
   useEffect(() => {
-    const dropdownOptions = [
+    if (!hashtags) return
+
+    const categorizeHashtags = (hashtags: IHashet[], confidenceLevel: { filter: (h: IHashet) => boolean }) =>
+      hashtags.filter(confidenceLevel.filter).map((hashtag) => ({
+        label: hashtag.hashtag,
+        value: hashtag.hashtag,
+        checked: false,
+      }))
+
+    const categorized = [
       {
-        name: 'Larget Than 90% Related',
-        options: hashtags.map((hashtag) => ({
-          label: hashtag,
-          value: hashtag,
-          checked: false,
-        })),
+        name: CONFIDENCE_LEVELS.HIGH.name,
+        options: categorizeHashtags(hashtags, { filter: (h) => h.acc > CONFIDENCE_LEVELS.HIGH.threshold! }),
       },
-    ]
-    setOptions(dropdownOptions)
+      {
+        name: CONFIDENCE_LEVELS.MEDIUM.name,
+        options: categorizeHashtags(hashtags, {
+          filter: (h) => h.acc > CONFIDENCE_LEVELS.MEDIUM.thresholdLow! && h.acc <= CONFIDENCE_LEVELS.MEDIUM.thresholdHigh!,
+        }),
+      },
+      {
+        name: CONFIDENCE_LEVELS.LOW.name,
+        options: categorizeHashtags(hashtags, { filter: (h) => h.acc <= CONFIDENCE_LEVELS.LOW.threshold! }),
+      },
+    ].filter((category) => category.options.length > 0)
+
+    setCategorizedOptions(categorized)
   }, [hashtags])
 
-  useEffect(() => {
-    const fetchHashtags = async () => {
-      if (images[currentImageIndex] && images[currentImageIndex].selectedLabels) {
-        try {
-          const res = await getImageHashtag(images[currentImageIndex].selectedLabels.join(', '))
-          updateHashtag(res.data.map((item) => item.hashtag))
-        } catch (error) {
-          console.error('Error fetching hashtags:', error)
-        }
+  const fetchHashtags = useCallback(async () => {
+    if (currentImage?.selectedLabels) {
+      try {
+        const res = await getImageHashtag(currentImage.selectedLabels.join(', '))
+        updateHashtag(res.data)
+      } catch (error) {
+        console.error('Error fetching hashtags:', error)
       }
     }
+  }, [currentImage?.selectedLabels, updateHashtag])
 
+  useEffect(() => {
     fetchHashtags()
-  }, [currentImageIndex, images, updateHashtag])
+  }, [])
 
-  const [options, setOptions] = useState(dropdownOptions)
-
-  const onClickSelectAll = useCallback(() => {
-    setOptions((prevOptions) =>
-      prevOptions.map((option) => ({
-        ...option,
-        options: option.options.map((opt) => ({ ...opt, checked: true })),
+  const updateOptions = useCallback((updateFn: (opt: Option) => Option) => {
+    setCategorizedOptions((prevOptions) =>
+      prevOptions.map((category) => ({
+        ...category,
+        options: category.options.map(updateFn),
       }))
     )
   }, [])
 
-  const onClickHashtag = useCallback((value: string | number) => {
-    setOptions((prevOptions) =>
-      prevOptions.map((option) => ({
-        ...option,
-        options: option.options.map((opt) => (opt.value === value ? { ...opt, checked: !opt.checked } : opt)),
-      }))
-    )
-  }, [])
-
-  const onClickLabel = useCallback((value: string) => {
-    updateSelectedLabels(value)
-  }, [])
-
-  const onClickClearAll = useCallback(() => {
-    setOptions((prevOptions) =>
-      prevOptions.map((option) => ({
-        ...option,
-        options: option.options.map((opt) => ({ ...opt, checked: false })),
-      }))
-    )
-  }, [])
+  const onClickSelectAll = useCallback(() => updateOptions((opt) => ({ ...opt, checked: true })), [updateOptions])
+  const onClickHashtag = useCallback(
+    (value: string | number) => updateOptions((opt) => (opt.value === value ? { ...opt, checked: !opt.checked } : opt)),
+    [updateOptions]
+  )
+  const onClickLabel = useCallback((value: string | number) => updateSelectedLabels(value as string), [updateSelectedLabels])
+  const onClickClearAll = useCallback(() => updateOptions((opt) => ({ ...opt, checked: false })), [updateOptions])
 
   const onClickCopySelected = useCallback(() => {
-    const selected = options.flatMap((option) => option.options.filter((opt) => opt.checked).map((opt) => `${opt.label}`))
+    const selected = categorizedOptions.flatMap((option) => option.options.filter((opt) => opt.checked).map((opt) => opt.label))
     navigator.clipboard.writeText(selected.join(', '))
-  }, [options])
+    addDialogue('Copied Successfully', Status.SUCCESS)
+  }, [addDialogue, categorizedOptions])
 
-  const currentImage = useMemo(() => {
-    return images[currentImageIndex]
-  }, [images, currentImageIndex])
+  const generateImageByHashtag = useCallback(async () => {
+    if (categorizedOptions) {
+      try {
+        const checkedOptions = categorizedOptions.flatMap((option) =>
+          option.options.filter((opt) => opt.checked).map((opt) => opt.label.replace(/#/g, '_'))
+        )
+        if (checkedOptions.length > 0) {
+          router.push(`/hashtag/hashtag-to-image?hashtags=${checkedOptions.join(', ')}`)
+        }
+      } catch (error) {
+        console.error('Error fetching hashtags:', error)
+      }
+    }
+  }, [categorizedOptions])
 
   const labelOptions = useMemo(() => {
-    if (!currentImage.labels || currentImage.labels.length === 0) return null
-
+    if (!currentImage?.labels) return null
     return currentImage.labels.map((label) => ({
       value: label,
       label,
       checked: currentImage.selectedLabels.includes(label),
     }))
-  }, [currentImage.labels, currentImage.selectedLabels])
+  }, [currentImage?.labels, currentImage?.selectedLabels])
+
+  const hashtagsLength = useMemo(() => categorizedOptions.reduce((acc, option) => acc + option.options.length, 0), [categorizedOptions])
 
   return (
     <div>
-      <h2 className="font-extrabold">Get hashtag recommendation</h2>
-      <div className="relative my-4 h-56 w-full">
-        {images[currentImageIndex] && images[currentImageIndex].image && (
-          <Image
-            fill={true}
-            src={images[currentImageIndex].image as string}
-            objectFit="contain"
-            className="rounded-3xl"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            alt="testing"
-          />
-        )}
-      </div>
+      <h2 className="flex flex-row items-center font-extrabold">
+        <div className="required relative h-6 w-6 cursor-pointer items-center justify-center px-4 text-center text-2xl text-black" onClick={goBack}>
+          <Image src="/back.svg" fill alt="back" />
+        </div>
+        <span className="flex items-center font-extrabold">Get hashtag recommendation</span>
+      </h2>
 
-      <div className="flex flex-col gap-4">
-        {labelOptions && labelOptions?.length > 0 && (
-          <DropdownCheckbox key={`${'label'}-dropdown`} name={'Label'} options={labelOptions} onValueChange={(val) => onClickLabel(val as string)} />
-        )}
-        {options.map((option) => {
-          return <DropdownCheckbox key={`${option.name}-dropdown`} name={option.name} options={option.options} onValueChange={onClickHashtag} />
-        })}
-      </div>
+      {currentImage?.image && (
+        <div className="relative my-4 flex aspect-square h-48 w-full items-center rounded-full md:min-w-fit md:justify-center">
+          <Image
+            fill
+            src={currentImage.image}
+            objectFit="contain"
+            className="w-fit rounded-4xl"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            alt="current image"
+          />
+        </div>
+      )}
+
+      {labelOptions && (
+        <div className="flex flex-col gap-4">
+          <DropdownCheckbox dropDownSizes={['l', 'l', 'l']} key="label-dropdown" name="Label" options={labelOptions} onValueChange={onClickLabel} />
+        </div>
+      )}
+
+      <div className="my-4 border-b md:hidden" />
+      <h3 className="my-4 text-text-secondary">{`${hashtagsLength} hashtags discovered`}</h3>
+
+      {categorizedOptions.map((option) => (
+        <div key={`${option.name}-dropdown`} className="my-4">
+          <DropdownCheckbox dropDownSizes={['l', 'l', 'l']} name={option.name} options={option.options} onValueChange={onClickHashtag} />
+        </div>
+      ))}
+
       <div className="my-4 flex w-full flex-col gap-4">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 md:grid-cols-3">
-          <Outline onClick={onClickClearAll} sizes={['m', 'l', 'l']}>
+          <Outline onClick={onClickClearAll} sizes={['s', 'l', 'l']}>
             Clear All
           </Outline>
-          <Primary onClick={onClickCopySelected} sizes={['m', 'l', 'l']}>
+          <Primary onClick={onClickCopySelected} sizes={['s', 'l', 'l']}>
             Copy Selected
           </Primary>
-          <Primary onClick={onClickSelectAll} sizes={['m', 'l', 'l']}>
+          <Primary onClick={onClickSelectAll} sizes={['s', 'l', 'l']}>
             Select All
           </Primary>
         </div>
-        <div className="w-full">
-          <Primary
-            sizes={['m', 'l', 'l']}
-            onClick={async () => {
-              if (!currentImage.labels) return null
-              const res = await getImageHashtag(currentImage.labels.join(', '))
-              updateHashtag(res.data.map((item) => item.hashtag))
-              // console.log(res.data.map((item) => item.hashtag))
-            }}
-          >
-            + Use Result to Generate Image
-          </Primary>
-        </div>
+        <Primary sizes={['l', 'l', 'l']} className="w-full" onClick={generateImageByHashtag}>
+          + Generate Image
+        </Primary>
+        <Outline sizes={['l', 'l', 'l']} className="w-full">
+          Restart
+        </Outline>
       </div>
     </div>
   )
 }
 
-export default Step3
+export default React.memo(Step3)

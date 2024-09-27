@@ -1,4 +1,5 @@
 const { i18n } = require('./next-i18next.config')
+const env = require('./env.config')
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -6,6 +7,7 @@ const nextConfig = {
   eslint: {
     dirs: ['src'],
   },
+  env,
   reactStrictMode: true,
   swcMinify: true,
   // async rewrites() {
