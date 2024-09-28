@@ -171,7 +171,7 @@ const AccountInfoCard: React.FC<AccountInfoCardProps> = ({ account }) => {
   const combinedField: IField[] = [...accountInfoField, ...checkBoxField, ...fields]
 
   const handleClick = useCallback(() => {
-    onCloseRegistry(() => console.log('test')) // eslint-disable-line no-console
+    onCloseRegistry(() => {}) // eslint-disable-line no-console
     openModal(ModalKeyEnum.SESSION)
     return () => {
       onClearCallbacks

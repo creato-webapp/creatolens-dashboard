@@ -21,6 +21,7 @@ const useAccounts = (paginationParams: PaginationParams, defaultShouldFetch?: bo
       refreshInterval: 0,
       fallbackData: fallbackData,
       revalidateOnMount: false,
+      keepPreviousData: true,
     }
   )
   useEffect(() => {

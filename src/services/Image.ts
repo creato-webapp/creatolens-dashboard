@@ -1,9 +1,6 @@
 import { AxiosRequestConfig, AxiosResponse } from 'axios'
 
-import { ImageDetailsType } from '@context/ImageToHashtagContext'
 import fetcher from '@helpers/fetcher'
-
-import { base64ToBlob } from './util'
 
 export async function getImageUploadUrl(
   data: {
@@ -22,49 +19,6 @@ export async function getImageUploadUrl(
     },
   })
   return response
-}
-
-export async function uploadImage(
-  data: {
-    args: {
-      username: string
-      file: string
-      imageDetails: ImageDetailsType // here is not string
-    }
-  },
-  customConfig?: AxiosRequestConfig
-) {
-  try {
-    const { file, imageDetails, username } = data.args
-
-    if (!imageDetails.format) {
-      throw new Error('Image format is required.')
-    }
-
-    const blobBody = base64ToBlob(file, imageDetails.format)
-
-    const formData = new FormData()
-    formData.append('file', blobBody, imageDetails.path)
-    formData.append('username', username)
-
-    const tempConfig = {
-      maxBodyLength: 8 * 1024 * 1024,
-      maxContentLength: 8 * 1024 * 1024,
-      ...customConfig,
-    }
-
-    const response = await fetcher.POST<AxiosResponse>('/api/image', formData, {
-      ...tempConfig,
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        keepAlive: false,
-      },
-    })
-    return response.data
-  } catch (error) {
-    console.error('Error uploading image:', error)
-    throw error
-  }
 }
 
 type ImageLabelResponseType = {
@@ -86,4 +40,14 @@ export async function getImageLabel(imagePath: string) {
     },
   })
   return response.data.labels
+}
+
+export async function getImageByPrompt(prompt: string) {
+  const response = await fetcher.POST<AxiosResponse>('/api/image-gen', prompt, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      keepAlive: false,
+    },
+  })
+  return response
 }

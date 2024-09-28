@@ -23,7 +23,7 @@ export async function getRoles(userEmail: string) {
 }
 
 export const imageToBase64 = (file: File): Promise<string | null> => {
-  return new Promise<string | null>((resolve, reject) => {
+  return new Promise<string>((resolve, reject) => {
     const reader = new FileReader()
 
     reader.onload = () => {
@@ -37,8 +37,6 @@ export const imageToBase64 = (file: File): Promise<string | null> => {
 
     if (file) {
       reader.readAsDataURL(file)
-    } else {
-      resolve(null)
     }
   })
 }
