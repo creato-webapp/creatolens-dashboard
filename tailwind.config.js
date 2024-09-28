@@ -1,11 +1,7 @@
+/** @type {import('tailwindcss').Config} */
+
 module.exports = {
-  darkMode: 'class',
-  fonts: [
-    {
-      family: 'Lato',
-      variants: ['300', '400', '700', '900'],
-    },
-  ],
+  darkMode: 'selector',
   content: ['./src/pages/**/*.{js,ts,jsx,tsx}', './src/components/**/*.{js,ts,jsx,tsx}', './src/lib/**/*.{js,ts,jsx,tsx}'],
   safelist: [
     {
@@ -22,8 +18,7 @@ module.exports = {
   ],
   theme: {
     fontFamily: {
-      lato: ['Lato', 'system-ui'],
-      // Add more font families if needed
+      sans: ['Inter', 'sans-serif'], // Setting Inter as the primary sans-serif font
     },
     screens: {
       sm: '425px',
@@ -36,6 +31,11 @@ module.exports = {
         8: '2rem',
       },
       fontSize: {
+        hero: ['4.5rem', { lineHeight: '5.4rem', fontWeight: 'bold' }],
+        title: ['3rem', { lineHeight: '3.6rem', fontWeight: 'bold' }],
+        subtitle: ['1.5rem', { lineHeight: '1.8rem', fontWeight: 'bold' }],
+        heading: ['1.5rem', { lineHeight: '1.8rem', fontWeight: '600' }],
+        subheading: ['1.25rem', { lineHeight: '1.5rem' }],
         xs: '0.75rem',
         sm: '0.875rem',
         base: '1rem',
@@ -101,18 +101,6 @@ module.exports = {
           200: '#A7BDFB',
           100: '#D3DFFD',
         },
-        successful: {
-          1000: '#013E4A',
-          900: '#026765',
-          800: '#047D6E',
-          700: '#079B7B',
-          600: '#0AB982',
-          500: '#0FD884',
-          400: '#45E793',
-          300: '#6BF39F',
-          200: '#9DFBB8',
-          100: '#CDFDD6',
-        },
         error: {
           1000: '#56063A',
           900: '#780D3D',
@@ -125,17 +113,71 @@ module.exports = {
           200: '#FEC3B5',
           100: '#FEE4DA',
         },
+        primary: {
+          900: '#711330',
+          800: '#892037',
+          700: '#AA3343',
+          600: '#D15456',
+          500: '#ED6C67',
+          400: '#F4998C',
+          300: '#F9B6A4',
+          200: '#FDD4C3',
+          100: '#FFECE1',
+        },
+        secondary: {
+          900: '#142342',
+          800: '#223450',
+          700: '#364A64',
+          600: '#50606D',
+          500: '#6C7D8B',
+          400: '#9AADB9',
+          300: '#BED2DC',
+          200: '#DDEDF3',
+          100: '#EEF6F9',
+        },
+        danger: {
+          900: '#B00524',
+          800: '#BD0726',
+          700: '#D00B29',
+          600: '#E40F2A',
+          500: '#F8122A',
+          400: '#FF2736',
+          300: '#FF363E',
+          200: '#FF5050',
+          100: '#FFE6C6',
+        },
+        successful: {
+          900: '#026765',
+          800: '#467918',
+          700: '#609626',
+          600: '#7DB338',
+          500: '#9CD14D',
+          400: '#BCE377',
+          300: '#D3F195',
+          200: '#E8FABB',
+          100: '#F5FCDC',
+        },
         warning: {
-          1000: '#573F03',
-          900: '#7A5F07',
-          800: '#93760C',
-          700: '#B79614',
-          600: '#DBB81D',
-          500: '#FFDB28',
-          400: '#FFE65D',
-          300: '#FFED7E',
-          200: '#FFF5A9',
-          100: '#FFFAD3',
+          900: '#6A4C1A',
+          800: '#866E0F',
+          700: '#A77118',
+          600: '#E5A000',
+          500: '#EB9314',
+          400: '#F1D062',
+          300: '#F8E082',
+          200: '#FCEAAC',
+          100: '#FDF7D5',
+        },
+        neutral: {
+          900: '#000000',
+          800: '#1E1E1E',
+          700: '#383838',
+          600: '#444444',
+          500: '#757575',
+          400: '#B2B2B2',
+          300: '#D9D9D9',
+          200: '#F5F5F5',
+          100: '#FFFFFF',
         },
       },
       animation: {
