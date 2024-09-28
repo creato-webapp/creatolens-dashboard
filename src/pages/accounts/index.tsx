@@ -131,7 +131,7 @@ const AccountsPage = ({ data }: Props) => {
       >
         <div className="flex h-full flex-row justify-between px-4 md:flex-col">
           <div>
-            <h1 className="font-extrabold text-white">ACCOUNTS</h1>
+            <h1 className="text-title font-extrabold text-white">ACCOUNTS</h1>
           </div>
           <Link href={ROUTE.ACCOUNT_BOT_CREATE}>
             <Button.Primary sizes={['s', 'l', 'l']} className="px-2" id="create-new-account-button">

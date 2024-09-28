@@ -163,7 +163,7 @@ const Dashboard = ({ botList }: Props) => {
         childrenStyle="h-full md:gap-3 flex-col flex py-4 md:py-16 justify-center"
       >
         <div>
-          <h1 className="uppercase md:font-extrabold">TREND ANALYSIS</h1>
+          <h1 className="text-title uppercase md:font-extrabold">TREND ANALYSIS</h1>
         </div>
       </Hero>
       {!botList || botList.length == 0 ? (

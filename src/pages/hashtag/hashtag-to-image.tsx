@@ -30,7 +30,7 @@ const HashtagToImage = () => {
           <h2 className="w-20">Image</h2>
         </div>
         <div>
-          <h1 className="font-extrabold">HASHTAG TO IMAGE</h1>
+          <h1 className="text-title font-extrabold">HASHTAG TO IMAGE</h1>
         </div>
         <div className="my-7">
           <ProgressBar total_step={3} current_step={step} />

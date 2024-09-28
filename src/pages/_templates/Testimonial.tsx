@@ -67,7 +67,7 @@ const TestimonialCards: React.FC<TestimonialCardsProps> = ({ comments = testimon
                   className="h-10 w-10 shrink-0 rounded-full object-cover object-center"
                 />
               ) : (
-                <div className="relative h-6 w-6 overflow-hidden rounded-full bg-gray-100 dark:bg-gray-600 md:h-10 md:w-10">
+                <div className="relative h-6 w-6 overflow-hidden rounded-full bg-gray-100 md:h-10 md:w-10 dark:bg-gray-600">
                   <svg
                     className="absolute -bottom-1 h-6 w-6 text-gray-400 md:h-10 md:w-10"
                     fill="currentColor"

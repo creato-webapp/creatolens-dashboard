@@ -20,7 +20,7 @@ export default function LandingHeader(props: LandingHeaderProps) {
     >
       <div className="flex flex-col md:ml-12 md:w-1/2">
         <span className="text-center md:text-left">
-          <h1 className=" text-4xl text-accent1-500">Creato Lens</h1>
+          <h1 className="text-title text-accent1-500">Creato Lens</h1>
           <div className="text-m-landing-title font-extrabold text-text-secondary md:text-d-landing-title">
             Get Your <br />
             <span className="text-m-landing-title font-extrabold text-text-secondary md:text-d-landing-title">Content&nbsp;</span>

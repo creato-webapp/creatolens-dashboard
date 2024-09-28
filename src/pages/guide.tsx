@@ -24,7 +24,7 @@ const Guide: NextPage = () => {
           className="flex h-full flex-col justify-between md:h-52"
           childrenStyle="h-full md:gap-3 flex-col flex md:py-24 justify-center"
         >
-          <h1 className="uppercase md:font-extrabold">User Guide</h1>
+          <h1 className="text-title uppercase md:font-extrabold">User Guide</h1>
           <h3 className="md:font-medium">3 Easy Steps to Kick-start</h3>
         </Hero>
         <div className="flex w-full flex-col items-center justify-start gap-6 md:flex-row md:flex-wrap md:items-stretch md:justify-center md:gap-12 md:p-12">

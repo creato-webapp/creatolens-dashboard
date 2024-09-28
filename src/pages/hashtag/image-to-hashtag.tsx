@@ -44,7 +44,7 @@ const ImageToHashtag = () => {
         <div className="my-4 border-b"></div>
         <div>
           <div className="flex">
-            <h1 className="font-extrabold">IMAGE TO HASHTAG</h1>
+            <h1 className="text-title font-extrabold">IMAGE TO HASHTAG</h1>
             <Image
               onClick={() => setIsDetailsPageOpen((pre) => !pre)}
               className="mx-3 cursor-pointer"

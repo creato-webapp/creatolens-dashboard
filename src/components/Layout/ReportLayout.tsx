@@ -164,12 +164,12 @@ const ReportLayout = (props: Prop) => {
           {
             <div>
               <h2>Top 10 Keywords</h2>
-              <div className="font-lato font-medium italic text-text-secondary">&quot;From hashtags, captions, locations&quot;</div>
+              <div className="font-medium italic text-text-secondary">&quot;From hashtags, captions, locations&quot;</div>
               <div className="flex w-full flex-row flex-wrap text-xl">
                 {keyword ? (
                   keyword.map((item: { term: string; count: number }, index: number) => {
                     return (
-                      <div key={item.term} className="flex flex-row font-lato font-bold text-text-secondary">
+                      <div key={item.term} className="flex flex-row font-bold text-text-secondary">
                         {item.term}
                         <div className="mr-2 text-accent1-500">
                           ({item.count}){keyword.length != index + 1 ? ',' : ''}

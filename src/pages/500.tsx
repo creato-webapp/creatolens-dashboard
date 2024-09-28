@@ -19,8 +19,8 @@ const ErrorPage: React.FC = () => {
       <div className="relative flex h-screen flex-col items-center justify-center overflow-hidden text-center md:items-start md:pl-32 md:text-left">
         <div>
           <div className="flex flex-col gap-12 md:items-start">
-            <h1 className="text-7xl font-extrabold text-accent1-500">ERROR 500</h1>
-            <h1 className="text-5xl font-extrabold">PAGE NOT FOUND</h1>
+            <h1 className="text-title font-extrabold text-accent1-500">ERROR 500</h1>
+            <h1 className="text-subtitle font-extrabold">PAGE NOT FOUND</h1>
             <h4 className="font-semibold">We are working on fixing the problem. Be back soon.</h4>
             <Button.Primary onClick={goBack}>Go Back</Button.Primary>
           </div>
