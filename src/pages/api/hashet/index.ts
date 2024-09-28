@@ -1,6 +1,6 @@
+import { HashetInstance } from '@helpers/axios'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-import HashetInstance from '../../../helpers/axios/Hashet'
 export default async function hashtagQueryHandler(req: NextApiRequest, res: NextApiResponse) {
   const {
     query: { recommend },
