@@ -25,7 +25,7 @@ export const BlobInstance = createInstance({
   maxContentLength: 8 * 1024 * 1024,
 })
 
-export const HashnetInstance = createInstance({
+export const HashetInstance = createInstance({
   baseURL: process.env.HASHET_SERVICE,
   withCredentials: true,
   headers: { 'Content-Type': 'application/json' },
