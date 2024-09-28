@@ -8,6 +8,7 @@ import { Button } from '@components/Button'
 import { useTranslation } from 'next-i18next'
 import { GetStaticProps } from 'next'
 import { getLocaleProps } from '@services/locale'
+import CustomLink from '@components/Link'
 
 export const getStaticProps: GetStaticProps = async (context) => {
   return getLocaleProps(context)
@@ -23,9 +24,11 @@ const NOT_FOUND: React.FC = () => {
 
   return (
     <div>
-      <Button.Text onClick={goBack} className="place-self-start p-4 text-accent2-500 md:hidden md:overflow-hidden">
-        {'< Back'}
-      </Button.Text>
+      <div className="place-self-start p-4 text-accent2-500 md:hidden md:overflow-hidden">
+        <CustomLink onClick={goBack} href={''}>
+          {'< Back'}
+        </CustomLink>
+      </div>
       <div className="flex h-screen w-full justify-center overflow-hidden text-center md:items-start md:text-left">
         <div className="flex h-full w-full flex-row items-center justify-center">
           <div className="flex items-center md:w-1/2 md:pl-16 lg:pl-32">

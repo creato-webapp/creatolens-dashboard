@@ -17,6 +17,7 @@ import ClockIcon from '@components/Icon/ClockIcon'
 import PlusIcon from '@components/Icon/PlusIcon'
 import { IProfile, KeywordData, MostRepeatedPost } from '@services/Meta'
 import dayjs, { DATE_FORMAT } from '@utils/dayjs'
+import { Button } from '@components/Button'
 
 interface Prop {
   days: number
@@ -189,10 +190,10 @@ const ReportLayout = (props: Prop) => {
           }
           <div className="flex flex-col items-center justify-center gap-4 md:flex-row ">
             <Link href={'/recommendation'}>
-              <Primary className="flex justify-center">
+              <Button.Primary className="flex justify-center">
                 <PlusIcon className="h-6 w-6" />
                 Search Hashtag by Text
-              </Primary>
+              </Button.Primary>
             </Link>
             <Link href={'/hashtag/hashtag-to-image'}>
               <Primary className="flex justify-center">
