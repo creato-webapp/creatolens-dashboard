@@ -3,7 +3,7 @@ import React from 'react'
 import Button from './Base'
 import { ButtonProps } from './interface'
 
-const PrimaryButton: React.FC<ButtonProps> = ({ children, onClick, disabled = false, loading, type = 'button', className, sizes, ...res }) => {
+const SubtleButton: React.FC<ButtonProps> = ({ children, onClick, disabled = false, loading, type = 'button', className, sizes, ...res }) => {
   return (
     <Button
       type={type}
@@ -12,11 +12,11 @@ const PrimaryButton: React.FC<ButtonProps> = ({ children, onClick, disabled = fa
       loading={loading}
       sizes={sizes}
       {...res}
-      className={`border border-primary-500 bg-primary-500 text-white hover:bg-primary-600 ${className}`}
+      className={`border border-white bg-white text-black hover:border-secondary-400 ${className}`}
     >
       {children}
     </Button>
   )
 }
 
-export default PrimaryButton
+export default SubtleButton
