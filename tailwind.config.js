@@ -74,8 +74,8 @@ module.exports = {
         },
         dividers: '#DDE5EA',
         'interface-hover': '#E3E9EC',
-        disabled: '#DDE5EA',
-        'bg-disabled': '#FF1F2F4',
+        disabled: '#B3B3B3',
+        'bg-disabled': '#D9D9D9',
         stroke: '#BACBD5',
         accent1: {
           1000: '#570421',

@@ -46,8 +46,8 @@ const BaseButton: React.FC<ButtonProps> = ({
     <button
       type={type}
       onClick={onClick}
-      disabled={disabled}
-      className={`flex min-w-fit items-center justify-center gap-2.5 whitespace-nowrap rounded-lg dark:invert ${padding} ${className} disabled:border-disabled disabled:bg-bg-disabled disabled:text-disabled`}
+      disabled={disabled || loading}
+      className={`${className} flex min-w-fit items-center justify-center gap-2.5 whitespace-nowrap rounded-lg  disabled:border disabled:border-disabled disabled:text-disabled  ${padding} disabled:bg-bg-disabled`}
       {...res}
     >
       {icon?.position === 'left' && <Image width={15} height={15} src={icon.src} alt={'icon'}></Image>}

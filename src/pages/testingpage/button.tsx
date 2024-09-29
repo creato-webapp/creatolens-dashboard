@@ -8,9 +8,7 @@ const ButtonPage = () => {
         <Button.Primary loading sizes={['l', 'l', 'l']}>
           Large Button
         </Button.Primary>
-        <Button.Primary disabled sizes={['m', 'm', 'm']}>
-          Medium Button
-        </Button.Primary>
+        <Button.Primary sizes={['m', 'm', 'm']}>Medium Button</Button.Primary>
         <Button.Primary loading sizes={['s', 's', 's']}>
           Small Button
         </Button.Primary>
@@ -39,8 +37,10 @@ const ButtonPage = () => {
           <Button.Subtle icon={{ position: 'left', src: '/check.svg' }} sizes={['l', 'l', 'l']}>
             Subtle
           </Button.Subtle>
-          <Button.Subtle sizes={['m', 'm', 'm']}>Subtle</Button.Subtle>
-          <Button.Subtle disabled sizes={['s', 's', 's']}>
+          <Button.Subtle icon={{ position: 'left', src: '/check.svg' }} sizes={['m', 'm', 'm']}>
+            Subtle
+          </Button.Subtle>
+          <Button.Subtle icon={{ position: 'left', src: '/check.svg' }} disabled sizes={['s', 's', 's']}>
             Subtle
           </Button.Subtle>
         </div>
