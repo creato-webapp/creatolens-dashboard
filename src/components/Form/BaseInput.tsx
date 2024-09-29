@@ -68,7 +68,7 @@ const BaseInput: React.FunctionComponent<IBaseInputProps> = ({
         </div>
       </div>
       {errorMessage && (
-        <p className={'text-secondary-700 absolute'} id={`${name}-error`}>
+        <p className={'absolute text-secondary-700'} id={`${name}-error`}>
           {errorMessage}
         </p>
       )}
