@@ -1,4 +1,4 @@
-import { Label } from '@components/ui/label'
+import { Label } from '@components/ui/Label'
 import { RadioGroup, RadioGroupItem } from '@components/ui/RadioGroup'
 
 const RadioPage = () => {
