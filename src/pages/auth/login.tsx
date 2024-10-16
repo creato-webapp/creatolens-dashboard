@@ -20,6 +20,19 @@ type Providers = {
   }
 }
 
+const ERROR_MESSAGE: Record<ErrorCodes, string> = {
+  [ErrorCodes.OAuthSignin]: 'Error in constructing an authorization URL.',
+  [ErrorCodes.OAuthCallback]: 'Error in handling the response from the OAuth provider.',
+  [ErrorCodes.OAuthCreateAccount]: 'User not in white list. Please Contact our team for support or questions',
+  [ErrorCodes.EmailCreateAccount]: 'Could not create email provider user in the database.',
+  [ErrorCodes.Callback]: 'Error in the OAuth callback handler route.',
+  [ErrorCodes.OAuthAccountNotLinked]: 'The email on the account is already linked, but not with this OAuth account.',
+  [ErrorCodes.EmailSignin]: 'Sending the email with the verification token failed.',
+  [ErrorCodes.CredentialsSignin]: 'An error occurred during sign-in.',
+  [ErrorCodes.SessionRequired]: 'This page requires you to be signed in at all times.',
+  [ErrorCodes.Default]: 'An error occurred during sign-in.',
+}
+
 export async function getServerSideProps() {
   const providers = await getProviders()
   return {
@@ -31,20 +44,8 @@ const Login: FC<loginProps> = ({ providers }) => {
   const { data: session } = useSession()
   const router = useRouter()
   const errorCode = router.query.error as ErrorCodes
-  const errorMessages: Record<ErrorCodes, string> = {
-    [ErrorCodes.OAuthSignin]: 'Error in constructing an authorization URL.',
-    [ErrorCodes.OAuthCallback]: 'Error in handling the response from the OAuth provider.',
-    [ErrorCodes.OAuthCreateAccount]: 'User not in white list. Please Contact our team for support or questions',
-    [ErrorCodes.EmailCreateAccount]: 'Could not create email provider user in the database.',
-    [ErrorCodes.Callback]: 'Error in the OAuth callback handler route.',
-    [ErrorCodes.OAuthAccountNotLinked]: 'The email on the account is already linked, but not with this OAuth account.',
-    [ErrorCodes.EmailSignin]: 'Sending the email with the verification token failed.',
-    [ErrorCodes.CredentialsSignin]: 'An error occurred during sign-in.',
-    [ErrorCodes.SessionRequired]: 'This page requires you to be signed in at all times.',
-    [ErrorCodes.Default]: 'An error occurred during sign-in.',
-  }
 
-  const OAuthErrorMessage = errorMessages[errorCode]
+  const OAuthErrorMessage = ERROR_MESSAGE[errorCode]
 
   return (
     <Card title="Login Page">
