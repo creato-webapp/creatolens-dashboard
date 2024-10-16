@@ -5,12 +5,12 @@ import { NextApiRequest, NextApiResponse } from 'next'
 function errorHandler(err: Error, res: NextApiResponse) {
   if (err.name === 'UnauthorizedError') {
     // jwt authentication error
-    return res.status(401).json({ message: 'Invalid Token' })
+    return res.status(StatusCodes.UNAUTHORIZED).json({ message: 'Invalid Token' })
   }
 
   // default to 500 server error
   console.error(err)
-  return res.status(500).json({ message: err.message })
+  return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: err.message })
 }
 
 type IApiHandlerType = (req: NextApiRequest, res: NextApiResponse) => Promise<void>
