@@ -3,14 +3,17 @@ import { StatusCodes } from 'http-status-codes'
 import { NextApiRequest, NextApiResponse } from 'next'
 
 function errorHandler(err: Error, res: NextApiResponse) {
-  if (err.name === 'UnauthorizedError') {
-    // jwt authentication error
-    return res.status(StatusCodes.UNAUTHORIZED).json({ message: 'Invalid Token' })
+  switch (err.name) {
+    case 'ValidationError':
+      return res.status(StatusCodes.BAD_REQUEST).json({ message: err.message })
+    case 'NotFoundError':
+      return res.status(StatusCodes.NOT_FOUND).json({ message: err.message })
+    case 'UnauthorizedError':
+      return res.status(StatusCodes.UNAUTHORIZED).json({ message: 'Invalid Token' })
+    default:
+      console.error(err)
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: err.message })
   }
-
-  // default to 500 server error
-  console.error(err)
-  return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: err.message })
 }
 
 type IApiHandlerType = (req: NextApiRequest, res: NextApiResponse) => Promise<void>
