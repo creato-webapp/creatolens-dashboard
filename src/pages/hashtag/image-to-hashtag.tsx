@@ -44,7 +44,7 @@ const ImageToHashtag = () => {
         <div className="my-4 border-b"></div>
         <div>
           <div className="flex items-center justify-between">
-            <h1 className="text-subtitle font-extrabold">IMAGE TO HASHTAG</h1>
+            <h1 className="text-subtitle font-bold">IMAGE TO HASHTAG</h1>
             <div className="flex flex-row">
               <Image src="/history.svg" alt={'history'} width={34} height={34}></Image>
               <Image
