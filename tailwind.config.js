@@ -8,7 +8,7 @@ module.exports = {
       pattern: /border-(error|warning|successful)-(500|600|700)/,
     },
     {
-      pattern: /text-(error|warning|successful)-(500|600|700)/,
+      pattern: /text-(error|warning|successful|neutral)-(500|600|700)/,
     },
     'aspect-[16/9]',
     'aspect-[9/16]',
