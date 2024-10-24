@@ -1,10 +1,32 @@
+import Link from 'next/link' // Import Next.js Link
 import { CaretUpIcon } from '@components/Icon'
 import { useState } from 'react'
+import ROUTE from '@constants/route'
 
 const menus = [
-  { header: 'Features', items: ['Instagram Trend Analysis', 'Manage Instabot Accounts', 'Hashtags-to-Image', 'Image-to-Hashtags'] },
-  { header: 'User Settings', items: ['item2', 'item3'] },
-  { header: 'Support', items: ['Contact'] },
+  {
+    header: 'Features',
+    items: [
+      { name: 'Instagram Trend Analysis', path: ROUTE.DASHBOARD },
+      { name: 'Manage Instabot Accounts', path: ROUTE.ACCOUNTS },
+      { name: 'Hashtags-to-Image', path: ROUTE.HASHTAG_TO_IMAGE },
+      { name: 'Image-to-Hashtags', path: ROUTE.IMAGE_TO_HASHTAG },
+    ],
+  },
+  {
+    header: 'User Settings',
+    items: [
+      { name: 'Profile Settings', path: ROUTE.ACCOUNTS },
+      { name: 'Privacy Settings', path: ROUTE.ACCOUNTS },
+    ],
+  },
+  {
+    header: 'Support',
+    items: [
+      { name: 'Contact', path: ROUTE.ACCOUNTS },
+      { name: 'FAQ', path: ROUTE.ACCOUNTS },
+    ],
+  },
 ]
 
 const SideMenu = () => {
@@ -27,20 +49,26 @@ const SideMenu = () => {
             >
               {menu.header}
               <CaretUpIcon
-                className={`pointer-events-none w-fit transform transition-all ${active === menu.header ? 'rotate-180 ' : ''}`}
+                className={`pointer-events-none w-fit transform transition-transform duration-300 ${active === menu.header ? 'rotate-180' : ''}`}
                 color={'black'}
               />
             </button>
             <div className="my-2 border-b border-neutral-300 px-4"></div>
-            {active === menu.header && ( // Show dropdown content only if active
+            <div className={`overflow-hidden transition-[max-height] duration-300 ease-in-out ${active === menu.header ? 'max-h-96' : 'max-h-0'}`}>
               <div className="dropdown-content my-4 flex flex-col items-center border-b border-neutral-300">
-                {menu.items.map((item) => (
-                  <button key={item} className="dropdown-item w-full rounded-lg px-3 py-4 hover:bg-neutral-200 hover:text-primary-500">
-                    {item}
-                  </button>
-                ))}
+                {menu.items.map((item) =>
+                  item.link ? ( // Only use Link if `link` is provided
+                    <Link key={item.name} href={item.link}>
+                      <div className="dropdown-item w-full rounded-lg px-3 py-4 hover:bg-neutral-200 hover:text-primary-500">{item.name}</div>
+                    </Link>
+                  ) : (
+                    <button key={item.name} className="dropdown-item w-full rounded-lg px-3 py-4 hover:bg-neutral-200 hover:text-primary-500">
+                      {item.name}
+                    </button>
+                  )
+                )}
               </div>
-            )}
+            </div>
           </div>
         ))}
       </div>
