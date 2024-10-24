@@ -1,17 +1,17 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import Image from 'next/image'
 
-import Outline from '@components/Button/Outline'
 import Primary from '@components/Button/Primary'
-import DropdownCheckbox from '@components/Form/DropdownCheckbox'
 import { getImageHashtag } from '@services/HashtagHelper'
 import { useImageHashtagContext } from '@hooks/UseImagetoHashtag'
 import { IHashet } from 'pages/recommendation'
-import router from 'next/router'
 import { CONFIDENCE_LEVELS } from '@constants/imageStyle'
 import { useDialogues } from '@hooks/useDialogues'
 import { Status } from '@context/DialogueContext'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@components/ui/Tabs'
+import Dropdown from '@components/Form/Dropdown/Dropdown'
+import SubtleButton from '@components/Button/Subtle'
+import CaretLeftIcon from '@components/Icon/CaretLeftIcon'
 
 interface Option {
   label: string
@@ -42,22 +42,18 @@ const Step3: React.FC = () => {
         checked: false,
       }))
 
-    const categorized = [
-      {
-        name: CONFIDENCE_LEVELS.HIGH.name,
-        options: categorizeHashtags(hashtags, { filter: (h) => h.acc > CONFIDENCE_LEVELS.HIGH.threshold! }),
-      },
-      {
-        name: CONFIDENCE_LEVELS.MEDIUM.name,
+    const categorized = Object.entries(CONFIDENCE_LEVELS)
+      .map(([, level]) => ({
+        name: level.name,
         options: categorizeHashtags(hashtags, {
-          filter: (h) => h.acc > CONFIDENCE_LEVELS.MEDIUM.thresholdLow! && h.acc <= CONFIDENCE_LEVELS.MEDIUM.thresholdHigh!,
+          filter: (h) => {
+            if (level.threshold) return h.acc > level.threshold
+            if (level.thresholdLow && level.thresholdHigh) return h.acc > level.thresholdLow && h.acc <= level.thresholdHigh
+            return false
+          },
         }),
-      },
-      {
-        name: CONFIDENCE_LEVELS.LOW.name,
-        options: categorizeHashtags(hashtags, { filter: (h) => h.acc <= CONFIDENCE_LEVELS.LOW.threshold! }),
-      },
-    ].filter((category) => category.options.length > 0)
+      }))
+      .filter((category) => category.options.length > 0)
 
     setCategorizedOptions(categorized)
   }, [hashtags])
@@ -86,13 +82,16 @@ const Step3: React.FC = () => {
     )
   }, [])
 
-  const onClickSelectAll = useCallback(() => updateOptions((opt) => ({ ...opt, checked: true })), [updateOptions])
   const onClickHashtag = useCallback(
     (value: string | number) => updateOptions((opt) => (opt.value === value ? { ...opt, checked: !opt.checked } : opt)),
     [updateOptions]
   )
-  const onClickLabel = useCallback((value: string | number) => updateSelectedLabels(value as string), [updateSelectedLabels])
-  const onClickClearAll = useCallback(() => updateOptions((opt) => ({ ...opt, checked: false })), [updateOptions])
+  const onClickLabel = useCallback(
+    (value: string | number) => {
+      updateSelectedLabels(value as string)
+    },
+    [updateSelectedLabels]
+  )
 
   const onClickCopySelected = useCallback(() => {
     const selected = categorizedOptions.flatMap((option) => option.options.filter((opt) => opt.checked).map((opt) => opt.label))
@@ -100,20 +99,20 @@ const Step3: React.FC = () => {
     addDialogue('Copied Successfully', Status.SUCCESS)
   }, [addDialogue, categorizedOptions])
 
-  const generateImageByHashtag = useCallback(async () => {
-    if (categorizedOptions) {
-      try {
-        const checkedOptions = categorizedOptions.flatMap((option) =>
-          option.options.filter((opt) => opt.checked).map((opt) => opt.label.replace(/#/g, '_'))
-        )
-        if (checkedOptions.length > 0) {
-          router.push(`/hashtag/hashtag-to-image?hashtags=${checkedOptions.join(', ')}`)
-        }
-      } catch (error) {
-        console.error('Error fetching hashtags:', error)
-      }
-    }
-  }, [categorizedOptions])
+  // const generateImageByHashtag = useCallback(async () => {
+  //   if (categorizedOptions) {
+  //     try {
+  //       const checkedOptions = categorizedOptions.flatMap((option) =>
+  //         option.options.filter((opt) => opt.checked).map((opt) => opt.label.replace(/#/g, '_'))
+  //       )
+  //       if (checkedOptions.length > 0) {
+  //         router.push(`/hashtag/hashtag-to-image?hashtags=${checkedOptions.join(', ')}`)
+  //       }
+  //     } catch (error) {
+  //       console.error('Error fetching hashtags:', error)
+  //     }
+  //   }
+  // }, [categorizedOptions])
 
   const labelOptions = useMemo(() => {
     if (!currentImage?.labels) return null
@@ -128,12 +127,10 @@ const Step3: React.FC = () => {
 
   return (
     <div>
-      <h2 className="flex flex-row items-center font-extrabold">
-        <div className="required relative h-6 w-6 cursor-pointer items-center justify-center px-4 text-center text-2xl text-black" onClick={goBack}>
-          <Image src="/back.svg" fill alt="back" />
-        </div>
-        <span className="flex items-center font-extrabold">Get hashtag recommendation</span>
-      </h2>
+      <div className="required relative flex cursor-pointer flex-row  " onClick={goBack}>
+        <CaretLeftIcon />
+        <div className="flex">Hashtags Recommendation</div>
+      </div>
 
       {currentImage?.image && (
         <div className="relative my-4 flex aspect-square h-48 w-full items-center rounded-full md:min-w-fit md:justify-center">
@@ -157,7 +154,20 @@ const Step3: React.FC = () => {
             <h3 className="my-4 text-text-secondary">{`${hashtagsLength} hashtags discovered`}</h3>
             {categorizedOptions.map((option) => (
               <div key={`${option.name}-dropdown`} className="my-4">
-                <DropdownCheckbox dropDownSizes={['l', 'l', 'l']} name={option.name} options={option.options} onValueChange={onClickHashtag} />
+                <Dropdown
+                  dropDownSizes={['l', 'l', 'l']}
+                  name={option.name}
+                  options={option.options}
+                  onValueChange={onClickHashtag}
+                  isCheckbox
+                  extraElement={
+                    <div className="flex w-full justify-center px-2 py-8">
+                      <SubtleButton sizes={['l', 'l', 'l']} onClick={onClickCopySelected}>
+                        Copy Selected
+                      </SubtleButton>
+                    </div>
+                  }
+                />
               </div>
             ))}
           </div>
@@ -165,19 +175,20 @@ const Step3: React.FC = () => {
         <TabsContent value="labels">
           {labelOptions && (
             <div className="flex flex-col gap-4">
-              <DropdownCheckbox
+              <Dropdown
                 dropDownSizes={['l', 'l', 'l']}
                 key="label-dropdown"
                 name="Label"
                 options={labelOptions}
                 onValueChange={onClickLabel}
+                isCheckbox
               />
             </div>
           )}
         </TabsContent>
       </Tabs>
       <div className="my-4 flex w-full flex-col gap-4">
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 md:grid-cols-3">
+        {/* <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 md:grid-cols-3">
           <Outline onClick={onClickClearAll} sizes={['s', 'l', 'l']}>
             Clear All
           </Outline>
@@ -187,13 +198,13 @@ const Step3: React.FC = () => {
           <Primary onClick={onClickSelectAll} sizes={['s', 'l', 'l']}>
             Select All
           </Primary>
-        </div>
-        <Primary sizes={['l', 'l', 'l']} className="w-full" onClick={generateImageByHashtag}>
+        </div> */}
+        {/* <Primary sizes={['l', 'l', 'l']} className="w-full" onClick={generateImageByHashtag}>
           + Generate Image
-        </Primary>
-        <Outline sizes={['l', 'l', 'l']} className="w-full">
+        </Primary> */}
+        <Primary sizes={['l', 'l', 'l']} className="w-full">
           Restart
-        </Outline>
+        </Primary>
       </div>
     </div>
   )
