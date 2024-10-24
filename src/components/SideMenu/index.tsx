@@ -56,16 +56,13 @@ const SideMenu = () => {
             <div className="my-2 border-b border-neutral-300 px-4"></div>
             <div className={`overflow-hidden transition-[max-height] duration-300 ease-in-out ${active === menu.header ? 'max-h-96' : 'max-h-0'}`}>
               <div className="dropdown-content my-4 flex flex-col items-center border-b border-neutral-300">
-                {menu.items.map((item) =>
-                  item.link ? ( // Only use Link if `link` is provided
-                    <Link key={item.name} href={item.link}>
-                      <div className="dropdown-item w-full rounded-lg px-3 py-4 hover:bg-neutral-200 hover:text-primary-500">{item.name}</div>
-                    </Link>
-                  ) : (
-                    <button key={item.name} className="dropdown-item w-full rounded-lg px-3 py-4 hover:bg-neutral-200 hover:text-primary-500">
-                      {item.name}
-                    </button>
-                  )
+                {menu.items.map(
+                  (item) =>
+                    item.path && ( // Only use Link if `link` is provided
+                      <Link key={item.name} href={item.path}>
+                        <div className="dropdown-item w-full rounded-lg px-3 py-4 hover:bg-neutral-200 hover:text-primary-500">{item.name}</div>
+                      </Link>
+                    )
                 )}
               </div>
             </div>
