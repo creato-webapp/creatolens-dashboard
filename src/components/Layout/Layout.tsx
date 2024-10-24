@@ -5,6 +5,7 @@ import { Popover } from '@headlessui/react'
 import Footer from '@components/Footer'
 
 import NavBar from './Navbar'
+import SideMenu from '@components/SideMenu'
 
 export default function Layout({ children }: PropsWithChildren) {
   return (
@@ -14,7 +15,12 @@ export default function Layout({ children }: PropsWithChildren) {
           <NavBar />
         </div>
       </Popover>
-      <main>{children}</main>
+      <main className="mt-10 flex h-full flex-row justify-center">
+        <div className="mr-6 w-full max-w-[300px] items-start">
+          <SideMenu />
+        </div>
+        {children}
+      </main>
       <Footer />
     </>
   )
