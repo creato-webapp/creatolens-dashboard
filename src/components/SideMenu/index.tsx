@@ -37,7 +37,7 @@ const SideMenu = () => {
   }
 
   return (
-    <div className="flex h-full w-full flex-col justify-between rounded-lg border border-neutral-300 p-4 text-base">
+    <div className="flex h-full max-h-screen w-full flex-col justify-between rounded-lg border border-neutral-300 p-4 text-base">
       <div>
         {menus.map((menu) => (
           <div key={menu.header} className="dropdown">
