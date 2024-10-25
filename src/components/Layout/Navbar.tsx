@@ -13,16 +13,16 @@ import { Title } from '@components/Typography'
 import useAuth from '@hooks/useAuth'
 
 import { Button } from '..'
-import DarkModeIcon from '@components/Icon/DarkModeIcon'
+// import DarkModeIcon from '@components/Icon/DarkModeIcon'
 import Avatar from '@components/Avatar'
 
 const LOGO_SRC = IMAGE.LOGO_CREATO_ORANGE
 
 const LINKS = [
-  { name: 'User Guide', path: ROUTE.GUIDE },
   { name: 'Accounts', path: ROUTE.ACCOUNTS },
   { name: 'Recommendation', path: ROUTE.RECOMMENDATION },
   { name: 'Trend Analysis', path: ROUTE.DASHBOARD },
+  { name: 'Image to Hashtags', path: ROUTE.IMAGE_TO_HASHTAG },
 ] as const
 
 const NavBar: React.FC = () => {
@@ -40,42 +40,38 @@ const NavBar: React.FC = () => {
   }, [])
 
   return (
-    <nav className="relative flex h-auto items-center justify-between border-b border-neutral-300 px-8 py-7 md:mx-10 md:px-6">
-      <div className="flex min-w-8 md:hidden">
-        {session && (
+    <nav className="relative flex h-auto items-center justify-between border-b border-neutral-300 px-6 py-7 md:mx-10 md:px-6 md:px-8">
+      <div className="flex flex-row gap-4">
+        <div className="flex min-w-8 md:hidden">
           <div className={'my-auto flex w-full md:hidden'} onClick={toggleMenu}>
             <Button.Text className="text-text-primary">
               <MenuIcon></MenuIcon>
             </Button.Text>
           </div>
-        )}
-      </div>
-      <Link href="/">
-        <div className="flex h-full items-center">
-          <img src={LOGO_SRC} alt="Logo" className="h-10" />
         </div>
-      </Link>
+        <Link href="/">
+          <div className="flex h-full items-center">
+            <img src={LOGO_SRC} alt="Logo" className="h-10" />
+          </div>
+        </Link>
+      </div>
 
-      <div className="flex w-8 md:hidden">
+      <div className="flex flex-row-reverse items-center md:flex-row">
+        {/* <div className="flex h-10 w-10 items-center">
+          <DarkModeIcon height={'20'} width={'20'} />
+        </div> */}
+
         {session ? (
-          <Button.Text onClick={onLogout} className="text-text-primary">
-            <LogoutIcon />
-          </Button.Text>
+          <Avatar size={'large'} src={session?.user?.image ? session?.user?.image : IMAGE.BOT_CREATO} fallbackSrc={IMAGE.BOT_CREATO} />
         ) : (
-          <Button.Text onClick={onLogin} className="text-text-primary">
+          <Button.Text onClick={onLogin} className="flex w-full flex-row items-center justify-center gap-4">
             <LoginIcon />
           </Button.Text>
         )}
       </div>
-      <div className="flex flex-row items-center gap-6">
-        <div className="flex h-full w-10 items-center">
-          <DarkModeIcon height={'20'} width={'20'} />
-        </div>
-        <Avatar size={'large'} src={session?.user?.image ? session?.user?.image : IMAGE.BOT_CREATO} fallbackSrc={IMAGE.BOT_CREATO} />
-      </div>
       <aside
         id="default-sidebar"
-        className={`fixed z-50 h-screen w-screen -translate-x-4 transition-transform ${isMenuCollapse ? 'hidden' : 'block'}`}
+        className={`fixed top-0 z-50 h-screen w-screen -translate-x-8 transition-transform ${isMenuCollapse ? 'hidden' : 'block'}`}
         aria-label="Sidebar"
       >
         <div className="flex h-[100vh] flex-col overflow-y-auto bg-gray-50 dark:bg-gray-800">
@@ -93,6 +89,17 @@ const NavBar: React.FC = () => {
                 </Link>
               </li>
             ))}
+            <div className="flex w-full text-lg font-bold text-text-primary md:hidden">
+              {session ? (
+                <Button.Text onClick={onLogout} className="flex w-full flex-row items-center justify-center gap-4 ">
+                  Logout <LogoutIcon />
+                </Button.Text>
+              ) : (
+                <Button.Text onClick={onLogin} className="flex w-full flex-row items-center justify-center gap-4">
+                  Login <LoginIcon />
+                </Button.Text>
+              )}
+            </div>
           </ul>
         </div>
       </aside>
