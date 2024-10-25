@@ -1,4 +1,4 @@
-import { FC, useMemo } from 'react'
+import { FC } from 'react'
 
 import Image from 'next/image'
 import Link from 'next/link'
@@ -10,7 +10,6 @@ import Primary from '@components/Button/Primary'
 import Card from '@components/Card'
 import CardWithIgPost from '@components/CardWithIgPost'
 import 'react-loading-skeleton/dist/skeleton.css'
-import Dropdown from '@components/Form/Dropdown'
 import ClockIcon from '@components/Icon/ClockIcon'
 import PlusIcon from '@components/Icon/PlusIcon'
 import { IProfile, KeywordData, MostRepeatedPost } from '@services/Meta'
@@ -54,22 +53,12 @@ const DateTimeLabel: FC<{ date: dayjs.ConfigType }> = ({ date }) => {
 }
 
 const ReportLayout = (props: Prop) => {
-  const { keyword, mostRepeatedPostImage, postCount, mostRepeatedPost, days, loading, botList, onAccountChange, selectedAccount } = props
+  const { keyword, mostRepeatedPostImage, postCount, mostRepeatedPost, days, loading, botList } = props
   // dayFormat = MMM DD YYYY - MMM DD YYYY
   const today = new Date()
   const lastDate = new Date(today)
   lastDate.setDate(today.getDate() - days)
   const dateStr = `${lastDate.toDateString().split(' ').slice(1).join(' ')} - ${today.toDateString().split(' ').slice(1).join(' ')}`
-
-  const instaBotList = useMemo(() => {
-    if (!botList || botList.length <= 0) return []
-    return botList.map((bot: IAccount) => {
-      return {
-        label: (!bot.profile_id ? '[No Profile Found]\n' : '') + bot.username,
-        value: bot.id,
-      }
-    })
-  }, [botList])
 
   if (!botList || botList.length == 0) {
     return (
@@ -89,21 +78,6 @@ const ReportLayout = (props: Prop) => {
 
   return (
     <div className="flex flex-col">
-      <div className="flex flex-col justify-between md:flex-col">
-        <div className="flex w-full flex-col justify-between gap-7 md:flex-row">
-          <div className="flex w-full flex-row items-center gap-2">
-            <div className=" flex w-4/5 items-start md:hidden">
-              <Dropdown
-                dropDownSizes={['full', 'l', 'l']}
-                onValueChange={onAccountChange}
-                value={selectedAccount?.id}
-                defaultValue={selectedAccount?.id}
-                options={instaBotList}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
       <div className="my-2 md:my-7 md:h-[1px] md:bg-[#DDE5EA]" />
       <div className="flex flex-col gap-5 md:gap-12">
         <div className="flex grid-cols-1 flex-col gap-4 md:grid md:grid-cols-2">

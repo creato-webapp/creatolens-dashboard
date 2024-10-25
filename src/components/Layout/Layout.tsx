@@ -14,7 +14,7 @@ export default function Layout({ children }: PropsWithChildren) {
           <NavBar />
         </div>
       </Popover>
-      <main>{children}</main>
+      <main className="px-4 py-4 md:mx-0">{children}</main>
       <Footer />
     </>
   )

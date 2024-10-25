@@ -182,7 +182,7 @@ const Dashboard = ({ botList }: Props) => {
         {Object.keys(dateFilter).map((item) => {
           return (
             <button
-              className={` rounded-lg p-2 ${selectedFilterDate === item ? 'bg-neutral-200 text-primary-500' : ''}`}
+              className={`text-nowrap rounded-lg p-2 ${selectedFilterDate === item ? 'bg-neutral-200 text-primary-500' : ''}`}
               key={item}
               onClick={() => onSelect(item)}
             >
@@ -195,30 +195,34 @@ const Dashboard = ({ botList }: Props) => {
   }
 
   return (
-    <div className="flex w-full justify-center">
-      <div className="flex max-w-screen-xl flex-col ">
-        <div className="">
+    <div className="flex w-full justify-center ">
+      <div className="flex w-full max-w-screen-xl flex-col">
+        <div className="flex w-full flex-col">
           <h1 className="text-heading">Instagram Trend Analysis</h1>
           {instaBotList && (
-            <div className="flex w-full flex-col gap-2  py-6">
-              Instabot Account
-              <div className="flex w-fit flex-row items-center gap-6">
-                <Dropdown
-                  className="min-w-40"
-                  onValueChange={(e) => onAccountChange(e)}
-                  value={selectedAccount?.id}
-                  defaultValue={selectedAccount?.id}
-                  options={instaBotList}
-                  name={instaBotList[0].label}
-                  dropDownSizes={['s', 's', 's']}
-                  isFloating
-                />
-                <Link href={profile?.data.url ? profile.data.url : ''} target="_blank" className="flex min-h-6 min-w-6">
-                  <Image className="cursor-pointer" alt={'account share button'} src={'./external-link.svg'} width={32} height={32} />
-                </Link>
+            <div>
+              <div className="relative flex flex-col gap-2 px-4 py-6">
+                Instabot Account
+                <div className="flex flex-row items-center gap-6 ">
+                  <Dropdown
+                    className="flex max-w-60  md:max-w-full"
+                    onValueChange={(e) => onAccountChange(e)}
+                    value={selectedAccount?.id}
+                    defaultValue={selectedAccount?.id}
+                    options={instaBotList}
+                    name={instaBotList[0].label}
+                    dropDownSizes={['s', 's', 's']}
+                    isFloating
+                  />
+                  <Link href={profile?.data.url ? profile.data.url : ''} target="_blank" className="flex min-h-6 min-w-6">
+                    <Image className="cursor-pointer" alt={'account share button'} src={'./external-link.svg'} width={32} height={32} />
+                  </Link>
+                </div>
               </div>
-              <MonthGroup />
-              <div className="w-full border-b border-neutral-300 pt-4"></div>
+              <div className="scrollbar-hidden flex w-full overflow-x-auto ">
+                <MonthGroup />
+              </div>
+              <div className="mx-4 border-b border-neutral-300 pt-4"></div>
             </div>
           )}
         </div>
@@ -239,7 +243,7 @@ const Dashboard = ({ botList }: Props) => {
             </Link>
           </div>
         ) : (
-          <Tabs defaultValue={tabItems[0].value} className="w-full">
+          <Tabs defaultValue={tabItems[0].value} className="mt-4 w-full">
             <TabsList>
               {tabItems.map((item) => (
                 <TabsTrigger key={item.key} value={item.value}>
