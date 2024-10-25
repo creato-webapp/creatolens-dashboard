@@ -8,7 +8,7 @@ import dayjs from '@utils/dayjs'
 
 const FOOTER_LINKS = [
   {
-    title: 'About Creato',
+    title: 'About 2Tag',
     links: [
       {
         title: 'Our Story',

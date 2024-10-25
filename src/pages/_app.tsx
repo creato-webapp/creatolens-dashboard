@@ -52,7 +52,7 @@ function App({ Component, pageProps }: Props) {
     <SessionProvider session={pageProps.session}>
       <Head>
         <link key="icon" rel="icon" href="./favicon.ico" />
-        <title>Creato Lens | AI Hashtag Maker</title>
+        <title>2Tag | AI Hashtag Maker</title>
       </Head>
       <Layout>
         <ErrorBoundary>
