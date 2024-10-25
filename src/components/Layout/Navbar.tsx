@@ -13,6 +13,8 @@ import { Title } from '@components/Typography'
 import useAuth from '@hooks/useAuth'
 
 import { Button } from '..'
+import DarkModeIcon from '@components/Icon/DarkModeIcon'
+import Avatar from '@components/Avatar'
 
 const LOGO_SRC = IMAGE.LOGO_CREATO_ORANGE
 
@@ -27,7 +29,6 @@ const NavBar: React.FC = () => {
   const router = useRouter()
   const { session, onLogin, onLogout } = useAuth()
   const [isMenuCollapse, setIsMenuCollapse] = useState(true)
-
   const pages = session ? LINKS : []
 
   const toggleMenu = useCallback(() => {
@@ -39,7 +40,7 @@ const NavBar: React.FC = () => {
   }, [])
 
   return (
-    <nav className="relative flex h-auto justify-between bg-bg-dark px-4 md:px-6">
+    <nav className="relative flex h-auto items-center justify-between border-b border-neutral-300 px-8 py-7 md:mx-10 md:px-6">
       <div className="flex min-w-8 md:hidden">
         {session && (
           <div className={'my-auto flex w-full md:hidden'} onClick={toggleMenu}>
@@ -50,24 +51,11 @@ const NavBar: React.FC = () => {
         )}
       </div>
       <Link href="/">
-        <div className="my-auto shrink-0">
-          <img src={LOGO_SRC} alt="Logo" className="h-12 md:h-16" />
+        <div className="flex h-full items-center">
+          <img src={LOGO_SRC} alt="Logo" className="h-10" />
         </div>
       </Link>
-      <div className="hidden space-x-10 justify-self-center md:flex md:min-h-16 md:items-center">
-        {pages.map((page, index) => (
-          <div key={`${page.name}-${index}`} className={`flex h-full flex-col items-center justify-center`}>
-            <Link
-              href={page.path}
-              className={`${
-                router.pathname === page.path ? 'border-t-4 pb-1' : 'py-1'
-              } box-border flex h-full items-center  border-accent1-500 text-center`}
-            >
-              <h3 className={`${router.pathname === page.path ? ' text-accent1-500' : ''} font-extrabold`}>{page.name}</h3>
-            </Link>
-          </div>
-        ))}
-      </div>
+
       <div className="flex w-8 md:hidden">
         {session ? (
           <Button.Text onClick={onLogout} className="text-text-primary">
@@ -79,22 +67,11 @@ const NavBar: React.FC = () => {
           </Button.Text>
         )}
       </div>
-      <div className="my-auto hidden md:flex">
-        {session ? (
-          <Button.Text onClick={onLogout} className="flex h-auto items-center rounded">
-            <LogoutIcon className="mr-1" size={24} fillColor="fill-accent2-500"></LogoutIcon>
-            <Title level={3} bold className="text-accent2-500">
-              Logout
-            </Title>
-          </Button.Text>
-        ) : (
-          <Button.Text onClick={onLogin} className="flex h-auto items-center rounded">
-            <LoginIcon className="mr-1" size={24} fillColor="fill-accent2-500"></LoginIcon>
-            <Title level={3} bold className="text-accent2-500">
-              Sign In
-            </Title>
-          </Button.Text>
-        )}
+      <div className="flex flex-row items-center gap-6">
+        <div className="flex h-full w-10 items-center">
+          <DarkModeIcon height={'20'} width={'20'} />
+        </div>
+        <Avatar size={'large'} src={session?.user?.image ? session?.user?.image : IMAGE.BOT_CREATO} fallbackSrc={IMAGE.BOT_CREATO} />
       </div>
       <aside
         id="default-sidebar"
