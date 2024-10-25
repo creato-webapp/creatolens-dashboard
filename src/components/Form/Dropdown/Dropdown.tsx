@@ -20,9 +20,10 @@ interface DropdownProps extends HTMLProps<HTMLSelectElement> {
   dropDownSizes?: [DropdownSize, DropdownSize, DropdownSize]
   selectedValue?: string
   setSelectedValue?: (arg: string | number) => void
+  isFloating?: boolean
 }
 
-const Dropdown: React.FC<DropdownProps> = ({ name, options, onValueChange, dropDownSizes }) => {
+const Dropdown: React.FC<DropdownProps> = ({ name, options, onValueChange, dropDownSizes, isFloating = false, ...props }) => {
   const [selectedValue, setSelectedValue] = useState<string | number>(name || '')
   const [isOpen, setIsOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
@@ -65,7 +66,7 @@ const Dropdown: React.FC<DropdownProps> = ({ name, options, onValueChange, dropD
   }, [])
 
   return (
-    <div ref={dropdownRef} className={`dropdown relative h-full w-full justify-end `}>
+    <div ref={dropdownRef} className={`dropdown relative h-full w-full justify-end ${props.className}`}>
       <DropdownButton
         name={mapSelectedValueToOptions as string}
         isDropdownNotSelected={false}
@@ -73,7 +74,7 @@ const Dropdown: React.FC<DropdownProps> = ({ name, options, onValueChange, dropD
         handleToggleMenu={handleToggleMenu}
         dropDownSizes={dropDownSizes}
       />
-      <DropdownContent handleOptionSelect={handleOptionSelect} options={options} isOpen={isOpen} />
+      <DropdownContent handleOptionSelect={handleOptionSelect} options={options} isOpen={isOpen} isFloating={isFloating} />
     </div>
   )
 }
