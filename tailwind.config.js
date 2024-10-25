@@ -24,7 +24,8 @@ module.exports = {
       sm: '425px',
       md: '768px',
       lg: '976px',
-      xl: '1440px',
+      xl: '1200px',
+      '2xl': '1440px',
     },
     extend: {
       minWidth: {
