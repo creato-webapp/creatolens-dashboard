@@ -8,7 +8,7 @@ const DropdownContent = ({
 }: {
   isOpen: boolean
   options: DropdownOption[]
-  handleOptionSelect: (value: string) => void
+  handleOptionSelect: (value: string | number) => () => void
   isCheckbox?: boolean
 }) => {
   return (
@@ -18,7 +18,7 @@ const DropdownContent = ({
           <li
             key={option.value}
             className="flex w-full cursor-pointer list-none flex-wrap items-center gap-2  px-4 py-2 hover:bg-gray-100"
-            onClick={() => handleOptionSelect(option.value as string)}
+            onClick={handleOptionSelect(option.value as string)}
           >
             {isCheckbox && (
               <input
@@ -26,8 +26,8 @@ const DropdownContent = ({
                 checked={option.checked || false}
                 className="mr-2 rounded border-stroke text-accent1-500 checked:bg-accent1-500 focus:bg-transparent focus:ring-0"
                 defaultChecked={option.checked || false}
-                onChange={() => handleOptionSelect(option.value as string)}
-                onClick={() => handleOptionSelect(option.value as string)}
+                onChange={handleOptionSelect(option.value as string)}
+                onClick={handleOptionSelect(option.value as string)}
               />
             )}
 
