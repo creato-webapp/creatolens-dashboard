@@ -1,16 +1,18 @@
-import React, { PropsWithChildren } from 'react'
-
+import React from 'react'
 import Footer from '@components/Footer'
-
 import SideMenu from '@components/SideMenu'
 
-export default function SideMenuLayout({ children }: PropsWithChildren) {
+type LayoutProps = {
+  children: React.ReactNode
+}
+
+export default function Layout({ children }: LayoutProps) {
   return (
-    <div className="flex w-full  flex-col items-center justify-center ">
-      <main className="mt-10 flex max-w-screen-xl flex-row justify-center">
-        <div className="mr-6">
+    <div className="flex w-full flex-col lg:mt-10 lg:items-center">
+      <main className="lg:flex lg:max-w-screen-xl">
+        <aside className="mr-6 hidden min-w-[250px] lg:flex">
           <SideMenu />
-        </div>
+        </aside>
         {children}
       </main>
       <Footer />
