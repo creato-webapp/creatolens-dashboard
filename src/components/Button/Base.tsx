@@ -27,13 +27,13 @@ const BaseButton: React.FC<ButtonProps> = ({
 
       switch (size) {
         case 's':
-          padding += ` ${breakpoint}px-2 ${breakpoint}py-2 w-fit`
+          padding += ` ${breakpoint}px-2 ${breakpoint}py-2 ${breakpoint}w-fit`
           break
         case 'm':
-          padding += ` ${breakpoint}px-3 ${breakpoint}py-3 w-fit`
+          padding += ` ${breakpoint}px-3 ${breakpoint}py-3 ${breakpoint}w-fit`
           break
         case 'l':
-          padding += ` ${breakpoint}px-3 ${breakpoint}py-3 w-full`
+          padding += ` ${breakpoint}px-3 ${breakpoint}py-3 ${breakpoint}w-full`
           break
       }
     })
@@ -47,7 +47,7 @@ const BaseButton: React.FC<ButtonProps> = ({
       type={type}
       onClick={onClick}
       disabled={disabled || loading}
-      className={`${className} flex min-w-fit items-center justify-center gap-2.5 whitespace-nowrap rounded-lg  disabled:border disabled:border-disabled disabled:text-disabled  ${padding} disabled:bg-bg-disabled`}
+      className={`${className} flex min-w-fit items-center justify-center gap-2.5 whitespace-nowrap rounded-lg disabled:border disabled:border-disabled disabled:text-disabled ${padding} disabled:bg-bg-disabled`}
       {...res}
     >
       {icon?.position === 'left' && <Image width={15} height={15} src={icon.src} alt={'icon'}></Image>}
