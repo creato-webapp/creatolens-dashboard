@@ -3,14 +3,15 @@ import Image from 'next/image'
 import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 
-import { Badges } from '@components/Badges'
-import Outline from '@components/Button/Outline'
-import OutlinePrimaryButton from '@components/Button/OutlinePrimary'
-import Primary from '@components/Button/Primary'
-import { useImageHashtagContext } from '@hooks/UseImagetoHashtag'
+import { Badge } from '@components/ui/Badge'
 
-const BACK_ICON = '/back.svg'
-const CHECK_ICON = '/check.svg'
+import { useImageHashtagContext } from '@hooks/UseImagetoHashtag'
+import SingleCheck from '@components/Icon/SingleCheckIcon'
+import CaretLeftIcon from '@components/Icon/CaretLeftIcon'
+import SubtleButton from '@components/Button/Subtle'
+import Primary from '@components/Button/Primary'
+import CaretRightIcon from '@components/Icon/CaretRightIcon'
+
 const ARROWS_CLOCKWISE_ICON = '/arrows-clockwise.png'
 
 const Step2 = () => {
@@ -49,38 +50,51 @@ const Step2 = () => {
     }
     updateLabel(data)
   }, [currentImage, updateLabel])
-
   const renderLabels = useMemo(() => {
     if (loadingLabels) {
-      return <Skeleton count={3} style={{ height: 40 }} containerClassName="flex-1" />
+      return {
+        selectedLabels: <Skeleton count={3} style={{ height: 40 }} containerClassName="flex-1" />,
+        unselectedLabels: null,
+      }
     }
 
-    return currentImage?.labels?.map((label) => (
-      <Badges
-        key={`key-${label}`}
-        rounded
-        className="cursor-pointer"
-        isOutline
-        status={!currentImage.selectedLabels.includes(label) ? 'text-secondary' : 'primary'}
-        onClose={() => onClose(label)}
-        onClick={() => onSelected(label)}
-      >
-        {currentImage.selectedLabels.includes(label) && (
-          <Image src={CHECK_ICON} id="check-icon" key="check" height={24} width={24} alt="check logo" />
-        )}
-        {label}
-      </Badges>
-    ))
+    const selectedLabels = currentImage?.labels
+      ?.filter((label) => currentImage.selectedLabels.includes(label))
+      .map((label) => (
+        <Badge key={`key-${label}`} className="cursor-pointer" variant={'default'} onClose={() => onClose(label)} onClick={() => onSelected(label)}>
+          <div className="flex flex-row items-center gap-2">
+            <SingleCheck className="h-4 w-4 stroke-white" />
+            {label}
+          </div>
+        </Badge>
+      ))
+
+    const unselectedLabels = currentImage?.labels
+      ?.filter((label) => !currentImage.selectedLabels.includes(label))
+      .map((label) => (
+        <Badge
+          key={`key-${label}`}
+          className="cursor-pointer"
+          variant={'destructive'}
+          onClose={() => onClose(label)}
+          onClick={() => onSelected(label)}
+        >
+          <div className="flex flex-row items-center gap-2">{label}</div>
+        </Badge>
+      ))
+
+    return { selectedLabels, unselectedLabels }
   }, [currentImage, loadingLabels, onClose, onSelected])
 
   return (
     <div className="flex w-full flex-col gap-4 md:flex-row">
       <div>
-        <div className="flex flex-row items-center">
-          <div className="required relative h-6 w-6 cursor-pointer items-center justify-center px-4 text-center text-2xl text-black" onClick={goBack}>
-            <Image src={BACK_ICON} fill alt="back" />
+        <div className="flex flex-col">
+          <div className="required relative flex cursor-pointer flex-row  " onClick={goBack}>
+            <CaretLeftIcon />
+            <div className="flex">Image label annotation</div>
           </div>
-          <h2 className="flex items-center font-extrabold">Image label annotation</h2>
+          <div className="pl-6 text-sm text-neutral-500">Let AI knows what is in your image</div>
         </div>
 
         <div className="relative my-4 flex aspect-square h-full w-full min-w-full rounded-full">
@@ -96,27 +110,36 @@ const Step2 = () => {
           )}
         </div>
       </div>
-      <div className="my-4 border-b md:hidden"></div>
       <div className="flex w-full flex-col gap-2 md:w-1/2">
-        {currentImage?.labels && <h3 className="mb-4 font-semibold text-text-secondary">{`${currentImage.labels.length}`} labels discovered</h3>}
-        <div>
-          <div className="flex h-full w-full flex-row flex-wrap gap-4">{renderLabels}</div>
+        <div className="flex flex-row items-center justify-between">
+          <div>{currentImage?.labels && <h3 className="text-text-secondary ">{`${currentImage.labels.length}`} labels discovered</h3>}</div>
+          <SubtleButton
+            sizes={['s', 's', 's']}
+            onClick={onReannotateClick}
+            className="items-end"
+            disabled={currentImage?.selectedLabels.length === currentImage?.labels?.length}
+          >
+            <Image src={ARROWS_CLOCKWISE_ICON} height={24} width={24} alt="arrows clockwise" />
+            Re-annotate
+          </SubtleButton>
+        </div>
+        <div className="flex flex-col gap-4">
+          <div className="flex h-full w-full flex-row flex-wrap gap-4">{renderLabels.unselectedLabels}</div>
+          <em className="text-neutral-500">Select the correct label(s) for the image.</em>
+          <div className="flex h-full w-full flex-row flex-wrap gap-4">{renderLabels.selectedLabels}</div>
         </div>
         <div>
-          <div className="flex flex-col gap-4">
-            <OutlinePrimaryButton sizes={['l', 'l', 'l']} onClick={selectAllLabels} disabled={loadingLabels}>
-              Select All
-            </OutlinePrimaryButton>
-            <Outline
-              sizes={['l', 'l', 'l']}
-              onClick={onReannotateClick}
-              disabled={currentImage?.selectedLabels.length === currentImage?.labels?.length}
-            >
-              <Image src={ARROWS_CLOCKWISE_ICON} height={24} width={24} alt="arrows clockwise" />
-              Re-annotate
-            </Outline>
+          <div className="mt-12 flex flex-col gap-4">
+            <div className="flex items-center justify-center">
+              {currentImage?.selectedLabels.length != currentImage?.labels?.length && (
+                <Primary sizes={['m', 'm', 'm']} onClick={selectAllLabels} disabled={loadingLabels}>
+                  Select All
+                </Primary>
+              )}
+            </div>
             <Primary sizes={['l', 'l', 'l']} onClick={goForward} disabled={loadingLabels}>
-              + Get Hashtag
+              Next
+              <CaretRightIcon size={16} />
             </Primary>
           </div>
         </div>
