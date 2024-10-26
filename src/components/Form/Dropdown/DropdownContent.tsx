@@ -15,12 +15,15 @@ const DropdownContent = ({
   extraElement?: React.ReactNode
 }) => {
   return (
-    <div className={`grid ${isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'} transition-all duration-300 `}>
-      <ul className={`${isOpen ? '' : 'hidden'} z-10 mt-2 w-full overflow-hidden rounded-md border border-gray-200 bg-white shadow-lg`}>
+    <div className={`grid ${isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'} transition-all duration-300`}>
+      <ul
+        className={`${isOpen ? '' : 'hidden'} z-10 mt-2 w-full overflow-hidden rounded-md border border-gray-200 bg-white shadow-lg`}
+        style={{ maxHeight: '200px', overflowY: 'auto' }} // Set max height and enable vertical scroll
+      >
         {options.map((option) => (
           <li
             key={option.value}
-            className="flex w-full cursor-pointer list-none flex-wrap items-center gap-2  px-4 py-2 hover:bg-gray-100"
+            className="flex w-full cursor-pointer list-none flex-wrap items-center gap-2 px-4 py-2 hover:bg-gray-100"
             onClick={handleOptionSelect(option.value as string)}
           >
             {isCheckbox && (

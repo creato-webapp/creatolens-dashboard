@@ -12,6 +12,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@components/ui/Tabs'
 import Dropdown from '@components/Form/Dropdown/Dropdown'
 import SubtleButton from '@components/Button/Subtle'
 import CaretLeftIcon from '@components/Icon/CaretLeftIcon'
+import CopyIcon from '@components/Icon/CopyIcon'
 
 interface Option {
   label: string
@@ -127,82 +128,73 @@ const Step3: React.FC = () => {
 
   return (
     <div>
-      <div className="required relative flex cursor-pointer flex-row  " onClick={goBack}>
-        <CaretLeftIcon />
-        <div className="flex">Hashtags Recommendation</div>
-      </div>
-
-      {currentImage?.image && (
-        <div className="relative my-4 flex aspect-square h-48 w-full items-center rounded-full md:min-w-fit md:justify-center">
-          <Image
-            fill
-            src={currentImage.image}
-            objectFit="contain"
-            className="w-fit rounded-4xl"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            alt="current image"
-          />
+      <div className="w-full md:flex md:flex-row">
+        <div className="flex flex-col md:w-1/2">
+          <div className="required relative flex cursor-pointer flex-row" onClick={goBack}>
+            <CaretLeftIcon />
+            <div className="flex">Hashtags Recommendation</div>
+          </div>
+          <div className="relative my-4 min-h-96 w-full  ">
+            {currentImage?.image && (
+              <Image
+                fill
+                src={currentImage.image}
+                objectFit="contain"
+                className="w-full rounded-4xl"
+                // sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                alt="image uploaded"
+              />
+            )}
+          </div>
         </div>
-      )}
-      <Tabs defaultValue="hashtags" className="w-full">
-        <TabsList>
-          <TabsTrigger value="hashtags">Hashtags</TabsTrigger>
-          <TabsTrigger value="labels">Labels</TabsTrigger>
-        </TabsList>
-        <TabsContent value="hashtags">
-          <div className="rounded-lg border border-neutral-300 p-4">
-            <h3 className="my-4 text-text-secondary">{`${hashtagsLength} hashtags discovered`}</h3>
-            {categorizedOptions.map((option) => (
-              <div key={`${option.name}-dropdown`} className="my-4">
+
+        <Tabs defaultValue="hashtags" className="md:w-1/2">
+          <TabsList>
+            <TabsTrigger value="hashtags">Hashtags</TabsTrigger>
+            <TabsTrigger value="labels">Labels</TabsTrigger>
+          </TabsList>
+          <TabsContent value="hashtags">
+            <div className="rounded-lg border border-neutral-300 p-4">
+              <h3 className="my-4 text-text-secondary">{`${hashtagsLength} hashtags discovered`}</h3>
+              {categorizedOptions.map((option) => (
+                <div key={`${option.name}-dropdown`} className="my-4">
+                  <Dropdown
+                    dropDownSizes={['l', 'l', 'l']}
+                    name={option.name}
+                    options={option.options}
+                    onValueChange={onClickHashtag}
+                    isCheckbox
+                    extraElement={
+                      <div className="flex w-full items-center justify-center px-2 py-8">
+                        <SubtleButton sizes={['l', 'l', 'l']} onClick={onClickCopySelected}>
+                          <CopyIcon />
+                          Copy Selected
+                        </SubtleButton>
+                      </div>
+                    }
+                  />
+                </div>
+              ))}
+            </div>
+          </TabsContent>
+          <TabsContent value="labels">
+            {labelOptions && (
+              <div className="flex flex-col gap-4">
                 <Dropdown
                   dropDownSizes={['l', 'l', 'l']}
-                  name={option.name}
-                  options={option.options}
-                  onValueChange={onClickHashtag}
+                  key="label-dropdown"
+                  name="Label"
+                  options={labelOptions}
+                  onValueChange={onClickLabel}
                   isCheckbox
-                  extraElement={
-                    <div className="flex w-full justify-center px-2 py-8">
-                      <SubtleButton sizes={['l', 'l', 'l']} onClick={onClickCopySelected}>
-                        Copy Selected
-                      </SubtleButton>
-                    </div>
-                  }
                 />
               </div>
-            ))}
-          </div>
-        </TabsContent>
-        <TabsContent value="labels">
-          {labelOptions && (
-            <div className="flex flex-col gap-4">
-              <Dropdown
-                dropDownSizes={['l', 'l', 'l']}
-                key="label-dropdown"
-                name="Label"
-                options={labelOptions}
-                onValueChange={onClickLabel}
-                isCheckbox
-              />
-            </div>
-          )}
-        </TabsContent>
-      </Tabs>
-      <div className="my-4 flex w-full flex-col gap-4">
-        {/* <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 md:grid-cols-3">
-          <Outline onClick={onClickClearAll} sizes={['s', 'l', 'l']}>
-            Clear All
-          </Outline>
-          <Primary onClick={onClickCopySelected} sizes={['s', 'l', 'l']}>
-            Copy Selected
-          </Primary>
-          <Primary onClick={onClickSelectAll} sizes={['s', 'l', 'l']}>
-            Select All
-          </Primary>
-        </div> */}
-        {/* <Primary sizes={['l', 'l', 'l']} className="w-full" onClick={generateImageByHashtag}>
-          + Generate Image
-        </Primary> */}
-        <Primary sizes={['l', 'l', 'l']} className="w-full">
+            )}
+          </TabsContent>
+        </Tabs>
+      </div>
+      <div className="mt-16 flex w-full justify-center">
+        <Primary sizes={['m', 'm', 'm']} className="w-fit">
           Restart
         </Primary>
       </div>

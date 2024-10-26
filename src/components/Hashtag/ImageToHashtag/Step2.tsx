@@ -88,7 +88,7 @@ const Step2 = () => {
 
   return (
     <div className="flex w-full flex-col gap-4 md:flex-row">
-      <div>
+      <div className="h-full w-full">
         <div className="flex flex-col">
           <div className="required relative flex cursor-pointer flex-row  " onClick={goBack}>
             <CaretLeftIcon />
@@ -97,20 +97,20 @@ const Step2 = () => {
           <div className="pl-6 text-sm text-neutral-500">Let AI knows what is in your image</div>
         </div>
 
-        <div className="relative my-4 flex aspect-square h-full w-full min-w-full rounded-full">
+        <div className="relative my-4 min-h-96 w-full rounded-full">
           {currentImage?.image && (
             <Image
               fill
               src={currentImage.image}
               objectFit="contain"
-              className="rounded-4xl"
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+              className="h-full rounded-4xl"
+              // sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               alt="image uploaded"
             />
           )}
         </div>
       </div>
-      <div className="flex w-full flex-col gap-2 md:w-1/2">
+      <div className="flex w-full flex-col gap-2">
         <div className="flex flex-row items-center justify-between">
           <div>{currentImage?.labels && <h3 className="text-text-secondary ">{`${currentImage.labels.length}`} labels discovered</h3>}</div>
           <SubtleButton
@@ -131,16 +131,18 @@ const Step2 = () => {
         <div>
           <div className="mt-12 flex flex-col gap-4">
             <div className="flex items-center justify-center">
-              {currentImage?.selectedLabels.length != currentImage?.labels?.length && (
+              {currentImage?.selectedLabels.length === 0 && (
                 <Primary sizes={['m', 'm', 'm']} onClick={selectAllLabels} disabled={loadingLabels}>
                   Select All
                 </Primary>
               )}
             </div>
-            <Primary sizes={['l', 'l', 'l']} onClick={goForward} disabled={loadingLabels}>
-              Next
-              <CaretRightIcon size={16} />
-            </Primary>
+            {currentImage?.selectedLabels.length !== 0 && (
+              <Primary sizes={['l', 'l', 'l']} onClick={goForward} disabled={loadingLabels}>
+                Next
+                <CaretRightIcon size={16} />
+              </Primary>
+            )}
           </div>
         </div>
       </div>
