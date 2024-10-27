@@ -205,7 +205,7 @@ const Dashboard = ({ botList }: Props) => {
                 Instabot Account
                 <div className="flex flex-row items-center gap-6 ">
                   <Dropdown
-                    className="flex max-w-60  md:max-w-full"
+                    className="md:max-w-1/2 flex  max-w-60"
                     onValueChange={(e) => onAccountChange(e)}
                     value={selectedAccount?.id}
                     defaultValue={selectedAccount?.id}
@@ -243,7 +243,7 @@ const Dashboard = ({ botList }: Props) => {
             </Link>
           </div>
         ) : (
-          <Tabs defaultValue={tabItems[0].value} className="mt-4 w-full">
+          <Tabs defaultValue={tabItems[0].value} className="mt-4 w-full px-4">
             <TabsList>
               {tabItems.map((item) => (
                 <TabsTrigger key={item.key} value={item.value}>

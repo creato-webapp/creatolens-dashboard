@@ -15,6 +15,7 @@ import PlusIcon from '@components/Icon/PlusIcon'
 import { IProfile, KeywordData, MostRepeatedPost } from '@services/Meta'
 import dayjs, { DATE_FORMAT } from '@utils/dayjs'
 import { Button } from '@components/Button'
+import ReportCard from '@components/ReportCard'
 
 interface Prop {
   days: number
@@ -60,6 +61,14 @@ const ReportLayout = (props: Prop) => {
   lastDate.setDate(today.getDate() - days)
   const dateStr = `${lastDate.toDateString().split(' ').slice(1).join(' ')} - ${today.toDateString().split(' ').slice(1).join(' ')}`
 
+  return (
+    <div className="flex flex-row gap-2 overflow-x-scroll">
+      <ReportCard dateRange="MAY 06 2024 - MAY 08 2024"></ReportCard>
+      <ReportCard dateRange="MAY 06 2024 - MAY 08 2024"></ReportCard>
+      <ReportCard dateRange="MAY 06 2024 - MAY 08 2024"></ReportCard>
+      <ReportCard dateRange="MAY 06 2024 - MAY 08 2024"></ReportCard>
+    </div>
+  )
   if (!botList || botList.length == 0) {
     return (
       <div className="flex h-64 w-full flex-col items-center justify-center gap-4">
