@@ -50,6 +50,7 @@ const Step2 = () => {
     }
     updateLabel(data)
   }, [currentImage, updateLabel])
+
   const renderLabels = useMemo(() => {
     if (loadingLabels) {
       return {
