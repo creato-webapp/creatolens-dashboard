@@ -3,6 +3,8 @@ import type { MostRepeatedPost } from '@services/Meta' // Changed to type-only i
 
 import ListPlusICon from './Icon/ListPlusIcon'
 import SubtleButton from './Button/Subtle'
+import HashIcon from './Icon/HashIcon'
+import RepeatedIcon from './Icon/RepeatedIcon'
 
 interface IReportCard {
   postCount: number
@@ -15,37 +17,47 @@ interface IReportCard {
 const Divider = () => <hr className="my-2 border-t border-neutral-300" />
 
 const PostCount = (props: { count: number }) => (
-  <div className="flex flex-row gap-3 py-3">
-    <div>
+  <div className="py-3">
+    <div className="flex flex-row items-center gap-2">
       <ListPlusICon />
-    </div>
-    <div className="flex flex-col gap-1">
       <div className="text-base">Post Count</div>
+    </div>
+    <div className="ml-7">
       <div className="text-sm text-neutral-500">{props.count}</div>
     </div>
   </div>
 )
 
-// const TopKeywords = (props: { keywords: KeywordData[] }) => {
-//   const { keywords } = props
-//   return (
-//     <div>
-//       {keywords.map((keyword) => {
-//         return <>{keyword.count}</>
-//       })}
-//     </div>
-//   )
-// }
+const TopKeywords = (props: { keywords: KeywordData[] }) => {
+  const { keywords } = props
+
+  const generateKeywordsString = keywords.map((keyword) => `${keyword.term} (${keyword.count})`).join(', ')
+
+  return (
+    <div className="py-3">
+      <div className="flex flex-row items-center gap-2">
+        <HashIcon />
+        <div className="text-base">Top {keywords.length} Keywords</div>
+      </div>
+      <div className="ml-7 text-sm text-neutral-500">{generateKeywordsString}</div>
+    </div>
+  )
+}
 
 const MostRepeatedPost = (props: { post: MostRepeatedPost | null }) => {
   const { post } = props
   return (
-    <div>
-      {post && (
+    <div className="py-3">
+      <div className="flex flex-row items-center gap-2">
+        <RepeatedIcon />
+        <div className="text-base">Most Repeated Post</div>
+      </div>
+      {post ? (
         <div>
-          <div className="text-base">Most Repeated Post</div>
           <div className="text-sm text-neutral-500">{post.caption}</div>
         </div>
+      ) : (
+        <div>No</div>
       )}
     </div>
   )
@@ -58,13 +70,33 @@ const exportToPDF = () => {
 const ReportCard = (props: IReportCard) => {
   const { dateRange } = props
   return (
-    <div id="report-card" className="min-w-80 ">
+    <div id="report-card" className="min-w-80 pb-12">
       <div className="rounded-lg border border-neutral-300 p-4 px-6">
         <div className="text-base font-semibold text-primary-500">{dateRange}</div>
         <Divider />
-        <PostCount count={1} />
+        <PostCount count={5} /> <Divider />
+        <TopKeywords
+          keywords={[
+            { term: 'sample1', count: 3 },
+            { term: 'sample2', count: 2 },
+            { term: 'sample3', count: 1 },
+          ]}
+        />
+        <Divider />
+        <MostRepeatedPost
+          post={{
+            caption: 'Sample Caption',
+            shortcode: 'sample-shortcode',
+            username: 'sample-username',
+            batch_id: 'sample-batch-id',
+            count: 10,
+          }}
+        />
+        <Divider />
         <div className="flex w-full items-center justify-center">
-          <SubtleButton onClick={() => exportToPDF()}>Export to PDF</SubtleButton>
+          <SubtleButton onClick={() => exportToPDF()}>
+            <div className="flex flex-row items-center">Export to PDF</div>
+          </SubtleButton>
         </div>
       </div>
     </div>
