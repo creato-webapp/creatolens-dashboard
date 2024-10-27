@@ -104,8 +104,7 @@ export async function getFilteredAccounts(
   isAsc?: boolean,
   customConfig?: AxiosRequestConfig
 ): Promise<IAccount[]> {
-  if (!account) return []
-  const filterData = generateAccountFilter(account)
+  const filterData = account && generateAccountFilter(account)
   const response = await fetcher.GET<IAccount[]>(XAPI.GET_ACCOUNTS, {
     ...customConfig,
     params: {
