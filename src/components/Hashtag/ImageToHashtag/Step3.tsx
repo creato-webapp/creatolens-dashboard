@@ -96,7 +96,7 @@ const Step3: React.FC = () => {
 
   const onClickCopySelected = useCallback(() => {
     const selected = categorizedOptions.flatMap((option) => option.options.filter((opt) => opt.checked).map((opt) => opt.label))
-    navigator.clipboard.writeText(selected.join(', '))
+    navigator.clipboard.writeText(selected.join(' '))
     addDialogue('Copied Successfully', Status.SUCCESS)
   }, [addDialogue, categorizedOptions])
 
