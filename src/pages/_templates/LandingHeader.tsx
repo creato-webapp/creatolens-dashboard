@@ -1,24 +1,26 @@
 import React from 'react'
 
-import { useRouter } from 'next/router'
-import { signIn } from 'next-auth/react'
-
-import { Button } from '@components/Button'
-
-import LandingImageLogo from './LandingImageLogo'
+import PrimaryButton from '@components/Button/Primary'
 
 interface LandingHeaderProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export default function LandingHeader(props: LandingHeaderProps) {
-  const router = useRouter()
-  const handleClick = () => {
-    router.replace('https://www.creatogether.app/zh/creatolens')
+  const TransparentCard = () => {
+    return (
+      <div className="flex flex-col items-center gap-2 rounded-3xl bg-white px-8 py-6 opacity-90">
+        <h1 className="text-title font-bold">The magical tool that gets engagement</h1>
+        <h2 className="text-subtitle font-normal">Keyword, SEO Insight, Gen AI All in one</h2>
+        <div className="flex flex-col items-center gap-8">
+          <PrimaryButton className="drop-shadow-md">Start Exploring</PrimaryButton>
+          <div className="text-xs text-neutral-500">Start with $0. No credit card needed.</div>
+          <div className="text-xs text-neutral-500">7 days a week customer services</div>
+        </div>
+      </div>
+    )
   }
   return (
-    <div
-      className={`flex w-auto flex-col items-center space-y-8 pt-12 ${props.className} bg-[url('/landing-background.png')]  bg-cover bg-bottom bg-no-repeat px-2 pb-10 md:flex-row md:justify-between`}
-    >
-      <div className="flex flex-col md:ml-12 md:w-1/2">
+    <div className={`${props.className} w-full bg-[url('/landing-background2.png')] bg-cover bg-bottom bg-no-repeat`}>
+      {/* <div className="flex flex-col md:ml-12 md:w-1/2">
         <span className="text-center md:text-left">
           <h1 className="text-title text-accent1-500">2Tag</h1>
           <div className="text-m-landing-title font-extrabold text-text-secondary md:text-d-landing-title">
@@ -39,7 +41,12 @@ export default function LandingHeader(props: LandingHeaderProps) {
           </Button.Outline>
         </div>
       </div>
-      <LandingImageLogo className="mb-10 h-auto w-full md:w-full"></LandingImageLogo>
+      <LandingImageLogo className="mb-10 h-auto w-full md:w-full"></LandingImageLogo> */}
+      <div className="flex h-[calc(100vh-95px)] items-center justify-center text-center">
+        <div className="h-4/5 w-1/3">
+          <TransparentCard />
+        </div>
+      </div>
     </div>
   )
 }
