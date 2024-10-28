@@ -10,7 +10,7 @@ const DropdownContent = ({
 }: {
   isOpen: boolean
   options: DropdownOption[]
-  handleOptionSelect: (value: string | number) => () => void
+  handleOptionSelect: (value: string | number) => () => void // Note the function signature
   isCheckbox?: boolean
   extraElement?: React.ReactNode
 }) => {
