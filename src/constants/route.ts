@@ -5,6 +5,8 @@ const ROUTE = {
   ACCOUNT_BOT_CREATE: 'accounts/bot/new',
   RECOMMENDATION: '/recommendation',
   DASHBOARD: '/dashboard',
+  IMAGE_TO_HASHTAG: '/hashtag/image-to-hashtag',
+  HASHTAG_TO_IMAGE: '/hashtag/hashtag-to-image',
 } as const
 
 export default ROUTE

@@ -7,7 +7,6 @@ import { Session } from 'next-auth/core/types'
 import { SessionProvider } from 'next-auth/react'
 
 import Dialogue from '@components/Dialogue'
-import { Layout } from '@components/Layout'
 import Modals from '@components/Modal'
 import { DialogueProvider } from '@context/DialogueContext'
 import { ModalProvider } from '@context/ModalContext'
@@ -20,18 +19,25 @@ import ErrorBoundary from '@components/common/ErrorBoundary'
 
 import Script from 'next/script'
 import { useRouter } from 'next/router'
-import { useEffect } from 'react'
+import { ReactElement, ReactNode, useEffect } from 'react'
+import { NextPage } from 'next'
 
 type PageProps = {
   session: Session
 }
 
-type Props = Omit<AppProps<PageProps>, 'pageProps'> & {
+export type NextPageWithLayout<P = object, IP = P> = NextPage<P, IP> & {
+  getLayout?: (page: ReactElement) => ReactNode
+}
+
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout
   pageProps: PageProps
 }
 
-function App({ Component, pageProps }: Props) {
+function App({ Component, pageProps }: AppPropsWithLayout) {
   const router = useRouter()
+  const getLayout = Component.getLayout ?? ((page) => page)
 
   useEffect(() => {
     const handleRouteChange = (url: string) => {
@@ -54,7 +60,7 @@ function App({ Component, pageProps }: Props) {
         <link key="icon" rel="icon" href="./favicon.ico" />
         <title>Creato Lens | AI Hashtag Maker</title>
       </Head>
-      <Layout>
+      {getLayout(
         <ErrorBoundary>
           <DialogueProvider>
             <ModalProvider>
@@ -68,7 +74,7 @@ function App({ Component, pageProps }: Props) {
             </ModalProvider>
           </DialogueProvider>
         </ErrorBoundary>
-      </Layout>
+      )}
       <Analytics />
       <SpeedInsights />
       <Script strategy="afterInteractive" src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_TRACKING_ID}`} />
