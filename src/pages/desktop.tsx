@@ -6,8 +6,8 @@ const Desktop: NextPage = () => {
   return (
     <div className="relative h-96 w-96 bg-white">
       <div className="absolute left-[81px] top-[424px] inline-flex items-end justify-start gap-7">
-        <img alt="Creato Lens" className="h-56 w-96" src="https://via.placeholder.com/361x227" />
-        <div className="w-96 self-stretch text-8xl font-extrabold leading-10 tracking-widest text-accent1-500">Creato Lens</div>
+        <img alt="2Tag" className="h-56 w-96" src="https://via.placeholder.com/361x227" />
+        <div className="w-96 self-stretch text-8xl font-extrabold leading-10 tracking-widest text-accent1-500">2Tag</div>
       </div>
       <div className="absolute left-[953px] top-[363px] inline-flex flex-col items-center justify-start gap-6 rounded bg-neutral-50 px-9 py-16 shadow">
         <div className="text-3xl font-bold leading-10 text-neutral-800">Let’s get started</div>
