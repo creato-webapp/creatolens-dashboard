@@ -5,6 +5,7 @@ import { IPromptType, PROMPT_TEMPLATE } from '@constants/prompt'
 import { remoteConfig } from '@helpers/firebase/admin'
 import handler from '@helpers/api/handlers'
 import METHOD from '@constants/method'
+import { NotFoundError, ValidationError } from '@services/error'
 
 const INITIAL_CONFIG = {
   defaultConfig: PROMPT_TEMPLATE,
@@ -21,7 +22,7 @@ export default handler.api({
     const promptType = req.query.prompt_type as IPromptType
 
     if (!promptType) {
-      return res.status(400).send({ error: 'Prompt type is required' })
+      throw new ValidationError('Prompt type is required')
     }
     const template = await remoteConfig.getServerTemplate(INITIAL_CONFIG)
 
@@ -29,11 +30,11 @@ export default handler.api({
     const promptMapperString = serverConfig.getString(MAPPER_TEMPLATE_TYPE)
     const promptMapper: mapper = JSON.parse(promptMapperString)
     if (!promptMapper) {
-      return res.status(404).send({ error: 'Prompt template not found' })
+      throw new NotFoundError('Prompt mapper is required')
     }
     const prompt = serverConfig.getString(promptMapper[promptType]!)
     if (!prompt) {
-      return res.status(404).send({ error: 'Prompt template not found' })
+      throw new NotFoundError('Prompt mapper is required')
     }
     return res.status(200).json(prompt)
   },

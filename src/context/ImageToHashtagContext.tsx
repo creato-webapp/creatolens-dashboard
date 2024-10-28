@@ -96,7 +96,7 @@ export const ImageHashtagProvider = ({ children }: ImageHashtagProviderProps) =>
           updatedImages[currentImageIndex] = {
             ...updatedImages[currentImageIndex],
             labels: labels,
-            selectedLabels: labels,
+            selectedLabels: [],
             uploadStatus: 'completed',
           }
           return updatedImages
