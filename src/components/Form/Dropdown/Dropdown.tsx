@@ -20,18 +20,20 @@ interface DropdownProps extends HTMLProps<HTMLSelectElement> {
   dropDownSizes?: [DropdownSize, DropdownSize, DropdownSize]
   selectedValue?: string
   setSelectedValue?: (arg: string | number) => void
-  isFloating?: boolean
+  isCheckbox?: boolean
+  extraElement?: React.ReactNode
 }
 
-const Dropdown: React.FC<DropdownProps> = ({ name, options, onValueChange, dropDownSizes, isFloating = false, ...props }) => {
+const Dropdown: React.FC<DropdownProps> = ({ name, options, onValueChange, dropDownSizes, isCheckbox = false, extraElement }) => {
   const [selectedValue, setSelectedValue] = useState<string | number>(name || '')
   const [isOpen, setIsOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
   const mapSelectedValueToOptions = useMemo(() => {
+    if (isCheckbox) return name
     const selectedOption = options.find((option) => option.value === selectedValue)
     return selectedOption ? selectedOption.label : selectedValue
-  }, [selectedValue, options])
+  }, [isCheckbox, name, options, selectedValue])
 
   const handleOptionSelect = useCallback(
     (value: string | number) => () => {
@@ -39,13 +41,11 @@ const Dropdown: React.FC<DropdownProps> = ({ name, options, onValueChange, dropD
         return
       }
       setSelectedValue(value)
-
-      setIsOpen(false)
       if (onValueChange) {
         onValueChange(value)
       }
     },
-    [onValueChange]
+    [setSelectedValue, onValueChange] // Add missing dependencies
   )
 
   const handleToggleMenu = () => {
@@ -74,7 +74,13 @@ const Dropdown: React.FC<DropdownProps> = ({ name, options, onValueChange, dropD
         handleToggleMenu={handleToggleMenu}
         dropDownSizes={dropDownSizes}
       />
-      <DropdownContent handleOptionSelect={handleOptionSelect} options={options} isOpen={isOpen} isFloating={isFloating} />
+      <DropdownContent
+        handleOptionSelect={handleOptionSelect}
+        options={options}
+        isOpen={isOpen}
+        isCheckbox={isCheckbox}
+        extraElement={extraElement}
+      />
     </div>
   )
 }

@@ -19,6 +19,7 @@ import SideMenuLayout from '@components/Layout/SideMenuLayout'
 import { Layout } from '@components/Layout'
 import { dateFilter, DateFilterKeys } from '@constants/dateFilter'
 import NavigationPill from '@components/ui/NavigationPill'
+import { getRoles } from '@services/util'
 
 type Props = {
   botList: IAccount[]
@@ -46,11 +47,11 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
 
   const user = session.user
 
-  const botList = await getFilteredAccounts({
-    created_by: user.email!,
-  })
+  const roles = (await getRoles(user.email!)) as string[]
+  const isAdmin = roles.includes('admin')
 
-  // const botList = []
+  const botList = isAdmin ? await getFilteredAccounts() : await getFilteredAccounts({ created_by: user.email! })
+
   return { props: { botList } }
 }
 
@@ -206,7 +207,6 @@ const Dashboard = ({ botList }: Props) => {
                     options={instaBotList}
                     name={instaBotList[0].label}
                     dropDownSizes={['s', 's', 's']}
-                    isFloating
                   />
                   <Link href={profile?.data.url ? profile.data.url : ''} target="_blank" className="flex min-h-6 min-w-6">
                     <Image className="cursor-pointer" alt={'account share button'} src={'./external-link.svg'} width={32} height={32} />
