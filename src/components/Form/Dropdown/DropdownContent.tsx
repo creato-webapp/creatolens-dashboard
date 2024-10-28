@@ -31,7 +31,8 @@ const DropdownContent = ({
                 checked={option.checked || false}
                 className="mr-2 rounded border-stroke text-primary-500 checked:bg-primary-500 focus:bg-transparent focus:ring-0"
                 defaultChecked={option.checked || false}
-                onClick={(e) => e.stopPropagation()} // Prevent triggering the `li` onClick when checkbox is clicked
+                onChange={handleOptionSelect(option.value as string)}
+                onClick={handleOptionSelect(option.value as string)}
               />
             )}
             {option.label}
