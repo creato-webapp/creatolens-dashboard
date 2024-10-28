@@ -10,9 +10,7 @@ export default function Layout({ children }: PropsWithChildren) {
   return (
     <>
       <Popover className="relative bg-white">
-        <div className="mx-auto max-w-screen-2xl">
-          <NavBar />
-        </div>
+        <NavBar />
       </Popover>
       <main className="px-4 py-4 md:mx-0">{children}</main>
       <Footer />
