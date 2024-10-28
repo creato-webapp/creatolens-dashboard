@@ -23,6 +23,7 @@ export async function reAnnotateLabel(data: ReAnnotateLabelType) {
     existing_labels: existing_labels,
     image_url: image_url,
   })
+
   const sortedLabels: string[] = Object.entries(response.data.confidence)
     .sort((a, b) => b[1] - a[1])
     .slice(0, number)

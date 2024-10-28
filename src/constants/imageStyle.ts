@@ -294,7 +294,8 @@ interface ConfidenceLevel {
 }
 
 export const CONFIDENCE_LEVELS: Record<string, ConfidenceLevel> = {
-  HIGH: { name: 'Greater Than 90% Related', threshold: 0.9 },
-  MEDIUM: { name: '80-90% Related', thresholdLow: 0.8, thresholdHigh: 0.9 },
-  LOW: { name: 'Less Than 80% Related', threshold: 0.8 },
+  HIGH: { name: '≥ 90% Related Keyword', threshold: 0.9 },
+  MEDIUM_HIGH: { name: '80-89% Related Keyword', thresholdLow: 0.8, thresholdHigh: 0.9 },
+  MEDIUM_LOW: { name: '70-79% Related Keyword', thresholdLow: 0.7, thresholdHigh: 0.8 },
+  LOW: { name: '≤ 70% Related Keyword', thresholdLow: 0, thresholdHigh: 0.7 },
 }
