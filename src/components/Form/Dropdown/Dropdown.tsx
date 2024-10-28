@@ -67,7 +67,7 @@ const Dropdown: React.FC<DropdownProps> = ({ name, options, onValueChange, dropD
   }, [])
 
   return (
-    <div ref={dropdownRef} className={`dropdown relative h-full w-full justify-end ${props.className}`}>
+    <div ref={dropdownRef} className={`dropdown relative h-full w-full justify-end `}>
       <DropdownButton
         name={mapSelectedValueToOptions as string}
         isDropdownNotSelected={false}
