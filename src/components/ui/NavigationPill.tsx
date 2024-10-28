@@ -1,14 +1,21 @@
+import { cn } from '@utils/index'
+
 interface INavigationPillProps {
   value: string
   name: string
-  onSelect: (value: string) => () => void
+  onSelect: (value: string) => void
   selected?: boolean
 }
 
 const NavigationPill = (props: INavigationPillProps) => {
   const { value, name, onSelect, selected } = props
+
+  const handleClick = () => {
+    onSelect(value)
+  }
+
   return (
-    <button className={`text-nowrap rounded-lg p-2 ${selected ? 'bg-neutral-200 text-primary-500' : ''}`} key={value} onClick={onSelect(value)}>
+    <button className={cn(`text-nowrap rounded-lg p-2 ${selected ? 'bg-neutral-200 text-primary-500' : ''}`)} key={value} onClick={handleClick}>
       {name}
     </button>
   )

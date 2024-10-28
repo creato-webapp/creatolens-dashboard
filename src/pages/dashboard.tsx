@@ -1,4 +1,4 @@
-import { ReactElement, useMemo, useState } from 'react'
+import { ReactElement, useCallback, useMemo, useState } from 'react'
 
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import Link from 'next/link'
@@ -17,7 +17,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@components/ui/Tab'
 import Dropdown from '@components/Form/Dropdown/Dropdown'
 import SideMenuLayout from '@components/Layout/SideMenuLayout'
 import { Layout } from '@components/Layout'
-import { dateFilter } from '@constants/dateFilter'
+import { dateFilter, DateFilterKeys } from '@constants/dateFilter'
+import NavigationPill from '@components/ui/NavigationPill'
 
 type Props = {
   botList: IAccount[]
@@ -174,21 +175,14 @@ const Dashboard = ({ botList }: Props) => {
   }, [botList])
 
   const MonthGroup = () => {
-    const onSelect = (item: string) => {
+    const onSelect = useCallback((item: string) => {
       setSelectedFilterDate(item)
-    }
+    }, [])
+
     return (
-      <div className="flex flex-row gap-2">
-        {Object.keys(dateFilter).map((item) => {
-          return (
-            <button
-              className={`text-nowrap rounded-lg p-2 ${selectedFilterDate === item ? 'bg-neutral-200 text-primary-500' : ''}`}
-              key={item}
-              onClick={() => onSelect(item)}
-            >
-              {dateFilter[item as keyof typeof dateFilter]}
-            </button>
-          )
+      <div className="flex flex-row gap-2 overflow-auto">
+        {(Object.keys(dateFilter) as DateFilterKeys[]).map((key) => {
+          return <NavigationPill key={key} name={dateFilter[key]} value={key} onSelect={onSelect} selected={key === selectedFilterDate} />
         })}
       </div>
     )
