@@ -5,6 +5,7 @@ import { getSession } from 'next-auth/react'
 import LandingHeader from './_templates/LandingHeader'
 import Testimonial from './_templates/Testimonial'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@components/ui/Tabs'
+import PrimaryButton from '@components/Button/Primary'
 
 export const getServerSideProps: GetServerSideProps = async (
   context: GetServerSidePropsContext
@@ -24,9 +25,24 @@ export const getServerSideProps: GetServerSideProps = async (
   }
 }
 
+interface FeatureCardProps {
+  title: string
+  description: string
+  image: string
+  button: React.ReactNode
+}
+
+const features: FeatureCardProps[] = [
+  {
+    title: 'Instagram Trend Analysis Report',
+    description: 'From up-to-date hashtags to topics, Trend Analysis can help you quickly realize the current market trend pattern.',
+    button: <PrimaryButton>See More</PrimaryButton>,
+    image: './landing.png',
+  },
+]
 const TabSession = () => {
   return (
-    <Tabs defaultValue="hashtags" className="flex w-full max-w-screen-xl flex-col items-center">
+    <Tabs defaultValue="hashtags" className="">
       <TabsList className="flex w-fit justify-center">
         <TabsTrigger value="dashboard">Instagram Trend Analysis Report</TabsTrigger>
         <TabsTrigger value="instabot">Instabot</TabsTrigger>
@@ -45,16 +61,31 @@ const TabSession = () => {
   )
 }
 
+const FeatureSession = () => {
+  return (
+    <div>
+      {features.map((feature) => {
+        return (
+          <div key={feature.title}>
+            <div className="text-heading">{feature.title}</div>
+            <div>{feature.description}</div>
+          </div>
+        )
+      })}
+    </div>
+  )
+}
 const Index: NextPage = () => {
   return (
     <div className="">
       <div className="flex w-full flex-col items-center">
         <LandingHeader className="mb-5" />
-        {/* <HowItWorks /> */}
-        <TabSession />
+        <div className="hidden w-full md:flex  md:max-w-screen-xl">
+          <TabSession />
+        </div>
+        <FeatureSession />
       </div>
       <Testimonial />
-      {/* <WhyCreatoLens /> */}
     </div>
   )
 }
