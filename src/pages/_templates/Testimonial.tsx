@@ -16,7 +16,7 @@ interface TestimonialCardsProps {
 const testimonial = [
   {
     author: 'Avenna',
-    text: ['I was able to ', ' based on the hashtags used by Creato lens! Will use it more often in the future.'],
+    text: ['I was able to ', ' based on the hashtags used by 2Tag! Will use it more often in the future.'],
     title: 'Videographer',
     img: '/userAvenna.jpeg',
     orangeText: 'get 5,000+ organic impressions',
@@ -48,7 +48,7 @@ const TestimonialCards: React.FC<TestimonialCardsProps> = ({ comments = testimon
         <span className="font-extrabold  tracking-wide text-accent1-500">Digital Marketers</span>
         <span className="font-medium  text-slate-600">, </span>
         <span className="font-extrabold  tracking-wide text-accent1-500">Freelancers</span>
-        <span className="font-medium  text-slate-600"> use Creato LENS for running their social media page </span>
+        <span className="font-medium  text-slate-600"> use 2Tag for running their social media page </span>
       </h2>
       <div className="grid-cols-3  md:mx-4 md:flex">
         {comments?.map((comment, index) => (

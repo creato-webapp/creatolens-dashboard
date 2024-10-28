@@ -45,8 +45,8 @@ const Step1 = () => {
   const fileSizeInMB = useMemo(() => (imageDetails.size ? (imageDetails.size / (1024 * 1024)).toFixed(2) : null), [imageDetails.size])
 
   return (
-    <div className="flex flex-col gap-3 rounded-2xl">
-      <div className="w-full">
+    <div className="flex h-full flex-col gap-3 rounded-2xl">
+      <div className="h-full w-full">
         <h2 className="text-subheading md:block">Image Upload</h2>
         <h4 className="my-2 text-sm text-neutral-500">
           Drag and drop or{' '}
@@ -55,12 +55,12 @@ const Step1 = () => {
           </span>{' '}
           your files
         </h4>
-        <div className="flex flex-col items-center justify-center">
-          <div className="h-full w-full items-center md:mt-0">
+        <div className="md:mt-0 md:px-4">
+          <div className="w-full items-center">
             <ImageUpload uploadedImage={uploadedImage} setUploadedImage={setUploadedImage} setImageDetails={setImageDetails} ref={fileInputRef} />
           </div>
-          <div className="flex w-full flex-col justify-center gap-4 md:w-1/2">
-            <div className="flex flex-row flex-wrap items-center gap-x-4 text-base text-neutral-500">
+          <div className="flex w-full flex-col justify-center gap-4 ">
+            <div className="flex flex-row flex-wrap items-center gap-x-4 text-base text-neutral-500 md:max-h-96">
               {imageDetails.path && (
                 <em className="">
                   Image uploaded: {imageDetails.path}
