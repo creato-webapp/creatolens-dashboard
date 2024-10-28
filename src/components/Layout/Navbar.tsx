@@ -13,21 +13,22 @@ import { Title } from '@components/Typography'
 import useAuth from '@hooks/useAuth'
 
 import { Button } from '..'
+// import DarkModeIcon from '@components/Icon/DarkModeIcon'
+import Avatar from '@components/Avatar'
 
 const LOGO_SRC = IMAGE.LOGO_CREATO_ORANGE
 
 const LINKS = [
-  { name: 'User Guide', path: ROUTE.GUIDE },
   { name: 'Accounts', path: ROUTE.ACCOUNTS },
   { name: 'Recommendation', path: ROUTE.RECOMMENDATION },
   { name: 'Trend Analysis', path: ROUTE.DASHBOARD },
+  { name: 'Image to Hashtags', path: ROUTE.IMAGE_TO_HASHTAG },
 ] as const
 
 const NavBar: React.FC = () => {
   const router = useRouter()
   const { session, onLogin, onLogout } = useAuth()
   const [isMenuCollapse, setIsMenuCollapse] = useState(true)
-
   const pages = session ? LINKS : []
 
   const toggleMenu = useCallback(() => {
@@ -39,66 +40,38 @@ const NavBar: React.FC = () => {
   }, [])
 
   return (
-    <nav className="relative flex h-auto justify-between bg-bg-dark px-4 md:px-6">
-      <div className="flex min-w-8 md:hidden">
-        {session && (
+    <nav className="relative flex h-auto items-center justify-between border-b border-neutral-300 px-6 py-7 md:mx-10 md:px-6 md:px-8">
+      <div className="flex flex-row gap-4">
+        <div className="flex min-w-8 md:hidden">
           <div className={'my-auto flex w-full md:hidden'} onClick={toggleMenu}>
             <Button.Text className="text-text-primary">
               <MenuIcon></MenuIcon>
             </Button.Text>
           </div>
-        )}
-      </div>
-      <Link href="/">
-        <div className="my-auto shrink-0">
-          <img src={LOGO_SRC} alt="Logo" className="h-12 md:h-16" />
         </div>
-      </Link>
-      <div className="hidden space-x-10 justify-self-center md:flex md:min-h-16 md:items-center">
-        {pages.map((page, index) => (
-          <div key={`${page.name}-${index}`} className={`flex h-full flex-col items-center justify-center`}>
-            <Link
-              href={page.path}
-              className={`${
-                router.pathname === page.path ? 'border-t-4 pb-1' : 'py-1'
-              } box-border flex h-full items-center  border-accent1-500 text-center`}
-            >
-              <h3 className={`${router.pathname === page.path ? ' text-accent1-500' : ''} font-extrabold`}>{page.name}</h3>
-            </Link>
+        <Link href="/">
+          <div className="flex h-full items-center">
+            <img src={LOGO_SRC} alt="Logo" className="h-10" />
           </div>
-        ))}
+        </Link>
       </div>
-      <div className="flex w-8 md:hidden">
+
+      <div className="flex flex-row-reverse items-center md:flex-row">
+        {/* <div className="flex h-10 w-10 items-center">
+          <DarkModeIcon height={'20'} width={'20'} />
+        </div> */}
+
         {session ? (
-          <Button.Text onClick={onLogout} className="text-text-primary">
-            <LogoutIcon />
-          </Button.Text>
+          <Avatar size={'large'} src={session?.user?.image ? session?.user?.image : IMAGE.BOT_CREATO} fallbackSrc={IMAGE.BOT_CREATO} />
         ) : (
-          <Button.Text onClick={onLogin} className="text-text-primary">
+          <Button.Text onClick={onLogin} className="flex w-full flex-row items-center justify-center gap-4">
             <LoginIcon />
-          </Button.Text>
-        )}
-      </div>
-      <div className="my-auto hidden md:flex">
-        {session ? (
-          <Button.Text onClick={onLogout} className="flex h-auto items-center rounded">
-            <LogoutIcon className="mr-1" size={24} fillColor="fill-accent2-500"></LogoutIcon>
-            <Title level={3} bold className="text-accent2-500">
-              Logout
-            </Title>
-          </Button.Text>
-        ) : (
-          <Button.Text onClick={onLogin} className="flex h-auto items-center rounded">
-            <LoginIcon className="mr-1" size={24} fillColor="fill-accent2-500"></LoginIcon>
-            <Title level={3} bold className="text-accent2-500">
-              Sign In
-            </Title>
           </Button.Text>
         )}
       </div>
       <aside
         id="default-sidebar"
-        className={`fixed z-50 h-screen w-screen -translate-x-4 transition-transform ${isMenuCollapse ? 'hidden' : 'block'}`}
+        className={`fixed top-0 z-50 h-screen w-screen -translate-x-8 transition-transform ${isMenuCollapse ? 'hidden' : 'block'}`}
         aria-label="Sidebar"
       >
         <div className="flex h-[100vh] flex-col overflow-y-auto bg-gray-50 dark:bg-gray-800">
@@ -116,6 +89,17 @@ const NavBar: React.FC = () => {
                 </Link>
               </li>
             ))}
+            <div className="flex w-full text-lg font-bold text-text-primary md:hidden">
+              {session ? (
+                <Button.Text onClick={onLogout} className="flex w-full flex-row items-center justify-center gap-4 ">
+                  Logout <LogoutIcon />
+                </Button.Text>
+              ) : (
+                <Button.Text onClick={onLogin} className="flex w-full flex-row items-center justify-center gap-4">
+                  Login <LoginIcon />
+                </Button.Text>
+              )}
+            </div>
           </ul>
         </div>
       </aside>
