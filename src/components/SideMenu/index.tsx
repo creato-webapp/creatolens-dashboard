@@ -2,6 +2,9 @@ import Link from 'next/link' // Import Next.js Link
 import { CaretUpIcon } from '@components/Icon'
 import { useState } from 'react'
 import ROUTE from '@constants/route'
+import SubtleButton from '@components/Button/Subtle'
+import LogoutIcon from '@components/Icon/LogOutIcon'
+import useAuth from '@hooks/useAuth'
 
 const menus = [
   {
@@ -31,6 +34,7 @@ const menus = [
 
 const SideMenu = () => {
   const [active, setActive] = useState<string>('')
+  const { onLogout } = useAuth()
 
   const toggleMenu = (header: string) => {
     setActive(active === header ? '' : header) // Toggle active state
@@ -69,7 +73,12 @@ const SideMenu = () => {
           </div>
         ))}
       </div>
-      <div className="flex items-end justify-center">Logout</div>
+      <div className="flex items-end justify-center">
+        <SubtleButton onClick={onLogout} className="flex h-auto items-center rounded">
+          <LogoutIcon className="mr-1" size={24} fillColor="fill-accent2-500"></LogoutIcon>
+          Logout
+        </SubtleButton>
+      </div>
     </div>
   )
 }
