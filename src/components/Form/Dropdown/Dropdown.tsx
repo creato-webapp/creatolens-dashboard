@@ -22,9 +22,10 @@ interface DropdownProps extends HTMLProps<HTMLSelectElement> {
   setSelectedValue?: (arg: string | number) => void
   isCheckbox?: boolean
   extraElement?: React.ReactNode
+  isFloating?: boolean
 }
 
-const Dropdown: React.FC<DropdownProps> = ({ name, options, onValueChange, dropDownSizes, isCheckbox = false, extraElement, ...props }) => {
+const Dropdown: React.FC<DropdownProps> = ({ name, options, onValueChange, dropDownSizes, isCheckbox = false, extraElement, isFloating = false }) => {
   const [selectedValue, setSelectedValue] = useState<string | number>(name || '')
   const [isOpen, setIsOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
@@ -80,6 +81,7 @@ const Dropdown: React.FC<DropdownProps> = ({ name, options, onValueChange, dropD
         isOpen={isOpen}
         isCheckbox={isCheckbox}
         extraElement={extraElement}
+        isFloating={isFloating}
       />
     </div>
   )
