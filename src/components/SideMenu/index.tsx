@@ -34,6 +34,7 @@ const menus = [
 
 const SideMenu = () => {
   const [active, setActive] = useState<string>('')
+
   const { onLogout } = useAuth()
 
   const toggleMenu = (header: string) => {
