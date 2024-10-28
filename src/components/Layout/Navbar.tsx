@@ -13,8 +13,9 @@ import { Title } from '@components/Typography'
 import useAuth from '@hooks/useAuth'
 
 import { Button } from '..'
-// import DarkModeIcon from '@components/Icon/DarkModeIcon'
+import DarkModeIcon from '@components/Icon/DarkModeIcon'
 import Avatar from '@components/Avatar'
+import PrimaryButton from '@components/Button/Primary'
 
 const LOGO_SRC = IMAGE.LOGO_CREATO_ORANGE
 
@@ -40,7 +41,7 @@ const NavBar: React.FC = () => {
   }, [])
 
   return (
-    <nav className="relative flex h-auto items-center justify-between border-b border-neutral-300 px-6 py-7 md:mx-10 md:px-6 md:px-8">
+    <nav className="relative my-2 flex h-auto items-center justify-between border-b border-neutral-300 px-6 py-7 md:mx-10 md:px-6">
       <div className="flex flex-row gap-4">
         <div className="flex min-w-8 md:hidden">
           <div className={'my-auto flex w-full md:hidden'} onClick={toggleMenu}>
@@ -57,16 +58,23 @@ const NavBar: React.FC = () => {
       </div>
 
       <div className="flex flex-row-reverse items-center md:flex-row">
-        {/* <div className="flex h-10 w-10 items-center">
-          <DarkModeIcon height={'20'} width={'20'} />
-        </div> */}
-
+        <div className="flex flex-row items-center gap-2">
+          <Link className="p-2" href={''}>
+            Feature
+          </Link>
+          <Link href={''} className="p-2">
+            Support
+          </Link>
+          <div className="flex h-10 w-10 items-center">
+            <DarkModeIcon height={'20'} width={'20'} />
+          </div>
+        </div>
         {session ? (
           <Avatar size={'large'} src={session?.user?.image ? session?.user?.image : IMAGE.BOT_CREATO} fallbackSrc={IMAGE.BOT_CREATO} />
         ) : (
-          <Button.Text onClick={onLogin} className="flex w-full flex-row items-center justify-center gap-4">
-            <LoginIcon />
-          </Button.Text>
+          <PrimaryButton onClick={onLogin} sizes={['s', 's', 's']} className="flex w-full flex-row items-center justify-center gap-4">
+            Log in/ Register
+          </PrimaryButton>
         )}
       </div>
       <aside
