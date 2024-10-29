@@ -50,8 +50,8 @@ const TestimonialCards: React.FC<TestimonialCardsProps> = ({ comments = testimon
 
   return (
     <div className="flex w-full justify-center py-10">
-      <div className="max-w-screen-xl ">
-        <h2 className="mb-14 flex flex-col">
+      <div className="max-w-screen-xl md:px-12">
+        <h2 className="mb-14 flex flex-col gap-2">
           <span className="text-heading"> Loved & trusted by +500,000 users. </span>
           <span className="text-subheading text-neutral-500">Content creators, Digital marketers, and more</span>
         </h2>

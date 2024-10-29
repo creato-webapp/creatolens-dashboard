@@ -7,7 +7,7 @@ interface LandingHeaderProps extends React.HTMLAttributes<HTMLDivElement> {}
 export default function LandingHeader(props: LandingHeaderProps) {
   const TransparentCard = () => {
     return (
-      <div className="flex flex-col items-center gap-2 rounded-3xl bg-white px-8 py-6 opacity-90">
+      <div className="flex w-full flex-col items-center gap-2 rounded-3xl bg-white px-2 py-6 opacity-90 md:px-8">
         <h1 className="text-title font-bold">The magical tool that gets engagement</h1>
         <h2 className="text-subtitle font-normal">Keyword, SEO Insight, Gen AI All in one</h2>
         <div className="flex flex-col items-center gap-8">
