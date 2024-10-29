@@ -66,36 +66,37 @@ const ImageUpload = forwardRef<HTMLInputElement, IImageUpload>((props, fileInput
         borderRadius: '0px',
         padding: uploadedImage ? '5px' : '40px',
         textAlign: 'center',
-        backgroundColor: isDragActive ? '#F5F6F6' : uploadedImage ? '' : '#F5F6F6',
+        alignItems: 'center',
+        backgroundColor: isDragActive ? '#D9D9D9' : '#F5F6F6',
         color: '#445F6F',
         transition: 'background-color 0.2s ease-in-out',
+        height: '100%',
         // marginBottom: '20px',
       }}
-      className="flex aspect-square h-full w-full items-center justify-center"
+      className="flex aspect-square w-auto flex-col items-center justify-center md:aspect-auto md:min-h-96"
     >
       <input {...getInputProps()} ref={fileInputRef} />
-      <div style={{ display: 'flex', width: '100%', flexDirection: 'column', alignItems: 'center' }}>
-        {imagePreview ? (
-          <div style={{ textAlign: 'center' }} className=" relative h-full w-full">
-            <div className=" absolute right-5 top-5 flex h-12 w-12 cursor-pointer rounded-full bg-primary-500 p-4 text-white" onClick={clearFile}>
-              <div className="flex h-full w-full items-center justify-center">X</div>
-            </div>
-            <img
-              src={imagePreview}
-              draggable={false}
-              alt="Uploaded"
-              style={{ width: '100%', maxWidth: '100%', maxHeight: '400px', borderRadius: '10px', objectFit: 'contain' }}
-            />
+      {imagePreview ? (
+        <div className="relative flex w-full flex-col items-center">
+          <div className="absolute right-5 top-5 flex h-12 w-12 cursor-pointer rounded-full bg-primary-500 p-4 text-white" onClick={clearFile}>
+            <div className="flex h-full w-full items-center justify-center">X</div>
           </div>
-        ) : (
-          <>
-            <UploadIcon className="" />
-            {/* <img draggable={false} src={UploadIcon} alt="Upload Icon" style={{ width: '50px', marginBottom: '20px' }} /> */}
-            <h4>File format accepted PNG, JPG, JPEG</h4>
-            <h4>Max. file size 5 MB</h4>
-          </>
-        )}
-      </div>
+          <img
+            src={imagePreview}
+            draggable={false}
+            alt="Uploaded"
+            className="aspect-square md:max-h-96"
+            style={{ width: '100%', maxWidth: '100%', borderRadius: '10px', objectFit: 'contain' }}
+          />
+        </div>
+      ) : (
+        <div className="flex w-full flex-col items-center">
+          <UploadIcon className="" />
+          {/* <img draggable={false} src={UploadIcon} alt="Upload Icon" style={{ width: '50px', marginBottom: '20px' }} /> */}
+          <h4>File format accepted PNG, JPG, JPEG</h4>
+          <h4>Max. file size 5 MB</h4>
+        </div>
+      )}
     </div>
   )
 })
