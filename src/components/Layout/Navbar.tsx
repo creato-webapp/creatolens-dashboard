@@ -58,7 +58,7 @@ const NavBar: React.FC = () => {
       </div>
 
       <div className="flex flex-row-reverse items-center md:flex-row">
-        <div className="flex flex-row items-center gap-2">
+        <div className="flex hidden flex-row items-center gap-2 md:flex">
           <Link className="p-2" href={''}>
             Feature
           </Link>
@@ -79,7 +79,7 @@ const NavBar: React.FC = () => {
       </div>
       <aside
         id="default-sidebar"
-        className={`fixed top-0 z-50 h-screen w-screen -translate-x-8 transition-transform ${isMenuCollapse ? 'hidden' : 'block'}`}
+        className={`fixed top-0 z-50 h-screen w-screen -translate-x-7 transition-transform ${isMenuCollapse ? 'hidden' : 'block'}`}
         aria-label="Sidebar"
       >
         <div className="flex h-[100vh] flex-col overflow-y-auto bg-gray-50 dark:bg-gray-800">
