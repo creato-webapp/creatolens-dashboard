@@ -45,8 +45,11 @@ const Dropdown: React.FC<DropdownProps> = ({ name, options, onValueChange, dropD
       if (onValueChange) {
         onValueChange(value)
       }
+      if (!isCheckbox) {
+        setIsOpen(false)
+      }
     },
-    [setSelectedValue, onValueChange] // Add missing dependencies
+    [onValueChange, isCheckbox] // Add missing dependencies
   )
 
   const handleToggleMenu = () => {
