@@ -3,7 +3,7 @@ const CopyIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="none" {...props}>
     <g clipPath="url(#a)">
       <path
-        stroke="#1E1E1E"
+        stroke="#FFFFFF"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth={2}

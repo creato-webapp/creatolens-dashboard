@@ -200,7 +200,7 @@ export const ImageHashtagProvider = ({ children }: ImageHashtagProviderProps) =>
             return {
               ...img,
               labels: updatedLabels,
-              selectedLabels: updatedLabels,
+              selectedLabels: [],
             }
           }
           return img

@@ -31,9 +31,7 @@ const ImageUpload = forwardRef<HTMLInputElement, IImageUpload>((props, fileInput
         const filePath = file.name || ''
 
         const fileFormat = file.type
-        // Get the file extension
         const fileExtension = file.name.split('.').pop()
-        // If you want to save the file path and format to state or props
 
         setImageDetails({
           size: file.size,
@@ -47,6 +45,9 @@ const ImageUpload = forwardRef<HTMLInputElement, IImageUpload>((props, fileInput
   })
 
   const clearFile = useCallback(() => {
+    if (fileInputRef && 'current' in fileInputRef && fileInputRef.current) {
+      fileInputRef.current.value = ''
+    }
     setUploadedImage(null)
     setImagePreview(null)
     setImageDetails({})
@@ -71,9 +72,13 @@ const ImageUpload = forwardRef<HTMLInputElement, IImageUpload>((props, fileInput
         color: '#445F6F',
         transition: 'background-color 0.2s ease-in-out',
         height: '100%',
-        // marginBottom: '20px',
       }}
-      className="flex aspect-square w-auto flex-col items-center justify-center md:aspect-auto md:min-h-96"
+      className="flex aspect-square w-auto cursor-pointer flex-col items-center justify-center md:aspect-auto md:min-h-96"
+      onClick={() => {
+        if (fileInputRef && 'current' in fileInputRef && fileInputRef.current) {
+          fileInputRef.current.click()
+        }
+      }}
     >
       <input {...getInputProps()} ref={fileInputRef} />
       {imagePreview ? (
@@ -92,7 +97,6 @@ const ImageUpload = forwardRef<HTMLInputElement, IImageUpload>((props, fileInput
       ) : (
         <div className="flex w-full flex-col items-center">
           <UploadIcon className="" />
-          {/* <img draggable={false} src={UploadIcon} alt="Upload Icon" style={{ width: '50px', marginBottom: '20px' }} /> */}
           <h4>File format accepted PNG, JPG, JPEG</h4>
           <h4>Max. file size 5 MB</h4>
         </div>
