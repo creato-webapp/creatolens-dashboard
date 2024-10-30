@@ -15,6 +15,7 @@ import PlusIcon from '@components/Icon/PlusIcon'
 import { IProfile, KeywordData, MostRepeatedPost } from '@services/Meta'
 import dayjs, { DATE_FORMAT } from '@utils/dayjs'
 import { Button } from '@components/Button'
+import ReportCard from '@components/ReportCard'
 
 interface Prop {
   days: number
@@ -76,6 +77,7 @@ const ReportLayout = (props: Prop) => {
     )
   }
 
+  return <ReportCard postCount={postCount ? postCount : 0} dateRange={''} keyword={keyword} mostRepeatedPost={mostRepeatedPost} />
   return (
     <div className="flex flex-col">
       <div className="my-2 md:my-7 md:h-[1px] md:bg-[#DDE5EA]" />
@@ -106,7 +108,7 @@ const ReportLayout = (props: Prop) => {
               <h2>Top 10 Keywords</h2>
               <div className="font-medium italic text-text-secondary">&quot;From hashtags, captions, locations&quot;</div>
               <div className="flex w-full flex-row flex-wrap text-xl">
-                {keyword ? (
+                {/* {keyword ? (
                   keyword.map((item: { term: string; count: number }, index: number) => {
                     return (
                       <div key={item.term} className="flex flex-row font-bold text-text-secondary">
@@ -123,7 +125,7 @@ const ReportLayout = (props: Prop) => {
                   </div>
                 ) : (
                   <div> No Keyword </div>
-                )}
+                )} */}
               </div>
             </div>
           }

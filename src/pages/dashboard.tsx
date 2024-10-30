@@ -103,14 +103,6 @@ const Dashboard = ({ botList }: Props) => {
     profileIsLoading,
   }
 
-  // const onKeyChange = (key: string) => {
-  //   const targetItem = tabItems.find((item) => item.key === key)
-  //   setMetaAttributes((pre) => ({
-  //     ...pre,
-  //     days: Number(targetItem?.days),
-  //   }))
-  // }
-
   const onAccountChange = (e: string | number) => {
     const targetAccount = typeof e === 'string' ? botList?.find((item) => item.id === e) : null
     setMetaAttributes((prev) => ({
@@ -178,6 +170,10 @@ const Dashboard = ({ botList }: Props) => {
   const MonthGroup = () => {
     const onSelect = useCallback((item: string) => {
       setSelectedFilterDate(item)
+      setMetaAttributes((pre) => ({
+        ...pre,
+        days: selectedFilterDate === 'THIS_WEEK' ? 7 : selectedFilterDate === 'THIS_MONTH' ? 30 : 0,
+      }))
     }, [])
 
     return (
@@ -198,15 +194,16 @@ const Dashboard = ({ botList }: Props) => {
             <div>
               <div className="relative flex flex-col gap-2 px-4 py-6">
                 Instabot Account
-                <div className="flex flex-row items-center gap-6 ">
+                <div className="flex w-64 flex-row items-center gap-6">
                   <Dropdown
-                    className="md:max-w-1/2 flex  max-w-60"
+                    className="flex"
                     onValueChange={(e) => onAccountChange(e)}
                     value={selectedAccount?.id}
                     defaultValue={selectedAccount?.id}
                     options={instaBotList}
                     name={instaBotList[0].label}
                     dropDownSizes={['s', 's', 's']}
+                    isFloating
                   />
                   <Link href={profile?.data.url ? profile.data.url : ''} target="_blank" className="flex min-h-6 min-w-6">
                     <Image className="cursor-pointer" alt={'account share button'} src={'./external-link.svg'} width={32} height={32} />
@@ -240,7 +237,7 @@ const Dashboard = ({ botList }: Props) => {
           <Tabs defaultValue={tabItems[0].value} className="mt-4 w-full px-4">
             <TabsList>
               {tabItems.map((item) => (
-                <TabsTrigger key={item.key} value={item.value}>
+                <TabsTrigger className="w-full" key={item.key} value={item.value}>
                   {item.title}
                 </TabsTrigger>
               ))}
