@@ -33,8 +33,8 @@ interface IFeatureLayout {
 
 const FeatureLayout = (props: IFeatureLayout) => {
   return (
-    <div className="feature-layout flex w-full flex-col pb-12">
-      <div className="flex flex-col gap-6 px-6 lg:max-w-screen-xl">
+    <div className="feature-layout flex w-full flex-col items-center pb-12">
+      <div className="flex flex-col gap-6 px-6 lg:max-w-screen-2xl">
         <div className="hidden md:flex">
           <Breadcrumb lastItemName={props.heading} />
         </div>
