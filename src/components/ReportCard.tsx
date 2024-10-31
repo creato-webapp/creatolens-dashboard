@@ -71,7 +71,7 @@ const exportToPDF = () => {
 const ReportCard = (props: IReportCard) => {
   const { dateRange, postCount, keyword } = props
   return (
-    <div id="report-card" className="min-w-80 pb-12">
+    <div id="report-card" className="w-full pb-12 md:min-w-80">
       <div className="rounded-lg border border-neutral-300 p-4 px-6">
         <div className="text-base font-semibold text-primary-500">{dateRange}</div>
         <Divider />

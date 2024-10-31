@@ -77,7 +77,11 @@ const ReportLayout = (props: Prop) => {
     )
   }
 
-  return <ReportCard postCount={postCount ? postCount : 0} dateRange={''} keyword={keyword} mostRepeatedPost={mostRepeatedPost} />
+  return (
+    <div className="flex w-full">
+      <ReportCard postCount={postCount ? postCount : 0} dateRange={''} keyword={keyword} mostRepeatedPost={mostRepeatedPost} />
+    </div>
+  )
   return (
     <div className="flex flex-col">
       <div className="my-2 md:my-7 md:h-[1px] md:bg-[#DDE5EA]" />

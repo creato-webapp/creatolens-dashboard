@@ -1,4 +1,4 @@
-import { ReactElement, useCallback, useMemo, useState } from 'react'
+import { ReactElement, useMemo, useState } from 'react'
 
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import Link from 'next/link'
@@ -17,9 +17,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@components/ui/Tabs'
 import Dropdown from '@components/Form/Dropdown/Dropdown'
 import SideMenuLayout from '@components/Layout/SideMenuLayout'
 import { Layout } from '@components/Layout'
-import { dateFilter, DateFilterKeys } from '@constants/dateFilter'
-import NavigationPill from '@components/ui/NavigationPill'
 import { getRoles } from '@services/util'
+import { DatePickerWithRange } from '@components/ui/DatePickerWithRange'
+import { DateRange } from 'react-day-picker'
+import dayjs from '@utils/dayjs'
 
 type Props = {
   botList: IAccount[]
@@ -75,7 +76,10 @@ const Dashboard = ({ botList }: Props) => {
     return bot ? bot : null
   }, [botList, metaAttributes.accId])
 
-  const [selectedFilterDate, setSelectedFilterDate] = useState<string>('THIS_WEEK')
+  const [date, setDate] = useState<DateRange | undefined>({
+    from: new Date(new Date().setDate(new Date().getDate() - 7)), // 7 days ago
+    to: new Date(), // today
+  })
 
   const { data: keywordData, isLoading: keywordIsLoading } = useKeyword(metaAttributes)
   const { data: postCountData, isLoading: postCountIsLoading } = usePostCount(metaAttributes)
@@ -167,24 +171,6 @@ const Dashboard = ({ botList }: Props) => {
     })
   }, [botList])
 
-  const MonthGroup = () => {
-    const onSelect = useCallback((item: string) => {
-      setSelectedFilterDate(item)
-      setMetaAttributes((pre) => ({
-        ...pre,
-        days: selectedFilterDate === 'THIS_WEEK' ? 7 : selectedFilterDate === 'THIS_MONTH' ? 30 : 0,
-      }))
-    }, [])
-
-    return (
-      <div className="flex flex-row gap-2 overflow-auto">
-        {(Object.keys(dateFilter) as DateFilterKeys[]).map((key) => {
-          return <NavigationPill key={key} name={dateFilter[key]} value={key} onSelect={onSelect} selected={key === selectedFilterDate} />
-        })}
-      </div>
-    )
-  }
-
   return (
     <div className="flex w-full justify-center ">
       <div className="flex w-full max-w-screen-xl flex-col">
@@ -210,8 +196,13 @@ const Dashboard = ({ botList }: Props) => {
                   </Link>
                 </div>
               </div>
-              <div className="scrollbar-hidden flex w-full overflow-x-auto ">
-                <MonthGroup />
+              <div className="">
+                <DatePickerWithRange date={date} className={''} setDate={setDate} />
+                {date && (
+                  <div>
+                    {dayjs(date.from).format('MMM DD, YYYY')} - {dayjs(date.to).format('MMM DD, YYYY')}
+                  </div>
+                )}
               </div>
               <div className="mx-4 border-b border-neutral-300 pt-4"></div>
             </div>
@@ -234,7 +225,7 @@ const Dashboard = ({ botList }: Props) => {
             </Link>
           </div>
         ) : (
-          <Tabs defaultValue={tabItems[0].value} className="mt-4 w-full px-4">
+          <Tabs defaultValue={tabItems[0].value} className="mt-4 w-full ">
             <TabsList>
               {tabItems.map((item) => (
                 <TabsTrigger className="w-full" key={item.key} value={item.value}>
