@@ -13,21 +13,18 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({ lastItemName }) => {
   return (
     <nav aria-label="breadcrumb" className="my-4">
       <ol className="flex items-center space-x-2 text-base text-neutral-700">
-        {/* Back Button */}
         <li>
           <button onClick={() => router.back()} className="mr-2 flex items-center hover:underline">
             {`< Back`}
           </button>
         </li>
 
-        {/* Home Link */}
         <li className="breadcrumb-item">
           <Link href="/" className="hover:underline">
             Home
           </Link>
         </li>
 
-        {/* Breadcrumb Paths */}
         {pathnames.map((value, index) => {
           const href = `/${pathnames.slice(0, index + 1).join('/')}`
           const isLast = index === pathnames.length - 1
