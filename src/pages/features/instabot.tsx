@@ -5,7 +5,7 @@ const Instabot = () => {
     <FeatureLayout
       heading={'Instabot'}
       card={{
-        image: '',
+        image: '/hashtag/analysis.png',
         heading: 'What is Instabot?',
         subheading: 'Train a personal ai on your data and make images in your style in seconds.',
         description:
