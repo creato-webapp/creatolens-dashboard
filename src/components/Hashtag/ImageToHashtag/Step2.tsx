@@ -52,13 +52,6 @@ const Step2 = () => {
   }, [currentImage, updateLabel])
 
   const renderLabels = useMemo(() => {
-    if (loadingLabels) {
-      return {
-        selectedLabels: <Skeleton count={3} style={{ height: 40 }} containerClassName="flex-1" />,
-        unselectedLabels: null,
-      }
-    }
-
     const selectedLabels = currentImage?.labels
       ?.filter((label) => currentImage.selectedLabels.includes(label))
       .map((label) => (
@@ -70,19 +63,23 @@ const Step2 = () => {
         </Badge>
       ))
 
-    const unselectedLabels = currentImage?.labels
-      ?.filter((label) => !currentImage.selectedLabels.includes(label))
-      .map((label) => (
-        <Badge
-          key={`key-${label}`}
-          className="cursor-pointer"
-          variant={'destructive'}
-          onClose={() => onClose(label)}
-          onClick={() => onSelected(label)}
-        >
-          <div className="flex flex-row items-center gap-2">{label}</div>
-        </Badge>
-      ))
+    const unselectedLabels = loadingLabels ? (
+      <Skeleton count={2} style={{ height: 40 }} containerClassName="flex-1" />
+    ) : (
+      currentImage?.labels
+        ?.filter((label) => !currentImage.selectedLabels.includes(label))
+        .map((label) => (
+          <Badge
+            key={`key-${label}`}
+            className="cursor-pointer"
+            variant={'destructive'}
+            onClose={() => onClose(label)}
+            onClick={() => onSelected(label)}
+          >
+            <div className="flex flex-row items-center gap-2">{label}</div>
+          </Badge>
+        ))
+    )
 
     return { selectedLabels, unselectedLabels }
   }, [currentImage, loadingLabels, onClose, onSelected])
@@ -96,7 +93,7 @@ const Step2 = () => {
         </div>
         <div className="pl-9 text-sm text-neutral-500">Let AI knows what is in your image</div>
       </div>
-      <div className="flex flex-col md:flex-row ">
+      <div className="flex flex-col gap-2 md:flex-row">
         <div className="h-full w-full">
           <div className="relative my-4 min-h-96 w-full rounded-full">
             {currentImage?.image && (
@@ -126,7 +123,7 @@ const Step2 = () => {
           </div>
           <div className="flex flex-col gap-4">
             <div className="flex h-full w-full flex-row flex-wrap gap-4">{renderLabels.unselectedLabels}</div>
-            <em className="text-neutral-500">Select the correct label(s) for the image.</em>
+            <em className="text-neutral-500">Select the correct label(s) for the image. ({`${renderLabels.selectedLabels?.length}/10`})</em>
             <div className="flex h-full w-full flex-row flex-wrap gap-4">{renderLabels.selectedLabels}</div>
           </div>
           <div>
