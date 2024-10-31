@@ -5,7 +5,7 @@ const InstagramTrendAnalysis = () => {
     <FeatureLayout
       heading={'Instagram Trend Analysis'}
       card={{
-        image: '/features/instagram-analysis.png',
+        image: '/hashtag/analysis.png',
         heading: 'Next-level Trend Tracer. Now in 2TAG',
         subheading: 'From up-to-date hashtags to topics, Trend Analysis can help you quickly realize the current market trend pattern.',
         description:
