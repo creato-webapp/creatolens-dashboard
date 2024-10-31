@@ -43,7 +43,7 @@ const features: FeatureCardProps[] = [
         <div className="md:w-96">See More</div>
       </PrimaryButton>
     ),
-    image: '/GuildHeroHeader.png',
+    image: '/hashtag/analysis.png',
   },
   {
     title: 'Instabot',
@@ -84,7 +84,7 @@ const features: FeatureCardProps[] = [
         <div className="md:w-96">See More</div>
       </PrimaryButton>
     ),
-    image: '/GuildHeroHeader.png',
+    image: '/hashtag/image-to-hashtag.png',
   },
 ]
 const TabSession = memo(() => {
@@ -99,7 +99,7 @@ const TabSession = memo(() => {
       </TabsList>
       <div className="w-full items-center justify-center">
         {features.map((feature, index) => (
-          <TabsContent key={index} value={feature.title} className="h-72">
+          <TabsContent key={index} value={feature.title} className="h-full pt-9 md:min-h-96">
             <div className="flex h-full flex-row items-center justify-center">
               <div className="min-w-1/2 flex w-full flex-col gap-6">
                 <div className="flex flex-col gap-2">
@@ -108,8 +108,8 @@ const TabSession = memo(() => {
                 </div>
                 {feature.button}
               </div>
-              <div className="max-w-1/2 relative h-full w-full items-center justify-center">
-                <Image fill src={feature.image} alt={`Feature ${index + 1}`} className="px-2 py-2" />
+              <div className="relative h-full w-full items-center justify-center">
+                <Image src={feature.image} alt={`Feature ${index + 1}`} fill className="px-2 py-2" objectFit="contain" />
               </div>
             </div>
           </TabsContent>
@@ -124,8 +124,16 @@ const MobileTabSession = memo(() => {
     <div className="m-4 flex flex-col gap-6 ">
       {features.map((feature) => (
         <div key={feature.title} className="flex w-full flex-col gap-6 rounded-lg bg-white p-6">
-          <div className="relative flex h-40 w-full">
-            <Image fill objectFit="cover" className="aspect-square" src={feature.image} alt={feature.title}></Image>
+          <div className="relative flex min-h-40 w-full">
+            <Image
+              src={feature.image}
+              alt={feature.title}
+              objectFit="contain"
+              width={0}
+              height={0}
+              sizes="100vw"
+              style={{ width: '100%', height: 'auto' }} // optional
+            ></Image>
           </div>
           <div className="gap-2">
             <div className="text-heading text-neutral-800">{feature.title}</div>
