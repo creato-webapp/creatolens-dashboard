@@ -41,7 +41,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "cookies-next": "2.1.1",
-    "date-fns": "^4.1.0",
+    "date-fns": "^3.6.0",
     "dayjs": "1.11.9",
     "dotenv": "^16.4.5",
     "firebase": "9.23.0",
