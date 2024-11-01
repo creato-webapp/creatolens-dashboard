@@ -20,7 +20,6 @@ import { Layout } from '@components/Layout'
 import { getRoles } from '@services/util'
 import { DatePickerWithRange } from '@components/ui/DatePickerWithRange'
 import { DateRange } from 'react-day-picker'
-import dayjs from '@utils/dayjs'
 
 type Props = {
   botList: IAccount[]
@@ -198,11 +197,6 @@ const Dashboard = ({ botList }: Props) => {
               </div>
               <div className="">
                 <DatePickerWithRange date={date} className={''} setDate={setDate} />
-                {date && (
-                  <div>
-                    {dayjs(date.from).format('MMM DD, YYYY')} - {dayjs(date.to).format('MMM DD, YYYY')}
-                  </div>
-                )}
               </div>
               <div className="mx-4 border-b border-neutral-300 pt-4"></div>
             </div>
