@@ -44,13 +44,29 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
       },
     }
   }
+  const cookies = context.req.headers.cookie
 
   const user = session.user
 
   const roles = (await getRoles(user.email!)) as string[]
   const isAdmin = roles.includes('admin')
-
-  const botList = isAdmin ? await getFilteredAccounts() : await getFilteredAccounts({ created_by: user.email! })
+  const botList = isAdmin
+    ? await getFilteredAccounts(
+        {},
+        {
+          headers: {
+            Cookie: cookies,
+          },
+        }
+      )
+    : await getFilteredAccounts(
+        { account: { created_by: user.email! } },
+        {
+          headers: {
+            Cookie: cookies,
+          },
+        }
+      )
 
   return { props: { botList } }
 }
