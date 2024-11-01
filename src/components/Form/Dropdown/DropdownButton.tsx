@@ -61,8 +61,8 @@ const DropdownButton: React.FC<DropdownButtonProps> = ({
       onClick={handleToggleMenu}
       disabled={disabled}
     >
-      <div className="flex items-center justify-between gap-2.5 truncate whitespace-nowrap rounded-md text-md">
-        <span className="flex-1 truncate">{name}</span>
+      <div className="flex items-center justify-between gap-2.5 truncate whitespace-nowrap rounded-md">
+        <span className="flex-1 truncate text-base">{name}</span>
         <div className="flex-shrink-0">
           <CaretUpIcon
             className={`w-fit transform stroke-black transition-all ${disabled ? 'stroke-disabled' : ''} ${caretSize} ${!isOpen ? 'rotate-180' : ''}`}

@@ -24,7 +24,7 @@ export function DatePickerWithRange({ className, date, setDate }: DatePickerWith
     <div className={cn('grid gap-2', className)}>
       <Popover>
         <PopoverTrigger asChild>
-          <Button id="date" variant={'outline'} className={cn('z-9 w-fit justify-start text-left font-normal', !date && 'text-muted-foreground')}>
+          <Button id="date" variant={'outline'} className={cn('z-9  w-fit justify-start text-left font-normal', !date && 'text-muted-foreground')}>
             <CalendarIcon />
             {date?.from ? (
               date.to ? (

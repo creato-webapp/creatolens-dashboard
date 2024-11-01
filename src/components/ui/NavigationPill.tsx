@@ -1,9 +1,9 @@
 import { cn } from '@utils/index'
 
 interface INavigationPillProps {
-  value: string
+  value: string | number
   name: string
-  onSelect: (value: string) => void
+  onSelect: (value: string | number) => void
   selected?: boolean
 }
 
