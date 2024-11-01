@@ -36,6 +36,8 @@ const SideMenu = () => {
   const [active, setActive] = useState<string>('')
   const { onLogout } = useAuth()
 
+  const { onLogout } = useAuth()
+
   const toggleMenu = (header: string) => {
     setActive(active === header ? '' : header) // Toggle active state
   }
@@ -59,11 +61,11 @@ const SideMenu = () => {
             </button>
             <div className="my-2 border-b border-neutral-300 px-4"></div>
             <div className={`overflow-hidden transition-[max-height] duration-300 ease-in-out ${active === menu.header ? 'max-h-96' : 'max-h-0'}`}>
-              <div className="dropdown-content my-2 flex flex-col items-center border-b border-neutral-300">
+              <div className="dropdown-content my-4 flex flex-col items-center border-b border-neutral-300">
                 {menu.items.map(
                   (item) =>
                     item.path && ( // Only use Link if `link` is provided
-                      <Link key={item.name} href={item.path} className="my-2 w-full text-center">
+                      <Link key={item.name} href={item.path}>
                         <div className="dropdown-item w-full rounded-lg px-3 py-4 hover:bg-neutral-200 hover:text-primary-500">{item.name}</div>
                       </Link>
                     )

@@ -14,6 +14,7 @@ import ROUTE from '@constants/route'
 import { useKeyword, useMostRepeatedPost, useMostRepeatedPostImage, usePostCount, useProfile } from '@hooks/useMeta'
 import { getFilteredAccounts } from '@services/Account/Account'
 import { CountryEnum } from 'enums/CountryCodeEnums'
+import { getRoles } from '@services/util'
 
 type Props = {
   botList: IAccount[]
@@ -41,11 +42,11 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
 
   const user = session.user
 
-  const botList = await getFilteredAccounts({
-    created_by: user.email!,
-  })
+  const roles = (await getRoles(user.email!)) as string[]
+  const isAdmin = roles.includes('admin')
 
-  // const botList = []
+  const botList = isAdmin ? await getFilteredAccounts() : await getFilteredAccounts({ created_by: user.email! })
+
   return { props: { botList } }
 }
 

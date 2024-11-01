@@ -9,9 +9,9 @@ import UserIcon from '@components/Icon/UserIcon'
 type AvatarSize = ISizeType
 
 const sizeClassName = {
-  [SIZE.L]: ['w-4 h-4'],
+  [SIZE.S]: ['w-5 h-5'],
   [SIZE.M]: ['w-7 h-7'],
-  [SIZE.S]: ['w-12 h-12'],
+  [SIZE.L]: ['w-10 h-10'],
 } as const
 
 const pixel = {

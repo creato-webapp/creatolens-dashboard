@@ -3,7 +3,7 @@ import React from 'react'
 interface Comment {
   img?: string
   author: string
-  text: string[]
+  text: string
   title: string
   subtitle?: string
   orangeText?: string
@@ -15,76 +15,77 @@ interface TestimonialCardsProps {
 
 const testimonial = [
   {
-    author: 'Avenna',
-    text: ['I was able to ', ' based on the hashtags used by Creato lens! Will use it more often in the future.'],
-    title: 'Videographer',
+    author: 'Avenna Hui',
+    text: '“I was able to *get 5,000+ organic impressions* based on the hashtags recommendation”',
+    title: 'Travel YouTuber with 3.95K↑ view',
     img: '/userAvenna.jpeg',
-    orangeText: 'get 5,000+ organic impressions',
   },
   {
-    author: 'Jacky',
-    text: ['Tried it for 3 posts in a row, and my impression rates ', '. Great tool to get more exposure.'],
+    author: 'Andy Ho',
+    text: '“Impression rates *grew more than 20%* from the hashtag category after 3 time usages in a row. ”',
     title: 'Wedding Photographer',
     img: './userJacky.jpeg',
-    orangeText: 'grew more than 20% from the hashtag category',
   },
   {
-    author: 'Jessica',
-    text: ['A great tool for us to ', ' for our video content on social media. Digital marketer should definitely consider trying it!'],
-    title: 'Content manager',
+    author: 'Ewen Cheuk',
+    text: '“A great tool for us to *get more viewers* for our video content on social media.”',
+    title: 'KOL with 30K↑ followers on Instagram',
     img: '/userJessica.jpeg',
-    orangeText: 'get more viewers',
   },
 ]
 
 const TestimonialCards: React.FC<TestimonialCardsProps> = ({ comments = testimonial }: TestimonialCardsProps) => {
+  const formatText = (text: string) => {
+    const parts = text.split(/\*(.*?)\*/g)
+    return parts.map((part, index) =>
+      index % 2 === 1 ? (
+        <strong className="font-bold" key={index}>
+          {part}
+        </strong>
+      ) : (
+        part
+      )
+    )
+  }
+
   return (
-    <div className="bg-bg-dark py-10">
-      <h2 className="m-4 mb-14 text-center md:mx-16">
-        <span className="font-extrabold  tracking-wide text-accent1-500">Content Managers</span>
-        <span className="font-medium  text-slate-600">, </span>
-        <span className="font-extrabold  tracking-wide text-accent1-500">Individual Creators</span>
-        <span className="font-medium  text-slate-600">, </span>
-        <span className="font-extrabold  tracking-wide text-accent1-500">Digital Marketers</span>
-        <span className="font-medium  text-slate-600">, </span>
-        <span className="font-extrabold  tracking-wide text-accent1-500">Freelancers</span>
-        <span className="font-medium  text-slate-600"> use Creato LENS for running their social media page </span>
-      </h2>
-      <div className="grid-cols-3  md:mx-4 md:flex">
-        {comments?.map((comment, index) => (
-          <div key={index} className="m-4 rounded-lg border border-slate-300 bg-white p-4 text-center shadow-lg">
-            <div className="flex items-center space-x-3"></div>
-            <h4 className="m-2 font-medium">
-              <span>{comment.text[0]}</span>
-              <span className="font-extrabold text-accent1-500">{comment.orangeText}</span>
-              <span>{comment.text[1]}</span>
-            </h4>
-            <div className="mx-4 flex flex-row items-center gap-4">
-              {comment.img ? (
-                <img
-                  src={comment.img} // Replace with your path to a default avatar image
-                  alt={comment.author}
-                  className="h-10 w-10 shrink-0 rounded-full object-cover object-center"
-                />
-              ) : (
-                <div className="relative h-6 w-6 overflow-hidden rounded-full bg-gray-100 md:h-10 md:w-10 dark:bg-gray-600">
-                  <svg
-                    className="absolute -bottom-1 h-6 w-6 text-gray-400 md:h-10 md:w-10"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd"></path>
-                  </svg>
+    <div className="flex w-full justify-center py-10">
+      <div className="max-w-screen-xl md:px-12">
+        <h2 className="mb-14 flex flex-col gap-2">
+          <span className="text-heading"> Loved & trusted by +500,000 users. </span>
+          <span className="text-subheading text-neutral-500">Content creators, Digital marketers, and more</span>
+        </h2>
+        <div id="testimonial-list" className="grid grid-cols-1 gap-4 md:grid-cols-3">
+          {comments?.map((comment, index) => (
+            <div
+              key={index}
+              className="flex h-full flex-col rounded-lg border border-neutral-300 bg-white p-4"
+              style={{ minHeight: '250px' }} // Set a minimum height
+            >
+              <h4 className="m-2 flex-grow flex-wrap text-ellipsis text-heading font-normal text-neutral-800">{formatText(comment.text)}</h4>
+              <div className="mx-4 flex flex-row items-center gap-4">
+                {comment.img ? (
+                  <img src={comment.img} alt={comment.author} className="h-10 w-10 shrink-0 rounded-full object-cover object-center" />
+                ) : (
+                  <div className="relative h-10 w-10 overflow-hidden rounded-full bg-gray-100 dark:bg-gray-600">
+                    <svg
+                      className="absolute -bottom-1 h-6 w-6 text-gray-400"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd"></path>
+                    </svg>
+                  </div>
+                )}
+                <div className="flex flex-col justify-between">
+                  <strong className="text-neutral-500">{comment.author}</strong>
+                  <h4 className="w-auto text-base font-normal text-disabled">{comment.title}</h4>
                 </div>
-              )}
-              <div className="flex w-full flex-row flex-wrap items-center justify-around">
-                <h3 className="font-extrabold">{comment.author}</h3>
-                <h4 className="ml-auto w-auto font-medium text-text-secondary">{comment.title}</h4>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   )
