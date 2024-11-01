@@ -57,18 +57,18 @@ const DropdownButton: React.FC<DropdownButtonProps> = ({
 
   return (
     <button
-      className={`dropdown-button w-full rounded-lg border border-neutral-300 disabled:bg-bg-disabled ${color} ${padding} `}
+      className={`dropdown-button w-full rounded-lg border border-neutral-300 disabled:bg-bg-disabled ${color} ${padding}`}
       onClick={handleToggleMenu}
       disabled={disabled}
     >
-      <div className="sm inline-flex w-full items-center justify-between gap-2.5 rounded-md text-md">
-        {name}
-        <CaretUpIcon
-          className={`pointer-events-none w-fit transform stroke-black transition-all ${disabled ? 'stroke-disabled' : ''} ${caretSize} ${
-            !isOpen ? 'rotate-180 ' : ''
-          }`}
-          color={isOpen ? 'white' : isDropdownNotSelected ? 'black' : 'white'}
-        />
+      <div className="flex items-center justify-between gap-2.5 truncate whitespace-nowrap rounded-md text-md">
+        <span className="flex-1 truncate">{name}</span>
+        <div className="flex-shrink-0">
+          <CaretUpIcon
+            className={`w-fit transform stroke-black transition-all ${disabled ? 'stroke-disabled' : ''} ${caretSize} ${!isOpen ? 'rotate-180' : ''}`}
+            color={isOpen ? 'white' : isDropdownNotSelected ? 'black' : 'white'}
+          />
+        </div>
       </div>
     </button>
   )
