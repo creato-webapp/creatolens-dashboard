@@ -1,23 +1,21 @@
-import { FC, useMemo } from 'react'
+import { FC } from 'react'
 
-import IMAGE from '@constants/image'
 import Image from 'next/image'
 import Link from 'next/link'
 import Skeleton from 'react-loading-skeleton'
 
 import { IAccount } from '@components/Account/Account'
-import Avatar from '@components/Avatar'
 import { Badges } from '@components/Badges'
 import Primary from '@components/Button/Primary'
 import Card from '@components/Card'
 import CardWithIgPost from '@components/CardWithIgPost'
 import 'react-loading-skeleton/dist/skeleton.css'
-import Dropdown from '@components/Form/Dropdown'
 import ClockIcon from '@components/Icon/ClockIcon'
 import PlusIcon from '@components/Icon/PlusIcon'
 import { IProfile, KeywordData, MostRepeatedPost } from '@services/Meta'
 import dayjs, { DATE_FORMAT } from '@utils/dayjs'
 import { Button } from '@components/Button'
+import ReportCard from '@components/ReportCard'
 
 interface Prop {
   days: number
@@ -56,22 +54,12 @@ const DateTimeLabel: FC<{ date: dayjs.ConfigType }> = ({ date }) => {
 }
 
 const ReportLayout = (props: Prop) => {
-  const { keyword, mostRepeatedPostImage, postCount, mostRepeatedPost, days, loading, botList, onAccountChange, selectedAccount, profile } = props
+  const { keyword, mostRepeatedPostImage, postCount, mostRepeatedPost, days, loading, botList } = props
   // dayFormat = MMM DD YYYY - MMM DD YYYY
   const today = new Date()
   const lastDate = new Date(today)
   lastDate.setDate(today.getDate() - days)
   const dateStr = `${lastDate.toDateString().split(' ').slice(1).join(' ')} - ${today.toDateString().split(' ').slice(1).join(' ')}`
-
-  const instaBotList = useMemo(() => {
-    if (!botList || botList.length <= 0) return []
-    return botList.map((bot: IAccount) => {
-      return {
-        label: (!bot.profile_id ? '[No Profile Found]\n' : '') + bot.username,
-        value: bot.id,
-      }
-    })
-  }, [botList])
 
   if (!botList || botList.length == 0) {
     return (
@@ -90,55 +78,12 @@ const ReportLayout = (props: Prop) => {
   }
 
   return (
+    <div className="flex w-full">
+      <ReportCard postCount={postCount ? postCount : 0} dateRange={''} keyword={keyword} mostRepeatedPost={mostRepeatedPost} />
+    </div>
+  )
+  return (
     <div className="flex flex-col">
-      <div className="flex flex-col justify-between md:flex-col">
-        <div className="my-2 flex flex-row justify-between md:my-7">
-          <h1>Account Overview:</h1>
-          <div className="hidden md:flex">
-            {instaBotList && (
-              <Dropdown
-                className="md:min-w-40"
-                onValueChange={(e) => onAccountChange(e)}
-                value={selectedAccount?.id}
-                defaultValue={selectedAccount?.id}
-                options={instaBotList}
-              />
-            )}
-          </div>
-        </div>
-        <div className="flex w-full flex-col justify-between gap-7 md:flex-row">
-          <div className="flex w-full flex-row items-center gap-2">
-            <div className="w-1/10 flex">
-              <Avatar size={'medium'} src={profile?.data.image ? profile.data.image : IMAGE.BOT_CREATO} fallbackSrc={IMAGE.BOT_CREATO} />
-            </div>
-
-            <h1 className="hidden text-text-secondary md:flex">{selectedAccount && '@' + selectedAccount.username}</h1>
-            <div className=" flex w-4/5 items-start md:hidden">
-              <Dropdown
-                dropDownSizes={['full', 'l', 'l']}
-                onValueChange={onAccountChange}
-                value={selectedAccount?.id}
-                defaultValue={selectedAccount?.id}
-                options={instaBotList}
-              />
-            </div>
-            {profile?.data?.url && (
-              <Link href={profile.data.url} target="_blank" className="flex min-h-6 min-w-6">
-                <Image className="cursor-pointer" alt={'account share button'} src={'./external-link.svg'} width={24} height={24} />
-              </Link>
-            )}
-          </div>
-          <div className="flex flex-col">
-            <div className="flex w-fit flex-col gap-3 md:flex-row md:gap-4">
-              <Link href="/accounts/create">
-                <Primary sizes={['m', 'l', 'l']} className="flex w-full">
-                  <PlusIcon className="h-6 w-6" /> Add New Account
-                </Primary>
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
       <div className="my-2 md:my-7 md:h-[1px] md:bg-[#DDE5EA]" />
       <div className="flex flex-col gap-5 md:gap-12">
         <div className="flex grid-cols-1 flex-col gap-4 md:grid md:grid-cols-2">
@@ -167,7 +112,7 @@ const ReportLayout = (props: Prop) => {
               <h2>Top 10 Keywords</h2>
               <div className="font-medium italic text-text-secondary">&quot;From hashtags, captions, locations&quot;</div>
               <div className="flex w-full flex-row flex-wrap text-xl">
-                {keyword ? (
+                {/* {keyword ? (
                   keyword.map((item: { term: string; count: number }, index: number) => {
                     return (
                       <div key={item.term} className="flex flex-row font-bold text-text-secondary">
@@ -184,7 +129,7 @@ const ReportLayout = (props: Prop) => {
                   </div>
                 ) : (
                   <div> No Keyword </div>
-                )}
+                )} */}
               </div>
             </div>
           }
