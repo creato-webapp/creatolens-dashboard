@@ -12,8 +12,9 @@ export default function Layout({ children }: PropsWithChildren) {
       <Popover className="relative bg-white">
         <NavBar />
       </Popover>
-      <main className="px-4 py-4 md:mx-0">{children}</main>
-      <Footer />
+      <main className="px-4 py-4 md:mx-0">
+        {children} <Footer />
+      </main>
     </>
   )
 }
