@@ -58,7 +58,7 @@ const NavBar: React.FC = () => {
       </div>
 
       <div className="flex flex-row-reverse items-center md:flex-row">
-        <div className="flex hidden flex-row items-center gap-2 md:flex">
+        <div className="hidden flex-row items-center gap-2 md:flex">
           <Link className="p-2" href={''}>
             Feature
           </Link>
