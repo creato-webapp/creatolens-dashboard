@@ -6,6 +6,8 @@ import useImageUploader from '@hooks/useImageUploader'
 import { imageToBase64 } from '@services/util'
 import { useImageHashtagContext } from '@hooks/UseImagetoHashtag'
 import Neutral from '@components/Button/Neutral'
+import RefreshIcon from '@components/Icon/RefreshIcon'
+import CaretRightBoldIcon from '@components/Icon/CaretRightBoldIcon'
 
 const Step1 = () => {
   const [uploading, setUploading] = useState<boolean>(false)
@@ -72,11 +74,13 @@ const Step1 = () => {
 
             {imageDetails.path && (
               <div className="flex flex-row justify-center gap-4">
-                <Neutral disabled={uploading} sizes={['s', 's', 's']} onClick={() => setUploadedImage(null)}>
+                <Neutral disabled={uploading} sizes={['m', 'm', 'm']} onClick={() => setUploadedImage(null)}>
+                  <RefreshIcon />
                   <div className="text-base">Re-Upload</div>
                 </Neutral>
-                <Primary disabled={uploading} sizes={['m', 's', 's']} onClick={onClickButton}>
+                <Primary disabled={uploading} className="w-28" sizes={['m', 'm', 'm']} onClick={onClickButton}>
                   Next
+                  <CaretRightBoldIcon width={16} height={16} />
                 </Primary>
               </div>
             )}

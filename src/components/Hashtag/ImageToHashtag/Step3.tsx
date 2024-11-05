@@ -10,9 +10,10 @@ import { useDialogues } from '@hooks/useDialogues'
 import { Status } from '@context/DialogueContext'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@components/ui/Tabs'
 import Dropdown from '@components/Form/Dropdown/Dropdown'
-import SubtleButton from '@components/Button/Subtle'
 import CaretLeftIcon from '@components/Icon/CaretLeftIcon'
 import CopyIcon from '@components/Icon/CopyIcon'
+import RepeatIcon from '@components/Icon/RepeatIcon'
+import PrimaryButton from '@components/Button/Primary'
 
 interface Option {
   label: string
@@ -130,8 +131,8 @@ const Step3: React.FC = () => {
     <div>
       <div className="w-full md:flex md:flex-row">
         <div className="flex flex-col md:w-1/2">
-          <div className="required relative flex cursor-pointer flex-row" onClick={goBack}>
-            <CaretLeftIcon />
+          <div className="required relative flex cursor-pointer flex-row items-center gap-4" onClick={goBack}>
+            <CaretLeftIcon size={20} />
             <div className="flex">Hashtags Recommendation</div>
           </div>
           <div className="relative my-4 min-h-96 w-full  ">
@@ -150,31 +151,27 @@ const Step3: React.FC = () => {
 
         <Tabs defaultValue="hashtags" className="md:w-1/2">
           <TabsList>
-            <TabsTrigger value="hashtags">Hashtags</TabsTrigger>
-            <TabsTrigger value="labels">Labels</TabsTrigger>
+            <TabsTrigger className="w-full" value="hashtags">
+              Hashtags
+            </TabsTrigger>
+            <TabsTrigger className="w-full" value="labels">
+              Labels
+            </TabsTrigger>
           </TabsList>
           <TabsContent value="hashtags">
-            <div className="rounded-lg border border-neutral-300 p-4">
+            <div className="rounded-lg py-4">
               <h3 className="my-4 text-text-secondary">{`${hashtagsLength} hashtags discovered`}</h3>
               {categorizedOptions.map((option) => (
                 <div key={`${option.name}-dropdown`} className="my-4">
-                  <Dropdown
-                    dropDownSizes={['l', 'l', 'l']}
-                    name={option.name}
-                    options={option.options}
-                    onValueChange={onClickHashtag}
-                    isCheckbox
-                    extraElement={
-                      <div className="flex w-full items-center justify-center px-2 py-8">
-                        <SubtleButton sizes={['l', 'l', 'l']} onClick={onClickCopySelected}>
-                          <CopyIcon />
-                          Copy Selected
-                        </SubtleButton>
-                      </div>
-                    }
-                  />
+                  <Dropdown dropDownSizes={['l', 'l', 'l']} name={option.name} options={option.options} onValueChange={onClickHashtag} isCheckbox />
                 </div>
               ))}
+              <div className="flex w-full items-center justify-center py-8">
+                <PrimaryButton sizes={['l', 'l', 'l']} onClick={onClickCopySelected}>
+                  <CopyIcon />
+                  Copy Selected
+                </PrimaryButton>
+              </div>
             </div>
           </TabsContent>
           <TabsContent value="labels">
@@ -194,8 +191,9 @@ const Step3: React.FC = () => {
         </Tabs>
       </div>
       <div className="mt-16 flex w-full justify-center">
-        <Primary sizes={['m', 'm', 'm']} className="w-fit">
-          Restart
+        <Primary sizes={['m', 'm', 'm']} className="!w-80">
+          <RepeatIcon />
+          <div className="text-base">Restart</div>
         </Primary>
       </div>
     </div>
