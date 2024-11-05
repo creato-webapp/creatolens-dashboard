@@ -37,7 +37,7 @@ const ImageToHashtag = () => {
     <div className="my-4 flex w-full justify-center md:min-h-144">
       <div className="w-full">
         <div className="flex items-center justify-between">
-          <h1 className="text-subtitle font-bold">IMAGE TO HASHTAG</h1>
+          <h1 className="text-subtitle font-bold">Image-to-Hashtags</h1>
           <div className="flex flex-row gap-2">
             <HelpIcon className="fill-black" />
             <Image
