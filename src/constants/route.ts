@@ -7,6 +7,8 @@ const ROUTE = {
   DASHBOARD: '/dashboard',
   IMAGE_TO_HASHTAG: '/hashtag/image-to-hashtag',
   HASHTAG_TO_IMAGE: '/hashtag/hashtag-to-image',
+  CONTACT_US: '/contact-us',
+  FAQ: '/faqs',
 } as const
 
 export default ROUTE
