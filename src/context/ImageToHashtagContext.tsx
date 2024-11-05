@@ -43,6 +43,7 @@ type ImageHashtagContextType = {
   updateHashtag: (arg: IHashet[]) => void
   updateLabel: (arg: { image_url: string; existing_labels: string[]; number: number }) => void
   generateImageByHashtag: () => void
+  addCustomLabels: (arg: string[]) => void
 }
 
 export const ImageHashtagContext = createContext<ImageHashtagContextType | undefined>(undefined)
@@ -210,6 +211,28 @@ export const ImageHashtagProvider = ({ children }: ImageHashtagProviderProps) =>
     },
     [currentImageIndex]
   )
+  const addCustomLabels = useCallback(
+    (labels: string[]) => {
+      setImages((prevImages) => {
+        const updatedImages = prevImages.map((img, idx) => {
+          if (idx === currentImageIndex) {
+            // Filter out labels that already exist in selectedLabels
+            const newLabels = labels.filter((label) => !img.selectedLabels.includes(label))
+            const currentLabels = img.labels || []
+            const currentSelectedLabels = img.selectedLabels || []
+            return {
+              ...img,
+              labels: [...currentLabels, ...newLabels],
+              selectedLabels: [...currentSelectedLabels, ...newLabels], // Add only unique labels
+            }
+          }
+          return img
+        })
+        return updatedImages
+      })
+    },
+    [currentImageIndex]
+  )
 
   const generateImageByHashtag = useCallback(() => {
     // Generate image by hashtags
@@ -233,6 +256,7 @@ export const ImageHashtagProvider = ({ children }: ImageHashtagProviderProps) =>
         updateStep,
         goBack,
         goForward,
+        addCustomLabels,
       }}
     >
       {children}
