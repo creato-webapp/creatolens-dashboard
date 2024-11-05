@@ -14,8 +14,8 @@ export default function SideMenuLayout({ children }: LayoutProps) {
           <SideMenu />
         </aside>
         {children}
+        <Footer />
       </main>
-      <Footer />
     </div>
   )
 }
