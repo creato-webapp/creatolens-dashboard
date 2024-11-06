@@ -1,5 +1,4 @@
 import React from 'react'
-import Footer from '@components/Footer'
 import SideMenu from '@components/SideMenu'
 
 type LayoutProps = {
@@ -14,7 +13,6 @@ export default function SideMenuLayout({ children }: LayoutProps) {
           <SideMenu />
         </aside>
         {children}
-        <Footer />
       </main>
     </div>
   )
