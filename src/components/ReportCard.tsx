@@ -5,6 +5,7 @@ import ListPlusICon from './Icon/ListPlusIcon'
 import SubtleButton from './Button/Subtle'
 import HashIcon from './Icon/HashIcon'
 import RepeatedIcon from './Icon/RepeatedIcon'
+import ExportIcon from './Icon/ExportIcon'
 
 interface IReportCard {
   postCount: number
@@ -68,20 +69,14 @@ const exportToPDF = () => {
 }
 
 const ReportCard = (props: IReportCard) => {
-  const { dateRange } = props
+  const { dateRange, postCount, keyword } = props
   return (
-    <div id="report-card" className="min-w-80 pb-12">
+    <div id="report-card" className="w-full pb-12 md:min-w-80">
       <div className="rounded-lg border border-neutral-300 p-4 px-6">
         <div className="text-base font-semibold text-primary-500">{dateRange}</div>
         <Divider />
-        <PostCount count={5} /> <Divider />
-        <TopKeywords
-          keywords={[
-            { term: 'sample1', count: 3 },
-            { term: 'sample2', count: 2 },
-            { term: 'sample3', count: 1 },
-          ]}
-        />
+        <PostCount count={postCount} /> <Divider />
+        <TopKeywords keywords={keyword ? keyword : []} />
         <Divider />
         <MostRepeatedPost
           post={{
@@ -94,7 +89,8 @@ const ReportCard = (props: IReportCard) => {
         />
         <Divider />
         <div className="flex w-full items-center justify-center">
-          <SubtleButton onClick={() => exportToPDF()}>
+          <SubtleButton onClick={() => exportToPDF()} className="flex items-center justify-center">
+            <ExportIcon width={16} height={16} />
             <div className="flex flex-row items-center">Export to PDF</div>
           </SubtleButton>
         </div>

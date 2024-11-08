@@ -99,17 +99,15 @@ export async function getAccount(id: string, customConfig?: AxiosRequestConfig):
 }
 
 export async function getFilteredAccounts(
-  account?: Partial<IAccount>,
-  orderBy?: string,
-  isAsc?: boolean,
+  params: { account?: Partial<IAccount>; orderBy?: string; isAsc?: boolean },
   customConfig?: AxiosRequestConfig
 ): Promise<IAccount[]> {
-  const filterData = account && generateAccountFilter(account)
+  const filterData = params.account && generateAccountFilter(params.account)
   const response = await fetcher.GET<IAccount[]>(XAPI.GET_ACCOUNTS, {
     ...customConfig,
     params: {
-      orderBy: orderBy,
-      isAsc: isAsc,
+      orderBy: params.orderBy,
+      isAsc: params.isAsc,
       filter: filterData,
     },
   })

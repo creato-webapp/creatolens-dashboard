@@ -17,12 +17,13 @@ const DropdownContent = ({
   isFloating?: boolean
 }) => {
   if (isFloating) {
+    if (!isOpen) return null
     return (
       <div className="absolute left-0 right-0 top-full z-10">
         <ul className="mt-2 max-h-60 w-full overflow-y-auto rounded-md border border-gray-200 bg-white shadow-lg">
-          {options.map((option) => (
+          {options.map((option, index) => (
             <li
-              key={option.value}
+              key={`${option.value}-${index}`}
               className="flex w-full cursor-pointer items-center gap-2 px-4 py-2 hover:bg-gray-100"
               onClick={handleOptionSelect(option.value as string)}
             >
