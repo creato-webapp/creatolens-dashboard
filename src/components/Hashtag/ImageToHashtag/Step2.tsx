@@ -47,8 +47,10 @@ export function DialogCloseButton(props: { onClick: (labels: string[]) => void }
     <Dialog>
       <DialogTrigger asChild>
         <div className="flex flex-row items-center">
-          <CirclePlusIcon />
-          <SubtleButton>Add Label</SubtleButton>
+          <SubtleButton>
+            <CirclePlusIcon />
+            Add Label
+          </SubtleButton>
         </div>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
