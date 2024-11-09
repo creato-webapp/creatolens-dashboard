@@ -24,6 +24,7 @@ const XAPI = {
   DASHBOARD_KEYWORDS: `${XAPI_PREFIX}dashboard/keyword`,
   DASHBOARD_POST_COUNT: `${XAPI_PREFIX}dashboard/postCount`,
   DASHBOARD_PROFILE: `${XAPI_PREFIX}dashboard/instaProfile`,
+  DASHBOARD_HISTORY: `${XAPI_PREFIX}dashboard/history`,
   DASHBOARD_POST_IMAGE: `${XAPI_PREFIX}dashboard/instapostImage`,
 } as const
 

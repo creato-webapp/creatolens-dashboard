@@ -6,9 +6,7 @@ import { getSession } from 'next-auth/react'
 import Image from 'next/image'
 
 import { IAccount } from '@components/Account/Account'
-import Primary from '@components/Button/Primary'
 import PlusIcon from '@components/Icon/PlusIcon'
-import ReportLayout from '@components/Layout/ReportLayout'
 import ROUTE from '@constants/route'
 import { useKeyword, useMostRepeatedPost, useMostRepeatedPostImage, usePostCount, useProfile } from '@hooks/useMeta'
 import { getFilteredAccounts } from '@services/Account/Account'
@@ -20,9 +18,21 @@ import { getRoles } from '@services/util'
 import { DatePickerWithRange } from '@components/ui/DatePickerWithRange'
 import { DateRange } from 'react-day-picker'
 import NavigationPill from '@components/ui/NavigationPill'
+import PrimaryButton from '@components/Button/Primary'
+import ReportCard from '@components/ReportCard'
+import Primary from '@components/Button/Primary'
+import { getSearchHistory, KeywordData, MostRepeatedPost } from '@services/Meta'
+import { CarouselContent, CarouselItem, Carousel } from '@components/ui/Carousel'
+
+enum ReportType {
+  ThreeDays = 3,
+  SevenDays = 7,
+  Custom = 0,
+}
 
 type Props = {
   botList: IAccount[]
+  historys: HistoricSearchResult[] | []
 }
 
 export interface DashboardData {
@@ -32,6 +42,14 @@ export interface DashboardData {
   last_updated_at: string
   last_uploaded_at: string
   term: string
+}
+
+export interface HistoricSearchResult {
+  date_range: DateRange
+  keyword: KeywordData[]
+  account: string
+  post_count: number
+  mostRepeatedPostData?: MostRepeatedPost
 }
 
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext): Promise<GetServerSidePropsResult<Props>> => {
@@ -50,15 +68,9 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
 
   const roles = (await getRoles(user.email!)) as string[]
   const isAdmin = roles.includes('admin')
+
   const botList = isAdmin
-    ? await getFilteredAccounts(
-        {},
-        {
-          headers: {
-            Cookie: cookies,
-          },
-        }
-      )
+    ? await getFilteredAccounts({})
     : await getFilteredAccounts(
         { account: { created_by: user.email! } },
         {
@@ -67,44 +79,41 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
           },
         }
       )
+  const historysResponse = await getSearchHistory({ headers: { Cookie: cookies } })
+  const historys = historysResponse?.data || []
 
-  return { props: { botList } }
+  return { props: { botList, historys } }
 }
 
-const Dashboard = ({ botList }: Props) => {
-  const [metaAttributes, setMetaAttributes] = useState<{
+const Dashboard = ({ botList, historys }: Props) => {
+  const [formValues, setFormValues] = useState<{
     accId: string | undefined
-    days: number
+    date_range: DateRange
     profile_id: string | undefined
     session_id?: string
     location?: CountryEnum
   }>({
     accId: botList.length > 0 ? botList[0].id : undefined,
-    days: 3,
+    date_range: { from: new Date(new Date().setDate(new Date().getDate() - 7)), to: new Date() },
     profile_id: botList.length > 0 ? (botList[0].profile_id as string) : undefined,
   })
+
+  // This state will be used for API calls
+  const [metaAttributes, setMetaAttributes] = useState(formValues)
+
   const selectedAccount = useMemo(() => {
     if (!botList || botList.length === 0) {
       return null
     }
-    const bot = botList.find((bot: IAccount) => bot.id === metaAttributes.accId)
+    const bot = botList.find((bot: IAccount) => bot.id === formValues.accId)
     return bot ? bot : null
-  }, [botList, metaAttributes.accId])
-
-  const [date, setDate] = useState<DateRange | undefined>({
-    from: new Date(new Date().setDate(new Date().getDate() - 7)), // 7 days ago
-    to: new Date(), // today
-  })
+  }, [botList, formValues.accId])
 
   const [reportDateRange, setReportDateRange] = useState(3)
 
   const { data: keywordData, isLoading: keywordIsLoading } = useKeyword(metaAttributes)
   const { data: postCountData, isLoading: postCountIsLoading } = usePostCount(metaAttributes)
-  const { data: mostRepeatedPostData, isLoading: mostRepeatedPostIsLoading } = useMostRepeatedPost({
-    ...metaAttributes,
-    session_id: selectedAccount?.session_cookies?.sessionid as string,
-    location: CountryEnum[selectedAccount?.location as CountryEnum],
-  })
+  const { data: mostRepeatedPostData, isLoading: mostRepeatedPostIsLoading } = useMostRepeatedPost(metaAttributes)
   const { data: mostRepeatedPostImage, isLoading: mostRepeatedPostImageIsLoading } = useMostRepeatedPostImage({
     shortcode: mostRepeatedPostData?.shortcode,
     batch_id: mostRepeatedPostData?.batch_id,
@@ -124,59 +133,23 @@ const Dashboard = ({ botList }: Props) => {
     profileIsLoading,
   }
 
-  const onAccountChange = (e: string | number) => {
-    const targetAccount = typeof e === 'string' ? botList?.find((item) => item.id === e) : null
-    setMetaAttributes((prev) => ({
-      ...prev,
-      profile_id: (targetAccount?.profile_id as string) || '',
-      accId: typeof e === 'string' ? e : '',
-      session_id: targetAccount?.session_cookies?.sessionid,
-      location: CountryEnum[targetAccount?.location as CountryEnum],
-    }))
-  }
+  const onAccountChange = useCallback(
+    (e: string | number) => {
+      const targetAccount = typeof e === 'string' ? botList?.find((item) => item.id === e) : null
+      setFormValues((prev) => ({
+        ...prev,
+        profile_id: (targetAccount?.profile_id as string) || '',
+        accId: typeof e === 'string' ? e : '',
+        session_id: targetAccount?.session_cookies?.sessionid,
+        location: CountryEnum[targetAccount?.location as CountryEnum],
+      }))
+    },
+    [botList]
+  )
 
-  const tabItems = [
-    {
-      key: '1',
-      value: '3-day-report',
-      title: '3 Days Report',
-      children: (
-        <ReportLayout
-          onAccountChange={onAccountChange}
-          botList={botList || []}
-          days={3}
-          keyword={keywordData?.data}
-          postCount={postCountData?.data?.post_count}
-          mostRepeatedPost={mostRepeatedPostData}
-          selectedAccount={selectedAccount}
-          loading={loadingStates}
-          mostRepeatedPostImage={mostRepeatedPostImage}
-          profile={profile}
-        />
-      ),
-      days: 3,
-    },
-    {
-      key: '2',
-      title: '7 Days Report',
-      value: '7-day-report',
-      children: (
-        <ReportLayout
-          days={7}
-          keyword={keywordData?.data}
-          postCount={postCountData?.data?.post_count}
-          mostRepeatedPost={mostRepeatedPostData}
-          onAccountChange={onAccountChange}
-          botList={botList || []}
-          selectedAccount={selectedAccount}
-          loading={loadingStates}
-          mostRepeatedPostImage={mostRepeatedPostImage}
-          profile={profile}
-        />
-      ),
-      days: 7,
-    },
-  ]
+  const onSearchClick = () => {
+    setMetaAttributes(formValues)
+  }
 
   const instaBotList = useMemo(() => {
     if (!botList || botList.length <= 0) return []
@@ -192,19 +165,40 @@ const Dashboard = ({ botList }: Props) => {
     const reportType = [
       {
         name: '3 Days Report',
-        value: 3,
+        value: ReportType.ThreeDays,
       },
       {
         name: '7 Days Report',
-        value: 7,
+        value: ReportType.SevenDays,
       },
       {
         name: 'Customized Period',
-        value: 0,
+        value: ReportType.Custom,
       },
     ]
+
     const onSelect = useCallback((value: string | number) => {
       setReportDateRange(value as number)
+
+      if (value === ReportType.SevenDays) {
+        setFormValues((prev) => ({
+          ...prev,
+          date_range: {
+            from: new Date(new Date().setDate(new Date().getDate() - 7)),
+            to: new Date(),
+          },
+        }))
+      }
+
+      if (value === ReportType.ThreeDays) {
+        setFormValues((prev) => ({
+          ...prev,
+          date_range: {
+            from: new Date(new Date().setDate(new Date().getDate() - 3)),
+            to: new Date(),
+          },
+        }))
+      }
     }, [])
 
     return (
@@ -216,68 +210,81 @@ const Dashboard = ({ botList }: Props) => {
     )
   }
 
-  const CustomPeriod = () => {
-    return (
-      <div className="flex h-full w-full flex-col justify-center gap-2">
-        <div className="text-neutral-800">Select Date-to-Dae</div>
-        <DatePickerWithRange setDate={setDate} date={date} className="w-full" />
-        <div className="text-neutral-500">Minimum 3 days need to be picked</div>
-      </div>
-    )
-  }
   return (
-    <div className="flex w-full justify-center ">
+    <div className="flex w-full justify-center overflow-hidden">
       <div className="flex w-full max-w-screen-xl flex-col pb-12">
         <div className="flex w-full flex-col">
           <h1 className="text-heading">Instagram Trend Analysis</h1>
-
-          <div className="">
+          <div className="flex flex-col">
             <div className="mt-4">
               <MonthGroup />
               <div className="mx-4 border-b border-neutral-300 pt-4"></div>
             </div>
             {instaBotList && (
               <div
-                className={`mt-4 flex flex-col-reverse gap-4 px-4 md:py-6 ${
-                  reportDateRange === 0 && 'rounded-bl-lg rounded-br-lg border-b border-l border-r py-4 shadow-lg'
-                } items-start md:flex-row`}
+                className={`mt-4 flex flex-col gap-4 px-4 md:py-6 ${
+                  reportDateRange === ReportType.Custom && 'rounded-bl-lg rounded-br-lg border-b border-l border-r py-4 shadow-lg'
+                } h-full `}
               >
-                {reportDateRange === 0 && (
-                  <div className="w-1/2">
-                    <CustomPeriod />
-                  </div>
-                )}
-                <div className="flex w-full flex-col justify-center gap-2 ">
-                  Instabot Account
-                  <div className="flex flex-row gap-2">
-                    <div className="flex w-4/5 md:w-3/5">
-                      <Dropdown
-                        onValueChange={(e) => onAccountChange(e)}
-                        value={selectedAccount?.id}
-                        defaultValue={selectedAccount?.id}
-                        options={instaBotList}
-                        name={instaBotList[0].label}
-                        dropDownSizes={['s', 's', 's']}
-                        isFloating
-                      />
-                    </div>
-                    <div>
-                      <Link href={profile?.data.url ? profile.data.url : ''} target="_blank" className="relative flex h-full w-full">
-                        <Image
-                          className="cursor-pointer"
-                          objectFit="contain"
-                          alt={'account share button'}
-                          src={'./external-link.svg'}
-                          width={32}
-                          height={32}
+                <div className="flex flex-col-reverse gap-4 md:flex-row md:gap-12">
+                  {reportDateRange === 0 && (
+                    <div className="">
+                      <div className="flex h-full w-full flex-col gap-2">
+                        <div className="text-neutral-800">Select Date Range</div>
+                        <DatePickerWithRange
+                          setDate={(date) => setFormValues((prevState) => ({ ...prevState, date_range: date }))}
+                          date={formValues.date_range}
+                          className="w-full"
                         />
-                      </Link>
+                        <div className="text-neutral-500">Minimum 3 days must be selected</div>
+                      </div>
+                    </div>
+                  )}
+                  <div className="flex flex-col gap-2">
+                    Instabot Account
+                    <div className="relative flex w-full flex-row gap-2">
+                      <div className="w-full flex-1 md:min-w-[300px]">
+                        <Dropdown
+                          onValueChange={(e) => onAccountChange(e)}
+                          value={selectedAccount?.id}
+                          defaultValue={selectedAccount?.id}
+                          options={instaBotList}
+                          name={instaBotList[0].label}
+                          dropDownSizes={['s', 's', 's']}
+                          isFloating
+                          className=""
+                        />
+                      </div>
+                      <div className="">
+                        <Link
+                          href={profile?.data?.url ? profile.data.url.replace(/\s/g, '') : ''}
+                          target="_blank"
+                          className="relative flex h-full w-full"
+                        >
+                          <Image
+                            className="cursor-pointer"
+                            objectFit="contain"
+                            alt={'account share button'}
+                            src={'./external-link.svg'}
+                            width={32}
+                            height={32}
+                          />
+                        </Link>
+                      </div>
                     </div>
                   </div>
                 </div>
+                {
+                  <div className="flex h-full w-full md:w-fit ">
+                    <PrimaryButton onClick={onSearchClick} sizes={['l', 'l', 'l']}>
+                      Search
+                    </PrimaryButton>
+                  </div>
+                }
               </div>
             )}
           </div>
+
           {!botList || botList.length == 0 ? (
             <div className="flex w-full flex-col items-center justify-center gap-4 px-4 py-4 md:py-24 md:pt-12">
               <img alt="missing insta bot" className="h-auto w-96" src={'/no-insta-bot.png'} />
@@ -286,28 +293,70 @@ const Dashboard = ({ botList }: Props) => {
                 Your account does not have any verified instabot. Complete the adding account process to see dashboard.
               </h3>
               <Link href={ROUTE.ACCOUNT_BOT_CREATE}>
-                <Primary sizes={['s', 'l', 'l']} className="px-2">
+                <PrimaryButton sizes={['s', 'l', 'l']} className="px-2">
                   <div className="flex flex-row items-center gap-2">
                     <PlusIcon className="h-6 w-6" />
                     <div className="">Add New Account</div>
                   </div>
+                </PrimaryButton>
+              </Link>
+            </div>
+          ) : botList ? (
+            <Carousel
+              opts={{
+                align: 'start',
+              }}
+              className="mt-6 w-full "
+            >
+              <CarouselContent className="-ml-1 gap-4">
+                <CarouselItem className="md:basis-2/3 lg:basis-1/3">
+                  <ReportCard
+                    postCount={postCountData?.data?.post_count ? postCountData?.data?.post_count : 0}
+                    dateRange={metaAttributes.date_range}
+                    loading={loadingStates}
+                    keyword={keywordData?.data}
+                    mostRepeatedPostImage={mostRepeatedPostImage}
+                    mostRepeatedPost={mostRepeatedPostData}
+                  />
+                </CarouselItem>
+
+                {historys.length > 0 &&
+                  historys.map((history, index) => {
+                    return (
+                      <CarouselItem key={`history.account-${index}`} className="md:basis-2/3 lg:basis-1/3">
+                        <ReportCard
+                          postCount={history.post_count}
+                          dateRange={history.date_range}
+                          mostRepeatedPost={history.mostRepeatedPostData}
+                          loading={{
+                            keywordIsLoading: false,
+                            postCountIsLoading: false,
+                            mostRepeatedPostIsLoading: false,
+                          }}
+                        ></ReportCard>
+                      </CarouselItem>
+                    )
+                  })}
+              </CarouselContent>
+            </Carousel>
+          ) : (
+            <div className="flex h-64 w-full flex-col items-center justify-center gap-4">
+              <h2>No Account Available</h2>
+              <Link href="/accounts/create">
+                <Primary sizes={['s', 'l', 'l']} className="px-2">
+                  <div className="flex flex-row items-center gap-2">
+                    <PlusIcon className="h-6 w-6" />
+                    <div className="hidden md:flex">Create New Account</div>
+                  </div>
                 </Primary>
               </Link>
             </div>
-          ) : (
-            <div className="gap-x-64s mx-4 mt-6 flex flex-row overflow-x-auto">
-              {tabItems.map((item) => (
-                <div key={item.key} className="flex-1">
-                  {item.children}
-                </div>
-              ))}
-            </div>
           )}
         </div>
-        <caption className="px-4 text-start text-sm text-neutral-500">
+        {/* <div className="px-4 text-start text-sm text-neutral-500">
           Please note: This tool may display offensive material that doesn&apos;t represent 2 Tag&apos;s views. You&apos;re solely responsible for use
           of any content generated using this tool, including its compliance with applicable laws and third-party rights.
-        </caption>
+        </div> */}
       </div>
     </div>
   )

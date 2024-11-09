@@ -113,7 +113,6 @@ export async function getFilteredAccounts(
   })
   return response
 }
-
 export async function getAccounts(params: PaginationParams, customConfig?: AxiosRequestConfig) {
   const response = await fetcher.GET<PaginationMetadata<IAccount[]>>(XAPI.ACCOUNT, {
     ...customConfig,
