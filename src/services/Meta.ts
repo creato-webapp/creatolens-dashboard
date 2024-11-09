@@ -4,6 +4,8 @@ import XAPI from '@constants/endpoints/xapi'
 import { CountryEnum } from 'enums/CountryCodeEnums'
 
 import fetcher from '../helpers/fetcher'
+import { DateRange } from 'react-day-picker'
+import { HistoricSearchResult } from 'pages/dashboard'
 
 export interface PostData {
   count: number
@@ -44,19 +46,22 @@ export interface IProfile {
 export async function getKeyword(
   data: {
     args: {
+      date_range: DateRange
       accId: string
-      days: number
     }
   },
   customConfig?: AxiosRequestConfig
 ): Promise<{ data: KeywordData[] }> {
+  const { from, to } = formatDateRange(data.args.date_range)
+
   const keywordResponse = await fetcher.GET<{
     data: KeywordData[]
   }>(XAPI.DASHBOARD_KEYWORDS, {
     ...customConfig,
     params: {
       accId: data.args.accId,
-      days: data.args.days,
+      start_date: from,
+      end_date: to,
     },
   })
   return keywordResponse
@@ -66,18 +71,21 @@ export async function getPostCount(
   data: {
     args: {
       accId: string
-      days: number
+      date_range: DateRange
     }
   },
   customConfig?: AxiosRequestConfig
 ): Promise<{ data: { post_count: number } }> {
+  const { from, to } = formatDateRange(data.args.date_range)
+
   const postCountResponse = await fetcher.GET<{
     data: { post_count: number }
   }>(XAPI.DASHBOARD_POST_COUNT, {
     ...customConfig,
     params: {
       accId: data.args.accId,
-      days: data.args.days,
+      start_date: from,
+      end_date: to,
     },
   })
 
@@ -88,20 +96,23 @@ export async function getMostRepeatedPost(
   data: {
     args: {
       accId: string
-      days: number
+      date_range: DateRange
       session_id?: string
       location?: CountryEnum
     }
   },
   customConfig?: AxiosRequestConfig
 ): Promise<MostRepeatedPost | null> {
+  const { from, to } = formatDateRange(data.args.date_range)
+
   const response = await fetcher.GET<{
     data: PostData[]
   }>(XAPI.DASHBOARD, {
     ...customConfig,
     params: {
       accId: data.args.accId,
-      days: data.args.days,
+      start_date: from,
+      end_date: to,
     },
   })
 
@@ -144,6 +155,7 @@ export async function getMostRepeatedPost(
 export async function getMostRepeatedPostImage(data: {
   args: {
     shortcode: string
+    session_id?: string
     batch_id: string
   }
 }) {
@@ -152,6 +164,7 @@ export async function getMostRepeatedPostImage(data: {
   const response = await fetcher.GET<string>(XAPI.DASHBOARD_POST_IMAGE, {
     params: {
       shortcode: data.args.shortcode,
+      session_id: data.args.session_id,
       batch_id: data.args.batch_id,
     },
   })
@@ -177,4 +190,18 @@ export async function getProfile(data: {
   })
 
   return response
+}
+
+export async function getSearchHistory(customConfig?: AxiosRequestConfig) {
+  const response = await fetcher.GET<{
+    data: HistoricSearchResult[] | []
+  }>(XAPI.DASHBOARD_HISTORY, { ...customConfig })
+
+  return response
+}
+
+function formatDateRange(dateRange: DateRange) {
+  const from = dateRange?.from?.toISOString().split('T')[0] + ' 00:00:00'
+  const to = dateRange?.to?.toISOString().split('T')[0] + ' 23:59:59'
+  return { from, to }
 }
