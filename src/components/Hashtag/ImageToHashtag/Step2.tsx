@@ -92,7 +92,7 @@ const AddLabelsButton: React.FC<AddLabelsButtonProps> = ({ onClick }) => {
         </DialogHeader>
         <div className="flex w-full flex-col items-center gap-4 space-x-2">
           <div className="flex w-full flex-row items-center justify-between gap-2">
-            <BaseInput allowSpace onChange={(e) => setInput(e.target.value)} value={input} placeholder="Other, please specify" />
+            <BaseInput className="w-full" allowSpace onChange={(e) => setInput(e.target.value)} value={input} placeholder="Other, please specify" />
             <div className="cursor-pointer" onClick={() => updateLabels(input)}>
               <CirclePlusLargeIcon width={35} height={35} />
             </div>
@@ -127,7 +127,7 @@ const AddLabelsButton: React.FC<AddLabelsButtonProps> = ({ onClick }) => {
               <NeutralButton className="text-base leading-4" sizes={['m', 'm', 'm']}>
                 Cancel
               </NeutralButton>
-              <Primary sizes={['m', 'm', 'm']} onClick={onClickParentFunction}>
+              <Primary sizes={['m', 'm', 'm']} onClick={onClickParentFunction} disabled={selectedLabels.length == 0}>
                 Confirm
               </Primary>
             </div>
@@ -245,7 +245,7 @@ const Step2: React.FC = () => {
                 )}
               </div>
             </div>
-            <em className="text-neutral-500">Select the correct label(s) for the image.</em>
+            <em className="text-neutral-500">Select or add the correct label(s) for the image.</em>
             <div className="flex h-full w-full flex-row flex-wrap gap-4">{renderLabels.selectedLabels}</div>
           </div>
         </div>
