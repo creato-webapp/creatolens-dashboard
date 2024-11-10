@@ -10,6 +10,7 @@ interface IFeatureCard {
   subheading: string
   description: string
   buttonUrl: string
+  video?: string
 }
 
 interface IFeatureBulletPoint {
@@ -44,11 +45,17 @@ interface IFeatureLayout {
 }
 
 export const Card = (props: IFeatureCard) => {
-  const { heading, subheading, description, buttonUrl, image } = props
+  const { video, heading, subheading, description, buttonUrl, image } = props
   return (
     <div className="card flex w-full flex-col gap-8 pb-6 md:flex-row md:pb-16 md:pt-8">
-      <div className="relative h-52 w-full md:h-80">
-        <Image src={image || '/logo_orange.png'} objectFit="contain" alt={heading} fill quality={100} unoptimized />
+      <div className="relative w-full md:h-80">
+        {video ? (
+          <video className="h-full object-cover" controls autoPlay>
+            <source src={video} type="video/mp4" />
+          </video>
+        ) : (
+          <Image src={image || '/logo_orange.png'} objectFit="contain" alt={heading} fill quality={100} unoptimized />
+        )}
       </div>
       <div className="flex w-full flex-col justify-between gap-6">
         <div>

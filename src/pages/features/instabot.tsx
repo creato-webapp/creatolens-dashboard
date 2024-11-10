@@ -5,6 +5,7 @@ const Instabot = () => {
     <FeatureLayout heading={'Instabot'}>
       <Card
         image="/hashtag/analysis.png"
+        video="/features/instabot-video.mp4"
         heading="What is Instabot?"
         subheading="Train a personal ai on your data and make images in your style in seconds."
         description="Instabot acts as a real Instagram user, scraping explore page posts to collect data. It builds a shared library, allowing users to access both personal and collective information."
