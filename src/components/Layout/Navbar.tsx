@@ -6,31 +6,29 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 
 import CrossIcon from '@components/Icon/CrossIcon'
-import LoginIcon from '@components/Icon/LoginIcon'
-import LogoutIcon from '@components/Icon/LogOutIcon'
 import MenuIcon from '@components/Icon/MenuIcon'
-import { Title } from '@components/Typography'
 import useAuth from '@hooks/useAuth'
 
 import { Button } from '..'
-import DarkModeIcon from '@components/Icon/DarkModeIcon'
 import Avatar from '@components/Avatar'
 import PrimaryButton from '@components/Button/Primary'
+import SideMenu from '@components/SideMenu'
 
 const LOGO_SRC = IMAGE.LOGO_CREATO_ORANGE
 
 const LINKS = [
-  { name: 'Accounts', path: ROUTE.ACCOUNTS },
+  { name: 'Instagram Trend Analysis', path: ROUTE.DASHBOARD },
+  { name: 'Instabot', path: ROUTE.ACCOUNTS },
   { name: 'Recommendation', path: ROUTE.RECOMMENDATION },
-  { name: 'Trend Analysis', path: ROUTE.DASHBOARD },
+  { name: 'Hashtags-to-Image', path: ROUTE.HASHTAG_TO_IMAGE },
   { name: 'Image to Hashtags', path: ROUTE.IMAGE_TO_HASHTAG },
 ] as const
 
 const NavBar: React.FC = () => {
   const router = useRouter()
-  const { session, onLogin, onLogout } = useAuth()
+  const { session, onLogin } = useAuth()
   const [isMenuCollapse, setIsMenuCollapse] = useState(true)
-  const pages = session ? LINKS : []
+  const [isDesktopMenuCollapse, setIsDesktopMenuCollapse] = useState(true)
 
   const toggleMenu = useCallback(() => {
     setIsMenuCollapse((prev) => !prev)
@@ -58,16 +56,32 @@ const NavBar: React.FC = () => {
       </div>
 
       <div className="flex flex-row-reverse items-center md:flex-row">
-        <div className="flex hidden flex-row items-center gap-2 md:flex">
-          <Link className="p-2" href={''}>
-            Feature
-          </Link>
-          <Link href={''} className="p-2">
+        <div className="relative mr-4 hidden flex-row items-center gap-2 md:flex">
+          <div
+            className="relative cursor-pointer rounded-lg p-2 hover:bg-neutral-200 hover:text-primary-500"
+            onMouseEnter={() => setIsDesktopMenuCollapse(false)}
+            onMouseLeave={() => setIsDesktopMenuCollapse(true)}
+          >
+            <span className="">Feature</span>
+            {!isDesktopMenuCollapse && (
+              <div className="absolute -left-14 top-full z-50 flex w-64 flex-col rounded-md border bg-white p-2 shadow-lg">
+                {LINKS.map((link, index) => (
+                  <Link href={link.path} key={`${link.name}-${index}`}>
+                    <div
+                      className={`block px-4 py-2 text-sm hover:bg-gray-100 ${
+                        router.pathname === link.path ? 'text-primary-500-500 font-bold' : 'text-neutral-800'
+                      }`}
+                    >
+                      {link.name}
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+          <Link href="#" className="p-2">
             Support
           </Link>
-          <div className="flex h-10 w-10 items-center">
-            <DarkModeIcon height={'20'} width={'20'} />
-          </div>
         </div>
         {session ? (
           <Avatar size={'large'} src={session?.user?.image ? session?.user?.image : IMAGE.BOT_CREATO} fallbackSrc={IMAGE.BOT_CREATO} />
@@ -82,33 +96,12 @@ const NavBar: React.FC = () => {
         className={`fixed top-0 z-50 h-screen w-screen -translate-x-7 transition-transform ${isMenuCollapse ? 'hidden' : 'block'}`}
         aria-label="Sidebar"
       >
-        <div className="flex h-[100vh] flex-col overflow-y-auto bg-gray-50 dark:bg-gray-800">
+        <div className="flex h-[100vh] flex-col overflow-y-auto bg-white">
           <Button.Text className="m-8 ml-auto text-text-primary" onClick={collapseMenu}>
             <CrossIcon></CrossIcon>
           </Button.Text>
 
-          <ul className="mx-auto my-auto list-none flex-row space-y-16">
-            {pages.map((page, index) => (
-              <li key={`${page.name}-${index}`} className="text-center">
-                <Link href={page.path}>
-                  <Title bold level={3} className={`${router.pathname === page.path ? ' text-accent1-500' : ''}`}>
-                    {page.name}
-                  </Title>
-                </Link>
-              </li>
-            ))}
-            <div className="flex w-full text-lg font-bold text-text-primary md:hidden">
-              {session ? (
-                <Button.Text onClick={onLogout} className="flex w-full flex-row items-center justify-center gap-4 ">
-                  Logout <LogoutIcon />
-                </Button.Text>
-              ) : (
-                <Button.Text onClick={onLogin} className="flex w-full flex-row items-center justify-center gap-4">
-                  Login <LoginIcon />
-                </Button.Text>
-              )}
-            </div>
-          </ul>
+          <SideMenu />
         </div>
       </aside>
     </nav>

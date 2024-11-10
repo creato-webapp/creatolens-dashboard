@@ -8,16 +8,8 @@ const nextConfig = {
     dirs: ['src'],
   },
   env,
-  reactStrictMode: true,
+  reactStrictMode: process.env.NODE_ENV === 'development',
   swcMinify: true,
-  // async rewrites() {
-  //   return [
-  //     {
-  //       source: '/api/:path*',
-  //       destination: 'http://localhost:3000/api/:path*' // Proxy to Backend
-  //     }
-  //   ]
-  // }
   images: {
     domains: ['storage.googleapis.com'],
     remotePatterns: [

@@ -5,6 +5,7 @@ import ROUTE from '@constants/route'
 import SubtleButton from '@components/Button/Subtle'
 import LogoutIcon from '@components/Icon/LogOutIcon'
 import useAuth from '@hooks/useAuth'
+import { useRouter } from 'next/router'
 
 const menus = [
   {
@@ -26,16 +27,16 @@ const menus = [
   {
     header: 'Support',
     items: [
-      { name: 'Contact', path: ROUTE.ACCOUNTS },
-      { name: 'FAQ', path: ROUTE.ACCOUNTS },
+      { name: 'Contact', path: ROUTE.CONTACT_US },
+      { name: 'FAQ', path: ROUTE.FAQ },
     ],
   },
 ]
 
 const SideMenu = () => {
   const [active, setActive] = useState<string>('')
-
   const { onLogout } = useAuth()
+  const router = useRouter() // Use Next.js router to get the current path
 
   const toggleMenu = (header: string) => {
     setActive(active === header ? '' : header) // Toggle active state
@@ -60,12 +61,18 @@ const SideMenu = () => {
             </button>
             <div className="my-2 border-b border-neutral-300 px-4"></div>
             <div className={`overflow-hidden transition-[max-height] duration-300 ease-in-out ${active === menu.header ? 'max-h-96' : 'max-h-0'}`}>
-              <div className="dropdown-content my-4 flex flex-col items-center border-b border-neutral-300">
+              <div className="dropdown-content my-4 flex flex-col items-center border-b border-neutral-300 pb-2">
                 {menu.items.map(
                   (item) =>
                     item.path && ( // Only use Link if `link` is provided
-                      <Link key={item.name} href={item.path}>
-                        <div className="dropdown-item w-full rounded-lg px-3 py-4 hover:bg-neutral-200 hover:text-primary-500">{item.name}</div>
+                      <Link key={item.name} href={item.path} className="flex w-full text-center">
+                        <div
+                          className={`dropdown-item w-full rounded-lg px-3 py-4 hover:bg-neutral-200 hover:text-primary-500 ${
+                            router.pathname === item.path ? 'font-semibold text-primary-500' : ''
+                          }`}
+                        >
+                          {item.name}
+                        </div>
                       </Link>
                     )
                 )}
@@ -76,7 +83,7 @@ const SideMenu = () => {
       </div>
       <div className="flex items-end justify-center">
         <SubtleButton onClick={onLogout} className="flex h-auto items-center rounded">
-          <LogoutIcon className="mr-1" size={24} fillColor="fill-accent2-500"></LogoutIcon>
+          <LogoutIcon className="mr-1" size={18} fillColor="fill-neutral-800"></LogoutIcon>
           Logout
         </SubtleButton>
       </div>

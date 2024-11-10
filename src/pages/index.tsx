@@ -8,6 +8,14 @@ import Testimonial from './_templates/Testimonial'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@components/ui/Tabs'
 import PrimaryButton from '@components/Button/Primary'
 import Image from 'next/image'
+import { Card, CardDescription, CardHeader, CardTitle } from '@components/ui/Card'
+import LightBulbIcon from '@components/Icon/LightBulbIcon'
+import EyeIcon from '@components/Icon/EyeIcon'
+import ThumbUpIcon from '@components/Icon/ThumbUpIcon'
+import PenIcon from '@components/Icon/PenIcon'
+import FinnTheHumanIcon from '@components/Icon/FinnTheHumanIcon'
+import TrendUpIcon from '@components/Icon/TrendUpIcon'
+import CoffeeIcon from '@components/Icon/CoffeeIcon'
 
 export const getServerSideProps: GetServerSideProps = async (
   context: GetServerSidePropsContext
@@ -43,7 +51,7 @@ const features: FeatureCardProps[] = [
         <div className="md:w-96">See More</div>
       </PrimaryButton>
     ),
-    image: '/GuildHeroHeader.png',
+    image: '/hashtag/analysis.png',
   },
   {
     title: 'Instabot',
@@ -64,27 +72,27 @@ const features: FeatureCardProps[] = [
         <div className="md:w-96">See More</div>
       </PrimaryButton>
     ),
-    image: '/GuildHeroHeader.png',
+    image: '/hashtag/hashtags-recommendation.png',
   },
   {
     title: 'Hashtags-to-Image',
-    description: 'Generate data-backed hashtag to add under your post. Enhancing your post content to be seen under the algorithm of Instagram',
+    description: 'Try new way to prompt the image to make your content visible with AI creation',
     button: (
       <PrimaryButton sizes={['m', 'm', 'm']}>
         <div className="md:w-96">See More</div>
       </PrimaryButton>
     ),
-    image: '/GuildHeroHeader.png',
+    image: '/hashtag/hashtags-to-image.png',
   },
   {
     title: 'Image-to-Hashtags',
-    description: 'Generate data-backed hashtag to add under your post. Enhancing your post content to be seen under the algorithm of Instagram',
+    description: 'Enhance your content with trending, targeted data-backed keywords for maximum impact.',
     button: (
       <PrimaryButton sizes={['m', 'm', 'm']}>
         <div className="md:w-96">See More</div>
       </PrimaryButton>
     ),
-    image: '/GuildHeroHeader.png',
+    image: '/hashtag/image-to-hashtag.png',
   },
 ]
 const TabSession = memo(() => {
@@ -99,7 +107,7 @@ const TabSession = memo(() => {
       </TabsList>
       <div className="w-full items-center justify-center">
         {features.map((feature, index) => (
-          <TabsContent key={index} value={feature.title} className="h-72">
+          <TabsContent key={index} value={feature.title} className="h-full pt-9 md:min-h-96">
             <div className="flex h-full flex-row items-center justify-center">
               <div className="min-w-1/2 flex w-full flex-col gap-6">
                 <div className="flex flex-col gap-2">
@@ -108,8 +116,8 @@ const TabSession = memo(() => {
                 </div>
                 {feature.button}
               </div>
-              <div className="max-w-1/2 relative h-full w-full items-center justify-center">
-                <Image fill src={feature.image} alt={`Feature ${index + 1}`} className="px-2 py-2" />
+              <div className="relative h-full w-full items-center justify-center">
+                <Image src={feature.image} alt={`Feature ${index + 1}`} fill className="px-2 py-2" objectFit="contain" />
               </div>
             </div>
           </TabsContent>
@@ -124,8 +132,16 @@ const MobileTabSession = memo(() => {
     <div className="m-4 flex flex-col gap-6 ">
       {features.map((feature) => (
         <div key={feature.title} className="flex w-full flex-col gap-6 rounded-lg bg-white p-6">
-          <div className="relative flex h-40 w-full">
-            <Image fill objectFit="cover" className="aspect-square" src={feature.image} alt={feature.title}></Image>
+          <div className="relative flex min-h-40 w-full">
+            <Image
+              src={feature.image}
+              alt={feature.title}
+              objectFit="contain"
+              width={0}
+              height={0}
+              sizes="100vw"
+              style={{ width: '100%', height: 'auto' }} // optional
+            ></Image>
           </div>
           <div className="gap-2">
             <div className="text-heading text-neutral-800">{feature.title}</div>
@@ -151,14 +167,114 @@ const FeatureSession = memo(() => {
   )
 })
 
+const UsageSession = memo(() => {
+  const cards = [
+    {
+      icon: <LightBulbIcon size={32} />,
+      heading: 'Idea in Hashtag',
+      content: 'We solve the challenge of using hashtags and promoting SEO effectively to enhance the online visibility of digital content.',
+    },
+    {
+      icon: <EyeIcon size={32} />,
+      heading: 'Boosting Organic Reach',
+      content: 'We ensure your valuable content reaches a wide and targeted audience, fostering growth and maximizing potential engagement.',
+    },
+    {
+      icon: <ThumbUpIcon />,
+      heading: 'Gaining Impressions',
+      content: 'We address the frustration of low impressions on digital content, enhancing visibility and extending the reach of your message.',
+    },
+  ]
+  return (
+    <div className="flex w-full justify-center">
+      <div className="session max-w-screen-xl py-6 md:px-12 md:py-16">
+        <div>
+          <h2 className="text-heading">{'What can 2TAG provide?'}</h2>
+          <h3 className="pt-2 text-subheading text-neutral-500">{'2TAG is the easiest way to grow content visibility on social media channels.'}</h3>
+        </div>
+        <div className="flex flex-col gap-6 pt-4 md:flex-row md:pt-12">
+          {cards.map((card) => {
+            return (
+              <Card key={card.heading}>
+                <CardHeader className="flex flex-row gap-6 md:flex-col">
+                  <div className="my-2">{card.icon}</div>
+                  <div className="flex flex-col items-start justify-start gap-2">
+                    <CardTitle className="text-heading font-semibold text-neutral-800">{card.heading}</CardTitle>
+                    <CardDescription className="text-neutral-500">{card.content}</CardDescription>
+                  </div>
+                </CardHeader>
+              </Card>
+            )
+          })}
+        </div>
+      </div>
+    </div>
+  )
+})
+
+const Service = memo(() => {
+  const services = [
+    {
+      icon: <PenIcon width={40} height={40} />,
+      title: <b className="font-normal text-[#9374FA]">Content Managers</b>,
+    },
+
+    {
+      icon: <FinnTheHumanIcon width={40} height={40} />,
+      title: <b className="font-normal text-[#ED6C67]">Individual Creators</b>,
+    },
+    {
+      icon: <TrendUpIcon width={40} height={40} />,
+      title: <b className="font-normal text-[#00B2FB]">Digital Marketers</b>,
+    },
+    {
+      icon: <CoffeeIcon width={40} height={40} />,
+      title: <b className="font-normal text-[#FE7CB5]">Freelancers</b>,
+    },
+  ]
+  return (
+    <div className="flex w-full justify-center">
+      <div className="session w-full max-w-screen-xl py-6 md:px-12 md:py-16">
+        <div>
+          <h2 className="text-heading">{'Who uses 2TAG?'}</h2>
+          <h3 className="pt-2 text-subheading text-neutral-500">
+            {'Joining is quick and easy. Start in just seconds — 2TAG is now open to all Instagram enthusiasts.'}
+          </h3>
+        </div>
+        <div className="flex flex-col justify-between gap-12 pt-12 md:flex-row">
+          {services.map((service, index) => {
+            return (
+              <div
+                key={`service-${index}`}
+                className="flex flex-1 flex-col items-center justify-center gap-6 rounded-lg border border-neutral-300 p-6"
+              >
+                <div className="">{service.icon}</div>
+                <div>{service.title}</div>
+              </div>
+            )
+          })}
+        </div>
+        <div className="flex w-full items-center justify-center pt-12">
+          <PrimaryButton sizes={['l', 'l', 'l']} className="!w-80 drop-shadow-md">
+            Start Exploring
+          </PrimaryButton>
+        </div>
+      </div>
+    </div>
+  )
+})
+
 const Index: NextPage = () => {
   return (
     <div className="">
-      <div className="flex w-full flex-col items-center">
-        <LandingHeader className="mb-5" />
+      <div className="w-full">
+        <LandingHeader className="w-full" />
       </div>
-
-      <FeatureSession />
+      <div className="w-full">
+        <FeatureSession />
+        <UsageSession />
+        <Service />
+      </div>
       <div className="px-6 md:px-12 md:py-16">
         <Testimonial />
       </div>
