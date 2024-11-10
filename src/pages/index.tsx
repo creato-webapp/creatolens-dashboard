@@ -30,8 +30,9 @@ export const getServerSideProps: GetServerSideProps = async (
 interface FeatureCardProps {
   title: string
   description: string
-  image: string
+  image?: string
   button: React.ReactNode
+  video?: string
 }
 
 const features: FeatureCardProps[] = [
@@ -54,7 +55,8 @@ const features: FeatureCardProps[] = [
         <div className="md:w-96">See More</div>
       </PrimaryButton>
     ),
-    image: '/GuildHeroHeader.png',
+    // image: '/features/instabot-video.mp4',
+    video: '/features/instabot-video.mp4',
   },
   {
     title: 'Hashtags Recommendation',
@@ -64,7 +66,7 @@ const features: FeatureCardProps[] = [
         <div className="md:w-96">See More</div>
       </PrimaryButton>
     ),
-    image: '/GuildHeroHeader.png',
+    image: '/hashtag/hashtags-recommendation.png',
   },
   {
     title: 'Hashtags-to-Image',
@@ -74,7 +76,7 @@ const features: FeatureCardProps[] = [
         <div className="md:w-96">See More</div>
       </PrimaryButton>
     ),
-    image: '/GuildHeroHeader.png',
+    image: '/hashtag/hashtags-to-image.png',
   },
   {
     title: 'Image-to-Hashtags',
@@ -109,7 +111,12 @@ const TabSession = memo(() => {
                 {feature.button}
               </div>
               <div className="relative h-full w-full items-center justify-center">
-                <Image src={feature.image} alt={`Feature ${index + 1}`} fill className="px-2 py-2" objectFit="contain" />
+                {feature.image && <Image src={feature.image} alt={`Feature ${index + 1}`} fill className="px-2 py-2" objectFit="contain" />}
+                {feature.video && (
+                  <video className="h-fit object-cover" controls autoPlay>
+                    <source src={feature.video} type="video/mp4" />
+                  </video>
+                )}
               </div>
             </div>
           </TabsContent>
@@ -125,15 +132,23 @@ const MobileTabSession = memo(() => {
       {features.map((feature) => (
         <div key={feature.title} className="flex w-full flex-col gap-6 rounded-lg bg-white p-6">
           <div className="relative flex min-h-40 w-full">
-            <Image
-              src={feature.image}
-              alt={feature.title}
-              objectFit="contain"
-              width={0}
-              height={0}
-              sizes="100vw"
-              style={{ width: '100%', height: 'auto' }} // optional
-            ></Image>
+            {feature.image && (
+              <Image
+                src={feature.image}
+                alt={feature.title}
+                objectFit="contain"
+                width={0}
+                height={0}
+                sizes="100vw"
+                style={{ width: '100%', height: 'auto' }} // optional
+                quality={100}
+              ></Image>
+            )}
+            {feature.video && (
+              <video className="h-fit object-cover" controls autoPlay>
+                <source src={feature.video} type="video/mp4" />
+              </video>
+            )}
           </div>
           <div className="gap-2">
             <div className="text-heading text-neutral-800">{feature.title}</div>
