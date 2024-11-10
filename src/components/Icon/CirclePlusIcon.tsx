@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { SVGProps } from 'react'
-const SvgComponent = (props: SVGProps<SVGSVGElement>) => (
+const CirclePlusIcon = (props: SVGProps<SVGSVGElement>) => (
   <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" fill="none" {...props}>
     <g clipPath="url(#a)">
       <path
@@ -18,4 +18,4 @@ const SvgComponent = (props: SVGProps<SVGSVGElement>) => (
     </defs>
   </svg>
 )
-export default SvgComponent
+export default CirclePlusIcon
