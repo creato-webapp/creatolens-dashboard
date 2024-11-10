@@ -14,6 +14,7 @@ import CaretLeftIcon from '@components/Icon/CaretLeftIcon'
 import CopyIcon from '@components/Icon/CopyIcon'
 import RepeatIcon from '@components/Icon/RepeatIcon'
 import PrimaryButton from '@components/Button/Primary'
+import Neutral from '@components/Button/Neutral'
 
 interface Option {
   label: string
@@ -101,6 +102,15 @@ const Step3: React.FC = () => {
     addDialogue('Copied Successfully', Status.SUCCESS)
   }, [addDialogue, categorizedOptions])
 
+  const onClickClearSelected = useCallback(() => {
+    setCategorizedOptions((prevOptions) =>
+      prevOptions.map((category) => ({
+        ...category,
+        options: category.options.map((opt) => ({ ...opt, checked: false })),
+      }))
+    )
+  }, [])
+
   // const generateImageByHashtag = useCallback(async () => {
   //   if (categorizedOptions) {
   //     try {
@@ -127,6 +137,10 @@ const Step3: React.FC = () => {
 
   const hashtagsLength = useMemo(() => categorizedOptions.reduce((acc, option) => acc + option.options.length, 0), [categorizedOptions])
 
+  const totalChecked = useMemo(
+    () => categorizedOptions.reduce((acc, option) => acc + option.options.filter((opt) => opt.checked).length, 0),
+    [categorizedOptions]
+  )
   return (
     <div>
       <div className="w-full md:flex md:flex-row">
@@ -166,8 +180,11 @@ const Step3: React.FC = () => {
                   <Dropdown dropDownSizes={['l', 'l', 'l']} name={option.name} options={option.options} onValueChange={onClickHashtag} isCheckbox />
                 </div>
               ))}
-              <div className="flex w-full items-center justify-center py-8">
-                <PrimaryButton sizes={['l', 'l', 'l']} onClick={onClickCopySelected}>
+              <div className="flex w-full justify-around gap-12 py-8">
+                <Neutral sizes={['l', 'l', 'l']} onClick={onClickClearSelected}>
+                  Clear All
+                </Neutral>
+                <PrimaryButton sizes={['l', 'l', 'l']} onClick={onClickCopySelected} disabled={totalChecked === 0}>
                   <CopyIcon />
                   Copy Selected
                 </PrimaryButton>
@@ -190,11 +207,15 @@ const Step3: React.FC = () => {
           </TabsContent>
         </Tabs>
       </div>
-      <div className="mt-16 flex w-full justify-center">
-        <Primary sizes={['m', 'm', 'm']} className="!w-80">
+      <div className="mt-4 flex w-full justify-center md:mt-16">
+        <Primary sizes={['m', 'm', 'm']} className="w-full md:!w-80">
           <RepeatIcon />
           <div className="text-base">Restart</div>
         </Primary>
+      </div>
+      <div className="mt-16 text-start text-sm text-neutral-500">
+        Please note: This tool may display offensive material that doesn&apos;t represent 2 Tag&apos;s views. You&apos;re solely responsible for use
+        of any content generated using this tool, including its compliance with applicable laws and third-party rights.
       </div>
     </div>
   )
