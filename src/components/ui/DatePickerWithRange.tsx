@@ -29,7 +29,8 @@ export function DatePickerWithRange({ className, date, setDate }: DatePickerWith
             {date?.from ? (
               date.to ? (
                 <>
-                  {dayjs(date.from).format('MMM DD, YYYY')} - {dayjs(date.to).format('MMM DD, YYYY')}
+                  {dayjs(date.from).format('MMM DD, YYYY').toUpperCase().replace(',', '')} -{' '}
+                  {dayjs(date.to).format('MMM DD, YYYY').toUpperCase().replace(',', '')}
                 </>
               ) : (
                 dayjs(date.from).format('MMM DD, YYYY')
