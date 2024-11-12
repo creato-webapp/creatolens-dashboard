@@ -92,6 +92,7 @@ const Dashboard = ({ botList, historys }: Props) => {
     profile_id: string | undefined
     session_id?: string
     location?: CountryEnum
+    account?: string
   }>({
     accId: botList.length > 0 ? botList[0].id : undefined,
     date_range: { from: new Date(new Date().setDate(new Date().getDate() - 7)), to: new Date() },
@@ -138,6 +139,7 @@ const Dashboard = ({ botList, historys }: Props) => {
       const targetAccount = typeof e === 'string' ? botList?.find((item) => item.id === e) : null
       setFormValues((prev) => ({
         ...prev,
+        account: targetAccount?.username,
         profile_id: (targetAccount?.profile_id as string) || '',
         accId: typeof e === 'string' ? e : '',
         session_id: targetAccount?.session_cookies?.sessionid,
@@ -311,6 +313,7 @@ const Dashboard = ({ botList, historys }: Props) => {
               <CarouselContent className="-ml-1 gap-4">
                 <CarouselItem className="md:basis-2/3 lg:basis-1/3">
                   <ReportCard
+                    account={metaAttributes.account}
                     postCount={postCountData?.data?.post_count ? postCountData?.data?.post_count : 0}
                     dateRange={metaAttributes.date_range}
                     loading={loadingStates}
