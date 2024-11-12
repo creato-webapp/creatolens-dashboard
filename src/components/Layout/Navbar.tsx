@@ -40,12 +40,22 @@ type DropdownMenuProps = {
   isOpen: boolean
   onMouseEnter: () => void
   onMouseLeave: () => void
-  label: string
+  label?: string | React.ReactNode
   className?: string
   dropdownWidth?: string
+  children?: React.ReactNode
 }
 
-const DropdownMenu: React.FC<DropdownMenuProps> = ({ items, isOpen, onMouseEnter, onMouseLeave, label, className = '', dropdownWidth = 'w-64' }) => {
+const DropdownMenu: React.FC<DropdownMenuProps> = ({
+  items,
+  isOpen,
+  onMouseEnter,
+  onMouseLeave,
+  label,
+  className = '',
+  dropdownWidth = 'w-64',
+  children,
+}) => {
   const router = useRouter()
 
   return (
@@ -54,7 +64,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({ items, isOpen, onMouseEnter
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
-      <span>{label}</span>
+      <div>{label}</div>
       {isOpen && (
         <div className={`absolute -left-14 top-full z-50 flex ${dropdownWidth} flex-col rounded-md border bg-white p-2 shadow-lg`}>
           {items.map((link, index) => (
@@ -68,6 +78,7 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({ items, isOpen, onMouseEnter
               </div>
             </Link>
           ))}
+          <div>{children}</div>
         </div>
       )}
     </div>
@@ -75,11 +86,12 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({ items, isOpen, onMouseEnter
 }
 
 const NavBar: React.FC = () => {
-  const { session, onLogin } = useAuth()
+  const { session, onLogin, onLogout } = useAuth()
   const [isMenuCollapse, setIsMenuCollapse] = useState(true)
 
   const { isCollapsed: isFeatureMenuCollapsed, open: openFeatureMenu, close: closeFeatureMenu } = useDropdown()
   const { isCollapsed: isSupportMenuCollapsed, open: openSupportMenu, close: closeSupportMenu } = useDropdown()
+  const { isCollapsed: isUserMenuCollapsed, open: openUserMenu, close: closeUsermenu } = useDropdown()
 
   const toggleMenu = useCallback(() => {
     setIsMenuCollapse((prev) => !prev)
@@ -125,7 +137,18 @@ const NavBar: React.FC = () => {
           />
         </div>
         {session ? (
-          <Avatar size={'large'} src={session?.user?.image ? session?.user?.image : IMAGE.BOT_CREATO} fallbackSrc={IMAGE.BOT_CREATO} />
+          <DropdownMenu
+            label={<Avatar size={'large'} src={session?.user?.image ? session?.user?.image : IMAGE.BOT_CREATO} fallbackSrc={IMAGE.BOT_CREATO} />}
+            isOpen={!isUserMenuCollapsed}
+            onMouseEnter={openUserMenu}
+            onMouseLeave={closeUsermenu}
+            dropdownWidth="w-48"
+            items={[]}
+          >
+            <div onClick={onLogout} className="block px-4 py-2 text-sm text-neutral-800 transition-colors hover:bg-gray-100">
+              {'Logout'}
+            </div>
+          </DropdownMenu>
         ) : (
           <PrimaryButton onClick={onLogin} sizes={['s', 's', 's']} className="flex w-full flex-row items-center justify-center gap-4">
             Log in/ Register
@@ -141,7 +164,6 @@ const NavBar: React.FC = () => {
           <Button.Text className="m-8 ml-auto text-text-primary" onClick={collapseMenu}>
             <CrossIcon></CrossIcon>
           </Button.Text>
-
           <SideMenu />
         </div>
       </aside>
