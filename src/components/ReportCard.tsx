@@ -13,6 +13,7 @@ import Link from 'next/link'
 import UserIcon from './Icon/UserIcon'
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from './ui/Dialog'
 import RobotIcon from './Icon/RobotIcon'
+import { formatDateRange } from '@utils/dayjs'
 
 interface IReportCard {
   account?: string
@@ -107,7 +108,7 @@ export function ReadMoreButton(props: IReportCard) {
         </div>
       </DialogTrigger>
       <DialogContent className="h-2/3 max-w-[80%] p-8">
-        <DialogHeader className="flex w-full flex-col">
+        <DialogHeader className="flex h-full w-full flex-col">
           <div className="flex w-full items-center justify-center">
             <DialogTitle>Most Repeated Post ({mostRepeatedPost?.count || 0})</DialogTitle>
           </div>
@@ -230,16 +231,18 @@ const exportToPDF = () => {}
 const ReportCard = (props: IReportCard) => {
   const { dateRange, postCount, keyword, mostRepeatedPost, loading, mostRepeatedPostImage, account } = props
 
-  const from = dateRange.from ? new Date(dateRange.from).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : ''
-  const to = dateRange.to ? new Date(dateRange.to).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) : ''
+  const from = formatDateRange(dateRange.from)
+  const to = formatDateRange(dateRange.to)
 
   const dateStr = `${from} - ${to}`
 
   return (
-    <ScrollArea id="report-card" className="relative h-128 w-full rounded-lg border border-neutral-300 p-4 px-6 md:w-80">
-      <div className="sticky top-0 z-10 bg-white text-base font-semibold text-primary-500">{dateStr}</div>
-      <div className="h-full  overflow-hidden">
-        <Divider />
+    <div id="report-card" className="relative h-128 w-full rounded-lg border border-neutral-300 py-4 md:w-80">
+      <div className="sticky top-0 z-10 bg-white px-6 text-base font-semibold text-primary-500">
+        {dateStr} <Divider />
+      </div>
+
+      <ScrollArea className="h-full w-full px-6">
         {account && (
           <>
             <AccountName account={account} /> <Divider />
@@ -260,14 +263,14 @@ const ReportCard = (props: IReportCard) => {
             dateRange={dateRange}
           />
         )}
-      </div>
-      <div className="sticky bottom-0 flex w-full items-center justify-center border-t border-neutral-300 bg-white p-4">
-        <SubtleButton onClick={() => exportToPDF()} className="flex items-center justify-center">
+      </ScrollArea>
+      <div className="sticky bottom-0 w-full rounded-l-lg rounded-r-lg border-b bg-white px-4">
+        <SubtleButton onClick={() => exportToPDF()} sizes={['l', 'l', 'l']} className="sticky bottom-0 flex w-full items-center justify-center ">
           <ExportIcon width={16} height={16} />
           <div className="flex flex-row items-center">Export to PDF</div>
         </SubtleButton>
       </div>
-    </ScrollArea>
+    </div>
   )
 }
 

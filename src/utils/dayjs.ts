@@ -14,3 +14,17 @@ export const DATE_FORMAT = {
 export type DATE_FORMAT = typeof DATE_FORMAT
 
 export default dayjs
+
+export const formatDateRange = (date?: Date) => {
+  if (!date) return ''
+  return date
+    ? new Date(date)
+        .toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'short',
+          day: '2-digit',
+        })
+        .toUpperCase()
+        .replace(',', '')
+    : ''
+}
