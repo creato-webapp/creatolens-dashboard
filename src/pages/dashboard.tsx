@@ -23,6 +23,7 @@ import ReportCard from '@components/ReportCard'
 import Primary from '@components/Button/Primary'
 import { getSearchHistory, KeywordData, MostRepeatedPost } from '@services/Meta'
 import { CarouselContent, CarouselItem, Carousel } from '@components/ui/Carousel'
+import SearchIcon from '@components/Icon/SearchIcon'
 
 enum ReportType {
   ThreeDays = 3,
@@ -155,7 +156,7 @@ const Dashboard = ({ botList, historys }: Props) => {
     if (!botList || botList.length <= 0) return []
     return botList.map((bot: IAccount) => {
       return {
-        label: (!bot.profile_id ? '[No Profile Found]\n' : '') + bot.username,
+        label: bot.username,
         value: bot.id,
       }
     })
@@ -212,7 +213,7 @@ const Dashboard = ({ botList, historys }: Props) => {
 
   return (
     <div className="flex w-full justify-center overflow-hidden">
-      <div className="flex w-full max-w-screen-xl flex-col pb-12">
+      <div className="flex w-full max-w-screen-xl flex-col">
         <div className="flex w-full flex-col">
           <h1 className="text-heading">Instagram Trend Analysis</h1>
           <div className="flex flex-col">
@@ -222,11 +223,11 @@ const Dashboard = ({ botList, historys }: Props) => {
             </div>
             {instaBotList && (
               <div
-                className={`mt-4 flex flex-col gap-4 px-4 md:py-6 ${
+                className={`mt-4 flex flex-col gap-4 px-4 md:mt-0 md:py-6 ${
                   reportDateRange === ReportType.Custom && 'rounded-bl-lg rounded-br-lg border-b border-l border-r py-4 shadow-lg'
                 } h-full `}
               >
-                <div className="flex flex-col-reverse gap-4 md:flex-row md:gap-12">
+                <div className="flex flex-col-reverse gap-4 md:flex-row md:gap-4">
                   {reportDateRange === 0 && (
                     <div className="">
                       <div className="flex h-full w-full flex-col gap-2">
@@ -236,14 +237,14 @@ const Dashboard = ({ botList, historys }: Props) => {
                           date={formValues.date_range}
                           className="w-full"
                         />
-                        <div className="text-neutral-500">Minimum 3 days must be selected</div>
+                        <div className="text-nowrap text-neutral-500">Minimum 3 days must be selected</div>
                       </div>
                     </div>
                   )}
                   <div className="flex flex-col gap-2">
                     Instabot Account
                     <div className="relative flex w-full flex-row gap-2">
-                      <div className="w-full flex-1 md:min-w-[300px]">
+                      <div className="w-full md:min-w-[200px]">
                         <Dropdown
                           onValueChange={(e) => onAccountChange(e)}
                           value={selectedAccount?.id}
@@ -274,13 +275,13 @@ const Dashboard = ({ botList, historys }: Props) => {
                     </div>
                   </div>
                 </div>
-                {
-                  <div className="flex h-full w-full md:w-fit ">
-                    <PrimaryButton onClick={onSearchClick} sizes={['l', 'l', 'l']}>
-                      Search
-                    </PrimaryButton>
-                  </div>
-                }
+
+                <div className="flex items-start">
+                  <PrimaryButton onClick={onSearchClick} sizes={['s', 's', 's']} className="w-full">
+                    <SearchIcon />
+                    Search
+                  </PrimaryButton>
+                </div>
               </div>
             )}
           </div>
@@ -306,7 +307,7 @@ const Dashboard = ({ botList, historys }: Props) => {
               opts={{
                 align: 'start',
               }}
-              className="mt-6 w-full "
+              className="mt-6 w-full"
             >
               <CarouselContent className="-ml-1 gap-4">
                 <CarouselItem className="md:basis-2/3 lg:basis-1/3">
