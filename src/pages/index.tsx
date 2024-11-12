@@ -153,9 +153,9 @@ const TabSession = memo(() => {
 
 const MobileTabSession = memo(() => {
   return (
-    <div className="m-4 flex flex-col gap-6 ">
+    <div className="flex flex-col gap-6 ">
       {features.map((feature) => (
-        <div key={feature.title} className="flex w-full flex-col gap-6 rounded-lg bg-white p-6">
+        <div key={feature.title} className="flex w-full flex-col gap-6 rounded-lg border bg-white p-6">
           <div className="relative flex min-h-40 w-full">
             {feature.image && (
               <Image
@@ -170,7 +170,7 @@ const MobileTabSession = memo(() => {
               ></Image>
             )}
             {feature.video && (
-              <video className="h-fit object-cover" controls autoPlay>
+              <video className="h-fit w-full" autoPlay controls>
                 <source src={feature.video} type="video/mp4" />
               </video>
             )}
@@ -192,7 +192,7 @@ const FeatureSession = memo(() => {
       <div className="hidden w-full justify-center md:flex">
         <TabSession />
       </div>
-      <div className="bg-primary-100 md:hidden">
+      <div className="md:hidden">
         <MobileTabSession />
       </div>
     </div>
