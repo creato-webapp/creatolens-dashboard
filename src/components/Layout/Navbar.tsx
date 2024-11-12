@@ -13,6 +13,7 @@ import { Button } from '..'
 import Avatar from '@components/Avatar'
 import PrimaryButton from '@components/Button/Primary'
 import SideMenu from '@components/SideMenu'
+import { useDropdown } from '@hooks/useDropdown'
 
 const LOGO_SRC = IMAGE.LOGO_CREATO_ORANGE
 
@@ -24,11 +25,61 @@ const LINKS = [
   { name: 'Image to Hashtags', path: ROUTE.IMAGE_TO_HASHTAG },
 ] as const
 
-const NavBar: React.FC = () => {
+const SUPPORT_LINKS = [
+  { name: 'FAQ', path: ROUTE.FAQ },
+  { name: 'Contact Us', path: ROUTE.CONTACT_US },
+] as const
+
+type NavLink = {
+  readonly name: string
+  readonly path: string
+}
+
+type DropdownMenuProps = {
+  items: readonly NavLink[] // Changed to readonly array
+  isOpen: boolean
+  onMouseEnter: () => void
+  onMouseLeave: () => void
+  label: string
+  className?: string
+  dropdownWidth?: string
+}
+
+const DropdownMenu: React.FC<DropdownMenuProps> = ({ items, isOpen, onMouseEnter, onMouseLeave, label, className = '', dropdownWidth = 'w-64' }) => {
   const router = useRouter()
+
+  return (
+    <div
+      className={`relative cursor-pointer rounded-lg p-2 hover:bg-neutral-200 hover:text-primary-500 ${className}`}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    >
+      <span>{label}</span>
+      {isOpen && (
+        <div className={`absolute -left-14 top-full z-50 flex ${dropdownWidth} flex-col rounded-md border bg-white p-2 shadow-lg`}>
+          {items.map((link, index) => (
+            <Link href={link.path} key={`${link.name}-${index}`}>
+              <div
+                className={`block px-4 py-2 text-sm transition-colors hover:bg-gray-100 ${
+                  router.pathname === link.path ? 'font-bold text-primary-500' : 'text-neutral-800'
+                }`}
+              >
+                {link.name}
+              </div>
+            </Link>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
+const NavBar: React.FC = () => {
   const { session, onLogin } = useAuth()
   const [isMenuCollapse, setIsMenuCollapse] = useState(true)
-  const [isDesktopMenuCollapse, setIsDesktopMenuCollapse] = useState(true)
+
+  const { isCollapsed: isFeatureMenuCollapsed, open: openFeatureMenu, close: closeFeatureMenu } = useDropdown()
+  const { isCollapsed: isSupportMenuCollapsed, open: openSupportMenu, close: closeSupportMenu } = useDropdown()
 
   const toggleMenu = useCallback(() => {
     setIsMenuCollapse((prev) => !prev)
@@ -57,31 +108,21 @@ const NavBar: React.FC = () => {
 
       <div className="flex flex-row-reverse items-center md:flex-row">
         <div className="relative mr-4 hidden flex-row items-center gap-2 md:flex">
-          <div
-            className="relative cursor-pointer rounded-lg p-2 hover:bg-neutral-200 hover:text-primary-500"
-            onMouseEnter={() => setIsDesktopMenuCollapse(false)}
-            onMouseLeave={() => setIsDesktopMenuCollapse(true)}
-          >
-            <span className="">Feature</span>
-            {!isDesktopMenuCollapse && (
-              <div className="absolute -left-14 top-full z-50 flex w-64 flex-col rounded-md border bg-white p-2 shadow-lg">
-                {LINKS.map((link, index) => (
-                  <Link href={link.path} key={`${link.name}-${index}`}>
-                    <div
-                      className={`block px-4 py-2 text-sm hover:bg-gray-100 ${
-                        router.pathname === link.path ? 'text-primary-500-500 font-bold' : 'text-neutral-800'
-                      }`}
-                    >
-                      {link.name}
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
-          <Link href="#" className="p-2">
-            Support
-          </Link>
+          <DropdownMenu
+            items={LINKS}
+            isOpen={!isFeatureMenuCollapsed}
+            onMouseEnter={openFeatureMenu}
+            onMouseLeave={closeFeatureMenu}
+            label="Feature"
+          />
+          <DropdownMenu
+            items={SUPPORT_LINKS}
+            isOpen={!isSupportMenuCollapsed}
+            onMouseEnter={openSupportMenu}
+            onMouseLeave={closeSupportMenu}
+            label="Support"
+            dropdownWidth="w-48"
+          />
         </div>
         {session ? (
           <Avatar size={'large'} src={session?.user?.image ? session?.user?.image : IMAGE.BOT_CREATO} fallbackSrc={IMAGE.BOT_CREATO} />
