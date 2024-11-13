@@ -10,7 +10,7 @@ import useAuth from '@hooks/useAuth'
 const COMMON_LINKS = {
   FAQ: {
     title: 'FAQ',
-    href: 'https://www.notion.so/ffd8e5bab4b04ac1b8dd1b9988dbd10f?v=d25dc72cdc9d44cf9dc492e74acf6855',
+    href: '/faqs',
   },
   TERMS: {
     title: 'Terms & Conditions',
@@ -22,7 +22,7 @@ const COMMON_LINKS = {
   },
   CONTACT: {
     title: 'Contact Us',
-    href: 'https://www.creatogether.app/contact-us',
+    href: '/contact-us',
   },
 } as const
 
