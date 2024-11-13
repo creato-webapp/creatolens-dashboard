@@ -51,7 +51,7 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
     <SessionProvider session={pageProps.session}>
       <Head>
         <link rel="icon" href="./favicon.ico" />
-        <title>Creato Lens | AI Hashtag Maker</title>
+        <title>2Tag | AI Hashtag Maker</title>
       </Head>
 
       <AppProviders>
