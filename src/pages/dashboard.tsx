@@ -277,7 +277,7 @@ const Dashboard = ({ botList, historys }: Props) => {
                 </div>
 
                 <div className="flex items-start">
-                  <PrimaryButton onClick={onSearchClick} sizes={['s', 's', 's']} className="w-full">
+                  <PrimaryButton onClick={onSearchClick} sizes={['s', 's', 's']} className="w-full md:w-80">
                     <SearchIcon />
                     Search
                   </PrimaryButton>
