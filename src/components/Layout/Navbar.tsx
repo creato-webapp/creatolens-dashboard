@@ -164,7 +164,7 @@ const NavBar: React.FC = () => {
           <Button.Text className="m-8 ml-auto text-text-primary" onClick={collapseMenu}>
             <CrossIcon></CrossIcon>
           </Button.Text>
-          <SideMenu />
+          <SideMenu collapseMenu={collapseMenu} />
         </div>
       </aside>
     </nav>
