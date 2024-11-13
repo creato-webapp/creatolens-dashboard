@@ -13,17 +13,18 @@ const menus = [
     items: [
       { name: 'Instagram Trend Analysis', path: ROUTE.DASHBOARD },
       { name: 'Manage Instabot Accounts', path: ROUTE.ACCOUNTS },
+      { name: 'Hashtags Recommendation', path: ROUTE.RECOMMENDATION },
       { name: 'Hashtags-to-Image', path: ROUTE.HASHTAG_TO_IMAGE },
       { name: 'Image-to-Hashtags', path: ROUTE.IMAGE_TO_HASHTAG },
     ],
   },
-  {
-    header: 'User Settings',
-    items: [
-      { name: 'Profile Settings', path: ROUTE.ACCOUNTS },
-      { name: 'Privacy Settings', path: ROUTE.ACCOUNTS },
-    ],
-  },
+  // {
+  //   header: 'User Settings',
+  //   items: [
+  //     { name: 'Profile Settings', path: ROUTE.ACCOUNTS },
+  //     { name: 'Privacy Settings', path: ROUTE.ACCOUNTS },
+  //   ],
+  // },
   {
     header: 'Support',
     items: [
