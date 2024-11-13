@@ -34,7 +34,8 @@ const menus = [
   },
 ]
 
-const SideMenu = () => {
+const SideMenu = (props: { collapseMenu?: () => void }) => {
+  const { collapseMenu } = props
   const [active, setActive] = useState<string>('')
   const { onLogout } = useAuth()
   const router = useRouter() // Use Next.js router to get the current path
@@ -66,7 +67,7 @@ const SideMenu = () => {
                 {menu.items.map(
                   (item) =>
                     item.path && ( // Only use Link if `link` is provided
-                      <Link key={item.name} href={item.path} className="flex w-full text-center">
+                      <Link key={item.name} href={item.path} className="flex w-full text-center" onClick={collapseMenu}>
                         <div
                           className={`dropdown-item w-full rounded-lg px-3 py-4 hover:bg-neutral-200 hover:text-primary-500 ${
                             router.pathname === item.path ? 'font-semibold text-primary-500' : ''
