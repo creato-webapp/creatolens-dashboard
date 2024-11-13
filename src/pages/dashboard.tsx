@@ -264,7 +264,7 @@ const Dashboard = ({ botList, historys }: Props) => {
                         >
                           <Image
                             className="cursor-pointer"
-                            objectFit="contain"
+                            style={{ objectFit: 'contain' }}
                             alt={'account share button'}
                             src={'./external-link.svg'}
                             width={32}

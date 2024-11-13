@@ -140,20 +140,10 @@ const AddLabelsButton: React.FC<AddLabelsButtonProps> = ({ onClick }) => {
 }
 
 const Step2: React.FC = () => {
-  const {
-    images,
-    addCustomLabels,
-    currentImageIndex,
-    getCurrentImageLabels,
-    updateSelectedLabels,
-    selectAllLabels,
-    loadingLabels,
-    updateLabel,
-    goBack,
-    goForward,
-  } = useImageHashtagContext()
+  const { image, addCustomLabels, getCurrentImageLabels, updateSelectedLabels, selectAllLabels, loadingLabels, updateLabel, goBack, goForward } =
+    useImageHashtagContext()
 
-  const currentImage = useMemo(() => images[currentImageIndex], [images, currentImageIndex])
+  const currentImage = useMemo(() => image, [image])
 
   useEffect(() => {
     if (currentImage && !currentImage.labels) {
@@ -213,7 +203,9 @@ const Step2: React.FC = () => {
       <div className="flex flex-col gap-2 md:flex-row">
         <div className="h-full w-full">
           <div className="relative my-4 min-h-96 w-full rounded-full">
-            {currentImage?.image && <Image fill src={currentImage.image} objectFit="contain" className="h-full rounded-4xl" alt="image uploaded" />}
+            {currentImage?.image && (
+              <Image fill src={currentImage.image} style={{ objectFit: 'contain' }} className="h-full rounded-4xl" alt="image uploaded" />
+            )}
           </div>
         </div>
         <div className="flex w-full flex-col gap-2">
