@@ -4,24 +4,25 @@ import { useDropzone } from 'react-dropzone'
 
 import { ImageDetailsType } from '@context/ImageToHashtagContext'
 import UploadIcon from '@components/Icon/UploadIcon'
+import useImageUploader from '@hooks/useImageUploader'
 interface IImageUpload {
-  uploadedImage?: File | null
-  setUploadedImage: (image: File | null) => void // Updated type
-  setImageDetails: (arg: Partial<ImageDetailsType>) => void // Updated type
+  uploadedImage?: null | string
+  clearImage?: () => void
+  setUploadedImage: (arg: string, details: ImageDetailsType) => void
   onClickBrowse?: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void
 }
 const ImageUpload = forwardRef<HTMLInputElement, IImageUpload>((props, fileInputRef) => {
-  const { uploadedImage, setUploadedImage, setImageDetails } = props
+  const { uploadedImage, setUploadedImage, clearImage } = props
   const [imagePreview, setImagePreview] = useState<string | null>(null)
+  const { uploadImage } = useImageUploader({ timeout: 30000 })
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: {
       'image/jpeg': ['.jpeg', '.png'],
     },
-    onDrop: (acceptedFiles: File[]) => {
+    onDrop: async (acceptedFiles: File[]) => {
       if (acceptedFiles.length > 0) {
         const file = acceptedFiles[0]
-        setUploadedImage(file)
         const reader = new FileReader()
         reader.onloadend = () => {
           setImagePreview(reader.result as string)
@@ -33,7 +34,10 @@ const ImageUpload = forwardRef<HTMLInputElement, IImageUpload>((props, fileInput
         const fileFormat = file.type
         const fileExtension = file.name.split('.').pop()
 
-        setImageDetails({
+        const uploadResponse = await uploadImage(file)
+        if (!uploadResponse?.data) throw new Error('Upload response is missing data')
+
+        setUploadedImage(uploadResponse.data, {
           size: file.size,
           path: filePath,
           format: fileFormat,
@@ -48,16 +52,15 @@ const ImageUpload = forwardRef<HTMLInputElement, IImageUpload>((props, fileInput
     if (fileInputRef && 'current' in fileInputRef && fileInputRef.current) {
       fileInputRef.current.value = ''
     }
-    setUploadedImage(null)
+    clearImage && clearImage()
     setImagePreview(null)
-    setImageDetails({})
-  }, [setImageDetails, setUploadedImage])
+  }, [clearImage, fileInputRef])
 
   useEffect(() => {
     if (!uploadedImage) {
       clearFile()
     }
-  }, [uploadedImage])
+  }, [clearFile, uploadedImage])
 
   return (
     <div
@@ -81,13 +84,19 @@ const ImageUpload = forwardRef<HTMLInputElement, IImageUpload>((props, fileInput
       }}
     >
       <input {...getInputProps()} ref={fileInputRef} />
-      {imagePreview ? (
+      {uploadedImage || imagePreview ? (
         <div className="relative flex w-full flex-col items-center">
-          <div className="absolute right-5 top-5 flex h-12 w-12 cursor-pointer rounded-full bg-primary-500 p-4 text-white" onClick={clearFile}>
+          <div
+            className="absolute right-5 top-5 z-50 flex h-12 w-12 cursor-pointer rounded-full bg-primary-500 p-4 text-white"
+            onClick={(e) => {
+              e.stopPropagation()
+              clearFile()
+            }}
+          >
             <div className="flex h-full w-full items-center justify-center">X</div>
           </div>
           <img
-            src={imagePreview}
+            src={uploadedImage ? uploadedImage : imagePreview || ''}
             draggable={false}
             alt="Uploaded"
             className="aspect-square md:max-h-96"
