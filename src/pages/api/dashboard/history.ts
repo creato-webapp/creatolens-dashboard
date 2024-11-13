@@ -66,7 +66,7 @@ export default handler.api({
 
     const data = response.data
     const singleMostRepatedPost =
-      data.most_repeated_post.length > 0
+      Array.isArray(data.most_repeated_post) && data.most_repeated_post.length > 0
         ? data.most_repeated_post[0]
         : {
             count: null,
@@ -141,7 +141,14 @@ export default handler.api({
         })),
         account: item.account_id,
         post_count: item.post_count,
-        mostRepeatedPostData: item.most_repeated_post[0],
+        mostRepeatedPostData: Array.isArray(item.most_repeated_post)
+          ? item.most_repeated_post.sort((a, b) => {
+              if (b.count !== a.count) {
+                return b.count - a.count
+              }
+              return b.latest_likes - a.latest_likes
+            })[0]
+          : null,
       }))
 
       return res.status(200).json({

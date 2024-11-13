@@ -2,7 +2,7 @@ import { ReactElement, useCallback, useMemo, useState } from 'react'
 
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import Link from 'next/link'
-import { getSession } from 'next-auth/react'
+import { getSession, useSession } from 'next-auth/react'
 import Image from 'next/image'
 import { CombinedUser } from '@api/auth/[...nextauth]'
 import { IAccount } from '@components/Account/Account'
@@ -21,7 +21,7 @@ import NavigationPill from '@components/ui/NavigationPill'
 import PrimaryButton from '@components/Button/Primary'
 import ReportCard from '@components/ReportCard'
 import Primary from '@components/Button/Primary'
-import { getSearchHistory, KeywordData, MostRepeatedPost } from '@services/Meta'
+import { getSearchHistory, KeywordData, MostRepeatedPost, createSearchHistory, formatDateRange } from '@services/Meta'
 import { CarouselContent, CarouselItem, Carousel } from '@components/ui/Carousel'
 import SearchIcon from '@components/Icon/SearchIcon'
 import { formatDateRangeFromString } from '@utils/dayjs'
@@ -100,6 +100,9 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
 }
 
 const Dashboard = ({ botList, historys }: Props) => {
+  const { data: session } = useSession()
+  const user = session?.user as CombinedUser
+
   const [formValues, setFormValues] = useState<{
     accId: string | undefined
     date_range: DateRange
@@ -161,8 +164,15 @@ const Dashboard = ({ botList, historys }: Props) => {
     [botList]
   )
 
-  const onSearchClick = () => {
+  const onSearchClick = async () => {
     setMetaAttributes(formValues)
+    const { from, to } = formatDateRange(formValues.date_range)
+    await createSearchHistory({
+      userId: user.id,
+      accId: formValues.accId as string,
+      from,
+      to,
+    })
   }
 
   const instaBotList = useMemo(() => {
