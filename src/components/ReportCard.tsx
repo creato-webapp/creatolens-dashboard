@@ -121,7 +121,7 @@ export function ReadMoreButton(props: IReportCard) {
 
         <div className="flex max-h-[100%] flex-col gap-4 overflow-hidden md:flex-row">
           <div className="relative flex h-80 w-1/2 min-w-64 items-start justify-start">
-            <Image src={mostRepeatedPostImage || '/logo_orange.png'} className="w-auto" layout="fill" objectFit="contain" alt={''} />
+            <Image src={mostRepeatedPostImage || '/logo_orange.png'} className="w-auto" layout="fill" style={{ objectFit: 'contain' }} alt={''} />
           </div>
           <div className="flex h-full w-1/2 flex-col overflow-hidden">
             {mostRepeatedPost?.username && (
@@ -183,7 +183,7 @@ const MostRepeatedPost = ({
       </div>
       <div className="ml-7 h-full text-sm text-neutral-500">
         <div className="relative h-80">
-          <Image src={mostRepeatedPostImage || '/logo_orange.png'} className="w-auto" layout="fill" objectFit="contain" alt={''} />
+          <Image src={mostRepeatedPostImage || '/logo_orange.png'} className="w-auto" layout="fill" style={{ objectFit: 'contain' }} alt={''} />
         </div>
 
         {post?.username && (

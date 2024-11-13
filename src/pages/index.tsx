@@ -17,6 +17,7 @@ import FinnTheHumanIcon from '@components/Icon/FinnTheHumanIcon'
 import TrendUpIcon from '@components/Icon/TrendUpIcon'
 import CoffeeIcon from '@components/Icon/CoffeeIcon'
 import Link from 'next/link'
+import useAuth from '@hooks/useAuth'
 
 export const getServerSideProps: GetServerSideProps = async (
   context: GetServerSidePropsContext
@@ -132,7 +133,7 @@ const TabSession = memo(() => {
                     alt={`Feature ${index + 1}`}
                     fill
                     className="px-2 py-2"
-                    objectFit="contain"
+                    style={{ objectFit: 'contain' }}
                     quality={100}
                     unoptimized={true}
                   />
@@ -161,11 +162,10 @@ const MobileTabSession = memo(() => {
               <Image
                 src={feature.image}
                 alt={feature.title}
-                objectFit="contain"
                 width={0}
                 height={0}
                 sizes="100vw"
-                style={{ width: '100%', height: 'auto' }} // optional
+                style={{ width: '100%', height: 'auto', objectFit: 'contain' }} // optional
                 quality={100}
               ></Image>
             )}
@@ -179,7 +179,9 @@ const MobileTabSession = memo(() => {
             <div className="text-heading text-neutral-800">{feature.title}</div>
             <div className="text-base text-neutral-500">{feature.description}</div>
           </div>
-          <div className="flex w-full justify-center">{feature.button}</div>
+          <Link className="flex w-full justify-center" href={feature.link}>
+            {feature.button}
+          </Link>
         </div>
       ))}
     </div>
@@ -245,6 +247,8 @@ const UsageSession = memo(() => {
 })
 
 const Service = memo(() => {
+  const { onLogin } = useAuth()
+
   const services = [
     {
       icon: <PenIcon width={40} height={40} />,
@@ -287,7 +291,7 @@ const Service = memo(() => {
           })}
         </div>
         <div className="flex w-full items-center justify-center pt-12">
-          <PrimaryButton sizes={['l', 'l', 'l']} className="!w-80 drop-shadow-md">
+          <PrimaryButton sizes={['l', 'l', 'l']} className="!w-80 drop-shadow-md" onClick={onLogin}>
             Start Exploring
           </PrimaryButton>
         </div>

@@ -24,6 +24,7 @@ type ImageType = {
   selectedLabels: string[]
   hashtags?: string[]
   uploadStatus: UploadStatus
+  details: ImageDetailsType
 }
 
 type ImageHashtagContextType = {
@@ -31,14 +32,13 @@ type ImageHashtagContextType = {
   updateStep: (arg: number) => void
   goBack: () => void
   goForward: () => void
-  images: ImageType[] // Corrected property name from 'dialoguese' to 'dialogues'
-  addImage: (arg: string, labels: string[]) => void
-  currentImageIndex: number
+  image: ImageType // Changed from images array to single image
+  addImage: (arg: string, details: ImageDetailsType) => void
+  clearImage: () => void
   updateSelectedLabels: (label: string) => void
   selectAllLabels: () => void
   getCurrentImageLabels: () => void
   loadingLabels: boolean
-  //Below is for hashtag
   hashtags: IHashet[]
   updateHashtag: (arg: IHashet[]) => void
   updateLabel: (arg: { image_url: string; existing_labels: string[]; number: number }) => void
@@ -55,62 +55,65 @@ interface ImageHashtagProviderProps {
 export const ImageHashtagProvider = ({ children }: ImageHashtagProviderProps) => {
   const [step, setStep] = useState<number>(1)
 
-  const [images, setImages] = useState<ImageType[] | []>([])
-  const [loadingLabels, setloadingLabels] = useState<boolean>(false)
-  const [currentImageIndex, setCurrentImageIndex] = useState<number>(0)
+  // Changed from array to single object
+  const [image, setImage] = useState<ImageType>({
+    image: null,
+    selectedLabels: [],
+    uploadStatus: 'pending',
+    details: {},
+  })
 
+  const [loadingLabels, setloadingLabels] = useState<boolean>(false)
   const [hashtags, setHashtags] = useState<IHashet[]>([])
 
   const updateStep = useCallback((arg: number) => {
     setStep(arg)
   }, [])
+
   const goBack = useCallback(() => {
-    setStep((prev) => Math.max(prev - 1, 1)) // Ensures step doesn't go below 1
+    setStep((prev) => Math.max(prev - 1, 1))
   }, [])
 
   const goForward = useCallback(() => {
     setStep((prev) => prev + 1)
   }, [])
 
-  const addImage = useCallback(
-    (image: string) => {
-      setImages((prevImages) => [
-        ...prevImages,
-        {
-          image,
-          selectedLabels: [],
-          uploadStatus: 'pending',
-        },
-      ])
-      setCurrentImageIndex(() => images.length) // Set to the index of the new image
-    },
-    [images.length]
-  )
+  const addImage = useCallback((imageUrl: string, details: ImageDetailsType) => {
+    setImage({
+      image: imageUrl,
+      selectedLabels: [],
+      uploadStatus: 'pending',
+      details: details,
+    })
+  }, [])
+
+  const clearImage = useCallback(() => {
+    setImage({
+      image: null,
+      selectedLabels: [],
+      uploadStatus: 'pending',
+      details: {},
+    })
+    setHashtags([])
+    setStep(1)
+  }, [])
 
   const getCurrentImageLabels = async () => {
     setloadingLabels(true)
     try {
-      const labels: string[] = await getImageLabel(images[currentImageIndex]?.image as string)
+      const labels: string[] = await getImageLabel(image.image as string)
       if (labels && labels.length > 0) {
-        setImages((prevImages) => {
-          const updatedImages = [...prevImages]
-          updatedImages[currentImageIndex] = {
-            ...updatedImages[currentImageIndex],
-            labels: labels,
-            selectedLabels: [],
-            uploadStatus: 'completed',
-          }
-          return updatedImages
-        })
+        setImage((prevImage) => ({
+          ...prevImage,
+          labels: labels,
+          selectedLabels: [],
+          uploadStatus: 'completed',
+        }))
       } else {
-        setImages((prevImages) => {
-          const updatedImages = [...prevImages]
-          updatedImages[currentImageIndex] = {
-            ...updatedImages[currentImageIndex],
-            uploadStatus: 'failed',
-          }
-          return updatedImages
-        })
+        setImage((prevImage) => ({
+          ...prevImage,
+          uploadStatus: 'failed',
+        }))
       }
       setloadingLabels(false)
     } catch {
@@ -118,121 +121,82 @@ export const ImageHashtagProvider = ({ children }: ImageHashtagProviderProps) =>
     }
   }
 
-  const updateSelectedLabels = useCallback(
-    (label: string) => {
-      setImages((prevImages) => {
-        const updatedImages = prevImages.map((img, idx) => {
-          if (idx === currentImageIndex) {
-            const selectedLabels = img.selectedLabels.includes(label)
-              ? img.selectedLabels.filter((item) => item !== label)
-              : [...img.selectedLabels, label]
+  const updateSelectedLabels = useCallback((label: string) => {
+    setImage((prevImage) => {
+      const selectedLabels = prevImage.selectedLabels.includes(label)
+        ? prevImage.selectedLabels.filter((item) => item !== label)
+        : [...prevImage.selectedLabels, label]
 
-            return {
-              ...img,
-              selectedLabels,
-            }
-          }
-          return img
-        })
-        return updatedImages
-      })
-    },
-    [currentImageIndex]
-  )
+      return {
+        ...prevImage,
+        selectedLabels,
+      }
+    })
+  }, [])
 
   const selectAllLabels = useCallback(() => {
-    setImages((prevImages) => {
-      const updatedImages = prevImages.map((img, idx) => {
-        if (idx === currentImageIndex && img.labels) {
-          return {
-            ...img,
-            selectedLabels: img.labels,
-          }
+    setImage((prevImage) => ({
+      ...prevImage,
+      selectedLabels: prevImage.labels || [],
+    }))
+  }, [])
+
+  const updateHashtag = useCallback((hashtag: IHashet[]) => {
+    setHashtags(hashtag)
+  }, [])
+
+  const updateLabel = useCallback(async (data: { image_url: string; existing_labels: string[]; number: number }) => {
+    setloadingLabels(true)
+    const newLabels: string[] = await reAnnotateLabel(data)
+
+    setImage((prevImage) => {
+      if (prevImage.labels) {
+        const allLabelsSelected = prevImage.labels.length === prevImage.selectedLabels.length
+        if (allLabelsSelected) {
+          return prevImage
         }
-        return img
-      })
-      return updatedImages
+
+        const usedLabels = new Set<string>()
+        const updatedLabels = prevImage.labels.map((label) => {
+          if (prevImage.selectedLabels.includes(label)) {
+            return label
+          }
+
+          let newLabel = null
+          for (const labelOption of newLabels) {
+            if (!usedLabels.has(labelOption)) {
+              newLabel = labelOption
+              usedLabels.add(labelOption)
+              break
+            }
+          }
+          return newLabel || label
+        })
+
+        return {
+          ...prevImage,
+          labels: updatedLabels,
+          selectedLabels: prevImage.selectedLabels,
+        }
+      }
+      return prevImage
     })
-  }, [currentImageIndex])
+    setloadingLabels(false)
+  }, [])
 
-  const updateHashtag = useCallback(
-    (hashtag: IHashet[]) => {
-      setHashtags(hashtag)
-    },
-    [setHashtags]
-  )
+  const addCustomLabels = useCallback((labels: string[]) => {
+    setImage((prevImage) => {
+      const newLabels = labels.filter((label) => !prevImage.selectedLabels.includes(label))
+      const currentLabels = prevImage.labels || []
+      const currentSelectedLabels = prevImage.selectedLabels || []
 
-  const updateLabel = useCallback(
-    async (data: { image_url: string; existing_labels: string[]; number: number }) => {
-      setloadingLabels(true)
-      const newLabels: string[] = await reAnnotateLabel(data)
-
-      setImages((prevImages) => {
-        const updatedImages = prevImages.map((img, idx) => {
-          if (idx === currentImageIndex && img.labels) {
-            // Check if all labels are selected
-            const allLabelsSelected = img.labels.length === img.selectedLabels.length
-            if (allLabelsSelected) {
-              return img // No need to replace if all labels are selected
-            }
-
-            const usedLabels = new Set<string>() // Set to keep track of used new labels
-            const newLabelsIterator = newLabels.values() // Create an iterator for new labels
-
-            const updatedLabels = img.labels.map((label) => {
-              if (img.selectedLabels.includes(label)) {
-                return label
-              } else {
-                let newLabel
-                do {
-                  const result = newLabelsIterator.next()
-                  newLabel = result.value
-                } while (newLabel && usedLabels.has(newLabel))
-
-                if (newLabel) {
-                  usedLabels.add(newLabel)
-                  return newLabel
-                } else {
-                  return label // Use the existing label if no new label is found
-                }
-              }
-            })
-            return {
-              ...img,
-              labels: updatedLabels,
-              selectedLabels: img.selectedLabels,
-            }
-          }
-          return img
-        })
-        setloadingLabels(false)
-        return updatedImages
-      })
-    },
-    [currentImageIndex]
-  )
-  const addCustomLabels = useCallback(
-    (labels: string[]) => {
-      setImages((prevImages) => {
-        const updatedImages = prevImages.map((img, idx) => {
-          if (idx === currentImageIndex) {
-            // Filter out labels that already exist in selectedLabels
-            const newLabels = labels.filter((label) => !img.selectedLabels.includes(label))
-            const currentLabels = img.labels || []
-            const currentSelectedLabels = img.selectedLabels || []
-            return {
-              ...img,
-              labels: [...currentLabels, ...newLabels],
-              selectedLabels: [...currentSelectedLabels, ...newLabels], // Add only unique labels
-            }
-          }
-          return img
-        })
-        return updatedImages
-      })
-    },
-    [currentImageIndex]
-  )
+      return {
+        ...prevImage,
+        labels: [...currentLabels, ...newLabels],
+        selectedLabels: [...currentSelectedLabels, ...newLabels],
+      }
+    })
+  }, [])
 
   const generateImageByHashtag = useCallback(() => {
     // Generate image by hashtags
@@ -241,9 +205,9 @@ export const ImageHashtagProvider = ({ children }: ImageHashtagProviderProps) =>
   return (
     <ImageHashtagContext.Provider
       value={{
-        images,
+        image,
         addImage,
-        currentImageIndex,
+        clearImage,
         selectAllLabels,
         updateSelectedLabels,
         getCurrentImageLabels,

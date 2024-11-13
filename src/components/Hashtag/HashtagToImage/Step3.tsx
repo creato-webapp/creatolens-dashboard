@@ -48,7 +48,7 @@ const Step3 = () => {
             <Image
               fill={true}
               src={generatedImageUri}
-              objectFit="contain"
+              style={{ objectFit: 'contain' }}
               className="rounded-3xl"
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
               alt="Generated image"

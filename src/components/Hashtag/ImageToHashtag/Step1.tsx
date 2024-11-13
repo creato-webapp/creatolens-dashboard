@@ -1,42 +1,26 @@
-import React, { useCallback, useRef, useState, useMemo } from 'react'
+import React, { useCallback, useRef, useMemo } from 'react'
 import Primary from '@components/Button/Primary'
-import { ImageDetailsType } from '@context/ImageToHashtagContext'
 import ImageUpload from '../ImageUpload'
 import useImageUploader from '@hooks/useImageUploader'
-import { imageToBase64 } from '@services/util'
 import { useImageHashtagContext } from '@hooks/UseImagetoHashtag'
 import Neutral from '@components/Button/Neutral'
 import RefreshIcon from '@components/Icon/RefreshIcon'
 import CaretRightBoldIcon from '@components/Icon/CaretRightBoldIcon'
 
 const Step1 = () => {
-  const [uploading, setUploading] = useState<boolean>(false)
-  const [uploadedImage, setUploadedImage] = useState<File | null>(null)
-  const [imageDetails, setImageDetails] = useState<ImageDetailsType>({})
   const fileInputRef = useRef<HTMLInputElement | null>(null)
 
-  const { uploadImage, error } = useImageUploader({ timeout: 30000 })
-  const { addImage, goForward } = useImageHashtagContext()
+  const { error } = useImageUploader({ timeout: 30000 })
+  const { addImage, goForward, image, clearImage } = useImageHashtagContext()
 
   const onClickButton = useCallback(async () => {
-    if (!uploadedImage || !imageDetails.format || !imageDetails.path) return
-
-    setUploading(true)
     try {
-      const imageString = await imageToBase64(uploadedImage)
-      if (!imageString) throw new Error('Failed to convert image to base64')
-
-      const uploadResponse = await uploadImage(uploadedImage)
-      if (!uploadResponse?.data) throw new Error('Upload response is missing data')
-
-      addImage(uploadResponse.data, [])
+      if (!image.details) return
       goForward()
     } catch (e) {
       console.error('Error uploading image:', e)
-    } finally {
-      setUploading(false)
     }
-  }, [addImage, goForward, imageDetails.format, imageDetails.path, uploadImage, uploadedImage])
+  }, [goForward, image.details])
 
   const triggerFileInput = useCallback(() => {
     if (fileInputRef.current) {
@@ -44,7 +28,7 @@ const Step1 = () => {
     }
   }, [])
 
-  const fileSizeInMB = useMemo(() => (imageDetails.size ? (imageDetails.size / (1024 * 1024)).toFixed(2) : null), [imageDetails.size])
+  const fileSizeInMB = useMemo(() => (image.details.size ? (image.details.size / (1024 * 1024)).toFixed(2) : null), [image.details.size])
 
   return (
     <div className="flex h-full flex-col gap-3 rounded-2xl">
@@ -59,31 +43,28 @@ const Step1 = () => {
         </h4>
         <div className="md:mt-0 md:px-4">
           <div className="w-full items-center">
-            <ImageUpload uploadedImage={uploadedImage} setUploadedImage={setUploadedImage} setImageDetails={setImageDetails} ref={fileInputRef} />
+            <ImageUpload clearImage={clearImage} uploadedImage={image.image} setUploadedImage={addImage} ref={fileInputRef} />
           </div>
           <div className="flex w-full flex-col justify-center gap-4 ">
             <div className="flex flex-row flex-wrap items-center gap-x-4 text-base text-neutral-500 md:max-h-96">
-              {imageDetails.path && (
+              {image.details?.path && (
                 <em className="">
-                  Image uploaded: {imageDetails.path}
+                  Image uploaded: {image.details.path}
                   {fileSizeInMB && ` File size: ${fileSizeInMB} MB`}
                 </em>
               )}
-              {fileSizeInMB && <h3 className="text-disabled"></h3>}
             </div>
 
-            {imageDetails.path && (
-              <div className="flex flex-row justify-center gap-4">
-                <Neutral disabled={uploading} sizes={['m', 'm', 'm']} onClick={() => setUploadedImage(null)}>
-                  <RefreshIcon />
-                  <div className="text-base">Re-Upload</div>
-                </Neutral>
-                <Primary disabled={uploading} className="w-28" sizes={['m', 'm', 'm']} onClick={onClickButton}>
-                  Next
-                  <CaretRightBoldIcon width={16} height={16} />
-                </Primary>
-              </div>
-            )}
+            <div className="flex flex-row justify-center gap-4">
+              <Neutral disabled={image.details?.path === undefined} sizes={['m', 'm', 'm']} onClick={clearImage}>
+                <RefreshIcon />
+                <div className="text-base">Re-Upload</div>
+              </Neutral>
+              <Primary disabled={image.details?.path === undefined} className="w-28" sizes={['m', 'm', 'm']} onClick={onClickButton}>
+                Next
+                <CaretRightBoldIcon width={16} height={16} />
+              </Primary>
+            </div>
             {error && <div>{error.message}</div>}
           </div>
         </div>

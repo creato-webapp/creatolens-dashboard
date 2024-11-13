@@ -287,7 +287,7 @@ const Dashboard = ({ botList, historys }: Props) => {
                         >
                           <Image
                             className="cursor-pointer"
-                            objectFit="contain"
+                            style={{ objectFit: 'contain' }}
                             alt={'account share button'}
                             src={'./external-link.svg'}
                             width={32}
@@ -300,7 +300,7 @@ const Dashboard = ({ botList, historys }: Props) => {
                 </div>
 
                 <div className="flex items-start">
-                  <PrimaryButton onClick={onSearchClick} sizes={['s', 's', 's']} className="w-full">
+                  <PrimaryButton onClick={onSearchClick} sizes={['s', 's', 's']} className="w-full md:w-80">
                     <SearchIcon />
                     Search
                   </PrimaryButton>
