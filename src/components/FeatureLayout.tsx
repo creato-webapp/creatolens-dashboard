@@ -54,7 +54,7 @@ export const Card = (props: IFeatureCard) => {
             <source src={video} type="video/mp4" />
           </video>
         ) : (
-          <Image src={image || '/logo_orange.png'} objectFit="contain" alt={heading} fill quality={100} unoptimized />
+          <Image src={image || '/logo_orange.png'} style={{ objectFit: 'contain' }} alt={heading} fill quality={100} unoptimized />
         )}
       </div>
       <div className="flex w-full flex-col justify-between gap-6">

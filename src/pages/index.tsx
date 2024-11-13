@@ -132,7 +132,7 @@ const TabSession = memo(() => {
                     alt={`Feature ${index + 1}`}
                     fill
                     className="px-2 py-2"
-                    objectFit="contain"
+                    style={{ objectFit: 'contain' }}
                     quality={100}
                     unoptimized={true}
                   />
@@ -161,11 +161,10 @@ const MobileTabSession = memo(() => {
               <Image
                 src={feature.image}
                 alt={feature.title}
-                objectFit="contain"
                 width={0}
                 height={0}
                 sizes="100vw"
-                style={{ width: '100%', height: 'auto' }} // optional
+                style={{ width: '100%', height: 'auto', objectFit: 'contain' }} // optional
                 quality={100}
               ></Image>
             )}

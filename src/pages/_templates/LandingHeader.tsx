@@ -29,7 +29,7 @@ export default function LandingHeader(props: LandingHeaderProps) {
         <div className="-px-4 absolute inset-0 -left-[100%] -top-[50%]  flex h-[200%] w-[300%] items-center justify-center overflow-visible opacity-15 md:relative md:left-0 md:top-0 md:h-full md:w-1/2 md:w-full md:opacity-100">
           <Image
             src="/landing-animation.gif"
-            className="object-contain"
+            style={{ objectFit: 'contain' }}
             alt={'2Tag animation'}
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             fill
