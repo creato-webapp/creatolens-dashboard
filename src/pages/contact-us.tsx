@@ -2,7 +2,7 @@ import Image from 'next/image'
 
 const ContactUs = () => {
   return (
-    <div className="flex w-full items-center justify-center ">
+    <div className="flex w-full items-center justify-center md:mb-40">
       <div className="flex w-full flex-col md:max-w-screen-xl">
         <h1 className="px-4 py-6 text-2xl font-bold md:pl-16">Contact Us</h1>
         <hr className="my-4 w-full border-t border-neutral-300" />
