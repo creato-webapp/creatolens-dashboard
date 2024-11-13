@@ -1,10 +1,13 @@
 import React from 'react'
 import Image from 'next/image'
 import PrimaryButton from '@components/Button/Primary'
+import useAuth from '@hooks/useAuth'
 
 interface LandingHeaderProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export default function LandingHeader(props: LandingHeaderProps) {
+  const { onLogin } = useAuth()
+
   const TransparentCard = () => {
     return (
       <div className="flex w-full flex-col items-center gap-2 rounded-3xl bg-white bg-opacity-60 py-6 shadow-lg shadow-primary-200 md:mt-0 md:px-8">
@@ -12,7 +15,9 @@ export default function LandingHeader(props: LandingHeaderProps) {
         <h1 className="w-full break-words bg-primary-500 text-title font-bold text-white md:text-title">ENGAGEMENT</h1>
         <h1 className="text-subtitle font-normal">Keyword, SEO Insight, Gen AI All in one</h1>
         <div className="flex flex-col items-center gap-8">
-          <PrimaryButton className=" drop-shadow-md">Start Exploring</PrimaryButton>
+          <PrimaryButton className=" drop-shadow-md" onClick={onLogin}>
+            Start Exploring
+          </PrimaryButton>
           <div className="text-xs text-neutral-500">Start with $0. No credit card needed.</div>
           <div className="text-xs text-neutral-500">7 days a week customer services</div>
         </div>
