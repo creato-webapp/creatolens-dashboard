@@ -16,6 +16,7 @@ import PenIcon from '@components/Icon/PenIcon'
 import FinnTheHumanIcon from '@components/Icon/FinnTheHumanIcon'
 import TrendUpIcon from '@components/Icon/TrendUpIcon'
 import CoffeeIcon from '@components/Icon/CoffeeIcon'
+import Link from 'next/link'
 
 export const getServerSideProps: GetServerSideProps = async (
   context: GetServerSidePropsContext
@@ -41,6 +42,7 @@ interface FeatureCardProps {
   image?: string
   button: React.ReactNode
   video?: string
+  link: string
 }
 
 const features: FeatureCardProps[] = [
@@ -53,6 +55,7 @@ const features: FeatureCardProps[] = [
       </PrimaryButton>
     ),
     image: '/hashtag/analysis.png',
+    link: '/dashboard',
   },
   {
     title: 'Instabot',
@@ -65,6 +68,7 @@ const features: FeatureCardProps[] = [
     ),
     // image: '/features/instabot-video.mp4',
     video: '/features/instabot-video.mp4',
+    link: '/accounts',
   },
   {
     title: 'Hashtags Recommendation',
@@ -75,6 +79,7 @@ const features: FeatureCardProps[] = [
       </PrimaryButton>
     ),
     image: '/hashtag/hashtags-recommendation.png',
+    link: '/recommendation',
   },
   {
     title: 'Hashtags-to-Image',
@@ -85,6 +90,7 @@ const features: FeatureCardProps[] = [
       </PrimaryButton>
     ),
     image: '/hashtag/hashtags-to-image.png',
+    link: '/hashtag/hashtag-to-image',
   },
   {
     title: 'Image-to-Hashtags',
@@ -95,6 +101,7 @@ const features: FeatureCardProps[] = [
       </PrimaryButton>
     ),
     image: '/hashtag/image-to-hashtag.png',
+    link: '/hashtag/image-to-hashtag',
   },
 ]
 const TabSession = memo(() => {
@@ -116,14 +123,22 @@ const TabSession = memo(() => {
                   <h3 className="text-2xl font-semibold text-neutral-800">{feature.title}</h3>
                   <p className="text-base text-neutral-500">{feature.description}</p>
                 </div>
-                {feature.button}
+                <Link href={feature.link}>{feature.button}</Link>
               </div>
               <div className="relative h-full w-full items-center justify-center">
                 {feature.image && (
-                  <Image src={feature.image} alt={`Feature ${index + 1}`} fill className="px-2 py-2" style={{ objectFit: 'contain' }} />
+                  <Image
+                    src={feature.image}
+                    alt={`Feature ${index + 1}`}
+                    fill
+                    className="px-2 py-2"
+                    style={{ objectFit: 'contain' }}
+                    quality={100}
+                    unoptimized={true}
+                  />
                 )}
                 {feature.video && (
-                  <video className="h-fit object-cover" controls autoPlay>
+                  <video className="h-fit rounded-lg object-cover" autoPlay>
                     <source src={feature.video} type="video/mp4" />
                   </video>
                 )}
@@ -138,9 +153,9 @@ const TabSession = memo(() => {
 
 const MobileTabSession = memo(() => {
   return (
-    <div className="m-4 flex flex-col gap-6 ">
+    <div className="flex flex-col gap-6 ">
       {features.map((feature) => (
-        <div key={feature.title} className="flex w-full flex-col gap-6 rounded-lg bg-white p-6">
+        <div key={feature.title} className="flex w-full flex-col gap-6 rounded-lg border bg-white p-6">
           <div className="relative flex min-h-40 w-full">
             {feature.image && (
               <Image
@@ -154,7 +169,7 @@ const MobileTabSession = memo(() => {
               ></Image>
             )}
             {feature.video && (
-              <video className="h-fit object-cover" controls autoPlay>
+              <video className="h-fit w-full" autoPlay controls>
                 <source src={feature.video} type="video/mp4" />
               </video>
             )}
@@ -176,7 +191,7 @@ const FeatureSession = memo(() => {
       <div className="hidden w-full justify-center md:flex">
         <TabSession />
       </div>
-      <div className="bg-primary-100 md:hidden">
+      <div className="md:hidden">
         <MobileTabSession />
       </div>
     </div>
@@ -291,7 +306,7 @@ const Index: NextPage = () => {
         <UsageSession />
         <Service />
       </div>
-      <div className="px-6 md:px-12 md:py-16">
+      <div className="md:px-12 md:py-16">
         <Testimonial />
       </div>
     </div>
