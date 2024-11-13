@@ -10,6 +10,8 @@ import { HistoricSearchResult } from 'pages/dashboard'
 export interface PostData {
   count: number
   owner_username: string
+  latest_likes: number
+  second_latest_likes: number
   latest_created_at?: string
   second_latest_created_at?: string
   caption?: string
@@ -120,8 +122,15 @@ export async function getMostRepeatedPost(
 
   if (response && response.data.length > 0) {
     const maxCountImage = response.data.reduce(
-      (maxImage: PostData, currentImage: PostData) => (currentImage.count > maxImage.count ? currentImage : maxImage),
-      { count: -Infinity, owner_username: '' } as PostData
+      (maxImage: PostData, currentImage: PostData) => {
+        if (currentImage.count > maxImage.count) {
+          return currentImage
+        } else if (currentImage.count === maxImage.count) {
+          return currentImage.latest_likes > maxImage.latest_likes ? currentImage : maxImage
+        }
+        return maxImage
+      },
+      { count: -Infinity, owner_username: '', latest_likes: -Infinity } as PostData
     )
 
     try {
@@ -192,15 +201,50 @@ export async function getProfile(data: {
   return response
 }
 
-export async function getSearchHistory(customConfig?: AxiosRequestConfig) {
-  const response = await fetcher.GET<{
+type SearchHistoryPayload = {
+  userId: string
+  accId: string
+  from: string
+  to: string
+}
+
+export async function createSearchHistory(data: SearchHistoryPayload, customConfig?: AxiosRequestConfig) {
+  const response = await fetcher.POST<{
     data: HistoricSearchResult[] | []
-  }>(XAPI.DASHBOARD_HISTORY, { ...customConfig })
+  }>(XAPI.DASHBOARD_HISTORY, {
+    user_id: data.userId,
+    account_id: data.accId,
+    from_date: data.from,
+    to_date: data.to,
+    ...customConfig,
+  })
 
   return response
 }
 
-function formatDateRange(dateRange: DateRange) {
+export async function getSearchHistory(
+  data: {
+    args: {
+      accId?: string
+      userId: string
+    }
+  },
+  customConfig?: AxiosRequestConfig
+) {
+  const response = await fetcher.GET<{
+    data: HistoricSearchResult[] | []
+  }>(XAPI.DASHBOARD_HISTORY, {
+    ...customConfig,
+    params: {
+      user_id: data.args.userId,
+      account_id: data.args.accId,
+    },
+  })
+
+  return response
+}
+
+export function formatDateRange(dateRange: DateRange) {
   const from = dateRange?.from?.toISOString().split('T')[0] + ' 00:00:00'
   const to = dateRange?.to?.toISOString().split('T')[0] + ' 23:59:59'
   return { from, to }

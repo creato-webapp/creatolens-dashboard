@@ -14,6 +14,7 @@ import UserIcon from './Icon/UserIcon'
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from './ui/Dialog'
 import RobotIcon from './Icon/RobotIcon'
 import { formatDateRange } from '@utils/dayjs'
+import { useMostRepeatedPostImage } from '@hooks/useMeta'
 
 interface IReportCard {
   account?: string
@@ -229,7 +230,12 @@ const MostRepeatedPost = ({
 const exportToPDF = () => {}
 
 const ReportCard = (props: IReportCard) => {
-  const { dateRange, postCount, keyword, mostRepeatedPost, loading, mostRepeatedPostImage, account } = props
+  const { dateRange, postCount, keyword, mostRepeatedPost, loading, account } = props
+
+  const { data: mostRepeatedPostImage } = useMostRepeatedPostImage({
+    shortcode: mostRepeatedPost?.shortcode,
+    batch_id: mostRepeatedPost?.batch_id,
+  })
 
   const from = formatDateRange(dateRange.from)
   const to = formatDateRange(dateRange.to)
