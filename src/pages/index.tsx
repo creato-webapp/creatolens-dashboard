@@ -119,7 +119,9 @@ const TabSession = memo(() => {
                 {feature.button}
               </div>
               <div className="relative h-full w-full items-center justify-center">
-                {feature.image && <Image src={feature.image} alt={`Feature ${index + 1}`} fill className="px-2 py-2" objectFit="contain" />}
+                {feature.image && (
+                  <Image src={feature.image} alt={`Feature ${index + 1}`} fill className="px-2 py-2" style={{ objectFit: 'contain' }} />
+                )}
                 {feature.video && (
                   <video className="h-fit object-cover" controls autoPlay>
                     <source src={feature.video} type="video/mp4" />
@@ -144,11 +146,10 @@ const MobileTabSession = memo(() => {
               <Image
                 src={feature.image}
                 alt={feature.title}
-                objectFit="contain"
                 width={0}
                 height={0}
                 sizes="100vw"
-                style={{ width: '100%', height: 'auto' }} // optional
+                style={{ width: '100%', height: 'auto', objectFit: 'contain' }} // optional
                 quality={100}
               ></Image>
             )}
