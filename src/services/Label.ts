@@ -2,8 +2,6 @@ import { AxiosResponse } from 'axios'
 
 import fetcher from '@helpers/fetcher'
 
-import { Labels } from './Object/Gemini'
-
 type ReAnnotateLabelType = {
   existing_labels: string[]
   image_url: string
@@ -17,17 +15,20 @@ export async function reAnnotateLabel(data: ReAnnotateLabelType) {
       confidence: {
         [key: string]: number
       }
-      labels: Labels[]
+      labels: string[]
     }>
   >('/api/image/labels', {
     existing_labels: existing_labels,
+    number: number,
     image_url: image_url,
   })
 
-  const sortedLabels: string[] = Object.entries(response.data.confidence)
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, number)
-    .map((entry) => entry[0])
+  // const sortedLabels: string[] = Object.entries(response.data.confidence)
+  //   .sort((a, b) => b[1] - a[1])
+  //   .slice(0, number)
+  //   .map((entry) => entry[0])
+
+  const sortedLabels = response.data.labels
 
   return sortedLabels
 }

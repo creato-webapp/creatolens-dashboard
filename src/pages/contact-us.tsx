@@ -8,7 +8,7 @@ const ContactUs = () => {
         <hr className="my-4 w-full border-t border-neutral-300" />
         <div className="flex flex-col px-6 md:flex-row">
           <div className="relative h-96 w-full">
-            <Image src={'/contact-us.png'} objectFit="contain" fill alt={'Contact Us'} />
+            <Image src={'/contact-us.png'} style={{ objectFit: 'contain' }} fill alt={'Contact Us'} />
           </div>
           <div className="flex w-full flex-col justify-center gap-6 text-neutral-500">
             <div className="flex flex-col gap-2">

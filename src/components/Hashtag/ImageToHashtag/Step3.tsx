@@ -28,10 +28,10 @@ interface CategoryOption {
 }
 
 const Step3: React.FC = () => {
-  const { images, currentImageIndex, updateSelectedLabels, hashtags, updateHashtag, goBack } = useImageHashtagContext()
+  const { image, updateSelectedLabels, hashtags, updateHashtag, goBack, clearImage } = useImageHashtagContext()
   const { addDialogue } = useDialogues()
 
-  const currentImage = useMemo(() => images[currentImageIndex], [images, currentImageIndex])
+  const currentImage = useMemo(() => image, [image])
 
   const [categorizedOptions, setCategorizedOptions] = useState<CategoryOption[]>([])
 
@@ -102,6 +102,12 @@ const Step3: React.FC = () => {
     addDialogue('Copied Successfully', Status.SUCCESS)
   }, [addDialogue, categorizedOptions])
 
+  const onClickCopySelectedLabels = useCallback(() => {
+    const selectedLabels = currentImage?.selectedLabels.join(' ')
+    navigator.clipboard.writeText(selectedLabels)
+    addDialogue('Labels Copied Successfully', Status.SUCCESS)
+  }, [currentImage?.selectedLabels, addDialogue])
+
   const onClickClearSelected = useCallback(() => {
     setCategorizedOptions((prevOptions) =>
       prevOptions.map((category) => ({
@@ -137,24 +143,26 @@ const Step3: React.FC = () => {
 
   const hashtagsLength = useMemo(() => categorizedOptions.reduce((acc, option) => acc + option.options.length, 0), [categorizedOptions])
 
+  const checkedLabelsLength = useMemo(() => (labelOptions ? labelOptions.filter((label) => label.checked).length : 0), [labelOptions])
+
   const totalChecked = useMemo(
     () => categorizedOptions.reduce((acc, option) => acc + option.options.filter((opt) => opt.checked).length, 0),
     [categorizedOptions]
   )
   return (
     <div>
-      <div className="w-full md:flex md:flex-row">
+      <div className="w-full md:flex md:flex-row md:gap-4">
         <div className="flex flex-col md:w-1/2">
           <div className="required relative flex cursor-pointer flex-row items-center gap-4" onClick={goBack}>
             <CaretLeftIcon size={20} />
             <div className="flex">Hashtags Recommendation</div>
           </div>
-          <div className="relative my-4 min-h-96 w-full  ">
+          <div className="relative my-4 min-h-96 w-full ">
             {currentImage?.image && (
               <Image
                 fill
                 src={currentImage.image}
-                objectFit="contain"
+                style={{ objectFit: 'contain' }}
                 className="w-full rounded-4xl"
                 // sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                 alt="image uploaded"
@@ -204,11 +212,17 @@ const Step3: React.FC = () => {
                 />
               </div>
             )}
+            <div className="pt-12">
+              <PrimaryButton sizes={['l', 'l', 'l']} onClick={onClickCopySelectedLabels} disabled={checkedLabelsLength === 0}>
+                <CopyIcon />
+                Copy Selected
+              </PrimaryButton>
+            </div>
           </TabsContent>
         </Tabs>
       </div>
       <div className="mt-4 flex w-full justify-center md:mt-16">
-        <Primary sizes={['m', 'm', 'm']} className="w-full md:!w-80">
+        <Primary sizes={['m', 'm', 'm']} className="w-full md:!w-80" onClick={clearImage}>
           <RepeatIcon />
           <div className="text-base">Restart</div>
         </Primary>
