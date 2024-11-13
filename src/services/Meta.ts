@@ -192,10 +192,45 @@ export async function getProfile(data: {
   return response
 }
 
-export async function getSearchHistory(customConfig?: AxiosRequestConfig) {
+type SearchHistoryPayload = {
+  userId: string
+  accId: string
+  from: string
+  to: string
+}
+
+export async function createSearchHistory(data: SearchHistoryPayload, customConfig?: AxiosRequestConfig) {
+  const response = await fetcher.POST<{
+    data: HistoricSearchResult[] | []
+  }>(XAPI.DASHBOARD_HISTORY, {
+    user_id: data.userId,
+    account_id: data.accId,
+    from_date: data.from,
+    to_date: data.to,
+    ...customConfig,
+  })
+
+  return response
+}
+
+export async function getSearchHistory(
+  data: {
+    args: {
+      accId?: string
+      userId: string
+    }
+  },
+  customConfig?: AxiosRequestConfig
+) {
   const response = await fetcher.GET<{
     data: HistoricSearchResult[] | []
-  }>(XAPI.DASHBOARD_HISTORY, { ...customConfig })
+  }>(XAPI.DASHBOARD_HISTORY, {
+    ...customConfig,
+    params: {
+      user_id: data.args.userId,
+      account_id: data.args.accId,
+    },
+  })
 
   return response
 }

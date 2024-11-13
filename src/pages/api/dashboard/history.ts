@@ -98,13 +98,16 @@ export default handler.api({
       username: data.username,
     }
 
-    return res.status(200).json(transformedResponse)
+    return res.status(200).json({
+      code: 0,
+      data: transformedResponse,
+    })
   },
 
   [METHOD.GET]: async (req: NextApiRequest, res: NextApiResponse) => {
     const { orderby, isAsc, user_id, account_id } = req.query
 
-    if (!user_id || !account_id) {
+    if (!user_id) {
       return res.status(400).json({ error: 'Missing required query parameters' })
     }
 
@@ -128,26 +131,23 @@ export default handler.api({
       }
 
       const transformedResponses = data.map((item: DashboardReportResponse) => ({
-        account_id: item.account_id,
-        created_at: item.created_at,
-        end_date: item.end_date,
+        date_range: {
+          from: item.start_date,
+          to: item.end_date,
+        },
         keyword: item.keyword.map((k: KeywordData) => ({
           term: k.term,
           count: k.count,
         })),
-        most_repeated_post: item.most_repeated_post,
-        most_repeated_post_image: item.most_repeated_post_image,
+        account: item.account_id,
         post_count: item.post_count,
-        start_date: item.start_date,
-        updated_at: item.updated_at,
-        user: {
-          email: item.user.email,
-          name: item.user.name,
-        },
-        username: item.username,
+        mostRepeatedPostData: item.most_repeated_post[0],
       }))
 
-      return res.status(200).json(transformedResponses)
+      return res.status(200).json({
+        code: 0,
+        data: transformedResponses,
+      })
     } catch (error) {
       console.error('Error fetching dashboard reports:', error)
       return res.status(500).json({ error: 'Failed to fetch dashboard reports' })

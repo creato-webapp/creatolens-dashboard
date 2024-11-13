@@ -4,7 +4,7 @@ import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult
 import Link from 'next/link'
 import { getSession } from 'next-auth/react'
 import Image from 'next/image'
-
+import { CombinedUser } from '@api/auth/[...nextauth]'
 import { IAccount } from '@components/Account/Account'
 import PlusIcon from '@components/Icon/PlusIcon'
 import ROUTE from '@constants/route'
@@ -24,6 +24,7 @@ import Primary from '@components/Button/Primary'
 import { getSearchHistory, KeywordData, MostRepeatedPost } from '@services/Meta'
 import { CarouselContent, CarouselItem, Carousel } from '@components/ui/Carousel'
 import SearchIcon from '@components/Icon/SearchIcon'
+import { formatDateRangeFromString } from '@utils/dayjs'
 
 enum ReportType {
   ThreeDays = 3,
@@ -46,7 +47,10 @@ export interface DashboardData {
 }
 
 export interface HistoricSearchResult {
-  date_range: DateRange
+  date_range: {
+    from: string
+    to: string
+  }
   keyword: KeywordData[]
   account: string
   post_count: number
@@ -65,7 +69,7 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
   }
   const cookies = context.req.headers.cookie
 
-  const user = session.user
+  const user = session.user as CombinedUser
 
   const roles = (await getRoles(user.email!)) as string[]
   const isAdmin = roles.includes('admin')
@@ -80,7 +84,16 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
           },
         }
       )
-  const historysResponse = await getSearchHistory({ headers: { Cookie: cookies } })
+
+  const historysResponse = await getSearchHistory(
+    {
+      args: {
+        userId: user.id,
+      },
+    },
+    { headers: { Cookie: cookies } }
+  )
+
   const historys = historysResponse?.data || []
 
   return { props: { botList, historys } }
@@ -323,12 +336,15 @@ const Dashboard = ({ botList, historys }: Props) => {
 
                 {historys.length > 0 &&
                   historys.map((history, index) => {
+                    const formattedDateRange = formatDateRangeFromString(history.date_range)
+
                     return (
                       <CarouselItem key={`history.account-${index}`} className="md:basis-2/3 lg:basis-1/3">
                         <ReportCard
                           postCount={history.post_count}
-                          dateRange={history.date_range}
+                          dateRange={formattedDateRange}
                           mostRepeatedPost={history.mostRepeatedPostData}
+                          keyword={history.keyword}
                           loading={{
                             keywordIsLoading: false,
                             postCountIsLoading: false,
