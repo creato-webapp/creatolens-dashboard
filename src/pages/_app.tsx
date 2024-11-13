@@ -52,6 +52,10 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
       <Head>
         <link rel="icon" href="./favicon.ico" />
         <title>2Tag | AI Hashtag Maker</title>
+        <meta name="description" content="2Tag is The magical tool that gets Engagement Keyword, SEO Insight, Gen AI All in one" />
+        <meta name="keywords" content="AI hashtag maker, social media hashtags, hashtag generator" />
+        <meta name="author" content="2Tag" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
 
       <AppProviders>
