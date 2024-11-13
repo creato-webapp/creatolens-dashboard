@@ -248,7 +248,7 @@ const ReportCard = (props: IReportCard) => {
         {dateStr} <Divider />
       </div>
 
-      <ScrollArea className="h-full w-full px-6">
+      <ScrollArea className="mb-4 h-4/5 w-full px-6">
         {account && (
           <>
             <AccountName account={account} /> <Divider />
@@ -270,7 +270,7 @@ const ReportCard = (props: IReportCard) => {
           />
         )}
       </ScrollArea>
-      <div className="sticky bottom-0 w-full rounded-l-lg rounded-r-lg border-b bg-white px-4">
+      <div className="sticky bottom-0 w-full rounded-l-lg rounded-r-lg bg-white px-4">
         <SubtleButton onClick={() => exportToPDF()} sizes={['l', 'l', 'l']} className="sticky bottom-0 flex w-full items-center justify-center ">
           <ExportIcon width={16} height={16} />
           <div className="flex flex-row items-center">Export to PDF</div>
