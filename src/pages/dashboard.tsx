@@ -273,7 +273,7 @@ const Dashboard = ({ botList, historys }: Props) => {
                           value={selectedAccount?.id}
                           defaultValue={selectedAccount?.id}
                           options={instaBotList}
-                          name={instaBotList[0].label}
+                          name={instaBotList[0]?.label}
                           dropDownSizes={['s', 's', 's']}
                           isFloating
                           className=""
