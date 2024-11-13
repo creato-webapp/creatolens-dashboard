@@ -127,7 +127,10 @@ export default handler.api({
       const data = response.data
 
       if (!data || data.length === 0) {
-        return res.status(404).json({ error: 'No dashboard reports found' })
+        return res.status(200).json({
+          code: 0,
+          data: [],
+        })
       }
 
       const transformedResponses = data.map((item: DashboardReportResponse) => ({
