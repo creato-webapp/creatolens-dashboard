@@ -1,11 +1,57 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import PAPI from '@constants/endpoints/papi'
-
 import { AccountInstance } from '@helpers/axios'
 import handler from '@helpers/api/handlers'
 import METHOD from '@constants/method'
+export interface DashboardReportResponse {
+  account_id: string
+  created_at: string
+  end_date: string
+  keyword: KeywordData[]
+  most_repeated_post: MostRepeatedPost[]
+  most_repeated_post_image: string | null
+  post_count: number
+  start_date: string
+  updated_at: string
+  user: UserProfile
+  username: string
+}
 
-import type { KeywordData } from '@services/Meta'
+export interface KeywordData {
+  count: number
+  fetched_by: string
+  last_created_at: string
+  last_updated_at: string
+  last_uploaded_at: string
+  term: string
+}
+
+export interface MostRepeatedPost {
+  batch_id: string
+  caption: string
+  count: number
+  is_video: boolean
+  latest_comments: number
+  latest_created_at: string
+  latest_likes: number
+  owner_username: string
+  second_latest_comments: number
+  second_latest_created_at: string
+  second_latest_likes: number
+  shortcode: string
+  uploaded_at: string
+}
+
+export interface UserProfile {
+  created_at: string
+  email: string
+  emailVerified: string | null
+  id: string
+  image: string
+  name: string
+  roles: string[]
+  updated_at: string
+}
 
 export default handler.api({
   [METHOD.POST]: async (req: NextApiRequest, res: NextApiResponse) => {
@@ -46,16 +92,65 @@ export default handler.api({
       start_date: data.start_date,
       updated_at: data.updated_at,
       user: {
-        created_at: data.user.created_at,
         email: data.user.email,
-        image: data.user.image,
         name: data.user.name,
-        roles: data.user.roles,
-        updated_at: data.user.updated_at,
       },
       username: data.username,
     }
 
     return res.status(200).json(transformedResponse)
+  },
+
+  [METHOD.GET]: async (req: NextApiRequest, res: NextApiResponse) => {
+    const { orderby, isAsc, user_id, account_id } = req.query
+
+    if (!user_id || !account_id) {
+      return res.status(400).json({ error: 'Missing required query parameters' })
+    }
+
+    try {
+      const response = await AccountInstance.get(PAPI.DASHBOARD_HISTORY, {
+        params: {
+          orderby,
+          isAsc,
+          user_id,
+          account_id,
+        },
+        headers: {
+          Cookie: req.headers.cookie,
+        },
+      })
+
+      const data = response.data
+
+      if (!data || data.length === 0) {
+        return res.status(404).json({ error: 'No dashboard reports found' })
+      }
+
+      const transformedResponses = data.map((item: DashboardReportResponse) => ({
+        account_id: item.account_id,
+        created_at: item.created_at,
+        end_date: item.end_date,
+        keyword: item.keyword.map((k: KeywordData) => ({
+          term: k.term,
+          count: k.count,
+        })),
+        most_repeated_post: item.most_repeated_post,
+        most_repeated_post_image: item.most_repeated_post_image,
+        post_count: item.post_count,
+        start_date: item.start_date,
+        updated_at: item.updated_at,
+        user: {
+          email: item.user.email,
+          name: item.user.name,
+        },
+        username: item.username,
+      }))
+
+      return res.status(200).json(transformedResponses)
+    } catch (error) {
+      console.error('Error fetching dashboard reports:', error)
+      return res.status(500).json({ error: 'Failed to fetch dashboard reports' })
+    }
   },
 })
