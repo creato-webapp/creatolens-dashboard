@@ -56,7 +56,7 @@ const features: FeatureCardProps[] = [
       </PrimaryButton>
     ),
     image: '/hashtag/analysis.png',
-    link: '/dashboard',
+    link: '/features/instagram-trend-analysis',
   },
   {
     title: 'Instabot',
@@ -69,7 +69,7 @@ const features: FeatureCardProps[] = [
     ),
     // image: '/features/instabot-video.mp4',
     video: '/features/instabot-video.mp4',
-    link: '/accounts',
+    link: '/features/instabot',
   },
   {
     title: 'Hashtags Recommendation',
@@ -80,7 +80,7 @@ const features: FeatureCardProps[] = [
       </PrimaryButton>
     ),
     image: '/hashtag/hashtags-recommendation.png',
-    link: '/recommendation',
+    link: '/features/hashtags-recommendation',
   },
   {
     title: 'Hashtags-to-Image',
@@ -91,7 +91,7 @@ const features: FeatureCardProps[] = [
       </PrimaryButton>
     ),
     image: '/hashtag/hashtags-to-image.png',
-    link: '/hashtag/hashtag-to-image',
+    link: '/features/hashtags-to-image',
   },
   {
     title: 'Image-to-Hashtags',
@@ -102,7 +102,7 @@ const features: FeatureCardProps[] = [
       </PrimaryButton>
     ),
     image: '/hashtag/image-to-hashtag.png',
-    link: '/hashtag/image-to-hashtag',
+    link: '/features/image-to-hashtags',
   },
 ]
 const TabSession = memo(() => {
