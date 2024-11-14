@@ -98,7 +98,7 @@ export const ImageHashtagProvider = ({ children }: ImageHashtagProviderProps) =>
     setStep(1)
   }, [])
 
-  const getCurrentImageLabels = async () => {
+  const getCurrentImageLabels = useCallback(async () => {
     setloadingLabels(true)
     try {
       const labels: string[] = await getImageLabel(image.image as string)
@@ -119,7 +119,7 @@ export const ImageHashtagProvider = ({ children }: ImageHashtagProviderProps) =>
     } catch {
       setloadingLabels(false)
     }
-  }
+  }, [image.image])
 
   const updateSelectedLabels = useCallback((label: string) => {
     setImage((prevImage) => {
