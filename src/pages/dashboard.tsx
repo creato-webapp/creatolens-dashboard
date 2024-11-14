@@ -15,7 +15,6 @@ import Dropdown from '@components/Form/Dropdown/Dropdown'
 import SideMenuLayout from '@components/Layout/SideMenuLayout'
 import { Layout } from '@components/Layout'
 import { getRoles } from '@services/util'
-import { DatePickerWithRange } from '@components/ui/DatePickerWithRange'
 import { DateRange } from 'react-day-picker'
 import NavigationPill from '@components/ui/NavigationPill'
 import PrimaryButton from '@components/Button/Primary'
@@ -25,6 +24,7 @@ import { getSearchHistory, KeywordData, MostRepeatedPost, createSearchHistory, f
 import { CarouselContent, CarouselItem, Carousel } from '@components/ui/Carousel'
 import SearchIcon from '@components/Icon/SearchIcon'
 import { formatDateRangeFromString } from '@utils/dayjs'
+import { DateRangePicker } from '@components/ui/DateRangePicker'
 
 enum ReportType {
   ThreeDays = 3,
@@ -255,10 +255,15 @@ const Dashboard = ({ botList, historys }: Props) => {
                     <div className="">
                       <div className="flex h-full w-full flex-col gap-2">
                         <div className="text-neutral-800">Select Date Range</div>
-                        <DatePickerWithRange
-                          setDate={(date) => setFormValues((prevState) => ({ ...prevState, date_range: date }))}
-                          date={formValues.date_range}
-                          className="w-full"
+                        <DateRangePicker
+                          showCompare={false}
+                          onUpdate={(values) =>
+                            setFormValues((pre) => ({
+                              ...pre,
+                              date_range: values.range,
+                            }))
+                          }
+                          align={'start'}
                         />
                         <div className="text-nowrap text-neutral-500">Minimum 3 days must be selected</div>
                       </div>
