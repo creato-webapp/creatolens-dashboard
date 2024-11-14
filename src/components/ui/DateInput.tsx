@@ -184,6 +184,7 @@ const DateInput: React.FC<DateInputProps> = ({ value, onChange }) => {
         ref={monthRef}
         max={12}
         maxLength={2}
+        disabled
         value={date.month.toString()}
         onChange={handleInputChange('month')}
         onKeyDown={handleKeyDown('month')}
@@ -196,12 +197,13 @@ const DateInput: React.FC<DateInputProps> = ({ value, onChange }) => {
         className="w-6 border-none p-0 text-center outline-none"
         placeholder="M"
       />
-      <span className="-mx-px opacity-20">/</span>
+      <span className="-mx-px opacity-20"></span>
       <input
         type="text"
         ref={dayRef}
         max={31}
         maxLength={2}
+        disabled
         value={date.day.toString()}
         onChange={handleInputChange('day')}
         onKeyDown={handleKeyDown('day')}
@@ -221,6 +223,7 @@ const DateInput: React.FC<DateInputProps> = ({ value, onChange }) => {
         max={9999}
         maxLength={4}
         value={date.year.toString()}
+        disabled
         onChange={handleInputChange('year')}
         onKeyDown={handleKeyDown('year')}
         onFocus={(e) => {
