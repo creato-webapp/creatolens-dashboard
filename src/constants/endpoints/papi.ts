@@ -18,6 +18,8 @@ const PAPI = {
   ACCOUNTS_ERROR: '/handlers',
   QUERY_ACCOUNTS_ERROR: '/handlers/query',
 
+  DASHBOARD_HISTORY: '/api/dashboard_reports',
+
   //label
   LABEL_IMAGE: '/api/image/labels',
 } as const

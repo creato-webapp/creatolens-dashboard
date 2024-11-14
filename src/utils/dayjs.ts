@@ -28,3 +28,12 @@ export const formatDateRange = (date?: Date) => {
         .replace(',', '')
     : ''
 }
+
+export const formatDateRangeFromString = (dateRange: { from: string; to: string }) => {
+  const { from, to } = dateRange
+
+  return {
+    from: from ? new Date(from.replace(' T', ' ')) : undefined,
+    to: to ? new Date(to.replace(' T', ' ')) : undefined,
+  }
+}

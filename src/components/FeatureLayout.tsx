@@ -54,7 +54,7 @@ export const Card = (props: IFeatureCard) => {
             <source src={video} type="video/mp4" />
           </video>
         ) : (
-          <Image src={image || '/logo_orange.png'} objectFit="contain" alt={heading} fill quality={100} unoptimized />
+          <Image src={image || '/logo_orange.png'} style={{ objectFit: 'contain' }} alt={heading} fill quality={100} unoptimized />
         )}
       </div>
       <div className="flex w-full flex-col justify-between gap-6">
@@ -151,7 +151,7 @@ const FeatureLayout = (props: IFeatureLayout) => {
           <div className="flex w-full flex-col">
             <div>
               <div className="flex flex-row items-center gap-7">
-                <div className="flex md:hidden">
+                <div className="flex cursor-pointer md:hidden" onClick={() => router.push('/')}>
                   <CaretLeftIcon size={20} />
                 </div>
                 <h1 className="py-3 text-heading font-bold text-neutral-800 md:px-16">{props.heading}</h1>

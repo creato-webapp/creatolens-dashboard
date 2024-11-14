@@ -2,9 +2,9 @@ import { ReactElement, useCallback, useMemo, useState } from 'react'
 
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import Link from 'next/link'
-import { getSession } from 'next-auth/react'
+import { getSession, useSession } from 'next-auth/react'
 import Image from 'next/image'
-
+import { CombinedUser } from '@api/auth/[...nextauth]'
 import { IAccount } from '@components/Account/Account'
 import PlusIcon from '@components/Icon/PlusIcon'
 import ROUTE from '@constants/route'
@@ -15,15 +15,16 @@ import Dropdown from '@components/Form/Dropdown/Dropdown'
 import SideMenuLayout from '@components/Layout/SideMenuLayout'
 import { Layout } from '@components/Layout'
 import { getRoles } from '@services/util'
-import { DatePickerWithRange } from '@components/ui/DatePickerWithRange'
 import { DateRange } from 'react-day-picker'
 import NavigationPill from '@components/ui/NavigationPill'
 import PrimaryButton from '@components/Button/Primary'
 import ReportCard from '@components/ReportCard'
 import Primary from '@components/Button/Primary'
-import { getSearchHistory, KeywordData, MostRepeatedPost } from '@services/Meta'
+import { getSearchHistory, KeywordData, MostRepeatedPost, createSearchHistory, formatDateRange } from '@services/Meta'
 import { CarouselContent, CarouselItem, Carousel } from '@components/ui/Carousel'
 import SearchIcon from '@components/Icon/SearchIcon'
+import { formatDateRangeFromString } from '@utils/dayjs'
+import { DateRangePicker } from '@components/ui/DateRangePicker'
 
 enum ReportType {
   ThreeDays = 3,
@@ -46,7 +47,10 @@ export interface DashboardData {
 }
 
 export interface HistoricSearchResult {
-  date_range: DateRange
+  date_range: {
+    from: string
+    to: string
+  }
   keyword: KeywordData[]
   account: string
   post_count: number
@@ -65,7 +69,7 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
   }
   const cookies = context.req.headers.cookie
 
-  const user = session.user
+  const user = session.user as CombinedUser
 
   const roles = (await getRoles(user.email!)) as string[]
   const isAdmin = roles.includes('admin')
@@ -80,13 +84,25 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
           },
         }
       )
-  const historysResponse = await getSearchHistory({ headers: { Cookie: cookies } })
+
+  const historysResponse = await getSearchHistory(
+    {
+      args: {
+        userId: user.id,
+      },
+    },
+    { headers: { Cookie: cookies } }
+  )
+
   const historys = historysResponse?.data || []
 
   return { props: { botList, historys } }
 }
 
 const Dashboard = ({ botList, historys }: Props) => {
+  const { data: session } = useSession()
+  const user = session?.user as CombinedUser
+
   const [formValues, setFormValues] = useState<{
     accId: string | undefined
     date_range: DateRange
@@ -148,8 +164,15 @@ const Dashboard = ({ botList, historys }: Props) => {
     [botList]
   )
 
-  const onSearchClick = () => {
+  const onSearchClick = async () => {
     setMetaAttributes(formValues)
+    const { from, to } = formatDateRange(formValues.date_range)
+    await createSearchHistory({
+      userId: user.id,
+      accId: formValues.accId as string,
+      from,
+      to,
+    })
   }
 
   const instaBotList = useMemo(() => {
@@ -232,10 +255,15 @@ const Dashboard = ({ botList, historys }: Props) => {
                     <div className="">
                       <div className="flex h-full w-full flex-col gap-2">
                         <div className="text-neutral-800">Select Date Range</div>
-                        <DatePickerWithRange
-                          setDate={(date) => setFormValues((prevState) => ({ ...prevState, date_range: date }))}
-                          date={formValues.date_range}
-                          className="w-full"
+                        <DateRangePicker
+                          showCompare={false}
+                          onUpdate={(values) =>
+                            setFormValues((pre) => ({
+                              ...pre,
+                              date_range: values.range,
+                            }))
+                          }
+                          align={'start'}
                         />
                         <div className="text-nowrap text-neutral-500">Minimum 3 days must be selected</div>
                       </div>
@@ -250,7 +278,7 @@ const Dashboard = ({ botList, historys }: Props) => {
                           value={selectedAccount?.id}
                           defaultValue={selectedAccount?.id}
                           options={instaBotList}
-                          name={instaBotList[0].label}
+                          name={instaBotList[0]?.label}
                           dropDownSizes={['s', 's', 's']}
                           isFloating
                           className=""
@@ -264,7 +292,7 @@ const Dashboard = ({ botList, historys }: Props) => {
                         >
                           <Image
                             className="cursor-pointer"
-                            objectFit="contain"
+                            style={{ objectFit: 'contain' }}
                             alt={'account share button'}
                             src={'./external-link.svg'}
                             width={32}
@@ -277,7 +305,7 @@ const Dashboard = ({ botList, historys }: Props) => {
                 </div>
 
                 <div className="flex items-start">
-                  <PrimaryButton onClick={onSearchClick} sizes={['s', 's', 's']} className="w-full">
+                  <PrimaryButton onClick={onSearchClick} sizes={['s', 's', 's']} className="w-full md:w-80">
                     <SearchIcon />
                     Search
                   </PrimaryButton>
@@ -323,12 +351,15 @@ const Dashboard = ({ botList, historys }: Props) => {
 
                 {historys.length > 0 &&
                   historys.map((history, index) => {
+                    const formattedDateRange = formatDateRangeFromString(history.date_range)
+
                     return (
                       <CarouselItem key={`history.account-${index}`} className="md:basis-2/3 lg:basis-1/3">
                         <ReportCard
                           postCount={history.post_count}
-                          dateRange={history.date_range}
+                          dateRange={formattedDateRange}
                           mostRepeatedPost={history.mostRepeatedPostData}
+                          keyword={history.keyword}
                           loading={{
                             keywordIsLoading: false,
                             postCountIsLoading: false,

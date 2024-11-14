@@ -14,6 +14,7 @@ import UserIcon from './Icon/UserIcon'
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from './ui/Dialog'
 import RobotIcon from './Icon/RobotIcon'
 import { formatDateRange } from '@utils/dayjs'
+import { useMostRepeatedPostImage } from '@hooks/useMeta'
 
 interface IReportCard {
   account?: string
@@ -120,7 +121,7 @@ export function ReadMoreButton(props: IReportCard) {
 
         <div className="flex max-h-[100%] flex-col gap-4 overflow-hidden md:flex-row">
           <div className="relative flex h-80 w-1/2 min-w-64 items-start justify-start">
-            <Image src={mostRepeatedPostImage || '/logo_orange.png'} className="w-auto" layout="fill" objectFit="contain" alt={''} />
+            <Image src={mostRepeatedPostImage || '/logo_orange.png'} className="w-auto" layout="fill" style={{ objectFit: 'contain' }} alt={''} />
           </div>
           <div className="flex h-full w-1/2 flex-col overflow-hidden">
             {mostRepeatedPost?.username && (
@@ -182,7 +183,7 @@ const MostRepeatedPost = ({
       </div>
       <div className="ml-7 h-full text-sm text-neutral-500">
         <div className="relative h-80">
-          <Image src={mostRepeatedPostImage || '/logo_orange.png'} className="w-auto" layout="fill" objectFit="contain" alt={''} />
+          <Image src={mostRepeatedPostImage || '/logo_orange.png'} className="w-auto" layout="fill" style={{ objectFit: 'contain' }} alt={''} />
         </div>
 
         {post?.username && (
@@ -229,7 +230,12 @@ const MostRepeatedPost = ({
 const exportToPDF = () => {}
 
 const ReportCard = (props: IReportCard) => {
-  const { dateRange, postCount, keyword, mostRepeatedPost, loading, mostRepeatedPostImage, account } = props
+  const { dateRange, postCount, keyword, mostRepeatedPost, loading, account } = props
+
+  const { data: mostRepeatedPostImage } = useMostRepeatedPostImage({
+    shortcode: mostRepeatedPost?.shortcode,
+    batch_id: mostRepeatedPost?.batch_id,
+  })
 
   const from = formatDateRange(dateRange.from)
   const to = formatDateRange(dateRange.to)
@@ -242,7 +248,7 @@ const ReportCard = (props: IReportCard) => {
         {dateStr} <Divider />
       </div>
 
-      <ScrollArea className="h-full w-full px-6">
+      <ScrollArea className="mb-4 h-4/5 w-full px-6">
         {account && (
           <>
             <AccountName account={account} /> <Divider />
@@ -264,7 +270,7 @@ const ReportCard = (props: IReportCard) => {
           />
         )}
       </ScrollArea>
-      <div className="sticky bottom-0 w-full rounded-l-lg rounded-r-lg border-b bg-white px-4">
+      <div className="sticky bottom-0 w-full rounded-l-lg rounded-r-lg bg-white px-4">
         <SubtleButton onClick={() => exportToPDF()} sizes={['l', 'l', 'l']} className="sticky bottom-0 flex w-full items-center justify-center ">
           <ExportIcon width={16} height={16} />
           <div className="flex flex-row items-center">Export to PDF</div>
