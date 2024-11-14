@@ -82,7 +82,7 @@ export default handler.api({
       account_id: data.account_id,
       created_at: data.created_at,
       end_date: data.end_date,
-      keyword: data.keyword.map((k: KeywordData) => ({
+      keyword: (data.keyword ?? []).map((k: KeywordData) => ({
         term: k.term,
         count: k.count,
       })),
@@ -138,7 +138,7 @@ export default handler.api({
           from: item.start_date,
           to: item.end_date,
         },
-        keyword: item.keyword.map((k: KeywordData) => ({
+        keyword: (item.keyword ?? []).map((k: KeywordData) => ({
           term: k.term,
           count: k.count,
         })),
