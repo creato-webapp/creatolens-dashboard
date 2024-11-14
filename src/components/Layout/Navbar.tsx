@@ -26,7 +26,7 @@ const LINKS = [
 ] as const
 
 const SUPPORT_LINKS = [
-  { name: 'FAQ', path: ROUTE.FAQ },
+  { name: 'FAQs', path: ROUTE.FAQ },
   { name: 'Contact Us', path: ROUTE.CONTACT_US },
 ] as const
 
