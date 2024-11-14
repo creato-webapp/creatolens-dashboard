@@ -3,12 +3,11 @@ import { ReactElement, useCallback, useMemo, useState } from 'react'
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import Link from 'next/link'
 import { getSession, useSession } from 'next-auth/react'
-import Image from 'next/image'
 import { CombinedUser } from '@api/auth/[...nextauth]'
 import { IAccount } from '@components/Account/Account'
 import PlusIcon from '@components/Icon/PlusIcon'
 import ROUTE from '@constants/route'
-import { useKeyword, useMostRepeatedPost, useMostRepeatedPostImage, usePostCount, useProfile } from '@hooks/useMeta'
+import { useKeyword, useMostRepeatedPost, useMostRepeatedPostImage, usePostCount } from '@hooks/useMeta'
 import { getFilteredAccounts } from '@services/Account/Account'
 import { CountryEnum } from 'enums/CountryCodeEnums'
 import Dropdown from '@components/Form/Dropdown/Dropdown'
@@ -136,18 +135,11 @@ const Dashboard = ({ botList, historys }: Props) => {
     batch_id: mostRepeatedPostData?.batch_id,
   })
 
-  const { data: profile, isLoading: profileIsLoading } = useProfile({
-    profile_id: selectedAccount?.profile_id as string,
-    session_id: selectedAccount?.session_cookies?.sessionid as string,
-    location: CountryEnum[selectedAccount?.location as CountryEnum],
-  })
-
   const loadingStates = {
     keywordIsLoading,
     postCountIsLoading,
     mostRepeatedPostImageIsLoading,
     mostRepeatedPostIsLoading,
-    profileIsLoading,
   }
 
   const onAccountChange = useCallback(
@@ -284,7 +276,7 @@ const Dashboard = ({ botList, historys }: Props) => {
                           className=""
                         />
                       </div>
-                      <div className="">
+                      {/* <div className="">
                         <Link
                           href={profile?.data?.url ? profile.data.url.replace(/\s/g, '') : ''}
                           target="_blank"
@@ -299,7 +291,7 @@ const Dashboard = ({ botList, historys }: Props) => {
                             height={32}
                           />
                         </Link>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 </div>
