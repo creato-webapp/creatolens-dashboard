@@ -39,12 +39,12 @@ const Skeleton = ({ width, height }: { width?: string; height?: string }) => (
 const AccountName = (props: { account?: string }) => {
   const { account } = props
   return (
-    <div>
+    <div className="py-3">
       <div className="flex flex-row gap-2">
         <RobotIcon width={20} height={20} />
         Instabot Account
       </div>
-      <div className="ml-7">{account}</div>
+      <div className="ml-7 text-sm text-neutral-500">{account}</div>
     </div>
   )
 }
