@@ -4,20 +4,28 @@ import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@c
 
 const faqs = [
   {
-    heading: 'What is 2TAG used for?',
-    content: 'Answer the frequently asked question in a simple sentence, a longish paragraph, or even in a list.',
+    heading: 'Will social media platforms detect if I’m using AI and reduce my post’s promotion?',
+    content:
+      "It depends on the platform and its AI policies, but don’t worry—2Tag’s hashtags are data-backed and open source, which means they’re fully available on social media and won't trigger any AI detection issues.",
   },
   {
-    heading: 'Why use 2TAG?',
-    content: 'Answer the frequently asked question in a simple sentence, a longish paragraph, or even in a list.',
+    heading: 'Will using the 2Tag Instabot cause my personal information to be leaked?',
+    content:
+      'Nope! The Instabot is only used for customizing trend analysis and hashtag recommendations. We don’t collect any personal info, so just avoid sharing anything sensitive like your ID with your Instabot account. Your privacy’s safe with us!',
   },
   {
-    heading: 'Is 2TAG free?',
-    content: 'Answer the frequently asked question in a simple sentence, a longish paragraph, or even in a list.',
+    heading: 'What do I need to download or prepare before using 2Tag?',
+    content:
+      'Nothing too complicated! You don’t need to be tech-savvy to use 2Tag—it’s super easy and available on all devices, including mobile and desktop. We’ve designed it to be intuitive and user-friendly.',
   },
   {
-    heading: 'How do I get access to Instabot in 2TAG?',
-    content: 'Answer the frequently asked question in a simple sentence, a longish paragraph, or even in a list.',
+    heading: 'How can I use 2Tag on Instagram?',
+    content: 'It’s simple! Just copy the hashtags we recommend, then paste them under your post like you usually would.',
+  },
+  {
+    heading: 'Will the results work with my Instagram account?',
+    content:
+      'Absolutely! 2Tag’s hashtags are optimized for Instagram’s algorithm, based on your account data. This means the hashtags are perfectly tailored to your content and audience, helping you get the most engagement possible!',
   },
 ]
 const FAQPage = () => {
@@ -41,14 +49,14 @@ const FAQPage = () => {
       </script>
       <div className="w-full max-w-screen-2xl ">
         <div className="hidden md:flex">
-          <Breadcrumb lastItemName="FAQ" />
+          <Breadcrumb lastItemName="FAQs" />
         </div>
         <div className="flex flex-row items-center gap-7 py-4">
           <div className="flex md:hidden">
             <CaretLeftIcon size={20} />
           </div>
           <div className="flex w-full flex-row justify-between">
-            <h1 className="py-3 text-heading font-bold text-neutral-800 md:px-16">FAQ</h1>
+            <h1 className="py-3 text-heading font-bold text-neutral-800 md:px-16">FAQs</h1>
             {/* <SubtleButton onClick={expandAll}>Expand All</SubtleButton> */}
           </div>
         </div>

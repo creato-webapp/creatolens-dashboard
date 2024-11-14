@@ -9,7 +9,7 @@ import useAuth from '@hooks/useAuth'
 
 const COMMON_LINKS = {
   FAQ: {
-    title: 'FAQ',
+    title: 'FAQS',
     href: '/faqs',
   },
   TERMS: {
