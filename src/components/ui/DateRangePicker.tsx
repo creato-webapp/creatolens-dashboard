@@ -294,7 +294,7 @@ export const DateRangePicker: FC<DateRangePickerProps> & {
       }}
     >
       <PopoverTrigger asChild>
-        <Button size={'lg'} variant="outline">
+        <Button size={'default'} variant="outline" className="justify-between">
           <div className="font-normal text-neutral-800">
             <div className="py-1">
               <div>{`${formatDate(range.from, locale)}${range.to != null ? ' - ' + formatDate(range.to, locale) : ''}`}</div>
@@ -311,7 +311,7 @@ export const DateRangePicker: FC<DateRangePickerProps> & {
           <div className="-mr-2 scale-125 pl-1 opacity-60">{isOpen ? <ChevronUpIcon width={24} /> : <ChevronDownIcon width={24} />}</div>
         </Button>
       </PopoverTrigger>
-      <PopoverContent align={align} className="w-auto bg-white">
+      <PopoverContent align={align} className="fixed w-auto bg-white">
         <div className="flex py-2">
           <div className="flex">
             <div className="flex flex-col">
@@ -344,7 +344,7 @@ export const DateRangePicker: FC<DateRangePickerProps> & {
                   </div>
                 )}
                 <div className="flex flex-col gap-2">
-                  <div className="flex gap-2">
+                  {/* <div className="flex gap-2">
                     <DateInput
                       value={range.from}
                       onChange={(date) => {
@@ -368,7 +368,7 @@ export const DateRangePicker: FC<DateRangePickerProps> & {
                         }))
                       }}
                     />
-                  </div>
+                  </div> */}
                   {rangeCompare != null && (
                     <div className="flex gap-2">
                       <DateInput
@@ -415,9 +415,17 @@ export const DateRangePicker: FC<DateRangePickerProps> & {
                   }}
                 >
                   <SelectTrigger className="mx-auto mb-2 w-[180px]">
-                    <SelectValue placeholder="Select..." />
+                    <SelectValue placeholder="Select..." className="bg-white" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent
+                    className="bg-white"
+                    ref={(ref) => {
+                      if (!ref) return
+                      ref.ontouchstart = (e) => {
+                        e.preventDefault()
+                      }
+                    }}
+                  >
                     {PRESETS.map((preset) => (
                       <SelectItem key={preset.name} value={preset.name}>
                         {preset.label}
@@ -451,7 +459,7 @@ export const DateRangePicker: FC<DateRangePickerProps> & {
             </div>
           )}
         </div>
-        <div className="flex justify-end gap-2 py-2 pr-4">
+        <div className="flex justify-center gap-2 py-2 pr-4">
           <SubtleButton
             onClick={() => {
               setIsOpen(false)
