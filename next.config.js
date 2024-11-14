@@ -8,7 +8,7 @@ const nextConfig = {
     dirs: ['src'],
   },
   env,
-  reactStrictMode: false,
+  reactStrictMode: process.env.NODE_ENV === 'development',
   swcMinify: true,
   images: {
     domains: ['storage.googleapis.com'],
