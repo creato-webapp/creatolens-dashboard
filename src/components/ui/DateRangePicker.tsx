@@ -422,15 +422,7 @@ export const DateRangePicker: FC<DateRangePickerProps> & {
                   <SelectTrigger className="mx-auto mb-2 w-[180px]">
                     <SelectValue placeholder="Select..." className="bg-white" />
                   </SelectTrigger>
-                  <SelectContent
-                    className="bg-white"
-                    ref={(ref) => {
-                      if (!ref) return
-                      ref.ontouchstart = (e) => {
-                        e.preventDefault()
-                      }
-                    }}
-                  >
+                  <SelectContent className="bg-white">
                     {PRESETS.map((preset) => (
                       <SelectItem key={preset.name} value={preset.name}>
                         {preset.label}
