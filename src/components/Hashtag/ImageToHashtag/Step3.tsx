@@ -86,9 +86,17 @@ const Step3: React.FC = () => {
   }, [])
 
   const onClickHashtag = useCallback(
-    (value: string | number) => updateOptions((opt) => (opt.value === value ? { ...opt, checked: !opt.checked } : opt)),
+    (value: string | number) => {
+      updateOptions((opt) => {
+        if (opt.value === value) {
+          return { ...opt, checked: !opt.checked }
+        }
+        return opt
+      })
+    },
     [updateOptions]
   )
+
   const onClickLabel = useCallback(
     (value: string | number) => {
       updateSelectedLabels(value as string)
