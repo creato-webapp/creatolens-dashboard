@@ -1,8 +1,9 @@
 import useSWR from 'swr'
 
-import { getKeyword, getMostRepeatedPost, getMostRepeatedPostImage, getPostCount, getProfile } from '@services/Meta'
+import { getKeyword, getMostRepeatedPost, getMostRepeatedPostImage, getPostCount, getProfile, getSearchHistory } from '@services/Meta'
 import { CountryEnum } from 'enums/CountryCodeEnums'
 import { DateRange } from 'react-day-picker'
+import { HistoricSearchResult } from 'pages/dashboard'
 
 export const useKeyword = (input: { accId?: string; date_range: DateRange; profile_id?: string }) => {
   const { data, error, isLoading, mutate, ...swr } = useSWR({ url: 'api/dashboard/keyword', args: input }, getKeyword, {
@@ -81,8 +82,9 @@ export const useProfile = (input: { profile_id?: string; session_id: string; loc
   }
 }
 
-export const useSearchHistory = () => {
-  const { data, error, mutate, ...swr } = useSWR({ url: 'api/dashboard/searchHistory' }, getMostRepeatedPostImage, {
+export const useSearchHistory = (input: { userId: string }, fallbackData?: { data: HistoricSearchResult[] }) => {
+  const { data, error, mutate, ...swr } = useSWR({ url: 'api/dashboard/searchHistory', args: input }, getSearchHistory, {
+    fallbackData: fallbackData,
     refreshInterval: 0,
     revalidateOnFocus: false,
   })
