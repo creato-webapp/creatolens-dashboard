@@ -294,7 +294,12 @@ export const DateRangePicker: FC<DateRangePickerProps> & {
       }}
     >
       <PopoverTrigger asChild>
-        <Button size={'default'} variant="outline" className="justify-between">
+        <Button
+          size={'default'}
+          variant="outline"
+          className="justify-between"
+          onClick={() => isSmallScreen && window.scrollTo({ top: 350, behavior: 'smooth' })}
+        >
           <div className="font-normal text-neutral-800">
             <div className="py-1">
               <div>{`${formatDate(range.from, locale)}${range.to != null ? ' - ' + formatDate(range.to, locale) : ''}`}</div>
