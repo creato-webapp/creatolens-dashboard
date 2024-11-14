@@ -92,8 +92,8 @@ export default handler.api({
       start_date: data.start_date,
       updated_at: data.updated_at,
       user: {
-        email: data.user.email,
-        name: data.user.name,
+        email: data.user?.email,
+        name: data.user?.name,
       },
       username: data.username,
     }
@@ -105,7 +105,7 @@ export default handler.api({
   },
 
   [METHOD.GET]: async (req: NextApiRequest, res: NextApiResponse) => {
-    const { orderby, isAsc, user_id, account_id } = req.query
+    const { user_id, account_id } = req.query
 
     if (!user_id) {
       return res.status(400).json({ error: 'Missing required query parameters' })
@@ -114,8 +114,8 @@ export default handler.api({
     try {
       const response = await AccountInstance.get(PAPI.DASHBOARD_HISTORY, {
         params: {
-          orderby,
-          isAsc,
+          orderby: 'created_at',
+          isAsc: false,
           user_id,
           account_id,
         },
@@ -142,6 +142,7 @@ export default handler.api({
           term: k.term,
           count: k.count,
         })),
+        username: item.username,
         account: item.account_id,
         post_count: item.post_count,
         mostRepeatedPostData: Array.isArray(item.most_repeated_post)

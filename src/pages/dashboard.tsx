@@ -2,12 +2,13 @@ import { ReactElement, useCallback, useMemo, useState } from 'react'
 
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import Link from 'next/link'
-import { getSession, useSession } from 'next-auth/react'
+import { getSession } from 'next-auth/react'
 import { CombinedUser } from '@api/auth/[...nextauth]'
 import { IAccount } from '@components/Account/Account'
 import PlusIcon from '@components/Icon/PlusIcon'
 import ROUTE from '@constants/route'
-import { useKeyword, useMostRepeatedPost, useMostRepeatedPostImage, usePostCount } from '@hooks/useMeta'
+
+import { useKeyword, useMostRepeatedPost, useMostRepeatedPostImage, usePostCount, useSearchHistory } from '@hooks/useMeta'
 import { getFilteredAccounts } from '@services/Account/Account'
 import { CountryEnum } from 'enums/CountryCodeEnums'
 import Dropdown from '@components/Form/Dropdown/Dropdown'
@@ -33,7 +34,10 @@ enum ReportType {
 
 type Props = {
   botList: IAccount[]
-  historys: HistoricSearchResult[] | []
+  historys: {
+    data: HistoricSearchResult[] | []
+  }
+  userId: string
 }
 
 export interface DashboardData {
@@ -50,6 +54,7 @@ export interface HistoricSearchResult {
     from: string
     to: string
   }
+  username: string
   keyword: KeywordData[]
   account: string
   post_count: number
@@ -70,6 +75,8 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
 
   const user = session.user as CombinedUser
 
+  const userId = user.id
+
   const roles = (await getRoles(user.email!)) as string[]
   const isAdmin = roles.includes('admin')
 
@@ -84,7 +91,7 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
         }
       )
 
-  const historysResponse = await getSearchHistory(
+  const historys = await getSearchHistory(
     {
       args: {
         userId: user.id,
@@ -93,15 +100,10 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
     { headers: { Cookie: cookies } }
   )
 
-  const historys = historysResponse?.data || []
-
-  return { props: { botList, historys } }
+  return { props: { botList, historys, userId } }
 }
 
-const Dashboard = ({ botList, historys }: Props) => {
-  const { data: session } = useSession()
-  const user = session?.user as CombinedUser
-
+const Dashboard = ({ botList, historys, userId }: Props) => {
   const [formValues, setFormValues] = useState<{
     accId: string | undefined
     date_range: DateRange
@@ -134,6 +136,7 @@ const Dashboard = ({ botList, historys }: Props) => {
     shortcode: mostRepeatedPostData?.shortcode,
     batch_id: mostRepeatedPostData?.batch_id,
   })
+  const { data: searchHistories, mutate } = useSearchHistory({ userId }, historys)
 
   const loadingStates = {
     keywordIsLoading,
@@ -157,10 +160,11 @@ const Dashboard = ({ botList, historys }: Props) => {
   )
 
   const onSearchClick = async () => {
+    mutate()
     setMetaAttributes(formValues)
     const { from, to } = formatDateRange(formValues.date_range)
     await createSearchHistory({
-      userId: user.id,
+      userId,
       accId: formValues.accId as string,
       from,
       to,
@@ -341,13 +345,14 @@ const Dashboard = ({ botList, historys }: Props) => {
                   />
                 </CarouselItem>
 
-                {historys.length > 0 &&
-                  historys.map((history, index) => {
+                {searchHistories?.data &&
+                  searchHistories.data.map((history, index) => {
                     const formattedDateRange = formatDateRangeFromString(history.date_range)
 
                     return (
                       <CarouselItem key={`history.account-${index}`} className="md:basis-2/3 lg:basis-1/3">
                         <ReportCard
+                          account={history.username}
                           postCount={history.post_count}
                           dateRange={formattedDateRange}
                           mostRepeatedPost={history.mostRepeatedPostData}
