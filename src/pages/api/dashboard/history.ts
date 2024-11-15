@@ -98,14 +98,11 @@ export default handler.api({
       username: data.username,
     }
 
-    return res.status(200).json({
-      code: 0,
-      data: transformedResponse,
-    })
+    return res.status(200).json(transformedResponse)
   },
 
   [METHOD.GET]: async (req: NextApiRequest, res: NextApiResponse) => {
-    const { user_id, account_id } = req.query
+    const { user_id } = req.query
 
     if (!user_id) {
       return res.status(400).json({ error: 'Missing required query parameters' })
@@ -117,7 +114,6 @@ export default handler.api({
           orderby: 'created_at',
           isAsc: false,
           user_id,
-          account_id,
         },
         headers: {
           Cookie: req.headers.cookie,
@@ -153,12 +149,10 @@ export default handler.api({
               return b.latest_likes - a.latest_likes
             })[0]
           : null,
+        created_at: item.created_at,
       }))
 
-      return res.status(200).json({
-        code: 0,
-        data: transformedResponses,
-      })
+      return res.status(200).json(transformedResponses)
     } catch (error) {
       console.error('Error fetching dashboard reports:', error)
       return res.status(500).json({ error: 'Failed to fetch dashboard reports' })

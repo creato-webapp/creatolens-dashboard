@@ -1,6 +1,9 @@
 import useSWR from 'swr'
 
-import { getKeyword, getMostRepeatedPost, getMostRepeatedPostImage, getPostCount, getProfile, getSearchHistory } from '@services/Meta'
+import XAPI from '@constants/endpoints/xapi'
+import useRequest from './useRequest'
+import METHOD from '@constants/method'
+import { getKeyword, getMostRepeatedPost, getMostRepeatedPostImage, getPostCount, getProfile } from '@services/Meta'
 import { CountryEnum } from 'enums/CountryCodeEnums'
 import { DateRange } from 'react-day-picker'
 import { HistoricSearchResult } from 'pages/dashboard'
@@ -82,17 +85,30 @@ export const useProfile = (input: { profile_id?: string; session_id: string; loc
   }
 }
 
-export const useSearchHistory = (input: { userId: string }, fallbackData?: { data: HistoricSearchResult[] }) => {
-  const { data, error, mutate, ...swr } = useSWR({ url: 'api/dashboard/searchHistory', args: input }, getSearchHistory, {
-    fallbackData: fallbackData,
-    refreshInterval: 0,
-    revalidateOnFocus: false,
-  })
+export const useSearchHistory = (input: { userId: string }, fallbackData: HistoricSearchResult[]) => {
+  const { data, error, mutate, isLoading, ...swr } = useRequest<HistoricSearchResult[] | []>(
+    [
+      XAPI.DASHBOARD_HISTORY,
+      {
+        params: {
+          user_id: input.userId,
+        },
+      },
+    ],
+    METHOD.GET,
+    {
+      refreshInterval: 0,
+      fallbackData: fallbackData,
+      revalidateOnMount: false, // Do not fetch on mount
+      revalidateOnReconnect: false, // Do not re-fetch on reconnect
+    }
+  )
 
   return {
     data,
-    error: error,
+    error,
     mutate,
+    isLoading,
     ...swr,
   }
 }

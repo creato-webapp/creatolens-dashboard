@@ -7,7 +7,6 @@ import { CombinedUser } from '@api/auth/[...nextauth]'
 import { IAccount } from '@components/Account/Account'
 import PlusIcon from '@components/Icon/PlusIcon'
 import ROUTE from '@constants/route'
-
 import { useKeyword, useMostRepeatedPost, useMostRepeatedPostImage, usePostCount, useSearchHistory } from '@hooks/useMeta'
 import { getFilteredAccounts } from '@services/Account/Account'
 import { CountryEnum } from 'enums/CountryCodeEnums'
@@ -34,9 +33,7 @@ enum ReportType {
 
 type Props = {
   botList: IAccount[]
-  historys: {
-    data: HistoricSearchResult[] | []
-  }
+  historys: HistoricSearchResult[] | []
   userId: string
 }
 
@@ -54,6 +51,7 @@ export interface HistoricSearchResult {
     from: string
     to: string
   }
+  created_at: string
   username: string
   keyword: KeywordData[]
   account: string
@@ -110,7 +108,11 @@ const Dashboard = ({ botList, historys, userId }: Props) => {
     profile_id: string | undefined
     session_id?: string
     location?: CountryEnum
+    username: string | undefined
+    userId: string
   }>({
+    userId,
+    username: '-',
     accId: botList.length > 0 ? botList[0].id : undefined,
     date_range: { from: new Date(new Date().setDate(new Date().getDate() - 7)), to: new Date() },
     profile_id: botList.length > 0 ? (botList[0].profile_id as string) : undefined,
@@ -136,14 +138,26 @@ const Dashboard = ({ botList, historys, userId }: Props) => {
     shortcode: mostRepeatedPostData?.shortcode,
     batch_id: mostRepeatedPostData?.batch_id,
   })
-  const { data: searchHistories, mutate } = useSearchHistory({ userId }, historys)
+  const {
+    data: searchHistories,
+    mutate: searchHistoryMutate,
+    isValidating: isSearchHistoryValidating,
+  } = useSearchHistory({ userId: metaAttributes.userId }, historys)
 
   const loadingStates = {
     keywordIsLoading,
     postCountIsLoading,
     mostRepeatedPostImageIsLoading,
     mostRepeatedPostIsLoading,
+    isSearchHistoryValidating,
   }
+
+  const isReportLoading =
+    loadingStates.keywordIsLoading ||
+    loadingStates.postCountIsLoading ||
+    loadingStates.mostRepeatedPostImageIsLoading ||
+    loadingStates.mostRepeatedPostIsLoading ||
+    loadingStates.isSearchHistoryValidating
 
   const onAccountChange = useCallback(
     (e: string | number) => {
@@ -152,6 +166,7 @@ const Dashboard = ({ botList, historys, userId }: Props) => {
         ...prev,
         profile_id: (targetAccount?.profile_id as string) || '',
         accId: typeof e === 'string' ? e : '',
+        username: targetAccount?.username,
         session_id: targetAccount?.session_cookies?.sessionid,
         location: CountryEnum[targetAccount?.location as CountryEnum],
       }))
@@ -160,7 +175,7 @@ const Dashboard = ({ botList, historys, userId }: Props) => {
   )
 
   const onSearchClick = async () => {
-    mutate()
+    searchHistoryMutate()
     setMetaAttributes(formValues)
     const { from, to } = formatDateRange(formValues.date_range)
     await createSearchHistory({
@@ -301,7 +316,7 @@ const Dashboard = ({ botList, historys, userId }: Props) => {
                 </div>
 
                 <div className="flex items-start">
-                  <PrimaryButton onClick={onSearchClick} sizes={['s', 's', 's']} className="w-full md:w-80">
+                  <PrimaryButton onClick={onSearchClick} sizes={['s', 's', 's']} className="w-full md:w-80" disabled={isReportLoading}>
                     <SearchIcon />
                     Search
                   </PrimaryButton>
@@ -336,6 +351,7 @@ const Dashboard = ({ botList, historys, userId }: Props) => {
               <CarouselContent className="-ml-1 gap-4">
                 <CarouselItem className="md:basis-2/3 lg:basis-1/3">
                   <ReportCard
+                    account={metaAttributes.username}
                     postCount={postCountData?.data?.post_count ? postCountData?.data?.post_count : 0}
                     dateRange={metaAttributes.date_range}
                     loading={loadingStates}
@@ -345,8 +361,9 @@ const Dashboard = ({ botList, historys, userId }: Props) => {
                   />
                 </CarouselItem>
 
-                {searchHistories?.data &&
-                  searchHistories.data.map((history, index) => {
+                {searchHistories &&
+                  searchHistories.length > 0 &&
+                  searchHistories.map((history, index) => {
                     const formattedDateRange = formatDateRangeFromString(history.date_range)
 
                     return (
