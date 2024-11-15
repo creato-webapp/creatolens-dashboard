@@ -11,11 +11,11 @@ const menus = [
   {
     header: 'Features',
     items: [
-      { name: 'Instagram Trend Analysis', path: ROUTE.DASHBOARD },
-      { name: 'Manage Instabot Accounts', path: ROUTE.ACCOUNTS },
-      { name: 'Hashtags Recommendation', path: ROUTE.RECOMMENDATION },
-      { name: 'Hashtags-to-Image', path: ROUTE.HASHTAG_TO_IMAGE },
-      { name: 'Image-to-Hashtags', path: ROUTE.IMAGE_TO_HASHTAG },
+      { name: 'Instagram Trend Analysis', path: ROUTE.DASHBOARD, disabled: false },
+      { name: 'Manage Instabot Accounts', path: ROUTE.ACCOUNTS, disabled: false },
+      { name: 'Hashtags Recommendation', path: ROUTE.RECOMMENDATION, disabled: true }, //disabled
+      { name: 'Hashtags-to-Image', path: ROUTE.HASHTAG_TO_IMAGE, disabled: true }, //disabled
+      { name: 'Image-to-Hashtags', path: ROUTE.IMAGE_TO_HASHTAG, disabled: false },
     ],
   },
   // {
@@ -28,8 +28,8 @@ const menus = [
   {
     header: 'Support',
     items: [
-      { name: 'Contact', path: ROUTE.CONTACT_US },
-      { name: 'FAQs', path: ROUTE.FAQ },
+      { name: 'Contact', path: ROUTE.CONTACT_US, disabled: false },
+      { name: 'FAQs', path: ROUTE.FAQ, disabled: false },
     ],
   },
 ]
@@ -67,7 +67,12 @@ const SideMenu = (props: { collapseMenu?: () => void }) => {
                 {menu.items.map(
                   (item) =>
                     item.path && ( // Only use Link if `link` is provided
-                      <Link key={item.name} href={item.path} className="flex w-full text-center" onClick={collapseMenu}>
+                      <Link
+                        key={item.name}
+                        href={item.path}
+                        className={`flex w-full text-center ${item.disabled ? 'pointer-events-none text-text-disabled' : ''}`}
+                        onClick={collapseMenu}
+                      >
                         <div
                           className={`dropdown-item w-full rounded-lg px-3 py-4 hover:bg-neutral-200 hover:text-primary-500 ${
                             router.pathname === item.path ? 'font-semibold text-primary-500' : ''
