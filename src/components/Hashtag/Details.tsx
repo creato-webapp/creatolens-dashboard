@@ -17,9 +17,15 @@ const Details = (props: { setIsDetailsPageOpen: () => void }) => {
         <Image src={'/turtorial.png'} fill alt={'image to hashtag tutorial'} />
       </div>
       <div className="flex flex-col gap-4">
-        <h3 className="font-extrabold">Create compelling content for your next post using generative AI with 2Tag.</h3>
-        <h4 className="font-bold text-text-secondary">Create compelling content for your next post using generative AI with 2Tag.</h4>
-        <h4 className="font-bold text-text-tertiary">Technical support: Google Gemini</h4>
+        <h3 className="text-2xl font-bold">Create compelling content for your next post using generative AI with 2Tag.</h3>
+        <h4 className="text-base text-text-secondary">
+          Providing easy description, copyright free image can be generated easily. Also upload images to extract data-based hashtags effortlessly
+          from 2Tag.
+        </h4>
+        <h4 className="text-base text-text-secondary">
+          Harness the power of 2Tag hashtag and label features to create more engaging images cater for social media algorithms.
+        </h4>
+        <h4 className="text-sm text-text-tertiary">Technical support: Google Gemini</h4>
       </div>
     </div>
   )
