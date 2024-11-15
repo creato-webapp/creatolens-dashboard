@@ -1,6 +1,9 @@
 import FeatureLayout, { Card, Guide, Session } from '@components/FeatureLayout'
+import useAuth from '@hooks/useAuth'
 
 const InstagramTrendAnalysis = () => {
+  const { onLogin } = useAuth()
+
   return (
     <FeatureLayout heading={'Instagram Trend Analysis'}>
       <Card
@@ -9,6 +12,7 @@ const InstagramTrendAnalysis = () => {
         subheading="From up-to-date hashtags to topics, Trend Analysis can help you quickly realize the current market trend pattern."
         description="Trend Analysis lets you monitor and manage scraped posts from the past 3 or 7 days, tracking activity by topic after pairing Instabot with your 2TAG account."
         buttonUrl="#"
+        onLearnMore={onLogin}
       />
       <Session
         heading="What data can be seen in the trend report"
@@ -34,6 +38,7 @@ const InstagramTrendAnalysis = () => {
         button={{
           name: 'Make Trend Report Now',
           url: '',
+          onClick: onLogin,
         }}
       />
     </FeatureLayout>
