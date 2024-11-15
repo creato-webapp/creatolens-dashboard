@@ -1,7 +1,9 @@
 import PrimaryButton from '@components/Button/Primary'
 import FeatureLayout, { Card, Guide, NumberedList } from '@components/FeatureLayout'
+import useAuth from '@hooks/useAuth'
 
 const ImageToHashtags = () => {
+  const { onLogin } = useAuth()
   return (
     <FeatureLayout heading={'Image-to-Hashtags'}>
       <Card
@@ -10,6 +12,7 @@ const ImageToHashtags = () => {
         subheading="Enhance your content with trending, targeted data-backed keywords for maximum impact."
         description={`Not sure which keywords to use in your social media post? We've got you covered! Simply upload your image to 2TAG, and our platform will analyze it to generate data-driven hashtags tailored for your content. Optimize your posts and boost visibility with algorithm-friendly keywords.`}
         buttonUrl="#"
+        onLearnMore={onLogin}
       />
 
       <Guide
@@ -32,6 +35,7 @@ const ImageToHashtags = () => {
         button={{
           name: '+  Get Hashtags Now #',
           url: '',
+          onClick: onLogin,
         }}
       />
       <div className="py-16">
@@ -58,7 +62,9 @@ const ImageToHashtags = () => {
         />
         <div className="flex w-full justify-center pt-6">
           <div className="w-full md:w-80 ">
-            <PrimaryButton sizes={['l', 'l', 'l']}>Get Hashtag Now</PrimaryButton>
+            <PrimaryButton sizes={['l', 'l', 'l']} onClick={onLogin}>
+              Get Hashtag Now
+            </PrimaryButton>
           </div>
         </div>
       </div>

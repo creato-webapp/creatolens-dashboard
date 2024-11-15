@@ -1,6 +1,9 @@
 import FeatureLayout, { Card, Guide, Session } from '@components/FeatureLayout'
+import useAuth from '@hooks/useAuth'
 
 const Instabot = () => {
+  const { onLogin } = useAuth()
+
   return (
     <FeatureLayout heading={'Instabot'}>
       <Card
@@ -10,6 +13,7 @@ const Instabot = () => {
         subheading="Train a personal ai on your data and make images in your style in seconds."
         description="Instabot acts as a real Instagram user, scraping explore page posts to collect data. It builds a shared library, allowing users to access both personal and collective information."
         buttonUrl="#"
+        onLearnMore={onLogin}
       />
       <Session
         heading="Using Instabot for even more convenience"
@@ -39,6 +43,7 @@ const Instabot = () => {
         button={{
           name: 'Create Instabot Now',
           url: '',
+          onClick: onLogin,
         }}
       />
     </FeatureLayout>

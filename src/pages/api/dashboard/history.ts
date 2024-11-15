@@ -3,6 +3,7 @@ import PAPI from '@constants/endpoints/papi'
 import { AccountInstance } from '@helpers/axios'
 import handler from '@helpers/api/handlers'
 import METHOD from '@constants/method'
+import { InstabotMapper } from '@constants/instabots'
 export interface DashboardReportResponse {
   account_id: string
   created_at: string
@@ -129,28 +130,30 @@ export default handler.api({
         })
       }
 
-      const transformedResponses = data.map((item: DashboardReportResponse) => ({
-        date_range: {
-          from: item.start_date,
-          to: item.end_date,
-        },
-        keyword: (item.keyword ?? []).map((k: KeywordData) => ({
-          term: k.term,
-          count: k.count,
-        })),
-        username: item.username,
-        account: item.account_id,
-        post_count: item.post_count,
-        mostRepeatedPostData: Array.isArray(item.most_repeated_post)
-          ? item.most_repeated_post.sort((a, b) => {
-              if (b.count !== a.count) {
-                return b.count - a.count
-              }
-              return b.latest_likes - a.latest_likes
-            })[0]
-          : null,
-        created_at: item.created_at,
-      }))
+      const transformedResponses = data.map((item: DashboardReportResponse) => {
+        return {
+          date_range: {
+            from: item.start_date,
+            to: item.end_date,
+          },
+          keyword: (item.keyword ?? []).map((k: KeywordData) => ({
+            term: k.term,
+            count: k.count,
+          })),
+          username: InstabotMapper[item.username as keyof typeof InstabotMapper] || item.username,
+          account: item.account_id,
+          post_count: item.post_count,
+          mostRepeatedPostData: Array.isArray(item.most_repeated_post)
+            ? item.most_repeated_post.sort((a, b) => {
+                if (b.count !== a.count) {
+                  return b.count - a.count
+                }
+                return b.latest_likes - a.latest_likes
+              })[0]
+            : null,
+          created_at: item.created_at,
+        }
+      })
 
       return res.status(200).json(transformedResponses)
     } catch (error) {

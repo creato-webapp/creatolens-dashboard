@@ -10,7 +10,7 @@ import ProgressBar from '@components/Hashtag/ProgressBar'
 import { useImageHashtagContext } from '@hooks/UseImagetoHashtag'
 import { Layout } from '@components/Layout'
 import SideMenuLayout from '@components/Layout/SideMenuLayout'
-import HelpIcon from '@components/Icon/HelpIcon'
+// import HelpIcon from '@components/Icon/HelpIcon'
 
 const ImageToHashtag = () => {
   const { step } = useImageHashtagContext()
@@ -39,7 +39,7 @@ const ImageToHashtag = () => {
         <div className="flex items-center justify-between">
           <h1 className="text-subtitle font-bold">Image-to-Hashtags</h1>
           <div className="flex flex-row gap-2">
-            <HelpIcon className="fill-black" />
+            {/* <HelpIcon className="fill-black" /> */}
             <Image
               onClick={() => setIsDetailsPageOpen((pre) => !pre)}
               className="cursor-pointer"

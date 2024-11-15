@@ -235,6 +235,7 @@ const ReportCard = (props: IReportCard) => {
   const { data: mostRepeatedPostImage } = useMostRepeatedPostImage({
     shortcode: mostRepeatedPost?.shortcode,
     batch_id: mostRepeatedPost?.batch_id,
+    is_video: mostRepeatedPost?.is_video,
   })
 
   const from = formatDateRange(dateRange.from)

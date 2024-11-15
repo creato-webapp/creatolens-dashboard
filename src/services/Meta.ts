@@ -15,6 +15,7 @@ export interface PostData {
   latest_created_at?: string
   second_latest_created_at?: string
   caption?: string
+  is_video: boolean
 }
 
 export interface KeywordData {
@@ -27,11 +28,7 @@ export interface UserProfile {
   username: string
 }
 
-export interface MostRepeatedPost {
-  count?: number
-  latest_created_at?: string
-  second_latest_created_at?: string
-  caption?: string
+export interface MostRepeatedPost extends PostData {
   shortcode?: string
   username: string
   batch_id?: string
@@ -166,6 +163,7 @@ export async function getMostRepeatedPostImage(data: {
     shortcode: string
     session_id?: string
     batch_id: string
+    is_video: boolean
   }
 }) {
   if (!data.args.shortcode) return
@@ -175,6 +173,7 @@ export async function getMostRepeatedPostImage(data: {
       shortcode: data.args.shortcode,
       session_id: data.args.session_id,
       batch_id: data.args.batch_id,
+      is_video: data.args.is_video,
     },
   })
   return response

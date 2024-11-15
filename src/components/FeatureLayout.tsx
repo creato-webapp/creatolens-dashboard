@@ -10,6 +10,7 @@ interface IFeatureCard {
   subheading: string
   description: string
   buttonUrl: string
+  onLearnMore?: () => void
   video?: string
 }
 
@@ -29,6 +30,7 @@ interface IGuide {
   button: {
     name: string
     url: string
+    onClick?: () => void
   }
 }
 
@@ -45,12 +47,21 @@ interface IFeatureLayout {
 }
 
 export const Card = (props: IFeatureCard) => {
-  const { video, heading, subheading, description, buttonUrl, image } = props
+  const { video, heading, subheading, description, buttonUrl, image, onLearnMore } = props
+
+  const handleClick = () => {
+    if (onLearnMore) {
+      onLearnMore()
+    } else {
+      router.push(buttonUrl)
+    }
+  }
+
   return (
     <div className="card flex w-full flex-col gap-8 pb-6 md:flex-row md:pb-16 md:pt-8">
       <div className="relative h-52 w-full md:h-80">
         {video ? (
-          <video className="h-full object-cover" autoPlay>
+          <video className="h-full object-cover" autoPlay muted>
             <source src={video} type="video/mp4" />
           </video>
         ) : (
@@ -63,7 +74,7 @@ export const Card = (props: IFeatureCard) => {
           <h3 className="pt-2 text-subheading text-neutral-500">{subheading}</h3>
           <p className="pt-6 text-base text-neutral-800">{description}</p>
         </div>
-        <PrimaryButton sizes={['m', 'm', 'm']} className="w-full md:!w-80" onClick={() => router.push(buttonUrl)}>
+        <PrimaryButton sizes={['m', 'm', 'm']} className="w-full md:!w-80" onClick={handleClick}>
           Learn More
         </PrimaryButton>
       </div>
@@ -91,6 +102,15 @@ export const Session = (props: IFeatureBulletPoint) => {
 
 export const Guide = (props: IGuide) => {
   const { heading, subheading, items, button } = props
+
+  const handleClick = () => {
+    if (button?.onClick) {
+      button.onClick()
+    } else {
+      router.push(button.url)
+    }
+  }
+
   return (
     <div className="guide flex w-full flex-col gap-12 py-6 md:py-16">
       <div>
@@ -114,7 +134,7 @@ export const Guide = (props: IGuide) => {
       </div>
       <div className="flex w-full items-center justify-center">
         <div className="w-full md:w-80">
-          <PrimaryButton sizes={['l', 'l', 'l']} onClick={() => router.push(button.url)}>
+          <PrimaryButton sizes={['l', 'l', 'l']} onClick={handleClick}>
             {button.name}
           </PrimaryButton>
         </div>

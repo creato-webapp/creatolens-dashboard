@@ -1,8 +1,11 @@
 import PrimaryButton from '@components/Button/Primary'
 import FeatureLayout, { Card, Session } from '@components/FeatureLayout'
 import SearchIcon from '@components/Icon/SearchIcon'
+import useAuth from '@hooks/useAuth'
 
 const HashtagsRecommendation = () => {
+  const { onLogin } = useAuth()
+
   return (
     <FeatureLayout heading={'Hashtags Recommendation'}>
       <Card
@@ -11,6 +14,7 @@ const HashtagsRecommendation = () => {
         subheading="Using text prompts, quickly transform post ideas into data-backed hashtag to make your post become popular. "
         description="Generate data-backed hashtag to add under your post. Enhancing your post content to be seen under the algorithm of Instagram"
         buttonUrl="#"
+        onLearnMore={onLogin}
       />
       <Session
         heading="Why use our hashtags?"
@@ -21,7 +25,7 @@ const HashtagsRecommendation = () => {
       >
         <div className="flex w-full items-center justify-center pt-6">
           <div className="w-80 ">
-            <PrimaryButton sizes={['l', 'l', 'l']} className="">
+            <PrimaryButton sizes={['l', 'l', 'l']} className="" onClick={onLogin}>
               Get Hashtag Now
             </PrimaryButton>
           </div>
@@ -32,7 +36,7 @@ const HashtagsRecommendation = () => {
         <h3 className="pt-2 text-lg text-neutral-500">Look up to the free to use Hashtag set from 2TAG and make good use for your post </h3>
 
         <div className="mt-12 w-80 max-w-full">
-          <PrimaryButton sizes={['l', 'l', 'l']}>
+          <PrimaryButton sizes={['l', 'l', 'l']} onClick={onLogin}>
             <SearchIcon />
             Look for Hashtag
           </PrimaryButton>
