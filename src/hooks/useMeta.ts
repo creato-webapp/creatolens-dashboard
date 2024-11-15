@@ -57,7 +57,7 @@ export const useMostRepeatedPost = (input: {
   }
 }
 
-export const useMostRepeatedPostImage = (input: { shortcode?: string; batch_id?: string }) => {
+export const useMostRepeatedPostImage = (input: { shortcode?: string; batch_id?: string; is_video?: boolean }) => {
   const { data, error, mutate, ...swr } = useSWR({ url: 'api/dashboard/mostRepeatedPostImage', args: input }, getMostRepeatedPostImage, {
     refreshInterval: 0,
     revalidateOnFocus: false,

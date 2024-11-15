@@ -140,6 +140,7 @@ const Dashboard = ({ botList, historys, userId }: Props) => {
   const { data: mostRepeatedPostImage, isLoading: mostRepeatedPostImageIsLoading } = useMostRepeatedPostImage({
     shortcode: mostRepeatedPostData?.shortcode,
     batch_id: mostRepeatedPostData?.batch_id,
+    is_video: mostRepeatedPostData?.is_video,
   })
   const {
     data: searchHistories,
