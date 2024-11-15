@@ -139,7 +139,7 @@ const TabSession = memo(() => {
                   />
                 )}
                 {feature.video && (
-                  <video className="h-fit rounded-lg object-cover" autoPlay>
+                  <video className="h-fit rounded-lg object-cover" autoPlay muted>
                     <source src={feature.video} type="video/mp4" />
                   </video>
                 )}
@@ -170,7 +170,7 @@ const MobileTabSession = memo(() => {
               ></Image>
             )}
             {feature.video && (
-              <video className="h-fit w-full" autoPlay controls>
+              <video className="h-fit w-full" autoPlay muted>
                 <source src={feature.video} type="video/mp4" />
               </video>
             )}
