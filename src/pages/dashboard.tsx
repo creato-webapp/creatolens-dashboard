@@ -7,6 +7,7 @@ import { CombinedUser } from '@api/auth/[...nextauth]'
 import { IAccount } from '@components/Account/Account'
 import PlusIcon from '@components/Icon/PlusIcon'
 import ROUTE from '@constants/route'
+import INSTABOT_TEMPLATE from '@constants/instabots'
 import { useKeyword, useMostRepeatedPost, useMostRepeatedPostImage, usePostCount, useSearchHistory } from '@hooks/useMeta'
 import { getFilteredAccounts } from '@services/Account/Account'
 import { CountryEnum } from 'enums/CountryCodeEnums'
@@ -78,7 +79,7 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
   const roles = (await getRoles(user.email!)) as string[]
   const isAdmin = roles.includes('admin')
 
-  const botList = isAdmin
+  let botList = isAdmin
     ? await getFilteredAccounts({})
     : await getFilteredAccounts(
         { account: { created_by: user.email! } },
@@ -88,6 +89,8 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
           },
         }
       )
+
+  botList = [...INSTABOT_TEMPLATE, ...botList]
 
   const historys = await getSearchHistory(
     {
