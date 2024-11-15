@@ -231,9 +231,7 @@ export async function getSearchHistory(
   },
   customConfig?: AxiosRequestConfig
 ) {
-  const response = await fetcher.GET<{
-    data: HistoricSearchResult[] | []
-  }>(XAPI.DASHBOARD_HISTORY, {
+  const response = await fetcher.GET<HistoricSearchResult[] | []>(XAPI.DASHBOARD_HISTORY, {
     ...customConfig,
     params: {
       user_id: data.args.userId,
