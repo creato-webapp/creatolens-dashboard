@@ -29,7 +29,7 @@ const menus = [
     header: 'Support',
     items: [
       { name: 'Contact', path: ROUTE.CONTACT_US },
-      { name: 'FAQ', path: ROUTE.FAQ },
+      { name: 'FAQs', path: ROUTE.FAQ },
     ],
   },
 ]

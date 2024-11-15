@@ -17,8 +17,14 @@ const ContactUs = () => {
             </div>
             <div>Have a question? Looking for assistance? We are here to help and answer any inquires!</div>
             <div>Reach us directly at:</div>
-            <div>E-mail: hello@creatogether.app</div>
-            <div>Whatsapp: +852 6821 5494</div>
+            <a href="mailto:hello@creatogether.app">
+              E-mail:
+              <div className="text-blue-600 underline">hello@creatogether.app</div>
+            </a>
+            <a href="https://wa.me/85268215494">
+              Whatsapp:
+              <div className="text-blue-600 underline"> +852 6821 5494</div>
+            </a>
           </div>
         </div>
       </div>

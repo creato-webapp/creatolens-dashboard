@@ -26,7 +26,7 @@ const LINKS = [
 ] as const
 
 const SUPPORT_LINKS = [
-  { name: 'FAQ', path: ROUTE.FAQ },
+  { name: 'FAQs', path: ROUTE.FAQ },
   { name: 'Contact Us', path: ROUTE.CONTACT_US },
 ] as const
 
@@ -142,7 +142,7 @@ const NavBar: React.FC = () => {
             isOpen={!isUserMenuCollapsed}
             onMouseEnter={openUserMenu}
             onMouseLeave={closeUsermenu}
-            dropdownWidth="w-48"
+            dropdownWidth="w-38"
             items={[]}
           >
             <div onClick={onLogout} className="block px-4 py-2 text-sm text-neutral-800 transition-colors hover:bg-gray-100">

@@ -45,6 +45,22 @@ const Login: FC<loginProps> = ({ providers }) => {
   const router = useRouter()
   const errorCode = router.query.error as ErrorCodes
 
+  const whiteListPrompt = (
+    <div className="my-4 text-center">
+      You are not in whitelist.&nbsp;
+      <a href="https://www.creatogether.app/creatolens/survey" target="_blank" rel="noopener noreferrer">
+        <span className="text-blue-600 underline">Click here</span>
+      </a>
+      &nbsp;to apply for whitelisting.
+      <br />
+      用戶不在白名單之內，
+      <a href="https://www.creatogether.app/creatolens/survey" target="_blank" rel="noopener noreferrer">
+        <span className="text-blue-600 underline">按此</span>
+      </a>
+      加入申請
+    </div>
+  )
+
   const OAuthErrorMessage = ERROR_MESSAGE[errorCode]
 
   return (
@@ -72,8 +88,14 @@ const Login: FC<loginProps> = ({ providers }) => {
           </div>
         ) : (
           <div>
-            <p>You are not signed in.</p>
-            {errorCode && <div className="error-message">{OAuthErrorMessage}</div>}
+            {errorCode === ErrorCodes.OAuthCreateAccount ? (
+              whiteListPrompt
+            ) : (
+              <div className="error-message">
+                <p>You are not signed in.</p>
+                {OAuthErrorMessage}
+              </div>
+            )}
             {providers &&
               Object.values(providers).map((provider) => (
                 <div key={provider.name} className="flex justify-center">
