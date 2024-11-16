@@ -18,21 +18,30 @@ import { useDropdown } from '@hooks/useDropdown'
 const LOGO_SRC = IMAGE.LOGO_CREATO_ORANGE
 
 const LINKS = [
-  { name: 'Instagram Trend Analysis', path: ROUTE.DASHBOARD },
-  { name: 'Instabot', path: ROUTE.ACCOUNTS },
-  { name: 'Recommendation', path: ROUTE.RECOMMENDATION },
-  { name: 'Hashtags-to-Image', path: ROUTE.HASHTAG_TO_IMAGE },
-  { name: 'Image to Hashtags', path: ROUTE.IMAGE_TO_HASHTAG },
+  { name: 'Instagram Trend Analysis', path: ROUTE.DASHBOARD, disabled: false },
+  { name: 'Instabot', path: ROUTE.ACCOUNTS, disabled: false },
+  { name: 'Recommendation', path: ROUTE.RECOMMENDATION, disabled: true },
+  { name: 'Hashtags-to-Image', path: ROUTE.HASHTAG_TO_IMAGE, disabled: true },
+  { name: 'Image to Hashtags', path: ROUTE.IMAGE_TO_HASHTAG, disabled: false },
+] as const
+
+const LINKS_STATIC = [
+  { name: 'Instagram Trend Analysis', path: ROUTE.STATIC_DASHBOARD, disabled: false },
+  { name: 'Instabot', path: ROUTE.STATIC_ACCOUNTS, disabled: false },
+  { name: 'Recommendation', path: ROUTE.STATIC_RECOMMENDATION, disabled: false },
+  { name: 'Hashtags-to-Image', path: ROUTE.STATIC_HASHTAG_TO_IMAGE, disabled: false },
+  { name: 'Image to Hashtags', path: ROUTE.STATIC_IMAGE_TO_HASHTAG, disabled: false },
 ] as const
 
 const SUPPORT_LINKS = [
-  { name: 'FAQs', path: ROUTE.FAQ },
-  { name: 'Contact Us', path: ROUTE.CONTACT_US },
+  { name: 'FAQs', path: ROUTE.FAQ, disabled: false },
+  { name: 'Contact Us', path: ROUTE.CONTACT_US, disabled: false },
 ] as const
 
 type NavLink = {
   readonly name: string
   readonly path: string
+  readonly disabled: boolean
 }
 
 type DropdownMenuProps = {
@@ -68,11 +77,11 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
       {isOpen && (
         <div className={`absolute -left-14 top-full z-50 flex ${dropdownWidth} flex-col rounded-md border bg-white p-2 shadow-lg`}>
           {items.map((link, index) => (
-            <Link href={link.path} key={`${link.name}-${index}`}>
+            <Link href={link.path} key={`${link.name}-${index}`} className={`${link.disabled ? 'pointer-events-none' : ''}`}>
               <div
                 className={`block px-4 py-2 text-sm transition-colors hover:bg-gray-100 ${
                   router.pathname === link.path ? 'font-bold text-primary-500' : 'text-neutral-800'
-                }`}
+                } ${link.disabled ? 'text-text-disabled' : ''}`}
               >
                 {link.name}
               </div>
@@ -121,7 +130,7 @@ const NavBar: React.FC = () => {
       <div className="flex flex-row-reverse items-center md:flex-row">
         <div className="relative mr-4 hidden flex-row items-center gap-2 md:flex">
           <DropdownMenu
-            items={LINKS}
+            items={session ? LINKS : LINKS_STATIC}
             isOpen={!isFeatureMenuCollapsed}
             onMouseEnter={openFeatureMenu}
             onMouseLeave={closeFeatureMenu}

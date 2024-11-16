@@ -25,7 +25,7 @@ export default async function dashboardPostPicQueryHandler(req: NextApiRequest, 
       await axios.get(signedUrl)
       return res.end(signedUrl)
     } catch (error) {
-      console.error('Signed URL from v1 is not accessible, trying v2:', error)
+      console.error('Signed URL from v1 is not accessible, trying v2')
     }
   } catch (error) {
     console.error('Failed to fetch signed URL from v1:', error)

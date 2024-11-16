@@ -9,6 +9,13 @@ const ROUTE = {
   HASHTAG_TO_IMAGE: '/hashtags/hashtags-to-image',
   CONTACT_US: '/contact-us',
   FAQ: '/faqs',
+
+  //static
+  STATIC_DASHBOARD: '/features/instagram-trend-analysis',
+  STATIC_ACCOUNTS: '/features/instabot',
+  STATIC_RECOMMENDATION: '/features/hashtags-recommendation',
+  STATIC_HASHTAG_TO_IMAGE: '/features/hashtags-to-image',
+  STATIC_IMAGE_TO_HASHTAG: '/features/image-to-hashtags',
 } as const
 
 export default ROUTE
