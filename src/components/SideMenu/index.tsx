@@ -34,20 +34,49 @@ const menus = [
   },
 ]
 
+const menusStatic = [
+  {
+    header: 'Features',
+    items: [
+      { name: 'Instagram Trend Analysis', path: ROUTE.STATIC_DASHBOARD, disabled: false },
+      { name: 'Manage Instabot Accounts', path: ROUTE.STATIC_ACCOUNTS, disabled: false },
+      { name: 'Hashtags Recommendation', path: ROUTE.STATIC_RECOMMENDATION, disabled: false }, //disabled
+      { name: 'Hashtags-to-Image', path: ROUTE.STATIC_HASHTAG_TO_IMAGE, disabled: false }, //disabled
+      { name: 'Image-to-Hashtags', path: ROUTE.STATIC_IMAGE_TO_HASHTAG, disabled: false },
+    ],
+  },
+  // {
+  //   header: 'User Settings',
+  //   items: [
+  //     { name: 'Profile Settings', path: ROUTE.ACCOUNTS },
+  //     { name: 'Privacy Settings', path: ROUTE.ACCOUNTS },
+  //   ],
+  // },
+  {
+    header: 'Support',
+    items: [
+      { name: 'Contact', path: ROUTE.CONTACT_US, disabled: false },
+      { name: 'FAQs', path: ROUTE.FAQ, disabled: false },
+    ],
+  },
+]
+
 const SideMenu = (props: { collapseMenu?: () => void }) => {
   const { collapseMenu } = props
   const [active, setActive] = useState<string>('')
-  const { onLogout } = useAuth()
+  const { session, onLogout } = useAuth()
   const router = useRouter() // Use Next.js router to get the current path
 
   const toggleMenu = (header: string) => {
     setActive(active === header ? '' : header) // Toggle active state
   }
 
+  const renderMenu = session ? menus : menusStatic
+
   return (
     <div className="flex h-full max-h-screen w-full flex-col justify-between rounded-lg border border-neutral-300 p-4 text-base">
       <div>
-        {menus.map((menu) => (
+        {renderMenu.map((menu) => (
           <div key={menu.header} className="dropdown">
             <button
               className={`dropdown-toggle flex w-full flex-row justify-between px-4 py-2 font-bold hover:text-primary-500 ${

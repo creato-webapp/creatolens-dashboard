@@ -18,6 +18,7 @@ import TrendUpIcon from '@components/Icon/TrendUpIcon'
 import CoffeeIcon from '@components/Icon/CoffeeIcon'
 import Link from 'next/link'
 import useAuth from '@hooks/useAuth'
+import ROUTE from '@constants/route'
 
 export const getServerSideProps: GetServerSideProps = async (
   context: GetServerSidePropsContext
@@ -56,7 +57,7 @@ const features: FeatureCardProps[] = [
       </PrimaryButton>
     ),
     image: '/hashtag/analysis.png',
-    link: '/features/instagram-trend-analysis',
+    link: ROUTE.STATIC_DASHBOARD,
   },
   {
     title: 'Instabot',
@@ -69,7 +70,7 @@ const features: FeatureCardProps[] = [
     ),
     // image: '/features/instabot-video.mp4',
     video: '/features/instabot-video.mp4',
-    link: '/features/instabot',
+    link: ROUTE.STATIC_ACCOUNTS,
   },
   {
     title: 'Hashtags Recommendation',
@@ -80,7 +81,7 @@ const features: FeatureCardProps[] = [
       </PrimaryButton>
     ),
     image: '/hashtag/hashtags-recommendation.png',
-    link: '/features/hashtags-recommendation',
+    link: ROUTE.STATIC_RECOMMENDATION,
   },
   {
     title: 'Hashtags-to-Image',
@@ -91,7 +92,7 @@ const features: FeatureCardProps[] = [
       </PrimaryButton>
     ),
     image: '/hashtag/hashtags-to-image.png',
-    link: '/features/hashtags-to-image',
+    link: ROUTE.STATIC_HASHTAG_TO_IMAGE,
   },
   {
     title: 'Image-to-Hashtags',
@@ -102,7 +103,7 @@ const features: FeatureCardProps[] = [
       </PrimaryButton>
     ),
     image: '/hashtag/image-to-hashtag.png',
-    link: '/features/image-to-hashtags',
+    link: ROUTE.STATIC_IMAGE_TO_HASHTAG,
   },
 ]
 const TabSession = memo(() => {
