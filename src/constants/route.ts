@@ -5,8 +5,8 @@ const ROUTE = {
   ACCOUNT_BOT_CREATE: 'accounts/bot/new',
   RECOMMENDATION: '/recommendation',
   DASHBOARD: '/dashboard',
-  IMAGE_TO_HASHTAG: '/hashtag/image-to-hashtag',
-  HASHTAG_TO_IMAGE: '/hashtag/hashtag-to-image',
+  IMAGE_TO_HASHTAG: '/hashtags/image-to-hashtags',
+  HASHTAG_TO_IMAGE: '/hashtags/hashtags-to-image',
   CONTACT_US: '/contact-us',
   FAQ: '/faqs',
 } as const
