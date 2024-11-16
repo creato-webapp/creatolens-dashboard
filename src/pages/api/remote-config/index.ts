@@ -28,7 +28,9 @@ export default handler.api({
 
     const serverConfig = template.evaluate()
     const promptMapperString = serverConfig.getString(MAPPER_TEMPLATE_TYPE)
+
     const promptMapper: mapper = JSON.parse(promptMapperString)
+
     if (!promptMapper) {
       throw new NotFoundError('Prompt mapper is required')
     }
