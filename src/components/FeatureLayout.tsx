@@ -61,7 +61,7 @@ export const Card = (props: IFeatureCard) => {
     <div className="card flex w-full flex-col gap-8 pb-6 md:flex-row md:pb-16 md:pt-8">
       <div className="relative h-52 w-full md:h-80">
         {video ? (
-          <video className="h-full object-cover" autoPlay muted>
+          <video className="h-full object-cover" autoPlay muted playsInline>
             <source src={video} type="video/mp4" />
           </video>
         ) : (
