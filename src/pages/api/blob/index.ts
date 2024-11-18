@@ -16,7 +16,7 @@ export default handler.api({
     if (!req.headers.cookie) {
       return res.status(401).json({ message: 'Unauthorized' })
     }
-    const promptTemplate: HashtagFilterResponse = await fetcher.GET(`/api/remote-config/hashtagFilter`)
+    const promptTemplate: HashtagFilterResponse = await fetcher.GET(`/api/remote-config/hashtagFilter`, { headers: req.headers })
     const response = await axios.get(`${process.env.IMAGE_HASHTAG_1}/model`, {
       headers: {
         Cookie: req.headers.cookie,
