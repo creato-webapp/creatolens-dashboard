@@ -77,7 +77,7 @@ const RecommendationPage = () => {
       <Hero backgroundImage="./RecommendationHero.svg" childrenStyle="pb-4 md:py-16">
         <div className="flex flex-col items-center gap-4">
           <div className="flex w-full flex-row items-center">
-            <h1 className="text-black md:text-white">RECOMMENDATION</h1>
+            <h1 className="text-title text-black md:text-white">RECOMMENDATION</h1>
             <Popover
               className="ml-auto shrink-0 rounded-full bg-accent1-500 p-2 text-white"
               trigger={<LightBulbIcon size={32} />}
@@ -117,9 +117,11 @@ const RecommendationPage = () => {
                 {isValidating ? <LoaderIcon className="animate-spin" /> : <MagnifyingGlassIcon />}
               </Form.BaseInput>
             </div>
-            <Button.Primary className="w-auto" sizes={['s', 'm', 'm']} onClick={onSubmit} loading={isValidating}>
-              Search
-            </Button.Primary>
+            <div className="w-1/5">
+              <Button.Primary className="w-auto" sizes={['s', 'm', 'm']} onClick={onSubmit} loading={isValidating}>
+                Search
+              </Button.Primary>
+            </div>
           </div>
         </div>
       </Hero>

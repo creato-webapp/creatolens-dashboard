@@ -27,23 +27,23 @@ const dataItemToKeyValues = (item: Cookies) => {
 export const SessionModal = () => {
   const router = useRouter()
   const { id } = router.query
-  const { updateSession, data, isLoading } = useAccount(id as string, true)
+  const { updateSession, response, isLoading } = useAccount(id as string, true)
   const { addDialogue } = useDialogues()
 
   const handleUpdateSubmit = useCallback(async () => {
     try {
-      if (!data) {
+      if (!response) {
         addDialogue(`Account session aborted`, Status.FAILED)
         return
       }
-      await updateSession(data)
+      await updateSession(response)
       addDialogue(`Account session started update`, Status.SUCCESS)
     } catch (err) {
       if (err && err instanceof Error) {
         addDialogue(`Failed to update account: ${err.message}`, Status.FAILED)
       }
     }
-  }, [addDialogue, data, updateSession])
+  }, [addDialogue, response, updateSession])
 
   const modalOptions = {
     title: 'Session Modal',
@@ -61,7 +61,7 @@ export const SessionModal = () => {
             'Loading'
           ) : (
             <div className="flex flex-wrap">
-              {data?.session_cookies ? dataItemToKeyValues(data.session_cookies) : 'This instabot do not have any cookies yet'}
+              {response?.session_cookies ? dataItemToKeyValues(response.session_cookies) : 'This instabot do not have any cookies yet'}
             </div>
           )}
         </code>

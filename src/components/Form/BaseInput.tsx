@@ -57,7 +57,7 @@ const BaseInput: React.FunctionComponent<IBaseInputProps> = ({
           value={inputValue}
           onChange={onChange}
           disabled={disabled}
-          className={`base-input inline-flex min-w-64 rounded-md border border-gray-500 bg-neutral-50 p-2 font-semibold ${
+          className={`inline-flex rounded-md border border-neutral-300 px-4 py-2 text-sm outline-none placeholder:text-disabled focus:border-primary-500 md:min-w-64 ${
             errorMessage ? 'focus:border-0 focus:border-none focus:outline-error-600' : ''
           } ${className ? className : ''}`}
         />
@@ -68,7 +68,7 @@ const BaseInput: React.FunctionComponent<IBaseInputProps> = ({
         </div>
       </div>
       {errorMessage && (
-        <p className={'text-secondary-700 absolute'} id={`${name}-error`}>
+        <p className={'absolute text-secondary-700'} id={`${name}-error`}>
           {errorMessage}
         </p>
       )}
