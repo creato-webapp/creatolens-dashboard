@@ -109,7 +109,6 @@ const Dashboard = ({ botList, historys, userId }: Props) => {
     accId: string | undefined
     date_range: DateRange
     profile_id: string | undefined
-    session_id?: string
     location?: CountryEnum
     username: string | undefined
     userId: string
@@ -171,7 +170,6 @@ const Dashboard = ({ botList, historys, userId }: Props) => {
         profile_id: (targetAccount?.profile_id as string) || '',
         accId: typeof e === 'string' ? e : '',
         username: targetAccount?.username,
-        session_id: targetAccount?.session_cookies?.sessionid,
         location: CountryEnum[targetAccount?.location as CountryEnum],
       }))
     },

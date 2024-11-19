@@ -9,7 +9,7 @@ export interface DashboardReportResponse {
   created_at: string
   end_date: string
   keyword: KeywordData[]
-  most_repeated_post: MostRepeatedPost[]
+  most_repeated_post: MostRepeatedPost
   most_repeated_post_image: string | null
   post_count: number
   start_date: string
@@ -27,6 +27,13 @@ export interface KeywordData {
   term: string
 }
 
+export interface IGProfile {
+  description?: string
+  image?: string
+  url: string
+  username: string
+}
+
 export interface MostRepeatedPost {
   batch_id: string
   caption: string
@@ -41,6 +48,7 @@ export interface MostRepeatedPost {
   second_latest_likes: number
   shortcode: string
   uploaded_at: string
+  ig_profile?: IGProfile
 }
 
 export interface UserProfile {
@@ -143,18 +151,10 @@ export default handler.api({
           username: InstabotMapper[item.username as keyof typeof InstabotMapper] || item.username,
           account: item.account_id,
           post_count: item.post_count,
-          mostRepeatedPostData: Array.isArray(item.most_repeated_post)
-            ? item.most_repeated_post.sort((a, b) => {
-                if (b.count !== a.count) {
-                  return b.count - a.count
-                }
-                return b.latest_likes - a.latest_likes
-              })[0]
-            : null,
+          mostRepeatedPostData: { username: item.most_repeated_post.ig_profile?.username, ...item.most_repeated_post },
           created_at: item.created_at,
         }
       })
-
       return res.status(200).json(transformedResponses)
     } catch (error) {
       console.error('Error fetching dashboard reports:', error)
