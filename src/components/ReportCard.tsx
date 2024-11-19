@@ -120,10 +120,10 @@ export function ReadMoreButton(props: IReportCard) {
         </DialogHeader>
 
         <div className="flex max-h-[100%] flex-col gap-4 overflow-hidden md:flex-row">
-          <div className="relative flex h-80 w-1/2 min-w-64 items-start justify-start">
+          <div className="relative flex h-80 min-w-64 items-start justify-start">
             <Image src={mostRepeatedPostImage || '/logo_orange.png'} className="w-auto" layout="fill" style={{ objectFit: 'contain' }} alt={''} />
           </div>
-          <div className="flex h-full w-1/2 flex-col overflow-hidden">
+          <div className="flex h-full flex-col overflow-hidden">
             {mostRepeatedPost?.username && (
               <div className="flex w-full flex-row items-center justify-between pb-2 text-base font-extrabold text-neutral-800">
                 <Link
