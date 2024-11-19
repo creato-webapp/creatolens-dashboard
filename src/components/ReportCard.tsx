@@ -175,7 +175,7 @@ const MostRepeatedPost = ({
       <div className="flex flex-row items-center gap-2">
         <RepeatedIcon />
         <div className="flex flex-col">
-          <div className="text-base">Most Repeated Post</div>
+          <div className="text-base">Most Repeated Post ({post?.count || 0})</div>
         </div>
       </div>
       <div className="ml-7 py-2 text-neutral-500">
