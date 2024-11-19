@@ -2,10 +2,10 @@ import { useEffect, useRef, useState } from 'react'
 import { KeywordData } from '@services/Meta'
 import type { MostRepeatedPost } from '@services/Meta'
 import ListPlusIcon from './Icon/ListPlusIcon'
-import SubtleButton from './Button/Subtle'
+// import SubtleButton from './Button/Subtle'
 import HashIcon from './Icon/HashIcon'
 import RepeatedIcon from './Icon/RepeatedIcon'
-import ExportIcon from './Icon/ExportIcon'
+// import ExportIcon from './Icon/ExportIcon'
 import Image from 'next/image'
 import { DateRange } from 'react-day-picker'
 import { ScrollArea } from './ui/ScrollArea'
@@ -120,10 +120,10 @@ export function ReadMoreButton(props: IReportCard) {
         </DialogHeader>
 
         <div className="flex max-h-[100%] flex-col gap-4 overflow-hidden md:flex-row">
-          <div className="relative flex h-80 w-1/2 min-w-64 items-start justify-start">
+          <div className="relative flex h-80 min-w-64 items-start justify-start">
             <Image src={mostRepeatedPostImage || '/logo_orange.png'} className="w-auto" layout="fill" style={{ objectFit: 'contain' }} alt={''} />
           </div>
-          <div className="flex h-full w-1/2 flex-col overflow-hidden">
+          <div className="flex h-full flex-col overflow-hidden">
             {mostRepeatedPost?.username && (
               <div className="flex w-full flex-row items-center justify-between pb-2 text-base font-extrabold text-neutral-800">
                 <Link
@@ -175,7 +175,7 @@ const MostRepeatedPost = ({
       <div className="flex flex-row items-center gap-2">
         <RepeatedIcon />
         <div className="flex flex-col">
-          <div className="text-base">Most Repeated Post</div>
+          <div className="text-base">Most Repeated Post ({post?.count || 0})</div>
         </div>
       </div>
       <div className="ml-7 py-2 text-neutral-500">
@@ -227,7 +227,7 @@ const MostRepeatedPost = ({
   )
 }
 
-const exportToPDF = () => {}
+// const exportToPDF = () => {}
 
 const ReportCard = (props: IReportCard) => {
   const { dateRange, postCount, keyword, mostRepeatedPost, loading, account } = props
@@ -249,7 +249,7 @@ const ReportCard = (props: IReportCard) => {
         {dateStr} <Divider />
       </div>
 
-      <ScrollArea className="mb-4 h-4/5 w-full px-6">
+      <ScrollArea className="h-full w-full px-6 pb-8">
         {account && (
           <>
             <AccountName account={account} /> <Divider />
@@ -271,12 +271,12 @@ const ReportCard = (props: IReportCard) => {
           />
         )}
       </ScrollArea>
-      <div className="sticky bottom-0 w-full rounded-l-lg rounded-r-lg bg-white px-4">
+      {/* <div className="sticky bottom-0 w-full rounded-l-lg rounded-r-lg bg-white px-4">
         <SubtleButton onClick={() => exportToPDF()} sizes={['l', 'l', 'l']} className="sticky bottom-0 flex w-full items-center justify-center ">
           <ExportIcon width={16} height={16} />
           <div className="flex flex-row items-center">Export to PDF</div>
         </SubtleButton>
-      </div>
+      </div> */}
     </div>
   )
 }

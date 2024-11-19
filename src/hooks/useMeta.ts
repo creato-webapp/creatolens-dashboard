@@ -37,13 +37,7 @@ export const usePostCount = (input: { accId?: string; date_range: DateRange; pro
   }
 }
 
-export const useMostRepeatedPost = (input: {
-  accId?: string
-  date_range: DateRange
-  profile_id?: string
-  session_id?: string
-  location?: string
-}) => {
+export const useMostRepeatedPost = (input: { accId?: string; date_range: DateRange; profile_id?: string; location?: string }) => {
   const { data, error, mutate, ...swr } = useSWR({ url: 'api/dashboard/mostRepeatedPost', args: input }, getMostRepeatedPost, {
     refreshInterval: 0,
     revalidateOnFocus: false,
@@ -71,7 +65,7 @@ export const useMostRepeatedPostImage = (input: { shortcode?: string; batch_id?:
   }
 }
 
-export const useProfile = (input: { profile_id?: string; session_id: string; location: CountryEnum }) => {
+export const useProfile = (input: { profile_id?: string; location: CountryEnum }) => {
   const { data, error, mutate, ...swr } = useSWR({ url: 'api/dashboard/profileImage', args: input }, getProfile, {
     refreshInterval: 0,
     revalidateOnFocus: false,

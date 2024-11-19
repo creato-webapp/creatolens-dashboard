@@ -32,6 +32,7 @@ export interface MostRepeatedPost extends PostData {
   shortcode?: string
   username: string
   batch_id?: string
+  ig_profile?: IProfile
 }
 
 export interface IProfile {
@@ -96,7 +97,6 @@ export async function getMostRepeatedPost(
     args: {
       accId: string
       date_range: DateRange
-      session_id?: string
       location?: CountryEnum
     }
   },
@@ -139,8 +139,6 @@ export async function getMostRepeatedPost(
         ...customConfig,
         params: {
           profile_id: maxCountImage.owner_username,
-          session_id: data.args.session_id,
-          location: data.args.location,
         },
       })
 
@@ -161,7 +159,6 @@ export async function getMostRepeatedPost(
 export async function getMostRepeatedPostImage(data: {
   args: {
     shortcode: string
-    session_id?: string
     batch_id: string
     is_video: boolean
   }
@@ -171,7 +168,6 @@ export async function getMostRepeatedPostImage(data: {
   const response = await fetcher.GET<string>(XAPI.DASHBOARD_POST_IMAGE, {
     params: {
       shortcode: data.args.shortcode,
-      session_id: data.args.session_id,
       batch_id: data.args.batch_id,
       is_video: data.args.is_video,
     },
@@ -182,18 +178,15 @@ export async function getMostRepeatedPostImage(data: {
 export async function getProfile(data: {
   args: {
     profile_id: string
-    session_id: string
     location: CountryEnum
   }
 }) {
-  if (!data.args.profile_id || !data.args.session_id) return
+  if (!data.args.profile_id) return
   const response = await fetcher.GET<{
     data: IProfile
   }>(XAPI.DASHBOARD_PROFILE, {
     params: {
       profile_id: data.args.profile_id,
-      session_id: data.args.session_id,
-      location: data.args.location,
     },
   })
 
