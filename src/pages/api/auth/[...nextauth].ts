@@ -42,7 +42,7 @@ const nextAuthOptions: NextAuthOptionsCallback = (req, res) => ({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
       authorization: {
         params: {
-          // prompt: 'consent',
+          prompt: 'select_account',
           access_type: 'offline',
           response_type: 'code',
           scope: 'openid email profile',
