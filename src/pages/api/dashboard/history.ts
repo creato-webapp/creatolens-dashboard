@@ -151,7 +151,7 @@ export default handler.api({
           username: InstabotMapper[item.username as keyof typeof InstabotMapper] || item.username,
           account: item.account_id,
           post_count: item.post_count,
-          mostRepeatedPostData: { username: item.most_repeated_post.ig_profile?.username, ...item.most_repeated_post },
+          mostRepeatedPostData: { username: item.most_repeated_post?.ig_profile?.username, ...item.most_repeated_post },
           created_at: item.created_at,
         }
       })
