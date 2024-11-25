@@ -6,6 +6,7 @@ import { CountryEnum } from 'enums/CountryCodeEnums'
 import fetcher from '../helpers/fetcher'
 import { DateRange } from 'react-day-picker'
 import { HistoricSearchResult } from 'pages/dashboard'
+import { formatDateTimeToLocal } from '@utils/dayjs'
 
 export interface PostData {
   count: number
@@ -52,7 +53,7 @@ export async function getKeyword(
   },
   customConfig?: AxiosRequestConfig
 ): Promise<{ data: KeywordData[] }> {
-  const { from, to } = formatDateRange(data.args.date_range)
+  const { from, to } = formatDateStartEndTime(data.args.date_range)
 
   const keywordResponse = await fetcher.GET<{
     data: KeywordData[]
@@ -76,7 +77,7 @@ export async function getPostCount(
   },
   customConfig?: AxiosRequestConfig
 ): Promise<{ data: { post_count: number } }> {
-  const { from, to } = formatDateRange(data.args.date_range)
+  const { from, to } = formatDateStartEndTime(data.args.date_range)
 
   const postCountResponse = await fetcher.GET<{
     data: { post_count: number }
@@ -102,7 +103,7 @@ export async function getMostRepeatedPost(
   },
   customConfig?: AxiosRequestConfig
 ): Promise<MostRepeatedPost | null> {
-  const { from, to } = formatDateRange(data.args.date_range)
+  const { from, to } = formatDateStartEndTime(data.args.date_range)
 
   const response = await fetcher.GET<{
     data: PostData[]
@@ -234,8 +235,14 @@ export async function getSearchHistory(
   return response
 }
 
-export function formatDateRange(dateRange: DateRange) {
-  const from = dateRange?.from?.toISOString().split('T')[0] + ' 00:00:00'
-  const to = dateRange?.to?.toISOString().split('T')[0] + ' 23:59:59'
+export function formatDateStartEndTime(dateRange: DateRange) {
+  if (!dateRange.from || !dateRange.to)
+    return {
+      from: '',
+      to: '',
+    }
+  const from = formatDateTimeToLocal(dateRange?.from, 0, 0, 0) // Start of the day
+  const to = formatDateTimeToLocal(dateRange?.to, 23, 59, 59) // End of the day
+
   return { from, to }
 }
