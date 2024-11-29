@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: 2tag.ai
+
+# Sitemaps
+Sitemap: 2tag.ai/sitemap.xml
