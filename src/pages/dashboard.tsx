@@ -20,7 +20,7 @@ import NavigationPill from '@components/ui/NavigationPill'
 import PrimaryButton from '@components/Button/Primary'
 import ReportCard from '@components/ReportCard'
 import Primary from '@components/Button/Primary'
-import { getSearchHistory, KeywordData, MostRepeatedPost, createSearchHistory, formatDateRange } from '@services/Meta'
+import { getSearchHistory, KeywordData, MostRepeatedPost, createSearchHistory, formatDateStartEndTime } from '@services/Meta'
 import { CarouselContent, CarouselItem, Carousel } from '@components/ui/Carousel'
 import SearchIcon from '@components/Icon/SearchIcon'
 import { formatDateRangeFromString } from '@utils/dayjs'
@@ -177,9 +177,12 @@ const Dashboard = ({ botList, historys, userId }: Props) => {
   )
 
   const onSearchClick = async () => {
-    searchHistoryMutate()
+    searchHistoryMutate({ userId: metaAttributes.userId })
     setMetaAttributes(formValues)
-    const { from, to } = formatDateRange(formValues.date_range)
+    const { from, to } = formatDateStartEndTime(formValues.date_range)
+    if (!from || !to) {
+      return
+    }
     await createSearchHistory({
       userId,
       accId: formValues.accId as string,
