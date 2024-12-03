@@ -1,43 +1,43 @@
-import { forwardRef, useCallback, useEffect, useState } from 'react'
+import { useRef } from 'react'
 
 import { useDropzone } from 'react-dropzone'
 
 import { ImageDetailsType } from '@context/ImageToHashtagContext'
-import UploadIcon from '@components/Icon/UploadIcon'
-import useImageUploader from '@hooks/useImageUploader'
+
 interface IImageUpload {
-  uploadedImage?: null | string
-  clearImage?: () => void
-  setUploadedImage: (arg: string, details: ImageDetailsType) => void
-  onClickBrowse?: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void
+  uploadedImage: string
+  setUploadedImage: (image: string) => void // Updated type
+  setImageDetails: (arg: Partial<ImageDetailsType>) => void // Updated type
 }
-const ImageUpload = forwardRef<HTMLInputElement, IImageUpload>((props, fileInputRef) => {
-  const { uploadedImage, setUploadedImage, clearImage } = props
-  const [imagePreview, setImagePreview] = useState<string | null>(null)
-  const { uploadImage } = useImageUploader({ timeout: 30000 })
+const ImageUpload = (props: IImageUpload) => {
+  const { uploadedImage, setUploadedImage, setImageDetails } = props
+  const fileInputRef = useRef<HTMLInputElement | null>(null)
+
+  const handleBrowseClick = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    e.preventDefault()
+    fileInputRef.current?.click()
+  }
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     accept: {
       'image/jpeg': ['.jpeg', '.png'],
     },
-    onDrop: async (acceptedFiles: File[]) => {
+    onDrop: (acceptedFiles: Blob[]) => {
       if (acceptedFiles.length > 0) {
         const file = acceptedFiles[0]
+
         const reader = new FileReader()
         reader.onloadend = () => {
-          setImagePreview(reader.result as string)
+          setUploadedImage(reader.result as string)
         }
         reader.readAsDataURL(file)
-
         const filePath = file.name || ''
 
         const fileFormat = file.type
+        // Get the file extension
         const fileExtension = file.name.split('.').pop()
-
-        const uploadResponse = await uploadImage(file)
-        if (!uploadResponse?.data) throw new Error('Upload response is missing data')
-
-        setUploadedImage(uploadResponse.data, {
+        // If you want to save the file path and format to state or props
+        setImageDetails({
           size: file.size,
           path: filePath,
           format: fileFormat,
@@ -48,70 +48,48 @@ const ImageUpload = forwardRef<HTMLInputElement, IImageUpload>((props, fileInput
     noClick: true,
   })
 
-  const clearFile = useCallback(() => {
-    if (fileInputRef && 'current' in fileInputRef && fileInputRef.current) {
-      fileInputRef.current.value = ''
-    }
-    clearImage && clearImage()
-    setImagePreview(null)
-  }, [clearImage, fileInputRef])
-
-  useEffect(() => {
-    if (!uploadedImage) {
-      clearFile()
-    }
-  }, [clearFile, uploadedImage])
+  const clearFile = () => {
+    setUploadedImage('')
+    setImageDetails({})
+  }
 
   return (
     <div
       {...getRootProps()}
       style={{
-        border: uploadedImage ? '' : '',
-        borderRadius: '0px',
+        border: uploadedImage ? '' : '2px dashed #d3d3d3',
+        borderRadius: '10px',
         padding: uploadedImage ? '5px' : '40px',
         textAlign: 'center',
-        alignItems: 'center',
-        backgroundColor: isDragActive ? '#D9D9D9' : '#F5F6F6',
+        backgroundColor: isDragActive ? '#f0f0f0' : uploadedImage ? '' : '#F5F5F6',
         color: '#445F6F',
         transition: 'background-color 0.2s ease-in-out',
-        height: '100%',
+        // marginBottom: '20px',
       }}
-      className="flex aspect-square w-auto cursor-pointer flex-col items-center justify-center md:aspect-auto md:min-h-96"
-      onClick={() => {
-        if (fileInputRef && 'current' in fileInputRef && fileInputRef.current) {
-          fileInputRef.current.click()
-        }
-      }}
+      className="flex aspect-square items-center justify-center"
     >
       <input {...getInputProps()} ref={fileInputRef} />
-      {uploadedImage || imagePreview ? (
-        <div className="relative flex w-full flex-col items-center">
-          <div
-            className="absolute right-5 top-5 z-50 flex h-12 w-12 cursor-pointer rounded-full bg-primary-500 p-4 text-white"
-            onClick={(e) => {
-              e.stopPropagation()
-              clearFile()
-            }}
-          >
-            <div className="flex h-full w-full items-center justify-center">X</div>
+      <div style={{ display: 'flex', width: '100%', flexDirection: 'column', alignItems: 'center' }}>
+        {uploadedImage ? (
+          <div style={{ textAlign: 'center' }} className=" relative">
+            <div className=" absolute right-5 top-5 flex h-12 w-12 cursor-pointer rounded-full bg-accent1-500 p-4 text-white" onClick={clearFile}>
+              <div className="flex h-full w-full items-center justify-center">X</div>
+            </div>
+            <img src={uploadedImage} alt="Uploaded" style={{ maxWidth: '100%', maxHeight: 'auto', borderRadius: '10px' }} />
           </div>
-          <img
-            src={uploadedImage ? uploadedImage : imagePreview || ''}
-            draggable={false}
-            alt="Uploaded"
-            className="aspect-square md:max-h-96"
-            style={{ width: '100%', maxWidth: '100%', borderRadius: '10px', objectFit: 'contain' }}
-          />
-        </div>
-      ) : (
-        <div className="flex w-full flex-col items-center">
-          <UploadIcon className="" />
-          <h4>File format accepted PNG, JPG, JPEG</h4>
-          <h4>Max. file size 5 MB</h4>
-        </div>
-      )}
+        ) : (
+          <img src="/file-input.png" alt="Upload Icon" style={{ width: '50px', marginBottom: '20px' }} />
+        )}
+        <h4>
+          Drag and drop or{' '}
+          <a className="text-accent2-500 underline underline-offset-2" href="#" onClick={handleBrowseClick}>
+            browse
+          </a>{' '}
+          your files
+        </h4>
+      </div>
     </div>
   )
-})
+}
 
 export default ImageUpload

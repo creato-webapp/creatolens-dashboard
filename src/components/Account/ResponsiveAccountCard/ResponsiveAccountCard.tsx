@@ -60,6 +60,8 @@ const ResponsiveAccountCard: FC<ResponsiveAccountCardProps> = ({ rowData }) => {
             pathname: ROUTE.ACCOUNT_BOT_GET,
             query: { id: rowData.id },
           }}
+          as="/accounts/bot"
+          legacyBehavior
         >
           <div className="flex w-full flex-row items-center justify-center gap-2">
             <EditIcon size={16} className="fill-accent2-500" />

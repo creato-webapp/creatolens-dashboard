@@ -5,7 +5,7 @@ import { signIn, signOut, useSession } from 'next-auth/react'
 
 const CALLBACK_URL = '/'
 
-const useAuth = () => {
+export const useAuth = () => {
   const { data: session } = useSession()
 
   const onLogin = useCallback(() => {
@@ -23,5 +23,3 @@ const useAuth = () => {
     onLogout,
   }
 }
-
-export default useAuth

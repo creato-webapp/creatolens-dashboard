@@ -118,12 +118,7 @@ const RetryAccountsPage = ({ paginationData }: Props) => {
                   <AccountBadges status={e.status} />
                 </Table.BodyCell>
                 <Table.BodyCell key={e.id}>
-                  <Link
-                    href={{
-                      pathname: '/accounts/[id]',
-                      query: { id: e.id },
-                    }}
-                  >
+                  <Link href="/accounts/[id]" as={`/accounts/${e.id}`} legacyBehavior>
                     <div className="flex w-full cursor-pointer flex-row items-center justify-center gap-2">
                       <EditIcon size={16} className="fill-accent2-500" />
                       <div className="font-semibold text-accent2-500">Edit</div>

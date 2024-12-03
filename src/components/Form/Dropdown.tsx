@@ -62,7 +62,7 @@ const Dropdown: React.FC<DropdownProps> = ({ name = '', options, defaultValue, o
   const activeStyle = isOpen && ' !bg-accent1-500 !text-white'
   const focusStyle = !isOpen && ' focus:ring-2 focus:ring-stroke focus:ring-opacity-50'
 
-  const generatePadding = useCallback((dropDownSizes?: DropdownSize[]): { padding: string; caretSize: string; maxWidth: string } => {
+  const generatePadding = useCallback((dropDownSizes: string[]): { padding: string; caretSize: string; maxWidth: string } => {
     let padding = ''
     let maxWidth = ''
     let caretSize = ''
@@ -111,7 +111,7 @@ const Dropdown: React.FC<DropdownProps> = ({ name = '', options, defaultValue, o
     }
   }, [isDropdownNotSelected])
 
-  const { padding, caretSize, maxWidth } = generatePadding(dropDownSizes)
+  const { padding, caretSize, maxWidth } = generatePadding(dropDownSizes!)
   return (
     <div ref={dropdownRef} className={`dropdown relative h-full w-full justify-end  ${maxWidth}`}>
       <button

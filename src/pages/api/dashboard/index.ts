@@ -1,13 +1,13 @@
-import { MetaInstance } from '@helpers/axios'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
+import MetaInstance from '@api/axiosInstance/Meta'
 export default async function dashboardQueryHandler(req: NextApiRequest, res: NextApiResponse) {
   const {
-    query: { accId, start_date, end_date },
+    query: { accId, days },
   } = req
 
   const response = await MetaInstance.get(`/${accId}/scrapped_posts/info?`, {
-    params: { start_date, end_date },
+    params: { days },
     headers: {
       Cookie: req.headers.cookie,
     },

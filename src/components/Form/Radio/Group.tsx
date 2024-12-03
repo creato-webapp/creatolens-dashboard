@@ -1,4 +1,4 @@
-import React, { HTMLAttributes } from 'react'
+import React, { HTMLAttributes, useState } from 'react'
 
 import { Radio } from './Radio'
 interface Option {
@@ -9,13 +9,15 @@ interface Option {
 interface RadioGroupProps extends HTMLAttributes<HTMLDivElement> {
   defaultValue: string
   options: Option[]
-  onValueChange?: (value: string) => void
-  selectedValue: string
+  onValueChange: (value: string) => void
 }
 
-export const RadioGroup: React.FC<RadioGroupProps> = ({ selectedValue, options, onValueChange }) => {
+export const RadioGroup: React.FC<RadioGroupProps> = ({ defaultValue, options, onValueChange }) => {
+  const [selectedValue, setSelectedValue] = useState<string>(defaultValue)
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    onValueChange && onValueChange(event.target.value)
+    setSelectedValue(event.target.value)
+    onValueChange(event.target.value)
   }
 
   return (

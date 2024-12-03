@@ -22,8 +22,14 @@ export async function getRoles(userEmail: string) {
   return userEntry ? userEntry.role : []
 }
 
+export function isExpired(expires: string): boolean {
+  const expiresDate = new Date(expires)
+  const currentTimestamp = Date.now()
+  return expiresDate.getTime() <= currentTimestamp
+}
+
 export const imageToBase64 = (file: File): Promise<string | null> => {
-  return new Promise<string>((resolve, reject) => {
+  return new Promise<string | null>((resolve, reject) => {
     const reader = new FileReader()
 
     reader.onload = () => {
@@ -37,6 +43,8 @@ export const imageToBase64 = (file: File): Promise<string | null> => {
 
     if (file) {
       reader.readAsDataURL(file)
+    } else {
+      resolve(null)
     }
   })
 }

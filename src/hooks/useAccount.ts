@@ -1,53 +1,72 @@
+import { useEffect, useState } from 'react'
+
 import { IAccount } from '@components/Account/Account'
-import XAPI from '@constants/endpoints/xapi'
+import { updateAccount as updateAccountHelper, updateSession as updateSessionHelper } from '@services/Account/Account'
+import { PaginationMetadata, PaginationParams } from '@services/Account/AccountInterface'
+import ENDPOINT_FRONTEND from '@constants/endpoints/frontend'
 
 import useRequest from './useRequest'
 import METHOD from '@constants/method'
-import useMutation from './useMutation'
-
-type SessionUpdateResponse = {
-  success: boolean
-  message?: string
-  // Include other fields expected in the response
-}
-
-type SessionUpdatePayload = {
-  username: string
-  password: string
-  account_id: string
-}
 
 export const useAccount = (id: string, defaultShouldFetch: boolean = true, fallbackData?: IAccount) => {
-  const { data, error, mutate, ...swr } = useRequest<IAccount>([XAPI.ACCOUNT + id], METHOD.GET, {
-    shouldFetch: defaultShouldFetch,
+  const [shouldFetch, setShouldFetch] = useState(defaultShouldFetch)
+  const { data, error, mutate, ...swr } = useRequest<IAccount>(shouldFetch ? [ENDPOINT_FRONTEND.ACCOUNT + id] : null, METHOD.GET, {
     refreshInterval: 0,
     fallbackData: fallbackData,
   })
-  const { trigger: triggerUpdateAccount } = useMutation<IAccount>(XAPI.ACCOUNT + id, METHOD.PATCH)
-  const { trigger: triggerUpdateSession } = useMutation<SessionUpdateResponse, SessionUpdatePayload>(XAPI.ACCOUNT_SESSION + id, METHOD.POST)
 
   const updateAccount = async (updatedAccount: IAccount) => {
-    const res = await triggerUpdateAccount({
-      ...updatedAccount,
-    })
-    await mutate()
+    const res = await updateAccountHelper(id, updatedAccount)
+    mutate()
     return res
   }
 
   const updateSession = async (updatedAccount: IAccount) => {
-    const res = await triggerUpdateSession({
-      username: updatedAccount.username,
-      password: updatedAccount.pwd,
-      account_id: updatedAccount.id,
-    })
-    await mutate()
+    const res = await updateSessionHelper(id, updatedAccount)
+    mutate()
     return res
   }
   return {
-    response: data,
+    data,
     error,
     updateAccount,
     updateSession,
+    setShouldFetch,
+    mutate,
+    ...swr,
+  }
+}
+export const useGetAccountsPagination = (
+  paginationParams: PaginationParams,
+  defaultShouldFetch?: boolean,
+  fallbackData?: PaginationMetadata<IAccount[]>
+) => {
+  const [shouldFetch, setShouldFetch] = useState(defaultShouldFetch)
+  const { data, error, mutate, ...swr } = useRequest<PaginationMetadata<IAccount[]>>(
+    shouldFetch
+      ? [
+          ENDPOINT_FRONTEND.GET_ACCOUNTS_PAGINATION,
+          {
+            params: paginationParams,
+          },
+        ]
+      : null,
+    METHOD.GET,
+    {
+      refreshInterval: 0,
+      fallbackData: fallbackData,
+      revalidateOnMount: false,
+    }
+  )
+  useEffect(() => {
+    mutate()
+  }, [paginationParams, mutate])
+
+  return {
+    data,
+    error,
+    shouldFetch,
+    setShouldFetch,
     mutate,
     ...swr,
   }
