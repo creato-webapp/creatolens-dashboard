@@ -1,66 +1,76 @@
-import { useCallback, useState } from 'react'
-
+import React, { useCallback, useRef, useMemo } from 'react'
 import Primary from '@components/Button/Primary'
-import { uploadImage } from '@services/Image'
-import { ImageDetailsType, useImageHashtagContext } from '@context/ImageToHashtagContext'
-
 import ImageUpload from '../ImageUpload'
+import useImageUploader from '@hooks/useImageUploader'
+import { useImageHashtagContext } from '@hooks/UseImagetoHashtag'
+import Neutral from '@components/Button/Neutral'
+import RefreshIcon from '@components/Icon/RefreshIcon'
+import CaretRightBoldIcon from '@components/Icon/CaretRightBoldIcon'
 
-export interface StepProps {
-  step: number
-  setStep: (arg: number) => void
-}
+const Step1 = () => {
+  const fileInputRef = useRef<HTMLInputElement | null>(null)
 
-const Step1 = (props: StepProps) => {
-  const { setStep } = props
-  const [uploading, setUploading] = useState<boolean>(false)
-  const [uploadedImage, setUploadedImage] = useState<string>('')
-  const [imageDetails, setImageDetails] = useState<ImageDetailsType>({})
-
-  const { addImage } = useImageHashtagContext()
+  const { error } = useImageUploader({ timeout: 30000 })
+  const { addImage, goForward, image, clearImage } = useImageHashtagContext()
 
   const onClickButton = useCallback(async () => {
-    if (!uploadedImage || !imageDetails.format || !imageDetails.path) {
-      return
-    }
-
-    setUploading(true)
     try {
-      const data = {
-        args: { username: 'timothy', file: uploadedImage, imageDetails },
-      }
-
-      const uploadedImageResponse = await uploadImage(data)
-      addImage(uploadedImageResponse, [])
-      setUploading(false)
-      setStep(2)
+      if (!image.details) return
+      goForward()
     } catch (e) {
-      setUploading(false)
+      console.error('Error uploading image:', e)
     }
-  }, [addImage, imageDetails, setStep, uploadedImage])
-  return (
-    <div className="flex flex-col gap-3 rounded-2xl md:flex-row md:p-12 md:shadow-lg">
-      <h2 className="font-extrabold md:hidden">Image Upload</h2>
-      <div className="mt-4 w-full md:mt-0 md:w-1/2">
-        <ImageUpload uploadedImage={uploadedImage} setUploadedImage={setUploadedImage} setImageDetails={setImageDetails} />
-      </div>
-      <div className="flex w-full flex-col justify-center gap-4 md:w-1/2">
-        <h2 className="hidden font-extrabold md:block">Image Upload</h2>
+  }, [goForward, image.details])
 
-        <div className="flex flex-row flex-wrap items-center gap-x-4">
-          {/* <Image src="/image-logo.png" alt="image logo" height={40} width={40} /> */}
-          <h3 className="text-text-secondary">{imageDetails.path}</h3>
-          {imageDetails.size && imageDetails.size > 0 && (
-            <h3 className="text-disabled">File size: {(imageDetails.size / 1024 / 1024).toFixed(2)} MB</h3>
-          )}
-        </div>
-        <div className="flex items-center justify-center">
-          <Primary disabled={uploading} sizes={['m', 'm', 'm']} onClick={onClickButton}>
-            Annotate
-          </Primary>
+  const triggerFileInput = useCallback(() => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click()
+    }
+  }, [])
+
+  const fileSizeInMB = useMemo(() => (image.details.size ? (image.details.size / (1024 * 1024)).toFixed(2) : null), [image.details.size])
+
+  return (
+    <div className="flex h-full flex-col gap-3 rounded-2xl">
+      <div className="h-full w-full">
+        <h2 className="text-subheading md:block">Image Upload</h2>
+        <h4 className="my-2 text-sm text-neutral-500">
+          Drag and drop or{' '}
+          <span className="cursor-pointer text-accent2-500 underline underline-offset-2" onClick={triggerFileInput}>
+            browse
+          </span>{' '}
+          your files
+        </h4>
+        <div className="md:mt-0 md:px-4">
+          <div className="w-full items-center">
+            <ImageUpload clearImage={clearImage} uploadedImage={image.image} setUploadedImage={addImage} ref={fileInputRef} />
+          </div>
+          <div className="flex w-full flex-col justify-center gap-4 ">
+            <div className="flex flex-row flex-wrap items-center gap-x-4 text-base text-neutral-500 md:max-h-96">
+              {image.details?.path && (
+                <em className="">
+                  Image uploaded: {image.details.path}
+                  {fileSizeInMB && ` File size: ${fileSizeInMB} MB`}
+                </em>
+              )}
+            </div>
+
+            <div className="flex flex-row justify-center gap-4">
+              <Neutral disabled={image.details?.path === undefined} sizes={['m', 'm', 'm']} onClick={clearImage}>
+                <RefreshIcon />
+                <div className="text-base">Re-Upload</div>
+              </Neutral>
+              <Primary disabled={image.details?.path === undefined} className="w-28" sizes={['m', 'm', 'm']} onClick={onClickButton}>
+                Next
+                <CaretRightBoldIcon width={16} height={16} />
+              </Primary>
+            </div>
+            {error && <div>{error.message}</div>}
+          </div>
         </div>
       </div>
     </div>
   )
 }
-export default Step1
+
+export default React.memo(Step1)

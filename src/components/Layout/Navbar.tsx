@@ -6,29 +6,101 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 
 import CrossIcon from '@components/Icon/CrossIcon'
-import LoginIcon from '@components/Icon/LoginIcon'
-import LogoutIcon from '@components/Icon/LogOutIcon'
 import MenuIcon from '@components/Icon/MenuIcon'
-import { Title } from '@components/Typography'
-import { useAuth } from '@hooks/useAuth'
+import useAuth from '@hooks/useAuth'
 
 import { Button } from '..'
+import Avatar from '@components/Avatar'
+import PrimaryButton from '@components/Button/Primary'
+import SideMenu from '@components/SideMenu'
+import { useDropdown } from '@hooks/useDropdown'
 
 const LOGO_SRC = IMAGE.LOGO_CREATO_ORANGE
 
 const LINKS = [
-  { name: 'User Guide', path: ROUTE.GUIDE },
-  { name: 'Accounts', path: ROUTE.ACCOUNTS },
-  { name: 'Recommendation', path: ROUTE.RECOMMENDATION },
-  { name: 'Trend Analysis', path: ROUTE.DASHBOARD },
+  { name: 'Instagram Trend Analysis', path: ROUTE.DASHBOARD, disabled: false },
+  { name: 'Instabot', path: ROUTE.ACCOUNTS, disabled: false },
+  { name: 'Recommendation', path: ROUTE.RECOMMENDATION, disabled: true },
+  { name: 'Hashtags-to-Image', path: ROUTE.HASHTAG_TO_IMAGE, disabled: true },
+  { name: 'Image to Hashtags', path: ROUTE.IMAGE_TO_HASHTAG, disabled: false },
 ] as const
 
-const NavBar: React.FC = () => {
+const LINKS_STATIC = [
+  { name: 'Instagram Trend Analysis', path: ROUTE.STATIC_DASHBOARD, disabled: false },
+  { name: 'Instabot', path: ROUTE.STATIC_ACCOUNTS, disabled: false },
+  { name: 'Recommendation', path: ROUTE.STATIC_RECOMMENDATION, disabled: false },
+  { name: 'Hashtags-to-Image', path: ROUTE.STATIC_HASHTAG_TO_IMAGE, disabled: false },
+  { name: 'Image to Hashtags', path: ROUTE.STATIC_IMAGE_TO_HASHTAG, disabled: false },
+] as const
+
+const SUPPORT_LINKS = [
+  { name: 'FAQs', path: ROUTE.FAQ, disabled: false },
+  { name: 'Contact Us', path: ROUTE.CONTACT_US, disabled: false },
+] as const
+
+type NavLink = {
+  readonly name: string
+  readonly path: string
+  readonly disabled: boolean
+}
+
+type DropdownMenuProps = {
+  items: readonly NavLink[] // Changed to readonly array
+  isOpen: boolean
+  onMouseEnter: () => void
+  onMouseLeave: () => void
+  label?: string | React.ReactNode
+  className?: string
+  dropdownWidth?: string
+  children?: React.ReactNode
+}
+
+const DropdownMenu: React.FC<DropdownMenuProps> = ({
+  items,
+  isOpen,
+  onMouseEnter,
+  onMouseLeave,
+  label,
+  className = '',
+  dropdownWidth = 'w-64',
+  children,
+}) => {
   const router = useRouter()
+
+  return (
+    <div
+      className={`relative cursor-pointer rounded-lg p-2 hover:bg-neutral-200 hover:text-primary-500 ${className}`}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    >
+      <div>{label}</div>
+      {isOpen && (
+        <div className={`absolute -left-14 top-full z-50 flex ${dropdownWidth} flex-col rounded-md border bg-white p-2 shadow-lg`}>
+          {items.map((link, index) => (
+            <Link href={link.path} key={`${link.name}-${index}`} className={`${link.disabled ? 'pointer-events-none' : ''}`}>
+              <div
+                className={`block px-4 py-2 text-sm transition-colors hover:bg-gray-100 ${
+                  router.pathname === link.path ? 'font-bold text-primary-500' : 'text-neutral-800'
+                } ${link.disabled ? 'text-text-disabled' : ''}`}
+              >
+                {link.name}
+              </div>
+            </Link>
+          ))}
+          <div>{children}</div>
+        </div>
+      )}
+    </div>
+  )
+}
+
+const NavBar: React.FC = () => {
   const { session, onLogin, onLogout } = useAuth()
   const [isMenuCollapse, setIsMenuCollapse] = useState(true)
 
-  const pages = session ? LINKS : []
+  const { isCollapsed: isFeatureMenuCollapsed, open: openFeatureMenu, close: closeFeatureMenu } = useDropdown()
+  const { isCollapsed: isSupportMenuCollapsed, open: openSupportMenu, close: closeSupportMenu } = useDropdown()
+  const { isCollapsed: isUserMenuCollapsed, open: openUserMenu, close: closeUsermenu } = useDropdown()
 
   const toggleMenu = useCallback(() => {
     setIsMenuCollapse((prev) => !prev)
@@ -39,84 +111,69 @@ const NavBar: React.FC = () => {
   }, [])
 
   return (
-    <nav className="relative flex h-auto justify-between bg-bg-dark px-4 md:px-6">
-      <div className="flex min-w-8 md:hidden">
-        {session && (
+    <nav className="relative my-2 flex h-auto items-center justify-between border-b border-neutral-300 px-6 py-7 md:mx-10 md:px-6">
+      <div className="flex flex-row gap-4">
+        <div className="flex min-w-8 md:hidden">
           <div className={'my-auto flex w-full md:hidden'} onClick={toggleMenu}>
             <Button.Text className="text-text-primary">
               <MenuIcon></MenuIcon>
             </Button.Text>
           </div>
-        )}
-      </div>
-      <Link href="/">
-        <div className="mx-8 my-auto shrink-0 md:mx-16">
-          <img src={LOGO_SRC} alt="Logo" className="h-12 md:h-16" />
         </div>
-      </Link>
-      <div className="hidden space-x-10 justify-self-center md:flex md:min-h-16 md:items-center">
-        {pages.map((page, index) => (
-          <div key={`${page.name}-${index}`} className={`flex h-full flex-col items-center justify-center`}>
-            <Link
-              href={page.path}
-              className={`${
-                router.pathname === page.path ? 'border-t-4 pb-1' : 'py-1'
-              } box-border flex h-full items-center  border-accent1-500 text-center`}
-            >
-              <h3 className={`${router.pathname === page.path ? ' text-accent1-500' : ''} font-extrabold`}>{page.name}</h3>
-            </Link>
+        <Link href="/">
+          <div className="flex h-full items-center">
+            <img src={LOGO_SRC} alt="Logo" className="h-10" />
           </div>
-        ))}
+        </Link>
       </div>
-      <div className="flex w-8 md:hidden">
+
+      <div className="flex flex-row-reverse items-center md:flex-row">
+        <div className="relative mr-4 hidden flex-row items-center gap-2 md:flex">
+          <DropdownMenu
+            items={session ? LINKS : LINKS_STATIC}
+            isOpen={!isFeatureMenuCollapsed}
+            onMouseEnter={openFeatureMenu}
+            onMouseLeave={closeFeatureMenu}
+            label="Feature"
+          />
+          <DropdownMenu
+            items={SUPPORT_LINKS}
+            isOpen={!isSupportMenuCollapsed}
+            onMouseEnter={openSupportMenu}
+            onMouseLeave={closeSupportMenu}
+            label="Support"
+            dropdownWidth="w-48"
+          />
+        </div>
         {session ? (
-          <Button.Text onClick={onLogout} className="text-text-primary">
-            <LogoutIcon />
-          </Button.Text>
+          <DropdownMenu
+            label={<Avatar size={'large'} src={session?.user?.image ? session?.user?.image : IMAGE.BOT_CREATO} fallbackSrc={IMAGE.BOT_CREATO} />}
+            isOpen={!isUserMenuCollapsed}
+            onMouseEnter={openUserMenu}
+            onMouseLeave={closeUsermenu}
+            dropdownWidth="w-38"
+            items={[]}
+          >
+            <div onClick={onLogout} className="block px-4 py-2 text-sm text-neutral-800 transition-colors hover:bg-gray-100">
+              {'Logout'}
+            </div>
+          </DropdownMenu>
         ) : (
-          <Button.Text onClick={onLogin} className="text-text-primary">
-            <LoginIcon />
-          </Button.Text>
-        )}
-      </div>
-      <div className="my-auto hidden md:flex">
-        {session ? (
-          <Button.Text onClick={onLogout} className="flex h-auto items-center rounded">
-            <LogoutIcon className="mr-1" size={24} fillColor="fill-accent2-500"></LogoutIcon>
-            <Title level={3} bold className="text-accent2-500">
-              Logout
-            </Title>
-          </Button.Text>
-        ) : (
-          <Button.Text onClick={onLogin} className="flex h-auto items-center rounded">
-            <LoginIcon className="mr-1" size={24} fillColor="fill-accent2-500"></LoginIcon>
-            <Title level={3} bold className="text-accent2-500">
-              Sign In
-            </Title>
-          </Button.Text>
+          <PrimaryButton onClick={onLogin} sizes={['s', 's', 's']} className="flex w-full flex-row items-center justify-center gap-4">
+            Log in/ Register
+          </PrimaryButton>
         )}
       </div>
       <aside
         id="default-sidebar"
-        className={`fixed z-50 h-screen w-screen -translate-x-4 transition-transform ${isMenuCollapse ? 'hidden' : 'block'}`}
+        className={`fixed top-0 z-50 h-screen w-screen -translate-x-7 transition-transform ${isMenuCollapse ? 'hidden' : 'block'}`}
         aria-label="Sidebar"
       >
-        <div className="flex h-[100vh] flex-col overflow-y-auto bg-gray-50 dark:bg-gray-800">
+        <div className="flex h-[100vh] flex-col overflow-y-auto bg-white">
           <Button.Text className="m-8 ml-auto text-text-primary" onClick={collapseMenu}>
             <CrossIcon></CrossIcon>
           </Button.Text>
-
-          <ul className="mx-auto my-auto list-none flex-row space-y-16">
-            {pages.map((page, index) => (
-              <li key={`${page.name}-${index}`} className="text-center">
-                <Link href={page.path}>
-                  <Title bold level={3} className={`${router.pathname === page.path ? ' text-accent1-500' : ''}`}>
-                    {page.name}
-                  </Title>
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <SideMenu collapseMenu={collapseMenu} />
         </div>
       </aside>
     </nav>
