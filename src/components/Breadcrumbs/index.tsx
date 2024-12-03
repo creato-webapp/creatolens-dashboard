@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation'
 
 const Breadcrumbs: React.FC = () => {
   const pathname = usePathname()
-  const segments = pathname?.split('/').filter((segment) => segment !== '') || []
+  const segments = pathname.split('/').filter((segment) => segment !== '')
 
   return (
     <nav className="flex flex-wrap items-center justify-center text-gray-500">

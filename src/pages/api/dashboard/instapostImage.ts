@@ -1,51 +1,26 @@
-import { MetaInstance } from '@helpers/axios'
 import type { NextApiRequest, NextApiResponse } from 'next'
-import axios from 'axios'
+
+import MetaInstance from '@api/axiosInstance/Meta'
 
 export default async function dashboardPostPicQueryHandler(req: NextApiRequest, res: NextApiResponse) {
   const {
-    query: { shortcode, batch_id, is_video },
+    query: { shortcode, batch_id },
   } = req
 
   try {
-    const response = await MetaInstance.get(`v1/posts/pic`, {
+    const response = await MetaInstance.get(`/posts/pic?`, {
       headers: {
         Cookie: req.headers.cookie,
       },
       params: {
-        is_video: is_video,
-        shortcode: shortcode,
-        batch_id: batch_id,
+        shortcode: shortcode, // Assuming you need the profile ID as a query parameter
+        batch_id: batch_id, // Assuming you need the batch ID as a query parameter
       },
     })
 
-    const signedUrl = response.data
-
-    try {
-      await axios.get(signedUrl)
-      return res.end(signedUrl)
-    } catch (error) {
-      console.error('Signed URL from v1 is not accessible, trying v2')
-    }
+    return res.end(response.data) // Send the image data directly without converting to JSON
   } catch (error) {
-    console.error('Failed to fetch signed URL from v1:', error)
-  }
-
-  try {
-    const responseV2 = await MetaInstance.get(`v2/posts/pic`, {
-      headers: {
-        Cookie: req.headers.cookie,
-      },
-      params: {
-        is_video: is_video,
-        shortcode: shortcode,
-        batch_id: batch_id,
-      },
-    })
-    const signedUrlV2 = responseV2.data
-    return res.end(signedUrlV2)
-  } catch (error2) {
-    console.error('Failed to fetch signed URL from v2:', error2)
+    console.error('Failed to fetch image:', error)
     res.status(500).json({ error: 'Failed to fetch image' })
   }
 }

@@ -3,19 +3,8 @@ import { useCallback } from 'react'
 import { ButtonProps } from './interface'
 
 import Spinner from '../Spinner'
-import Image from 'next/image'
 
-const BaseButton: React.FC<ButtonProps> = ({
-  children,
-  onClick,
-  disabled = false,
-  loading,
-  type = 'button',
-  className,
-  sizes = ['s', 'm', 'l'],
-  icon,
-  ...res
-}) => {
+const BaseButton: React.FC<ButtonProps> = ({ children, onClick, disabled = false, loading, type = 'button', className, sizes, ...res }) => {
   const generatePadding = useCallback((sizes: string[]): { padding: string } => {
     let padding = ''
 
@@ -27,13 +16,16 @@ const BaseButton: React.FC<ButtonProps> = ({
 
       switch (size) {
         case 's':
-          padding += ` ${breakpoint}px-2 ${breakpoint}py-2 ${breakpoint}w-fit`
+          padding += ` ${breakpoint}px-4 ${breakpoint}py-2`
           break
         case 'm':
-          padding += ` ${breakpoint}px-3 ${breakpoint}py-3 ${breakpoint}w-fit`
+          padding += ` ${breakpoint}px-6 ${breakpoint}py-2`
           break
         case 'l':
-          padding += ` ${breakpoint}px-3 ${breakpoint}py-3 ${breakpoint}w-full`
+          padding += ` ${breakpoint}px-6 ${breakpoint}py-3`
+          break
+        default:
+          padding = 'px-2 py-1 md:px-3 md:py-2 lg:py-3 lg:px-3'
           break
       }
     })
@@ -46,14 +38,12 @@ const BaseButton: React.FC<ButtonProps> = ({
     <button
       type={type}
       onClick={onClick}
-      disabled={disabled || loading}
-      className={`${className} flex min-w-fit items-center justify-center gap-2.5 whitespace-nowrap rounded-lg disabled:border disabled:border-disabled disabled:text-disabled ${padding} disabled:bg-bg-disabled`}
+      disabled={loading || disabled}
+      className={`flex w-full min-w-fit items-center justify-center gap-2.5 whitespace-nowrap rounded-lg border-2 hover:shadow-sm ${padding} ${className}`}
       {...res}
     >
-      {icon?.position === 'left' && <Image width={15} height={15} src={icon.src} alt={'icon'}></Image>}
       <Spinner loading={loading} />
       {children}
-      {icon?.position === 'right' && <Image width={15} height={15} src={icon.src} alt={'icon'}></Image>}
     </button>
   )
 }

@@ -40,11 +40,11 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
 const BotPage = ({ account }: Props) => {
   const router = useRouter()
   const { id } = router.query
-  const { response } = useAccount(id as string, false, account as IAccount)
+  const { data } = useAccount(id as string, false, account as IAccount)
 
   return (
     <div className="h-full bg-cover bg-center bg-no-repeat md:px-12 ">
-      <div className="flex justify-center">{account && <AccountInfoCard account={response as IAccount} />}</div>
+      <div className="flex justify-center">{account && <AccountInfoCard account={data as IAccount} />}</div>
     </div>
   )
 }

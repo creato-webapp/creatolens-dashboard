@@ -1,37 +1,32 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-import PAPI from '@constants/endpoints/papi'
+import ENDPOINT_BACKEND from '@constants/endpoints/backend'
 
-import METHOD from '@constants/method'
-import handler from '@helpers/api/handlers'
-import { AccountInstance } from '@helpers/axios'
+import AccountInstance from '../axiosInstance/Account'
 
-export default handler.api({
-  //
-  [METHOD.GET]: async (req: NextApiRequest, res: NextApiResponse) => {
-    const {
-      query: { id },
-    } = req
-    const cookieHeader = {
-      headers: {
-        Cookie: req.headers.cookie,
-      },
+export default async function AccountHandler(req: NextApiRequest, res: NextApiResponse) {
+  const {
+    query: { id },
+    body,
+    method,
+  } = req
+  const cookieHeader = {
+    headers: {
+      Cookie: req.headers.cookie,
+    },
+  }
+  let response
+
+  switch (method) {
+    case 'GET': {
+      response = await AccountInstance.get(`${ENDPOINT_BACKEND.ACCOUNTS}/${id}`, cookieHeader)
+      return res.status(response.status).json(response.data)
     }
-    const response = await AccountInstance.get(`${PAPI.ACCOUNTS}/${id}`, cookieHeader)
-    return res.status(response.status).json(response.data)
-  },
-  [METHOD.PATCH]: async (req: NextApiRequest, res: NextApiResponse) => {
-    const cookieHeader = {
-      headers: {
-        Cookie: req.headers.cookie,
-      },
-    }
-    const {
-      query: { id },
-      body,
-    } = req
-
-    const response = await AccountInstance.patch(`${PAPI.UPDATE_ACCOUNT}/${id}`, body, cookieHeader)
-    return res.status(response.status).json(response.data)
-  },
-})
+    case 'PATCH':
+      response = await AccountInstance.patch(`${ENDPOINT_BACKEND.UPDATE_ACCOUNT}/${id}`, body, cookieHeader)
+      return res.status(response.status).json(response.data)
+    default:
+      res.setHeader('Allow', ['GET', 'PATCH'])
+      res.status(405).end(`Method ${method} Not Allowed`)
+  }
+}

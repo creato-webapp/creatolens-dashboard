@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { getProviders, signIn, signOut, useSession } from 'next-auth/react'
 
-import PrimaryButton from '@components/Button/Primary'
+import { Button } from '@components/Button'
 import Card from '@components/Card'
 import { ErrorCodes } from 'enums/ErrorCodeEnums'
 interface loginProps {
@@ -20,19 +20,6 @@ type Providers = {
   }
 }
 
-const ERROR_MESSAGE: Record<ErrorCodes, string> = {
-  [ErrorCodes.OAuthSignin]: 'Error in constructing an authorization URL.',
-  [ErrorCodes.OAuthCallback]: 'Error in handling the response from the OAuth provider.',
-  [ErrorCodes.OAuthCreateAccount]: 'User not in white list. Please Contact our team for support or questions',
-  [ErrorCodes.EmailCreateAccount]: 'Could not create email provider user in the database.',
-  [ErrorCodes.Callback]: 'Error in the OAuth callback handler route.',
-  [ErrorCodes.OAuthAccountNotLinked]: 'The email on the account is already linked, but not with this OAuth account.',
-  [ErrorCodes.EmailSignin]: 'Sending the email with the verification token failed.',
-  [ErrorCodes.CredentialsSignin]: 'An error occurred during sign-in.',
-  [ErrorCodes.SessionRequired]: 'This page requires you to be signed in at all times.',
-  [ErrorCodes.Default]: 'An error occurred during sign-in.',
-}
-
 export async function getServerSideProps() {
   const providers = await getProviders()
   return {
@@ -44,24 +31,20 @@ const Login: FC<loginProps> = ({ providers }) => {
   const { data: session } = useSession()
   const router = useRouter()
   const errorCode = router.query.error as ErrorCodes
+  const errorMessages: Record<ErrorCodes, string> = {
+    [ErrorCodes.OAuthSignin]: 'Error in constructing an authorization URL.',
+    [ErrorCodes.OAuthCallback]: 'Error in handling the response from the OAuth provider.',
+    [ErrorCodes.OAuthCreateAccount]: 'User not in white list. Please Contact',
+    [ErrorCodes.EmailCreateAccount]: 'Could not create email provider user in the database.',
+    [ErrorCodes.Callback]: 'Error in the OAuth callback handler route.',
+    [ErrorCodes.OAuthAccountNotLinked]: 'The email on the account is already linked, but not with this OAuth account.',
+    [ErrorCodes.EmailSignin]: 'Sending the email with the verification token failed.',
+    [ErrorCodes.CredentialsSignin]: 'An error occurred during sign-in.',
+    [ErrorCodes.SessionRequired]: 'This page requires you to be signed in at all times.',
+    [ErrorCodes.Default]: 'An error occurred during sign-in.',
+  }
 
-  const whiteListPrompt = (
-    <div className="my-4 text-center">
-      You are not in whitelist.&nbsp;
-      <a href="https://www.creatogether.app/creatolens/survey" target="_blank" rel="noopener noreferrer">
-        <span className="text-blue-600 underline">Click here</span>
-      </a>
-      &nbsp;to apply for whitelisting.
-      <br />
-      用戶不在白名單之內，
-      <a href="https://www.creatogether.app/creatolens/survey" target="_blank" rel="noopener noreferrer">
-        <span className="text-blue-600 underline">按此</span>
-      </a>
-      加入申請
-    </div>
-  )
-
-  const OAuthErrorMessage = ERROR_MESSAGE[errorCode]
+  const OAuthErrorMessage = errorMessages[errorCode]
 
   return (
     <Card title="Login Page">
@@ -76,7 +59,6 @@ const Login: FC<loginProps> = ({ providers }) => {
             </div>
             <div>
               <button
-                id="logout-button"
                 onClick={() => {
                   deleteCookie('idToken')
                   signOut()
@@ -88,24 +70,17 @@ const Login: FC<loginProps> = ({ providers }) => {
           </div>
         ) : (
           <div>
-            {errorCode === ErrorCodes.OAuthCreateAccount ? (
-              whiteListPrompt
-            ) : (
-              <div className="error-message">
-                <p>You are not signed in.</p>
-                {OAuthErrorMessage}
+            <p>You are not signed in.</p>
+            {errorCode && <div className="error-message">{OAuthErrorMessage}</div>}
+            {Object.values(providers).map((provider) => (
+              <div key={provider.name} className="flex justify-center">
+                {provider.name === 'Google' && (
+                  <Button.Text loading={false} onClick={() => signIn(provider.id)} className="">
+                    Sign in
+                  </Button.Text>
+                )}
               </div>
-            )}
-            {providers &&
-              Object.values(providers).map((provider) => (
-                <div key={provider.name} className="flex justify-center">
-                  {provider.name === 'Google' && (
-                    <PrimaryButton id={'login'} loading={false} onClick={() => signIn(provider.id)}>
-                      Sign in
-                    </PrimaryButton>
-                  )}
-                </div>
-              ))}
+            ))}
           </div>
         )}
       </div>
