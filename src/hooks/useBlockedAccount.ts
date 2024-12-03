@@ -2,10 +2,14 @@ import useSWR from 'swr'
 
 import { IBlockedAccount } from '@components/Account/Account/interface'
 import { PaginationMetadata, PaginationParams } from '@services/Account/AccountInterface'
-import { getBlockedAccount, getBlockedAccountsPagination, updateBlockedAccount } from '@services/Account/BlockAccount'
+import { getBlockedAccountsPagination, updateBlockedAccount } from '@services/Account/BlockAccount'
+import useRequest from './useRequest'
+import METHOD from '@constants/method'
+import XAPI from '@constants/endpoints/xapi'
 
 export const useBlockAccount = (id: string, shouldFetch: boolean = true, fallbackData?: IBlockedAccount) => {
-  const { data, error, mutate, isLoading, ...swr } = useSWR(shouldFetch ? id : null, (id) => getBlockedAccount(id), {
+  const { data, error, mutate, isLoading, ...swr } = useRequest<IBlockedAccount>([XAPI.BLOCKED_ACCOUNT + id], METHOD.GET, {
+    shouldFetch,
     refreshInterval: 0,
     fallbackData: fallbackData,
   })

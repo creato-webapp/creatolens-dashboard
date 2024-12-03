@@ -42,7 +42,7 @@ const nextAuthOptions: NextAuthOptionsCallback = (req, res) => ({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
       authorization: {
         params: {
-          prompt: 'consent',
+          prompt: 'select_account',
           access_type: 'offline',
           response_type: 'code',
           scope: 'openid email profile',
@@ -93,4 +93,6 @@ const authHandler = (req: NextApiRequest, res: NextApiResponse) => {
   return NextAuth(req, res, nextAuthOptions(req, res))
 }
 
-export default authHandler
+export default async function handler(...params: [NextApiRequest, NextApiResponse]) {
+  await authHandler(...params)
+}

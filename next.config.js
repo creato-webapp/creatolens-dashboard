@@ -1,18 +1,15 @@
+const { i18n } = require('./next-i18next.config')
+const env = require('./env.config')
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  i18n,
   eslint: {
     dirs: ['src'],
   },
-  reactStrictMode: true,
+  env,
+  reactStrictMode: process.env.NODE_ENV === 'development',
   swcMinify: true,
-  // async rewrites() {
-  //   return [
-  //     {
-  //       source: '/api/:path*',
-  //       destination: 'http://localhost:3000/api/:path*' // Proxy to Backend
-  //     }
-  //   ]
-  // }
   images: {
     domains: ['storage.googleapis.com'],
     remotePatterns: [

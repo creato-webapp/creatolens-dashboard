@@ -16,18 +16,18 @@ import EditIcon from '@components/Icon/EditIcon'
 import Pagination from '@components/Pagination'
 import { Table } from '@components/Table'
 import ROUTE from '@constants/route'
-import { useGetAccountsPagination } from '@hooks/useAccount'
 import { usePagination } from '@hooks/usePagination'
-import { getAccountsPagination } from '@services/Account/Account'
+import { getAccounts } from '@services/Account/Account'
 import { PaginationMetadata } from '@services/Account/AccountInterface'
-
+import useAccounts from '@hooks/useAccounts'
+import { DATE_FORMAT } from '@utils/dayjs'
 type Props = {
-  paginationData: PaginationMetadata<IAccount[]>
+  data: PaginationMetadata<IAccount[]>
 }
 
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext): Promise<GetServerSidePropsResult<Props>> => {
   const cookies = context.req.headers.cookie
-  const response = await getAccountsPagination(
+  const response = await getAccounts(
     {
       pageNumber: 1,
       pageSize: 10,
@@ -45,14 +45,14 @@ export const getServerSideProps: GetServerSideProps = async (context: GetServerS
       notFound: true,
     }
   }
-  return { props: { paginationData: response } }
+  return { props: { data: response } }
 }
 
-const AccountsPage = ({ paginationData }: Props) => {
+const AccountsPage = ({ data }: Props) => {
   const [createDateOrder, setCreateDateOrder] = useState<'asc' | 'desc'>('desc')
   const { pageParams, onPageClick, updateSort, updateOrderBy, onNextClick, onPrevClick } = usePagination()
-  const { data, isLoading, setShouldFetch } = useGetAccountsPagination(pageParams, true, paginationData)
-  const accounts: IAccount[] = useMemo(() => data?.data || [], [data])
+  const { response, isLoading, setShouldFetch } = useAccounts(pageParams, true, data)
+  const accounts: IAccount[] = useMemo(() => response?.data || [], [response])
 
   const updateSorting = useCallback(
     (orderBy: string): React.MouseEventHandler<HTMLDivElement> =>
@@ -94,8 +94,8 @@ const AccountsPage = ({ paginationData }: Props) => {
       sortAvailable: true,
     },
     {
-      title: 'Created Time',
-      dataIndex: 'created_at',
+      title: 'Updated Time',
+      dataIndex: 'updated_at',
     },
     {
       title: 'Created By',
@@ -122,7 +122,7 @@ const AccountsPage = ({ paginationData }: Props) => {
   ]
 
   return (
-    <div>
+    <>
       <Hero
         backgroundImage="./GuideHero.svg"
         className="flex h-full flex-col justify-between md:h-52"
@@ -131,10 +131,10 @@ const AccountsPage = ({ paginationData }: Props) => {
       >
         <div className="flex h-full flex-row justify-between px-4 md:flex-col">
           <div>
-            <h1 className="font-extrabold text-white">ACCOUNTS</h1>
+            <h1 className="text-title font-extrabold text-white">ACCOUNTS</h1>
           </div>
           <Link href={ROUTE.ACCOUNT_BOT_CREATE}>
-            <Button.Primary sizes={['s', 'l', 'l']} className="px-2">
+            <Button.Primary sizes={['s', 'l', 'l']} className="px-2" id="create-new-account-button">
               <div className="flex flex-row items-center gap-2">
                 <PlusIcon className="h-6 w-6" />
                 <div className="hidden md:flex">Create New Account</div>
@@ -161,12 +161,11 @@ const AccountsPage = ({ paginationData }: Props) => {
                 <Table.Row key={`accounts-table-${index}`} className="text-sm">
                   <Table.BodyCell key={e.id}>
                     <Link
+                      key={e.id}
                       href={{
                         pathname: ROUTE.ACCOUNT_BOT_GET,
                         query: { id: e.id },
                       }}
-                      as="/accounts/bot"
-                      legacyBehavior
                     >
                       <div className="flex w-full cursor-pointer flex-row items-center justify-center gap-2">
                         <EditIcon size={16} className="fill-accent2-500" />
@@ -177,8 +176,8 @@ const AccountsPage = ({ paginationData }: Props) => {
                   <Table.BodyCell key={`username-${e.id}`}>
                     <div className="flex items-center text-nowrap text-accent1-600">{e.username}</div>
                   </Table.BodyCell>
-                  <Table.DateTimeCell key={`created_at-${e.id}`} date={e.created_at} />
-                  <Table.DateTimeCell key={`updated_at-${e.id}`} date={e.updated_at} />
+                  <Table.DateTimeCell key={`created_at-${e.id}`} format={DATE_FORMAT.YYYYMMDD_HHMMSS} date={e.created_at} />
+                  <Table.DateTimeCell format={DATE_FORMAT.YYYYMMDD_HHMMSS} key={`updated_at-${e.id}`} date={e.updated_at} />
                   <Table.BodyCell key={`created_by-${e.id}`}>{e.created_by}</Table.BodyCell>
 
                   <Table.BodyCell key={`post_scrapped_count-${e.id}`}>{e.post_scrapped_count}</Table.BodyCell>
@@ -223,11 +222,17 @@ const AccountsPage = ({ paginationData }: Props) => {
         <div className="flex w-full flex-col justify-center gap-16 bg-none md:hidden">
           {!isLoading && accounts?.map((e, index) => <ResponsiveAccountCard columns={columns} rowData={e} key={`account_data_${index}`} />)}
         </div>
-        {data && data.total_items > 10 && (
-          <Pagination<IAccount[]> isLoading={isLoading} data={data} onNextClick={onNextClick} onPrevClick={onPrevClick} onPageClick={onPageClick} />
+        {response && response.total_items > 10 && (
+          <Pagination<IAccount[]>
+            isLoading={isLoading}
+            data={response}
+            onNextClick={onNextClick}
+            onPrevClick={onPrevClick}
+            onPageClick={onPageClick}
+          />
         )}
       </Card>
-    </div>
+    </>
   )
 }
 

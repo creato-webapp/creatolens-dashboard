@@ -1,29 +1,26 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-import ENDPOINT_BACKEND from '@constants/endpoints/backend'
+import PAPI from '@constants/endpoints/papi'
 
-import AccountInstance from '../../axiosInstance/Account'
+import handler from '@helpers/api/handlers'
+import METHOD from '@constants/method'
+import { AccountInstance } from '@helpers/axios'
 
-export default async function AccountHandler(req: NextApiRequest, res: NextApiResponse) {
-  const {
-    query: { id },
-    body,
-    method,
-  } = req
-  let response
+export default handler.api({
+  [METHOD.GET]: async (req: NextApiRequest, res: NextApiResponse) => {
+    const {
+      query: { id },
+    } = req
 
-  switch (method) {
-    case 'GET': {
-      response = await AccountInstance.get(`${ENDPOINT_BACKEND.BLOCKED_ACCOUNTS}/${id}`)
-      return res.status(response.status).json(response.data)
-    }
-
-    case 'PATCH':
-      response = await AccountInstance.patch(`${ENDPOINT_BACKEND.UPDATE_BLOCKED_ACCOUNT}/${id}`, body)
-      return res.status(response.status).json(response.data)
-
-    default:
-      res.setHeader('Allow', ['GET', 'PATCH', 'PUT'])
-      res.status(405).end(`Method ${method} Not Allowed`)
-  }
-}
+    const response = await AccountInstance.get(`${PAPI.BLOCKED_ACCOUNTS}/${id}`)
+    return res.status(response.status).json(response.data)
+  },
+  [METHOD.PATCH]: async (req: NextApiRequest, res: NextApiResponse) => {
+    const {
+      query: { id },
+      body,
+    } = req
+    const response = await AccountInstance.patch(`${PAPI.UPDATE_BLOCKED_ACCOUNT}/${id}`, body)
+    return res.status(response.status).json(response.data)
+  },
+})
