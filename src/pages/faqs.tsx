@@ -1,6 +1,7 @@
 import Breadcrumb from '@components/Breadcrumb'
 import CaretLeftIcon from '@components/Icon/CaretLeftIcon'
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@components/ui/Accordion'
+import router from 'next/router'
 
 const faqs = [
   {
@@ -52,7 +53,7 @@ const FAQPage = () => {
           <Breadcrumb lastItemName="FAQs" />
         </div>
         <div className="flex flex-row items-center gap-7 py-4">
-          <div className="flex md:hidden">
+          <div className="flex cursor-pointer md:hidden" onClick={() => router.push('/')}>
             <CaretLeftIcon size={20} />
           </div>
           <div className="flex w-full flex-row justify-between">
