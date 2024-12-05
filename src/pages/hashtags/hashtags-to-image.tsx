@@ -1,48 +1,61 @@
-import { useCallback } from 'react'
+import { ReactElement } from 'react'
 
-import Link from 'next/link'
-
-import Step1 from '@components/Hashtag/HashtagToImage/Step1'
-import Step2 from '@components/Hashtag/HashtagToImage/Step2'
-import Step3 from '@components/Hashtag/HashtagToImage/Step3'
-import ProgressBar from '@components/Hashtag/ProgressBar'
-import { useHashtagToImage } from '@hooks/useHashtagToImage'
+import Keywordsinput from '@components/Hashtag/HashtagToImage/Keywordsinput'
+import NegativePrompt from '@components/Hashtag/HashtagToImage/NegativePrompt'
+import StyleSelection from '@components/Hashtag/HashtagToImage/StyleSelection'
+import { Layout } from '@components/Layout'
+import SideMenuLayout from '@components/Layout/SideMenuLayout'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@components/ui/Tabs'
+import { useTranslation } from 'next-i18next'
+import PrimaryButton from '@components/Button/Primary'
 
 const HashtagToImage = () => {
-  const { step } = useHashtagToImage()
-
-  const StepComponent = useCallback(() => {
-    if (step === 1) {
-      return <Step1 />
-    } else if (step === 2) return <Step2 />
-    else if (step === 3) return <Step3 />
-    else return null
-  }, [step])
+  const { t } = useTranslation('common')
 
   return (
-    <div className="mx-3 my-4 flex items-center justify-center">
-      <div className="w-full max-w-screen-md">
-        <div className="mb-4 flex items-center justify-around border-b py-4 text-text-secondary">
-          <h2 className="w-20">Hashtag</h2>
-          <Link href="/hashtag/image-to-hashtag">
-            <img className="w-12 rounded-full bg-accent1-500" src={'/arrow-left-right.svg'} alt="switch Image" />
-          </Link>
-          <h2 className="w-20">Image</h2>
-        </div>
-        <div>
-          <h1 className="text-title font-extrabold">HASHTAG TO IMAGE</h1>
-        </div>
-        <div className="my-7">
-          <ProgressBar total_step={3} current_step={step} />
-        </div>
-        <div className="my-12 flex w-full items-center justify-center">
-          <div className="w-full max-w-[900px]">
-            <StepComponent />
-          </div>
+    <div className="mb-4 flex w-full flex-col justify-center gap-12 md:min-h-144">
+      <div className="flex items-center justify-between">
+        <h1 className="text-subtitle font-bold">Hashtags-to-Image</h1>
+        <div className="flex flex-row gap-2"></div>
+      </div>
+
+      <div className="my-4 flex w-full items-center justify-center">
+        <div className="flex w-full flex-col">
+          <Tabs defaultValue="keyword" className="">
+            <TabsList>
+              <TabsTrigger className="w-full" value="keyword" asChild>
+                <div>{t('hashtags-to-image.keywords_input')}</div>
+              </TabsTrigger>
+              <TabsTrigger className="w-full" value="paste" asChild>
+                <div>{t('hashtags-to-image.paste_keyword_result')}</div>
+              </TabsTrigger>
+            </TabsList>
+            <TabsContent value="keyword">
+              <div className="flex flex-col gap-6">
+                <Keywordsinput />
+                <NegativePrompt />
+                <StyleSelection />
+              </div>
+            </TabsContent>
+            <TabsContent value="paste"></TabsContent>
+          </Tabs>
         </div>
       </div>
+      <div className="flex justify-center">
+        <PrimaryButton sizes={['m', 'm', 'm']} className="w-full md:!w-80">
+          Generate
+        </PrimaryButton>
+      </div>
+      <div className="text-start text-neutral-500">{t('hashtags-to-image.disclaimer')}</div>
     </div>
   )
 }
-
 export default HashtagToImage
+
+HashtagToImage.getLayout = function getLayout(page: ReactElement) {
+  return (
+    <Layout>
+      <SideMenuLayout>{page}</SideMenuLayout>
+    </Layout>
+  )
+}

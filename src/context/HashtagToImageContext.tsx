@@ -42,6 +42,8 @@ type HashtagImageContextType = {
   updateImageCategory: (category: string, option: string) => void
   generateImageWithKeywords: () => void
   generatedImageUri: string | null
+  negativePrompt: string
+  setNegativePrompt: (text: string) => void
   isLoading: boolean
   error: string | null
 }
@@ -62,6 +64,7 @@ export const HashtagImageProvider = ({ children }: HashtagImageProviderProps) =>
   const [step, setStep] = useState<number>(1)
   const [images, setImages] = useState<ImageType[]>([])
   const [keywords, setKeywords] = useState<string>('')
+  const [negativePrompt, setNegatvePrompt] = useState<string>('')
   const [currentImageIndex, setCurrentImageIndex] = useState<number>(0)
   const [hashtags, setHashtags] = useState<IHashet[]>([])
   const [imageCategory, setImageCategory] = useState<ImageModifier>(initialGeneral)
@@ -74,8 +77,13 @@ export const HashtagImageProvider = ({ children }: HashtagImageProviderProps) =>
   const updateStep = useCallback((arg: number) => {
     setStep(arg)
   }, [])
+
   const goBack = useCallback(() => {
     setStep((prev) => Math.max(prev - 1, 1)) // Ensures step doesn't go below 1
+  }, [])
+
+  const setNegativePrompt = useCallback((text: string) => {
+    setNegatvePrompt(text)
   }, [])
 
   const goForward = useCallback(() => {
@@ -132,24 +140,26 @@ export const HashtagImageProvider = ({ children }: HashtagImageProviderProps) =>
   return (
     <HashtagImageContext.Provider
       value={{
-        images,
-        imageConfig,
-        updateImageConfig,
-        updateImageCategory,
         addImage,
         addKeywords,
-        keywords,
         currentImageIndex,
-        hashtags,
-        updateHashtags,
-        step,
-        updateStep,
+        error,
+        generateImageWithKeywords,
         generatedImageUri,
         goBack,
         goForward,
-        generateImageWithKeywords,
+        hashtags,
+        imageConfig,
+        images,
         isLoading,
-        error,
+        keywords,
+        negativePrompt,
+        setNegativePrompt,
+        step,
+        updateImageCategory,
+        updateImageConfig,
+        updateHashtags,
+        updateStep,
       }}
     >
       {children}

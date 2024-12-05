@@ -1,3 +1,4 @@
+import Dropdown from '@components/Form/Dropdown/Dropdown'
 import { useRemoteStringConfig } from '@hooks/useRemoteConfig'
 
 export type ImageAspectRatioListType = {
@@ -11,21 +12,20 @@ type ImageAspectRatioType = {
   height: number
 }
 
-interface ImageAspectSelectorProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
-  aspectRatio: string
-  setAspectRatio: (aspectRatio: string) => void
-}
 const IMAGE_ASPECT_KEY = 'IMAGE_ASPECT_RATIOS'
 
-const ImageAspectSelector = ({ aspectRatio, setAspectRatio }: ImageAspectSelectorProps) => {
+const ImageAspectSelector = () => {
   const { config: imageAspectRatios } = useRemoteStringConfig<ImageAspectRatioListType>(IMAGE_ASPECT_KEY)
 
   if (!imageAspectRatios) return null
+  const options = Object.entries(imageAspectRatios).map(([key, value]) => ({ key, value: value.value, label: value.label }))
 
   return (
     <div className="flex flex-col gap-4">
-      <h2 className="font-extrabold">Aspect ratio</h2>
-      <div className="grid aspect-square w-full grid-cols-2 gap-4">
+      <div>
+        <Dropdown options={options} dropDownSizes={['m', 'm', 'm']} name="Please Select" />
+      </div>
+      {/* <div className="grid aspect-square w-full grid-cols-2 gap-4">
         {Object.entries(imageAspectRatios).map(([key, value]) => (
           <div className="flex w-full flex-col items-center justify-center rounded-xl" key={key}>
             <div
@@ -47,7 +47,7 @@ const ImageAspectSelector = ({ aspectRatio, setAspectRatio }: ImageAspectSelecto
             <div>{value.label}</div>
           </div>
         ))}
-      </div>
+      </div> */}
     </div>
   )
 }

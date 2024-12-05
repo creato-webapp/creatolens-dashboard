@@ -1,23 +1,20 @@
 import React from 'react'
-import Image from 'next/image'
 import { useRemoteStringConfig } from '@hooks/useRemoteConfig'
-import { ImageStyleKeys } from '@constants/imageStyle'
-
-interface ImageStyleProps {
-  imageConfigStyles: ImageStyleKeys
-  imageConfigSelect: (key: string, value: string) => void
-}
+import Dropdown from '@components/Form/Dropdown/Dropdown'
 
 const IMAGE_STYLE_KEY = 'IMAGE_STYLE'
 
-const ImageStyle = ({ imageConfigStyles, imageConfigSelect }: ImageStyleProps) => {
+const ImageStyle = () => {
   const { config: imageStyles } = useRemoteStringConfig<Record<string, { value: string; image: string; name: string }>>(IMAGE_STYLE_KEY)
 
   if (!imageStyles) return null
 
+  const options = Object.entries(imageStyles).map(([key, value]) => ({ key, value: value.name, label: value.name }))
+
   return (
-    <div className="grid h-auto grid-cols-2 gap-4 md:grid-cols-4">
-      {Object.entries(imageStyles).map(([key, value]) => (
+    <div className="grid h-auto gap-4">
+      <Dropdown options={options} dropDownSizes={['m', 'm', 'm']} name="Please Select" isFloating={true} />
+      {/* {Object.entries(imageStyles).map(([key, value]) => (
         <div
           key={key}
           onClick={() => imageConfigSelect('imageStyle', value.value)}
@@ -28,7 +25,7 @@ const ImageStyle = ({ imageConfigStyles, imageConfigSelect }: ImageStyleProps) =
           </div>
           <h3 className={`text-center font-bold ${imageConfigStyles === value.value ? 'text-accent1-500' : ''}`}>{value.name}</h3>
         </div>
-      ))}
+      ))} */}
     </div>
   )
 }

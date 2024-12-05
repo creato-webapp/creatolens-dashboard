@@ -7,6 +7,7 @@ export interface DropdownOption {
   label: string
   value: string | number
   checked?: boolean
+  image?: string
 }
 
 export type DropdownSize = 's' | 'm' | 'l' | 'full'

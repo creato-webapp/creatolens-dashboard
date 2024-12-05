@@ -1,4 +1,4 @@
-import Dropdown from '@components/Form/DropdownV2'
+import Dropdown from '@components/Form/Dropdown/Dropdown'
 import { ImageCategoryType, ImageStyleKeys } from '@constants/imageStyle'
 import { usePromptTemplate } from '@hooks/usePromptTemplate'
 import { useCallback } from 'react'
@@ -24,7 +24,6 @@ const ImageCategory = ({ imageConfigStyles, setCategories }: ImageCategorySelect
 
   return (
     <div>
-      <h2>General</h2>
       <div className="flex flex-col gap-4">
         {Object.entries(imageCategories).map(
           ([key, value]) =>
