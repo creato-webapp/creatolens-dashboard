@@ -58,7 +58,6 @@ const FAQPage = () => {
           </div>
           <div className="flex w-full flex-row justify-between">
             <h1 className="py-3 text-heading font-bold text-neutral-800 md:px-16">FAQs</h1>
-            {/* <SubtleButton onClick={expandAll}>Expand All</SubtleButton> */}
           </div>
         </div>
         <hr className="my-10 hidden w-full border-t border-neutral-300 first-letter:my-4 md:block" />
