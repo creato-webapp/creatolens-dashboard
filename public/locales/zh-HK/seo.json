@@ -1,0 +1,35 @@
+{
+  "description": "Ready-To-Go Hashtag Set from LENS AI. Can be used for free for both commercial and personal uses. Boost your SEO or organic reach by applying these keywords or understand the latest trend of niche topic.",
+  "mostRepeatedHashtags": "Most Repeated Hashtags",
+  "mostRelatedHashtags": "Most Related Hashtags",
+  "bestHashtag": "Best Hashtag For {{tag}} in Instagram",
+  "session": {
+    "heading": "Not Enough of topic? Not Enough of hashtag? Want real time hashtag?",
+    "items": [
+      "Customize the followed niche of your account",
+      "Full access to customized Instagram trend analysis reports",
+      "Contribute your AI model to the community library"
+    ],
+    "button": "Explore Now"
+  },
+  "guide": {
+    "heading": "How to make hashtag suggestion",
+    "subheading": "Make your own hashtag recommendation model in around 10 minutes.",
+    "items": {
+      "createAccount": {
+        "heading": "Create an Instagram account",
+        "content": "Create a new Instagram account on your device."
+      },
+      "followNiche": {
+        "heading": "Follow niche",
+        "content": "Follow other interesting pages as you use Instagram as usual. We will take that area as your category for the Instabot."
+      },
+      "connectInstabot": {
+        "heading": "Connect Insta-bot with us",
+        "content": "Enter your Instagram account details in our system. Wait for a moment for the Instabot to run. You are all set."
+      }
+    },
+    "button": "Try Now"
+  },
+  "hashtagsCopied": "Hashtags Copied Successfully"
+}

@@ -20,6 +20,7 @@ import { ModalProvider } from '@context/ModalContext'
 import { HashtagImageProvider } from '@context/HashtagToImageContext'
 import { ImageHashtagProvider } from '@context/ImageToHashtagContext'
 import { Layout } from '@components/Layout'
+import IMAGE from '@constants/image'
 
 type NextPageWithLayout<P = object> = NextPage<P> & {
   getLayout?: (page: ReactElement) => ReactNode
@@ -30,6 +31,11 @@ type AppPropsWithLayout = AppProps<{
 }> & {
   Component: NextPageWithLayout
 }
+
+const LOGO_SRC = IMAGE.LOGO_2TAG
+const META_TITLE = '2Tag | AI Hashtag Maker'
+const META_DESCRIPTION = 'Boost your social media engagement with 2Tag! Get AI-backed hashtags, find inspiration, and drive engagement effortlessly.'
+const META_URL = process.env.NEXT_PUBLIC_LOCAL_SERVER_URL
 
 function App({ Component, pageProps }: AppPropsWithLayout) {
   const router = useRouter()
@@ -51,14 +57,28 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
     <SessionProvider session={pageProps.session}>
       <Head>
         <link rel="icon" href="./favicon.ico" />
-        <title>2Tag | AI Hashtag Maker</title>
-        <meta
-          name="description"
-          content="Boost your social media engagement with 2Tag! Get AI-backed hashtags, find inspiration, and drive engagement effortlessly. Just ask, and let 2Tag fuel your content creation!"
-        />
+        <title>{META_TITLE}</title>
+        <meta name="description" content={META_DESCRIPTION} />
         <meta name="keywords" content="social media, engagement, AI, hashtags, content creation" />
         <meta name="author" content="2Tag" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta itemProp="image" content={LOGO_SRC} />
+
+        <meta property="og:url" content={META_URL} />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={META_TITLE} />
+        <meta property="og:description" content={META_DESCRIPTION} />
+        <meta property="og:image" content={LOGO_SRC} />
+        <meta property="og:site_name" content="2Tag" />
+        <meta property="og:locale" content="en_US" />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content={META_URL} />
+        <meta name="twitter:title" content={META_TITLE} />
+        <meta name="twitter:description" content={META_DESCRIPTION} />
+        <meta name="twitter:image" content={LOGO_SRC} />
+        <meta name="twitter:site" content="@2Tag" />
+        <meta name="twitter:creator" content="@2Tag" />
       </Head>
 
       <AppProviders>
@@ -69,9 +89,13 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
         )}
       </AppProviders>
 
-      <Analytics />
-      <SpeedInsights />
-      <GoogleAnalytics id={GA_ID} />
+      {process.env.NODE_ENV === 'production' && (
+        <>
+          <Analytics />
+          <SpeedInsights />
+          <GoogleAnalytics id={GA_ID} />
+        </>
+      )}
     </SessionProvider>
   )
 }
@@ -93,20 +117,24 @@ function AppProviders({ children }: { children: ReactNode }) {
 }
 
 function GoogleAnalytics({ id }: { id?: string }) {
-  if (!id) return null
+  if (!id) {
+    console.warn('Google Analytics ID is not provided.')
+    return null
+  }
 
+  const initializeGtag = `
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', '${id}', {
+    page_path: window.location.pathname,
+  });
+`
   return (
     <>
       <Script strategy="afterInteractive" src={`https://www.googletagmanager.com/gtag/js?id=${id}`} />
-      <Script id="google-analytics" strategy="afterInteractive">
-        {`
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', '${id}', {
-            page_path: window.location.pathname,
-          });
-        `}
+      <Script id="google-analytics-init" strategy="afterInteractive">
+        {initializeGtag}
       </Script>
     </>
   )
