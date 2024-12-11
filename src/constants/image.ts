@@ -1,5 +1,6 @@
 const IMAGE = {
-  LOGO_CREATO_ORANGE: '/logo/creato_orange.png',
+  LOGO_CREATO_ORANGE: '/logo/2tag-logo.png',
+  LOGO_2TAG: '/logo/2tag-logo.png',
   BOT_CREATO: '/logo/insta-bot.svg',
   LOGO_BACK: '/logo/back.svg',
   LOGO_INSTAGRAM: '/footer/instagram.svg',
