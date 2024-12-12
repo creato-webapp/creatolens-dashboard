@@ -222,8 +222,8 @@ const Tag = (props: { data: IHashtagResponse; title: string }) => {
         <title>{`${t('bestHashtag', { tag: title })} | Instagram Hashtags`}</title>
         <meta name="description" content={t('description')} />
       </Head>
-      <div className="mt-12 flex w-full flex-col items-center">
-        <div className="hidden w-full max-w-screen-2xl md:flex">
+      <div className="mt-12 flex w-full flex-col items-center justify-center">
+        <div className="hidden w-full max-w-screen-2xl px-12 md:flex">
           <Breadcrumb lastItemName={title} />
         </div>
         <div className="mt-12 flex w-full max-w-screen-2xl flex-col gap-12 md:px-12">

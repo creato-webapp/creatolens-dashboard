@@ -27,8 +27,8 @@ const XAPI = {
   DASHBOARD_HISTORY: `${XAPI_PREFIX}dashboard/history`,
   DASHBOARD_POST_IMAGE: `${XAPI_PREFIX}dashboard/instapostImage`,
 
-  SEO_KEYWORD: `${XAPI_PREFIX}seo/keywords`,
-  SEO_HASHTAG_BY_KEYWORD: `${XAPI_PREFIX}seo/hashtags`,
+  SEO_KEYWORDS: `${XAPI_PREFIX}seo/keywords`,
+  SEO_HASHTAGS_BY_KEYWORD: `${XAPI_PREFIX}seo/hashtags`,
 } as const
 
 export default XAPI

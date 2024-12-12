@@ -4,10 +4,13 @@ import { slugify } from '@utils/index'
 import { AxiosRequestConfig } from 'axios'
 import { Hashtag } from 'pages/hashtag/[tag]'
 
-async function getSeoKeywords(customConfig?: AxiosRequestConfig): Promise<string[]> {
-  const response = await fetcher.GET<string[]>(XAPI.SEO_KEYWORD, {
-    ...customConfig,
-  })
+export async function getSeoKeywords(): Promise<string[]> {
+  const apiPath = process.env.SEO_SERVICE + '/map'
+
+  if (!apiPath) return []
+
+  const response = await fetcher.GET<string[]>(apiPath)
+
   return response
 }
 
@@ -19,9 +22,9 @@ export const fetchSeoPagePath = async () => {
 }
 
 export async function fetchHashtagByKeyword(keyword?: string, customConfig?: AxiosRequestConfig): Promise<Hashtag[]> {
-  const seoKeywords = await getSeoKeywords(customConfig)
+  const seoKeywords = await getSeoKeywords()
   const matchedTag = Object.keys(seoKeywords).find((key) => slugify(key) === keyword) || null
-  const response = await fetcher.GET<Hashtag[]>(XAPI.SEO_HASHTAG_BY_KEYWORD, {
+  const response = await fetcher.GET<Hashtag[]>(XAPI.SEO_HASHTAGS_BY_KEYWORD, {
     ...customConfig,
     params: {
       keyword: matchedTag,
