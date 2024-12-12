@@ -70,3 +70,9 @@ export const UserInstance = createInstance({
   headers: { 'Content-Type': 'application/json' },
   timeout: 2000,
 })
+
+export const SEOKeywordInstance = createInstance({
+  baseURL: process.env.SEO_SERVICE,
+  headers: { 'Content-Type': 'application/json' },
+  timeout: 2000,
+})

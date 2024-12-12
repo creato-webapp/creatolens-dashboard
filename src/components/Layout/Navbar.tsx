@@ -15,7 +15,7 @@ import PrimaryButton from '@components/Button/Primary'
 import SideMenu from '@components/SideMenu'
 import { useDropdown } from '@hooks/useDropdown'
 
-const LOGO_SRC = IMAGE.LOGO_CREATO_ORANGE
+const LOGO_SRC = IMAGE.LOGO_2TAG
 
 const LINKS = [
   { name: 'Instagram Trend Analysis', path: ROUTE.DASHBOARD, disabled: false },
