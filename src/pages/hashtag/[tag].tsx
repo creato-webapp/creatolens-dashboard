@@ -22,7 +22,7 @@ interface IFeatureBulletPoint {
   children?: React.ReactNode
 }
 
-interface IHashtagResponse {
+export interface IHashtagResponse {
   is_related: { recent: Hashtag[]; older: Hashtag[] }
   most_repeated: { recent: Hashtag[]; older: Hashtag[] }
 }
