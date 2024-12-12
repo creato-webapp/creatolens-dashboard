@@ -52,13 +52,18 @@ interface IGuide {
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const paths = await fetchSeoPagePath()
-  return { paths, fallback: false }
+  console.error('Generated paths:', paths)
+
+  return { paths, fallback: 'blocking' }
 }
 
 export const getStaticProps: GetStaticProps = async (context) => {
   const { params } = context
   await getLocaleProps(context)
   const tag = params?.tag as string
+
+  console.error('Fetching data for tag:', tag)
+
   if (!tag) {
     return { notFound: true }
   }
@@ -234,18 +239,22 @@ const Tag = (props: { data: IHashtagResponse; title: string }) => {
             </div>
           </div>
           <div className="flex w-full flex-col gap-12">
-            <HashtagSection
-              title={title}
-              label={t('mostRepeatedHashtags')}
-              recentHashtags={data.most_repeated.recent}
-              allTimeHashtags={data.most_repeated.older}
-            />
-            <HashtagSection
-              title={title}
-              label={t('mostRelatedHashtags')}
-              recentHashtags={data.is_related.recent}
-              allTimeHashtags={data.is_related.older}
-            />
+            {data && data.most_repeated && data.is_related && (
+              <>
+                <HashtagSection
+                  title={title}
+                  label={t('mostRepeatedHashtags')}
+                  recentHashtags={data.most_repeated.recent}
+                  allTimeHashtags={data.most_repeated.older}
+                />
+                <HashtagSection
+                  title={title}
+                  label={t('mostRelatedHashtags')}
+                  recentHashtags={data.is_related.recent}
+                  allTimeHashtags={data.is_related.older}
+                />
+              </>
+            )}
           </div>
 
           <div className="mx-auto mt-12 w-full bg-neutral-200 px-12">
