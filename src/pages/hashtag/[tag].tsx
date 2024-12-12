@@ -52,8 +52,6 @@ interface IGuide {
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const paths = await fetchSeoPagePath()
-  console.error('Generated paths:', paths)
-
   return { paths, fallback: 'blocking' }
 }
 
@@ -61,8 +59,6 @@ export const getStaticProps: GetStaticProps = async (context) => {
   const { params } = context
   await getLocaleProps(context)
   const tag = params?.tag as string
-
-  console.error('Fetching data for tag:', tag)
 
   if (!tag) {
     return { notFound: true }
