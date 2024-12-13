@@ -52,7 +52,7 @@ interface IGuide {
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const paths = await fetchSeoPagePath()
-  return { paths, fallback: 'blocking' }
+  return { paths, fallback: false }
 }
 
 export const getStaticProps: GetStaticProps = async (context) => {
