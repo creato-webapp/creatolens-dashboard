@@ -20,7 +20,11 @@ module.exports = {
     defaultLocale: 'en',
     locales: ['en', 'zh-HK'],
   },
+  fallbackLng: 'en',
   initImmediate: false,
+  interpolation: {
+    escapeValue: false,
+  },
   /** To avoid issues when deploying to some paas (vercel...) */
   localePath: typeof window === 'undefined' ? require('path').resolve('./public/locales') : '/locales',
   ns: ['common', 'error', 'footer', 'hashtag'],
