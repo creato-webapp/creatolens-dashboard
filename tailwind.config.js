@@ -205,6 +205,13 @@ module.exports = {
             height: '0',
           },
         },
+        keyframes: {
+          pulse: {
+            '50%': {
+              opacity: '0.5',
+            },
+          },
+        },
       },
     },
   },

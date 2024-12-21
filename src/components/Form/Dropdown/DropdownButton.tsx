@@ -9,6 +9,7 @@ interface DropdownButtonProps {
   handleToggleMenu: () => void
   dropDownSizes?: [DropdownSize, DropdownSize, DropdownSize]
   disabled?: boolean
+  className?: string
 }
 
 const DropdownButton: React.FC<DropdownButtonProps> = ({
@@ -18,6 +19,7 @@ const DropdownButton: React.FC<DropdownButtonProps> = ({
   handleToggleMenu,
   dropDownSizes,
   disabled = false,
+  className,
 }) => {
   const generatePadding = useCallback((dropDownSizes: string[]): { padding: string; caretSize: string } => {
     let padding = ''
@@ -53,11 +55,11 @@ const DropdownButton: React.FC<DropdownButtonProps> = ({
 
   const { padding, caretSize } = generatePadding(dropDownSizes!)
 
-  const color = isDropdownNotSelected ? 'text-text-secondary' : '!text-neutral-800'
+  const color = isDropdownNotSelected ? 'text-text-secondary bg-white' : '!text-neutral-800'
 
   return (
     <button
-      className={`dropdown-button w-full rounded-lg border border-neutral-300 disabled:bg-bg-disabled ${color} ${padding}`}
+      className={`dropdown-button w-full rounded-lg border border-neutral-300 disabled:bg-bg-disabled ${color} ${padding} ${className}`}
       onClick={handleToggleMenu}
       disabled={disabled}
     >

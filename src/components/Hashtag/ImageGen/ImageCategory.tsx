@@ -1,7 +1,7 @@
-import Dropdown from '@components/Form/DropdownV2'
+import Dropdown from '@components/Form/Dropdown/Dropdown'
 import { ImageCategoryType, ImageStyleKeys } from '@constants/imageStyle'
 import { usePromptTemplate } from '@hooks/usePromptTemplate'
-import { useCallback } from 'react'
+import { useCallback, useState } from 'react'
 
 interface ImageCategorySelectorProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
   imageConfigStyles: ImageStyleKeys
@@ -11,21 +11,24 @@ interface ImageCategorySelectorProps extends React.DetailedHTMLProps<React.HTMLA
 const ImageCategory = ({ imageConfigStyles, setCategories }: ImageCategorySelectorProps) => {
   const { imageCategories } = usePromptTemplate() // remote config
 
+  const [selectedValues, setSelectedValues] = useState<{ [key: string]: string | null }>({})
+
   const onGeneralSelected = useCallback(
     (option: keyof ImageCategoryType, value: string) => {
       setCategories(option.toString(), value)
+      setSelectedValues((prevState) => ({ ...prevState, [option]: value })) // Track selected value
     },
     [setCategories]
   )
 
   if (!imageConfigStyles) {
-    return <div>No</div>
+    return <div></div>
   }
 
   return (
     <div>
-      <h2>General</h2>
       <div className="flex flex-col gap-4">
+        <div className="capitalize">{imageConfigStyles.toLocaleLowerCase()}</div>
         {Object.entries(imageCategories).map(
           ([key, value]) =>
             value.templateType.includes(imageConfigStyles) && (
@@ -35,6 +38,7 @@ const ImageCategory = ({ imageConfigStyles, setCategories }: ImageCategorySelect
                 key={key}
                 options={value.options.map((option) => ({ label: option.label, value: option.value }))}
                 onValueChange={(selectedValue) => onGeneralSelected(value.key, selectedValue as string)}
+                buttonClassName={selectedValues[value.key] ? 'bg-white' : 'bg-neutral-200'} // Set to bg-white when selected
               />
             )
         )}

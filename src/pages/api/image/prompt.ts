@@ -19,6 +19,7 @@ type PromptData = {
   aspectRatio: string
   platform: string
   usage: string
+  negativeKeywords: string
 }
 
 export default handler.api({
@@ -49,6 +50,7 @@ export default handler.api({
       prompt: renderedPrompt,
       user_id: user.id,
       aspect_ratio: body.aspectRatio,
+      negative_prompt: body.negativeKeywords,
     })
 
     return res.status(200).json(response.data)
