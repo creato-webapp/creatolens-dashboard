@@ -34,7 +34,9 @@ type HashtagImageContextType = {
   addImage: (arg: string, labels: string[]) => void
   keywords: string
   addKeywords: (arg: string) => void
-  currentImageIndex: number
+  negativeKeywords: string[]
+  addNegativeKeywords: (arg: string) => void
+  removeNegativeKeyword: (arg: string) => void
   hashtags: IHashet[]
   updateHashtags: (arg: IHashet[]) => void
   imageConfig: ImageConfigType
@@ -61,11 +63,7 @@ type ImageModifier = {
 const initialGeneral: ImageModifier = {}
 
 export const HashtagImageProvider = ({ children }: HashtagImageProviderProps) => {
-  const [step, setStep] = useState<number>(1)
-  const [images, setImages] = useState<ImageType[]>([])
-  const [keywords, setKeywords] = useState<string>('')
-  const [negativePrompt, setNegatvePrompt] = useState<string>('')
-  const [currentImageIndex, setCurrentImageIndex] = useState<number>(0)
+  const [negativeKeywords, setNegativeKeywords] = useState<string[]>([])
   const [hashtags, setHashtags] = useState<IHashet[]>([])
   const [imageCategory, setImageCategory] = useState<ImageModifier>(initialGeneral)
   const [imageConfig, setImageConfig] = useState<ImageConfigType>({
@@ -78,29 +76,12 @@ export const HashtagImageProvider = ({ children }: HashtagImageProviderProps) =>
     setStep(arg)
   }, [])
 
-  const goBack = useCallback(() => {
-    setStep((prev) => Math.max(prev - 1, 1)) // Ensures step doesn't go below 1
+  const addNegativeKeywords = useCallback((text: string) => {
+    setNegativeKeywords((pre) => [...new Set([...pre, text])])
   }, [])
 
-  const setNegativePrompt = useCallback((text: string) => {
-    setNegatvePrompt(text)
-  }, [])
-
-  const goForward = useCallback(() => {
-    setStep((prev) => prev + 1)
-  }, [])
-
-  const addImage = useCallback((image: string, labels: string[]) => {
-    setImages((prevImages) => [
-      ...prevImages,
-      {
-        image,
-        labels,
-        selectedLabels: [],
-        uploadStatus: 'pending',
-      },
-    ])
-    setCurrentImageIndex(image.length) // Set to the index of the new image
+  const removeNegativeKeyword = useCallback((text: string) => {
+    setNegativeKeywords((pre) => pre.filter((keyword) => keyword !== text))
   }, [])
 
   const addKeywords = useCallback((text: string) => {
@@ -153,9 +134,9 @@ export const HashtagImageProvider = ({ children }: HashtagImageProviderProps) =>
         images,
         isLoading,
         keywords,
-        negativePrompt,
-        setNegativePrompt,
-        step,
+        negativeKeywords,
+        addNegativeKeywords,
+        removeNegativeKeyword,
         updateImageCategory,
         updateImageConfig,
         updateHashtags,

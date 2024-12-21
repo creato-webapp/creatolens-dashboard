@@ -8,9 +8,10 @@ import SideMenuLayout from '@components/Layout/SideMenuLayout'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@components/ui/Tabs'
 import { useTranslation } from 'next-i18next'
 import PrimaryButton from '@components/Button/Primary'
+import { useHashtagToImage } from '@hooks/useHashtagToImage'
 
 const HashtagToImage = () => {
-  const { t } = useTranslation('common')
+  const { generateImageWithKeywords, generatedImageUri, isLoading, loadingIndicator, isImageGenerated, resetToDefault } = useHashtagToImage()
 
   return (
     <div className="mb-4 flex w-full flex-col justify-center gap-12 md:min-h-144">
@@ -30,11 +31,7 @@ const HashtagToImage = () => {
                 <div>{t('hashtags-to-image.paste_keyword_result')}</div>
               </TabsTrigger>
             </TabsList>
-            <TabsContent value="keyword">
-              <div className="flex flex-col gap-6">
-                <Keywordsinput />
-                <NegativePrompt />
-                <StyleSelection />
+                  <NegativePrompt />
               </div>
             </TabsContent>
             <TabsContent value="paste"></TabsContent>
