@@ -1,12 +1,3 @@
 {
-  "title": "2Tag",
-  "hashtags-to-image": {
-    "keywords_input": "Keywords Input",
-    "paste_keyword_result": "Paste Keyword Result",
-    "keywords_describe": "Describe your image with keywords",
-    "keywords_textarea_placeholder": "Type anything you want to generate, separate by double tab space bar",
-    "negative_prompt": "Negative Prompt",
-    "negative_prompt_textarea_placeholder": "Type anything you don’t want, separate by double tab space bar",
-    "disclaimer": "Please note: This tool may display inaccurate or offensive material that doesn’t represent Creato’s views. You’re solely responsible for use of any content generated using this tool, including its compliance with applicable laws and third-party rights."
-  }
+  "title": "2Tag"
 }

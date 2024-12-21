@@ -23,7 +23,7 @@ module.exports = {
   initImmediate: false,
   /** To avoid issues when deploying to some paas (vercel...) */
   localePath: typeof window === 'undefined' ? require('path').resolve('./public/locales') : '/locales',
-  ns: ['common', 'error', 'footer'],
+  ns: ['common', 'error', 'footer', 'hashtag'],
   partialBundledLanguages: isBrowser,
   reloadOnPrerender: process.env.NODE_ENV === 'development',
   use: isBrowser ? [ChainedBackend] : [],
