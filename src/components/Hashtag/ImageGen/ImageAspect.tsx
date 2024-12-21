@@ -1,5 +1,8 @@
 import Dropdown from '@components/Form/Dropdown/Dropdown'
+import { useHashtagToImage } from '@hooks/useHashtagToImage'
 import { useRemoteStringConfig } from '@hooks/useRemoteConfig'
+import { useTranslation } from 'next-i18next'
+import { useCallback } from 'react'
 
 export type ImageAspectRatioListType = {
   [key: string]: ImageAspectRatioType
@@ -15,39 +18,39 @@ type ImageAspectRatioType = {
 const IMAGE_ASPECT_KEY = 'IMAGE_ASPECT_RATIOS'
 
 const ImageAspectSelector = () => {
+  const { t } = useTranslation(['common'])
   const { config: imageAspectRatios } = useRemoteStringConfig<ImageAspectRatioListType>(IMAGE_ASPECT_KEY)
+  const { updateImageConfig, isLoading } = useHashtagToImage()
+  const options = Object.entries(imageAspectRatios).map(([key, value]) => ({ key, value: value.value, label: value.label }))
+
+  const imageConfigSelect = useCallback(
+    (key: string, value: string) => {
+      updateImageConfig({ [key]: value })
+    },
+    [updateImageConfig]
+  )
+
+  const updateImageAspect = useCallback(
+    (aspectRatio: string) => {
+      imageConfigSelect('aspectRatio', aspectRatio)
+    },
+    [imageConfigSelect]
+  )
 
   if (!imageAspectRatios) return null
-  const options = Object.entries(imageAspectRatios).map(([key, value]) => ({ key, value: value.value, label: value.label }))
 
   return (
     <div className="flex flex-col gap-4">
       <div>
-        <Dropdown options={options} dropDownSizes={['m', 'm', 'm']} name="Please Select" />
+        <Dropdown
+          options={options}
+          onValueChange={(key) => updateImageAspect(key.toString())}
+          dropDownSizes={['m', 'm', 'm']}
+          name={t('please_select')}
+          isFloating
+          disabled={isLoading}
+        />
       </div>
-      {/* <div className="grid aspect-square w-full grid-cols-2 gap-4">
-        {Object.entries(imageAspectRatios).map(([key, value]) => (
-          <div className="flex w-full flex-col items-center justify-center rounded-xl" key={key}>
-            <div
-              className={`${
-                value.value
-              } flex aspect-square h-auto max-h-48 w-full max-w-48 items-center justify-center rounded-xl bg-white px-8 py-4 ${
-                aspectRatio === value.value ? 'border-4 border-accent1-500' : 'border border-stroke'
-              }`}
-              onClick={() => setAspectRatio(value.value)}
-            >
-              <div
-                className="bg-[#D9D9D9] shadow-2xl"
-                style={{
-                  aspectRatio: `${value.width} / ${value.height}`,
-                  width: `${value.width === 9 && value.height === 16 ? '70%' : '100%'}`,
-                }}
-              />
-            </div>
-            <div>{value.label}</div>
-          </div>
-        ))}
-      </div> */}
     </div>
   )
 }
