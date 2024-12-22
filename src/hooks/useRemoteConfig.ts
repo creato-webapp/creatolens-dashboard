@@ -20,9 +20,7 @@ const getAllRemoteConfig = async () => {
   }
 }
 
-const DEFAULT_REFETCH_INTERVAL = 10000
-
-const useRemoteConfig = (key: string, refetchInterval: number | undefined = DEFAULT_REFETCH_INTERVAL) => {
+const useRemoteConfig = (key: string) => {
   const [configValue, setConfigValue] = useState<Value | undefined>(undefined)
   const [error, setError] = useState<string | null>(null)
 
@@ -33,10 +31,6 @@ const useRemoteConfig = (key: string, refetchInterval: number | undefined = DEFA
     }
     fetchConfigValue()
   }, [key])
-
-  useEffect(() => {
-    remoteConfig.settings.minimumFetchIntervalMillis = refetchInterval || DEFAULT_REFETCH_INTERVAL
-  }, [refetchInterval])
 
   const getRemoteConfigByKey = async (key: string) => {
     try {
