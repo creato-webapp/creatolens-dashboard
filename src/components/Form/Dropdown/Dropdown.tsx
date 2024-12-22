@@ -7,6 +7,7 @@ export interface DropdownOption {
   label: string
   value: string | number
   checked?: boolean
+  image?: string
 }
 
 export type DropdownSize = 's' | 'm' | 'l' | 'full'
@@ -23,9 +24,21 @@ interface DropdownProps extends HTMLProps<HTMLSelectElement> {
   isCheckbox?: boolean
   extraElement?: React.ReactNode
   isFloating?: boolean
+  buttonClassName?: string // Added props for className
 }
 
-const Dropdown: React.FC<DropdownProps> = ({ name, options, onValueChange, dropDownSizes, isCheckbox = false, extraElement, isFloating = false }) => {
+const Dropdown: React.FC<DropdownProps> = ({
+  name,
+  options,
+  onValueChange,
+  dropDownSizes,
+  isCheckbox = false,
+  extraElement,
+  isFloating = false,
+  className = '',
+  buttonClassName = '',
+  disabled = false,
+}) => {
   const [selectedValue, setSelectedValue] = useState<string | number>(name || '')
   const [isOpen, setIsOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
@@ -70,13 +83,15 @@ const Dropdown: React.FC<DropdownProps> = ({ name, options, onValueChange, dropD
   }, [])
 
   return (
-    <div ref={dropdownRef} className={`dropdown relative h-full w-full justify-end `}>
+    <div ref={dropdownRef} className={`dropdown relative h-full w-full justify-end ${className}`}>
       <DropdownButton
         name={mapSelectedValueToOptions as string}
         isDropdownNotSelected={false}
         isOpen={isOpen}
         handleToggleMenu={handleToggleMenu}
         dropDownSizes={dropDownSizes}
+        className={buttonClassName} // Added className to DropdownButton
+        disabled={disabled}
       />
       <DropdownContent
         handleOptionSelect={handleOptionSelect}
