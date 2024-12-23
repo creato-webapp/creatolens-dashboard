@@ -1,4 +1,4 @@
-import { ReactElement, useCallback, useState } from 'react'
+import { ReactElement, Suspense, useCallback, useState } from 'react'
 
 import Image from 'next/image'
 
@@ -10,9 +10,15 @@ import ProgressBar from '@components/Hashtag/ProgressBar'
 import { useImageHashtagContext } from '@hooks/UseImagetoHashtag'
 import { Layout } from '@components/Layout'
 import SideMenuLayout from '@components/Layout/SideMenuLayout'
+import { GetServerSidePropsContext, GetStaticPropsContext } from 'next'
+import { getLocaleProps } from '@services/locale'
 // import HelpIcon from '@components/Icon/HelpIcon'
 
-const ImageToHashtag = () => {
+export async function getStaticProps(context: { locale: GetStaticPropsContext | GetServerSidePropsContext }) {
+  return await getLocaleProps(context.locale)
+}
+
+const ImageToHashtags = () => {
   const { step } = useImageHashtagContext()
   const [isDetailPagesOpen, setIsDetailsPageOpen] = useState<boolean>(false)
 
@@ -65,9 +71,16 @@ const ImageToHashtag = () => {
     </div>
   )
 }
-export default ImageToHashtag
 
-ImageToHashtag.getLayout = function getLayout(page: ReactElement) {
+const ImageToHashtagsWrapper = () => (
+  <Suspense fallback={<div>Loading translations...</div>}>
+    <ImageToHashtags />
+  </Suspense>
+)
+
+export default ImageToHashtagsWrapper
+
+ImageToHashtagsWrapper.getLayout = function getLayout(page: ReactElement) {
   return (
     <Layout>
       <SideMenuLayout>{page}</SideMenuLayout>
