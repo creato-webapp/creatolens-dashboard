@@ -20,7 +20,7 @@ export default handler.api({
     const { fields, files } = await parseForm(req)
 
     const fileArray = files.file as formidable.File[]
-    const usernameArray = fields.username as string[]
+    const userIdFieldsArray = fields.user_id as string[]
 
     const file = fileArray[0] as formidable.File
     const fileStream = fs.createReadStream(file.filepath)
@@ -28,7 +28,7 @@ export default handler.api({
     const formData = new FormData()
 
     formData.append('file', fileStream, file.originalFilename as string)
-    formData.append('username', usernameArray[0] as string)
+    formData.append('user_id', userIdFieldsArray[0] as string)
 
     const response = await ImageInstance.post(`/api/image-tagen`, formData, {
       headers: {
