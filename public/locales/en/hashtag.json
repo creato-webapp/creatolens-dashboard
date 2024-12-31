@@ -19,5 +19,8 @@
   "paste_keyword_result": "Paste Keyword Result",
   "regenerate": "Re-Generate",
   "return": "Return",
-  "type_of_image": "Type of image"
+  "type_of_image": "Type of image",
+  "label": "Label",
+  "hashtag": "Hashtag",
+  "search_for_hashtag_label": "Search for Hashtag/ label"
 }

@@ -3,7 +3,7 @@ import Image from 'next/image'
 
 import Primary from '@components/Button/Primary'
 import { getImageHashtag } from '@services/HashtagHelper'
-import { useImageHashtagContext } from '@hooks/UseImagetoHashtag'
+import { useImageHashtagContext } from '@hooks/useImagetoHashtag'
 import { IHashet } from 'pages/recommendation'
 import { CONFIDENCE_LEVELS } from '@constants/imageStyle'
 import { useDialogues } from '@hooks/useDialogues'

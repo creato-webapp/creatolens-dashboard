@@ -4,7 +4,7 @@ import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 
 import { Badge } from '@components/ui/Badge'
-import { useImageHashtagContext } from '@hooks/UseImagetoHashtag'
+import { useImageHashtagContext } from '@hooks/useImagetoHashtag'
 import SingleCheck from '@components/Icon/SingleCheckIcon'
 import CaretLeftIcon from '@components/Icon/CaretLeftIcon'
 import SubtleButton from '@components/Button/Subtle'

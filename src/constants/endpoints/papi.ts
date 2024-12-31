@@ -19,6 +19,7 @@ const PAPI = {
   QUERY_ACCOUNTS_ERROR: '/handlers/query',
 
   DASHBOARD_HISTORY: '/api/dashboard_reports',
+  HASHTAG_HISTORY: '/api/history/image-to-hashtag',
 
   //label
   LABEL_IMAGE: '/api/image/labels',
