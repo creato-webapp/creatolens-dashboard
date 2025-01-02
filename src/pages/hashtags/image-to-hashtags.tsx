@@ -1,4 +1,5 @@
 import { ReactElement, useCallback, useState } from 'react'
+import { GetServerSideProps, GetServerSidePropsContext } from 'next'
 
 import Image from 'next/image'
 
@@ -10,7 +11,16 @@ import ProgressBar from '@components/Hashtag/ProgressBar'
 import { useImageHashtagContext } from '@hooks/UseImagetoHashtag'
 import { Layout } from '@components/Layout'
 import SideMenuLayout from '@components/Layout/SideMenuLayout'
+import { v4 as uuidv4 } from 'uuid'
 // import HelpIcon from '@components/Icon/HelpIcon'
+
+export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
+  const correlationId = uuidv4()
+  context.res.setHeader('Set-Cookie', `correlationId=${correlationId}; Path=/; HttpOnly`)
+  return {
+    props: {},
+  }
+}
 
 const ImageToHashtag = () => {
   const { step } = useImageHashtagContext()
