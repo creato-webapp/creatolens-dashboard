@@ -1,5 +1,6 @@
 import Breadcrumb from '@components/Breadcrumb'
 import Dropdown from '@components/Form/Dropdown/Dropdown'
+import HistoryGridView from '@components/Hashtag/History/HistoryGridView'
 import HistoryListView from '@components/Hashtag/History/HistoryListView'
 import { Input } from '@components/ui/Input'
 import { useHistory } from '@hooks/useHistory'
@@ -7,9 +8,6 @@ import { Grid2X2Icon, List, SearchIcon } from 'lucide-react'
 import { useState } from 'react'
 // import router from 'next/router'
 
-const HistoryGridView = () => {
-  return <div></div>
-}
 const History = () => {
   const [layout, setLayout] = useState('list')
   const { historys } = useHistory()
@@ -46,7 +44,9 @@ const History = () => {
         </div>
       </div>
 
-      {historys && <div className="w-full max-w-screen-2xl">{layout === 'grid' ? <HistoryGridView /> : <HistoryListView data={historys} />}</div>}
+      {historys && (
+        <div className="w-full max-w-screen-2xl">{layout === 'grid' ? <HistoryGridView data={historys} /> : <HistoryListView data={historys} />}</div>
+      )}
     </div>
   )
 }
