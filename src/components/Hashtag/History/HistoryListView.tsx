@@ -1,30 +1,17 @@
 import { Checkbox } from '@components/ui/Checkbox'
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@components/ui/Table'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@components/ui/Table'
 import Image from 'next/image'
 import { Button } from '@components/ui/Button'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@components/ui/Dialog'
 import { Input } from '@components/ui/Input'
 import { Label } from '@components/ui/Label'
+import { HistoryRow } from '@context/HistoryContext'
+import { Skeleton } from '@components/ui/Skeleton'
+import { arrayOfStringsToSentence } from '@utils/index'
 
 export interface HistoryListViewProps {
   data: HistoryRow[]
-}
-
-export interface HistoryRow {
-  created_at: string
-  id: string
-  input_object: null
-  is_deleted: boolean
-  output_object: {
-    created_at: string
-    data: {
-      url: string
-    }
-    updated_at: string
-  }
-  status: number
-  updated_at: string
-  user_id: string
+  isLoading?: boolean
 }
 
 const FallBackImage = () => {
@@ -34,17 +21,35 @@ const FallBackImage = () => {
     </div>
   )
 }
-const HistoryListView = (props: HistoryListViewProps) => {
+export default function HistoryListView(props: HistoryListViewProps) {
   const { data } = props
 
   const renderRows = () => {
+    if (props.isLoading) {
+      return (
+        <>
+          {Array.from({ length: 8 }).map((_, index) => (
+            <TableRow key={index}>
+              <TableCell colSpan={6}>
+                <Skeleton className="h-10 w-full" />
+              </TableCell>
+            </TableRow>
+          ))}
+        </>
+      )
+    }
+
     return data.map((item) => (
       <TableRow key={item.id} className="">
         <TableCell className="font-medium">
-          {item.output_object.data.url ? <Image src={item.output_object.data.url} alt="Image" width={40} height={40} /> : <FallBackImage />}
+          {item.output_object.data.url ? (
+            <Image src={item.output_object.data.url} alt="Image" className="aspect-square object-cover" width={40} height={40} />
+          ) : (
+            <FallBackImage />
+          )}
         </TableCell>
-        <TableCell className="font-medium">{item.id}</TableCell>
-        <TableCell>{item.status}</TableCell>
+        <TableCell className="font-medium">{arrayOfStringsToSentence(item.labels)}</TableCell>
+        <TableCell className="font-medium">{arrayOfStringsToSentence(item.hashtags)}</TableCell>
         <TableCell>
           <Checkbox className="h-5 w-5 rounded-md" checked={item.is_deleted} />
         </TableCell>
@@ -54,7 +59,7 @@ const HistoryListView = (props: HistoryListViewProps) => {
             <DialogTrigger asChild>
               <Button variant="outline">View</Button>
             </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
+            <DialogContent className="">
               <DialogHeader>
                 <DialogTitle>Edit profile</DialogTitle>
                 <DialogDescription>Make changes to your profile here. Click save when you&apos;re done.</DialogDescription>
@@ -85,7 +90,6 @@ const HistoryListView = (props: HistoryListViewProps) => {
 
   return (
     <Table className="h-full overflow-hidden">
-      <TableCaption>A list of your recent invoices.</TableCaption>
       <TableHeader>
         <TableRow className="text-neutral-800">
           <TableHead className="w-[100px]"></TableHead>
@@ -100,4 +104,3 @@ const HistoryListView = (props: HistoryListViewProps) => {
     </Table>
   )
 }
-export default HistoryListView

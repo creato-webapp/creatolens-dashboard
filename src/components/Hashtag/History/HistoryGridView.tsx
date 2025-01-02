@@ -1,103 +1,87 @@
-import { Checkbox } from '@components/ui/Checkbox'
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@components/ui/Table'
 import Image from 'next/image'
-import { Button } from '@components/ui/Button'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from '@components/ui/Dialog'
-import { Input } from '@components/ui/Input'
-import { Label } from '@components/ui/Label'
+
+import { Card, CardContent } from '@components/ui/Card'
+import { useMemo } from 'react'
+import { HistoryRow } from '@context/HistoryContext'
+import { Skeleton } from '@components/ui/Skeleton'
+import { arrayOfStringsToSentence } from '@utils/index'
 
 export interface HistoryGridViewProps {
   data: HistoryRow[]
-}
-
-export interface HistoryRow {
-  created_at: string
-  id: string
-  input_object: null
-  is_deleted: boolean
-  output_object: {
-    created_at: string
-    data: {
-      url: string
-    }
-    updated_at: string
-  }
-  status: number
-  updated_at: string
-  user_id: string
+  isLoading: boolean
 }
 
 const FallBackImage = () => {
   return (
-    <div className="flex h-10 w-10 items-center justify-center rounded-md bg-neutral-200">
-      <span className="text-neutral-500">?</span>
+    <div className="flex h-full max-h-[400px] w-full items-center justify-center rounded-md bg-neutral-200">
+      <Skeleton className="h-64 w-full" />
     </div>
   )
 }
 const HistoryGridView = (props: HistoryGridViewProps) => {
   const { data } = props
 
-  const renderRows = () => {
-    return data.map((item) => (
-      <TableRow key={item.id} className="">
-        <TableCell className="font-medium">
-          {item.output_object.data.url ? <Image src={item.output_object.data.url} alt="Image" width={40} height={40} /> : <FallBackImage />}
-        </TableCell>
-        <TableCell className="font-medium">{item.id}</TableCell>
-        <TableCell>{item.status}</TableCell>
-        <TableCell>
-          <Checkbox className="h-5 w-5 rounded-md" checked={item.is_deleted} />
-        </TableCell>
-        <TableCell className="">{new Date(item.created_at).toLocaleDateString()}</TableCell>
-        <TableCell className="text-right">
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button variant="outline">View</Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
-              <DialogHeader>
-                <DialogTitle>Edit profile</DialogTitle>
-                <DialogDescription>Make changes to your profile here. Click save when you&apos;re done.</DialogDescription>
-              </DialogHeader>
-              <div className="grid gap-4 py-4">
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="name" className="text-right">
-                    Name
-                  </Label>
-                  <Input id="name" defaultValue="Pedro Duarte" className="col-span-3" />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="username" className="text-right">
-                    Username
-                  </Label>
-                  <Input id="username" defaultValue="@peduarte" className="col-span-3" />
-                </div>
-              </div>
-              <DialogFooter>
-                <Button type="submit">Save changes</Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
-        </TableCell>
-      </TableRow>
-    ))
-  }
+  const dateToBefore = useMemo(() => {
+    return (date: string) => {
+      const now = new Date()
+      const pastDate = new Date(date)
+      const diffTime = Math.abs(now.getTime() - pastDate.getTime())
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+
+      if (diffDays >= 30) {
+        const diffMonths = Math.floor(diffDays / 30)
+        return `${diffMonths} months before`
+      } else {
+        return `${diffDays} days before`
+      }
+    }
+  }, [])
 
   return (
-    <Table className="h-full overflow-hidden">
-      <TableCaption>A list of your recent invoices.</TableCaption>
-      <TableHeader>
-        <TableRow className="text-neutral-800">
-          <TableHead className="w-[100px]"></TableHead>
-          <TableHead className="w-[400px]">Label</TableHead>
-          <TableHead className="w-[400px]">Hashtag</TableHead>
-          <TableHead className="w-[100px] text-right"></TableHead>
-          <TableHead className="w-[100px] whitespace-nowrap">Created Date</TableHead>
-          <TableHead className="w-[100px]"></TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>{renderRows()}</TableBody>
-    </Table>
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 ">
+      {props.isLoading && (
+        <Card className="mb-4">
+          <CardContent className="p-4">
+            <div className="flex flex-col">
+              <FallBackImage />
+              <div className="mt-4 flex flex-col gap-2">
+                <div className="flex flex-row justify-start text-left">
+                  <Skeleton className="h-6 w-full" />
+                </div>
+                <div className="mt-2 flex flex-row justify-start overflow-hidden text-left">
+                  <Skeleton className="h-6 w-full" />
+                </div>
+                <Skeleton className="h-6 w-24" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+      {data.map((row) => (
+        <Card key={row.id} className="mb-4">
+          <CardContent className="p-4">
+            <div className="flex flex-col">
+              {row.output_object.data.url ? (
+                <div className="relative h-64 w-full">
+                  <Image src={row.output_object.data.url} alt="Output" fill style={{ maxHeight: '400px' }} className="rounded-md" />
+                </div>
+              ) : (
+                <FallBackImage />
+              )}
+              <div className="mt-4 flex flex-col gap-2">
+                <div className="flex flex-row justify-start text-left">
+                  <b className="truncate font-normal text-neutral-800">{arrayOfStringsToSentence(row.labels)}</b>
+                </div>
+                <div className="mt-2 flex flex-row justify-start overflow-hidden text-left">
+                  <div className="truncate font-semibold text-neutral-800">{arrayOfStringsToSentence(row.hashtags)}</div>
+                </div>
+                <div className="text-sm text-neutral-500">{dateToBefore(row.created_at)}</div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      ))}
+    </div>
   )
 }
 export default HistoryGridView
