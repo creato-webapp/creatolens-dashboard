@@ -21,10 +21,10 @@ const ImageStyle = () => {
 
   const updateImageStyle = useCallback(
     (value: string) => {
-      const mappedValue = Object.values(imageStyles).find((style) => style.name === value)?.value || value
-      imageConfigSelect('imageStyle', mappedValue)
+      const mappedValue = Object.values(imageStyles).find((style) => style.name === value)?.value
+      imageConfigSelect('imageStyle', mappedValue || imageStyles[0].value)
     },
-    [imageConfigSelect]
+    [imageConfigSelect, imageStyles]
   )
 
   if (!imageStyles) return null
