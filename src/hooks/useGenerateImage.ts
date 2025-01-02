@@ -2,6 +2,8 @@ import { useState, useCallback, useEffect } from 'react'
 import { renderPromptAndGenImage } from '@services/imagePromptsHelper'
 import { ImageStyleKeys } from '@constants/imageStyle'
 import { IHashet } from 'pages/recommendation'
+import { Status } from '@context/DialogueContext'
+import { useDialogues } from './useDialogues'
 
 interface ImageGenerationData {
   aspectRatio: string
@@ -26,6 +28,7 @@ export function useGenerateImage(): UseGenerateImageResult {
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [error, setError] = useState<string | null>(null)
   const [loadingIndicator, setLoadingIndicator] = useState<number>(0)
+  const { addDialogue } = useDialogues()
 
   useEffect(() => {
     if (isLoading) {
@@ -45,6 +48,8 @@ export function useGenerateImage(): UseGenerateImageResult {
       setGeneratedImageUri(uri)
     } catch (err) {
       if (err instanceof Error) {
+        addDialogue('Failed to generate image', Status.FAILED)
+
         setError(err.message)
       }
     } finally {

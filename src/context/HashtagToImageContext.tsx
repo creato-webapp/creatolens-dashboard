@@ -56,7 +56,7 @@ export const HashtagImageProvider = ({ children }: HashtagImageProviderProps) =>
   const [hashtags, setHashtags] = useState<IHashet[]>([])
   const [imageCategory, setImageCategory] = useState<ImageModifier>(initialGeneral)
   const [imageConfig, setImageConfig] = useState<ImageConfigType>({
-    imageStyle: 'GENERAL',
+    imageStyle: 'GENERAL' as ImageStyleKeys,
     aspectRatio: '3:4',
   })
   const [isImageGenerated, setIsImageGenerated] = useState<boolean>(false)
@@ -89,20 +89,24 @@ export const HashtagImageProvider = ({ children }: HashtagImageProviderProps) =>
 
   /*  */
   const generateImageWithKeywords = useCallback(async () => {
-    updateImageGenerated(false)
-    const keywordString = keywords.map((keyword) => keyword.replace(/\s/g, '').trimEnd()).join(', ')
-    const negativeKeywordString = negativeKeywords.map((keyword) => keyword.replace(/\s/g, '').trimEnd()).join(', ')
+    try {
+      updateImageGenerated(false)
+      const keywordString = keywords.map((keyword) => keyword.replace(/\s/g, '').trimEnd()).join(', ')
+      const negativeKeywordString = negativeKeywords.map((keyword) => keyword.replace(/\s/g, '').trimEnd()).join(', ')
 
-    const data = {
-      aspectRatio: imageConfig.aspectRatio,
-      hashtags: hashtags,
-      imageCategory: imageCategory,
-      imageStyle: imageConfig.imageStyle,
-      keywords: keywordString,
-      negativeKeywords: negativeKeywordString,
+      const data = {
+        aspectRatio: imageConfig.aspectRatio,
+        hashtags: hashtags,
+        imageCategory: imageCategory,
+        imageStyle: imageConfig.imageStyle,
+        keywords: keywordString,
+        negativeKeywords: negativeKeywordString,
+      }
+      await generateImage(data)
+      updateImageGenerated(true)
+    } catch (error) {
+      console.error('Error generating image:', error)
     }
-    await generateImage(data)
-    updateImageGenerated(true)
   }, [updateImageGenerated, keywords, negativeKeywords, imageConfig.aspectRatio, imageConfig.imageStyle, hashtags, imageCategory, generateImage])
 
   const updateImageConfig = useCallback((config: Partial<ImageConfigType>) => {
