@@ -109,7 +109,7 @@ const features: FeatureCardProps[] = [
 const TabSession = memo(() => {
   return (
     <Tabs defaultValue="Instagram Trend Analysis Report" className="flex w-full max-w-screen-xl flex-col px-12">
-      <TabsList className="flex h-full w-full overflow-x-auto md:flex-wrap lg:flex-nowrap">
+      <TabsList className="flex h-full w-full overflow-x-auto md:flex-wrap">
         {features.map((feature) => (
           <TabsTrigger key={feature.title} value={feature.title} className="my-2">
             {feature.title}
