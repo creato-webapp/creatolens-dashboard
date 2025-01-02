@@ -1,4 +1,4 @@
-import { ReactElement } from 'react'
+import { ReactElement, Suspense } from 'react'
 
 import Keywordsinput from '@components/Hashtag/HashtagToImage/Keywordsinput'
 import NegativePrompt from '@components/Hashtag/HashtagToImage/NegativePrompt'
@@ -16,6 +16,13 @@ import NeutralButton from '@components/Button/Neutral'
 import RepeatIcon from '@components/Icon/RepeatIcon'
 import { AlertTriangle, InfoIcon } from 'lucide-react'
 import React from 'react'
+
+import { getLocaleProps } from '@services/locale'
+import { GetStaticPropsContext, GetServerSidePropsContext } from 'next'
+
+export async function getStaticProps(context: { locale: GetStaticPropsContext | GetServerSidePropsContext }) {
+  return await getLocaleProps(context.locale)
+}
 
 const HashtagToImage = () => {
   const { t } = useTranslation(['hashtag', 'common'])
@@ -98,9 +105,16 @@ const HashtagToImage = () => {
     </div>
   )
 }
-export default HashtagToImage
 
-HashtagToImage.getLayout = function getLayout(page: ReactElement) {
+const HashtagsToImageWrapper = () => (
+  <Suspense fallback={<div>Loading translations...</div>}>
+    <HashtagToImage />
+  </Suspense>
+)
+
+export default HashtagsToImageWrapper
+
+HashtagsToImageWrapper.getLayout = function getLayout(page: ReactElement) {
   return (
     <Layout>
       <SideMenuLayout>{page}</SideMenuLayout>
