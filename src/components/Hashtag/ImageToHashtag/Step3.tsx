@@ -3,7 +3,7 @@ import Image from 'next/image'
 
 import Primary from '@components/Button/Primary'
 import { getImageHashtag } from '@services/HashtagHelper'
-import { useImageHashtagContext } from '@hooks/useImagetoHashtag'
+import { useImageHashtag } from '@hooks/useImagetoHashtag'
 import { IHashet } from 'pages/recommendation'
 import { CONFIDENCE_LEVELS } from '@constants/imageStyle'
 import { useDialogues } from '@hooks/useDialogues'
@@ -28,7 +28,7 @@ interface CategoryOption {
 }
 
 const Step3: React.FC = () => {
-  const { image, updateSelectedLabels, hashtags, updateHashtag, goBack, clearImage } = useImageHashtagContext()
+  const { image, updateSelectedLabels, hashtags, updateHashtag, goBack, clearImage } = useImageHashtag()
   const { addDialogue } = useDialogues()
 
   const currentImage = useMemo(() => image, [image])
