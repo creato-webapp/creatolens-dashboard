@@ -25,7 +25,7 @@ const DropdownButton: React.FC<DropdownButtonProps> = ({
     let padding = ''
     let caretSize = ''
     if (!dropDownSizes) {
-      return { padding: 'px-2 py-1 md:px-3 md:py-2 lg:py-3 lg:px-3', caretSize: 'w-6 h-6' }
+      return { padding: 'px-2 py-2 md:px-3 md:py-2 lg:py-3 lg:px-3', caretSize: 'w-6 h-6' }
     }
     dropDownSizes.forEach((size: string, index: number) => {
       const breakpoint = index === 0 ? '' : index === 1 ? 'md:' : 'lg:'
@@ -45,7 +45,7 @@ const DropdownButton: React.FC<DropdownButtonProps> = ({
           break
 
         default:
-          padding = 'px-2 py-1 md:px-3 md:py-2 lg:py-3 lg:px-3'
+          padding = 'px-2 py-2 md:px-3 md:py-2 lg:py-3 lg:px-3'
           caretSize = 'w-6 h-6'
           break
       }

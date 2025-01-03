@@ -19,6 +19,7 @@ const XAPI = {
 
   ANNOTATE_LABELS: `${XAPI_PREFIX}image/labels`,
   HASHTAG: `${XAPI_PREFIX}hashtags`,
+  IMAGE_HASHTAG_HISTORY: `${XAPI_PREFIX}history`,
 
   DASHBOARD: `${XAPI_PREFIX}dashboard`,
   DASHBOARD_KEYWORDS: `${XAPI_PREFIX}dashboard/keyword`,
