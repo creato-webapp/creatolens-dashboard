@@ -19,5 +19,6 @@ export const getUniqueSortedHashtags = (hashtags: Hashtag[]): Hashtag[] => {
 }
 
 export const arrayOfStringsToSentence = (array: string[]): string => {
+  if (!array) return ''
   return array.join(', ')
 }

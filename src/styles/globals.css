@@ -5,9 +5,7 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
-html {
-  overflow-y: scroll;
-}
+
 @layer base {
   body {
     @apply content-center bg-white antialiased;
