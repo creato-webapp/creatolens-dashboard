@@ -83,7 +83,7 @@ export default async function historyHandler(req: NextApiRequest, res: NextApiRe
         output_object: {
           created_at: '2024-12-29T16:23:17',
           data: {
-            url: 'https://fakeimg.pl/250x100/',
+            url: 'https://fakeimg.pl/250x700/',
           },
           updated_at: '2024-12-29T16:23:17',
         },
@@ -252,7 +252,7 @@ export default async function historyHandler(req: NextApiRequest, res: NextApiRe
         status: 1,
         updated_at: '2024-12-29T16:23:17',
         user_id: '123',
-        labels: ['label1', 'label2', 'label3', 'label4', 'label5', 'label1', 'label2', 'label3', 'label4', 'label5'],
+        labels: ['football'],
         hashtags: ['hashtag1', 'hashtag2', 'hashtag3', 'hashtag4', 'hashtag5'],
       },
       {
@@ -270,7 +270,7 @@ export default async function historyHandler(req: NextApiRequest, res: NextApiRe
         status: 1,
         updated_at: '2024-12-29T16:23:17',
         user_id: '123',
-        labels: ['label1', 'label2', 'label3', 'label4', 'label5', 'label1', 'label2', 'label3', 'label4', 'label5'],
+        labels: ['cake', 'label2', 'label3', 'label4', 'label5', 'label1', 'label2', 'label3', 'label4', 'label5'],
         hashtags: ['hashtag1', 'hashtag2', 'hashtag3', 'hashtag4', 'hashtag5'],
       },
       {
@@ -288,8 +288,8 @@ export default async function historyHandler(req: NextApiRequest, res: NextApiRe
         status: 1,
         updated_at: '2024-12-29T16:23:17',
         user_id: '123',
-        labels: ['label1', 'label2', 'label3', 'label4', 'label5', 'label1', 'label2', 'label3', 'label4', 'label5'],
-        hashtags: ['hashtag1', 'hashtag2', 'hashtag3', 'hashtag4', 'hashtag5'],
+        labels: ['label1', 'cake2', 'label3', 'label4', 'label5', 'label1', 'label2', 'label3', 'label4', 'label5'],
+        hashtags: ['hhhhtag', 'hashtag2', 'hashtag3', 'hashtag4', 'hashtag5'],
       },
     ],
   }
