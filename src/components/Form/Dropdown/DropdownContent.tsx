@@ -48,7 +48,7 @@ const DropdownContent = ({
     <div className={`grid ${isOpen ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'} transition-all duration-300`}>
       <ul
         className={`${isOpen ? '' : 'hidden'} z-10 mt-2 w-full overflow-hidden rounded-md border border-gray-200 bg-white shadow-lg`}
-        style={{ maxHeight: '200px', overflowY: 'auto' }} // Set max height and enable vertical scroll
+        style={{ maxHeight: '250px', overflowY: 'auto' }} // Set max height and enable vertical scroll
       >
         {options.map((option) => (
           <li
