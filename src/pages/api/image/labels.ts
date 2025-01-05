@@ -1,17 +1,24 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
-
 import handler from '@helpers/api/handlers'
 import METHOD from '@constants/method'
 import { ImageInstance } from '@helpers/axios'
+import { CombinedUser } from '@api/auth/[...nextauth]'
+import { decode } from 'next-auth/jwt'
 
 export default handler.api({
   [METHOD.GET]: async (req: NextApiRequest, res: NextApiResponse) => {
+    const decoded = await decode({
+      token: req.cookies['next-auth.session-token'] ?? req.cookies['__Secure-next-auth.session-token'],
+      secret: process.env.JWT_SECRET as string,
+    })
+    const user = decoded?.user as CombinedUser
     const {
       query: { image_url },
     } = req
     const response = await ImageInstance.get(`/api/image-tagen/labels`, {
       params: {
         image_url,
+        user_id: user.id,
       },
     })
     return res.status(200).json(response.data)

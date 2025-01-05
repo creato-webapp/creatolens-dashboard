@@ -33,6 +33,7 @@ export default handler.api({
     const response = await ImageInstance.post(`/api/image-tagen`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
+        Cookie: req.headers.cookie,
       },
     })
     return res.status(response.status).json(response.data)
