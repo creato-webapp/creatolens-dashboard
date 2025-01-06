@@ -20,16 +20,27 @@ export default handler.api({
         image_url,
         user_id: user.id,
       },
+      headers: {
+        Cookie: req.headers.cookie,
+      },
     })
     return res.status(200).json(response.data)
   },
   [METHOD.POST]: async (req: NextApiRequest, res: NextApiResponse) => {
     const { image_url, existing_labels } = req.body
-    const response = await ImageInstance.post('/gemini/images/re-label', {
-      imageUrl: image_url,
-      existing_labels: existing_labels,
-      isGcsUri: false,
-    })
+    const response = await ImageInstance.post(
+      '/gemini/images/re-label',
+      {
+        imageUrl: image_url,
+        existing_labels: existing_labels,
+        isGcsUri: false,
+      },
+      {
+        headers: {
+          Cookie: req.headers.cookie,
+        },
+      }
+    )
     return res.status(200).json(response.data)
   },
 })
