@@ -4,20 +4,18 @@ import XAPI from '@constants/endpoints/xapi'
 import METHOD from '@constants/method'
 import useAuth from '@hooks/useAuth'
 import { CombinedUser } from '@api/auth/[...nextauth]'
-import router from 'next/router'
-import { usePathname, useSearchParams } from 'next/navigation'
-import { useDebouncedCallback } from 'use-debounce'
 import useLocalStorage from '@hooks/useLocalStorage'
 import { ColumnFiltersState, Row, SortingState } from '@tanstack/react-table'
+import { useDialogues } from '@hooks/useDialogues'
+import { Status } from './DialogueContext'
 
 interface HistoryContextType {
   historys: HistoryRow[] | undefined
   selectedHistoryRows: HistoryRow[]
   isLoading: boolean
-  handleSearch: (term: string) => void
   updateFavoriteStatus: (id: string) => void
   globalFilter: string
-  setGlobalFilter: (term: string) => void
+  setGlobalFilter: Dispatch<SetStateAction<string>>
   openedRow: Row<HistoryRow> | null
   setOpenedRow: (row: Row<HistoryRow> | null) => void
   columnFilters: ColumnFiltersState
@@ -52,8 +50,6 @@ export interface HistoryRow {
 
 interface HistoryQueryData {
   user_id: string
-  page: number
-  query_input: string
 }
 
 export const HistoryContext = createContext<HistoryContextType | undefined>(undefined)
@@ -85,14 +81,13 @@ const useHistoryQuery = (query: HistoryQueryData, shouldFetch: boolean = true, f
 }
 
 export const HistoryProvider = ({ children }: HistoryProviderProps) => {
-  const [page, setPage] = useState<number>(1)
-  const [queryInput, setQueryInput] = useState<string>('')
   const [selectedHistoryRows, setSelectedHistoryRows] = useState<HistoryRow[] | []>([])
   const [favouritedHistoryRowIds, setFavouritedHistoryRowIds] = useLocalStorage<string[]>('favouritedHistoryRowIds', [])
   const [globalFilter, setGlobalFilter] = useState<string>('')
   const [openedRow, setOpenedRow] = useState<Row<HistoryRow> | null>(null)
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [sorting, setSorting] = useState<SortingState>([])
+  const { addDialogue } = useDialogues()
 
   const updateFavoriteStatus = useCallback(
     (id: string) => {
@@ -106,32 +101,22 @@ export const HistoryProvider = ({ children }: HistoryProviderProps) => {
     [setFavouritedHistoryRowIds]
   )
 
-  const searchParams = useSearchParams()
-  const pathname = usePathname()
   const { session } = useAuth()
 
   const user = session?.user as CombinedUser
   const userId = user?.id
   const requestdata: HistoryQueryData = {
     user_id: userId,
-    query_input: queryInput,
-    page: page,
   }
 
-  const { data: historys, mutate, isLoading } = useHistoryQuery(requestdata, false, [])
-
+  const { data: historys, isLoading, error } = useHistoryQuery(userId ? requestdata : { user_id: '' }, !!userId, [])
   const combinedHistorys = useMemo(() => {
     if (!historys) return []
-
     return historys.map((row) => ({
       ...row,
       is_favourited: favouritedHistoryRowIds.includes(row.id),
     }))
-  }, [historys, favouritedHistoryRowIds, selectedHistoryRows])
-
-  useEffect(() => {
-    mutate() // Manually trigger the fetch
-  }, [mutate, queryInput, page])
+  }, [historys, favouritedHistoryRowIds])
 
   const updateHistoryRow = useCallback(
     (row: HistoryRow) => {
@@ -145,21 +130,11 @@ export const HistoryProvider = ({ children }: HistoryProviderProps) => {
     [selectedHistoryRows]
   )
 
-  const handleSearch = useDebouncedCallback((term: string) => {
-    const params = new URLSearchParams(searchParams?.toString() || '')
-    if (term) {
-      params.set('query', term)
-    } else {
-      params.delete('query')
+  useEffect(() => {
+    if (error) {
+      addDialogue('Error', Status.FAILED)
     }
-    setQueryInput(term) // Update the queryInput state
-    setPage(1) // Reset page when searching
-    router.replace(`${pathname}?${params.toString()}`)
-  }, 300)
-
-  const clearHistoryRow = useCallback(() => {
-    setSelectedHistoryRows([])
-  }, [])
+  }, [addDialogue, error])
 
   const value = useMemo(
     () => ({
@@ -170,28 +145,14 @@ export const HistoryProvider = ({ children }: HistoryProviderProps) => {
       setGlobalFilter,
       selectedHistoryRows,
       updateHistoryRow,
-      clearHistoryRow,
       updateFavoriteStatus,
-      handleSearch,
       isLoading,
       openedRow,
       setOpenedRow,
       setSorting,
       sorting,
     }),
-    [
-      combinedHistorys,
-      columnFilters,
-      globalFilter,
-      selectedHistoryRows,
-      updateHistoryRow,
-      clearHistoryRow,
-      updateFavoriteStatus,
-      handleSearch,
-      isLoading,
-      openedRow,
-      sorting,
-    ]
+    [combinedHistorys, columnFilters, globalFilter, selectedHistoryRows, updateHistoryRow, updateFavoriteStatus, isLoading, openedRow, sorting]
   )
 
   return <HistoryContext.Provider value={value}>{children}</HistoryContext.Provider>
