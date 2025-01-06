@@ -1,21 +1,84 @@
+import { useState } from 'react'
 import Breadcrumb from '@components/Breadcrumb'
+
 import Dropdown from '@components/Form/Dropdown/Dropdown'
 import HistoryGridView from '@components/Hashtag/History/HistoryGridView'
-import HistoryListView from '@components/Hashtag/History/HistoryListView'
+import { columns } from '@components/Hashtag/History/Table/columns'
+import { DataTable } from '@components/Hashtag/History/Table/data-table'
+import Paginator from '@components/Hashtag/History/Table/pagination'
 import { Input } from '@components/ui/Input'
 import { useHistory } from '@hooks/useHistory'
-import { Grid2X2Icon, List, SearchIcon } from 'lucide-react'
-import { useSearchParams } from 'next/navigation'
-import { useState } from 'react'
+import { DownloadIcon, Grid2X2Icon, List, SearchIcon, XIcon } from 'lucide-react'
+import { DeleteConfirmationDialog, DetailsDialog } from '@components/Hashtag/History/HistoryDialog'
+import { getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table'
 
+const FilterOptions = {
+  ALL: {
+    label: 'All',
+    value: 'all',
+  },
+  FAVOURITE: {
+    label: 'Favourite',
+    value: 'is_favourited',
+  },
+}
 const History = () => {
-  const searchParams = useSearchParams()
-  const { historys, handleSearch, isLoading } = useHistory()
+  const {
+    historys,
+    isLoading,
+    globalFilter,
+    setGlobalFilter,
+    openedRow,
+    setOpenedRow,
+    columnFilters,
+    setColumnFilters,
+    updateFavoriteStatus,
+    setSorting,
+    sorting,
+  } = useHistory()
+
+  const table = useReactTable({
+    data: historys ?? [],
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    onColumnFiltersChange: setColumnFilters,
+    onGlobalFilterChange: setGlobalFilter,
+    onSortingChange: setSorting,
+    state: {
+      globalFilter: globalFilter,
+      columnFilters,
+      sorting,
+    },
+    meta: {
+      updateFavoriteStatus: (row: string) => updateFavoriteStatus(row),
+    },
+  })
+
+  const [open, setOpen] = useState(false)
 
   const [layout, setLayout] = useState('list')
 
   const changeLayout = () => {
     setLayout(layout === 'grid' ? 'list' : 'grid')
+  }
+
+  const onDropDownChange = (value: string | number) => {
+    const isFavourite = value === FilterOptions['FAVOURITE'].value
+    const isAll = value === FilterOptions['ALL'].value
+
+    const column = table.getColumn('is_favourited')
+    if (column) {
+      if (isFavourite) {
+        column.setFilterValue(true)
+      } else if (isAll) {
+        column.setFilterValue(undefined)
+      }
+    } else {
+      console.error('Column "is_favourited" not found in the table columns.')
+    }
   }
 
   return (
@@ -32,20 +95,20 @@ const History = () => {
                 placeholder="Search for Hashtag/ Label"
                 className="relative rounded-full focus:ring-primary-500"
                 endIcon={SearchIcon}
-                onChange={(e) => handleSearch(e.target.value)}
-                defaultValue={searchParams?.get('query') || ''}
+                value={globalFilter}
+                onChange={(event) => {
+                  setGlobalFilter(event.target.value)
+                }}
               ></Input>
             </div>
-            <div className="flex flex-row flex-nowrap items-center gap-12 md:w-fit md:flex-row">
+            <div className="flex w-full flex-row flex-nowrap items-center gap-12 sm:w-fit md:w-fit md:flex-row">
               <Dropdown
                 isFloating
                 dropDownSizes={['m', 'm', 'm']}
-                options={[
-                  { label: 'Latest on top', value: 'All' },
-                  { label: 'Earliest on top', value: 'Label' },
-                  { label: 'Favourite ', value: 'Hashtag' },
-                ]}
+                options={Object.values(FilterOptions).map((option) => ({ label: option.label, value: option.value }))}
                 className="!w-full sm:!w-[200px]"
+                value={table.getColumn('is_favourited')?.getFilterValue() ? 'Favourite' : 'All'}
+                onValueChange={(value) => onDropDownChange(value)}
               ></Dropdown>
               <div className="cursor-pointer" onClick={() => changeLayout()}>
                 {layout === 'grid' ? <Grid2X2Icon /> : <List />}
@@ -54,11 +117,48 @@ const History = () => {
           </div>
         </div>
       </div>
-
       {historys && (
         <div className="w-full max-w-screen-2xl">
-          {layout === 'grid' ? <HistoryGridView data={historys} isLoading={isLoading} /> : <HistoryListView data={historys} isLoading={isLoading} />}
+          {layout === 'grid' ? (
+            <HistoryGridView data={historys} isLoading={isLoading} />
+          ) : (
+            table && <DataTable table={table} columns={columns} setOpen={setOpen} setOpenedRow={setOpenedRow} />
+          )}
         </div>
+      )}
+      <div className="mt-12">
+        <Paginator
+          currentPage={table.getState().pagination.pageIndex + 1}
+          totalPages={table.getPageCount()}
+          onPageChange={(pageNumber) => table.setPageIndex(pageNumber - 1)}
+          showPreviousNext
+        />
+      </div>
+
+      {table.getFilteredSelectedRowModel().rows?.length > 0 && (
+        <div className="fixed bottom-20 z-10 flex w-4/5 rounded-lg border border-neutral-300 bg-white p-6 drop-shadow-2xl md:w-1/2">
+          <div className="mx-12 flex w-full flex-row justify-between gap-4">
+            <div>Selected {table.getFilteredSelectedRowModel().rows.length}</div>
+            <DeleteConfirmationDialog />
+            <button className="btn-danger">
+              <DownloadIcon />
+            </button>
+            <div className="flex cursor-pointer items-center" onClick={() => table.resetRowSelection()}>
+              <XIcon />
+            </div>
+          </div>
+        </div>
+      )}
+      {openedRow && (
+        <DetailsDialog
+          open={open}
+          data={openedRow}
+          setOpen={setOpen}
+          onClose={() => {
+            setOpenedRow(null)
+            setOpen(false)
+          }}
+        />
       )}
     </div>
   )

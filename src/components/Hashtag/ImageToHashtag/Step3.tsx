@@ -125,21 +125,6 @@ const Step3: React.FC = () => {
     )
   }, [])
 
-  // const generateImageByHashtag = useCallback(async () => {
-  //   if (categorizedOptions) {
-  //     try {
-  //       const checkedOptions = categorizedOptions.flatMap((option) =>
-  //         option.options.filter((opt) => opt.checked).map((opt) => opt.label.replace(/#/g, '_'))
-  //       )
-  //       if (checkedOptions.length > 0) {
-  //         router.push(`/hashtag/hashtag-to-image?hashtags=${checkedOptions.join(', ')}`)
-  //       }
-  //     } catch (error) {
-  //       console.error('Error fetching hashtags:', error)
-  //     }
-  //   }
-  // }, [categorizedOptions])
-
   const labelOptions = useMemo(() => {
     if (!currentImage?.labels) return null
     return currentImage.labels.map((label) => ({
