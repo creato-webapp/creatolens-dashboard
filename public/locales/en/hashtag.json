@@ -12,7 +12,7 @@
   "image_generated_failed": "Image Generated Fail",
   "keywords_describe": "Describe your image with keywords",
   "keywords_input": "Keywords Input",
-  "keywords_input_info": "Type to describe, separated keywords by double tab space",
+  "keywords_input_info": "Type your description, and add them using the Add button or by pressing Enter",
   "keywords_textarea_placeholder": "Describe image with keywords",
   "negative_prompt": "Negative Prompt",
   "negative_prompt_textarea_placeholder": "Describe unwanted items in image with keywords",
