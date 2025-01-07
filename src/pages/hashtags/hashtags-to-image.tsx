@@ -43,7 +43,7 @@ const HashtagToImage = () => {
   ))
 
   return (
-    <div className="mb-4 flex w-full flex-col justify-center gap-12 md:min-h-144">
+    <div className="mb-4 flex w-full flex-col justify-center gap-8 md:min-h-144">
       <div className="flex items-center justify-between">
         <h1 className="text-subtitle font-bold">{t('hashtags_to_image')}</h1>
         <div className="flex flex-row gap-2"></div>
