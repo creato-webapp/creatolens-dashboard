@@ -18,13 +18,12 @@ const NegativePrompt = () => {
   const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
 
-    // Split the text when double spaces are detected
     if (value.includes('  ')) {
-      const words = value.split('  ') // Split on double spaces
-      const lastWord = words[0].trim() // Get the word before the double spaces
+      const words = value.split('  ')
+      const lastWord = words[0].trim()
 
       if (lastWord) {
-        addNegativeKeywords(value) // Update the input value normally
+        addNegativeKeywords(value)
         setInputText('')
       }
     } else {
@@ -69,7 +68,7 @@ const NegativePrompt = () => {
             placeholder={t('negative_prompt_textarea_placeholder')}
             value={inputText}
             onChange={handleTextChange}
-            onKeyDown={handleKeyDown} // Add this line to handle the Enter key
+            onKeyDown={handleKeyDown}
             maxLength={MAX_TEXT_LENGTH}
           />
         </div>
