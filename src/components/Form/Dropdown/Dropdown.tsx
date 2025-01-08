@@ -24,6 +24,7 @@ interface DropdownProps extends HTMLProps<HTMLSelectElement> {
   isCheckbox?: boolean
   extraElement?: React.ReactNode
   isFloating?: boolean
+  isDefaultOpen?: boolean
   buttonClassName?: string // Added props for className
 }
 
@@ -38,9 +39,10 @@ const Dropdown: React.FC<DropdownProps> = ({
   className = '',
   buttonClassName = '',
   disabled = false,
+  isDefaultOpen = false,
 }) => {
   const [selectedValue, setSelectedValue] = useState<string | number>(name || '')
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(isDefaultOpen)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
   const mapSelectedValueToOptions = useMemo(() => {

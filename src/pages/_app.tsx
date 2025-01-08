@@ -21,6 +21,7 @@ import { HashtagImageProvider } from '@context/HashtagToImageContext'
 import { ImageHashtagProvider } from '@context/ImageToHashtagContext'
 import { Layout } from '@components/Layout'
 import IMAGE from '@constants/image'
+import { HistoryProvider } from '@context/HistoryContext'
 
 type NextPageWithLayout<P = object> = NextPage<P> & {
   getLayout?: (page: ReactElement) => ReactNode
@@ -104,13 +105,15 @@ function AppProviders({ children }: { children: ReactNode }) {
   return (
     <DialogueProvider>
       <ModalProvider>
-        <ImageHashtagProvider>
-          <HashtagImageProvider>
-            {children}
-            <Dialogue />
-            <Modals />
-          </HashtagImageProvider>
-        </ImageHashtagProvider>
+        <HistoryProvider>
+          <ImageHashtagProvider>
+            <HashtagImageProvider>
+              {children}
+              <Dialogue />
+              <Modals />
+            </HashtagImageProvider>
+          </ImageHashtagProvider>
+        </HistoryProvider>
       </ModalProvider>
     </DialogueProvider>
   )

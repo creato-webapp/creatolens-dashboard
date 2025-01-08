@@ -12,7 +12,7 @@ const useRequest = <T = unknown>(key: Key, method: IMethodsType, config?: IReque
   const [shouldFetch, setShouldFetch] = useState(config?.shouldFetch)
 
   // @ts-expect-error tuple type from key cannot pass correctly into fetcher
-  const { data, error, mutate: onMutate, ...swr } = useSWR(shouldFetch ? key : null, (key) => fetcher[method](...key), config)
+  const { data, error, mutate: onMutate, isLoading, ...swr } = useSWR(shouldFetch ? key : null, (key) => fetcher[method](...key), config)
 
   const mutate: KeyedMutator<unknown> = useCallback(
     async (data, opts) => {
@@ -26,11 +26,12 @@ const useRequest = <T = unknown>(key: Key, method: IMethodsType, config?: IReque
     () => ({
       setShouldFetch,
       data: data as T | undefined,
+      isLoading,
       error,
       mutate,
       ...swr,
     }),
-    [data, error, mutate, swr]
+    [data, error, isLoading, mutate, swr]
   )
 }
 

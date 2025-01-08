@@ -3,7 +3,7 @@ import Image from 'next/image'
 
 import Primary from '@components/Button/Primary'
 import { getImageHashtag } from '@services/HashtagHelper'
-import { useImageHashtagContext } from '@hooks/UseImagetoHashtag'
+import { useImageHashtag } from '@hooks/useImagetoHashtag'
 import { IHashet } from 'pages/recommendation'
 import { CONFIDENCE_LEVELS } from '@constants/imageStyle'
 import { useDialogues } from '@hooks/useDialogues'
@@ -28,7 +28,7 @@ interface CategoryOption {
 }
 
 const Step3: React.FC = () => {
-  const { image, updateSelectedLabels, hashtags, updateHashtag, goBack, clearImage } = useImageHashtagContext()
+  const { image, updateSelectedLabels, hashtags, updateHashtag, goBack, clearImage } = useImageHashtag()
   const { addDialogue } = useDialogues()
 
   const currentImage = useMemo(() => image, [image])
@@ -124,21 +124,6 @@ const Step3: React.FC = () => {
       }))
     )
   }, [])
-
-  // const generateImageByHashtag = useCallback(async () => {
-  //   if (categorizedOptions) {
-  //     try {
-  //       const checkedOptions = categorizedOptions.flatMap((option) =>
-  //         option.options.filter((opt) => opt.checked).map((opt) => opt.label.replace(/#/g, '_'))
-  //       )
-  //       if (checkedOptions.length > 0) {
-  //         router.push(`/hashtag/hashtag-to-image?hashtags=${checkedOptions.join(', ')}`)
-  //       }
-  //     } catch (error) {
-  //       console.error('Error fetching hashtags:', error)
-  //     }
-  //   }
-  // }, [categorizedOptions])
 
   const labelOptions = useMemo(() => {
     if (!currentImage?.labels) return null

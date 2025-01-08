@@ -1,11 +1,11 @@
-import { ReactElement } from 'react'
+import { ReactElement, Suspense } from 'react'
 
 import Keywordsinput from '@components/Hashtag/HashtagToImage/Keywordsinput'
 import NegativePrompt from '@components/Hashtag/HashtagToImage/NegativePrompt'
 import StyleSelection from '@components/Hashtag/HashtagToImage/StyleSelection'
 import { Layout } from '@components/Layout'
 import SideMenuLayout from '@components/Layout/SideMenuLayout'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@components/ui/Tabs'
+import { Tabs, TabsContent } from '@components/ui/Tabs'
 import { useTranslation } from 'next-i18next'
 import PrimaryButton from '@components/Button/Primary'
 import { useHashtagToImage } from '@hooks/useHashtagToImage'
@@ -16,6 +16,13 @@ import NeutralButton from '@components/Button/Neutral'
 import RepeatIcon from '@components/Icon/RepeatIcon'
 import { AlertTriangle, InfoIcon } from 'lucide-react'
 import React from 'react'
+
+import { getLocaleProps } from '@services/locale'
+import { GetStaticPropsContext, GetServerSidePropsContext } from 'next'
+
+export async function getStaticProps(context: { locale: GetStaticPropsContext | GetServerSidePropsContext }) {
+  return await getLocaleProps(context.locale)
+}
 
 const HashtagToImage = () => {
   const { t } = useTranslation(['hashtag', 'common'])
@@ -36,19 +43,19 @@ const HashtagToImage = () => {
   ))
 
   return (
-    <div className="mb-4 flex w-full flex-col justify-center gap-12 md:min-h-144">
+    <div className="mb-4 flex w-full flex-col justify-center gap-8 md:min-h-144">
       <div className="flex items-center justify-between">
         <h1 className="text-subtitle font-bold">{t('hashtags_to_image')}</h1>
         <div className="flex flex-row gap-2"></div>
       </div>
-      <div className="flex w-full items-center justify-center md:my-4">
+      <div className="flex w-full items-center justify-center">
         <div className="flex w-full flex-col">
-          <Tabs defaultValue="keyword" className="">
-            <TabsList>
-              <TabsTrigger className="w-full" value="keyword">
+          <Tabs defaultValue="keyword" className="flex flex-col">
+            {/* <TabsList>
+              <TabsTrigger className="w-1/2" value="keyword">
                 <div>{t('keywords_input')}</div>
               </TabsTrigger>
-            </TabsList>
+            </TabsList> */}
             <TabsContent value="keyword" className="w-full">
               <div className="flex flex-col items-center gap-4 lg:flex-row">
                 {(isLoading || isImageGenerated || generatedImageUri) && (
@@ -98,9 +105,16 @@ const HashtagToImage = () => {
     </div>
   )
 }
-export default HashtagToImage
 
-HashtagToImage.getLayout = function getLayout(page: ReactElement) {
+const HashtagsToImageWrapper = () => (
+  <Suspense fallback={<div>Loading translations...</div>}>
+    <HashtagToImage />
+  </Suspense>
+)
+
+export default HashtagsToImageWrapper
+
+HashtagsToImageWrapper.getLayout = function getLayout(page: ReactElement) {
   return (
     <Layout>
       <SideMenuLayout>{page}</SideMenuLayout>

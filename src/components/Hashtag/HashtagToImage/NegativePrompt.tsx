@@ -2,9 +2,10 @@ import React, { useState } from 'react'
 
 import { useTranslation } from 'next-i18next'
 import { useHashtagToImage } from '@hooks/useHashtagToImage'
-import { Textarea } from '@components/ui/Textarea'
 import { Badge } from '@components/ui/Badge'
 import CrossIcon from '@components/Icon/CrossIcon'
+import { Input } from '@components/ui/Input'
+import SubtleButton from '@components/Button/Subtle'
 
 const MAX_TEXT_LENGTH = 200
 
@@ -14,20 +15,33 @@ const NegativePrompt = () => {
 
   const { t } = useTranslation('hashtag')
 
-  const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
 
-    // Split the text when double spaces are detected
     if (value.includes('  ')) {
-      const words = value.split('  ') // Split on double spaces
-      const lastWord = words[0].trim() // Get the word before the double spaces
+      const words = value.split('  ')
+      const lastWord = words[0].trim()
 
       if (lastWord) {
-        addNegativeKeywords(value) // Update the input value normally
+        addNegativeKeywords(value)
         setInputText('')
       }
     } else {
       setInputText(value)
+    }
+  }
+
+  const handleAddNegativeKeywords = () => {
+    if (inputText.trim() !== '') {
+      addNegativeKeywords(inputText)
+      setInputText('')
+    }
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault() // Prevent form submission if inside a form
+      handleAddNegativeKeywords()
     }
   }
 
@@ -45,14 +59,23 @@ const NegativePrompt = () => {
             </Badge>
           ))}
       </div>
-      <Textarea
-        disabled={isLoading}
-        className="max-h-20 w-full rounded-md border border-neutral-300 px-4 py-3  focus:border-primary-500 focus:ring-0 focus-visible:border-primary-500 focus-visible:ring-0 focus-visible:ring-offset-0 "
-        placeholder={t('negative_prompt_textarea_placeholder')}
-        value={inputText}
-        onChange={handleTextChange}
-        maxLength={MAX_TEXT_LENGTH}
-      />
+
+      <div className="flex flex-row items-center justify-start gap-4">
+        <div className="w-full xl:w-1/2">
+          <Input
+            disabled={isLoading}
+            className="w-full"
+            placeholder={t('negative_prompt_textarea_placeholder')}
+            value={inputText}
+            onChange={handleTextChange}
+            onKeyDown={handleKeyDown}
+            maxLength={MAX_TEXT_LENGTH}
+          />
+        </div>
+        <SubtleButton sizes={['s', 's', 's']} onClick={handleAddNegativeKeywords}>
+          Add
+        </SubtleButton>
+      </div>
     </div>
   )
 }

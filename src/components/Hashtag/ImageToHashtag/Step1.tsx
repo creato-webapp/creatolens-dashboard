@@ -2,7 +2,7 @@ import React, { useCallback, useRef, useMemo } from 'react'
 import Primary from '@components/Button/Primary'
 import ImageUpload from '../ImageUpload'
 import useImageUploader from '@hooks/useImageUploader'
-import { useImageHashtagContext } from '@hooks/UseImagetoHashtag'
+import { useImageHashtag } from '@hooks/useImagetoHashtag'
 import Neutral from '@components/Button/Neutral'
 import RefreshIcon from '@components/Icon/RefreshIcon'
 import CaretRightBoldIcon from '@components/Icon/CaretRightBoldIcon'
@@ -11,7 +11,7 @@ const Step1 = () => {
   const fileInputRef = useRef<HTMLInputElement | null>(null)
 
   const { error } = useImageUploader({ timeout: 30000 })
-  const { addImage, goForward, image, clearImage } = useImageHashtagContext()
+  const { addImage, goForward, image, clearImage } = useImageHashtag()
 
   const onClickButton = useCallback(async () => {
     try {

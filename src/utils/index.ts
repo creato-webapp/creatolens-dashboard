@@ -17,3 +17,8 @@ export function slugify(item: string): string {
 export const getUniqueSortedHashtags = (hashtags: Hashtag[]): Hashtag[] => {
   return Array.from(new Map(hashtags.map((hashtag) => [hashtag.hashtag, hashtag])).values()).sort((a, b) => b.count - a.count)
 }
+
+export const arrayOfStringsToSentence = (array: string[]): string => {
+  if (!array) return ''
+  return array.join(', ')
+}
