@@ -2,8 +2,9 @@ import NeutralButton from '@components/Button/Neutral'
 import PrimaryButton from '@components/Button/Primary'
 import Dropdown from '@components/Form/Dropdown/Dropdown'
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@components/ui/Dialog'
-import { HistoryRow } from '@context/HistoryContext'
+import { HistoryRow } from '@services/HistoryHelper'
 import { Row } from '@tanstack/react-table'
+import { convertGcsUriToHttp } from '@utils/index'
 import { Trash2Icon } from 'lucide-react'
 import Image from 'next/image'
 
@@ -24,10 +25,16 @@ const DetailsDialog = (props: { open: boolean; setOpen: (id: boolean) => void; d
           </DialogHeader>
           <DialogDescription>{data.getValue('favourite')}</DialogDescription>
           <div className="flex w-full flex-col gap-4 bg-white">
-            <div>Image Uploaded: {data.original.output_object.updated_at}</div>
+            <div>Image Uploaded: {data.original.updated_at}</div>
             <div className="flex flex-col gap-4 md:flex-row">
               <div className="relative flex min-h-[300px] w-full flex-1 bg-neutral-200 sm:h-[400px]">
-                <Image src={data.original.output_object.data.url} alt="Output" fill style={{ objectFit: 'contain' }} className="rounded-md" />
+                <Image
+                  src={convertGcsUriToHttp(data.original.uploaded_image)}
+                  alt="Output"
+                  fill
+                  style={{ objectFit: 'contain' }}
+                  className="rounded-md"
+                />
               </div>
               <div className="flex flex-1 flex-col gap-4">
                 <div className="font-semibold text-secondary-500">{data.original.labels.length} Labels discovered</div>{' '}
@@ -53,8 +60,8 @@ const DetailsDialog = (props: { open: boolean; setOpen: (id: boolean) => void; d
                     key="hashtags-dropdown"
                     name="Hashtags"
                     options={data.original.hashtags.map((hashtag) => ({
-                      value: hashtag,
-                      label: hashtag,
+                      value: hashtag.hashtag,
+                      label: hashtag.hashtag,
                       checked: data.original.hashtags.includes(hashtag),
                     }))}
                     isCheckbox

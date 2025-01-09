@@ -1,5 +1,7 @@
 import { Checkbox } from '@components/ui/Checkbox'
+import { HistoryRow } from '@services/HistoryHelper'
 import { ColumnDef, RowData } from '@tanstack/react-table'
+import { convertGcsUriToHttp } from '@utils/index'
 import { ArrowUpDown, StarIcon } from 'lucide-react'
 import Image from 'next/image'
 
@@ -8,26 +10,6 @@ declare module '@tanstack/react-table' {
   interface TableMeta<TData extends RowData> {
     updateFavoriteStatus: (id: string) => void
   }
-}
-
-type HistoryRow = {
-  created_at: string
-  id: string
-  input_object: null
-  is_deleted: boolean
-  output_object: {
-    created_at: string
-    data: {
-      url: string
-    }
-    updated_at: string
-  }
-  status: number
-  updated_at: string
-  user_id: string
-  labels: string[]
-  hashtags: string[]
-  is_favourited: boolean
 }
 
 const FallBackImage = () => {
@@ -76,9 +58,11 @@ export const columns: ColumnDef<HistoryRow>[] = [
     accessorKey: 'image',
     header: 'Image',
     cell: ({ row }) => {
-      const imageUrl = row.original.output_object.data.url || ''
+      const imageUrl = row.original.uploaded_image || ''
+      const combinedUrl = convertGcsUriToHttp(imageUrl)
+
       if (!imageUrl) return <FallBackImage />
-      else return <Image src={imageUrl as string} alt="Image" className="aspect-square object-cover" width={40} height={40} />
+      else return <Image src={combinedUrl as string} alt="Image" className="aspect-square object-cover" width={40} height={40} />
     },
   },
   {
@@ -88,13 +72,19 @@ export const columns: ColumnDef<HistoryRow>[] = [
     enableResizing: true,
     enableGlobalFilter: true,
     accessorFn: (originalRow) => originalRow.labels.toString(), // matches is a number
-    cell: ({ row }) => <div className="text-nowrap lowercase">{(row.getValue('labels') as string).replace(/,/g, ', ')}</div>,
+    cell: ({ row }) => <div className="line-clamp-2 lowercase">{(row.getValue('labels') as string).replace(/,/g, ', ')}</div>,
   },
   {
     accessorKey: 'hashtags',
     header: 'Hashtags',
-    accessorFn: (originalRow) => originalRow.hashtags.toString(), // matches is a number
-    cell: ({ row }) => <div className="text-nowrap lowercase">{(row.getValue('hashtags') as string).replace(/,/g, ', ')}</div>,
+    accessorFn: (originalRow) => {
+      const tags = originalRow.hashtags.map((hashtag) => {
+        return hashtag.hashtag
+      })
+      return tags.toString()
+    },
+    //originalRow.hashtags.toString(), // matches is a number
+    cell: ({ row }) => <div className="line-clamp-2 lowercase">{(row.getValue('hashtags') as string).replace(/,/g, ', ')}</div>,
   },
   {
     accessorKey: 'created_at',

@@ -49,7 +49,9 @@ export function DataTable<TData, TValue>({ table, columns, setOpenedRow, setOpen
                 className="cursor-pointer hover:bg-neutral-200"
               >
                 {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
+                  <TableCell key={cell.id} className="max-w-80">
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </TableCell>
                 ))}
               </TableRow>
             ))

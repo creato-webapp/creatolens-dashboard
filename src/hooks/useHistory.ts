@@ -6,7 +6,7 @@ export const useHistory = () => {
   // move to useHook folder
   const context = useContext(HistoryContext)
   if (!context) {
-    throw new Error('HistoryContext must be used within an ImageHashtagProvider')
+    throw new Error('useHistory must be used within a HistoryProvider') // Fixed error message
   }
   return context
 }

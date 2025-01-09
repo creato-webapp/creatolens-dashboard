@@ -1,6 +1,6 @@
 import Dropdown from '@components/Form/Dropdown/Dropdown'
 import { Input } from '@components/ui/Input'
-import { HistoryRow } from '@context/HistoryContext'
+import { HistoryRow } from '@services/HistoryHelper'
 import { Table } from '@tanstack/react-table'
 import { Grid2X2Icon, List, SearchIcon } from 'lucide-react'
 import { Dispatch, SetStateAction } from 'react'

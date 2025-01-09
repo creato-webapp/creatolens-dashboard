@@ -2,9 +2,9 @@ import Image from 'next/image'
 
 import { Card, CardContent } from '@components/ui/Card'
 import { useMemo } from 'react'
-import { HistoryRow } from '@context/HistoryContext'
 import { Skeleton } from '@components/ui/Skeleton'
-import { arrayOfStringsToSentence } from '@utils/index'
+import { arrayOfStringsToSentence, convertGcsUriToHttp } from '@utils/index'
+import { HistoryRow } from '@services/HistoryHelper'
 
 export interface HistoryGridViewProps {
   data: HistoryRow[]
@@ -61,9 +61,15 @@ const HistoryGridView = (props: HistoryGridViewProps) => {
         <Card key={row.id} className="mb-4">
           <CardContent className="p-4">
             <div className="flex flex-col">
-              {row.output_object.data.url ? (
+              {row.uploaded_image ? (
                 <div className="relative h-64 w-full">
-                  <Image src={row.output_object.data.url} alt="Output" fill style={{ maxHeight: '400px' }} className="rounded-md" />
+                  <Image
+                    src={convertGcsUriToHttp(row.uploaded_image)}
+                    alt="Output"
+                    fill
+                    style={{ maxHeight: '400px', objectFit: 'contain' }}
+                    className="rounded-md"
+                  />
                 </div>
               ) : (
                 <FallBackImage />
@@ -73,7 +79,9 @@ const HistoryGridView = (props: HistoryGridViewProps) => {
                   <b className="truncate font-normal text-neutral-800">{arrayOfStringsToSentence(row.labels)}</b>
                 </div>
                 <div className="mt-2 flex flex-row justify-start overflow-hidden text-left">
-                  <div className="truncate font-semibold text-neutral-800">{arrayOfStringsToSentence(row.hashtags)}</div>
+                  <div className="truncate font-semibold text-neutral-800">
+                    {arrayOfStringsToSentence(row.hashtags.map((hashtag) => hashtag.hashtag))}
+                  </div>
                 </div>
                 <div className="text-sm text-neutral-500">{dateToBefore(row.created_at)}</div>
               </div>

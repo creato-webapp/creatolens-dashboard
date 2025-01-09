@@ -8,6 +8,7 @@ import useLocalStorage from '@hooks/useLocalStorage'
 import { ColumnFiltersState, Row, SortingState } from '@tanstack/react-table'
 import { useDialogues } from '@hooks/useDialogues'
 import { Status } from './DialogueContext'
+import { HistoryRow } from '@services/HistoryHelper'
 
 interface HistoryContextType {
   historys: HistoryRow[] | undefined
@@ -26,26 +27,6 @@ interface HistoryContextType {
 
 interface HistoryProviderProps {
   children: ReactNode
-}
-
-export interface HistoryRow {
-  created_at: string
-  id: string
-  input_object: null
-  is_deleted: boolean
-  output_object: {
-    created_at: string
-    data: {
-      url: string
-    }
-    updated_at: string
-  }
-  status: number
-  updated_at: string
-  user_id: string
-  labels: string[]
-  hashtags: string[]
-  is_favourited: boolean
 }
 
 interface HistoryQueryData {
@@ -91,14 +72,19 @@ export const HistoryProvider = ({ children }: HistoryProviderProps) => {
 
   const updateFavoriteStatus = useCallback(
     (id: string) => {
-      setFavouritedHistoryRowIds(
-        (prevIds) =>
-          prevIds.includes(id)
-            ? prevIds.filter((prevId) => prevId !== id) // Remove the specific ID
-            : [...prevIds, id] // Add the specific ID
-      )
+      try {
+        setFavouritedHistoryRowIds(
+          (prevIds) =>
+            prevIds.includes(id)
+              ? prevIds.filter((prevId) => prevId !== id) // Remove the specific ID
+              : [...prevIds, id] // Add the specific ID
+        )
+      } catch (error) {
+        console.error('Error updating favorite status:', error)
+        addDialogue('Failed to update favorite status', Status.FAILED)
+      }
     },
-    [setFavouritedHistoryRowIds]
+    [addDialogue, setFavouritedHistoryRowIds]
   )
 
   const { session } = useAuth()
@@ -109,25 +95,39 @@ export const HistoryProvider = ({ children }: HistoryProviderProps) => {
     user_id: userId,
   }
 
-  const { data: historys, isLoading, error } = useHistoryQuery(userId ? requestdata : { user_id: '' }, !!userId, [])
+  const { data: historys, isLoading, error } = useHistoryQuery(userId ? requestdata : { user_id: '' }, true, [])
+
   const combinedHistorys = useMemo(() => {
-    if (!historys) return []
-    return historys.map((row) => ({
-      ...row,
-      is_favourited: favouritedHistoryRowIds.includes(row.id),
-    }))
-  }, [historys, favouritedHistoryRowIds])
+    try {
+      if (!historys) return []
+      return historys.map((row) => ({
+        ...row,
+        is_favourited: favouritedHistoryRowIds?.includes(row.id) ?? false,
+      }))
+    } catch (error) {
+      console.error('Error combining history data:', error)
+      addDialogue('Error processing history data', Status.FAILED)
+      return []
+    }
+  }, [historys, favouritedHistoryRowIds, addDialogue])
 
   const updateHistoryRow = useCallback(
     (row: HistoryRow) => {
-      const index = selectedHistoryRows.findIndex((r) => r.id === row.id)
-      if (index === -1) {
-        setSelectedHistoryRows((prevRows) => [...prevRows, row])
-      } else {
-        setSelectedHistoryRows((prevRows) => prevRows.filter((r) => r.id !== row.id))
+      try {
+        if (!row?.id) throw new Error('Invalid history row')
+        setSelectedHistoryRows((prevRows) => {
+          const index = prevRows.findIndex((r) => r.id === row.id)
+          if (index === -1) {
+            return [...prevRows, row]
+          }
+          return prevRows.filter((r) => r.id !== row.id)
+        })
+      } catch (error) {
+        console.error('Error updating history row:', error)
+        addDialogue('Failed to update history selection', Status.FAILED)
       }
     },
-    [selectedHistoryRows]
+    [selectedHistoryRows, addDialogue]
   )
 
   useEffect(() => {

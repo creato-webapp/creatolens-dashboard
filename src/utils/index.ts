@@ -22,3 +22,22 @@ export const arrayOfStringsToSentence = (array: string[]): string => {
   if (!array) return ''
   return array.join(', ')
 }
+
+export function convertGcsUriToHttp(gsUri: string): string {
+  if (!gsUri.startsWith('gs://')) {
+    throw new Error("Invalid GCS URI. It must start with 'gs://'")
+  }
+
+  // Remove the "gs://" prefix
+  const path = gsUri.replace('gs://', '')
+
+  // Split into bucket name and object path
+  const [bucketName, ...objectPathParts] = path.split('/')
+  const objectPath = objectPathParts.join('/')
+
+  // Encode object path to handle special characters
+  const encodedObjectPath = encodeURIComponent(objectPath).replace(/%2F/g, '/') // Keep "/" unencoded
+
+  // Construct the public URL
+  return `https://storage.googleapis.com/${bucketName}/${encodedObjectPath}`
+}
