@@ -1,4 +1,4 @@
-import { GetServerSideProps, GetServerSidePropsContext, GetStaticPropsContext } from 'next'
+import { GetServerSideProps, GetServerSidePropsContext } from 'next'
 import { ReactElement, Suspense, useCallback, useState } from 'react'
 import Image from 'next/image'
 import Details from '@components/Hashtag/Details'
@@ -16,16 +16,10 @@ import { v4 as uuidv4 } from 'uuid'
 export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
   const correlationId = uuidv4()
   context.res.setHeader('Set-Cookie', `correlationId=${correlationId}; Path=/; HttpOnly`)
-  return {
-    props: {},
-  }
+  return await getLocaleProps(context)
 }
 
 // import HelpIcon from '@components/Icon/HelpIcon'
-
-export async function getStaticProps(context: { locale: GetStaticPropsContext | GetServerSidePropsContext }) {
-  return await getLocaleProps(context.locale)
-}
 
 const ImageToHashtags = () => {
   const { step } = useImageHashtag()
