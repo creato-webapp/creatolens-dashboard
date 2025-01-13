@@ -26,6 +26,6 @@ export default handler.api({
       throw new NotFoundError('Invalid hashtag filter format')
     }
 
-    return res.status(200).json(hashtagFilter)
+    return res.status(200).json(hashtagFilter || [])
   },
 })

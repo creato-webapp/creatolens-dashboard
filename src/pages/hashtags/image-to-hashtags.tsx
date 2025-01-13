@@ -1,7 +1,6 @@
+import { GetServerSideProps, GetServerSidePropsContext } from 'next'
 import { ReactElement, Suspense, useCallback, useState } from 'react'
-
 import Image from 'next/image'
-
 import Details from '@components/Hashtag/Details'
 import Step1 from '@components/Hashtag/ImageToHashtag/Step1'
 import Step2 from '@components/Hashtag/ImageToHashtag/Step2'
@@ -10,13 +9,17 @@ import ProgressBar from '@components/Hashtag/ProgressBar'
 import { useImageHashtag } from '@hooks/useImagetoHashtag'
 import { Layout } from '@components/Layout'
 import SideMenuLayout from '@components/Layout/SideMenuLayout'
-import { GetServerSidePropsContext, GetStaticPropsContext } from 'next'
 import { getLocaleProps } from '@services/locale'
+import { v4 as uuidv4 } from 'uuid'
 // import HelpIcon from '@components/Icon/HelpIcon'
 
-export async function getStaticProps(context: { locale: GetStaticPropsContext | GetServerSidePropsContext }) {
-  return await getLocaleProps(context.locale)
+export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
+  const correlationId = uuidv4()
+  context.res.setHeader('Set-Cookie', `correlationId=${correlationId}; Path=/; HttpOnly`)
+  return await getLocaleProps(context)
 }
+
+// import HelpIcon from '@components/Icon/HelpIcon'
 
 const ImageToHashtags = () => {
   const { step } = useImageHashtag()
