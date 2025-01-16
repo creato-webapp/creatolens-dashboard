@@ -19,6 +19,7 @@ const nextConfig = {
         port: '',
       },
     ],
+    minimumCacheTTL: 60,
   },
   webpack(config) {
     config.module.rules.push({

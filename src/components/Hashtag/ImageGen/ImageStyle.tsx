@@ -2,15 +2,23 @@ import React, { useCallback } from 'react'
 import { useRemoteStringConfig } from '@hooks/useRemoteConfig'
 import Dropdown from '@components/Form/Dropdown/Dropdown'
 import { useHashtagToImage } from '@hooks/useHashtagToImage'
-import { useTranslation } from 'next-i18next'
+import { getImageStyle } from '@services/HashtagHelper'
 
 const IMAGE_STYLE_KEY = 'IMAGE_STYLE'
+export interface ImageStyleProps {
+  [key: string]: ImageStyleType
+}
+
+type ImageStyleType = {
+  label: string
+  value: string
+  image: string
+}
 
 const ImageStyle = () => {
-  const { t } = useTranslation(['common'])
-
-  const { config: imageStyles } = useRemoteStringConfig<Record<string, { value: string; image: string; name: string }>>(IMAGE_STYLE_KEY)
-  const { updateImageConfig, isLoading } = useHashtagToImage()
+  const { config: imageStyles } = useRemoteStringConfig<ImageStyleProps>(IMAGE_STYLE_KEY)
+  const { updateImageConfig, isLoading, imageConfig } = useHashtagToImage()
+  const imageStyleOptions = getImageStyle(imageStyles)
 
   const imageConfigSelect = useCallback(
     (key: string, value: string) => {
@@ -21,25 +29,27 @@ const ImageStyle = () => {
 
   const updateImageStyle = useCallback(
     (value: string) => {
-      const mappedValue = Object.values(imageStyles).find((style) => style.name === value)?.value
-      imageConfigSelect('imageStyle', mappedValue || imageStyles[0].value)
+      // map with the value and return the key
+      const mappedValue = Object.keys(imageStyles).find((key) => {
+        return imageStyles[key].value === value
+      })
+      imageConfigSelect('imageStyle', mappedValue || imageStyleOptions[0].value)
     },
-    [imageConfigSelect, imageStyles]
+    [imageConfigSelect, imageStyleOptions, imageStyles]
   )
 
-  if (!imageStyles) return null
-
-  const options = Object.entries(imageStyles).map(([key, value]) => ({ key, value: value.name, label: value.name }))
+  if (!imageStyleOptions) return null
 
   return (
-    <div className="grid h-auto gap-4">
+    <div className="grid h-auto w-full gap-4">
       <Dropdown
-        options={options}
+        options={imageStyleOptions}
         onValueChange={(key) => updateImageStyle(key.toString())}
         dropDownSizes={['m', 'm', 'm']}
-        name={t('please_select')}
+        name={imageConfig.imageStyle}
         isFloating={true}
         disabled={isLoading}
+        className="w-full"
       />
     </div>
   )
