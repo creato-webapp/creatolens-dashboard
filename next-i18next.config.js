@@ -15,7 +15,7 @@ module.exports = {
     backends: isBrowser ? [LocalStorageBackend, HttpBackend] : [],
   },
   // https://www.i18next.com/overview/configuration-options#logging
-  debug: isDev,
+  debug: false,
   i18n: {
     defaultLocale: 'en',
     locales: ['en', 'zh-HK'],
@@ -27,7 +27,7 @@ module.exports = {
   },
   /** To avoid issues when deploying to some paas (vercel...) */
   localePath: typeof window === 'undefined' ? require('path').resolve('./public/locales') : '/locales',
-  ns: ['common', 'error', 'footer'],
+  ns: ['common', 'error', 'footer', 'hashtag'],
   partialBundledLanguages: isBrowser,
   reloadOnPrerender: process.env.NODE_ENV === 'development',
   use: isBrowser ? [ChainedBackend] : [],

@@ -1,19 +1,28 @@
-import { ReactElement, useCallback, useState } from 'react'
-
+import { GetServerSideProps, GetServerSidePropsContext } from 'next'
+import { ReactElement, Suspense, useCallback, useState } from 'react'
 import Image from 'next/image'
-
 import Details from '@components/Hashtag/Details'
 import Step1 from '@components/Hashtag/ImageToHashtag/Step1'
 import Step2 from '@components/Hashtag/ImageToHashtag/Step2'
 import Step3 from '@components/Hashtag/ImageToHashtag/Step3'
 import ProgressBar from '@components/Hashtag/ProgressBar'
-import { useImageHashtagContext } from '@hooks/UseImagetoHashtag'
+import { useImageHashtag } from '@hooks/useImagetoHashtag'
 import { Layout } from '@components/Layout'
 import SideMenuLayout from '@components/Layout/SideMenuLayout'
+import { getLocaleProps } from '@services/locale'
+import { v4 as uuidv4 } from 'uuid'
 // import HelpIcon from '@components/Icon/HelpIcon'
 
-const ImageToHashtag = () => {
-  const { step } = useImageHashtagContext()
+export const getServerSideProps: GetServerSideProps = async (context: GetServerSidePropsContext) => {
+  const correlationId = uuidv4()
+  context.res.setHeader('Set-Cookie', `correlationId=${correlationId}; Path=/; HttpOnly`)
+  return await getLocaleProps(context)
+}
+
+// import HelpIcon from '@components/Icon/HelpIcon'
+
+const ImageToHashtags = () => {
+  const { step } = useImageHashtag()
   const [isDetailPagesOpen, setIsDetailsPageOpen] = useState<boolean>(false)
 
   const StepComponent = useCallback(() => {
@@ -65,9 +74,16 @@ const ImageToHashtag = () => {
     </div>
   )
 }
-export default ImageToHashtag
 
-ImageToHashtag.getLayout = function getLayout(page: ReactElement) {
+const ImageToHashtagsWrapper = () => (
+  <Suspense fallback={<div>Loading translations...</div>}>
+    <ImageToHashtags />
+  </Suspense>
+)
+
+export default ImageToHashtagsWrapper
+
+ImageToHashtagsWrapper.getLayout = function getLayout(page: ReactElement) {
   return (
     <Layout>
       <SideMenuLayout>{page}</SideMenuLayout>

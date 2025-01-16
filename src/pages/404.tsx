@@ -6,12 +6,12 @@ import { useRouter } from 'next/router'
 
 import { Button } from '@components/Button'
 import { useTranslation } from 'next-i18next'
-import { GetStaticProps } from 'next'
 import { getLocaleProps } from '@services/locale'
 import CustomLink from '@components/Link'
+import { GetServerSidePropsContext, GetStaticPropsContext } from 'next'
 
-export const getStaticProps: GetStaticProps = async (context) => {
-  return getLocaleProps(context)
+export async function getStaticProps(context: { locale: GetStaticPropsContext | GetServerSidePropsContext }) {
+  return await getLocaleProps(context.locale)
 }
 
 const NOT_FOUND: React.FC = () => {

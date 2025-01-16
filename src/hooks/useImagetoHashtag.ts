@@ -2,7 +2,7 @@ import { useContext } from 'react'
 
 import { ImageHashtagContext } from '@context/ImageToHashtagContext'
 
-export const useImageHashtagContext = () => {
+export const useImageHashtag = () => {
   // move to useHook folder
   const context = useContext(ImageHashtagContext)
   if (!context) {

@@ -1,7 +1,6 @@
 import { ReactNode, createContext, useCallback, useState } from 'react'
 
 import { IHashet } from 'pages/recommendation'
-import { ImageStyleKeys } from '@constants/imageStyle'
 import { useGenerateImage } from '@hooks/useGenerateImage'
 
 export type ImageDetailsType = {
@@ -12,38 +11,30 @@ export type ImageDetailsType = {
 }
 
 export type ImageConfigType = {
-  imageStyle: ImageStyleKeys
+  imageStyle: string
   aspectRatio: string
 }
 
-export interface StepProps {
-  step: number
-  setStep: (arg: number) => void
-}
-
-type ImageType = {
-  image: string | null
-}
-
 type HashtagImageContextType = {
-  step: number
-  updateStep: (arg: number) => void
-  goBack: () => void
-  goForward: () => void
-  images: ImageType[]
-  addImage: (arg: string, labels: string[]) => void
-  keywords: string
+  keywords: string[]
   addKeywords: (arg: string) => void
-  currentImageIndex: number
+  removeKeywords: (arg: string) => void
+  negativeKeywords: string[]
+  addNegativeKeywords: (arg: string) => void
+  removeNegativeKeyword: (arg: string) => void
   hashtags: IHashet[]
   updateHashtags: (arg: IHashet[]) => void
   imageConfig: ImageConfigType
   updateImageConfig: (config: Partial<ImageConfigType>) => void
+  imageCategory: ImageModifier
   updateImageCategory: (category: string, option: string) => void
   generateImageWithKeywords: () => void
   generatedImageUri: string | null
+  isImageGenerated?: boolean
   isLoading: boolean
   error: string | null
+  loadingIndicator: number
+  resetToDefault: () => void
 }
 
 export const HashtagImageContext = createContext<HashtagImageContextType | undefined>(undefined)
@@ -59,61 +50,63 @@ type ImageModifier = {
 const initialGeneral: ImageModifier = {}
 
 export const HashtagImageProvider = ({ children }: HashtagImageProviderProps) => {
-  const [step, setStep] = useState<number>(1)
-  const [images, setImages] = useState<ImageType[]>([])
-  const [keywords, setKeywords] = useState<string>('')
-  const [currentImageIndex, setCurrentImageIndex] = useState<number>(0)
+  const [keywords, setKeywords] = useState<string[]>([])
+  const [negativeKeywords, setNegativeKeywords] = useState<string[]>([])
   const [hashtags, setHashtags] = useState<IHashet[]>([])
-  const [imageCategory, setImageCategory] = useState<ImageModifier>(initialGeneral)
+  const [imageCategory, setImageCategory] = useState<Record<string, string>>(initialGeneral)
   const [imageConfig, setImageConfig] = useState<ImageConfigType>({
-    imageStyle: 'GENERAL',
+    imageStyle: 'PHOTOGRAPHY',
     aspectRatio: '3:4',
   })
-  const { generatedImageUri, isLoading, error, generateImage } = useGenerateImage()
+  const [isImageGenerated, setIsImageGenerated] = useState<boolean>(false)
 
-  const updateStep = useCallback((arg: number) => {
-    setStep(arg)
-  }, [])
-  const goBack = useCallback(() => {
-    setStep((prev) => Math.max(prev - 1, 1)) // Ensures step doesn't go below 1
-  }, [])
+  const { generatedImageUri, isLoading, error, generateImage, loadingIndicator, removeImage } = useGenerateImage()
 
-  const goForward = useCallback(() => {
-    setStep((prev) => prev + 1)
+  const addNegativeKeywords = useCallback((text: string) => {
+    setNegativeKeywords((pre) => [...new Set([...pre, text])])
   }, [])
 
-  const addImage = useCallback((image: string, labels: string[]) => {
-    setImages((prevImages) => [
-      ...prevImages,
-      {
-        image,
-        labels,
-        selectedLabels: [],
-        uploadStatus: 'pending',
-      },
-    ])
-    setCurrentImageIndex(image.length) // Set to the index of the new image
+  const removeNegativeKeyword = useCallback((text: string) => {
+    setNegativeKeywords((pre) => pre.filter((keyword) => keyword !== text))
   }, [])
 
   const addKeywords = useCallback((text: string) => {
-    setKeywords(text)
+    setKeywords((prevKeywords) => [...new Set([...prevKeywords, text])])
+  }, [])
+
+  const removeKeywords = useCallback((text: string) => {
+    setKeywords((prevKeywords) => prevKeywords.filter((keyword) => keyword !== text))
   }, [])
 
   const updateHashtags = useCallback((newHashtags: IHashet[]) => {
     setHashtags(newHashtags)
   }, [])
 
+  const updateImageGenerated = useCallback((generated: boolean) => {
+    setIsImageGenerated(generated)
+  }, [])
+
   /*  */
   const generateImageWithKeywords = useCallback(async () => {
-    const data = {
-      aspectRatio: imageConfig.aspectRatio,
-      hashtags: hashtags,
-      imageCategory: imageCategory,
-      imageStyle: imageConfig.imageStyle,
-      keywords: keywords,
+    try {
+      updateImageGenerated(false)
+      const keywordString = keywords.map((keyword) => keyword.replace(/\s/g, '').trimEnd()).join(', ')
+      const negativeKeywordString = negativeKeywords.map((keyword) => keyword.replace(/\s/g, '').trimEnd()).join(', ')
+
+      const data = {
+        aspectRatio: imageConfig.aspectRatio,
+        hashtags: hashtags,
+        imageCategory: imageCategory,
+        imageStyle: imageConfig.imageStyle,
+        keywords: keywordString,
+        negativeKeywords: negativeKeywordString,
+      }
+      await generateImage(data)
+      updateImageGenerated(true)
+    } catch (error) {
+      console.error('Error generating image:', error)
     }
-    await generateImage(data)
-  }, [keywords, imageConfig, imageCategory, hashtags, generateImage])
+  }, [updateImageGenerated, keywords, negativeKeywords, imageConfig.aspectRatio, imageConfig.imageStyle, hashtags, imageCategory, generateImage])
 
   const updateImageConfig = useCallback((config: Partial<ImageConfigType>) => {
     setImageConfig((prev) => ({
@@ -129,27 +122,37 @@ export const HashtagImageProvider = ({ children }: HashtagImageProviderProps) =>
     }))
   }, [])
 
+  const resetToDefault = () => {
+    setKeywords([])
+    setNegativeKeywords([])
+    setImageConfig({ aspectRatio: '1:1', imageStyle: 'GENERAL' })
+    setImageCategory({})
+    setIsImageGenerated(false)
+    removeImage()
+  }
+
   return (
     <HashtagImageContext.Provider
       value={{
-        images,
-        imageConfig,
-        updateImageConfig,
-        updateImageCategory,
-        addImage,
         addKeywords,
-        keywords,
-        currentImageIndex,
-        hashtags,
-        updateHashtags,
-        step,
-        updateStep,
-        generatedImageUri,
-        goBack,
-        goForward,
-        generateImageWithKeywords,
-        isLoading,
+        removeKeywords,
         error,
+        generateImageWithKeywords,
+        generatedImageUri,
+        hashtags,
+        imageConfig,
+        isLoading,
+        keywords,
+        negativeKeywords,
+        addNegativeKeywords,
+        removeNegativeKeyword,
+        imageCategory,
+        updateImageCategory,
+        updateImageConfig,
+        updateHashtags,
+        loadingIndicator,
+        isImageGenerated,
+        resetToDefault,
       }}
     >
       {children}

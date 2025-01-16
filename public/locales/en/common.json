@@ -1,3 +1,8 @@
 {
-  "title": "2Tag"
+  "confirm": "Confirm",
+  "please_select": "Please Select",
+  "title": "2Tag",
+  "latest_on_top": "Latest on top",
+  "earliest_on_top": "Earliest on top",
+  "favorite": "Favorite"
 }

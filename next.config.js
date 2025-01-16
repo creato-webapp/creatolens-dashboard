@@ -11,7 +11,7 @@ const nextConfig = {
   reactStrictMode: process.env.NODE_ENV === 'development',
   swcMinify: true,
   images: {
-    domains: ['storage.googleapis.com'],
+    domains: ['storage.googleapis.com', 'essaa-creatolen-cdst-lens-image_gen_user_files-sit'],
     remotePatterns: [
       {
         protocol: 'https',
@@ -19,6 +19,7 @@ const nextConfig = {
         port: '',
       },
     ],
+    minimumCacheTTL: 60,
   },
   webpack(config) {
     config.module.rules.push({

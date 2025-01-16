@@ -1,34 +1,56 @@
-import React from 'react'
-import Image from 'next/image'
+import React, { useCallback } from 'react'
 import { useRemoteStringConfig } from '@hooks/useRemoteConfig'
-import { ImageStyleKeys } from '@constants/imageStyle'
-
-interface ImageStyleProps {
-  imageConfigStyles: ImageStyleKeys
-  imageConfigSelect: (key: string, value: string) => void
-}
+import Dropdown from '@components/Form/Dropdown/Dropdown'
+import { useHashtagToImage } from '@hooks/useHashtagToImage'
+import { getImageStyle } from '@services/HashtagHelper'
 
 const IMAGE_STYLE_KEY = 'IMAGE_STYLE'
+export interface ImageStyleProps {
+  [key: string]: ImageStyleType
+}
 
-const ImageStyle = ({ imageConfigStyles, imageConfigSelect }: ImageStyleProps) => {
-  const { config: imageStyles } = useRemoteStringConfig<Record<string, { value: string; image: string; name: string }>>(IMAGE_STYLE_KEY)
+type ImageStyleType = {
+  label: string
+  value: string
+  image: string
+}
 
-  if (!imageStyles) return null
+const ImageStyle = () => {
+  const { config: imageStyles } = useRemoteStringConfig<ImageStyleProps>(IMAGE_STYLE_KEY)
+  const { updateImageConfig, isLoading, imageConfig } = useHashtagToImage()
+  const imageStyleOptions = getImageStyle(imageStyles)
+
+  const imageConfigSelect = useCallback(
+    (key: string, value: string) => {
+      updateImageConfig({ [key]: value })
+    },
+    [updateImageConfig]
+  )
+
+  const updateImageStyle = useCallback(
+    (value: string) => {
+      // map with the value and return the key
+      const mappedValue = Object.keys(imageStyles).find((key) => {
+        return imageStyles[key].value === value
+      })
+      imageConfigSelect('imageStyle', mappedValue || imageStyleOptions[0].value)
+    },
+    [imageConfigSelect, imageStyleOptions, imageStyles]
+  )
+
+  if (!imageStyleOptions) return null
 
   return (
-    <div className="grid h-auto grid-cols-2 gap-4 md:grid-cols-4">
-      {Object.entries(imageStyles).map(([key, value]) => (
-        <div
-          key={key}
-          onClick={() => imageConfigSelect('imageStyle', value.value)}
-          className="flex aspect-square cursor-pointer flex-col items-center rounded-xl"
-        >
-          <div className={`relative h-full w-full ${imageConfigStyles === value.value ? 'rounded-xl ring-2 ring-accent1-500' : ''}`}>
-            <Image className="rounded-xl" src={value.image} alt={value.name} fill />
-          </div>
-          <h3 className={`text-center font-bold ${imageConfigStyles === value.value ? 'text-accent1-500' : ''}`}>{value.name}</h3>
-        </div>
-      ))}
+    <div className="grid h-auto w-full gap-4">
+      <Dropdown
+        options={imageStyleOptions}
+        onValueChange={(key) => updateImageStyle(key.toString())}
+        dropDownSizes={['m', 'm', 'm']}
+        name={imageConfig.imageStyle}
+        isFloating={true}
+        disabled={isLoading}
+        className="w-full"
+      />
     </div>
   )
 }

@@ -1,5 +1,3 @@
-import { ImageStyleKeys } from '@constants/imageStyle'
-
 import fetcher from '@helpers/fetcher'
 import { ImageGenErrorCodeEnums } from 'enums/ImageGenErrorCodeEnums'
 import { IHashet } from 'pages/recommendation'
@@ -9,7 +7,7 @@ interface PromptData {
   hashtags: IHashet[]
   imageCategory: { [key: string]: string }
   keywords: string
-  imageStyle: ImageStyleKeys
+  imageStyle: string
 }
 
 interface PromptResponse {

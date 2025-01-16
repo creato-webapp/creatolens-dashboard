@@ -4,7 +4,7 @@ import Skeleton from 'react-loading-skeleton'
 import 'react-loading-skeleton/dist/skeleton.css'
 
 import { Badge } from '@components/ui/Badge'
-import { useImageHashtagContext } from '@hooks/UseImagetoHashtag'
+import { useImageHashtag } from '@hooks/useImagetoHashtag'
 import SingleCheck from '@components/Icon/SingleCheckIcon'
 import CaretLeftIcon from '@components/Icon/CaretLeftIcon'
 import SubtleButton from '@components/Button/Subtle'
@@ -141,7 +141,7 @@ const AddLabelsButton: React.FC<AddLabelsButtonProps> = ({ onClick }) => {
 
 const Step2: React.FC = () => {
   const { image, addCustomLabels, getCurrentImageLabels, updateSelectedLabels, selectAllLabels, loadingLabels, updateLabel, goBack, goForward } =
-    useImageHashtagContext()
+    useImageHashtag()
 
   const currentImage = useMemo(() => image, [image])
 

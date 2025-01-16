@@ -4,6 +4,7 @@ import METHOD from '@constants/method'
 import useMutation from './useMutation'
 import { useEffect } from 'react'
 import { useSession } from 'next-auth/react'
+import { CombinedUser } from '@api/auth/[...nextauth]'
 
 const REQUEST_CONFIG = {
   maxBodyLength: 8 * 1024 * 1024,
@@ -17,6 +18,9 @@ interface UploadImageResponse {
 
 export default function useImageUploader(config?: AxiosRequestConfig, onCompleted?: (path: string) => void, onError?: (error: AxiosError) => void) {
   const { data: session } = useSession()
+
+  const user = session?.user as CombinedUser | undefined
+  const user_id = user?.id
 
   const { data, error, isMutating, trigger } = useMutation<UploadImageResponse>('/api/image', METHOD.POST, {
     request: {
@@ -41,12 +45,9 @@ export default function useImageUploader(config?: AxiosRequestConfig, onComplete
   const uploadImage = async (file: File) => {
     const formData = new FormData()
     formData.append('file', file)
-    if (session?.user?.name) {
-      formData.append('username', session?.user?.name)
-    } else {
-      formData.append('username', 'null')
+    if (user_id) {
+      formData.append('user_id', user_id)
     }
-
     return trigger(formData)
   }
 
