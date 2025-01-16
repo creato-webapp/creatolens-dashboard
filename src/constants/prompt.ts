@@ -48,6 +48,45 @@ export const PROMPT_TEMPLATE = {
   {{#theme}} in a {{theme}} theme,{{/theme}}
   {{#action_and_movement}} showcasing {{action_and_movement}} action or movement.{{/action_and_movement}}
 `,
+  PROMPT_TEMPLATE_ARTISTIC: `
+  Generate an artistic image of {{labels}} that match {{hashtags}},
+  {{#lighting}} with {{lighting}} lighting,{{/lighting}}
+  {{#environment}} set in a {{environment}} environment,{{/environment}}
+  {{#color_scheme}} featuring a {{color_scheme}} color scheme,{{/color_scheme}}
+  {{#point_of_view}} viewed from a {{point_of_view}} point of view,{{/point_of_view}}
+  {{#camera_angle}} captured with a {{camera_angle}} camera angle,{{/camera_angle}}
+  {{#lens_type}} using a {{lens_type}} lens,{{/lens_type}}
+  {{#background}} against a {{background}} background,{{/background}}
+  {{#mood}} evoking a {{mood}} mood,{{/mood}}
+  {{#theme}} in a {{theme}} theme,{{/theme}}
+  {{#action_and_movement}} showcasing {{action_and_movement}} action or movement.{{/action_and_movement}}
+`,
+  PROMPT_TEMPLATE_PHOTOGRAPHY: `
+  Capture a stunning photograph of {{labels}} that match {{hashtags}},
+  {{#lighting}} featuring {{lighting}} lighting,{{/lighting}}
+  {{#environment}} set in a {{environment}} environment,{{/environment}}
+  {{#color_scheme}} showcasing a {{color_scheme}} color scheme,{{/color_scheme}}
+  {{#point_of_view}} taken from a {{point_of_view}} point of view,{{/point_of_view}}
+  {{#camera_angle}} captured with a {{camera_angle}} camera angle,{{/camera_angle}}
+  {{#lens_type}} using a {{lens_type}} lens,{{/lens_type}}
+  {{#background}} against a {{background}} background,{{/background}}
+  {{#mood}} evoking a {{mood}} mood,{{/mood}}
+  {{#theme}} in a {{theme}} theme,{{/theme}}
+  {{#action_and_movement}} showcasing {{action_and_movement}} action or movement.{{/action_and_movement}}
+`,
+  PROMPT_TEMPLATE_STOCK_IMAGE: `
+  Generate a high-quality stock image of {{labels}} that matches {{hashtags}},
+  {{#lighting}} featuring {{lighting}} lighting,{{/lighting}}
+  {{#environment}} set in a {{environment}} environment,{{/environment}}
+  {{#color_scheme}} showcasing a {{color_scheme}} color scheme,{{/color_scheme}}
+  {{#point_of_view}} taken from a {{point_of_view}} point of view,{{/point_of_view}}
+  {{#camera_angle}} captured with a {{camera_angle}} camera angle,{{/camera_angle}}
+  {{#lens_type}} using a {{lens_type}} lens,{{/lens_type}}
+  {{#background}} against a {{background}} background,{{/background}}
+  {{#mood}} evoking a {{mood}} mood,{{/mood}}
+  {{#theme}} in a {{theme}} theme,{{/theme}}
+  {{#action_and_movement}} showcasing {{action_and_movement}} action or movement.{{/action_and_movement}}
+`,
 }
 
 export type IPromptType = keyof typeof PROMPT_TEMPLATE

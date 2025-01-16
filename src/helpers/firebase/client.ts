@@ -18,7 +18,7 @@ isSupported().then((isBrowserSupported) => {
     analytics = getAnalytics(app)
     remoteConfig = getRemoteConfig(app)
     remoteConfig.settings = {
-      minimumFetchIntervalMillis: DEFAULT_FETCH_INTERVAL || 12 * 60 * 60 * 1000,
+      minimumFetchIntervalMillis: DEFAULT_FETCH_INTERVAL || 10000,
       fetchTimeoutMillis: DEFAULT_TIMEOUT_MILLIS,
     }
   }

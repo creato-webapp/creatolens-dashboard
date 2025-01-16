@@ -47,7 +47,7 @@ const Dropdown: React.FC<DropdownProps> = ({
 
   const mapSelectedValueToOptions = useMemo(() => {
     if (isCheckbox) return name
-    const selectedOption = options.find((option) => option.value === selectedValue)
+    const selectedOption = options.find((option) => option.value.toString().toLowerCase() === selectedValue.toString().toLowerCase())
     return selectedOption ? selectedOption.label : selectedValue
   }, [isCheckbox, name, options, selectedValue])
 
