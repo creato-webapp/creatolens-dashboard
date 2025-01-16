@@ -1,0 +1,4 @@
+{
+  "negative_prompt": "T-shirt, human, photoframe, poster frame, background, complicated",
+  "prompt": "simple, plain flat design, A {{General_Modifiers}} and {{labels}} which match {{hashtags}}"
+}

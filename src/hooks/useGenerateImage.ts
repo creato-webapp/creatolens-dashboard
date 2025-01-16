@@ -1,6 +1,5 @@
 import { useState, useCallback, useEffect } from 'react'
 import { renderPromptAndGenImage } from '@services/imagePromptsHelper'
-import { ImageStyleKeys } from '@constants/imageStyle'
 import { IHashet } from 'pages/recommendation'
 import { Status } from '@context/DialogueContext'
 import { useDialogues } from './useDialogues'
@@ -8,8 +7,8 @@ import { useDialogues } from './useDialogues'
 interface ImageGenerationData {
   aspectRatio: string
   hashtags: IHashet[]
-  imageCategory: { [key: string]: string }
-  imageStyle: ImageStyleKeys
+  imageCategory: Record<string, string>
+  imageStyle: string
   keywords: string
   negativeKeywords: string
 }

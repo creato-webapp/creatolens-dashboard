@@ -1,0 +1,6 @@
+{
+  "PHOTOGRAPHY": { "label": "Photography", "value": "photography" },
+  "GRAPHIC_DESIGN": { "label": "Graphic Design", "value": "graphic_design" },
+  "STOCK_IMAGE": { "label": "Stock Image", "value": "stock_image" },
+  "ARTISTIC": { "label": "Artistic", "value": "artistic" }
+}

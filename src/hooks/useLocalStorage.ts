@@ -1,7 +1,19 @@
 import { useState, useCallback } from 'react'
 
 const useLocalStorage = <T>(key: string, initialValue: T) => {
+  const isLocalStorageAvailable = () => {
+    try {
+      return typeof window !== 'undefined' && window.localStorage !== undefined
+    } catch {
+      return false
+    }
+  }
+
   const [storedValue, setStoredValue] = useState<T>(() => {
+    if (!isLocalStorageAvailable()) {
+      return initialValue
+    }
+
     try {
       const item = localStorage.getItem(key)
       return item ? JSON.parse(item) : initialValue
@@ -13,6 +25,10 @@ const useLocalStorage = <T>(key: string, initialValue: T) => {
 
   const setValue = useCallback(
     (value: T | ((val: T) => T)) => {
+      if (!isLocalStorageAvailable()) {
+        return
+      }
+
       try {
         const valueToStore = value instanceof Function ? value(storedValue) : value
         setStoredValue(valueToStore)
@@ -25,6 +41,10 @@ const useLocalStorage = <T>(key: string, initialValue: T) => {
   )
 
   const removeValue = useCallback(() => {
+    if (!isLocalStorageAvailable()) {
+      return
+    }
+
     try {
       setStoredValue(initialValue)
       localStorage.removeItem(key)
