@@ -1,44 +1,58 @@
 import Dropdown from '@components/Form/Dropdown/Dropdown'
-import { ImageCategoryType, ImageStyleKeys } from '@constants/imageStyle'
 import { usePromptTemplate } from '@hooks/usePromptTemplate'
-import { useCallback, useState } from 'react'
+import { getModifiersImage } from '@services/HashtagHelper'
+import { useCallback, useMemo } from 'react'
 
-interface ImageCategorySelectorProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
-  imageConfigStyles: ImageStyleKeys
-  setCategories: (category: string, option: string) => void
+export interface ImageCategoryListType {
+  [key: string]: {
+    label: string
+    key: string
+    options: ImageOptionType[]
+    templateType: string[]
+  }
 }
 
-const ImageCategory = ({ imageConfigStyles, setCategories }: ImageCategorySelectorProps) => {
-  const { imageCategories } = usePromptTemplate() // remote config
+interface ImageOptionType {
+  label: string
+  value: string
+  image: string
+}
 
-  const [selectedValues, setSelectedValues] = useState<{ [key: string]: string | null }>({})
+interface ImageCategorySelectorProps extends React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> {
+  imageConfigStyles: string
+  setCategories: (category: string, option: string) => void
+  imageCategory: Record<string, string>
+}
+
+const ImageCategory = ({ imageConfigStyles, setCategories, imageCategory }: ImageCategorySelectorProps) => {
+  const { imageCategories } = usePromptTemplate() // remote config
+  const data = useMemo(() => getModifiersImage(imageCategories), [imageCategories])
 
   const onGeneralSelected = useCallback(
-    (option: keyof ImageCategoryType, value: string) => {
-      setCategories(option.toString(), value)
-      setSelectedValues((prevState) => ({ ...prevState, [option]: value })) // Track selected value
+    (option: keyof ImageCategoryListType, value: string) => {
+      setCategories(option as string, value)
     },
     [setCategories]
   )
 
   if (!imageConfigStyles) {
-    return <div></div>
+    return null
   }
 
   return (
     <div>
       <div className="flex flex-col gap-4">
-        <div className="capitalize">{imageConfigStyles.toLocaleLowerCase()}</div>
-        {Object.entries(imageCategories).map(
-          ([key, value]) =>
-            value.templateType.includes(imageConfigStyles) && (
+        {Object.entries(data).map(
+          ([, value]) =>
+            value.templateType.includes(imageConfigStyles) &&
+            value.options && (
               <Dropdown
-                name={value.label}
                 dropDownSizes={['m', 'm', 'm']}
-                key={key}
-                options={value.options.map((option) => ({ label: option.label, value: option.value }))}
+                name={value.label}
+                key={value.key}
+                options={value.options.map((option: ImageOptionType) => ({ label: option.label, value: option.value, image: option.image }))}
                 onValueChange={(selectedValue) => onGeneralSelected(value.key, selectedValue as string)}
-                buttonClassName={selectedValues[value.key] ? 'bg-white' : 'bg-neutral-200'} // Set to bg-white when selected
+                buttonClassName={imageCategory[value.key] ? 'bg-white' : 'bg-neutral-200'} // Set to bg-white when selected
               />
             )
         )}

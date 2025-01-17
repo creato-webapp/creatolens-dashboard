@@ -14,7 +14,7 @@ import { getUniqueSortedHashtags } from '@utils/index'
 import { Status } from '@context/DialogueContext'
 import { useDialogues } from '@hooks/useDialogues'
 import Head from 'next/head'
-
+import Link from 'next/link'
 interface IFeatureBulletPoint {
   heading: string
   description: string
@@ -59,7 +59,8 @@ export const getStaticProps: GetStaticProps = async (context) => {
   const { params } = context
   await getLocaleProps(context)
   const tag = params?.tag as string
-
+  const hashtags = await fetchSeoPagePath()
+  const hashtagsData = hashtags.map((h) => h.params.tag)
   if (!tag) {
     return { notFound: true }
   }
@@ -70,6 +71,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
       props: {
         title: tag,
         data: data,
+        hashtags: hashtagsData,
       },
     }
   } catch (error) {
@@ -212,11 +214,31 @@ const HashtagSection = ({
   </div>
 )
 
-const Tag = (props: { data: IHashtagResponse; title: string }) => {
-  const { t } = useTranslation(['seo', 'common'])
-  const { title, data } = props
-  const { onLogin } = useAuth()
+const RecommendedHashtags = ({ tags }: { tags: string[] }) => {
+  const { t } = useTranslation('seo')
 
+  return (
+    <div className="mt-12 w-full">
+      <h2 className="mb-6 text-2xl font-bold text-gray-800">{t('recommendedTopics')}</h2>
+      <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+        {tags.map((tag) => (
+          <Link
+            href={`/hashtag/${tag}`}
+            key={tag}
+            className="flex items-center justify-center rounded-lg border border-neutral-200 bg-white p-6 text-center capitalize text-gray-700 shadow-sm transition duration-200 hover:border-primary-500 hover:text-primary-500 hover:shadow-lg"
+          >
+            {tag}
+          </Link>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+const Tag = (props: { data: IHashtagResponse; title: string; hashtags: string[] }) => {
+  const { t } = useTranslation(['seo', 'common'])
+  const { title, data, hashtags } = props
+  const { onLogin } = useAuth()
   return (
     <>
       <Head>
@@ -266,6 +288,7 @@ const Tag = (props: { data: IHashtagResponse; title: string }) => {
               </div>
             </Session>
           </div>
+          {hashtags && <RecommendedHashtags tags={hashtags} />}
           <Guide
             heading={t('guide.heading')}
             subheading={t('guide.subheading')}

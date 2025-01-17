@@ -51,11 +51,6 @@ const HashtagToImage = () => {
       <div className="flex w-full items-center justify-center">
         <div className="flex w-full flex-col">
           <Tabs defaultValue="keyword" className="flex flex-col">
-            {/* <TabsList>
-              <TabsTrigger className="w-1/2" value="keyword">
-                <div>{t('keywords_input')}</div>
-              </TabsTrigger>
-            </TabsList> */}
             <TabsContent value="keyword" className="w-full">
               <div className="flex flex-col items-center gap-4 lg:flex-row">
                 {(isLoading || isImageGenerated || generatedImageUri) && (
