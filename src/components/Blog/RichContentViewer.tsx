@@ -127,11 +127,12 @@ export interface RichContent {
 const applyDecorations = (text: string, decorations: NonNullable<RichContentNode['textData']>['decorations'] = []) => {
   let element: React.ReactNode = text
 
-  decorations?.forEach((decoration) => {
+  decorations?.forEach((decoration, index) => {
     switch (decoration.type) {
       case 'LINK':
         element = (
           <a
+            key={`link-${index}`}
             href={decoration.linkData?.link.url}
             target={decoration.linkData?.link.target === 'BLANK' ? '_blank' : undefined}
             rel="noopener noreferrer"
@@ -141,17 +142,18 @@ const applyDecorations = (text: string, decorations: NonNullable<RichContentNode
         )
         break
       case 'BOLD':
-        element = <strong>{element}</strong>
+        element = <strong key={`bold-${index}`}>{element}</strong>
         break
       case 'ITALIC':
-        element = <em>{element}</em>
+        element = <em key={`italic-${index}`}>{element}</em>
         break
       case 'UNDERLINE':
-        element = <u>{element}</u>
+        element = <u key={`underline-${index}`}>{element}</u>
         break
       case 'COLOR':
         element = (
           <span
+            key={`color-${index}`}
             style={{
               color: decoration.colorData?.foreground,
               backgroundColor: decoration.colorData?.background,

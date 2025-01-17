@@ -6,8 +6,10 @@ import Breadcrumb from '@components/Breadcrumb'
 import Divider from '@components/Divider'
 import { getBlogPosts } from '@services/Blog'
 import { BlogListProps } from '.'
-import Image from 'next/image'
-import { transformWixImageURL } from '@utils/index'
+import HotTopics from '@components/Blog/HotTopics'
+import Header from '@components/Blog/Header'
+import { getLocaleProps } from '@services/locale'
+
 const createWixClient = () => {
   return createClient({
     modules: { items },
@@ -17,13 +19,15 @@ const createWixClient = () => {
   })
 }
 
-interface BlogPost {
+export interface BlogPost {
   _id: string
   slug: string
+  description: string
   title: string
   richcontent: RichContent
-  _createdDate?: Date
-  _updatedDate?: Date
+  _createdDate?: string
+  _updatedDate?: string
+  featuredImage: string
 }
 
 export async function getStaticPaths() {
@@ -50,13 +54,13 @@ export async function getStaticPaths() {
 }
 
 // Add getStaticProps to fetch data at build time
-export async function getStaticProps({ params }: { params: { slug: string } }) {
+export async function getStaticProps(context: { params: { slug: string }; locale: string }) {
   const client = createWixClient()
 
   try {
     const result = await client.items
       .query(process.env.WIX_CMS_ID || '')
-      .eq('slug', params.slug)
+      .eq('slug', context.params.slug)
       .limit(1) // Add limit for optimization
       .find()
 
@@ -73,12 +77,13 @@ export async function getStaticProps({ params }: { params: { slug: string } }) {
 
     const otherTopicsData = await getBlogPosts()
     // remove the current blog post from the list
-    const filteredOtherTopicsData = otherTopicsData?.filter((topic) => topic.slug !== params.slug)
-
+    const filteredOtherTopicsData = otherTopicsData?.filter((topic) => topic.slug !== context.params.slug)
+    const lang = await getLocaleProps(context)
     return {
       props: {
         data: serializedData,
         blogs: filteredOtherTopicsData,
+        ...lang,
       },
       revalidate: 3600, // Optional: Revalidate every hour
     }
@@ -101,52 +106,73 @@ const BlogContent = ({ content }: { content: RichContent }) => (
 )
 
 export default function BlogPost({ data, blogs }: { data: BlogPost; blogs: BlogListProps['data'] }) {
+  function addBlogPostJsonLd() {
+    return {
+      __html: `{
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": "${data.title}",
+        "description": "${data.description}",
+        "image": "${data.featuredImage}",
+        "author": {
+          "@type": "Person",
+          "name": "2Tag.ai"
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "2Tag.ai",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "${process.env.NEXT_PUBLIC_LOCAL_SERVER_URL}/logo/2tag-logo.png"
+          }
+        },
+        "datePublished": "${data._createdDate}",
+        "dateModified": "${data._updatedDate}",
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": "${process.env.NEXT_PUBLIC_LOCAL_SERVER_URL}/blog/${data.slug}"
+        }
+      }`,
+    }
+  }
+
   if (!data) {
     return <div>Loading...</div>
   }
 
   return (
-    <div className="flex w-full justify-center">
-      <div className="flex w-full max-w-7xl flex-col items-center justify-center">
-        <div className="hidden w-full items-start justify-start md:flex">
-          <Breadcrumb lastItemName={data.title} />
-        </div>
-        <div className="relative flex w-full flex-col md:flex-row">
-          <div>
-            <h1 className="my-12 px-12 text-2xl font-bold">{data.title}</h1>
-            <Divider />
-            <div className="flex w-full flex-col md:flex-row">
-              <div className="w-2/3 ">
-                <BlogContent content={data.richcontent} />
-              </div>
-              <aside className="sticky top-0 w-1/3 p-4">
-                <div className="rounded-lg bg-white p-6 shadow-sm">
-                  <div className="mb-2 flex w-full items-center justify-between">
-                    <h2 className="text-2xl font-bold">Hot Topics</h2>
-                    <div className="text-sm text-gray-500">See More</div>
-                  </div>
-                  <div className="space-y-4">
-                    <article>
-                      {blogs.map((topic, index) => (
-                        <div key={topic.slug}>
-                          <Image
-                            src={transformWixImageURL(topic.featuredImage)}
-                            alt={topic.title}
-                            width={index === 0 ? 400 : 100}
-                            height={index === 0 ? 400 : 100}
-                            className={index === 0 ? 'w-full' : ''}
-                          />
-                          <h3 className="text-neutral-800">{topic.title}</h3>
-                        </div>
-                      ))}
-                    </article>
-                  </div>
+    <>
+      <Header data={data} dangerouslySetInnerHTML={addBlogPostJsonLd()} />
+      <div className="flex w-full justify-center">
+        <div className="flex w-full max-w-7xl flex-col items-center justify-center">
+          <div className="hidden w-full items-start justify-start md:flex">
+            <Breadcrumb lastItemName={data.title} />
+          </div>
+          <div className="relative flex w-full flex-col md:flex-row">
+            <div className="">
+              <h1 className="my-12 text-2xl font-bold md:px-12">{data.title}</h1>
+              {data._createdDate && (
+                <p className="-mt-8 mb-8 text-sm text-gray-500 md:px-12">
+                  {new Date(data._createdDate).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                  })}
+                </p>
+              )}
+              <Divider />
+              <div className="flex w-full flex-col md:flex-row">
+                <div className="md:w-2/3 ">
+                  <BlogContent content={data.richcontent} />
                 </div>
-              </aside>
+                <div className="mt-12 w-full md:mt-0 md:block md:w-1/3">
+                  <HotTopics blogs={blogs} />
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
