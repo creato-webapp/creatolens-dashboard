@@ -3,14 +3,6 @@ import { OAuthStrategy } from '@wix/sdk'
 
 import { createClient } from '@wix/sdk'
 
-interface BlogPost {
-  title: string
-  description: string
-  slug: string
-  featuredImage: string
-  _createdDate: string
-}
-
 const client = createClient({
   modules: { items },
   auth: OAuthStrategy({
@@ -27,8 +19,8 @@ export const getBlogPosts = async () => {
     }
 
     return result.items
-      .filter((data: BlogPost) => data.title !== undefined)
-      .map((data: BlogPost) => ({
+      .filter((data) => data.title !== undefined)
+      .map((data) => ({
         title: data.title,
         description: data.description,
         slug: data.slug,
