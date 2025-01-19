@@ -61,7 +61,7 @@ const NegativePrompt = () => {
       </div>
 
       <div className="flex flex-row items-center justify-start gap-4">
-        <div className="w-full xl:w-1/2">
+        <div className="w-full md:w-1/2">
           <Input
             disabled={isLoading}
             className="w-full"

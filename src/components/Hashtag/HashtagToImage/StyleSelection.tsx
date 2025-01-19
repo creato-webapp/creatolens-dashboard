@@ -32,8 +32,8 @@ export function EffectButton() {
             <DialogTitle>{t('effect_list')}</DialogTitle>
           </div>
         </DialogHeader>
-        <ScrollArea className="-px-6 mt-4 p-4">
-          <ImageCategory imageConfigStyles={imageConfig.imageStyle} setCategories={updateImageCategory} />
+        <ScrollArea className="-px-6  p-4">
+          <ImageCategory imageConfigStyles={imageConfig.imageStyle} setCategories={updateImageCategory} imageCategory={imageCategory} />
           <ScrollBar />
         </ScrollArea>
 
@@ -54,12 +54,12 @@ const StyleSelection = () => {
 
   return (
     <div className="flex flex-col gap-2">
-      <div className="flex flex-col flex-wrap gap-4 md:flex-row">
-        <div className="flex w-fit flex-col gap-2">
+      <div className="flex flex-col flex-wrap gap-4 sm:flex-row">
+        <div className="flex w-full flex-col gap-2 sm:w-[300px]">
           {t('type_of_image')}
           <ImageStyle />
         </div>
-        <div className="flex w-fit flex-col gap-2">
+        <div className="flex w-full flex-col gap-2 sm:w-[300px]">
           {t('aspect_ratio')}
           <ImageAspectSelector />
         </div>

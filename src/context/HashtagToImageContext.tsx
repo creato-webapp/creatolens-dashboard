@@ -1,7 +1,6 @@
 import { ReactNode, createContext, useCallback, useState } from 'react'
 
 import { IHashet } from 'pages/recommendation'
-import { ImageStyleKeys } from '@constants/imageStyle'
 import { useGenerateImage } from '@hooks/useGenerateImage'
 
 export type ImageDetailsType = {
@@ -12,7 +11,7 @@ export type ImageDetailsType = {
 }
 
 export type ImageConfigType = {
-  imageStyle: ImageStyleKeys
+  imageStyle: string
   aspectRatio: string
 }
 
@@ -54,9 +53,9 @@ export const HashtagImageProvider = ({ children }: HashtagImageProviderProps) =>
   const [keywords, setKeywords] = useState<string[]>([])
   const [negativeKeywords, setNegativeKeywords] = useState<string[]>([])
   const [hashtags, setHashtags] = useState<IHashet[]>([])
-  const [imageCategory, setImageCategory] = useState<ImageModifier>(initialGeneral)
+  const [imageCategory, setImageCategory] = useState<Record<string, string>>(initialGeneral)
   const [imageConfig, setImageConfig] = useState<ImageConfigType>({
-    imageStyle: 'GENERAL' as ImageStyleKeys,
+    imageStyle: 'PHOTOGRAPHY',
     aspectRatio: '3:4',
   })
   const [isImageGenerated, setIsImageGenerated] = useState<boolean>(false)
