@@ -8,7 +8,7 @@ import Image from 'next/image'
 declare module '@tanstack/react-table' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface TableMeta<TData extends RowData> {
-    updateFavoriteStatus: (id: string) => void
+    toggleFavoriteStatus: (id: string) => void
   }
 }
 
@@ -27,7 +27,7 @@ const FavouriteColumn: Partial<ColumnDef<HistoryRow>> = {
         <StarIcon
           className={`${row.original.is_favourited ? 'fill-primary-500 text-primary-500' : 'stroke-1'} cursor-pointer`}
           onClick={() => {
-            table.options.meta?.updateFavoriteStatus(row.original.id)
+            table.options.meta?.toggleFavoriteStatus(row.original.id)
           }}
         />
       </>
@@ -36,6 +36,11 @@ const FavouriteColumn: Partial<ColumnDef<HistoryRow>> = {
 }
 
 export const columns: ColumnDef<HistoryRow>[] = [
+  {
+    accessorKey: 'id',
+    header: 'ID',
+    enableGlobalFilter: false,
+  },
   {
     id: 'select',
     header: ({ table }) => (
@@ -71,8 +76,10 @@ export const columns: ColumnDef<HistoryRow>[] = [
     enableColumnFilter: true,
     enableResizing: true,
     enableGlobalFilter: true,
-    accessorFn: (originalRow) => originalRow.labels.toString(), // matches is a number
-    cell: ({ row }) => <div className="line-clamp-2 lowercase">{(row.getValue('labels') as string).replace(/,/g, ', ')}</div>,
+    accessorFn: (originalRow) => {
+      return originalRow.labels.join(', ')
+    },
+    cell: ({ row }) => <div className="line-clamp-2 lowercase">{row.original.labels.join(', ')}</div>,
   },
   {
     accessorKey: 'hashtags',
@@ -81,10 +88,12 @@ export const columns: ColumnDef<HistoryRow>[] = [
       const tags = originalRow.hashtags.map((hashtag) => {
         return hashtag.hashtag
       })
-      return tags.toString()
+      return tags.join(', ')
     },
-    //originalRow.hashtags.toString(), // matches is a number
-    cell: ({ row }) => <div className="line-clamp-2 lowercase">{(row.getValue('hashtags') as string).replace(/,/g, ', ')}</div>,
+    // originalRow.hashtags.toString(), // matches is a number
+    cell: ({ row }) => {
+      return <div className="line-clamp-2 lowercase">{row.original.hashtags.map((hashtag) => hashtag.hashtag).join(', ')}</div>
+    },
   },
   {
     accessorKey: 'created_at',
@@ -96,7 +105,13 @@ export const columns: ColumnDef<HistoryRow>[] = [
         </div>
       )
     },
-    cell: ({ row }) => new Date(row.getValue('created_at')).toLocaleDateString(),
+    // cell: ({ row }) => new Date(row.getValue('created_at')).toLocaleDateString(), //trim spaces inside the date
+    cell: ({ row }) => {
+      const date = new Date(row.getValue('created_at'))
+      // trim spaces inside the date
+      const trimmedDate = date.toLocaleDateString().replace(/\s+/g, ' ')
+      return trimmedDate
+    },
     enableGlobalFilter: false,
     enableSorting: true,
   },

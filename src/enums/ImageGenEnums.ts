@@ -1,11 +1,11 @@
 export enum TaskEnum {
-  INPUT_TEXT = 1,
-  INPUT_IMAGE = 2,
-  ANNOTATE_IMAGE = 3,
-  FETCH_HASHTAG = 4,
-  FETCH_IMAGE = 5,
-  COPY_HASHTAG = 6,
-  COPY_LABELS = 7,
+  INPUT_TEXT = 'task_config/1',
+  INPUT_IMAGE = 'task_config/2',
+  ANNOTATE_IMAGE = 'task_config/3',
+  FETCH_HASHTAG = 'task_config/4',
+  FETCH_IMAGE = 'task_config/5',
+  COPY_HASHTAG = 'task_config/6',
+  COPY_LABELS = 'task_config/7',
 }
 
 export enum StatusEnum {

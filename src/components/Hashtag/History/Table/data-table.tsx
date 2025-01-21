@@ -3,8 +3,7 @@
 import { ColumnDef, flexRender, Table as ReactTable, Row } from '@tanstack/react-table'
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@components/ui/Table'
-import { HistoryRow } from '@context/HistoryContext'
-
+import { HistoryRow } from '@services/HistoryHelper'
 interface DataTableProps<TData, TValue> {
   table: ReactTable<HistoryRow>
   columns: ColumnDef<TData, TValue>[]

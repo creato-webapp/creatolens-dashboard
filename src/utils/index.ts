@@ -25,7 +25,8 @@ export const arrayOfStringsToSentence = (array: string[]): string => {
 
 export function convertGcsUriToHttp(gsUri: string): string {
   if (!gsUri.startsWith('gs://')) {
-    throw new Error("Invalid GCS URI. It must start with 'gs://'")
+    // throw new Error("Invalid GCS URI. It must start with 'gs://'")
+    return ''
   }
 
   // Remove the "gs://" prefix

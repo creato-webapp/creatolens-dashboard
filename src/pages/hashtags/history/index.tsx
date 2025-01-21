@@ -4,11 +4,12 @@ import HistoryGridView from '@components/Hashtag/History/HistoryGridView'
 import { columns } from '@components/Hashtag/History/Table/columns'
 import { DataTable } from '@components/Hashtag/History/Table/data-table'
 import Paginator from '@components/Hashtag/History/Table/pagination'
-import { useHistory } from '@hooks/useHistory'
+import { useHistory } from '@hooks/useHistoryData'
 import { DownloadIcon, XIcon } from 'lucide-react'
 import { DeleteConfirmationDialog, DetailsDialog } from '@components/Hashtag/History/HistoryDialog'
-import { getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table'
+import { ColumnDef, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table'
 import TableFunctionBar from '@components/Hashtag/History/TableFunctionBar'
+import { HistoryRow } from '@services/HistoryHelper'
 
 const History = () => {
   const {
@@ -20,7 +21,7 @@ const History = () => {
     setOpenedRow,
     columnFilters,
     setColumnFilters,
-    updateFavoriteStatus,
+    toggleFavoriteStatus,
     setSorting,
     sorting,
   } = useHistory()
@@ -28,9 +29,9 @@ const History = () => {
   const [open, setOpen] = useState(false)
   const [layout, setLayout] = useState('list')
 
-  const table = useReactTable({
+  const table = useReactTable<HistoryRow>({
     data: historys ?? [],
-    columns,
+    columns: columns as ColumnDef<HistoryRow>[],
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -49,7 +50,7 @@ const History = () => {
       maxSize: 500,
     },
     meta: {
-      updateFavoriteStatus: (row: string) => updateFavoriteStatus(row),
+      toggleFavoriteStatus: (row: string) => toggleFavoriteStatus(row),
     },
   })
 

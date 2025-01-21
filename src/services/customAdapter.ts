@@ -27,7 +27,7 @@ export interface FirebaseConfig {
 
 export const FireStoreAdapterWrapper = (options: FirebaseConfig) => {
   const adapter = FirestoreAdapter(options)
-  adapter.createUser = async (user) => {
+  adapter.createUser = async (user: CombinedUser) => {
     const roles = await getRoles(user.email)
     const combinedUser = { ...(user as CombinedUser), roles: roles }
     if (FirestoreAdapter(options).createUser) {

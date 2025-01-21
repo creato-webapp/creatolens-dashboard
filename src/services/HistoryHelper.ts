@@ -13,15 +13,10 @@ interface InputObject {
 
 interface OutputObject {
   created_at: string
-  data?: {
-    url?: string
-  }
+  url?: string
   image_url?: string | null
-  labels?: string[]
-  hashtags?: {
-    hashtags: IHashet[]
-    input_obj: string
-  }
+  labels?: string
+  hashtags?: IHashet[]
   input_obj?: string
   updated_at: string
 }
@@ -32,7 +27,7 @@ interface History {
   input_object?: InputObject | null
   output_object: OutputObject
   status: StatusEnum
-  task_config_id: TaskEnum
+  task_config_ref: TaskEnum
   updated_at: string
 }
 
@@ -86,34 +81,24 @@ export interface HistoryRow {
 }
 
 export const mapHistoryData = (data: Data[], favouritedIds: string[] = []): HistoryRow[] => {
-  const resultV2: HistoryRow[] = data.flatMap((item) => {
-    const getTaskOutput = <T>(taskId: TaskEnum, mapper: (history: History) => T | undefined): T[] => {
-      return item.histories_ref
-        .filter((history) => history.task_config_id === taskId)
-        .map(mapper)
-        .filter((item): item is T => item !== undefined)
-    }
+  const result = data.map((item) => {
+    const input_image = item.histories_ref.find((history) => history.task_config_ref === TaskEnum['INPUT_IMAGE'])?.output_object?.url || ''
+    const output_hashtags = item.histories_ref.find((history) => history.task_config_ref === TaskEnum['FETCH_HASHTAG'])?.output_object?.hashtags || [] // add to array
+    const output_labels = item.histories_ref.find((history) => history.task_config_ref === TaskEnum['ANNOTATE_IMAGE'])?.output_object?.labels || [] //split by comma
 
-    const input_image = getTaskOutput(TaskEnum['INPUT_IMAGE'], (history) => history.output_object?.data?.url)[0] || ''
-
-    const output_hashtags = getTaskOutput(TaskEnum['FETCH_HASHTAG'], (history) => history.output_object.hashtags?.hashtags).flat()
-
-    const output_labels = getTaskOutput(TaskEnum['ANNOTATE_IMAGE'], (history) => history.output_object.labels).flat()
-
-    // ... rest of the mapping logic ...
-    return item.histories_ref.map((history) => ({
-      created_at: history.created_at,
-      id: history.id,
+    return {
+      created_at: item.created_at,
+      id: item.id,
       is_deleted: item.is_deleted,
-      status: history.status,
-      updated_at: history.updated_at,
+      status: item.status,
+      updated_at: item.updated_at,
       user_id: item.user_ref.id || item.user_ref.email,
-      labels: output_labels,
+      labels: Array.isArray(output_labels) ? output_labels : output_labels.split(', '),
       hashtags: output_hashtags,
-      is_favourited: favouritedIds?.includes(history.id) || false,
+      is_favourited: favouritedIds?.includes(item.id) || false,
       uploaded_image: input_image,
-    }))
+    }
   })
 
-  return resultV2
+  return result
 }
