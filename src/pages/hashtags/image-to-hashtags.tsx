@@ -12,6 +12,8 @@ import { Layout } from '@components/Layout'
 import SideMenuLayout from '@components/Layout/SideMenuLayout'
 import { GetServerSidePropsContext, GetStaticPropsContext } from 'next'
 import { getLocaleProps } from '@services/locale'
+import { HistoryIcon } from 'lucide-react'
+import router from 'next/router'
 // import HelpIcon from '@components/Icon/HelpIcon'
 
 export async function getStaticProps(context: { locale: GetStaticPropsContext | GetServerSidePropsContext }) {
@@ -32,6 +34,10 @@ const ImageToHashtags = () => {
     } else return <></>
   }, [step])
 
+  const navigateToHistory = () => {
+    router.push('/hashtags/history')
+  }
+
   if (isDetailPagesOpen)
     return (
       <div className="mx-3 my-4 flex items-center justify-center">
@@ -45,14 +51,14 @@ const ImageToHashtags = () => {
         <div className="flex items-center justify-between">
           <h1 className="text-subtitle font-bold">Image-to-Hashtags</h1>
           <div className="flex flex-row gap-2">
-            {/* <HelpIcon className="fill-black" /> */}
+            <HistoryIcon onClick={() => navigateToHistory()} className="h-8 w-8 cursor-pointer text-neutral-600" />
             <Image
               onClick={() => setIsDetailsPageOpen((pre) => !pre)}
               className="cursor-pointer"
               src="/help-circle.svg"
               alt={'help'}
-              width={34}
-              height={34}
+              width={32}
+              height={32}
             ></Image>
           </div>
         </div>
