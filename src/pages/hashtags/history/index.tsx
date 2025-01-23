@@ -11,6 +11,13 @@ import { ColumnDef, getCoreRowModel, getFilteredRowModel, getPaginationRowModel,
 import TableFunctionBar from '@components/Hashtag/History/TableFunctionBar'
 import { HistoryRow } from '@services/HistoryHelper'
 import { Skeleton } from '@components/ui/Skeleton'
+import { convertGcsUriToHttp, downloadMultipleImages } from '@utils/index'
+import { getLocaleProps } from '@services/locale'
+import { GetStaticPropsContext, GetServerSidePropsContext } from 'next'
+
+export async function getStaticProps(context: { locale: GetStaticPropsContext | GetServerSidePropsContext }) {
+  return await getLocaleProps(context.locale)
+}
 
 const History = () => {
   const {
@@ -67,20 +74,43 @@ const History = () => {
     },
   })
 
-  const SelectedRowsBar = () => (
-    <div className="fixed bottom-20 z-10 flex w-4/5 rounded-lg border border-neutral-300 bg-white p-6 drop-shadow-2xl md:w-1/2">
-      <div className="mx-12 flex w-full flex-row justify-between gap-4">
-        <div>Selected {table.getFilteredSelectedRowModel().rows.length}</div>
-        <DeleteConfirmationDialog />
-        <button className="btn-danger">
-          <DownloadIcon />
-        </button>
-        <div className="flex cursor-pointer items-center" onClick={() => table.resetRowSelection()}>
-          <XIcon />
+  const onClickDownloadSelectedImage = async () => {
+    const selectedRows = table.getFilteredSelectedRowModel().rows
+
+    const imageUrls = selectedRows.map((row) => {
+      const imageUrl = row.original.uploaded_image || ''
+      return convertGcsUriToHttp(imageUrl)
+    })
+
+    try {
+      // Dynamically import JSZip only on client side
+      downloadMultipleImages(imageUrls)
+    } catch (error) {
+      console.error('Error downloading images:', error)
+      // Handle error appropriately (e.g., show error message to user)
+    }
+  }
+
+  // Helper function to get file extension from URL
+
+  const SelectedRowsBar = (props: { onClick: () => void }) => {
+    const { onClick } = props
+
+    return (
+      <div className="fixed bottom-20 z-10 flex w-4/5 rounded-lg border border-neutral-300 bg-white p-6 drop-shadow-2xl md:w-1/2">
+        <div className="mx-12 flex w-full flex-row justify-between gap-4">
+          <div>Selected {table.getFilteredSelectedRowModel().rows.length}</div>
+          <DeleteConfirmationDialog />
+          <button className="btn-danger" onClick={onClick}>
+            <DownloadIcon />
+          </button>
+          <div className="flex cursor-pointer items-center" onClick={() => table.resetRowSelection()}>
+            <XIcon />
+          </div>
         </div>
       </div>
-    </div>
-  )
+    )
+  }
 
   return (
     <div className="scroll mb-10 flex w-full flex-col items-center justify-center md:mb-40">
@@ -112,7 +142,7 @@ const History = () => {
         />
       </div>
 
-      {table.getFilteredSelectedRowModel().rows?.length > 0 && <SelectedRowsBar />}
+      {table.getFilteredSelectedRowModel().rows?.length > 0 && <SelectedRowsBar onClick={onClickDownloadSelectedImage} />}
 
       {openedRow && (
         <DetailsDialog

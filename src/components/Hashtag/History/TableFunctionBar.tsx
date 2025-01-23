@@ -3,18 +3,8 @@ import { Input } from '@components/ui/Input'
 import { HistoryRow } from '@services/HistoryHelper'
 import { Table } from '@tanstack/react-table'
 import { Grid2X2Icon, List, SearchIcon } from 'lucide-react'
+import { useTranslation } from 'next-i18next'
 import { Dispatch, SetStateAction } from 'react'
-
-const filterOptions = {
-  ALL: {
-    label: 'All',
-    value: 'all',
-  },
-  FAVOURITE: {
-    label: 'Favourite',
-    value: 'is_favourited',
-  },
-} as const
 
 interface ITableFunctionBar {
   globalFilter: string
@@ -25,6 +15,18 @@ interface ITableFunctionBar {
 }
 const TableFunctionBar = (props: ITableFunctionBar) => {
   const { globalFilter, setGlobalFilter, setLayout, layout, table } = props
+  const { t } = useTranslation('history')
+
+  const filterOptions = {
+    ALL: {
+      label: t('all'),
+      value: 'all',
+    },
+    FAVOURITE: {
+      label: t('favourite'),
+      value: 'is_favourited',
+    },
+  } as const
 
   const changeLayout = () => {
     setLayout(layout === 'grid' ? 'list' : 'grid')
@@ -51,7 +53,7 @@ const TableFunctionBar = (props: ITableFunctionBar) => {
       <h1 className="py-3 text-heading font-bold text-neutral-800 sm:w-full md:w-fit md:text-nowrap ">Image-To-Hashtags History</h1>
       <div className="w-full sm:w-[300px]">
         <Input
-          placeholder="Search for Hashtag/ Label"
+          placeholder={t('search_for_hashtag_label')}
           className="relative rounded-full focus:ring-primary-500"
           endIcon={SearchIcon}
           value={globalFilter}

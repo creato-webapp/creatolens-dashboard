@@ -8,14 +8,16 @@ import { HistoryRow } from '@services/HistoryHelper'
 import { Row } from '@tanstack/react-table'
 import { convertGcsUriToHttp } from '@utils/index'
 import { Trash2Icon } from 'lucide-react'
+import { useTranslation } from 'next-i18next'
 import Image from 'next/image'
 import { useState } from 'react'
 
 const DetailsDialog = (props: { open: boolean; setOpen: (id: boolean) => void; data: Row<HistoryRow>; onClose: () => void }) => {
   const { open, setOpen, data, onClose } = props
-  const [selectedHashtags, setSelectedHashtags] = useState<string[]>([])
-  const [selectedLabels, setSelectedLabels] = useState<string[]>([])
+  const [selectedHashtags, setSelectedHashtags] = useState<string[]>(data.original.hashtags.map((hashtag) => hashtag.hashtag))
+  const [selectedLabels, setSelectedLabels] = useState<string[]>(data.original.labels)
   const { addDialogue } = useDialogues()
+  const { t } = useTranslation('history')
   const handleClose = () => {
     setOpen(false)
     onClose()
@@ -53,12 +55,10 @@ const DetailsDialog = (props: { open: boolean; setOpen: (id: boolean) => void; d
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="h-[700px] w-full max-w-5xl overflow-hidden p-4 sm:p-8" showOverlay={false}>
         <div className="h-full max-h-[90vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle className="text-lg font-bold">{data.id}</DialogTitle>
-          </DialogHeader>
-          <DialogDescription>{data.getValue('favourite')}</DialogDescription>
           <div className="flex w-full flex-col gap-4 bg-white">
-            <div>Image Uploaded: {data.original.updated_at}</div>
+            <div className="text-neutral-500">
+              {t('history_uploaded_image')} {data.original.uploaded_image.split('/').pop()}
+            </div>
             <div className="flex flex-col gap-4 md:flex-row">
               <div className="relative flex min-h-[300px] w-full flex-1 bg-neutral-200 sm:h-[400px]">
                 <Image
@@ -72,7 +72,7 @@ const DetailsDialog = (props: { open: boolean; setOpen: (id: boolean) => void; d
               <div className="flex flex-1 flex-col items-center justify-between gap-4">
                 <div className="w-full">
                   <div className="font-semibold text-secondary-500">{data.original.labels.length} Labels discovered</div>{' '}
-                  <div>
+                  <div className="mt-4">
                     <Dropdown
                       dropDownSizes={['l', 'l', 'l']}
                       key="label-dropdown"
@@ -88,13 +88,13 @@ const DetailsDialog = (props: { open: boolean; setOpen: (id: boolean) => void; d
                   </div>
                 </div>
                 <PrimaryButton className="w-full" onClick={onClickCopySelectedLabels}>
-                  Copy Selected Labels
+                  {t('copy_selected_labels')}
                 </PrimaryButton>
               </div>
               <div className="flex flex-1 flex-col items-center justify-between gap-4">
                 <div className="w-full">
                   <div className="font-semibold text-secondary-500">{data.original.hashtags.length} Hashtags discovered</div>
-                  <div className="w-full">
+                  <div className="mt-4">
                     <Dropdown
                       dropDownSizes={['l', 'l', 'l']}
                       key="hashtags-dropdown"
@@ -111,14 +111,14 @@ const DetailsDialog = (props: { open: boolean; setOpen: (id: boolean) => void; d
                   </div>
                 </div>
                 <PrimaryButton className="w-full" onClick={onClickCopySelectedHashtags}>
-                  Copy Selected Hashtags
+                  {t('copy_selected_hashtags')}
                 </PrimaryButton>
               </div>
             </div>
           </div>
           <div className="mt-12 flex flex-row justify-center gap-4">
             <DialogClose asChild>
-              <NeutralButton onClick={() => handleClose()}>Close</NeutralButton>
+              <NeutralButton onClick={() => handleClose()}>{t('close')}</NeutralButton>
             </DialogClose>
           </div>
         </div>
@@ -128,6 +128,7 @@ const DetailsDialog = (props: { open: boolean; setOpen: (id: boolean) => void; d
 }
 
 const DeleteConfirmationDialog = () => {
+  const { t } = useTranslation('history')
   return (
     <Dialog>
       <DialogTrigger>
@@ -137,14 +138,14 @@ const DeleteConfirmationDialog = () => {
       </DialogTrigger>
       <DialogContent className="w-72 p-8">
         <DialogHeader>
-          <DialogTitle className="text-red-600">History Deleting</DialogTitle>
+          <DialogTitle className="text-red-600">{t('history_deleting')}</DialogTitle>
         </DialogHeader>
-        <DialogDescription>Are you sure you want to delete this result?</DialogDescription>
+        <DialogDescription>{t('history_deleting_description')}</DialogDescription>
         <div className="flex flex-row justify-center gap-4">
           <DialogClose asChild>
-            <NeutralButton>Cancel</NeutralButton>
+            <NeutralButton>{t('history_deleting_cancel')}</NeutralButton>
           </DialogClose>
-          <PrimaryButton>Delete</PrimaryButton>
+          <PrimaryButton>{t('history_deleting_delete')}</PrimaryButton>
         </div>
       </DialogContent>
     </Dialog>

@@ -4,6 +4,7 @@ import { ColumnDef, flexRender, Table as ReactTable, Row } from '@tanstack/react
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@components/ui/Table'
 import { HistoryRow } from '@services/HistoryHelper'
+import { useTranslation } from 'next-i18next'
 interface DataTableProps<TData, TValue> {
   table: ReactTable<HistoryRow>
   columns: ColumnDef<TData, TValue>[]
@@ -13,6 +14,7 @@ interface DataTableProps<TData, TValue> {
 }
 
 export function DataTable<TData, TValue>({ table, columns, setOpenedRow, setOpen, isLoading }: DataTableProps<TData, TValue>) {
+  const { t } = useTranslation('common')
   const handleRowClick = (row: Row<HistoryRow>) => {
     setOpenedRow(row)
     setOpen(true)
@@ -70,7 +72,7 @@ export function DataTable<TData, TValue>({ table, columns, setOpenedRow, setOpen
         </TableBody>
       </Table>
       <div className="text-muted-foreground flex-1 p-2 text-sm text-neutral-500">
-        {table.getFilteredSelectedRowModel().rows.length} of {table.getFilteredRowModel().rows.length} row(s) selected.
+        {table.getFilteredSelectedRowModel().rows.length} {t('of')} {table.getFilteredRowModel().rows.length} {t('rows_selected')}
       </div>
     </div>
   )

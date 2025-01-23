@@ -15,7 +15,10 @@ interface OutputObject {
   created_at: string
   url?: string
   image_url?: string | null
-  labels?: string
+  labels?: {
+    categories: string[]
+    labels: string[]
+  }
   hashtags?: IHashet[]
   input_obj?: string
   updated_at: string
@@ -84,7 +87,8 @@ export const mapHistoryData = (data: Data[], favouritedIds: string[] = []): Hist
   const result = data.map((item) => {
     const input_image = item.histories_ref.find((history) => history.task_config_ref === TaskEnum['INPUT_IMAGE'])?.output_object?.url || ''
     const output_hashtags = item.histories_ref.find((history) => history.task_config_ref === TaskEnum['FETCH_HASHTAG'])?.output_object?.hashtags || [] // add to array
-    const output_labels = item.histories_ref.find((history) => history.task_config_ref === TaskEnum['ANNOTATE_IMAGE'])?.output_object?.labels || [] //split by comma
+    const output_labels =
+      item.histories_ref.find((history) => history.task_config_ref === TaskEnum['ANNOTATE_IMAGE'])?.output_object?.labels?.labels || [] //split by comma
 
     return {
       created_at: item.created_at,
@@ -93,7 +97,7 @@ export const mapHistoryData = (data: Data[], favouritedIds: string[] = []): Hist
       status: item.status,
       updated_at: item.updated_at,
       user_id: item.user_ref.id || item.user_ref.email,
-      labels: Array.isArray(output_labels) ? output_labels : output_labels.split(', '),
+      labels: output_labels,
       hashtags: output_hashtags,
       is_favourited: favouritedIds?.includes(item.id) || false,
       uploaded_image: input_image,

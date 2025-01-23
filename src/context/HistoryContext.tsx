@@ -4,6 +4,8 @@ import { useFavoriteStatus, useHistoryData } from '@hooks/useHistoryData'
 import { Status } from './DialogueContext'
 import { useDialogues } from '@hooks/useDialogues'
 import { HistoryRow } from '@services/HistoryHelper'
+import { useAuth } from '@hooks/index'
+import { CombinedUser } from '@api/auth/[...nextauth]'
 
 interface HistoryContextType {
   historys: HistoryRow[] | undefined
@@ -35,6 +37,9 @@ export const HistoryProvider = ({ children }: HistoryProviderProps) => {
   const [sorting, setSorting] = useState<SortingState>([])
   const { favouritedIds, toggleFavoriteStatus } = useFavoriteStatus('favouritedHistoryRowIds', [])
 
+  const { session } = useAuth()
+  const user = session?.user as CombinedUser | undefined
+  const user_id = user?.id
   const { addDialogue } = useDialogues()
 
   const {
@@ -44,7 +49,7 @@ export const HistoryProvider = ({ children }: HistoryProviderProps) => {
     removeHistory,
     error,
   } = useHistoryData({
-    user_id: 'oo3PkLqi4ZUnbeUllJwh', // Replace with dynamic user ID
+    user_id: user_id || '', // Replace with dynamic user ID
   })
 
   const combinedHistorys = useMemo(() => {

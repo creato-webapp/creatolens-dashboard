@@ -1,8 +1,14 @@
 {
-  "confirm": "Confirm",
-  "please_select": "Please Select",
+  "confirm": "確認",
+  "please_select": "請選擇",
   "title": "2Tag",
-  "latest_on_top": "Latest on top",
-  "earliest_on_top": "Earliest on top",
-  "favorite": "Favorite"
+  "latest_on_top": "最新置頂",
+  "earliest_on_top": "最舊置頂",
+  "favorite": "收藏",
+  "previous": "上一頁",
+  "next": "下一頁",
+  "page": "頁",
+  "more_pages": "更多頁面",
+  "of": "共",
+  "rows_selected": "行已選項目"
 }

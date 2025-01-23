@@ -47,3 +47,40 @@ export function convertGcsUriToHttp(gsUri: string): string {
   // Construct the public URL
   return `https://storage.googleapis.com/${bucketName}/${encodedObjectPath}`
 }
+
+const getFileExtension = (url: string): string => {
+  const match = url.match(/\.([^./?#]+)(?:[?#]|$)/)
+  return match ? `.${match[1].toLowerCase()}` : '.jpg'
+}
+
+export const downloadMultipleImages = async (imageUrls: string[]) => {
+  try {
+    // Dynamically import JSZip only on client side
+    const JSZip = (await import('jszip')).default
+    const zip = new JSZip()
+
+    // Download each image and add to zip
+    const imagePromises = imageUrls.map(async (url, index) => {
+      const response = await fetch(url)
+      const blob = await response.blob()
+      zip.file(`image_${index + 1}${getFileExtension(url)}`, blob)
+    })
+
+    await Promise.all(imagePromises)
+
+    // Generate and download zip file
+    const zipContent = await zip.generateAsync({ type: 'blob' })
+    const zipUrl = URL.createObjectURL(zipContent)
+
+    const link = document.createElement('a')
+    link.href = zipUrl
+    link.download = '2tag-generated-images.zip'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(zipUrl)
+  } catch (error) {
+    console.error('Error downloading images:', error)
+    // Handle error appropriately (e.g., show error message to user)
+  }
+}
