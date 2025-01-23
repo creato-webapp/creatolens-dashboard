@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import Breadcrumb from '@components/Breadcrumb'
 import HistoryGridView from '@components/Hashtag/History/HistoryGridView'
 import { columns } from '@components/Hashtag/History/Table/columns'
@@ -10,6 +10,7 @@ import { DeleteConfirmationDialog, DetailsDialog } from '@components/Hashtag/His
 import { ColumnDef, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table'
 import TableFunctionBar from '@components/Hashtag/History/TableFunctionBar'
 import { HistoryRow } from '@services/HistoryHelper'
+import { Skeleton } from '@components/ui/Skeleton'
 
 const History = () => {
   const {
@@ -29,9 +30,21 @@ const History = () => {
   const [open, setOpen] = useState(false)
   const [layout, setLayout] = useState('list')
 
+  const tableData = useMemo(() => (isLoading ? Array(8).fill({}) : historys), [isLoading, historys])
+  const tableColumns = useMemo(
+    () =>
+      isLoading
+        ? columns.map((column) => ({
+            ...column,
+            cell: () => <Skeleton className="h-[40px] rounded-md" />,
+          }))
+        : columns,
+    [isLoading]
+  )
+
   const table = useReactTable<HistoryRow>({
-    data: historys ?? [],
-    columns: columns as ColumnDef<HistoryRow>[],
+    data: tableData ?? [],
+    columns: tableColumns as ColumnDef<HistoryRow>[],
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -85,7 +98,7 @@ const History = () => {
           {layout === 'grid' ? (
             <HistoryGridView data={historys} isLoading={isLoading} />
           ) : (
-            <DataTable table={table} columns={columns} setOpen={setOpen} setOpenedRow={setOpenedRow} />
+            <DataTable table={table} columns={columns} setOpen={setOpen} setOpenedRow={setOpenedRow} isLoading={isLoading} />
           )}
         </div>
       )}

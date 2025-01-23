@@ -31,6 +31,9 @@ module.exports = {
       minWidth: {
         8: '2rem',
       },
+      zIndex: {
+        1000: '1000',
+      },
       fontSize: {
         hero: ['4.5rem', { lineHeight: '5.4rem', fontWeight: 'bold' }],
         title: ['3rem', { lineHeight: '3.6rem', fontWeight: 'bold' }],

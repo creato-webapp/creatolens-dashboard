@@ -2,23 +2,56 @@ import NeutralButton from '@components/Button/Neutral'
 import PrimaryButton from '@components/Button/Primary'
 import Dropdown from '@components/Form/Dropdown/Dropdown'
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@components/ui/Dialog'
+import { Status } from '@context/DialogueContext'
+import { useDialogues } from '@hooks/useDialogues'
 import { HistoryRow } from '@services/HistoryHelper'
 import { Row } from '@tanstack/react-table'
 import { convertGcsUriToHttp } from '@utils/index'
 import { Trash2Icon } from 'lucide-react'
 import Image from 'next/image'
+import { useState } from 'react'
 
 const DetailsDialog = (props: { open: boolean; setOpen: (id: boolean) => void; data: Row<HistoryRow>; onClose: () => void }) => {
   const { open, setOpen, data, onClose } = props
-
+  const [selectedHashtags, setSelectedHashtags] = useState<string[]>([])
+  const [selectedLabels, setSelectedLabels] = useState<string[]>([])
+  const { addDialogue } = useDialogues()
   const handleClose = () => {
     setOpen(false)
     onClose()
   }
 
+  const onLabelSelect = (value: string | number) => {
+    if (selectedLabels.includes(value as string)) {
+      setSelectedLabels(selectedLabels.filter((label) => label !== value))
+    } else {
+      setSelectedLabels([...selectedLabels, value as string])
+    }
+  }
+
+  const onHashtagSelect = (value: string | number) => {
+    if (selectedHashtags.includes(value as string)) {
+      setSelectedHashtags(selectedHashtags.filter((hashtag) => hashtag !== value))
+    } else {
+      setSelectedHashtags([...selectedHashtags, value as string])
+    }
+  }
+
+  const onClickCopySelectedHashtags = () => {
+    const selected = data.original.hashtags.flatMap((hashtag) => hashtag.hashtag)
+    navigator.clipboard.writeText(selected.join(' '))
+    addDialogue('Hashtags Copied Successfully', Status.SUCCESS)
+  }
+
+  const onClickCopySelectedLabels = () => {
+    const selected = data.original.labels.join(' ')
+    navigator.clipboard.writeText(selected)
+    addDialogue('Labels Copied Successfully', Status.SUCCESS)
+  }
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="h-[700px] w-full max-w-5xl overflow-hidden bg-white p-4 sm:p-8">
+      <DialogContent className="h-[700px] w-full max-w-5xl overflow-hidden p-4 sm:p-8" showOverlay={false}>
         <div className="h-full max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="text-lg font-bold">{data.id}</DialogTitle>
@@ -36,42 +69,54 @@ const DetailsDialog = (props: { open: boolean; setOpen: (id: boolean) => void; d
                   className="rounded-md"
                 />
               </div>
-              <div className="flex flex-1 flex-col gap-4">
-                <div className="font-semibold text-secondary-500">{data.original.labels.length} Labels discovered</div>{' '}
-                <div>
-                  <Dropdown
-                    dropDownSizes={['l', 'l', 'l']}
-                    key="label-dropdown"
-                    name="Label"
-                    options={data.original.labels.map((label) => ({
-                      value: label,
-                      label,
-                      checked: data.original.labels.includes(label),
-                    }))}
-                    isCheckbox
-                  />
+              <div className="flex flex-1 flex-col items-center justify-between gap-4">
+                <div className="w-full">
+                  <div className="font-semibold text-secondary-500">{data.original.labels.length} Labels discovered</div>{' '}
+                  <div>
+                    <Dropdown
+                      dropDownSizes={['l', 'l', 'l']}
+                      key="label-dropdown"
+                      name="Label"
+                      options={data.original.labels.map((label) => ({
+                        value: label,
+                        label,
+                        checked: selectedLabels.includes(label),
+                      }))}
+                      isCheckbox
+                      onValueChange={onLabelSelect}
+                    />
+                  </div>
                 </div>
+                <PrimaryButton className="w-full" onClick={onClickCopySelectedLabels}>
+                  Copy Selected Labels
+                </PrimaryButton>
               </div>
-              <div className="flex flex-1 flex-col gap-4">
-                <div className="font-semibold text-secondary-500">{data.original.hashtags.length} Hashtags discovered</div>
-                <div>
-                  <Dropdown
-                    dropDownSizes={['l', 'l', 'l']}
-                    key="hashtags-dropdown"
-                    name="Hashtags"
-                    options={data.original.hashtags.map((hashtag) => ({
-                      value: hashtag.hashtag,
-                      label: hashtag.hashtag,
-                      checked: data.original.hashtags.includes(hashtag),
-                    }))}
-                    isCheckbox
-                    isDefaultOpen={true}
-                  />
+              <div className="flex flex-1 flex-col items-center justify-between gap-4">
+                <div className="w-full">
+                  <div className="font-semibold text-secondary-500">{data.original.hashtags.length} Hashtags discovered</div>
+                  <div className="w-full">
+                    <Dropdown
+                      dropDownSizes={['l', 'l', 'l']}
+                      key="hashtags-dropdown"
+                      name="Hashtags"
+                      options={data.original.hashtags.map((hashtag) => ({
+                        value: hashtag.hashtag,
+                        label: hashtag.hashtag,
+                        checked: selectedHashtags.includes(hashtag.hashtag),
+                      }))}
+                      isCheckbox
+                      isDefaultOpen={true}
+                      onValueChange={onHashtagSelect}
+                    />
+                  </div>
                 </div>
+                <PrimaryButton className="w-full" onClick={onClickCopySelectedHashtags}>
+                  Copy Selected Hashtags
+                </PrimaryButton>
               </div>
             </div>
           </div>
-          <div className="mt-4 flex flex-row justify-center gap-4">
+          <div className="mt-12 flex flex-row justify-center gap-4">
             <DialogClose asChild>
               <NeutralButton onClick={() => handleClose()}>Close</NeutralButton>
             </DialogClose>

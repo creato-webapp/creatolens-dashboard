@@ -37,11 +37,6 @@ const FavouriteColumn: Partial<ColumnDef<HistoryRow>> = {
 
 export const columns: ColumnDef<HistoryRow>[] = [
   {
-    accessorKey: 'id',
-    header: 'ID',
-    enableGlobalFilter: false,
-  },
-  {
     id: 'select',
     header: ({ table }) => (
       <Checkbox

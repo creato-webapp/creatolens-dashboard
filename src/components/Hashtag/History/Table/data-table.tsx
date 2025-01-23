@@ -9,9 +9,10 @@ interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   setOpenedRow: (row: Row<HistoryRow>) => void
   setOpen: (open: boolean) => void
+  isLoading: boolean
 }
 
-export function DataTable<TData, TValue>({ table, columns, setOpenedRow, setOpen }: DataTableProps<TData, TValue>) {
+export function DataTable<TData, TValue>({ table, columns, setOpenedRow, setOpen, isLoading }: DataTableProps<TData, TValue>) {
   const handleRowClick = (row: Row<HistoryRow>) => {
     setOpenedRow(row)
     setOpen(true)
@@ -41,11 +42,16 @@ export function DataTable<TData, TValue>({ table, columns, setOpenedRow, setOpen
                 data-state={row.getIsSelected() && 'selected'}
                 onClick={(event) => {
                   // prevent row click when checkbox is clicked
-                  if (event.target instanceof HTMLButtonElement || event.target instanceof HTMLInputElement || event.target instanceof SVGElement)
+                  if (
+                    event.target instanceof HTMLButtonElement ||
+                    event.target instanceof HTMLInputElement ||
+                    event.target instanceof SVGElement ||
+                    isLoading
+                  )
                     return
                   handleRowClick(row)
                 }}
-                className="cursor-pointer hover:bg-neutral-200"
+                className={`cursor-pointer hover:bg-neutral-200 ${isLoading ? 'cursor-not-allowed' : ''}`}
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id} className="max-w-80">
