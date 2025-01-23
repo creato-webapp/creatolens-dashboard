@@ -21,7 +21,7 @@ const LINKS = [
   { name: 'Instagram Trend Analysis', path: ROUTE.DASHBOARD, disabled: false },
   { name: 'Instabot', path: ROUTE.ACCOUNTS, disabled: false },
   { name: 'Recommendation', path: ROUTE.RECOMMENDATION, disabled: true },
-  { name: 'Hashtags-to-Image', path: ROUTE.HASHTAG_TO_IMAGE, disabled: true },
+  { name: 'Hashtags-to-Image', path: ROUTE.HASHTAG_TO_IMAGE, disabled: false },
   { name: 'Image to Hashtags', path: ROUTE.IMAGE_TO_HASHTAG, disabled: false },
 ] as const
 

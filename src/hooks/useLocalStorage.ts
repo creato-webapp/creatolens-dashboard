@@ -1,11 +1,16 @@
 import { useState, useCallback } from 'react'
 
 const useLocalStorage = <T>(key: string, initialValue: T) => {
-  const isBrowser = typeof window !== 'undefined' // Check if window object is available
+  const isLocalStorageAvailable = () => {
+    try {
+      return typeof window !== 'undefined' && window.localStorage !== undefined
+    } catch {
+      return false
+    }
+  }
 
   const [storedValue, setStoredValue] = useState<T>(() => {
-    if (!isBrowser) {
-      // Return the initial value during SSR
+    if (!isLocalStorageAvailable()) {
       return initialValue
     }
 
@@ -20,8 +25,7 @@ const useLocalStorage = <T>(key: string, initialValue: T) => {
 
   const setValue = useCallback(
     (value: T | ((val: T) => T)) => {
-      if (!isBrowser) {
-        console.warn('localStorage is not available on the server.')
+      if (!isLocalStorageAvailable()) {
         return
       }
 
@@ -33,12 +37,11 @@ const useLocalStorage = <T>(key: string, initialValue: T) => {
         console.error('Error setting to localStorage', error)
       }
     },
-    [key, storedValue, isBrowser]
+    [key, storedValue]
   )
 
   const removeValue = useCallback(() => {
-    if (!isBrowser) {
-      console.warn('localStorage is not available on the server.')
+    if (!isLocalStorageAvailable()) {
       return
     }
 
@@ -48,7 +51,7 @@ const useLocalStorage = <T>(key: string, initialValue: T) => {
     } catch (error) {
       console.error('Error removing from localStorage', error)
     }
-  }, [key, initialValue, isBrowser])
+  }, [key, initialValue])
 
   return [storedValue, setValue, removeValue] as const
 }

@@ -1,7 +1,7 @@
 import Dropdown from '@components/Form/Dropdown/Dropdown'
 import { useHashtagToImage } from '@hooks/useHashtagToImage'
 import { useRemoteStringConfig } from '@hooks/useRemoteConfig'
-import { useTranslation } from 'next-i18next'
+import { getAspectImage } from '@services/HashtagHelper'
 import { useCallback } from 'react'
 
 export type ImageAspectRatioListType = {
@@ -18,10 +18,9 @@ type ImageAspectRatioType = {
 const IMAGE_ASPECT_KEY = 'IMAGE_ASPECT_RATIOS'
 
 const ImageAspectSelector = () => {
-  const { t } = useTranslation(['common'])
   const { config: imageAspectRatios } = useRemoteStringConfig<ImageAspectRatioListType>(IMAGE_ASPECT_KEY)
-  const { updateImageConfig, isLoading } = useHashtagToImage()
-  const options = Object.entries(imageAspectRatios).map(([key, value]) => ({ key, value: value.value, label: value.label }))
+  const { updateImageConfig, isLoading, imageConfig } = useHashtagToImage()
+  const options = getAspectImage(imageAspectRatios)
 
   const imageConfigSelect = useCallback(
     (key: string, value: string) => {
@@ -46,9 +45,10 @@ const ImageAspectSelector = () => {
           options={options}
           onValueChange={(key) => updateImageAspect(key.toString())}
           dropDownSizes={['m', 'm', 'm']}
-          name={t('please_select')}
+          name={imageConfig.aspectRatio}
           isFloating
           disabled={isLoading}
+          className="w-[300px]"
         />
       </div>
     </div>

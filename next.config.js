@@ -18,7 +18,13 @@ const nextConfig = {
         hostname: '*',
         port: '',
       },
+      {
+        protocol: 'https',
+        hostname: 'v1.wix:image',
+        pathname: '/**', // Allow all paths under this hostname
+      },
     ],
+    minimumCacheTTL: 60,
   },
   webpack(config) {
     config.module.rules.push({

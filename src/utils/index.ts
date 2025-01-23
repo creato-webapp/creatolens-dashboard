@@ -18,6 +18,11 @@ export const getUniqueSortedHashtags = (hashtags: Hashtag[]): Hashtag[] => {
   return Array.from(new Map(hashtags.map((hashtag) => [hashtag.hashtag, hashtag])).values()).sort((a, b) => b.count - a.count)
 }
 
+export const transformWixImageURL = (wixUrl: string) => {
+  const replaced = wixUrl.replace('wix:image://v1/', 'https://static.wixstatic.com/media/')
+  return replaced.substring(0, replaced.lastIndexOf('/'))
+}
+
 export const arrayOfStringsToSentence = (array: string[]): string => {
   if (!array) return ''
   return array.join(', ')

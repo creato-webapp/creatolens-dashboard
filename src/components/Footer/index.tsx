@@ -55,6 +55,10 @@ const FOOTER_LINKS = [
         title: 'School Resources',
         href: 'https://www.creatogether.app/creato-academy',
       },
+      {
+        title: 'Hashtags & Keywords ',
+        href: '/hashtag',
+      },
     ],
   },
 ] as const
