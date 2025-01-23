@@ -19,6 +19,7 @@ export const getUniqueSortedHashtags = (hashtags: Hashtag[]): Hashtag[] => {
 }
 
 export const transformWixImageURL = (wixUrl: string) => {
+  if (!wixUrl) return ''
   const replaced = wixUrl.replace('wix:image://v1/', 'https://static.wixstatic.com/media/')
   return replaced.substring(0, replaced.lastIndexOf('/'))
 }
