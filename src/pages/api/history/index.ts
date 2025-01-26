@@ -30,7 +30,6 @@ export default async function historyHandler(req: NextApiRequest, res: NextApiRe
     }
 
     const historysIds = posts.map((item: PostData) => item.id)
-
     const data = await Promise.all(
       historysIds.map(async (id: string) => {
         try {

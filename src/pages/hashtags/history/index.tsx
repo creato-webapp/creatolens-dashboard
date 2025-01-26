@@ -13,7 +13,10 @@ import { HistoryRow } from '@services/HistoryHelper'
 import { Skeleton } from '@components/ui/Skeleton'
 import { convertGcsUriToHttp, downloadMultipleImages } from '@utils/index'
 import { getLocaleProps } from '@services/locale'
-import { GetStaticPropsContext, GetServerSidePropsContext } from 'next'
+import { GetServerSidePropsContext, GetStaticPropsContext } from 'next'
+import { useDialogues } from '@hooks/useDialogues'
+import { Status } from '@context/DialogueContext'
+import { useTranslation } from 'next-i18next'
 
 export async function getStaticProps(context: { locale: GetStaticPropsContext | GetServerSidePropsContext }) {
   return await getLocaleProps(context.locale)
@@ -36,7 +39,8 @@ const History = () => {
 
   const [open, setOpen] = useState(false)
   const [layout, setLayout] = useState('list')
-
+  const { addDialogue } = useDialogues()
+  const { t } = useTranslation('common')
   const tableData = useMemo(() => (isLoading ? Array(8).fill({}) : historys), [isLoading, historys])
   const tableColumns = useMemo(
     () =>
@@ -84,10 +88,11 @@ const History = () => {
 
     try {
       // Dynamically import JSZip only on client side
-      downloadMultipleImages(imageUrls)
+      await downloadMultipleImages(imageUrls)
+      addDialogue(t('download_success'), Status.SUCCESS)
     } catch (error) {
       console.error('Error downloading images:', error)
-      // Handle error appropriately (e.g., show error message to user)
+      addDialogue(t('download_failed'), Status.FAILED)
     }
   }
 
@@ -126,7 +131,7 @@ const History = () => {
       {historys && (
         <div className="w-full max-w-screen-2xl">
           {layout === 'grid' ? (
-            <HistoryGridView data={historys} isLoading={isLoading} />
+            <HistoryGridView table={table} data={historys} isLoading={isLoading} setOpen={setOpen} setOpenedRow={setOpenedRow} />
           ) : (
             <DataTable table={table} columns={columns} setOpen={setOpen} setOpenedRow={setOpenedRow} isLoading={isLoading} />
           )}

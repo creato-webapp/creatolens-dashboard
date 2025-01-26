@@ -5,10 +5,14 @@ import { useMemo } from 'react'
 import { Skeleton } from '@components/ui/Skeleton'
 import { arrayOfStringsToSentence, convertGcsUriToHttp } from '@utils/index'
 import { HistoryRow } from '@services/HistoryHelper'
+import { Row, Table } from '@tanstack/react-table'
 
 export interface HistoryGridViewProps {
+  table: Table<HistoryRow>
   data: HistoryRow[]
   isLoading: boolean
+  setOpen: (open: boolean) => void
+  setOpenedRow: (row: Row<HistoryRow>) => void
 }
 
 const FallBackImage = () => {
@@ -19,7 +23,7 @@ const FallBackImage = () => {
   )
 }
 const HistoryGridView = (props: HistoryGridViewProps) => {
-  const { data } = props
+  const { table, data, setOpen, setOpenedRow } = props
 
   const dateToBefore = useMemo(() => {
     return (date: string) => {
@@ -36,6 +40,15 @@ const HistoryGridView = (props: HistoryGridViewProps) => {
       }
     }
   }, [])
+
+  const onRowClick = (row: HistoryRow) => {
+    // get table row from row id
+    const tableRow = table.getRowModel().rows.find((r: Row<HistoryRow>) => r.original.id === row.id)
+    if (tableRow) {
+      setOpen(true)
+      setOpenedRow(tableRow)
+    }
+  }
 
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 ">
@@ -58,7 +71,13 @@ const HistoryGridView = (props: HistoryGridViewProps) => {
         </Card>
       )}
       {data.map((row) => (
-        <Card key={row.id} className="mb-4">
+        <Card
+          key={row.id}
+          className="mb-4 cursor-pointer"
+          onClick={() => {
+            onRowClick(row)
+          }}
+        >
           <CardContent className="p-4">
             <div className="flex flex-col">
               {row.uploaded_image ? (

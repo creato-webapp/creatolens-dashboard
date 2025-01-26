@@ -49,7 +49,7 @@ export const HistoryProvider = ({ children }: HistoryProviderProps) => {
     removeHistory,
     error,
   } = useHistoryData({
-    user_id: user_id || '', // Replace with dynamic user ID
+    user_id: user_id ? user_id : '',
   })
 
   const combinedHistorys = useMemo(() => {

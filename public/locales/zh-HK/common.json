@@ -10,5 +10,7 @@
   "page": "頁",
   "more_pages": "更多頁面",
   "of": "共",
-  "rows_selected": "行已選項目"
+  "rows_selected": "行已選項目",
+  "download_success": "下載成功",
+  "download_failed": "下載失敗"
 }

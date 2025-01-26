@@ -38,7 +38,10 @@ const ImageToHashtags = () => {
   }, [step])
 
   const navigateToHistory = () => {
-    router.push('/hashtags/history')
+    // router.push('/hashtags/history') //perform page load
+    router.push('/hashtags/history').then(() => {
+      window.location.reload()
+    })
   }
 
   if (isDetailPagesOpen)
