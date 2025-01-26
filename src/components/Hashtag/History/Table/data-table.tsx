@@ -3,16 +3,18 @@
 import { ColumnDef, flexRender, Table as ReactTable, Row } from '@tanstack/react-table'
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@components/ui/Table'
-import { HistoryRow } from '@context/HistoryContext'
-
+import { HistoryRow } from '@services/HistoryHelper'
+import { useTranslation } from 'next-i18next'
 interface DataTableProps<TData, TValue> {
   table: ReactTable<HistoryRow>
   columns: ColumnDef<TData, TValue>[]
   setOpenedRow: (row: Row<HistoryRow>) => void
   setOpen: (open: boolean) => void
+  isLoading: boolean
 }
 
-export function DataTable<TData, TValue>({ table, columns, setOpenedRow, setOpen }: DataTableProps<TData, TValue>) {
+export function DataTable<TData, TValue>({ table, columns, setOpenedRow, setOpen, isLoading }: DataTableProps<TData, TValue>) {
+  const { t } = useTranslation('common')
   const handleRowClick = (row: Row<HistoryRow>) => {
     setOpenedRow(row)
     setOpen(true)
@@ -42,14 +44,21 @@ export function DataTable<TData, TValue>({ table, columns, setOpenedRow, setOpen
                 data-state={row.getIsSelected() && 'selected'}
                 onClick={(event) => {
                   // prevent row click when checkbox is clicked
-                  if (event.target instanceof HTMLButtonElement || event.target instanceof HTMLInputElement || event.target instanceof SVGElement)
+                  if (
+                    event.target instanceof HTMLButtonElement ||
+                    event.target instanceof HTMLInputElement ||
+                    event.target instanceof SVGElement ||
+                    isLoading
+                  )
                     return
                   handleRowClick(row)
                 }}
-                className="cursor-pointer hover:bg-neutral-200"
+                className={`cursor-pointer hover:bg-neutral-200 ${isLoading ? 'cursor-not-allowed' : ''}`}
               >
                 {row.getVisibleCells().map((cell) => (
-                  <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
+                  <TableCell key={cell.id} className="max-w-80">
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </TableCell>
                 ))}
               </TableRow>
             ))
@@ -63,7 +72,7 @@ export function DataTable<TData, TValue>({ table, columns, setOpenedRow, setOpen
         </TableBody>
       </Table>
       <div className="text-muted-foreground flex-1 p-2 text-sm text-neutral-500">
-        {table.getFilteredSelectedRowModel().rows.length} of {table.getFilteredRowModel().rows.length} row(s) selected.
+        {table.getFilteredSelectedRowModel().rows.length} {t('of')} {table.getFilteredRowModel().rows.length} {t('rows_selected')}
       </div>
     </div>
   )
