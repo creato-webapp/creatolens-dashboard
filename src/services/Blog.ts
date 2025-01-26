@@ -26,8 +26,10 @@ export const getBlogPosts = async () => {
         slug: data.slug,
         featuredImage: data.featuredImage || null,
         _createdDate: data._createdDate ? data._createdDate.toString() : null,
+        tags: data.tags || [],
       }))
   } catch (error) {
+    console.error(error)
     return null
   }
 }

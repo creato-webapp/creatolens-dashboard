@@ -30,6 +30,7 @@ const menus = [
     items: [
       { name: 'Contact', path: ROUTE.CONTACT_US, disabled: false },
       { name: 'FAQs', path: ROUTE.FAQ, disabled: false },
+      { name: 'Blog', path: ROUTE.BLOG, disabled: false },
     ],
   },
 ]
@@ -57,6 +58,7 @@ const menusStatic = [
     items: [
       { name: 'Contact', path: ROUTE.CONTACT_US, disabled: false },
       { name: 'FAQs', path: ROUTE.FAQ, disabled: false },
+      { name: 'Blog', path: ROUTE.BLOG, disabled: false },
     ],
   },
 ]

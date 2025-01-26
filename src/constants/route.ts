@@ -9,7 +9,7 @@ const ROUTE = {
   HASHTAG_TO_IMAGE: '/hashtags/hashtags-to-image',
   CONTACT_US: '/contact-us',
   FAQ: '/faqs',
-
+  BLOG: '/blog',
   //static
   STATIC_DASHBOARD: '/features/instagram-trend-analysis',
   STATIC_ACCOUNTS: '/features/instabot',
