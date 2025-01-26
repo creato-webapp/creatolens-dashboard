@@ -27,17 +27,24 @@ export const useHistoryData = (query: { user_id: string }) => {
   )
 
   const removeHistory = useCallback(
-    async (id: string, userId: string) => {
+    async (post_ids: string[], update_fields: { is_deleted: boolean }) => {
       try {
-        mutate((prevHistorys: HistoryRow[]) => prevHistorys?.filter((history: HistoryRow) => history.id !== id), false)
-        await fetch(XAPI.IMAGE_HASHTAG_HISTORY, {
-          method: METHOD.DELETE,
-          body: JSON.stringify({ user_id: userId, id }),
+        mutate((prevHistorys: HistoryRow[]) => prevHistorys?.filter((history: HistoryRow) => !post_ids.includes(history.id)), false)
+
+        const body = { post_ids, update_fields }
+
+        const response = await fetch(XAPI.IMAGE_HASHTAG_HISTORY, {
+          method: METHOD.PATCH,
+          body: JSON.stringify(body),
         })
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`)
+        }
+        return true
       } catch (error) {
         console.error('Error removing history:', error)
-        mutate()
-        throw error
+        mutate() // Revalidate data after error
+        return false
       }
     },
     [mutate]

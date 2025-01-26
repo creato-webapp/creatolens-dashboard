@@ -20,7 +20,7 @@ interface HistoryContextType {
   setColumnFilters: Dispatch<SetStateAction<ColumnFiltersState>>
   setSorting: Dispatch<SetStateAction<SortingState>>
   sorting: SortingState
-  removeHistory: (id: string, userId: string) => void
+  removeHistory: (post_ids: string[], update_fields: { is_deleted: boolean }) => Promise<boolean>
 }
 
 interface HistoryProviderProps {
