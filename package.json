@@ -67,6 +67,7 @@
     "i18next-chained-backend": "^4.6.2",
     "i18next-http-backend": "^2.5.0",
     "i18next-localstorage-backend": "^4.2.0",
+    "jszip": "^3.10.1",
     "lucide-react": "^0.453.0",
     "moment-timezone": "0.5.38",
     "mustache": "^4.2.0",
@@ -87,8 +88,8 @@
     "swr": "^2.2.5",
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7",
-    "uuid": "^11.0.3",
-    "use-debounce": "^10.0.4"
+    "use-debounce": "^10.0.4",
+    "uuid": "^11.0.3"
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^14.2.5",

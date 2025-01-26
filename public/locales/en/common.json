@@ -4,5 +4,13 @@
   "title": "2Tag",
   "latest_on_top": "Latest on top",
   "earliest_on_top": "Earliest on top",
-  "favorite": "Favorite"
+  "favorite": "Favorite",
+  "previous": "Previous",
+  "next": "Next",
+  "page": "Page",
+  "more_pages": "More pages",
+  "of": "of",
+  "rows_selected": "row(s) selected",
+  "download_success": "Downloaded successfully",
+  "download_failed": "Download failed"
 }

@@ -25,7 +25,7 @@ const Dialogue = () => {
   const { dialogues } = useDialogues()
 
   return (
-    <div className="fixed bottom-5 z-10 flex w-full flex-col gap-2 md:right-5 md:w-2/3">
+    <div className="fixed bottom-5 z-1000 flex w-full flex-col gap-2 md:right-5 md:w-2/3">
       {dialogues.map(({ status, message }, index) => {
         const { border, text, src } = color[status]
         return (

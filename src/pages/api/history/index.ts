@@ -1,297 +1,56 @@
+import { HistoryInstance } from '@helpers/axios'
+import { mapHistoryData } from '@services/HistoryHelper'
 import type { NextApiRequest, NextApiResponse } from 'next'
 
+interface PostData {
+  id: string
+}
+
 export default async function historyHandler(req: NextApiRequest, res: NextApiResponse) {
-  const response = {
-    data: [
-      {
-        created_at: '2024-12-29T16:23:17',
-        id: '1',
-        input_object: null,
-        is_deleted: false,
-        output_object: {
-          created_at: '2024-12-29T16:23:17',
-          data: {
-            url: 'https://fakeimg.pl/250x100/',
-          },
-          updated_at: '2024-12-29T16:23:17',
-        },
-        status: 1,
-        updated_at: '2024-12-29T16:23:17',
-        user_id: '123',
-        labels: ['label1', 'label2', 'label3', 'label4', 'label5', 'label1', 'label2', 'label3', 'label4', 'label5'],
-        hashtags: ['hashtag1', 'hashtag2', 'hashtag3', 'hashtag4', 'hashtag5'],
+  try {
+    const {
+      query: { user_id },
+    } = req
+
+    if (!user_id) {
+      return res.status(400).json({ error: 'User ID is required' })
+    }
+
+    // Fetch user posts
+    const historysRefResponse = await HistoryInstance.get(`/api/users/${user_id}/posts`, {
+      headers: {
+        Cookie: req.headers.cookie || '',
       },
-      {
-        created_at: '2024-02-29T16:23:17',
-        id: '2',
-        input_object: null,
-        is_deleted: false,
-        output_object: {
-          created_at: '2024-12-29T16:23:17',
-          data: {
-            url: 'https://fakeimg.pl/250x100/',
-          },
-          updated_at: '2024-12-29T16:23:17',
-        },
-        status: 1,
-        updated_at: '2024-12-29T16:23:17',
-        user_id: '123',
-        labels: ['label1', 'label2', 'label3', 'label4', 'label5', 'label1', 'label2', 'label3', 'label4', 'label5'],
-        hashtags: ['hashtag1', 'hashtag2', 'hashtag3', 'hashtag4', 'hashtag5'],
-      },
-      {
-        created_at: '2024-02-29T16:23:17',
-        id: '3',
-        input_object: null,
-        is_deleted: false,
-        output_object: {
-          created_at: '2024-12-29T16:23:17',
-          data: {
-            url: 'https://fakeimg.pl/250x100/',
-          },
-          updated_at: '2024-12-29T16:23:17',
-        },
-        status: 1,
-        updated_at: '2024-12-29T16:23:17',
-        user_id: '123',
-        labels: ['label1', 'label2', 'label3', 'label4', 'label5', 'label1', 'label2', 'label3', 'label4', 'label5'],
-        hashtags: ['hashtag1', 'hashtag2', 'hashtag3', 'hashtag4', 'hashtag5'],
-      },
-      {
-        created_at: '2024-02-29T16:23:17',
-        id: '4',
-        input_object: null,
-        is_deleted: false,
-        output_object: {
-          created_at: '2024-12-29T16:23:17',
-          data: {
-            url: 'https://fakeimg.pl/250x100/',
-          },
-          updated_at: '2024-12-29T16:23:17',
-        },
-        status: 1,
-        updated_at: '2024-12-29T16:23:17',
-        user_id: '123',
-        labels: ['label1', 'label2', 'label3', 'label4', 'label5', 'label1', 'label2', 'label3', 'label4', 'label5'],
-        hashtags: ['hashtag1', 'hashtag2', 'hashtag3', 'hashtag4', 'hashtag5'],
-      },
-      {
-        created_at: '2024-02-29T16:23:17',
-        id: '5',
-        input_object: null,
-        is_deleted: false,
-        output_object: {
-          created_at: '2024-12-29T16:23:17',
-          data: {
-            url: 'https://fakeimg.pl/250x700/',
-          },
-          updated_at: '2024-12-29T16:23:17',
-        },
-        status: 1,
-        updated_at: '2024-12-29T16:23:17',
-        user_id: '123',
-        labels: ['label1', 'label2', 'label3', 'label4', 'label5', 'label1', 'label2', 'label3', 'label4', 'label5'],
-        hashtags: ['hashtag1', 'hashtag2', 'hashtag3', 'hashtag4', 'hashtag5'],
-      },
-      {
-        created_at: '2024-02-29T16:23:17',
-        id: '6',
-        input_object: null,
-        is_deleted: false,
-        output_object: {
-          created_at: '2024-12-29T16:23:17',
-          data: {
-            url: 'https://fakeimg.pl/250x100/',
-          },
-          updated_at: '2024-12-29T16:23:17',
-        },
-        status: 1,
-        updated_at: '2024-12-29T16:23:17',
-        user_id: '123',
-        labels: ['label1', 'label2', 'label3', 'label4', 'label5', 'label1', 'label2', 'label3', 'label4', 'label5'],
-        hashtags: ['hashtag1', 'hashtag2', 'hashtag3', 'hashtag4', 'hashtag5'],
-      },
-      {
-        created_at: '2024-02-29T16:23:17',
-        id: '7',
-        input_object: null,
-        is_deleted: false,
-        output_object: {
-          created_at: '2024-12-29T16:23:17',
-          data: {
-            url: 'https://fakeimg.pl/250x100/',
-          },
-          updated_at: '2024-12-29T16:23:17',
-        },
-        status: 1,
-        updated_at: '2024-12-29T16:23:17',
-        user_id: '123',
-        labels: ['label1', 'label2', 'label3', 'label4', 'label5', 'label1', 'label2', 'label3', 'label4', 'label5'],
-        hashtags: ['hashtag1', 'hashtag2', 'hashtag3', 'hashtag4', 'hashtag5'],
-      },
-      {
-        created_at: '2024-02-29T16:23:17',
-        id: '8',
-        input_object: null,
-        is_deleted: false,
-        output_object: {
-          created_at: '2024-12-29T16:23:17',
-          data: {
-            url: 'https://fakeimg.pl/250x100/',
-          },
-          updated_at: '2024-12-29T16:23:17',
-        },
-        status: 1,
-        updated_at: '2024-12-29T16:23:17',
-        user_id: '123',
-        labels: ['label1', 'label2', 'label3', 'label4', 'label5', 'label1', 'label2', 'label3', 'label4', 'label5'],
-        hashtags: ['hashtag1', 'hashtag2', 'hashtag3', 'hashtag4', 'hashtag5'],
-      },
-      {
-        created_at: '2024-02-29T16:23:17',
-        id: '9',
-        input_object: null,
-        is_deleted: false,
-        output_object: {
-          created_at: '2024-12-29T16:23:17',
-          data: {
-            url: 'https://fakeimg.pl/250x100/',
-          },
-          updated_at: '2024-12-29T16:23:17',
-        },
-        status: 1,
-        updated_at: '2024-12-29T16:23:17',
-        user_id: '123',
-        labels: ['label1', 'label2', 'label3', 'label4', 'label5', 'label1', 'label2', 'label3', 'label4', 'label5'],
-        hashtags: ['hashtag1', 'hashtag2', 'hashtag3', 'hashtag4', 'hashtag5'],
-      },
-      {
-        created_at: '2024-02-29T16:23:17',
-        id: '10',
-        input_object: null,
-        is_deleted: false,
-        output_object: {
-          created_at: '2024-12-29T16:23:17',
-          data: {
-            url: 'https://fakeimg.pl/250x100/',
-          },
-          updated_at: '2024-12-29T16:23:17',
-        },
-        status: 1,
-        updated_at: '2024-12-29T16:23:17',
-        user_id: '123',
-        labels: ['label1', 'label2', 'label3', 'label4', 'label5', 'label1', 'label2', 'label3', 'label4', 'label5'],
-        hashtags: ['hashtag1', 'hashtag2', 'hashtag3', 'hashtag4', 'hashtag5'],
-      },
-      {
-        created_at: '2024-02-29T16:23:17',
-        id: '11',
-        input_object: null,
-        is_deleted: false,
-        output_object: {
-          created_at: '2024-12-29T16:23:17',
-          data: {
-            url: 'https://fakeimg.pl/250x100/',
-          },
-          updated_at: '2024-12-29T16:23:17',
-        },
-        status: 1,
-        updated_at: '2024-12-29T16:23:17',
-        user_id: '123',
-        labels: ['label1', 'label2', 'label3', 'label4', 'label5', 'label1', 'label2', 'label3', 'label4', 'label5'],
-        hashtags: ['hashtag1', 'hashtag2', 'hashtag3', 'hashtag4', 'hashtag5'],
-      },
-      {
-        created_at: '2024-02-29T16:23:17',
-        id: '12',
-        input_object: null,
-        is_deleted: false,
-        output_object: {
-          created_at: '2024-12-29T16:23:17',
-          data: {
-            url: 'https://fakeimg.pl/250x100/',
-          },
-          updated_at: '2024-12-29T16:23:17',
-        },
-        status: 1,
-        updated_at: '2024-12-29T16:23:17',
-        user_id: '123',
-        labels: ['label1', 'label2', 'label3', 'label4', 'label5', 'label1', 'label2', 'label3', 'label4', 'label5'],
-        hashtags: ['hashtag1', 'hashtag2', 'hashtag3', 'hashtag4', 'hashtag5'],
-      },
-      {
-        created_at: '2024-02-29T16:23:17',
-        id: '13',
-        input_object: null,
-        is_deleted: false,
-        output_object: {
-          created_at: '2024-12-29T16:23:17',
-          data: {
-            url: 'https://fakeimg.pl/250x100/',
-          },
-          updated_at: '2024-12-29T16:23:17',
-        },
-        status: 1,
-        updated_at: '2024-12-29T16:23:17',
-        user_id: '123',
-        labels: ['label1', 'label2', 'label3', 'label4', 'label5', 'label1', 'label2', 'label3', 'label4', 'label5'],
-        hashtags: ['hashtag1', 'hashtag2', 'hashtag3', 'hashtag4', 'hashtag5'],
-      },
-      {
-        created_at: '2024-02-29T16:23:17',
-        id: '14',
-        input_object: null,
-        is_deleted: false,
-        output_object: {
-          created_at: '2024-12-29T16:23:17',
-          data: {
-            url: 'https://fakeimg.pl/250x100/',
-          },
-          updated_at: '2024-12-29T16:23:17',
-        },
-        status: 1,
-        updated_at: '2024-12-29T16:23:17',
-        user_id: '123',
-        labels: ['football'],
-        hashtags: ['hashtag1', 'hashtag2', 'hashtag3', 'hashtag4', 'hashtag5'],
-      },
-      {
-        created_at: '2024-02-29T16:23:17',
-        id: '15',
-        input_object: null,
-        is_deleted: false,
-        output_object: {
-          created_at: '2024-12-29T16:23:17',
-          data: {
-            url: 'https://fakeimg.pl/250x100/',
-          },
-          updated_at: '2024-12-29T16:23:17',
-        },
-        status: 1,
-        updated_at: '2024-12-29T16:23:17',
-        user_id: '123',
-        labels: ['cake', 'label2', 'label3', 'label4', 'label5', 'label1', 'label2', 'label3', 'label4', 'label5'],
-        hashtags: ['hashtag1', 'hashtag2', 'hashtag3', 'hashtag4', 'hashtag5'],
-      },
-      {
-        created_at: '2024-02-29T16:23:17',
-        id: '16',
-        input_object: null,
-        is_deleted: false,
-        output_object: {
-          created_at: '2024-12-29T16:23:17',
-          data: {
-            url: 'https://fakeimg.pl/250x100/',
-          },
-          updated_at: '2024-12-29T16:23:17',
-        },
-        status: 1,
-        updated_at: '2024-12-29T16:23:17',
-        user_id: '123',
-        labels: ['label1', 'cake2', 'label3', 'label4', 'label5', 'label1', 'label2', 'label3', 'label4', 'label5'],
-        hashtags: ['hhhhtag', 'hashtag2', 'hashtag3', 'hashtag4', 'hashtag5'],
-      },
-    ],
+    })
+
+    const posts = historysRefResponse.data
+
+    if (!posts || !Array.isArray(posts)) {
+      return res.status(200).json([])
+    }
+
+    const historysIds = posts.map((item: PostData) => item.id)
+    const data = await Promise.all(
+      historysIds.map(async (id: string) => {
+        try {
+          const historyData = await HistoryInstance.get(`/api/posts/${id}`, {
+            headers: {
+              Cookie: req.headers.cookie || '',
+            },
+          })
+          return historyData.data
+        } catch (error) {
+          console.error(`Error fetching data for post ID: ${id}`, error)
+          return null // Handle errors gracefully for individual posts
+        }
+      })
+    )
+
+    const filteredData = data.filter(Boolean)
+    const result = mapHistoryData(filteredData)
+    return res.status(200).json(result)
+  } catch (error) {
+    console.error('Error in historyHandler:', error)
+    return res.status(500).json({ error: 'Internal Server Error' })
   }
-  return res.status(200).json(response.data)
 }
