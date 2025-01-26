@@ -23,6 +23,7 @@ const LINKS = [
   { name: 'Recommendation', path: ROUTE.RECOMMENDATION, disabled: true },
   { name: 'Hashtags-to-Image', path: ROUTE.HASHTAG_TO_IMAGE, disabled: false },
   { name: 'Image to Hashtags', path: ROUTE.IMAGE_TO_HASHTAG, disabled: false },
+  { name: 'Blog', path: ROUTE.BLOG, disabled: false },
 ] as const
 
 const LINKS_STATIC = [
@@ -31,6 +32,7 @@ const LINKS_STATIC = [
   { name: 'Recommendation', path: ROUTE.STATIC_RECOMMENDATION, disabled: false },
   { name: 'Hashtags-to-Image', path: ROUTE.STATIC_HASHTAG_TO_IMAGE, disabled: false },
   { name: 'Image to Hashtags', path: ROUTE.STATIC_IMAGE_TO_HASHTAG, disabled: false },
+  { name: 'Blog', path: ROUTE.BLOG, disabled: false },
 ] as const
 
 const SUPPORT_LINKS = [
@@ -128,7 +130,7 @@ const NavBar: React.FC = () => {
       </div>
 
       <div className="flex flex-row-reverse items-center md:flex-row">
-        <div className="relative mr-4 hidden flex-row items-center gap-2 md:flex">
+        <div className="relative mr-4 hidden flex-row items-center gap-4 md:flex">
           <DropdownMenu
             items={session ? LINKS : LINKS_STATIC}
             isOpen={!isFeatureMenuCollapsed}
@@ -144,6 +146,9 @@ const NavBar: React.FC = () => {
             label="Support"
             dropdownWidth="w-48"
           />
+          <Link href={ROUTE.BLOG} className="rounded-md px-4 py-2 text-text-primary hover:bg-neutral-200 hover:text-primary-500">
+            Blog
+          </Link>
         </div>
         {session ? (
           <DropdownMenu

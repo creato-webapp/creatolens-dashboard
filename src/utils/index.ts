@@ -7,6 +7,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function slugify(item: string): string {
+  if (!item) return ''
   return item
     .toLowerCase() // Convert to lowercase
     .replace(/&/g, 'and') // Replace "&" with "and"
@@ -19,6 +20,7 @@ export const getUniqueSortedHashtags = (hashtags: Hashtag[]): Hashtag[] => {
 }
 
 export const transformWixImageURL = (wixUrl: string) => {
+  if (!wixUrl) return null
   const replaced = wixUrl.replace('wix:image://v1/', 'https://static.wixstatic.com/media/')
   return replaced.substring(0, replaced.lastIndexOf('/'))
 }

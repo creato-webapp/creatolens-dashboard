@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { BlogListProps } from 'pages/blog'
 import Image from 'next/image'
 import { useTranslation } from 'next-i18next'
+import IMAGE from '@constants/image'
 
 const HotTopics = ({ blogs }: { blogs: BlogListProps['data'] }) => {
   const { t } = useTranslation('blog')
@@ -34,7 +35,7 @@ const HotTopics = ({ blogs }: { blogs: BlogListProps['data'] }) => {
                 {index === 0 ? (
                   <div className="flex flex-col">
                     <Image
-                      src={transformWixImageURL(topic.featuredImage)}
+                      src={transformWixImageURL(topic.featuredImage) || IMAGE.LOGO_2TAG}
                       alt={`Featured image for ${topic.title}`}
                       width={400}
                       height={400}
@@ -45,7 +46,7 @@ const HotTopics = ({ blogs }: { blogs: BlogListProps['data'] }) => {
                 ) : (
                   <div className="flex flex-row items-center gap-4">
                     <Image
-                      src={transformWixImageURL(topic.featuredImage)}
+                      src={transformWixImageURL(topic.featuredImage) || IMAGE.LOGO_2TAG}
                       alt={`Featured image for ${topic.title}`}
                       width={100}
                       height={100}

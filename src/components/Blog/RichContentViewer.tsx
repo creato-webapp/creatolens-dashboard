@@ -1,6 +1,29 @@
+import { Button } from '@components/Button'
+import Divider from '@components/Divider'
 import Image from 'next/image'
 import React from 'react'
 
+interface ContainerData {
+  alignment?: string
+  width?: {
+    size?: string
+    custom?: number
+  }
+  height?: {
+    size?: string
+    custom?: number
+  }
+  textWrap?: boolean
+  backgroundColor?: string
+  backgroundImage?: {
+    src: {
+      id: string
+    }
+  }
+  custom?: {
+    [key: string]: number
+  }
+}
 interface RichContentNode {
   type: string
   id: string
@@ -31,12 +54,7 @@ interface RichContentNode {
       width: number
       height: number
     }
-    containerData?: {
-      alignment?: string
-      width?: {
-        size: string
-      }
-    }
+    containerData?: ContainerData
   }
   gifData?: {
     height: number
@@ -51,13 +69,7 @@ interface RichContentNode {
       mp4: string
       still: string
     }
-    containerData?: {
-      width?: {
-        size: string
-      }
-      alignment?: string
-      textWrap?: boolean
-    }
+    containerData?: ContainerData
   }
   videoData?: {
     video: {
@@ -72,22 +84,10 @@ interface RichContentNode {
       width: number
       height: number
     }
-    containerData?: {
-      textWrap?: boolean
-      alignment?: string
-      width?: {
-        size?: string
-      }
-    }
+    containerData?: ContainerData
   }
   galleryData?: {
-    containerData?: {
-      textWrap?: boolean
-      alignment?: string
-      width?: {
-        size?: string
-      }
-    }
+    containerData?: ContainerData
     items: Array<{
       image: {
         media: {
@@ -118,6 +118,19 @@ interface RichContentNode {
   headingData?: {
     level: number
   }
+  embedData?: {
+    oembed: {
+      html: string
+    }
+    containerData?: ContainerData
+  }
+  buttonData?: {
+    text: string
+    link: {
+      url: string
+    }
+    containerData?: ContainerData
+  }
 }
 
 export interface RichContent {
@@ -128,11 +141,13 @@ const applyDecorations = (text: string, decorations: NonNullable<RichContentNode
   let element: React.ReactNode = text
 
   decorations?.forEach((decoration, index) => {
+    const uniqueKey = `${decoration.type.toLowerCase()}-${text}-${index}`
+
     switch (decoration.type) {
       case 'LINK':
         element = (
           <a
-            key={`link-${index}`}
+            key={uniqueKey}
             href={decoration.linkData?.link.url}
             target={decoration.linkData?.link.target === 'BLANK' ? '_blank' : undefined}
             rel="noopener noreferrer"
@@ -142,18 +157,18 @@ const applyDecorations = (text: string, decorations: NonNullable<RichContentNode
         )
         break
       case 'BOLD':
-        element = <strong key={`bold-${index}`}>{element}</strong>
+        element = <strong key={uniqueKey}>{element}</strong>
         break
       case 'ITALIC':
-        element = <em key={`italic-${index}`}>{element}</em>
+        element = <em key={uniqueKey}>{element}</em>
         break
       case 'UNDERLINE':
-        element = <u key={`underline-${index}`}>{element}</u>
+        element = <u key={uniqueKey}>{element}</u>
         break
       case 'COLOR':
         element = (
           <span
-            key={`color-${index}`}
+            key={uniqueKey}
             style={{
               color: decoration.colorData?.foreground,
               backgroundColor: decoration.colorData?.background,
@@ -301,6 +316,62 @@ const parseNode = (node: RichContentNode): React.ReactNode => {
             ))}
           </div>
         </div>
+      )
+
+    case 'BLOCKQUOTE':
+      return (
+        <blockquote key={node.id} className="text-paragraph font-normal">
+          {node.nodes.map((childNode) => parseNode(childNode))}
+        </blockquote>
+      )
+
+    case 'BULLETED_LIST':
+      return (
+        <ul key={node.id} className="text-paragraph font-normal">
+          {node.nodes.map((childNode) => parseNode(childNode))}
+        </ul>
+      )
+
+    case 'LIST_ITEM':
+      return (
+        <li key={node.id} className="ml-2 list-outside list-disc">
+          {node.nodes.map((childNode) => parseNode(childNode))}
+        </li>
+      )
+
+    case 'DIVIDER':
+      return <Divider key={node.id} />
+
+    case 'EMBED':
+      if (!node.embedData) return null
+      return (
+        <div
+          key={node.id}
+          style={{
+            width: node.embedData.containerData?.width?.custom ? `${node.embedData.containerData.width.custom}px` : '100%',
+            height: node.embedData.containerData?.height?.custom ? `${node.embedData.containerData.height.custom}px` : 'auto',
+            margin: node.embedData.containerData?.alignment === 'CENTER' ? '0 auto' : undefined,
+          }}
+          className="embed-container h-fit overflow-hidden"
+        >
+          <div dangerouslySetInnerHTML={{ __html: node.embedData.oembed.html }} />
+        </div>
+      )
+
+    case 'BUTTON':
+      return (
+        <Button.Outline
+          onClick={() => {
+            window.open(node.buttonData?.link.url, '_blank')
+          }}
+          key={node.id}
+          className="w-fit"
+          style={{
+            alignItems: node.buttonData?.containerData?.alignment?.toLowerCase() as React.CSSProperties['alignItems'],
+          }}
+        >
+          {node.buttonData?.text}
+        </Button.Outline>
       )
 
     default:
