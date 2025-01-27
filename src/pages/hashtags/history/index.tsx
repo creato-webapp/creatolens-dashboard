@@ -17,6 +17,7 @@ import { GetServerSidePropsContext, GetStaticPropsContext } from 'next'
 import { useDialogues } from '@hooks/useDialogues'
 import { Status } from '@context/DialogueContext'
 import { useTranslation } from 'next-i18next'
+import { HistoryProvider } from '@context/HistoryContext'
 
 export async function getStaticProps(context: { locale: GetStaticPropsContext | GetServerSidePropsContext }) {
   return await getLocaleProps(context.locale)
@@ -118,49 +119,51 @@ const History = () => {
   }
 
   return (
-    <div className="scroll mb-10 flex w-full flex-col items-center justify-center md:mb-40">
-      <div className="flex w-full flex-col md:max-w-screen-2xl">
-        <div className="hidden md:flex">
-          <Breadcrumb lastItemName="History" />
+    <HistoryProvider>
+      <div className="scroll mb-10 flex w-full flex-col items-center justify-center md:mb-40">
+        <div className="flex w-full flex-col md:max-w-screen-2xl">
+          <div className="hidden md:flex">
+            <Breadcrumb lastItemName="History" />
+          </div>
+          <div className="flex flex-row items-center gap-7 py-4 md:px-12">
+            <TableFunctionBar setLayout={setLayout} layout={layout} table={table} globalFilter={globalFilter} setGlobalFilter={setGlobalFilter} />
+          </div>
         </div>
-        <div className="flex flex-row items-center gap-7 py-4 md:px-12">
-          <TableFunctionBar setLayout={setLayout} layout={layout} table={table} globalFilter={globalFilter} setGlobalFilter={setGlobalFilter} />
+
+        {historys && (
+          <div className="w-full max-w-screen-2xl">
+            {layout === 'grid' ? (
+              <HistoryGridView table={table} data={historys} isLoading={isLoading} setOpen={setOpen} setOpenedRow={setOpenedRow} />
+            ) : (
+              <DataTable table={table} columns={columns} setOpen={setOpen} setOpenedRow={setOpenedRow} isLoading={isLoading} />
+            )}
+          </div>
+        )}
+
+        <div className="mt-12">
+          <Paginator
+            currentPage={table.getState().pagination.pageIndex + 1}
+            totalPages={table.getPageCount()}
+            onPageChange={(pageNumber) => table.setPageIndex(pageNumber - 1)}
+            showPreviousNext
+          />
         </div>
+
+        {table.getFilteredSelectedRowModel().rows?.length > 0 && <SelectedRowsBar onClick={onClickDownloadSelectedImage} />}
+
+        {openedRow && (
+          <DetailsDialog
+            open={open}
+            data={openedRow}
+            setOpen={setOpen}
+            onClose={() => {
+              setOpenedRow(null)
+              setOpen(false)
+            }}
+          />
+        )}
       </div>
-
-      {historys && (
-        <div className="w-full max-w-screen-2xl">
-          {layout === 'grid' ? (
-            <HistoryGridView table={table} data={historys} isLoading={isLoading} setOpen={setOpen} setOpenedRow={setOpenedRow} />
-          ) : (
-            <DataTable table={table} columns={columns} setOpen={setOpen} setOpenedRow={setOpenedRow} isLoading={isLoading} />
-          )}
-        </div>
-      )}
-
-      <div className="mt-12">
-        <Paginator
-          currentPage={table.getState().pagination.pageIndex + 1}
-          totalPages={table.getPageCount()}
-          onPageChange={(pageNumber) => table.setPageIndex(pageNumber - 1)}
-          showPreviousNext
-        />
-      </div>
-
-      {table.getFilteredSelectedRowModel().rows?.length > 0 && <SelectedRowsBar onClick={onClickDownloadSelectedImage} />}
-
-      {openedRow && (
-        <DetailsDialog
-          open={open}
-          data={openedRow}
-          setOpen={setOpen}
-          onClose={() => {
-            setOpenedRow(null)
-            setOpen(false)
-          }}
-        />
-      )}
-    </div>
+    </HistoryProvider>
   )
 }
 
