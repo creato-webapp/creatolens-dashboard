@@ -115,10 +115,11 @@ const Blog = ({ data }: BlogListProps) => {
                                 {index < item.tags.length - 1 && <span className="text-sm text-gray-500">/</span>}
                               </>
                             ))}
+                          ‰
                         </div>
                       </div>
                       <div className="relative aspect-[4/3] w-full overflow-hidden rounded-lg md:w-1/2 md:max-w-72">
-                        {item.featuredImage && <BlurredImage src={transformWixImageURL(item.featuredImage)} alt={item.title} fallbackSrc={IMAGE.LOGO_2TAG} />}
+                        <BlurredImage src={transformWixImageURL(item.featuredImage)} alt={item.title} fallbackSrc={IMAGE.LOGO_2TAG} />
                       </div>
                     </div>
                   </Link>
