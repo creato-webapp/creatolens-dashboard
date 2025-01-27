@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { slugify } from '@utils/index'
+import { slugify, transformWixImageURL } from '@utils/index'
 import Breadcrumb from '@components/Breadcrumb'
 import { getBlogPosts } from '@services/Blog'
 import IMAGE from '@constants/image'
@@ -39,7 +39,7 @@ const BlogList = ({ data, category }: BlogListProps) => {
               <article className="border-b pb-8">
                 <Link href={`/blog/${item.slug}`} className="flex flex-row gap-12">
                   <div className="relative aspect-[4/3] w-1/2 overflow-hidden rounded-lg">
-                    <BlurredImage src={item.featuredImage} alt={item.title} fallbackSrc={IMAGE.LOGO_2TAG} />
+                    <BlurredImage src={transformWixImageURL(item.featuredImage)} alt={item.title} fallbackSrc={IMAGE.LOGO_2TAG} />
                   </div>
                   <div className="group flex cursor-pointer flex-row gap-12">
                     <div className="flex flex-col gap-2">
