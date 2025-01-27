@@ -1,33 +1,15 @@
 import { Checkbox } from '@components/ui/Checkbox'
+import { HistoryRow } from '@services/HistoryHelper'
 import { ColumnDef, RowData } from '@tanstack/react-table'
+import { convertGcsUriToHttp } from '@utils/index'
 import { ArrowUpDown, StarIcon } from 'lucide-react'
 import Image from 'next/image'
 
 declare module '@tanstack/react-table' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface TableMeta<TData extends RowData> {
-    updateFavoriteStatus: (id: string) => void
+    toggleFavoriteStatus: (id: string) => void
   }
-}
-
-type HistoryRow = {
-  created_at: string
-  id: string
-  input_object: null
-  is_deleted: boolean
-  output_object: {
-    created_at: string
-    data: {
-      url: string
-    }
-    updated_at: string
-  }
-  status: number
-  updated_at: string
-  user_id: string
-  labels: string[]
-  hashtags: string[]
-  is_favourited: boolean
 }
 
 const FallBackImage = () => {
@@ -45,7 +27,7 @@ const FavouriteColumn: Partial<ColumnDef<HistoryRow>> = {
         <StarIcon
           className={`${row.original.is_favourited ? 'fill-primary-500 text-primary-500' : 'stroke-1'} cursor-pointer`}
           onClick={() => {
-            table.options.meta?.updateFavoriteStatus(row.original.id)
+            table.options.meta?.toggleFavoriteStatus(row.original.id)
           }}
         />
       </>
@@ -76,9 +58,11 @@ export const columns: ColumnDef<HistoryRow>[] = [
     accessorKey: 'image',
     header: 'Image',
     cell: ({ row }) => {
-      const imageUrl = row.original.output_object.data.url || ''
+      const imageUrl = row.original.uploaded_image || ''
+      const combinedUrl = convertGcsUriToHttp(imageUrl)
+
       if (!imageUrl) return <FallBackImage />
-      else return <Image src={imageUrl as string} alt="Image" className="aspect-square object-cover" width={40} height={40} />
+      else return <Image src={combinedUrl as string} alt="Image" className="aspect-square object-cover" width={40} height={40} />
     },
   },
   {
@@ -87,14 +71,24 @@ export const columns: ColumnDef<HistoryRow>[] = [
     enableColumnFilter: true,
     enableResizing: true,
     enableGlobalFilter: true,
-    accessorFn: (originalRow) => originalRow.labels.toString(), // matches is a number
-    cell: ({ row }) => <div className="text-nowrap lowercase">{(row.getValue('labels') as string).replace(/,/g, ', ')}</div>,
+    accessorFn: (originalRow) => {
+      return originalRow.labels.join(', ')
+    },
+    cell: ({ row }) => <div className="line-clamp-2 lowercase">{row.original.labels.join(', ')}</div>,
   },
   {
     accessorKey: 'hashtags',
     header: 'Hashtags',
-    accessorFn: (originalRow) => originalRow.hashtags.toString(), // matches is a number
-    cell: ({ row }) => <div className="text-nowrap lowercase">{(row.getValue('hashtags') as string).replace(/,/g, ', ')}</div>,
+    accessorFn: (originalRow) => {
+      const tags = originalRow.hashtags.map((hashtag) => {
+        return hashtag.hashtag
+      })
+      return tags.join(', ')
+    },
+    // originalRow.hashtags.toString(), // matches is a number
+    cell: ({ row }) => {
+      return <div className="line-clamp-2 lowercase">{row.original.hashtags.map((hashtag) => hashtag.hashtag).join(', ')}</div>
+    },
   },
   {
     accessorKey: 'created_at',
@@ -106,7 +100,13 @@ export const columns: ColumnDef<HistoryRow>[] = [
         </div>
       )
     },
-    cell: ({ row }) => new Date(row.getValue('created_at')).toLocaleDateString(),
+    // cell: ({ row }) => new Date(row.getValue('created_at')).toLocaleDateString(), //trim spaces inside the date
+    cell: ({ row }) => {
+      const date = new Date(row.getValue('created_at'))
+      // trim spaces inside the date
+      const trimmedDate = date.toLocaleDateString().replace(/\s+/g, ' ')
+      return trimmedDate
+    },
     enableGlobalFilter: false,
     enableSorting: true,
   },

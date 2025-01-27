@@ -76,3 +76,9 @@ export const SEOKeywordInstance = createInstance({
   headers: { 'Content-Type': 'application/json' },
   timeout: 2000,
 })
+
+export const HistoryInstance = createInstance({
+  baseURL: process.env.ACCOUNT_SERVICE,
+  headers: { 'Content-Type': 'application/json' },
+  timeout: 20000,
+})

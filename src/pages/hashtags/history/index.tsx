@@ -1,27 +1,27 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import Breadcrumb from '@components/Breadcrumb'
-
-import Dropdown from '@components/Form/Dropdown/Dropdown'
 import HistoryGridView from '@components/Hashtag/History/HistoryGridView'
 import { columns } from '@components/Hashtag/History/Table/columns'
 import { DataTable } from '@components/Hashtag/History/Table/data-table'
 import Paginator from '@components/Hashtag/History/Table/pagination'
-import { Input } from '@components/ui/Input'
-import { useHistory } from '@hooks/useHistory'
-import { DownloadIcon, Grid2X2Icon, List, SearchIcon, XIcon } from 'lucide-react'
+import { useHistory } from '@hooks/useHistoryData'
+import { DownloadIcon, XIcon } from 'lucide-react'
 import { DeleteConfirmationDialog, DetailsDialog } from '@components/Hashtag/History/HistoryDialog'
-import { getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table'
+import { ColumnDef, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table'
+import TableFunctionBar from '@components/Hashtag/History/TableFunctionBar'
+import { HistoryRow } from '@services/HistoryHelper'
+import { Skeleton } from '@components/ui/Skeleton'
+import { convertGcsUriToHttp, downloadMultipleImages } from '@utils/index'
+import { getLocaleProps } from '@services/locale'
+import { GetServerSidePropsContext, GetStaticPropsContext } from 'next'
+import { useDialogues } from '@hooks/useDialogues'
+import { Status } from '@context/DialogueContext'
+import { useTranslation } from 'next-i18next'
 
-const FilterOptions = {
-  ALL: {
-    label: 'All',
-    value: 'all',
-  },
-  FAVOURITE: {
-    label: 'Favourite',
-    value: 'is_favourited',
-  },
+export async function getStaticProps(context: { locale: GetStaticPropsContext | GetServerSidePropsContext }) {
+  return await getLocaleProps(context.locale)
 }
+
 const History = () => {
   const {
     historys,
@@ -32,14 +32,30 @@ const History = () => {
     setOpenedRow,
     columnFilters,
     setColumnFilters,
-    updateFavoriteStatus,
+    toggleFavoriteStatus,
     setSorting,
     sorting,
   } = useHistory()
 
-  const table = useReactTable({
-    data: historys ?? [],
-    columns,
+  const [open, setOpen] = useState(false)
+  const [layout, setLayout] = useState('list')
+  const { addDialogue } = useDialogues()
+  const { t } = useTranslation('common')
+  const tableData = useMemo(() => (isLoading ? Array(8).fill({}) : historys), [isLoading, historys])
+  const tableColumns = useMemo(
+    () =>
+      isLoading
+        ? columns.map((column) => ({
+            ...column,
+            cell: () => <Skeleton className="h-[40px] rounded-md" />,
+          }))
+        : columns,
+    [isLoading]
+  )
+
+  const table = useReactTable<HistoryRow>({
+    data: tableData ?? [],
+    columns: tableColumns as ColumnDef<HistoryRow>[],
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -48,37 +64,57 @@ const History = () => {
     onGlobalFilterChange: setGlobalFilter,
     onSortingChange: setSorting,
     state: {
-      globalFilter: globalFilter,
+      globalFilter,
       columnFilters,
       sorting,
     },
+    defaultColumn: {
+      size: 200,
+      minSize: 50,
+      maxSize: 500,
+    },
     meta: {
-      updateFavoriteStatus: (row: string) => updateFavoriteStatus(row),
+      toggleFavoriteStatus: (row: string) => toggleFavoriteStatus(row),
     },
   })
 
-  const [open, setOpen] = useState(false)
+  const onClickDownloadSelectedImage = async () => {
+    const selectedRows = table.getFilteredSelectedRowModel().rows
 
-  const [layout, setLayout] = useState('list')
+    const imageUrls = selectedRows.map((row) => {
+      const imageUrl = row.original.uploaded_image || ''
+      return convertGcsUriToHttp(imageUrl)
+    })
 
-  const changeLayout = () => {
-    setLayout(layout === 'grid' ? 'list' : 'grid')
+    try {
+      // Dynamically import JSZip only on client side
+      await downloadMultipleImages(imageUrls)
+      addDialogue(t('download_success'), Status.SUCCESS)
+    } catch (error) {
+      console.error('Error downloading images:', error)
+      addDialogue(t('download_failed'), Status.FAILED)
+    }
   }
 
-  const onDropDownChange = (value: string | number) => {
-    const isFavourite = value === FilterOptions['FAVOURITE'].value
-    const isAll = value === FilterOptions['ALL'].value
+  // Helper function to get file extension from URL
 
-    const column = table.getColumn('is_favourited')
-    if (column) {
-      if (isFavourite) {
-        column.setFilterValue(true)
-      } else if (isAll) {
-        column.setFilterValue(undefined)
-      }
-    } else {
-      console.error('Column "is_favourited" not found in the table columns.')
-    }
+  const SelectedRowsBar = (props: { onClick: () => void }) => {
+    const { onClick } = props
+
+    return (
+      <div className="fixed bottom-20 z-10 flex w-4/5 rounded-lg border border-neutral-300 bg-white p-6 drop-shadow-2xl md:w-1/2">
+        <div className="mx-12 flex w-full flex-row justify-between gap-4">
+          <div>Selected {table.getFilteredSelectedRowModel().rows.length}</div>
+          <DeleteConfirmationDialog />
+          <button className="btn-danger" onClick={onClick}>
+            <DownloadIcon />
+          </button>
+          <div className="flex cursor-pointer items-center" onClick={() => table.resetRowSelection()}>
+            <XIcon />
+          </div>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -88,44 +124,20 @@ const History = () => {
           <Breadcrumb lastItemName="History" />
         </div>
         <div className="flex flex-row items-center gap-7 py-4 md:px-12">
-          <div className="flex w-full flex-wrap justify-between gap-4 md:flex-row md:items-center">
-            <h1 className="py-3 text-heading font-bold text-neutral-800 sm:w-full md:w-fit md:text-nowrap ">Image-To-Hashtags History</h1>
-            <div className="w-full sm:w-[300px]">
-              <Input
-                placeholder="Search for Hashtag/ Label"
-                className="relative rounded-full focus:ring-primary-500"
-                endIcon={SearchIcon}
-                value={globalFilter}
-                onChange={(event) => {
-                  setGlobalFilter(event.target.value)
-                }}
-              ></Input>
-            </div>
-            <div className="flex w-full flex-row flex-nowrap items-center gap-12 sm:w-fit md:w-fit md:flex-row">
-              <Dropdown
-                isFloating
-                dropDownSizes={['m', 'm', 'm']}
-                options={Object.values(FilterOptions).map((option) => ({ label: option.label, value: option.value }))}
-                className="!w-full sm:!w-[200px]"
-                value={table.getColumn('is_favourited')?.getFilterValue() ? 'Favourite' : 'All'}
-                onValueChange={(value) => onDropDownChange(value)}
-              ></Dropdown>
-              <div className="cursor-pointer" onClick={() => changeLayout()}>
-                {layout === 'grid' ? <Grid2X2Icon /> : <List />}
-              </div>
-            </div>
-          </div>
+          <TableFunctionBar setLayout={setLayout} layout={layout} table={table} globalFilter={globalFilter} setGlobalFilter={setGlobalFilter} />
         </div>
       </div>
+
       {historys && (
         <div className="w-full max-w-screen-2xl">
           {layout === 'grid' ? (
-            <HistoryGridView data={historys} isLoading={isLoading} />
+            <HistoryGridView table={table} data={historys} isLoading={isLoading} setOpen={setOpen} setOpenedRow={setOpenedRow} />
           ) : (
-            table && <DataTable table={table} columns={columns} setOpen={setOpen} setOpenedRow={setOpenedRow} />
+            <DataTable table={table} columns={columns} setOpen={setOpen} setOpenedRow={setOpenedRow} isLoading={isLoading} />
           )}
         </div>
       )}
+
       <div className="mt-12">
         <Paginator
           currentPage={table.getState().pagination.pageIndex + 1}
@@ -135,20 +147,8 @@ const History = () => {
         />
       </div>
 
-      {table.getFilteredSelectedRowModel().rows?.length > 0 && (
-        <div className="fixed bottom-20 z-10 flex w-4/5 rounded-lg border border-neutral-300 bg-white p-6 drop-shadow-2xl md:w-1/2">
-          <div className="mx-12 flex w-full flex-row justify-between gap-4">
-            <div>Selected {table.getFilteredSelectedRowModel().rows.length}</div>
-            <DeleteConfirmationDialog />
-            <button className="btn-danger">
-              <DownloadIcon />
-            </button>
-            <div className="flex cursor-pointer items-center" onClick={() => table.resetRowSelection()}>
-              <XIcon />
-            </div>
-          </div>
-        </div>
-      )}
+      {table.getFilteredSelectedRowModel().rows?.length > 0 && <SelectedRowsBar onClick={onClickDownloadSelectedImage} />}
+
       {openedRow && (
         <DetailsDialog
           open={open}
