@@ -1,0 +1,16 @@
+{
+  "history": "歷史記錄",
+  "history_deleting": "刪除歷史記錄",
+  "history_deleting_description": "你確定要刪除這個結果嗎？",
+  "history_deleting_cancel": "取消",
+  "history_deleting_delete": "刪除",
+  "history_deleting_success": "成功刪除歷史記錄",
+  "history_deleting_failure": "刪除歷史記錄失敗",
+  "history_uploaded_image": "已上傳圖片：",
+  "copy_selected_hashtags": "複製已選擇的標籤",
+  "copy_selected_labels": "複製已選擇的標籤",
+  "close": "關閉",
+  "search_for_hashtag_label": "搜尋標籤/Hashtag",
+  "all": "全部",
+  "favourite": "收藏"
+}

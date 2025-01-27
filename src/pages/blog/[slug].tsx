@@ -5,10 +5,13 @@ import { RichContent } from '@components/Blog/RichContentViewer'
 import Breadcrumb from '@components/Breadcrumb'
 import Divider from '@components/Divider'
 import { getBlogPosts } from '@services/Blog'
-import { BlogListProps } from '.'
+import { BlogListProps, onClickCategory } from '.'
 import HotTopics from '@components/Blog/HotTopics'
 import Header from '@components/Blog/Header'
 import { getLocaleProps } from '@services/locale'
+import { ArrowLeft, ArrowRight, FolderIcon } from 'lucide-react'
+import Link from 'next/link'
+import { useTranslation } from 'next-i18next'
 
 const createWixClient = () => {
   return createClient({
@@ -25,6 +28,7 @@ export interface BlogPost {
   description: string
   title: string
   richcontent: RichContent
+  tags: string[]
   _createdDate?: string
   _updatedDate?: string
   featuredImage: string
@@ -58,17 +62,35 @@ export async function getStaticProps(context: { params: { slug: string }; locale
   const client = createWixClient()
 
   try {
-    const result = await client.items
-      .query(process.env.WIX_CMS_ID || '')
-      .eq('slug', context.params.slug)
-      .limit(1) // Add limit for optimization
-      .find()
+    const [currentPost, otherPosts] = await Promise.all([
+      client.items
+        .query(process.env.WIX_CMS_ID || '')
+        .eq('slug', context.params.slug)
+        .eq('published', true)
+        .limit(1)
+        .find(),
+      client.items
+        .query(process.env.WIX_CMS_ID || '')
+        .ne('slug', context.params.slug)
+        .eq('published', true)
+        .limit(2)
+        .find(),
+    ])
+
+    const result = {
+      items: [...currentPost.items, ...otherPosts.items],
+    }
 
     if (!result.items.length) {
       return { notFound: true }
     }
 
     const data = result.items[0]
+
+    // if there is no previous or next post, set it to null
+    const previousPost = result.items[1] ? { title: result.items[1].title, slug: result.items[1].slug } : null
+    const nextPost = result.items[2] ? { title: result.items[2].title, slug: result.items[2].slug } : null
+
     const serializedData = {
       ...data,
       _createdDate: data._createdDate ? data._createdDate.toISOString() : null, // Convert to ISO string
@@ -83,6 +105,8 @@ export async function getStaticProps(context: { params: { slug: string }; locale
       props: {
         data: serializedData,
         blogs: filteredOtherTopicsData,
+        previousPost: previousPost ? { title: previousPost.title, slug: previousPost.slug } : null,
+        nextPost: nextPost ? { title: nextPost.title, slug: nextPost.slug } : null,
         ...lang,
       },
       revalidate: 3600, // Optional: Revalidate every hour
@@ -105,9 +129,20 @@ const BlogContent = ({ content }: { content: RichContent }) => (
   </div>
 )
 
-export default function BlogPost({ data, blogs }: { data: BlogPost; blogs: BlogListProps['data'] }) {
+export default function BlogPost({
+  data,
+  blogs,
+  previousPost,
+  nextPost,
+}: {
+  data: BlogPost
+  blogs: BlogListProps['data']
+  previousPost: { title: string; slug: string } | null
+  nextPost: { title: string; slug: string } | null
+}) {
+  const { t } = useTranslation('blog')
   function addBlogPostJsonLd() {
-    return {
+    const jsonLd = {
       __html: `{
         "@context": "https://schema.org",
         "@type": "BlogPosting",
@@ -134,6 +169,21 @@ export default function BlogPost({ data, blogs }: { data: BlogPost; blogs: BlogL
         }
       }`,
     }
+    const safeJsonLd = JSON.stringify(jsonLd)
+      .replace(/</g, '\\u003c')
+      .replace(/>/g, '\\u003e')
+      .replace(/&/g, '\\u0026')
+      .replace(/'/g, '\\u0027')
+      .replace(/"/g, '\\u0022')
+
+    return {
+      __html: `{
+      "@context": "https://schema.org",
+      "@type": "script",
+      "type": "application/ld+json",
+      "text": ${safeJsonLd}
+    }`,
+    }
   }
 
   if (!data) {
@@ -150,16 +200,31 @@ export default function BlogPost({ data, blogs }: { data: BlogPost; blogs: BlogL
           </div>
           <div className="relative flex w-full flex-col md:flex-row">
             <div className="">
-              <h1 className="my-12 text-2xl font-bold md:px-12">{data.title}</h1>
-              {data._createdDate && (
-                <p className="-mt-8 mb-8 text-sm text-gray-500 md:px-12">
-                  {new Date(data._createdDate).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                  })}
-                </p>
-              )}
+              <div className="flex flex-col gap-2 md:px-12">
+                <h1 className="mt-6 text-2xl font-bold">{data.title}</h1>
+                <div className="flex flex-col gap-2 md:flex-row md:items-center">
+                  <div className="my-4 flex flex-wrap items-center gap-2">
+                    <FolderIcon className="h-4 w-4 text-neutral-500" />
+                    {data.tags?.map((tag, index) => (
+                      <div key={`${tag}-${index}`} className="flex flex-row items-center gap-2">
+                        <div onClick={() => onClickCategory(tag)} className="cursor-pointer text-sm text-gray-500">
+                          {tag}
+                        </div>
+                        {index < data.tags.length - 1 && <span className="text-sm text-gray-500">/</span>}
+                      </div>
+                    ))}
+                  </div>
+                  {data._createdDate && (
+                    <p className="text-sm text-gray-500 md:px-12">
+                      {new Date(data._createdDate).toLocaleDateString('en-US', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                      })}
+                    </p>
+                  )}
+                </div>
+              </div>
               <Divider />
               <div className="flex w-full flex-col md:flex-row">
                 <div className="md:w-2/3 ">
@@ -167,6 +232,30 @@ export default function BlogPost({ data, blogs }: { data: BlogPost; blogs: BlogL
                 </div>
                 <div className="mt-12 w-full md:mt-0 md:block md:w-1/3">
                   <HotTopics blogs={blogs} />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div>
+              <div className="flex w-full flex-col items-center justify-center gap-4">
+                <div className="flex flex-col justify-between gap-4 md:w-1/2 md:flex-row">
+                  {previousPost && (
+                    <Link href={`/blog/${previousPost.slug}`} className="group flex flex-1 flex-col gap-2 rounded-lg p-4 hover:border-primary-500">
+                      <span className="flex flex-row items-center gap-2 text-sm text-gray-500 group-hover:text-primary-500">
+                        <ArrowLeft className="h-4 w-4" /> {t('previous_post')}
+                      </span>
+                      <h3 className="font-medium group-hover:text-primary-500">{previousPost.title}</h3>
+                    </Link>
+                  )}
+                  {nextPost && (
+                    <Link href={`/blog/${nextPost.slug}`} className="group flex flex-1 flex-col gap-2 rounded-lg p-4 hover:border-primary-500">
+                      <span className="flex flex-row items-center justify-end gap-2 text-sm text-gray-500 group-hover:text-primary-500">
+                        <ArrowRight className="h-4 w-4" /> {t('next_post')}
+                      </span>
+                      <h3 className="font-medium group-hover:text-primary-500">{nextPost.title}</h3>
+                    </Link>
+                  )}
                 </div>
               </div>
             </div>

@@ -1,5 +1,10 @@
 {
   "hot_topics": "Hot Topics",
   "no_blog_posts": "No blog posts available at the moment.",
-  "see_more": "See More"
+  "see_more": "See More",
+  "blog_title": "Blog",
+  "latest_blog_title": "Latest",
+  "explore_blog_title": "Explore AI and digital marketing trends on 2Tag's blog",
+  "previous_post": "Previous Post",
+  "next_post": "Next Post"
 }

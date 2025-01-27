@@ -1,0 +1,16 @@
+{
+  "history": "History",
+  "history_deleting": "History Deleting",
+  "history_deleting_description": "Are you sure you want to delete this result?",
+  "history_deleting_cancel": "Cancel",
+  "history_deleting_delete": "Delete",
+  "history_deleting_success": "History Deleted Successfully",
+  "history_deleting_failure": "History Deletion Failed",
+  "history_uploaded_image": "Image Uploaded: ",
+  "copy_selected_hashtags": "Copy Selected Hashtags",
+  "copy_selected_labels": "Copy Selected Labels",
+  "close": "Close",
+  "search_for_hashtag_label": "Search for Hashtag/ Label",
+  "all": "All",
+  "favourite": "Favourite"
+}

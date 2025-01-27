@@ -128,7 +128,7 @@ const NavBar: React.FC = () => {
       </div>
 
       <div className="flex flex-row-reverse items-center md:flex-row">
-        <div className="relative mr-4 hidden flex-row items-center gap-2 md:flex">
+        <div className="relative mr-4 hidden flex-row items-center gap-4 md:flex">
           <DropdownMenu
             items={session ? LINKS : LINKS_STATIC}
             isOpen={!isFeatureMenuCollapsed}
@@ -144,6 +144,9 @@ const NavBar: React.FC = () => {
             label="Support"
             dropdownWidth="w-48"
           />
+          <Link href={ROUTE.BLOG} className="rounded-md px-4 py-2 text-text-primary hover:bg-neutral-200 hover:text-primary-500">
+            Blog
+          </Link>
         </div>
         {session ? (
           <DropdownMenu

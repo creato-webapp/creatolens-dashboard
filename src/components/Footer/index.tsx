@@ -36,7 +36,7 @@ const FOOTER_LINKS = [
       },
       {
         title: 'Blog',
-        href: 'https://www.creatogether.app/zh/blogs',
+        href: '/blog',
       },
     ],
   },
