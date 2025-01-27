@@ -1,6 +1,6 @@
 import Image from 'next/image'
 interface BlurredImageProps {
-  src: string
+  src: string | null
   alt: string
   fallbackSrc: string
   className?: string

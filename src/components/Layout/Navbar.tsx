@@ -23,7 +23,6 @@ const LINKS = [
   { name: 'Recommendation', path: ROUTE.RECOMMENDATION, disabled: true },
   { name: 'Hashtags-to-Image', path: ROUTE.HASHTAG_TO_IMAGE, disabled: false },
   { name: 'Image to Hashtags', path: ROUTE.IMAGE_TO_HASHTAG, disabled: false },
-  { name: 'Blog', path: ROUTE.BLOG, disabled: false },
 ] as const
 
 const LINKS_STATIC = [
@@ -32,7 +31,6 @@ const LINKS_STATIC = [
   { name: 'Recommendation', path: ROUTE.STATIC_RECOMMENDATION, disabled: false },
   { name: 'Hashtags-to-Image', path: ROUTE.STATIC_HASHTAG_TO_IMAGE, disabled: false },
   { name: 'Image to Hashtags', path: ROUTE.STATIC_IMAGE_TO_HASHTAG, disabled: false },
-  { name: 'Blog', path: ROUTE.BLOG, disabled: false },
 ] as const
 
 const SUPPORT_LINKS = [
