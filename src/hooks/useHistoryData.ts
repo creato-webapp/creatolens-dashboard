@@ -3,7 +3,6 @@ import METHOD from '@constants/method'
 import { useCallback } from 'react'
 import useRequest from './useRequest'
 import { HistoryContext } from '@context/HistoryContext'
-import useLocalStorage from '@hooks/useLocalStorage'
 import { HistoryRow } from '@services/HistoryHelper'
 
 export const useHistoryData = (query: { user_id: string }) => {
@@ -27,39 +26,60 @@ export const useHistoryData = (query: { user_id: string }) => {
   )
 
   const removeHistory = useCallback(
-    async (id: string, userId: string) => {
+    async (post_ids: string[], update_fields: { is_deleted: boolean }) => {
       try {
-        mutate((prevHistorys: HistoryRow[]) => prevHistorys?.filter((history: HistoryRow) => history.id !== id), false)
-        await fetch(XAPI.IMAGE_HASHTAG_HISTORY, {
-          method: METHOD.DELETE,
-          body: JSON.stringify({ user_id: userId, id }),
+        mutate((prevHistorys: HistoryRow[]) => prevHistorys?.filter((history: HistoryRow) => !post_ids.includes(history.id)), false)
+
+        const body = { post_ids, update_fields }
+
+        const response = await fetch(XAPI.IMAGE_HASHTAG_HISTORY, {
+          method: METHOD.PATCH,
+          body: JSON.stringify(body),
         })
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`)
+        }
+        return true
       } catch (error) {
         console.error('Error removing history:', error)
-        mutate()
-        throw error
+        mutate() // Revalidate data after error
+        return false
       }
     },
     [mutate]
   )
 
-  return { historys, mutate, isLoading, error, removeHistory }
-}
+  const { trigger: toggleFavorite } = useMutation(XAPI.IMAGE_HASHTAG_HISTORY, METHOD.PATCH)
 
-export const useFavoriteStatus = (key: string, initialIds: string[]) => {
-  const [favouritedIds, setFavouritedIds] = useLocalStorage<string[]>(key, initialIds)
+  const toggleFavoriteStatus = async (id: string, is_favorite: boolean) => {
+    try {
+      mutate((prevHistorys: HistoryRow[]) => {
+        return prevHistorys?.map((history) => {
+          if (history.id === id) {
+            return { ...history, is_favorite: !is_favorite }
+          }
+          return history
+        })
+      }, false)
 
-  const toggleFavoriteStatus = useCallback(
-    (id: string) => {
-      setFavouritedIds((prevIds) => (prevIds.includes(id) ? prevIds.filter((prevId) => prevId !== id) : [...prevIds, id]))
-    },
-    [setFavouritedIds]
-  )
+      const response = await toggleFavorite({
+        post_ids: [id],
+        update_fields: { is_favorite: !is_favorite },
+      })
 
-  return { favouritedIds, toggleFavoriteStatus }
+      return response
+    } catch (error) {
+      console.error('Error toggling favorite status:', error)
+      mutate()
+      return false
+    }
+  }
+
+  return { historys, mutate, isLoading, error, removeHistory, toggleFavoriteStatus }
 }
 
 import { useContext } from 'react'
+import useMutation from './useMutation'
 
 export const useHistory = () => {
   // move to useHook folder

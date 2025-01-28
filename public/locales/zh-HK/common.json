@@ -12,5 +12,12 @@
   "of": "共",
   "rows_selected": "行已選項目",
   "download_success": "下載成功",
-  "download_failed": "下載失敗"
+  "download_failed": "下載失敗",
+  "delete_success": "刪除成功",
+  "delete_failed": "刪除失敗",
+  "delete": "刪除",
+  "delete_selected": "刪除已選項目",
+  "delete_all": "刪除全部",
+  "delete_all_confirm": "確定要刪除全部歷史紀錄嗎？",
+  "delete_selected_confirm": "確定要刪除已選的歷史紀錄嗎？"
 }
