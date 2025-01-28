@@ -60,9 +60,7 @@ export default handler.api({
     }
   },
   [METHOD.PATCH]: async (req: NextApiRequest, res: NextApiResponse) => {
-    const body = JSON.parse(req.body)
-
-    const response = await HistoryInstance.patch(PAPI.UPDATE_HISTORY, body)
+    const response = await HistoryInstance.patch(PAPI.UPDATE_HISTORY, req.body)
     return res.status(response.status).json(response.data)
   },
 })

@@ -75,7 +75,7 @@ const History = () => {
       maxSize: 500,
     },
     meta: {
-      toggleFavoriteStatus: (row: string) => toggleFavoriteStatus(row),
+      toggleFavoriteStatus: (row: string, is_favorite: boolean) => toggleFavoriteStatus(row, is_favorite),
     },
   })
 

@@ -1,6 +1,6 @@
 import React, { createContext, Dispatch, ReactNode, SetStateAction, useCallback, useEffect, useMemo, useState } from 'react'
 import { ColumnFiltersState, Row, SortingState } from '@tanstack/react-table'
-import { useFavoriteStatus, useHistoryData } from '@hooks/useHistoryData'
+import { useHistoryData } from '@hooks/useHistoryData'
 import { Status } from './DialogueContext'
 import { useDialogues } from '@hooks/useDialogues'
 import { HistoryRow } from '@services/HistoryHelper'
@@ -11,7 +11,7 @@ interface HistoryContextType {
   historys: HistoryRow[] | undefined
   selectedHistoryRows: HistoryRow[]
   isLoading: boolean
-  toggleFavoriteStatus: (id: string) => void
+  toggleFavoriteStatus: (id: string, is_favorite: boolean) => void
   globalFilter: string
   setGlobalFilter: Dispatch<SetStateAction<string>>
   openedRow: Row<HistoryRow> | null
@@ -35,7 +35,6 @@ export const HistoryProvider = ({ children }: HistoryProviderProps) => {
   const [openedRow, setOpenedRow] = useState<Row<HistoryRow> | null>(null)
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [sorting, setSorting] = useState<SortingState>([])
-  const { favouritedIds, toggleFavoriteStatus } = useFavoriteStatus('favouritedHistoryRowIds', [])
 
   const { session } = useAuth()
   const user = session?.user as CombinedUser | undefined
@@ -47,20 +46,11 @@ export const HistoryProvider = ({ children }: HistoryProviderProps) => {
     mutate,
     isLoading,
     removeHistory,
+    toggleFavoriteStatus,
     error,
   } = useHistoryData({
     user_id: user_id ? user_id : '',
   })
-
-  const combinedHistorys = useMemo(() => {
-    if (historys.length > 0) {
-      return historys.map((row) => ({
-        ...row,
-        is_favourited: favouritedIds.includes(row.id),
-      }))
-    }
-    return []
-  }, [historys, favouritedIds])
 
   useEffect(() => {
     mutate() // Manually trigger the fetch
@@ -93,14 +83,14 @@ export const HistoryProvider = ({ children }: HistoryProviderProps) => {
 
   const value = useMemo(
     () => ({
-      historys: combinedHistorys,
+      historys: historys,
       columnFilters,
+      toggleFavoriteStatus,
       setColumnFilters,
       globalFilter,
       setGlobalFilter,
       selectedHistoryRows,
       updateHistoryRow,
-      toggleFavoriteStatus,
       isLoading,
       removeHistory,
       openedRow,
@@ -108,18 +98,7 @@ export const HistoryProvider = ({ children }: HistoryProviderProps) => {
       setSorting,
       sorting,
     }),
-    [
-      combinedHistorys,
-      columnFilters,
-      globalFilter,
-      selectedHistoryRows,
-      updateHistoryRow,
-      toggleFavoriteStatus,
-      removeHistory,
-      isLoading,
-      openedRow,
-      sorting,
-    ]
+    [historys, columnFilters, globalFilter, toggleFavoriteStatus, selectedHistoryRows, updateHistoryRow, isLoading, removeHistory, openedRow, sorting]
   )
 
   return <HistoryContext.Provider value={value}>{children}</HistoryContext.Provider>
