@@ -20,6 +20,9 @@ export const getBlogPosts = async () => {
 
     return result.items
       .filter((data) => data.title !== undefined)
+      .filter((data) => data.description !== undefined)
+      .filter((data) => data.slug !== undefined)
+      .filter((data) => data.published === true)
       .map((data) => ({
         title: data.title,
         description: data.description,

@@ -66,11 +66,13 @@ export async function getStaticProps(context: { params: { slug: string }; locale
       client.items
         .query(process.env.WIX_CMS_ID || '')
         .eq('slug', context.params.slug)
+        .eq('published', true)
         .limit(1)
         .find(),
       client.items
         .query(process.env.WIX_CMS_ID || '')
         .ne('slug', context.params.slug)
+        .eq('published', true)
         .limit(2)
         .find(),
     ])

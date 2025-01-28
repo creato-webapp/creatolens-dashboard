@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { slugify } from '@utils/index'
+import { slugify, transformWixImageURL } from '@utils/index'
 import Breadcrumb from '@components/Breadcrumb'
 import { getBlogPosts } from '@services/Blog'
 import IMAGE from '@constants/image'
@@ -41,7 +41,7 @@ const FirstBlogPost = (props: BlogListProps['data'][0]) => {
         <h3 className="text-neutral-500 md:text-lg">&ldquo;{t('explore_blog_title')}</h3>
         <Link href={`/blog/${slug}`} className="mt-6 flex w-full flex-col gap-6 md:flex-row">
           <div className="relative aspect-[2/1] w-full flex-grow items-center justify-center overflow-hidden rounded-lg bg-red-50 md:h-[350px] md:w-2/3">
-            <BlurredImage src={featuredImage} alt={title} fallbackSrc={IMAGE.LOGO_2TAG} />
+            <BlurredImage src={transformWixImageURL(featuredImage)} alt={title} fallbackSrc={IMAGE.LOGO_2TAG} />
           </div>
           <div className="flex w-full flex-col gap-2 md:w-1/3">
             <h2 className="text-2xl font-semibold text-neutral-800 hover:text-primary-500">{title}</h2>
@@ -115,10 +115,11 @@ const Blog = ({ data }: BlogListProps) => {
                                 {index < item.tags.length - 1 && <span className="text-sm text-gray-500">/</span>}
                               </>
                             ))}
+                          ‰
                         </div>
                       </div>
                       <div className="relative aspect-[4/3] w-full overflow-hidden rounded-lg md:w-1/2 md:max-w-72">
-                        {item.featuredImage && <BlurredImage src={item.featuredImage} alt={item.title} fallbackSrc={IMAGE.LOGO_2TAG} />}
+                        <BlurredImage src={transformWixImageURL(item.featuredImage)} alt={item.title} fallbackSrc={IMAGE.LOGO_2TAG} />
                       </div>
                     </div>
                   </Link>
