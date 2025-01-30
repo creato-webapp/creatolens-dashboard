@@ -87,6 +87,14 @@ const loginedInFooterLink = [
         title: 'Image-to-Hashtags',
         href: '/hashtag/image-to-hashtags',
       },
+      {
+        title: 'Hashtags & Keywords ',
+        href: '/hashtag',
+      },
+      {
+        title: 'Blog',
+        href: '/blog',
+      },
     ],
   },
   {
