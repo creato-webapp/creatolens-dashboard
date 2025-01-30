@@ -1,13 +1,21 @@
-import { useMemo, useState } from 'react'
+import { SetStateAction, Dispatch, useMemo, useState } from 'react'
 import Breadcrumb from '@components/Breadcrumb'
 import HistoryGridView from '@components/Hashtag/History/HistoryGridView'
 import { columns } from '@components/Hashtag/History/Table/columns'
 import { DataTable } from '@components/Hashtag/History/Table/data-table'
 import Paginator from '@components/Hashtag/History/Table/pagination'
-import { useHistory } from '@hooks/useHistoryData'
+import { useHistory } from '@hooks/useHistory'
 import { DownloadIcon, XIcon } from 'lucide-react'
 import { DeleteConfirmationDialog, DetailsDialog } from '@components/Hashtag/History/HistoryDialog'
-import { ColumnDef, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from '@tanstack/react-table'
+import {
+  ColumnDef,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  RowSelectionState,
+  useReactTable,
+} from '@tanstack/react-table'
 import TableFunctionBar from '@components/Hashtag/History/TableFunctionBar'
 import { HistoryRow } from '@services/HistoryHelper'
 import { Skeleton } from '@components/ui/Skeleton'
@@ -24,8 +32,50 @@ export async function getStaticProps(context: { locale: GetStaticPropsContext | 
 }
 
 const History = () => {
+  const { t } = useTranslation('common')
+  const { addDialogue } = useDialogues()
+  const [open, setOpen] = useState(false)
+  const [layout, setLayout] = useState('list')
+  const [rowSelection, setRowSelection] = useState<RowSelectionState>({})
+
+  return (
+    <HistoryProvider>
+      <HistoryContent
+        open={open}
+        setOpen={setOpen}
+        layout={layout}
+        setLayout={setLayout}
+        rowSelection={rowSelection}
+        setRowSelection={setRowSelection}
+        addDialogue={addDialogue}
+        t={t}
+      />
+    </HistoryProvider>
+  )
+}
+
+// Create a new component to use the history context
+const HistoryContent = ({
+  open,
+  setOpen,
+  layout,
+  setLayout,
+  rowSelection,
+  setRowSelection,
+  addDialogue,
+  t,
+}: {
+  open: boolean
+  setOpen: Dispatch<SetStateAction<boolean>>
+  layout: string
+  setLayout: Dispatch<SetStateAction<string>>
+  rowSelection: RowSelectionState
+  setRowSelection: Dispatch<SetStateAction<RowSelectionState>>
+  addDialogue: (message: string, status: Status) => void
+  t: (key: string) => string
+}) => {
   const {
-    historys,
+    histories,
     isLoading,
     globalFilter,
     setGlobalFilter,
@@ -38,11 +88,7 @@ const History = () => {
     sorting,
   } = useHistory()
 
-  const [open, setOpen] = useState(false)
-  const [layout, setLayout] = useState('list')
-  const { addDialogue } = useDialogues()
-  const { t } = useTranslation('common')
-  const tableData = useMemo(() => (isLoading ? Array(8).fill({}) : historys), [isLoading, historys])
+  const tableData = useMemo(() => (isLoading ? Array(8).fill({}) : histories), [isLoading, histories])
   const tableColumns = useMemo(
     () =>
       isLoading
@@ -64,10 +110,12 @@ const History = () => {
     onColumnFiltersChange: setColumnFilters,
     onGlobalFilterChange: setGlobalFilter,
     onSortingChange: setSorting,
+    onRowSelectionChange: setRowSelection,
     state: {
       globalFilter,
       columnFilters,
       sorting,
+      rowSelection,
     },
     defaultColumn: {
       size: 200,
@@ -119,51 +167,56 @@ const History = () => {
   }
 
   return (
-    <HistoryProvider>
-      <div className="scroll mb-10 flex w-full flex-col items-center justify-center md:mb-40">
-        <div className="flex w-full flex-col md:max-w-screen-2xl">
-          <div className="hidden md:flex">
-            <Breadcrumb lastItemName="History" />
-          </div>
-          <div className="flex flex-row items-center gap-7 py-4 md:px-12">
-            <TableFunctionBar setLayout={setLayout} layout={layout} table={table} globalFilter={globalFilter} setGlobalFilter={setGlobalFilter} />
-          </div>
+    <div className="scroll mb-10 flex w-full flex-col items-center justify-center md:mb-40">
+      <div className="flex w-full flex-col md:max-w-screen-2xl">
+        <div className="hidden md:flex">
+          <Breadcrumb lastItemName="History" />
         </div>
-
-        {historys && (
-          <div className="w-full max-w-screen-2xl">
-            {layout === 'grid' ? (
-              <HistoryGridView table={table} data={historys} isLoading={isLoading} setOpen={setOpen} setOpenedRow={setOpenedRow} />
-            ) : (
-              <DataTable table={table} columns={columns} setOpen={setOpen} setOpenedRow={setOpenedRow} isLoading={isLoading} />
-            )}
-          </div>
-        )}
-
-        <div className="mt-12">
-          <Paginator
-            currentPage={table.getState().pagination.pageIndex + 1}
-            totalPages={table.getPageCount()}
-            onPageChange={(pageNumber) => table.setPageIndex(pageNumber - 1)}
-            showPreviousNext
-          />
+        <div className="flex flex-row items-center gap-7 py-4 md:px-12">
+          <TableFunctionBar setLayout={setLayout} layout={layout} table={table} globalFilter={globalFilter} setGlobalFilter={setGlobalFilter} />
         </div>
-
-        {table.getFilteredSelectedRowModel().rows?.length > 0 && <SelectedRowsBar onClick={onClickDownloadSelectedImage} />}
-
-        {openedRow && (
-          <DetailsDialog
-            open={open}
-            data={openedRow}
-            setOpen={setOpen}
-            onClose={() => {
-              setOpenedRow(null)
-              setOpen(false)
-            }}
-          />
-        )}
       </div>
-    </HistoryProvider>
+
+      {histories && (
+        <div className="w-full max-w-screen-2xl">
+          {layout === 'grid' ? (
+            <HistoryGridView
+              table={table}
+              isLoading={isLoading}
+              setOpen={setOpen}
+              setOpenedRow={setOpenedRow}
+              rowSelection={rowSelection}
+              setRowSelection={setRowSelection}
+            />
+          ) : (
+            <DataTable table={table} columns={columns} setOpen={setOpen} setOpenedRow={setOpenedRow} isLoading={isLoading} />
+          )}
+        </div>
+      )}
+
+      <div className="mt-12">
+        <Paginator
+          currentPage={table.getState().pagination.pageIndex + 1}
+          totalPages={table.getPageCount()}
+          onPageChange={(pageNumber) => table.setPageIndex(pageNumber - 1)}
+          showPreviousNext
+        />
+      </div>
+
+      {table.getFilteredSelectedRowModel().rows?.length > 0 && <SelectedRowsBar onClick={onClickDownloadSelectedImage} />}
+
+      {openedRow && (
+        <DetailsDialog
+          open={open}
+          data={openedRow}
+          setOpen={setOpen}
+          onClose={() => {
+            setOpenedRow(null)
+            setOpen(false)
+          }}
+        />
+      )}
+    </div>
   )
 }
 

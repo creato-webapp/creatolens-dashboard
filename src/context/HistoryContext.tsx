@@ -8,7 +8,7 @@ import { useAuth } from '@hooks/index'
 import { CombinedUser } from '@api/auth/[...nextauth]'
 
 interface HistoryContextType {
-  historys: HistoryRow[] | undefined
+  histories: HistoryRow[] | undefined
   selectedHistoryRows: HistoryRow[]
   isLoading: boolean
   toggleFavoriteStatus: (id: string) => void
@@ -43,7 +43,7 @@ export const HistoryProvider = ({ children }: HistoryProviderProps) => {
   const { addDialogue } = useDialogues()
 
   const {
-    historys = [],
+    histories = [],
     mutate,
     isLoading,
     removeHistory,
@@ -52,15 +52,15 @@ export const HistoryProvider = ({ children }: HistoryProviderProps) => {
     user_id: user_id ? user_id : '',
   })
 
-  const combinedHistorys = useMemo(() => {
-    if (historys.length > 0) {
-      return historys.map((row) => ({
+  const combinedHistories = useMemo(() => {
+    if (histories.length > 0) {
+      return histories.map((row) => ({
         ...row,
         is_favourited: favouritedIds.includes(row.id),
       }))
     }
     return []
-  }, [historys, favouritedIds])
+  }, [histories, favouritedIds])
 
   useEffect(() => {
     mutate() // Manually trigger the fetch
@@ -93,7 +93,7 @@ export const HistoryProvider = ({ children }: HistoryProviderProps) => {
 
   const value = useMemo(
     () => ({
-      historys: combinedHistorys,
+      histories: combinedHistories,
       columnFilters,
       setColumnFilters,
       globalFilter,
@@ -109,7 +109,7 @@ export const HistoryProvider = ({ children }: HistoryProviderProps) => {
       sorting,
     }),
     [
-      combinedHistorys,
+      combinedHistories,
       columnFilters,
       globalFilter,
       selectedHistoryRows,

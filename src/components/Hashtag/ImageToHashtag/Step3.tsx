@@ -4,8 +4,6 @@ import Image from 'next/image'
 import Primary from '@components/Button/Primary'
 import { getImageHashtag } from '@services/HashtagHelper'
 import { useImageHashtag } from '@hooks/useImagetoHashtag'
-import { IHashet } from 'pages/recommendation'
-import { CONFIDENCE_LEVELS } from '@constants/imageStyle'
 import { useDialogues } from '@hooks/useDialogues'
 import { Status } from '@context/DialogueContext'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@components/ui/Tabs'
@@ -15,14 +13,15 @@ import CopyIcon from '@components/Icon/CopyIcon'
 import RepeatIcon from '@components/Icon/RepeatIcon'
 import PrimaryButton from '@components/Button/Primary'
 import Neutral from '@components/Button/Neutral'
+import HashtagDropdown from '@components/common/HashtagDropdown'
 
-interface Option {
+export interface Option {
   label: string
   value: string
   checked: boolean
 }
 
-interface CategoryOption {
+export interface CategoryOption {
   name: string
   options: Option[]
 }
@@ -34,32 +33,6 @@ const Step3: React.FC = () => {
   const currentImage = useMemo(() => image, [image])
 
   const [categorizedOptions, setCategorizedOptions] = useState<CategoryOption[]>([])
-
-  useEffect(() => {
-    if (!hashtags) return
-
-    const categorizeHashtags = (hashtags: IHashet[], confidenceLevel: { filter: (h: IHashet) => boolean }) =>
-      hashtags.filter(confidenceLevel.filter).map((hashtag) => ({
-        label: hashtag.hashtag,
-        value: hashtag.hashtag,
-        checked: false,
-      }))
-
-    const categorized = Object.entries(CONFIDENCE_LEVELS)
-      .map(([, level]) => ({
-        name: level.name,
-        options: categorizeHashtags(hashtags, {
-          filter: (h) => {
-            if (level.threshold) return h.acc > level.threshold
-            if (level.thresholdLow && level.thresholdHigh) return h.acc > level.thresholdLow && h.acc <= level.thresholdHigh
-            return false
-          },
-        }),
-      }))
-      .filter((category) => category.options.length > 0)
-
-    setCategorizedOptions(categorized)
-  }, [hashtags])
 
   const fetchHashtags = useCallback(async () => {
     if (currentImage?.selectedLabels) {
@@ -176,11 +149,12 @@ const Step3: React.FC = () => {
           <TabsContent value="hashtags">
             <div className="rounded-lg py-4">
               <h3 className="my-4 text-text-secondary">{`${hashtagsLength} hashtags discovered`}</h3>
-              {categorizedOptions.map((option) => (
-                <div key={`${option.name}-dropdown`} className="my-4">
-                  <Dropdown dropDownSizes={['l', 'l', 'l']} name={option.name} options={option.options} onValueChange={onClickHashtag} isCheckbox />
-                </div>
-              ))}
+              <HashtagDropdown
+                hashtags={hashtags}
+                onHashtagSelect={onClickHashtag}
+                categorizedOptions={categorizedOptions}
+                setCategorizedOptions={setCategorizedOptions}
+              />
               <div className="flex w-full justify-around gap-12 py-8">
                 <Neutral sizes={['l', 'l', 'l']} onClick={onClickClearSelected}>
                   Clear All
