@@ -47,12 +47,14 @@ interface RichContentNode {
     }>
   }
   imageData?: {
+    caption: string
     image: {
       src: {
         id: string
       }
       width: number
       height: number
+      caption?: string
     }
     containerData?: ContainerData
   }
@@ -151,6 +153,7 @@ const applyDecorations = (text: string, decorations: NonNullable<RichContentNode
             href={decoration.linkData?.link.url}
             target={decoration.linkData?.link.target === 'BLANK' ? '_blank' : undefined}
             rel="noopener noreferrer"
+            className="text-link"
           >
             {element}
           </a>
@@ -226,6 +229,7 @@ const parseNode = (node: RichContentNode): React.ReactNode => {
             width={node.imageData.image.width}
             height={node.imageData.image.height}
           />
+          {node.imageData.caption && <p className="text-caption font-normal">{node.imageData.caption}</p>}
         </div>
       )
     case 'GIF':
@@ -320,7 +324,7 @@ const parseNode = (node: RichContentNode): React.ReactNode => {
 
     case 'BLOCKQUOTE':
       return (
-        <blockquote key={node.id} className="text-paragraph font-normal">
+        <blockquote key={node.id} className="text-paragraph ml-4 border-l-2 border-blue-600 pl-4 font-normal">
           {node.nodes.map((childNode) => parseNode(childNode))}
         </blockquote>
       )
