@@ -11,16 +11,16 @@ const Header = ({ data, dangerouslySetInnerHTML }: { data: BlogPost; dangerously
     <>
       <Head>
         <title>{data.title} | Your Site Name</title>
-        <meta name="description" content={data.description?.slice(0, 160) || data.title} />
+        <meta name="description" content={data.metaDescription} />
         <meta property="og:title" content={data.title} />
-        <meta property="og:description" content={data.description?.slice(0, 160) || data.title} />
+        <meta property="og:description" content={data.metaDescription} />
         {data.featuredImage && <meta property="og:image" content={transformWixImageURL(data.featuredImage) || LOGO_SRC} />}
         <meta property="og:type" content="article" />
         <meta property="article:published_time" content={data._createdDate || ''} />
         <meta property="article:modified_time" content={data._updatedDate || ''} />
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={data.title} />
-        <meta name="twitter:description" content={data.description?.slice(0, 160) || data.title} />
+        <meta name="twitter:description" content={data.metaDescription} />
         {data.featuredImage && <meta name="twitter:image" content={transformWixImageURL(data.featuredImage) || LOGO_SRC} />}
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <script type="application/ld+json" dangerouslySetInnerHTML={dangerouslySetInnerHTML} key="blogpost-jsonld" />
