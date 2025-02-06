@@ -8,7 +8,7 @@ import Image from 'next/image'
 declare module '@tanstack/react-table' {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   interface TableMeta<TData extends RowData> {
-    toggleFavoriteStatus: (id: string) => void
+    toggleFavoriteStatus: (id: string, is_favorite: boolean) => void
   }
 }
 
@@ -20,14 +20,14 @@ const FallBackImage = () => {
   )
 }
 
-const FavouriteColumn: Partial<ColumnDef<HistoryRow>> = {
+const FavoriteColumn: Partial<ColumnDef<HistoryRow>> = {
   cell: ({ row, table }) => {
     return (
       <>
         <StarIcon
-          className={`${row.original.is_favourited ? 'fill-primary-500 text-primary-500' : 'stroke-1'} cursor-pointer`}
+          className={`${row.original.is_favorite ? 'fill-primary-500 text-primary-500' : 'stroke-1'} cursor-pointer`}
           onClick={() => {
-            table.options.meta?.toggleFavoriteStatus(row.original.id)
+            table.options.meta?.toggleFavoriteStatus(row.original.id, row.original.is_favorite)
           }}
         />
       </>
@@ -112,10 +112,10 @@ export const columns: ColumnDef<HistoryRow>[] = [
   },
 
   {
-    id: 'is_favourited',
-    accessorKey: 'is_favourited',
+    id: 'is_favorite',
+    accessorKey: 'is_favorite',
     header: '',
-    ...FavouriteColumn,
+    ...FavoriteColumn,
     enableColumnFilter: true,
     enableGlobalFilter: false,
   },

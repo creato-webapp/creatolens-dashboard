@@ -79,11 +79,11 @@ export interface HistoryRow {
   user_id: string
   labels: string[]
   hashtags: IHashet[]
-  is_favourited: boolean
+  is_favorite: boolean
   uploaded_image: string
 }
 
-export const mapHistoryData = (data: Data[], favouritedIds: string[] = []): HistoryRow[] => {
+export const mapHistoryData = (data: Data[]): HistoryRow[] => {
   const result = data.map((item) => {
     const input_image = item.histories_ref.find((history) => history.task_config_ref === TaskEnum['INPUT_IMAGE'])?.output_object?.url || ''
     const output_hashtags = item.histories_ref.find((history) => history.task_config_ref === TaskEnum['FETCH_HASHTAG'])?.output_object?.hashtags || [] // add to array
@@ -99,7 +99,7 @@ export const mapHistoryData = (data: Data[], favouritedIds: string[] = []): Hist
       user_id: item.user_ref.id || item.user_ref.email,
       labels: output_labels,
       hashtags: output_hashtags,
-      is_favourited: favouritedIds?.includes(item.id) || false,
+      is_favorite: item.is_favorite,
       uploaded_image: input_image,
     }
   })

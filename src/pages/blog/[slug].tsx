@@ -32,6 +32,7 @@ export interface BlogPost {
   _createdDate?: string
   _updatedDate?: string
   featuredImage: string
+  metaDescription: string
 }
 
 export async function getStaticPaths() {
@@ -147,7 +148,7 @@ export default function BlogPost({
         "@context": "https://schema.org",
         "@type": "BlogPosting",
         "headline": "${data.title}",
-        "description": "${data.description}",
+        "description": "${data.metaDescription}",
         "image": "${data.featuredImage}",
         "author": {
           "@type": "Person",
@@ -237,26 +238,24 @@ export default function BlogPost({
             </div>
           </div>
           <div>
-            <div>
-              <div className="flex w-full flex-col items-center justify-center gap-4">
-                <div className="flex flex-col justify-between gap-4 md:w-1/2 md:flex-row">
-                  {previousPost && (
-                    <Link href={`/blog/${previousPost.slug}`} className="group flex flex-1 flex-col gap-2 rounded-lg p-4 hover:border-primary-500">
-                      <span className="flex flex-row items-center gap-2 text-sm text-gray-500 group-hover:text-primary-500">
-                        <ArrowLeft className="h-4 w-4" /> {t('previous_post')}
-                      </span>
-                      <h3 className="font-medium group-hover:text-primary-500">{previousPost.title}</h3>
-                    </Link>
-                  )}
-                  {nextPost && (
-                    <Link href={`/blog/${nextPost.slug}`} className="group flex flex-1 flex-col gap-2 rounded-lg p-4 hover:border-primary-500">
-                      <span className="flex flex-row items-center justify-end gap-2 text-sm text-gray-500 group-hover:text-primary-500">
-                        <ArrowRight className="h-4 w-4" /> {t('next_post')}
-                      </span>
-                      <h3 className="font-medium group-hover:text-primary-500">{nextPost.title}</h3>
-                    </Link>
-                  )}
-                </div>
+            <div className="mt-12 flex w-full flex-col items-center justify-center gap-4">
+              <div className="flex flex-col justify-between gap-4 md:w-1/2 md:flex-row">
+                {previousPost && (
+                  <Link href={`/blog/${previousPost.slug}`} className="group flex flex-1 flex-col gap-2 rounded-lg p-4 hover:border-primary-500">
+                    <span className="flex flex-row items-center gap-2 text-sm text-gray-500 group-hover:text-primary-500">
+                      <ArrowLeft className="h-4 w-4" /> {t('previous_post')}
+                    </span>
+                    <h3 className="font-medium group-hover:text-primary-500">{previousPost.title}</h3>
+                  </Link>
+                )}
+                {nextPost && (
+                  <Link href={`/blog/${nextPost.slug}`} className="group flex flex-1 flex-col gap-2 rounded-lg p-4 hover:border-primary-500">
+                    <span className="flex flex-row items-center justify-end gap-2 text-sm text-gray-500 group-hover:text-primary-500">
+                      <ArrowRight className="h-4 w-4" /> {t('next_post')}
+                    </span>
+                    <h3 className="font-medium group-hover:text-primary-500">{nextPost.title}</h3>
+                  </Link>
+                )}
               </div>
             </div>
           </div>

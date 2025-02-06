@@ -148,8 +148,9 @@ const DetailsDialog = (props: { open: boolean; setOpen: (id: boolean) => void; d
   )
 }
 
-const DeleteConfirmationDialog = () => {
+const DeleteConfirmationDialog = (props: { onConfirm: () => void }) => {
   const { t } = useTranslation('history')
+  const { onConfirm } = props
   return (
     <Dialog>
       <DialogTrigger>
@@ -166,7 +167,7 @@ const DeleteConfirmationDialog = () => {
           <DialogClose asChild>
             <NeutralButton>{t('history_deleting_cancel')}</NeutralButton>
           </DialogClose>
-          <PrimaryButton>{t('history_deleting_delete')}</PrimaryButton>
+          <PrimaryButton onClick={onConfirm}>{t('history_deleting_delete')}</PrimaryButton>
         </div>
       </DialogContent>
     </Dialog>

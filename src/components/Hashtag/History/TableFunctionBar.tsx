@@ -22,9 +22,9 @@ const TableFunctionBar = (props: ITableFunctionBar) => {
       label: t('all'),
       value: 'all',
     },
-    FAVOURITE: {
-      label: t('favourite'),
-      value: 'is_favourited',
+    FAVORITE: {
+      label: t('favorite'),
+      value: 'is_favorite',
     },
   } as const
 
@@ -33,18 +33,18 @@ const TableFunctionBar = (props: ITableFunctionBar) => {
   }
 
   const onDropDownChange = (value: string | number) => {
-    const isFavourite = value === filterOptions['FAVOURITE'].value
+    const isFavorite = value === filterOptions['FAVORITE'].value
     const isAll = value === filterOptions['ALL'].value
 
-    const column = table.getColumn('is_favourited')
+    const column = table.getColumn('is_favorite')
     if (column) {
-      if (isFavourite) {
+      if (isFavorite) {
         column.setFilterValue(true)
       } else if (isAll) {
         column.setFilterValue(undefined)
       }
     } else {
-      console.error('Column "is_favourited" not found in the table columns.')
+      console.error('Column "is_favorite" not found in the table columns.')
     }
   }
 
@@ -68,7 +68,7 @@ const TableFunctionBar = (props: ITableFunctionBar) => {
           dropDownSizes={['m', 'm', 'm']}
           options={Object.values(filterOptions).map((option) => ({ label: option.label, value: option.value }))}
           className="!w-full sm:!w-[200px]"
-          value={table.getColumn('is_favourited')?.getFilterValue() ? 'Favourite' : 'All'}
+          value={table.getColumn('is_favorite')?.getFilterValue() ? 'Favorite' : 'All'}
           onValueChange={(value) => onDropDownChange(value)}
         ></Dropdown>
         <div className="cursor-pointer" onClick={() => changeLayout()}>
