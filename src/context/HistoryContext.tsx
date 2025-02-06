@@ -40,8 +40,8 @@ export const HistoryProvider = ({ children }: HistoryProviderProps) => {
   const user = session?.user as CombinedUser | undefined
   const user_id = user?.id
   const { addDialogue } = useDialogues()
-
   const { histories, mutate, isLoading, removeHistory, toggleFavoriteStatus, error } = useHistoryData({
+        
     user_id: user_id ? user_id : '',
   })
 
