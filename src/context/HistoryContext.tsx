@@ -8,7 +8,7 @@ import { useAuth } from '@hooks/index'
 import { CombinedUser } from '@api/auth/[...nextauth]'
 
 interface HistoryContextType {
-  historys: HistoryRow[] | undefined
+  histories: HistoryRow[] | undefined
   selectedHistoryRows: HistoryRow[]
   isLoading: boolean
   toggleFavoriteStatus: (id: string, is_favorite: boolean) => void
@@ -42,7 +42,7 @@ export const HistoryProvider = ({ children }: HistoryProviderProps) => {
   const { addDialogue } = useDialogues()
 
   const {
-    historys = [],
+    histories = [],
     mutate,
     isLoading,
     removeHistory,
@@ -83,7 +83,7 @@ export const HistoryProvider = ({ children }: HistoryProviderProps) => {
 
   const value = useMemo(
     () => ({
-      historys: historys,
+      histories,
       columnFilters,
       toggleFavoriteStatus,
       setColumnFilters,
@@ -98,7 +98,18 @@ export const HistoryProvider = ({ children }: HistoryProviderProps) => {
       setSorting,
       sorting,
     }),
-    [historys, columnFilters, globalFilter, toggleFavoriteStatus, selectedHistoryRows, updateHistoryRow, isLoading, removeHistory, openedRow, sorting]
+    [
+      histories,
+      columnFilters,
+      globalFilter,
+      selectedHistoryRows,
+      updateHistoryRow,
+      toggleFavoriteStatus,
+      removeHistory,
+      isLoading,
+      openedRow,
+      sorting,
+    ]
   )
 
   return <HistoryContext.Provider value={value}>{children}</HistoryContext.Provider>

@@ -10,14 +10,19 @@ import { convertGcsUriToHttp } from '@utils/index'
 import { Trash2Icon } from 'lucide-react'
 import { useTranslation } from 'next-i18next'
 import Image from 'next/image'
+import React, { useCallback } from 'react'
 import { useState } from 'react'
+import { CategoryOption, Option } from '../ImageToHashtag/Step3'
+import HashtagDropdown from '@components/common/HashtagDropdown'
 
 const DetailsDialog = (props: { open: boolean; setOpen: (id: boolean) => void; data: Row<HistoryRow>; onClose: () => void }) => {
   const { open, setOpen, data, onClose } = props
-  const [selectedHashtags, setSelectedHashtags] = useState<string[]>(data.original.hashtags.map((hashtag) => hashtag.hashtag))
   const [selectedLabels, setSelectedLabels] = useState<string[]>(data.original.labels)
   const { addDialogue } = useDialogues()
   const { t } = useTranslation('history')
+
+  const [categorizedOptions, setCategorizedOptions] = useState<CategoryOption[]>([])
+
   const handleClose = () => {
     setOpen(false)
     onClose()
@@ -31,22 +36,36 @@ const DetailsDialog = (props: { open: boolean; setOpen: (id: boolean) => void; d
     }
   }
 
-  const onHashtagSelect = (value: string | number) => {
-    if (selectedHashtags.includes(value as string)) {
-      setSelectedHashtags(selectedHashtags.filter((hashtag) => hashtag !== value))
-    } else {
-      setSelectedHashtags([...selectedHashtags, value as string])
-    }
-  }
+  const updateOptions = useCallback((updateFn: (opt: Option) => Option) => {
+    setCategorizedOptions((prevOptions) =>
+      prevOptions.map((category) => ({
+        ...category,
+        options: category.options.map(updateFn),
+      }))
+    )
+  }, [])
+
+  const onClickHashtag = useCallback(
+    (value: string | number) => {
+      updateOptions((opt) => {
+        if (opt.value === value) {
+          return { ...opt, checked: !opt.checked }
+        }
+        return opt
+      })
+    },
+    [updateOptions]
+  )
 
   const onClickCopySelectedHashtags = () => {
-    const selected = data.original.hashtags.flatMap((hashtag) => hashtag.hashtag)
+    const selected = categorizedOptions.flatMap((category) => category.options.filter((opt) => opt.checked).map((opt) => opt.label))
+
     navigator.clipboard.writeText(selected.join(' '))
     addDialogue('Hashtags Copied Successfully', Status.SUCCESS)
   }
 
   const onClickCopySelectedLabels = () => {
-    const selected = data.original.labels.join(' ')
+    const selected = selectedLabels.join(' ')
     navigator.clipboard.writeText(selected)
     addDialogue('Labels Copied Successfully', Status.SUCCESS)
   }
@@ -95,18 +114,20 @@ const DetailsDialog = (props: { open: boolean; setOpen: (id: boolean) => void; d
                 <div className="w-full">
                   <div className="font-semibold text-secondary-500">{data.original.hashtags.length} Hashtags discovered</div>
                   <div className="mt-4">
-                    <Dropdown
+                    {/* <Dropdown
                       dropDownSizes={['l', 'l', 'l']}
                       key="hashtags-dropdown"
                       name="Hashtags"
-                      options={data.original.hashtags.map((hashtag) => ({
-                        value: hashtag.hashtag,
-                        label: hashtag.hashtag,
-                        checked: selectedHashtags.includes(hashtag.hashtag),
-                      }))}
+                      options={categorizedOptions}
                       isCheckbox
                       isDefaultOpen={true}
                       onValueChange={onHashtagSelect}
+                    /> */}
+                    <HashtagDropdown
+                      hashtags={data.original.hashtags}
+                      onHashtagSelect={onClickHashtag}
+                      categorizedOptions={categorizedOptions}
+                      setCategorizedOptions={setCategorizedOptions}
                     />
                   </div>
                 </div>
