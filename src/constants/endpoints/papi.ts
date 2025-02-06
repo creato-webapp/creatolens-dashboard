@@ -20,6 +20,7 @@ const PAPI = {
 
   DASHBOARD_HISTORY: '/api/dashboard_reports',
   HASHTAG_HISTORY: '/api/history/image-to-hashtag',
+  UPDATE_HISTORY: '/api/posts',
 
   //label
   LABEL_IMAGE: '/api/image/labels',

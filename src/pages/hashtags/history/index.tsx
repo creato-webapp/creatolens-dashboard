@@ -85,6 +85,7 @@ const HistoryContent = ({
     setColumnFilters,
     toggleFavoriteStatus,
     setSorting,
+    removeHistory,
     sorting,
   } = useHistory()
 
@@ -123,7 +124,7 @@ const HistoryContent = ({
       maxSize: 500,
     },
     meta: {
-      toggleFavoriteStatus: (row: string) => toggleFavoriteStatus(row),
+      toggleFavoriteStatus: (row: string, is_favorite: boolean) => toggleFavoriteStatus(row, is_favorite),
     },
   })
 
@@ -145,16 +146,33 @@ const HistoryContent = ({
     }
   }
 
+  const onClickDelete = async () => {
+    try {
+      const selectedRows = table.getFilteredSelectedRowModel().rows
+      const selectedIds = selectedRows.map((row) => row.original.id)
+      table.resetRowSelection()
+      const result = await removeHistory(selectedIds, { is_deleted: true })
+      if (result) {
+        addDialogue(t('delete_success'), Status.SUCCESS)
+      } else {
+        addDialogue(t('delete_failed'), Status.FAILED)
+      }
+    } catch (error) {
+      console.error('Error deleting history:', error)
+      addDialogue(t('delete_failed'), Status.FAILED)
+    }
+  }
+
   // Helper function to get file extension from URL
 
-  const SelectedRowsBar = (props: { onClick: () => void }) => {
-    const { onClick } = props
+  const SelectedRowsBar = (props: { onClick: () => void; onClickDelete: () => void }) => {
+    const { onClick, onClickDelete } = props
 
     return (
       <div className="fixed bottom-20 z-10 flex w-4/5 rounded-lg border border-neutral-300 bg-white p-6 drop-shadow-2xl md:w-1/2">
         <div className="mx-12 flex w-full flex-row justify-between gap-4">
           <div>Selected {table.getFilteredSelectedRowModel().rows.length}</div>
-          <DeleteConfirmationDialog />
+          <DeleteConfirmationDialog onConfirm={onClickDelete} />
           <button className="btn-danger" onClick={onClick}>
             <DownloadIcon />
           </button>
@@ -203,7 +221,9 @@ const HistoryContent = ({
         />
       </div>
 
-      {table.getFilteredSelectedRowModel().rows?.length > 0 && <SelectedRowsBar onClick={onClickDownloadSelectedImage} />}
+      {table.getFilteredSelectedRowModel().rows?.length > 0 && (
+        <SelectedRowsBar onClick={onClickDownloadSelectedImage} onClickDelete={onClickDelete} />
+      )}
 
       {openedRow && (
         <DetailsDialog

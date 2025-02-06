@@ -3,7 +3,7 @@ import { ColumnFiltersState, Row, SortingState } from '@tanstack/react-table'
 
 export type HistoryState = {
   historys: HistoryRow[]
-  favouritedHistoryRowIds: string[]
+  favoriteHistoryRowIds: string[]
   selectedHistoryRows: HistoryRow[]
   columnFilters: ColumnFiltersState
   globalFilter: string
@@ -15,7 +15,7 @@ export type HistoryState = {
 
 export const initialState: HistoryState = {
   historys: [],
-  favouritedHistoryRowIds: [],
+  favoriteHistoryRowIds: [],
   selectedHistoryRows: [],
   columnFilters: [],
   globalFilter: '',
@@ -36,20 +36,20 @@ export type HistoryAction =
   | { type: 'SET_LOADING'; payload: boolean }
   | { type: 'SET_ERROR'; payload: Error }
 
-export const historyReducer = (state: HistoryState, action: HistoryAction, setFavouritedHistoryRowIds: (value: string[]) => void): HistoryState => {
+export const historyReducer = (state: HistoryState, action: HistoryAction, setFavoriteHistoryRowIds: (value: string[]) => void): HistoryState => {
   switch (action.type) {
     case 'SET_HISTORIES':
       return { ...state, historys: action.payload }
 
     case 'UPDATE_FAVORITE_STATUS': {
       const { payload: id } = action
-      const updatedFavourites = state.favouritedHistoryRowIds.includes(id)
-        ? state.favouritedHistoryRowIds.filter((fId) => fId !== id)
-        : [...state.favouritedHistoryRowIds, id]
+      const updatedFavorites = state.favoriteHistoryRowIds.includes(id)
+        ? state.favoriteHistoryRowIds.filter((fId) => fId !== id)
+        : [...state.favoriteHistoryRowIds, id]
       // Save to localStorage
-      setFavouritedHistoryRowIds(updatedFavourites)
+      setFavoriteHistoryRowIds(updatedFavorites)
 
-      return { ...state, favouritedHistoryRowIds: updatedFavourites }
+      return { ...state, favoriteHistoryRowIds: updatedFavorites }
     }
     case 'UPDATE_SELECTED_ROWS': {
       const { payload: row } = action

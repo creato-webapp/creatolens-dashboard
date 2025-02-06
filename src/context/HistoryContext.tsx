@@ -1,6 +1,6 @@
 import React, { createContext, Dispatch, ReactNode, SetStateAction, useCallback, useEffect, useMemo, useState } from 'react'
 import { ColumnFiltersState, Row, SortingState } from '@tanstack/react-table'
-import { useFavoriteStatus, useHistoryData } from '@hooks/useHistoryData'
+import { useHistoryData } from '@hooks/useHistoryData'
 import { Status } from './DialogueContext'
 import { useDialogues } from '@hooks/useDialogues'
 import { HistoryRow } from '@services/HistoryHelper'
@@ -11,7 +11,7 @@ interface HistoryContextType {
   histories: HistoryRow[] | undefined
   selectedHistoryRows: HistoryRow[]
   isLoading: boolean
-  toggleFavoriteStatus: (id: string) => void
+  toggleFavoriteStatus: (id: string, is_favorite: boolean) => void
   globalFilter: string
   setGlobalFilter: Dispatch<SetStateAction<string>>
   openedRow: Row<HistoryRow> | null
@@ -20,7 +20,7 @@ interface HistoryContextType {
   setColumnFilters: Dispatch<SetStateAction<ColumnFiltersState>>
   setSorting: Dispatch<SetStateAction<SortingState>>
   sorting: SortingState
-  removeHistory: (id: string, userId: string) => void
+  removeHistory: (post_ids: string[], update_fields: { is_deleted: boolean }) => Promise<boolean>
 }
 
 interface HistoryProviderProps {
@@ -35,32 +35,15 @@ export const HistoryProvider = ({ children }: HistoryProviderProps) => {
   const [openedRow, setOpenedRow] = useState<Row<HistoryRow> | null>(null)
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [sorting, setSorting] = useState<SortingState>([])
-  const { favouritedIds, toggleFavoriteStatus } = useFavoriteStatus('favouritedHistoryRowIds', [])
 
   const { session } = useAuth()
   const user = session?.user as CombinedUser | undefined
   const user_id = user?.id
   const { addDialogue } = useDialogues()
 
-  const {
-    histories = [],
-    mutate,
-    isLoading,
-    removeHistory,
-    error,
-  } = useHistoryData({
+  const { histories, mutate, isLoading, removeHistory, toggleFavoriteStatus, error } = useHistoryData({
     user_id: user_id ? user_id : '',
   })
-
-  const combinedHistories = useMemo(() => {
-    if (histories.length > 0) {
-      return histories.map((row) => ({
-        ...row,
-        is_favourited: favouritedIds.includes(row.id),
-      }))
-    }
-    return []
-  }, [histories, favouritedIds])
 
   useEffect(() => {
     mutate() // Manually trigger the fetch
@@ -93,14 +76,14 @@ export const HistoryProvider = ({ children }: HistoryProviderProps) => {
 
   const value = useMemo(
     () => ({
-      histories: combinedHistories,
+      histories,
       columnFilters,
+      toggleFavoriteStatus,
       setColumnFilters,
       globalFilter,
       setGlobalFilter,
       selectedHistoryRows,
       updateHistoryRow,
-      toggleFavoriteStatus,
       isLoading,
       removeHistory,
       openedRow,
@@ -109,14 +92,14 @@ export const HistoryProvider = ({ children }: HistoryProviderProps) => {
       sorting,
     }),
     [
-      combinedHistories,
+      histories,
       columnFilters,
       globalFilter,
+      toggleFavoriteStatus,
       selectedHistoryRows,
       updateHistoryRow,
-      toggleFavoriteStatus,
-      removeHistory,
       isLoading,
+      removeHistory,
       openedRow,
       sorting,
     ]
