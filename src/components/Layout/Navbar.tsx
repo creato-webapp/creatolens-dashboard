@@ -17,26 +17,7 @@ import { useDropdown } from '@hooks/useDropdown'
 
 const LOGO_SRC = IMAGE.LOGO_2TAG
 
-const LINKS = [
-  { name: 'Instagram Trend Analysis', path: ROUTE.DASHBOARD, disabled: false },
-  { name: 'Instabot', path: ROUTE.ACCOUNTS, disabled: false },
-  { name: 'Recommendation', path: ROUTE.RECOMMENDATION, disabled: true },
-  { name: 'Hashtags-to-Image', path: ROUTE.HASHTAG_TO_IMAGE, disabled: false },
-  { name: 'Image to Hashtags', path: ROUTE.IMAGE_TO_HASHTAG, disabled: false },
-] as const
-
-const LINKS_STATIC = [
-  { name: 'Instagram Trend Analysis', path: ROUTE.STATIC_DASHBOARD, disabled: false },
-  { name: 'Instabot', path: ROUTE.STATIC_ACCOUNTS, disabled: false },
-  { name: 'Recommendation', path: ROUTE.STATIC_RECOMMENDATION, disabled: false },
-  { name: 'Hashtags-to-Image', path: ROUTE.STATIC_HASHTAG_TO_IMAGE, disabled: false },
-  { name: 'Image to Hashtags', path: ROUTE.STATIC_IMAGE_TO_HASHTAG, disabled: false },
-] as const
-
-const SUPPORT_LINKS = [
-  { name: 'FAQs', path: ROUTE.FAQ, disabled: false },
-  { name: 'Contact Us', path: ROUTE.CONTACT_US, disabled: false },
-] as const
+import { FEATURE_LINKS, FEATURE_LINKS_STATIC, SUPPORT_LINKS } from '@constants/menu'
 
 type NavLink = {
   readonly name: string
@@ -130,7 +111,7 @@ const NavBar: React.FC = () => {
       <div className="flex flex-row-reverse items-center md:flex-row">
         <div className="relative mr-4 hidden flex-row items-center gap-4 md:flex">
           <DropdownMenu
-            items={session ? LINKS : LINKS_STATIC}
+            items={session ? FEATURE_LINKS : FEATURE_LINKS_STATIC}
             isOpen={!isFeatureMenuCollapsed}
             onMouseEnter={openFeatureMenu}
             onMouseLeave={closeFeatureMenu}
