@@ -73,6 +73,10 @@ const DetailsDialog = (props: { open: boolean; setOpen: (id: boolean) => void; d
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="h-[700px] w-full max-w-5xl overflow-hidden p-4 sm:p-8" showOverlay={false}>
+        <DialogHeader className="hidden">
+          <DialogTitle id="image-title">{data.original.uploaded_image.split('/').pop()}</DialogTitle>
+        </DialogHeader>
+
         <div className="h-full max-h-[90vh] overflow-y-auto">
           <div className="flex w-full flex-col gap-4 bg-white">
             <div className="text-neutral-500">

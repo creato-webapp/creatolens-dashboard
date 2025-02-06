@@ -41,14 +41,7 @@ export const HistoryProvider = ({ children }: HistoryProviderProps) => {
   const user_id = user?.id
   const { addDialogue } = useDialogues()
 
-  const {
-    histories = [],
-    mutate,
-    isLoading,
-    removeHistory,
-    toggleFavoriteStatus,
-    error,
-  } = useHistoryData({
+  const { histories, mutate, isLoading, removeHistory, toggleFavoriteStatus, error } = useHistoryData({
     user_id: user_id ? user_id : '',
   })
 
@@ -102,11 +95,11 @@ export const HistoryProvider = ({ children }: HistoryProviderProps) => {
       histories,
       columnFilters,
       globalFilter,
+      toggleFavoriteStatus,
       selectedHistoryRows,
       updateHistoryRow,
-      toggleFavoriteStatus,
-      removeHistory,
       isLoading,
+      removeHistory,
       openedRow,
       sorting,
     ]

@@ -2,6 +2,7 @@ import XAPI from '@constants/endpoints/xapi'
 import METHOD from '@constants/method'
 import { useCallback } from 'react'
 import useRequest from './useRequest'
+import { HistoryContext } from '@context/HistoryContext'
 import { HistoryRow } from '@services/HistoryHelper'
 
 export const useHistoryData = (query: { user_id: string }) => {
@@ -10,7 +11,6 @@ export const useHistoryData = (query: { user_id: string }) => {
     mutate,
     isLoading,
     error,
-    // eslint-disable-next-line react-hooks/rules-of-hooks
   } = useRequest<HistoryRow[]>(
     query.user_id
       ? [
@@ -24,14 +24,13 @@ export const useHistoryData = (query: { user_id: string }) => {
     {
       suspense: true,
       fallbackData: [],
-      shouldFetch: !!query.user_id,
     }
   )
 
   const removeHistory = useCallback(
     async (post_ids: string[], update_fields: { is_deleted: boolean }) => {
       try {
-        mutate((prevHistorys: HistoryRow[]) => prevHistorys?.filter((history: HistoryRow) => !post_ids.includes(history.id)), false)
+        mutate((prevHistories: HistoryRow[]) => prevHistories?.filter((history: HistoryRow) => !post_ids.includes(history.id)), false)
 
         const body = { post_ids, update_fields }
 
@@ -52,8 +51,7 @@ export const useHistoryData = (query: { user_id: string }) => {
     [mutate]
   )
 
-  return { histories, mutate, isLoading, error, removeHistory }
-}
+  const { trigger: toggleFavorite } = useMutation(XAPI.IMAGE_HASHTAG_HISTORY, METHOD.PATCH)
 
   const toggleFavoriteStatus = async (id: string, is_favorite: boolean) => {
     try {
@@ -79,5 +77,17 @@ export const useHistoryData = (query: { user_id: string }) => {
     }
   }
 
-  return { historys, mutate, isLoading, error, removeHistory, toggleFavoriteStatus }
+  return { histories, mutate, isLoading, error, removeHistory, toggleFavoriteStatus }
+}
+
+import { useContext } from 'react'
+import useMutation from './useMutation'
+
+export const useHistory = () => {
+  // move to useHook folder
+  const context = useContext(HistoryContext)
+  if (!context) {
+    throw new Error('HistoryContext must be used within an ImageHashtagProvider')
+  }
+  return context
 }
