@@ -13,7 +13,7 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({ lastItemName }) => {
 
   return (
     <nav aria-label="breadcrumb" className="my-4">
-      <ol className="flex items-center space-x-2 text-base text-neutral-700">
+      <ol className="flex flex-wrap items-center space-x-2 text-base text-neutral-700">
         <li>
           <button onClick={() => router.back()} className="mr-2 flex items-center gap-2 hover:underline">
             <CaretLeftIcon size={16} />
