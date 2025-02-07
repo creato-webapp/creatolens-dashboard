@@ -37,8 +37,8 @@ const BlogList = ({ data, category }: BlogListProps) => {
           {data.map((item) => (
             <div key={item.slug} className="pb-8">
               <article className="border-b pb-8">
-                <Link href={`/blog/${item.slug}`} className="flex flex-row gap-12">
-                  <div className="relative aspect-[4/3] w-1/2 overflow-hidden rounded-lg">
+                <Link href={`/blog/${item.slug}`} className="flex flex-col gap-12 md:flex-row ">
+                  <div className="relative aspect-[4/3] min-w-full overflow-hidden rounded-lg md:min-w-[350px]">
                     <BlurredImage src={transformWixImageURL(item.featuredImage)} alt={item.title} fallbackSrc={IMAGE.LOGO_2TAG} />
                   </div>
                   <div className="group flex cursor-pointer flex-row gap-12">
@@ -52,7 +52,7 @@ const BlogList = ({ data, category }: BlogListProps) => {
                         <FolderIcon className="h-4 w-4" />
                         {item.tags &&
                           item.tags.map((tag, index) => (
-                            <>
+                            <div key={item.slug + tag} className="flex items-center gap-2">
                               <div
                                 onClick={(e) => {
                                   e.preventDefault()
@@ -64,7 +64,7 @@ const BlogList = ({ data, category }: BlogListProps) => {
                                 {tag}
                               </div>
                               {index < item.tags.length - 1 && <span className="text-sm text-gray-500">/</span>}
-                            </>
+                            </div>
                           ))}
                       </div>
                     </div>

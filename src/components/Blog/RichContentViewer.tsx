@@ -324,7 +324,7 @@ const parseNode = (node: RichContentNode): React.ReactNode => {
 
     case 'BLOCKQUOTE':
       return (
-        <blockquote key={node.id} className="text-paragraph ml-4 border-l-2 border-blue-600 pl-4 font-normal">
+        <blockquote key={node.id} className="text-paragraph ml-4 border-l-2 border-blue-600 pl-4 text-lg font-normal">
           {node.nodes.map((childNode) => parseNode(childNode))}
         </blockquote>
       )
