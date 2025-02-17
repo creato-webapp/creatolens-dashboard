@@ -17,7 +17,7 @@ import { useDropdown } from '@hooks/useDropdown'
 
 const LOGO_SRC = IMAGE.LOGO_2TAG
 
-import { FEATURE_LINKS, FEATURE_LINKS_STATIC, SUPPORT_LINKS } from '@constants/menu'
+import { FEATURE_LINKS, FEATURE_LINKS_STATIC, RESOURCE_LINKS, SUPPORT_LINKS } from '@constants/menu'
 
 type NavLink = {
   readonly name: string
@@ -81,6 +81,7 @@ const NavBar: React.FC = () => {
 
   const { isCollapsed: isFeatureMenuCollapsed, open: openFeatureMenu, close: closeFeatureMenu } = useDropdown()
   const { isCollapsed: isSupportMenuCollapsed, open: openSupportMenu, close: closeSupportMenu } = useDropdown()
+  const { isCollapsed: isResourceMenuCollapsed, open: openResourceMenu, close: closeResourceMenu } = useDropdown()
   const { isCollapsed: isUserMenuCollapsed, open: openUserMenu, close: closeUsermenu } = useDropdown()
 
   const toggleMenu = useCallback(() => {
@@ -123,6 +124,14 @@ const NavBar: React.FC = () => {
             onMouseEnter={openSupportMenu}
             onMouseLeave={closeSupportMenu}
             label="Support"
+            dropdownWidth="w-48"
+          />
+          <DropdownMenu
+            items={RESOURCE_LINKS}
+            isOpen={!isResourceMenuCollapsed}
+            onMouseEnter={openResourceMenu}
+            onMouseLeave={closeResourceMenu}
+            label="Resources"
             dropdownWidth="w-48"
           />
           <Link href={ROUTE.BLOG} className="rounded-md px-4 py-2 text-text-primary hover:bg-neutral-200 hover:text-primary-500">

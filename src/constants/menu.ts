@@ -1,3 +1,4 @@
+import IMAGE from './image'
 import ROUTE from './route'
 
 export type NavLink = {
@@ -27,6 +28,11 @@ export const SUPPORT_LINKS = [
   { name: 'Contact Us', path: ROUTE.CONTACT_US, disabled: false },
 ] as const
 
+export const RESOURCE_LINKS = [
+  { name: 'Hashtags & Keywords', path: ROUTE.RESOURCE_HASHTAG, disabled: false },
+  { name: 'Blog', path: ROUTE.RESOURCE_BLOG, disabled: false },
+] as const
+
 export const SIDE_MENU_CONFIG = [
   {
     header: 'Features',
@@ -34,11 +40,11 @@ export const SIDE_MENU_CONFIG = [
   },
   {
     header: 'Support',
-    items: [
-      { name: 'Contact', path: ROUTE.CONTACT_US, disabled: false },
-      { name: 'FAQs', path: ROUTE.FAQ, disabled: false },
-      { name: 'Blog', path: ROUTE.BLOG, disabled: false },
-    ],
+    items: SUPPORT_LINKS,
+  },
+  {
+    header: 'Resources',
+    items: RESOURCE_LINKS,
   },
 ] as const
 
@@ -49,10 +55,63 @@ export const SIDE_MENU_CONFIG_STATIC = [
   },
   {
     header: 'Support',
-    items: [
-      { name: 'Contact', path: ROUTE.CONTACT_US, disabled: false },
-      { name: 'FAQs', path: ROUTE.FAQ, disabled: false },
-      { name: 'Blog', path: ROUTE.BLOG, disabled: false },
-    ],
+    items: SUPPORT_LINKS,
+  },
+  {
+    header: 'Resources',
+    items: RESOURCE_LINKS,
+  },
+] as const
+
+export const FOOTER_LINKS = [
+  {
+    header: 'Features',
+    items: FEATURE_LINKS,
+  },
+  {
+    header: 'Support',
+    items: SUPPORT_LINKS,
+  },
+  {
+    header: 'Resources',
+    items: RESOURCE_LINKS,
+  },
+] as const
+
+export const FOOTER_LINKS_STATIC = [
+  {
+    header: 'Features',
+    items: FEATURE_LINKS_STATIC,
+  },
+  {
+    header: 'Support',
+    items: SUPPORT_LINKS,
+  },
+  {
+    header: 'Resources',
+    items: RESOURCE_LINKS,
+  },
+] as const
+
+export const SOCIAL_MEDIA_LINKS = [
+  {
+    alt: 'Instagram',
+    src: IMAGE.LOGO_INSTAGRAM,
+    href: 'https://www.instagram.com/creatogether.app/',
+  },
+  {
+    alt: 'Linkedin',
+    src: IMAGE.LOGO_LINKEDIN,
+    href: 'https://www.linkedin.com/company/creato-edu/',
+  },
+  {
+    alt: 'Spotify',
+    src: IMAGE.LOGO_SPOTIFY,
+    href: 'https://open.spotify.com/show/1nOYgPbId7Cq8fQoqXuxf5?si=dceab17fa4c04db5&nd=1&dlsi=9c44e2be6f314145',
+  },
+  {
+    alt: 'Youtube',
+    src: IMAGE.LOGO_YOUTUBE,
+    href: 'https://www.youtube.com/@Creatopodcast',
   },
 ] as const

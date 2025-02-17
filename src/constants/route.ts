@@ -16,6 +16,9 @@ const ROUTE = {
   STATIC_RECOMMENDATION: '/features/hashtags-recommendation',
   STATIC_HASHTAG_TO_IMAGE: '/features/hashtags-to-image',
   STATIC_IMAGE_TO_HASHTAG: '/features/image-to-hashtags',
+
+  RESOURCE_HASHTAG: '/hashtag',
+  RESOURCE_BLOG: '/blog',
 } as const
 
 export default ROUTE
