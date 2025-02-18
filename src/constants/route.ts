@@ -16,6 +16,12 @@ const ROUTE = {
   STATIC_RECOMMENDATION: '/features/hashtags-recommendation',
   STATIC_HASHTAG_TO_IMAGE: '/features/hashtags-to-image',
   STATIC_IMAGE_TO_HASHTAG: '/features/image-to-hashtags',
+
+  RESOURCE_HASHTAG: '/hashtag',
+  RESOURCE_BLOG: '/blog',
+
+  TERMS_AND_CONDITIONS: 'https://hickory-fight-55b.notion.site/Creato-Terms-Conditions-62e6fbb474394483bda8f81cd73b0a2a',
+  PRIVACY_POLICY: 'https://hickory-fight-55b.notion.site/Creato-Privacy-Policy-3e9a90f983d74fed8b4734c0775d897e',
 } as const
 
 export default ROUTE
