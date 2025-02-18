@@ -10,7 +10,7 @@ export type NavLink = {
 export const FEATURE_LINKS = [
   { name: 'Instagram Trend Analysis', path: ROUTE.DASHBOARD, disabled: false },
   { name: 'Instabot', path: ROUTE.ACCOUNTS, disabled: false },
-  { name: 'Recommendation', path: ROUTE.RECOMMENDATION, disabled: true },
+  { name: 'Hashtags Recommendation', path: ROUTE.RECOMMENDATION, disabled: false },
   { name: 'Hashtags-to-Image', path: ROUTE.HASHTAG_TO_IMAGE, disabled: false },
   { name: 'Image to Hashtags', path: ROUTE.IMAGE_TO_HASHTAG, disabled: false },
 ] as const
@@ -18,7 +18,7 @@ export const FEATURE_LINKS = [
 export const FEATURE_LINKS_STATIC = [
   { name: 'Instagram Trend Analysis', path: ROUTE.STATIC_DASHBOARD, disabled: false },
   { name: 'Instabot', path: ROUTE.STATIC_ACCOUNTS, disabled: false },
-  { name: 'Recommendation', path: ROUTE.STATIC_RECOMMENDATION, disabled: false },
+  { name: 'Hashtags Recommendation', path: ROUTE.RECOMMENDATION, disabled: false },
   { name: 'Hashtags-to-Image', path: ROUTE.STATIC_HASHTAG_TO_IMAGE, disabled: false },
   { name: 'Image to Hashtags', path: ROUTE.STATIC_IMAGE_TO_HASHTAG, disabled: false },
 ] as const
