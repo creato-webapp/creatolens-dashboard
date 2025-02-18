@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useState } from 'react'
 
 import { Button } from '@components/Button'
 import Card from '@components/Card'
-import Dropdown from '@components/Form/Dropdown'
+import Dropdown from '@components/Form/Dropdown/Dropdown'
 interface Hashtag {
   acc: number
   hashtag: string
@@ -47,14 +47,16 @@ const TopRelatedHashtagCard: React.FC<Props> = ({ hashtags }) => {
           <span>Related</span>
         </h1>
       }
-      className="w-full min-w-96 whitespace-normal !rounded-none py-4 md:h-auto md:w-1/2"
+      className="w-full whitespace-normal !rounded-none py-4 md:h-auto"
       isDropdown={true}
       extra={
         <Dropdown
           options={DropdownOptions}
           defaultValue={numberOfHashes}
           onValueChange={(value) => setNumberOfHashes(value)}
-          dropDownSizes={['s', 'm', 'm']}
+          dropDownSizes={['m', 'm', 'm']}
+          isFloating={true}
+          buttonClassName="justify-end w-full items-end"
         ></Dropdown>
       }
     >

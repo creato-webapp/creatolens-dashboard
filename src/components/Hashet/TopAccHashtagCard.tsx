@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react'
 
 import { Button } from '@components/Button'
 import Card from '@components/Card'
-import Dropdown from '@components/Form/Dropdown'
+import Dropdown from '@components/Form/Dropdown/Dropdown'
 
 interface Hashtag {
   acc: number
@@ -33,7 +33,7 @@ const TopAccHashtagCard: React.FC<Props> = ({ hashtags }) => {
     window.alert('Copied to clipboard!')
   }, [slicedHashtags])
 
-  const DropdownOptions = [
+  const dropdownOptions = [
     {
       label: '≥ 95%',
       value: 95,
@@ -60,16 +60,15 @@ const TopAccHashtagCard: React.FC<Props> = ({ hashtags }) => {
           <span className="text-text-primary">Related</span>
         </h1>
       }
-      className="w-full min-w-96 whitespace-normal !rounded-none py-4 md:h-auto md:w-1/2"
-      // className="min-w-96 w-auto justify-start gap-6 bg-neutral-50 px-6 py-9 shadow"
+      className="w-full whitespace-normal !rounded-none py-4 md:h-auto"
       isDropdown={true}
       extra={
         <Dropdown
-          name="numberOfHashes"
-          options={DropdownOptions}
-          defaultValue={selectedAccuracy}
+          options={dropdownOptions}
           onValueChange={(value) => setSelectedAccuracy(value as number)}
-          dropDownSizes={['s', 'm', 'm']}
+          dropDownSizes={['m', 'm', 'm']}
+          isFloating={true}
+          buttonClassName="justify-end w-full items-end "
         ></Dropdown>
       }
     >

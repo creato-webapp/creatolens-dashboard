@@ -1,7 +1,6 @@
 import React, { useCallback, useState } from 'react'
 
 import { Button } from '@components/Button'
-import Card from '@components/Card'
 import { Form } from '@components/Form'
 import CustomizeHashtagCard from '@components/Hashet/CustomizeHashtagCard'
 import TopAccHashtagCard from '@components/Hashet/TopAccHashtagCard'
@@ -55,9 +54,13 @@ const RecommendationPage = () => {
       key: '1',
       title: 'Categories',
       children: (
-        <div className="flex flex-col justify-center gap-4 md:flex md:flex-row md:px-14 md:py-24 ">
-          <TopRelatedHashtagCard hashtags={hashetData} />
-          <TopAccHashtagCard hashtags={hashetData} />
+        <div className="flex w-full flex-col flex-wrap justify-center gap-4 md:flex md:flex-row md:py-24">
+          <div className="w-full flex-1">
+            <TopRelatedHashtagCard hashtags={hashetData} />
+          </div>
+          <div className="w-full flex-1">
+            <TopAccHashtagCard hashtags={hashetData} />
+          </div>
         </div>
       ),
     },
@@ -65,7 +68,7 @@ const RecommendationPage = () => {
       key: '2',
       title: 'Customize',
       children: (
-        <div className="w-full flex-wrap gap-2 md:flex md:flex-nowrap md:justify-center md:py-12 md:shadow-lg">
+        <div className="flex w-full flex-col justify-center gap-4 md:flex md:flex-nowrap md:justify-center md:py-12 md:shadow-lg">
           <CustomizeHashtagCard hashtags={hashetData} />
         </div>
       ),
@@ -73,11 +76,11 @@ const RecommendationPage = () => {
   ]
 
   return (
-    <div className="flex-col justify-center">
+    <div className="w-full flex-col justify-center">
       <Hero backgroundImage="./RecommendationHero.svg" childrenStyle="pb-4 md:py-16">
         <div className="flex flex-col items-center gap-4">
           <div className="flex w-full flex-row items-center">
-            <h1 className="text-title text-black md:text-white">RECOMMENDATION</h1>
+            <h1 className="text-heading text-black md:text-title md:text-white">HASHTAGS RECOMMENDATION</h1>
             <Popover
               className="ml-auto shrink-0 rounded-full bg-accent1-500 p-2 text-white"
               trigger={<LightBulbIcon size={32} />}
@@ -125,9 +128,9 @@ const RecommendationPage = () => {
           </div>
         </div>
       </Hero>
-      <Card className="min-h-full w-full rounded-none border-none bg-transparent px-4 py-0 shadow-none md:px-20 md:pb-28">
-        <Tab items={tabItems} defaultActiveKey="1" scrollable={false} className="shadow-none md:px-0 md:shadow-xl" />
-      </Card>
+      <div className="flex min-h-full w-full rounded-none border-none bg-transparent px-0 py-0 shadow-none md:px-20 md:pb-28">
+        <Tab items={tabItems} defaultActiveKey="1" scrollable={false} className="flex w-full px-0 shadow-none md:px-0 md:shadow-xl" />
+      </div>
     </div>
   )
 }
