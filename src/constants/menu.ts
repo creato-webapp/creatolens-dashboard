@@ -28,6 +28,8 @@ export const FEATURE_LINKS_STATIC = [
 
 export const SUPPORT_LINKS = [
   { name: 'FAQs', path: ROUTE.FAQ, disabled: false },
+  { name: 'Terms & Conditions', path: ROUTE.TERMS_AND_CONDITIONS, disabled: false },
+  { name: 'Privacy Policy', path: ROUTE.PRIVACY_POLICY, disabled: false },
   { name: 'Contact Us', path: ROUTE.CONTACT_US, disabled: false },
 ] as const
 
