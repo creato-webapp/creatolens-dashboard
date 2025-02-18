@@ -205,18 +205,18 @@ export default function BlogPost({
                 <h1 className="mt-6 text-2xl font-bold">{data.title}</h1>
                 <div className="flex flex-col gap-2 md:flex-row md:items-center">
                   <div className="my-4 flex flex-wrap items-center gap-2">
-                    <FolderIcon className="h-4 w-4 text-neutral-500" />
+                    <FolderIcon className="h-4 w-4" />
                     {data.tags?.map((tag, index) => (
                       <div key={`${tag}-${index}`} className="flex flex-row items-center gap-2">
-                        <div onClick={() => onClickCategory(tag)} className="cursor-pointer text-sm text-gray-500">
+                        <div onClick={() => onClickCategory(tag)} className="cursor-pointer text-sm">
                           {tag}
                         </div>
-                        {index < data.tags.length - 1 && <span className="text-sm text-gray-500">/</span>}
+                        {index < data.tags.length - 1 && <span className="text-sm">/</span>}
                       </div>
                     ))}
                   </div>
                   {data._createdDate && (
-                    <p className="text-sm text-gray-500 md:px-12">
+                    <p className="text-sm  md:px-12">
                       {new Date(data._createdDate).toLocaleDateString('en-US', {
                         year: 'numeric',
                         month: 'long',
@@ -242,7 +242,7 @@ export default function BlogPost({
               <div className="flex flex-col justify-between gap-4 md:w-1/2 md:flex-row">
                 {previousPost && (
                   <Link href={`/blog/${previousPost.slug}`} className="group flex flex-1 flex-col gap-2 rounded-lg p-4 hover:border-primary-500">
-                    <span className="flex flex-row items-center gap-2 text-sm text-gray-500 group-hover:text-primary-500">
+                    <span className="flex flex-row items-center gap-2 text-sm  group-hover:text-primary-500">
                       <ArrowLeft className="h-4 w-4" /> {t('previous_post')}
                     </span>
                     <h3 className="font-medium group-hover:text-primary-500">{previousPost.title}</h3>
@@ -250,7 +250,7 @@ export default function BlogPost({
                 )}
                 {nextPost && (
                   <Link href={`/blog/${nextPost.slug}`} className="group flex flex-1 flex-col gap-2 rounded-lg p-4 hover:border-primary-500">
-                    <span className="flex flex-row items-center justify-end gap-2 text-sm text-gray-500 group-hover:text-primary-500">
+                    <span className="flex flex-row items-center justify-end gap-2 text-sm  group-hover:text-primary-500">
                       <ArrowRight className="h-4 w-4" /> {t('next_post')}
                     </span>
                     <h3 className="font-medium group-hover:text-primary-500">{nextPost.title}</h3>

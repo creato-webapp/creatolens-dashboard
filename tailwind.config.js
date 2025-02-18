@@ -1,7 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 
 module.exports = {
-  darkMode: ['selector', 'class'],
+  darkMode: 'selector',
   content: ['./src/pages/**/*.{js,ts,jsx,tsx}', './src/components/**/*.{js,ts,jsx,tsx}', './src/lib/**/*.{js,ts,jsx,tsx}'],
   safelist: [
     {
@@ -66,7 +66,7 @@ module.exports = {
       colors: {
         bg: {
           white: '#FDFCFB',
-          dark: '#F5F6F6',
+          dark: '#1E1E1E',
         },
         text: {
           primary: '#1A242A',

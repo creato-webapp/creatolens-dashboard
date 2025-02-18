@@ -19,6 +19,8 @@ import CoffeeIcon from '@components/Icon/CoffeeIcon'
 import Link from 'next/link'
 import useAuth from '@hooks/useAuth'
 import ROUTE from '@constants/route'
+import Head from 'next/head'
+import IMAGE from '@constants/image'
 
 export const getServerSideProps: GetServerSideProps = async (
   context: GetServerSidePropsContext
@@ -122,8 +124,8 @@ const TabSession = memo(() => {
             <div className="flex h-full flex-row items-center justify-center">
               <div className="min-w-1/2 flex w-full flex-col gap-6">
                 <div className="flex flex-col gap-2">
-                  <h3 className="text-2xl font-semibold text-neutral-800">{feature.title}</h3>
-                  <p className="text-base text-neutral-500">{feature.description}</p>
+                  <h3 className="text-2xl font-semibold">{feature.title}</h3>
+                  <p className="text-base">{feature.description}</p>
                 </div>
                 <Link href={feature.link}>{feature.button}</Link>
               </div>
@@ -157,7 +159,7 @@ const MobileTabSession = memo(() => {
   return (
     <div className="flex flex-col gap-6 ">
       {features.map((feature) => (
-        <div key={feature.title} className="flex w-full flex-col gap-6 rounded-lg border bg-white p-6">
+        <div key={feature.title} className="flex w-full flex-col gap-6 rounded-lg border p-6">
           <div className="relative flex min-h-40 w-full">
             {feature.image && (
               <Image
@@ -177,8 +179,8 @@ const MobileTabSession = memo(() => {
             )}
           </div>
           <div className="gap-2">
-            <div className="text-heading text-neutral-800">{feature.title}</div>
-            <div className="text-base text-neutral-500">{feature.description}</div>
+            <div className="text-heading">{feature.title}</div>
+            <div className="text-base">{feature.description}</div>
           </div>
           <Link className="flex w-full justify-center" href={feature.link}>
             {feature.button}
@@ -225,7 +227,7 @@ const UsageSession = memo(() => {
       <div className="session max-w-screen-xl py-6 md:px-12 md:py-16">
         <div>
           <h2 className="text-heading">{'What can 2TAG provide?'}</h2>
-          <h3 className="pt-2 text-subheading text-neutral-500">{'2TAG is the easiest way to grow content visibility on social media channels.'}</h3>
+          <h3 className="pt-2 text-subheading">{'2TAG is the easiest way to grow content visibility on social media channels.'}</h3>
         </div>
         <div className="flex flex-col gap-6 pt-4 md:flex-row md:pt-12">
           {cards.map((card) => {
@@ -234,8 +236,8 @@ const UsageSession = memo(() => {
                 <CardHeader className="flex flex-row gap-6 md:flex-col">
                   <div className="my-2">{card.icon}</div>
                   <div className="flex flex-col items-start justify-start gap-2">
-                    <CardTitle className="text-heading font-semibold text-neutral-800">{card.heading}</CardTitle>
-                    <CardDescription className="text-neutral-500">{card.content}</CardDescription>
+                    <CardTitle className="text-heading font-semibold">{card.heading}</CardTitle>
+                    <CardDescription className="">{card.content}</CardDescription>
                   </div>
                 </CardHeader>
               </Card>
@@ -274,7 +276,7 @@ const Service = memo(() => {
       <div className="session w-full max-w-screen-xl py-6 md:px-12 md:py-16">
         <div>
           <h2 className="text-heading">{'Who uses 2TAG?'}</h2>
-          <h3 className="pt-2 text-subheading text-neutral-500">
+          <h3 className="pt-2 text-subheading">
             {'Joining is quick and easy. Start in just seconds — 2TAG is now open to all Instagram enthusiasts.'}
           </h3>
         </div>
@@ -301,21 +303,53 @@ const Service = memo(() => {
   )
 })
 
+const LOGO_SRC = IMAGE.LOGO_2TAG
+const META_TITLE = '2Tag | AI Hashtag Maker'
+const META_DESCRIPTION = 'Boost your social media engagement with 2Tag! Get AI-backed hashtags, find inspiration, and drive engagement effortlessly.'
+const META_URL = process.env.NEXT_PUBLIC_LOCAL_SERVER_URL
+
 const Index: NextPage = () => {
   return (
-    <div className="">
-      <div className="w-full">
-        <LandingHeader className="w-full" />
+    <>
+      <Head>
+        <title>{META_TITLE}</title>
+        <link rel="icon" href="./favicon.ico" />
+        <meta name="description" content={META_DESCRIPTION} />
+        <meta name="keywords" content="social media, engagement, AI, hashtags, content creation" />
+        <meta name="author" content="2Tag" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta itemProp="image" content={LOGO_SRC} />
+
+        <meta property="og:url" content={META_URL} />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={META_TITLE} />
+        <meta property="og:description" content={META_DESCRIPTION} />
+        <meta property="og:image" content={LOGO_SRC} />
+        <meta property="og:site_name" content="2Tag" />
+        <meta property="og:locale" content="en_US" />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta property="twitter:url" content={META_URL} />
+        <meta name="twitter:title" content={META_TITLE} />
+        <meta name="twitter:description" content={META_DESCRIPTION} />
+        <meta name="twitter:image" content={LOGO_SRC} />
+        <meta name="twitter:site" content="@2Tag" />
+        <meta name="twitter:creator" content="@2Tag" />
+      </Head>
+      <div className="">
+        <div className="w-full">
+          <LandingHeader className="w-full" />
+        </div>
+        <div className="w-full">
+          <FeatureSession />
+          <UsageSession />
+          <Service />
+        </div>
+        <div className="md:px-12 md:py-16">
+          <Testimonial />
+        </div>
       </div>
-      <div className="w-full">
-        <FeatureSession />
-        <UsageSession />
-        <Service />
-      </div>
-      <div className="md:px-12 md:py-16">
-        <Testimonial />
-      </div>
-    </div>
+    </>
   )
 }
 

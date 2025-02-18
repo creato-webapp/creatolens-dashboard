@@ -57,20 +57,20 @@ const FAQPage = () => {
             <CaretLeftIcon size={20} />
           </div>
           <div className="flex w-full flex-row justify-between">
-            <h1 className="py-3 text-heading font-bold text-neutral-800 md:px-16">FAQs</h1>
+            <h1 className="py-3 text-heading font-bold md:px-16">FAQs</h1>
             {/* <SubtleButton onClick={expandAll}>Expand All</SubtleButton> */}
           </div>
         </div>
-        <hr className="my-10 hidden w-full border-t border-neutral-300 first-letter:my-4 md:block" />
+        <hr className="my-10 hidden w-full border-t first-letter:my-4 md:block" />
         <div className="flex w-full">
           <Accordion type="multiple" defaultValue={['item-1']} className="flex w-full flex-col gap-4">
             {faqs.map((faq, index) => (
               <AccordionItem
                 key={index}
                 value={`item-${index + 1}`}
-                className="rounded-lg border px-4 data-[state=closed]:bg-neutral-200 data-[state=closed]:text-neutral-500"
+                className="rounded-lg border px-4 data-[state=closed]:bg-neutral-200 data-[state=closed]:text-neutral-500 dark:border-[#444444] dark:data-[state=closed]:bg-[#2C2C2C] dark:data-[state=closed]:text-white"
               >
-                <AccordionTrigger>{faq.heading}</AccordionTrigger>
+                <AccordionTrigger className="">{faq.heading}</AccordionTrigger>
                 <AccordionContent>{faq.content}</AccordionContent>
               </AccordionItem>
             ))}

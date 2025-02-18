@@ -169,7 +169,7 @@ const HistoryContent = ({
     const { onClick, onClickDelete } = props
 
     return (
-      <div className="fixed bottom-20 z-10 flex w-4/5 rounded-lg border border-neutral-300 bg-white p-6 drop-shadow-2xl md:w-1/2">
+      <div className="fixed bottom-20 z-10 flex w-4/5 rounded-lg border border-neutral-300 p-6 drop-shadow-2xl md:w-1/2">
         <div className="mx-12 flex w-full flex-row justify-between gap-4">
           <div>Selected {table.getFilteredSelectedRowModel().rows.length}</div>
           <DeleteConfirmationDialog onConfirm={onClickDelete} />

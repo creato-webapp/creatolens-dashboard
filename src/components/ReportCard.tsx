@@ -41,10 +41,10 @@ const AccountName = (props: { account?: string }) => {
   return (
     <div className="py-3">
       <div className="flex flex-row gap-2">
-        <RobotIcon width={20} height={20} />
+        <RobotIcon width={20} height={20} className="" />
         Instabot Account
       </div>
-      <div className="ml-7 text-sm text-neutral-500">{account}</div>
+      <div className="ml-7 text-sm">{account}</div>
     </div>
   )
 }
@@ -55,7 +55,7 @@ const PostCount = (props: { count: number; loading: boolean }) => (
       <ListPlusIcon />
       <div className="text-base">Post Count</div>
     </div>
-    <div className="ml-7">{props.loading ? <Skeleton height="1rem" /> : <div className="text-sm text-neutral-500">{props.count}</div>}</div>
+    <div className="ml-7">{props.loading ? <Skeleton height="1rem" /> : <div className="text-sm">{props.count}</div>}</div>
   </div>
 )
 
@@ -64,7 +64,7 @@ const KeywordLink = ({ keyword }: { keyword: KeywordData }) => (
     href={`https://www.instagram.com/explore/tags/${keyword.term}`}
     target="_blank"
     rel="noopener noreferrer"
-    className="inline-block text-neutral-500 transition-colors duration-200 hover:text-neutral-700 hover:underline"
+    className="inline-block transition-colors duration-200 hover:text-neutral-700 hover:underline"
   >
     #{keyword.term} ({keyword.count})
   </a>
@@ -73,17 +73,17 @@ const KeywordLink = ({ keyword }: { keyword: KeywordData }) => (
 const TopKeywords = ({ keywords, loading }: { keywords: KeywordData[]; loading: boolean }) => (
   <div className="py-3">
     <div className="flex flex-row items-center gap-2">
-      <HashIcon className="h-5 w-5" />
+      <HashIcon className="h-5 w-5 " />
       <div className="text-base">Top {keywords.length} Keywords</div>
     </div>
-    <div className="ml-7 text-sm text-neutral-500">
+    <div className="ml-7 text-sm">
       {loading ? (
         <Skeleton height="1rem" />
       ) : keywords ? (
         keywords.map((keyword, index) => (
           <span key={keyword.term}>
             <KeywordLink keyword={keyword} />
-            {index < keywords.length - 1 && <span className="text-neutral-400">, </span>}
+            {index < keywords.length - 1 && <span className="">, </span>}
           </span>
         ))
       ) : (
@@ -114,7 +114,7 @@ export function ReadMoreButton(props: IReportCard) {
             <DialogTitle>Most Repeated Post ({mostRepeatedPost?.count || 0})</DialogTitle>
           </div>
           <DialogDescription className="flex flex-col text-start">
-            <div className="text-start text-subheading text-neutral-800">From instabot explore</div>
+            <div className="text-start text-subheading">From instabot explore</div>
             <div className="font-semibold text-primary-500">{dateStr}</div>
           </DialogDescription>
         </DialogHeader>
@@ -125,7 +125,7 @@ export function ReadMoreButton(props: IReportCard) {
           </div>
           <div className="flex h-full flex-col overflow-hidden">
             {mostRepeatedPost?.username && (
-              <div className="flex w-full flex-row items-center justify-between pb-2 text-base font-extrabold text-neutral-800">
+              <div className="flex w-full flex-row items-center justify-between pb-2 text-base font-extrabold">
                 <Link
                   href={`https://www.instagram.com/p/${mostRepeatedPost?.shortcode}`}
                   target="_blank"
@@ -178,16 +178,16 @@ const MostRepeatedPost = ({
           <div className="text-base">Most Repeated Post ({post?.count || 0})</div>
         </div>
       </div>
-      <div className="ml-7 py-2 text-neutral-500">
+      <div className="ml-7 py-2 ">
         <div>From instabot explore </div>
       </div>
-      <div className="ml-7 h-full text-sm text-neutral-500">
+      <div className="ml-7 h-full text-sm ">
         <div className="relative h-80">
           <Image src={mostRepeatedPostImage || '/logo_orange.png'} className="w-auto" layout="fill" style={{ objectFit: 'contain' }} alt={''} />
         </div>
 
         {post?.username && (
-          <div className="flex w-full flex-row items-center justify-between pt-3 text-base font-extrabold text-neutral-800">
+          <div className="flex w-full flex-row items-center justify-between pt-3 text-base font-extrabold ">
             <Link
               href={`https://www.instagram.com/p/${post?.shortcode}`}
               target="_blank"
@@ -245,7 +245,7 @@ const ReportCard = (props: IReportCard) => {
 
   return (
     <div id="report-card" className="relative h-128 w-full rounded-lg border border-neutral-300 py-4 md:w-80">
-      <div className="sticky top-0 z-10 bg-white px-6 text-base font-semibold text-primary-500">
+      <div className="sticky top-0 z-10  px-6 text-base font-semibold text-primary-500">
         {dateStr} <Divider />
       </div>
 
@@ -271,12 +271,6 @@ const ReportCard = (props: IReportCard) => {
           />
         )}
       </ScrollArea>
-      {/* <div className="sticky bottom-0 w-full rounded-l-lg rounded-r-lg bg-white px-4">
-        <SubtleButton onClick={() => exportToPDF()} sizes={['l', 'l', 'l']} className="sticky bottom-0 flex w-full items-center justify-center ">
-          <ExportIcon width={16} height={16} />
-          <div className="flex flex-row items-center">Export to PDF</div>
-        </SubtleButton>
-      </div> */}
     </div>
   )
 }

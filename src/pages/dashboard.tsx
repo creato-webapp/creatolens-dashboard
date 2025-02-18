@@ -270,7 +270,7 @@ const Dashboard = ({ botList, historys, userId }: Props) => {
                   {reportDateRange === 0 && (
                     <div className="">
                       <div className="flex h-full w-full flex-col gap-2">
-                        <div className="text-neutral-800">Select Date Range</div>
+                        <div className="">Select Date Range</div>
                         <DateRangePicker
                           showCompare={false}
                           onUpdate={(values) =>
@@ -281,7 +281,7 @@ const Dashboard = ({ botList, historys, userId }: Props) => {
                           }
                           align={'start'}
                         />
-                        <div className="text-nowrap text-neutral-500">Minimum 3 days must be selected</div>
+                        <div className="text-nowrap ">Minimum 3 days must be selected</div>
                       </div>
                     </div>
                   )}
@@ -297,7 +297,7 @@ const Dashboard = ({ botList, historys, userId }: Props) => {
                           name={instaBotList[0]?.label}
                           dropDownSizes={['s', 's', 's']}
                           isFloating
-                          className=""
+                          className="text-white"
                         />
                       </div>
                       {/* <div className="">
@@ -334,7 +334,7 @@ const Dashboard = ({ botList, historys, userId }: Props) => {
             <div className="flex w-full flex-col items-center justify-center gap-4 px-4 py-4 md:py-24 md:pt-12">
               <img alt="missing insta bot" className="h-auto w-96" src={'/no-insta-bot.png'} />
               <h2 className="font-extrabold">You have no linked instabot</h2>
-              <h3 className="items-center text-center text-text-secondary">
+              <h3 className="items-center text-center ">
                 Your account does not have any verified instabot. Complete the adding account process to see dashboard.
               </h3>
               <Link href={ROUTE.ACCOUNT_BOT_CREATE}>

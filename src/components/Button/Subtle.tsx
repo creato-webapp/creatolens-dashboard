@@ -12,7 +12,7 @@ const SubtleButton: React.FC<ButtonProps> = ({ children, onClick, disabled = fal
       loading={loading}
       sizes={sizes}
       {...res}
-      className={`border border-white bg-white text-black hover:border-secondary-400 ${className}`}
+      className={`border border-white  hover:border-secondary-400 ${className}`}
     >
       {children}
     </Button>

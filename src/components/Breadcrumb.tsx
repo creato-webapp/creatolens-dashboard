@@ -13,7 +13,7 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({ lastItemName }) => {
 
   return (
     <nav aria-label="breadcrumb" className="my-4">
-      <ol className="flex flex-wrap items-center space-x-2 text-base text-neutral-700">
+      <ol className="flex flex-wrap items-center space-x-2 text-base ">
         <li>
           <button onClick={() => router.back()} className="mr-2 flex items-center gap-2 hover:underline">
             <CaretLeftIcon size={16} />
@@ -36,7 +36,7 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({ lastItemName }) => {
               <li key={index} className="flex items-center">
                 <span className="mx-2">/</span>
                 {isLast ? (
-                  <span className="text-neutral-700 underline">
+                  <span className="underline">
                     {lastItemName ? lastItemName : decodeURIComponent(value).charAt(0).toUpperCase() + decodeURIComponent(value).slice(1)}
                   </span>
                 ) : (

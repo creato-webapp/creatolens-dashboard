@@ -10,7 +10,7 @@ export default function LandingHeader(props: LandingHeaderProps) {
 
   const TransparentCard = () => {
     return (
-      <div className="flex w-full flex-col items-center gap-2 rounded-3xl bg-white bg-opacity-60 py-6 shadow-lg shadow-primary-200 md:mt-0 md:px-8">
+      <div className="flex w-full flex-col items-center gap-2 rounded-3xl bg-opacity-60 py-6 shadow-lg shadow-primary-200 md:mt-0 md:px-8 dark:border dark:border-white dark:shadow-none ">
         <h1 className="text-title font-bold">The magical tool that gets</h1>
         <h1 className="w-full break-words bg-primary-500 text-title font-bold text-white md:text-title">ENGAGEMENT</h1>
         <h1 className="text-subtitle font-normal">Keyword, SEO Insight, Gen AI All in one</h1>
@@ -18,8 +18,8 @@ export default function LandingHeader(props: LandingHeaderProps) {
           <PrimaryButton className=" drop-shadow-md" onClick={onLogin}>
             Start Exploring
           </PrimaryButton>
-          <div className="text-xs text-neutral-500">Start with $0. No credit card needed.</div>
-          <div className="text-xs text-neutral-500">7 days a week customer services</div>
+          <div className="text-xs">Start with $0. No credit card needed.</div>
+          <div className="text-xs">7 days a week customer services</div>
         </div>
       </div>
     )

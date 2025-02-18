@@ -20,7 +20,7 @@ const DropdownContent = ({
     if (!isOpen) return null
     return (
       <div className="absolute left-0 right-0 top-full z-10">
-        <ul className="mt-2 max-h-60 w-full overflow-y-auto rounded-md border border-gray-200 bg-white shadow-lg">
+        <ul className="mt-2 max-h-60 w-full overflow-y-auto rounded-md border border-gray-200 bg-white shadow-lg dark:bg-black">
           {options.map((option, index) => (
             <li
               key={`${option.value}-${index}`}

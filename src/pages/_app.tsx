@@ -11,6 +11,7 @@ import { ReactElement, ReactNode, useEffect } from 'react'
 import { NextPage } from 'next'
 import { appWithTranslation } from 'next-i18next'
 import nextI18NextConfig from '../../next-i18next.config'
+import { ThemeProvider } from '@context/ThemeProvider'
 
 import Dialogue from '@components/Dialogue'
 import Modals from '@components/Modal'
@@ -28,6 +29,8 @@ type NextPageWithLayout<P = object> = NextPage<P> & {
 
 type AppPropsWithLayout = AppProps<{
   session: Session
+  title: string
+  description: string
 }> & {
   Component: NextPageWithLayout
 }
@@ -57,8 +60,8 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
     <SessionProvider session={pageProps.session}>
       <Head>
         <link rel="icon" href="./favicon.ico" />
-        <title>{META_TITLE}</title>
-        <meta name="description" content={META_DESCRIPTION} />
+        <title>{pageProps.title || META_TITLE}</title>
+        <meta name="description" content={pageProps.description || META_DESCRIPTION} />
         <meta name="keywords" content="social media, engagement, AI, hashtags, content creation" />
         <meta name="author" content="2Tag" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -82,11 +85,13 @@ function App({ Component, pageProps }: AppPropsWithLayout) {
       </Head>
 
       <AppProviders>
-        {getLayout(
-          <ErrorBoundary>
-            <Component {...pageProps} />
-          </ErrorBoundary>
-        )}
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+          {getLayout(
+            <ErrorBoundary>
+              <Component {...pageProps} />
+            </ErrorBoundary>
+          )}
+        </ThemeProvider>
       </AppProviders>
 
       {process.env.NODE_ENV === 'production' && (

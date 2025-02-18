@@ -55,7 +55,7 @@ const DropdownButton: React.FC<DropdownButtonProps> = ({
 
   const { padding, caretSize } = generatePadding(dropDownSizes!)
 
-  const color = isDropdownNotSelected ? 'text-text-secondary bg-white' : '!text-neutral-800'
+  const color = isDropdownNotSelected ? 'text-text-secondary' : '!text-neutral-800'
 
   return (
     <button
@@ -64,7 +64,7 @@ const DropdownButton: React.FC<DropdownButtonProps> = ({
       disabled={disabled}
     >
       <div className="flex items-center justify-between gap-2.5 truncate whitespace-nowrap rounded-md">
-        <span className="truncate text-base">{name}</span>
+        <span className="truncate text-base text-black dark:text-white">{name}</span>
         <div className="flex-shrink-0">
           <CaretUpIcon
             className={`w-fit transform stroke-black transition-all ${disabled ? 'stroke-disabled' : ''} ${caretSize} ${!isOpen ? 'rotate-180' : ''}`}

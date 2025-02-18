@@ -1,9 +1,9 @@
 import * as React from 'react'
 import { SVGProps } from 'react'
 const ThumbUpIcon = (props: SVGProps<SVGSVGElement>) => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="32px" height="32px" fill="none" {...props}>
+  <svg xmlns="http://www.w3.org/2000/svg" width="32px" height="32px" fill="none" color="currentColor" {...props}>
     <path
-      stroke="#1E1E1E"
+      stroke="currentColor"
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth={3}

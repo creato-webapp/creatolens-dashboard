@@ -38,32 +38,30 @@ const FirstBlogPost = (props: BlogListProps['data'][0]) => {
     <div>
       <h2 className="text-2xl font-semibold">{t('latest_blog_title')}</h2>
       <div>
-        <h3 className="text-neutral-500 md:text-lg">&ldquo;{t('explore_blog_title')}</h3>
+        <h3 className=" md:text-lg">&ldquo;{t('explore_blog_title')}</h3>
         <Link href={`/blog/${slug}`} className="mt-6 flex w-full flex-col gap-6 md:flex-row">
           <div className="relative aspect-[2/1] w-full flex-grow items-center justify-center overflow-hidden rounded-lg bg-red-50 md:h-[350px] md:w-2/3">
             <BlurredImage src={transformWixImageURL(featuredImage)} alt={title} fallbackSrc={IMAGE.LOGO_2TAG} />
           </div>
           <div className="flex w-full flex-col gap-2 md:w-1/3">
-            <h2 className="text-2xl font-semibold text-neutral-800 hover:text-primary-500">{title}</h2>
+            <h2 className="text-2xl font-semibold hover:text-primary-500">{title}</h2>
 
-            <p className="mt-2 line-clamp-3 text-neutral-800">{description}</p>
-            <div className="mt-2 flex items-center gap-2 text-sm text-gray-500">
+            <p className="mt-2 line-clamp-3">{description}</p>
+            <div className="mt-2 flex items-center gap-2 text-sm">
               <div>
                 <FolderIcon className="h-4 w-4" />
               </div>
               {tags &&
                 tags.map((tag, index) => (
                   <>
-                    <div onClick={() => onClickCategory(tag)} key={tag} className="cursor-pointer text-sm text-gray-500">
+                    <div onClick={() => onClickCategory(tag)} key={tag} className="cursor-pointer text-sm">
                       {tag}
                     </div>
-                    {index < tags.length - 1 && <span className="text-sm text-gray-500">/</span>}
+                    {index < tags.length - 1 && <span className="text-sm">/</span>}
                   </>
                 ))}
             </div>
-            <div className="text-sm text-gray-500">
-              {new Date(_createdDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
-            </div>
+            <div className="text-sm">{new Date(_createdDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</div>
           </div>
         </Link>
       </div>
@@ -98,21 +96,21 @@ const Blog = ({ data }: BlogListProps) => {
                     <div className="group flex cursor-pointer flex-col-reverse gap-12 md:flex-row">
                       <div className="flex w-full flex-col gap-2 md:w-1/2">
                         <h2 className="text-2xl font-semibold group-hover:text-primary-500">{item.title}</h2>
-                        <p className="mt-2 line-clamp-3 text-neutral-800">{item.description}</p>
-                        <div className="text-sm text-gray-500">
+                        <p className="mt-2 line-clamp-3 ">{item.description}</p>
+                        <div className="text-sm">
                           {new Date(item._createdDate).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}
                         </div>
-                        <div className="mt-2 flex items-center gap-2 text-sm text-gray-500">
+                        <div className="mt-2 flex items-center gap-2 text-sm">
                           <div>
                             <FolderIcon className="h-4 w-4" />
                           </div>
                           {item.tags &&
                             item.tags.map((tag, index) => (
                               <>
-                                <div onClick={() => onClickCategory(tag)} key={tag} className="cursor-pointer text-sm text-gray-500">
+                                <div onClick={() => onClickCategory(tag)} key={tag} className="cursor-pointer text-sm">
                                   {tag}
                                 </div>
-                                {index < item.tags.length - 1 && <span className="text-sm text-gray-500">/</span>}
+                                {index < item.tags.length - 1 && <span className="text-sm">/</span>}
                               </>
                             ))}
                         </div>
@@ -144,6 +142,7 @@ export async function getStaticProps(context: GetStaticPropsContext) {
 
   return {
     props: {
+      title: '2Tag | Blog',
       data: serializedData,
       ...lang,
     },

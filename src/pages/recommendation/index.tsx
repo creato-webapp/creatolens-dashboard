@@ -54,11 +54,11 @@ const RecommendationPage = () => {
       key: '1',
       title: 'Categories',
       children: (
-        <div className="flex w-full flex-col flex-wrap justify-center gap-4 md:flex md:flex-row md:py-24">
-          <div className="w-full flex-1">
+        <div className="flex w-full flex-col flex-wrap justify-center gap-4 px-4 md:flex md:py-24 lg:flex-row">
+          <div className="aspect-[4/3] h-full w-full flex-1">
             <TopRelatedHashtagCard hashtags={hashetData} />
           </div>
-          <div className="w-full flex-1">
+          <div className="aspect-[4/3] h-full w-full flex-1">
             <TopAccHashtagCard hashtags={hashetData} />
           </div>
         </div>
@@ -80,14 +80,14 @@ const RecommendationPage = () => {
       <Hero backgroundImage="./RecommendationHero.svg" childrenStyle="pb-4 md:py-16">
         <div className="flex flex-col items-center gap-4">
           <div className="flex w-full flex-row items-center">
-            <h1 className="text-heading text-black md:text-title md:text-white">HASHTAGS RECOMMENDATION</h1>
+            <h1 className="text-black md:text-title md:text-white">HASHTAGS RECOMMENDATION</h1>
             <Popover
               className="ml-auto shrink-0 rounded-full bg-accent1-500 p-2 text-white"
               trigger={<LightBulbIcon size={32} />}
               content={
                 <>
-                  <div className="rounded-t-lg border-b border-gray-200  px-3 py-2">
-                    <h3 className="font-semibold text-gray-900 ">💡Input prompt</h3>
+                  <div className="rounded-t-lg border-b border-gray-200 px-3 py-2 dark:border-gray-800">
+                    <h3 className="font-semibold ">💡Input prompt</h3>
                   </div>
                   <div className="px-3 py-2">
                     <ul>
@@ -103,7 +103,7 @@ const RecommendationPage = () => {
             />
           </div>
           <div className="flex w-full gap-2">
-            <div className="flex w-full items-center rounded-3xl bg-bg-dark px-2 text-text-primary hover:rounded-3xl hover:outline-none focus:rounded-3xl focus:outline-none focus:ring-opacity-50 active:rounded-3xl">
+            <div className="flex w-full items-center rounded-3xl bg-white px-2 hover:rounded-3xl hover:outline-none focus:rounded-3xl focus:outline-none focus:ring-opacity-50 active:rounded-3xl dark:bg-black">
               <Form.BaseInput
                 // TODO fix input element (cannot enter and submit)
                 allowSpace
@@ -111,13 +111,13 @@ const RecommendationPage = () => {
                 disabled={isValidating}
                 onKeyDown={handleKeyDown}
                 placeholder="Searching for new idea"
-                className={` w-full rounded-3xl border-none py-1.5 hover:rounded-3xl hover:outline-none focus:rounded-3xl focus:outline-none focus:ring-opacity-50 active:rounded-3xl ${
+                className={` w-full rounded-3xl border-none py-1.5 text-black hover:rounded-3xl hover:outline-none focus:rounded-3xl focus:outline-none focus:ring-opacity-50 active:rounded-3xl dark:text-white ${
                   isValidating ? 'text-gray-400' : ''
                 } w-full`}
                 onChange={(e) => onChange(e)}
                 childrenPosition="left"
               >
-                {isValidating ? <LoaderIcon className="animate-spin" /> : <MagnifyingGlassIcon />}
+                {isValidating ? <LoaderIcon className="animate-spin" /> : <MagnifyingGlassIcon color="" className="fill-black dark:fill-white" />}
               </Form.BaseInput>
             </div>
             <div className="w-1/5">
@@ -129,7 +129,7 @@ const RecommendationPage = () => {
         </div>
       </Hero>
       <div className="flex min-h-full w-full rounded-none border-none bg-transparent px-0 py-0 shadow-none md:px-20 md:pb-28">
-        <Tab items={tabItems} defaultActiveKey="1" scrollable={false} className="flex w-full px-0 shadow-none md:px-0 md:shadow-xl" />
+        <Tab items={tabItems} defaultActiveKey="1" scrollable={false} className="flex w-full px-0 shadow-none md:shadow-xl" />
       </div>
     </div>
   )

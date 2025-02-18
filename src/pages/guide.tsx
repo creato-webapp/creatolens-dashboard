@@ -28,7 +28,7 @@ const Guide: NextPage = () => {
           <h3 className="md:font-medium">3 Easy Steps to Kick-start</h3>
         </Hero>
         <div className="flex w-full flex-col items-center justify-start gap-6 md:flex-row md:flex-wrap md:items-stretch md:justify-center md:gap-12 md:p-12">
-          <Card className="mx-6 h-full w-auto rounded-none bg-neutral-50 shadow-lg md:mx-0 md:h-auto md:w-[30%] ">
+          <Card className="mx-6 h-full w-auto rounded-none shadow-lg md:mx-0 md:h-auto md:w-[45%] lg:w-[30%]">
             {<img alt="Connect IG" className="h-auto w-full rounded-xl md:shrink-0 " src={'/guide/create-insta-bot.svg'} />}
             <h2 className="font-extrabold">Connect an empty IG account to 2Tag</h2>
             <ul className="line flex list-outside list-disc flex-col gap-6">
@@ -42,7 +42,7 @@ const Guide: NextPage = () => {
               New Account
             </Button.Primary>
           </Card>
-          <Card className="mx-6 h-full w-auto rounded-none bg-neutral-50 shadow-lg md:mx-0 md:h-auto md:w-[30%]">
+          <Card className="mx-6 h-full w-auto rounded-none shadow-lg md:mx-0 md:h-auto md:w-[45%] lg:w-[30%]">
             {<img className="h-auto w-full rounded-xl md:shrink-0 " alt="Input" src={'/guide/hashtag-exploration.svg'} />}
             <h2>Input a 5-8 word-prompt</h2>
             <ul className="line flex list-outside list-disc flex-col gap-6">
@@ -53,7 +53,7 @@ const Guide: NextPage = () => {
             <footer>Tell us again in another few words and let us work for you again if results are not satisfied.</footer>
           </Card>
 
-          <Card className="mx-6 h-full w-auto rounded-none bg-neutral-50 shadow-lg md:mx-0 md:h-auto md:w-[30%]">
+          <Card className="mx-6 h-full w-auto rounded-none shadow-lg md:mx-0 md:h-auto md:w-[45%] lg:w-[30%]">
             <img className="h-auto w-full rounded-xl md:shrink-0" alt="apply-hashtag" src={'/guide/apply-hashtag.svg'} />
             <h2>Generate Trending Hashtag</h2>
             <ul className="line flex list-outside list-disc flex-col gap-6">

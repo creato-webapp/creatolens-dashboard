@@ -59,7 +59,7 @@ const Tab: React.FC<TabProps> = ({
         {items.map((item) => (
           <button
             className={`disabled:text-text-disable flex h-8 min-w-[50%] flex-nowrap items-center  justify-center hover:bg-accent1-300 hover:text-text-white hover:underline hover:underline-offset-2 focus:bg-accent1-500 active:bg-accent1-500 disabled:bg-disabled md:h-12 md:min-w-[10rem] lg:min-w-[15rem] ${
-              currentActiveKey == item.key ? 'bg-accent1-500 text-text-white' : 'bg-bg-dark text-text-primary'
+              currentActiveKey == item.key ? 'bg-accent1-500 text-text-white' : 'bg-bg-dark text-text-primary dark:text-text-white'
             }`}
             key={item.key}
             onClick={handleChange}
@@ -72,7 +72,7 @@ const Tab: React.FC<TabProps> = ({
         ))}
         {tabBarExtraContent}
       </div>
-      <div className={`tab-content flex w-full justify-center bg-bg-white  ${scrollable ? 'overflow-auto' : ''}`}>
+      <div className={`tab-content flex w-full justify-center bg-bg-white dark:bg-bg-dark  ${scrollable ? 'overflow-auto' : ''}`}>
         {items.map((item) =>
           currentActiveKey === item.key ? (
             <div key={item.key} className={`tab-pane ${currentActiveKey === item.key ? 'active' : ''}  flex min-w-full flex-col justify-center`}>

@@ -10,7 +10,7 @@ const Header = ({ data, dangerouslySetInnerHTML }: { data: BlogPost; dangerously
   return (
     <>
       <Head>
-        <title>{data.title} | Your Site Name</title>
+        <title>{data.title.toString()} | 2Tag.ai</title>
         <meta name="description" content={data.metaDescription} />
         <meta property="og:title" content={data.title} />
         <meta property="og:description" content={data.metaDescription} />

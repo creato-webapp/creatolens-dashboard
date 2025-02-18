@@ -34,12 +34,12 @@ const Home = ({ pages }: HomeProps) => {
         <title>Keywords and Hashtags</title>
         <meta
           name="description"
-          content="Ready-To-Go Hashtag Set from  2Tag. Can be used for free for both commercial and personal uses. Boost your SEO or organic reach by applying these keywords or understand the latest trend of niche topic."
+          content="Ready-To-Go Hashtag Set from 2Tag. Can be used for free for both commercial and personal uses. Boost your SEO or organic reach by applying these keywords or understand the latest trend of niche topic."
         />
       </Head>
       <div className="container mx-auto mt-12 px-6 md:px-12">
-        <h1 className="mb-8 text-center text-4xl font-bold text-gray-800">Keywords and Hashtags</h1>
-        <p className="mb-12 text-center text-base text-neutral-500">
+        <h1 className="mb-8 text-center text-4xl font-bold">Keywords and Hashtags</h1>
+        <p className="mb-12 text-center text-base">
           Ready-To-Go Hashtag Set from 2Tag. Can be used for free for both commercial and personal uses. Boost your SEO or organic reach by applying
           these keywords or understand the latest trend of niche topic..
         </p>
@@ -55,7 +55,7 @@ const Home = ({ pages }: HomeProps) => {
                 <Badge variant="secondary" className="mb-4 px-4 py-1 text-sm font-medium">
                   #{page.tag}
                 </Badge>
-                <h2 className="text-lg font-semibold text-gray-800 transition group-hover:text-primary-600">{page.tag}</h2>
+                <h2 className="text-lg font-semibold transition group-hover:text-primary-600">{page.tag}</h2>
               </div>
             </Link>
           ))}

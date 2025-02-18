@@ -15,7 +15,7 @@ const OutlineButton: React.FC<ButtonProps> = ({ children, onClick, disabled = fa
       disabled={loading || disabled}
       sizes={sizes}
       {...res}
-      className={`border-text-secondary text-text-secondary hover:bg-text-secondary hover:text-white hover:shadow-sm focus:border-text-secondary focus:outline-2 active:border-text-secondary active:bg-white active:text-text-secondary active:outline active:outline-2 active:outline-slate-300 ${className} ${
+      className={`border-text-secondary  text-text-secondary hover:bg-text-secondary hover:text-white hover:shadow-sm focus:border-text-secondary focus:outline-2 active:border-text-secondary active:bg-white active:text-text-secondary active:outline active:outline-2 active:outline-slate-300 dark:bg-bg-white dark:text-zinc-600 ${className} ${
         isDisabled ? 'pointer-events-none border-2 border-gray-100 bg-gray-100 text-zinc-400' : ''
       }`}
     >

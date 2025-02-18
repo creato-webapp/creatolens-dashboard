@@ -96,7 +96,7 @@ const Hashtags = (props: { hashtags: Hashtag[] | null }) => {
 
   return (
     <>
-      <div className="flex h-full w-full flex-col ">
+      <div className="flex h-full w-full flex-col justify-between">
         <div className="mt-4 flex flex-wrap gap-4">
           {uniqueHashtags.map((hashtag) => (
             <Badge variant="destructive" key={hashtag.hashtag}>
@@ -121,13 +121,13 @@ const Session = (props: IFeatureBulletPoint) => {
 
   return (
     <div className="session py-6 md:py-16">
-      <h2 className="text-heading text-neutral-800">{heading}</h2>
+      <h2 className="text-heading ">{heading}</h2>
       <h3>{description}</h3>
       <ul className="pl-6 pt-6">
         {Array.isArray(items) &&
           items.length > 0 &&
           items.map((item: string, index: number) => (
-            <li key={index} className="list-disc text-neutral-500 md:pl-5">
+            <li key={index} className="list-disc md:pl-5">
               {item}
             </li>
           ))}
@@ -152,18 +152,18 @@ const Guide = (props: IGuide) => {
     <div className="guide flex w-full flex-col gap-12 py-6 md:py-16">
       <div>
         <h2 className="text-heading">{heading}</h2>
-        <h3 className="pt-2 text-subheading text-neutral-500">{subheading}</h3>
+        <h3 className="pt-2 text-subheading">{subheading}</h3>
       </div>
       <div className="flex flex-row flex-wrap justify-between gap-6">
         {items.map((item: { heading: string; content: string }, index: number) => (
           <div key={index} className="md:flex-1">
             <div className="flex w-full flex-row gap-6">
-              <div className="flex aspect-square h-8 w-8 items-center justify-center rounded-full border-2 border-neutral-800">
-                <span className="text-neutral-800">{index + 1}</span>
+              <div className="flex aspect-square h-8 w-8 items-center justify-center rounded-full border-2">
+                <span className="">{index + 1}</span>
               </div>
               <div>
-                <h4 className="text-heading text-neutral-800">{item.heading}</h4>
-                <p className="pt-2 text-neutral-500">{item.content}</p>
+                <h4 className="text-heading">{item.heading}</h4>
+                <p className="pt-2">{item.content}</p>
               </div>
             </div>
           </div>
@@ -202,10 +202,10 @@ const HashtagSection = ({
         { type: 'Most Recent', hashtags: recentHashtags },
         { type: 'All Time', hashtags: allTimeHashtags },
       ].map((item, index) => (
-        <div key={index} className="flex flex-col justify-between rounded-lg border bg-white p-4 md:flex-1">
+        <div key={index} className="flex flex-col justify-between rounded-lg border  p-4 md:flex-1">
           <div className="flex flex-row items-center justify-between">
             <h4 className="text-lg font-bold capitalize text-primary-500">{title}</h4>
-            <div className="text-end text-neutral-500">{item.type}</div>
+            <div className="text-end">{item.type}</div>
           </div>
           <Hashtags hashtags={item.hashtags} />
         </div>
@@ -219,13 +219,13 @@ const RecommendedHashtags = ({ tags }: { tags: string[] }) => {
 
   return (
     <div className="mt-12 w-full">
-      <h2 className="mb-6 text-2xl font-bold text-gray-800">{t('recommendedTopics')}</h2>
+      <h2 className="mb-6 text-2xl font-bold">{t('recommendedTopics')}</h2>
       <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
         {tags.map((tag) => (
           <Link
             href={`/hashtag/${tag}`}
             key={tag}
-            className="flex items-center justify-center rounded-lg border border-neutral-200 bg-white p-6 text-center capitalize text-gray-700 shadow-sm transition duration-200 hover:border-primary-500 hover:text-primary-500 hover:shadow-lg"
+            className="flex items-center justify-center rounded-lg border border-neutral-200 p-6 text-center capitalize shadow-sm transition duration-200 hover:border-primary-500 hover:text-primary-500 hover:shadow-lg"
           >
             {tag}
           </Link>
@@ -253,7 +253,7 @@ const Tag = (props: { data: IHashtagResponse; title: string; hashtags: string[] 
           <div className="">
             <div className="flex flex-col gap-4">
               <h1 className="text-heading font-semibold capitalize"> {t('bestHashtag', { tag: title })}</h1>
-              <h3 className="text-subheading text-neutral-500">{t('description')}</h3>
+              <h3 className="text-subheading">{t('description')}</h3>
             </div>
           </div>
           <div className="flex w-full flex-col gap-12">
@@ -275,7 +275,7 @@ const Tag = (props: { data: IHashtagResponse; title: string; hashtags: string[] 
             )}
           </div>
 
-          <div className="mx-auto mt-12 w-full bg-neutral-200 px-12">
+          <div className="mx-auto mt-12 w-full px-12">
             <Session
               heading={t('session.heading')}
               description={''}

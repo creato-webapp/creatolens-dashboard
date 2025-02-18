@@ -1,13 +1,13 @@
 import React, { useCallback, useState } from 'react'
 
 import IMAGE from '@constants/image'
-import ROUTE from '@constants/route'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
 import CrossIcon from '@components/Icon/CrossIcon'
 import MenuIcon from '@components/Icon/MenuIcon'
 import useAuth from '@hooks/useAuth'
+import ThemeToggle from '@components/ThemeToggle'
 
 import { Button } from '..'
 import Avatar from '@components/Avatar'
@@ -56,12 +56,16 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
     >
       <div>{label}</div>
       {isOpen && (
-        <div className={`absolute -left-14 top-full z-50 flex ${dropdownWidth} flex-col rounded-md border bg-white p-2 shadow-lg`}>
+        <div className={`absolute -left-14 top-full z-50 flex ${dropdownWidth} flex-col rounded-md border bg-white p-2 shadow-lg dark:bg-black`}>
           {items.map((link, index) => (
-            <Link href={link.path} key={`${link.name}-${index}`} className={`${link.disabled ? 'pointer-events-none' : ''}`}>
+            <Link
+              href={link.path}
+              key={`${link.name}-${index}`}
+              className={`text-black hover:text-primary-500 dark:text-white ${link.disabled ? 'pointer-events-none' : ''}`}
+            >
               <div
-                className={`block px-4 py-2 text-sm transition-colors hover:bg-gray-100 ${
-                  router.pathname === link.path ? 'font-bold text-primary-500' : 'text-neutral-800'
+                className={`block rounded-md px-4 py-2 text-sm transition-colors hover:bg-neutral-200 ${
+                  router.pathname === link.path ? 'font-bold text-primary-500' : ''
                 } ${link.disabled ? 'text-text-disabled' : ''}`}
               >
                 {link.name}
@@ -134,9 +138,7 @@ const NavBar: React.FC = () => {
             label="Resources"
             dropdownWidth="w-48"
           />
-          <Link href={ROUTE.BLOG} className="rounded-md px-4 py-2 text-text-primary hover:bg-neutral-200 hover:text-primary-500">
-            Blog
-          </Link>
+          <ThemeToggle />
         </div>
         {session ? (
           <DropdownMenu
@@ -162,7 +164,7 @@ const NavBar: React.FC = () => {
         className={`fixed top-0 z-50 h-screen w-screen -translate-x-7 transition-transform ${isMenuCollapse ? 'hidden' : 'block'}`}
         aria-label="Sidebar"
       >
-        <div className="flex h-[100vh] flex-col overflow-y-auto bg-white">
+        <div className="flex h-[100vh] flex-col overflow-y-auto">
           <Button.Text className="m-8 ml-auto text-text-primary" onClick={collapseMenu}>
             <CrossIcon></CrossIcon>
           </Button.Text>

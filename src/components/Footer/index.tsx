@@ -22,7 +22,7 @@ function Footer() {
             <div className="flex flex-row gap-4">
               {SOCIAL_MEDIA_LINKS.map(({ alt, Icon, href }) => (
                 <Link href={href} className="h-6 w-6 items-center justify-center" key={alt}>
-                  <Icon width={24} height={24} />
+                  <Icon width={24} height={24} className="text-white" />
                 </Link>
               ))}
             </div>
@@ -38,7 +38,7 @@ function Footer() {
                     {items.items.map((link) => {
                       return (
                         <Link href={link.path} key={link.name}>
-                          <div className="font-normal text-neutral-800">{link.name}</div>
+                          <div className="font-normal">{link.name}</div>
                         </Link>
                       )
                     })}
@@ -51,7 +51,7 @@ function Footer() {
         </div>
       </div>
       <div className="mt-24 inline-flex w-full flex-col items-center justify-start">
-        <span className="text-base font-semibold leading-none text-neutral-400">{`©${dayjs().get('year')} ESSAA Limited All Rights Reserved`}</span>
+        <span className="text-base font-semibold leading-none ">{`©${dayjs().get('year')} ESSAA Limited All Rights Reserved`}</span>
       </div>
     </footer>
   )

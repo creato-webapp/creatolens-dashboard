@@ -58,7 +58,7 @@ const Popup: React.FC<PopupProps> = ({
   return isShow ? (
     <div className="fixed inset-0 h-full w-full overflow-y-auto bg-gray-600 bg-opacity-50">
       <div
-        className="absolute left-1/2 top-1/2 mx-auto w-96 -translate-x-1/2 -translate-y-1/2 transform rounded-md border bg-white p-5 shadow-lg"
+        className="absolute left-1/2 top-1/2 mx-auto w-96 -translate-x-1/2 -translate-y-1/2 transform rounded-md border p-5 shadow-lg"
         ref={popupRef}
       >
         <div className="flex flex-col justify-center space-y-3">

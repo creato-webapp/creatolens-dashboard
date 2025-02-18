@@ -96,7 +96,7 @@ const CustomizeHashtagCard: React.FC<Props> = ({ hashtags }) => {
                   </ul>
                 </div>
               </Collapse>
-              <div className="hidden bg-white md:block">
+              <div className="hidden md:block">
                 <div>
                   <h4 className="font-extrabold">{range.label}</h4>
                 </div>

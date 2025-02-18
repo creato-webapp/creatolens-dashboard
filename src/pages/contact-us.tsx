@@ -24,10 +24,10 @@ const ContactUs = () => {
           <div className="relative h-96 w-full">
             <Image src={'/contact-us.png'} style={{ objectFit: 'contain' }} fill alt={'Contact Us'} />
           </div>
-          <div className="flex w-full flex-col justify-center gap-6 text-neutral-500">
+          <div className="flex w-full flex-col justify-center gap-6">
             <div className="flex flex-col gap-2">
-              <div className="text-heading text-neutral-800">Contact Us</div>
-              <div className="text-subheading text-neutral-500">Let&apos;s talk</div>
+              <div className="text-heading">Contact Us</div>
+              <div className="text-subheading">Let&apos;s talk</div>
             </div>
             <div>Have a question? Looking for assistance? We are here to help and answer any inquiries!</div>
             <div>Reach us directly at:</div>

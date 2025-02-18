@@ -47,7 +47,7 @@ const TopRelatedHashtagCard: React.FC<Props> = ({ hashtags }) => {
           <span>Related</span>
         </h1>
       }
-      className="w-full whitespace-normal !rounded-none py-4 md:h-auto"
+      className="h-full w-full whitespace-normal !rounded-none py-4"
       isDropdown={true}
       extra={
         <Dropdown

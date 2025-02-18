@@ -57,10 +57,10 @@ const TopAccHashtagCard: React.FC<Props> = ({ hashtags }) => {
       customTitle={
         <h1 className="flex items-center gap-2 font-extrabold tracking-tighter">
           <span className="text-accent1-500">{`≥${selectedAccuracy}% `}</span>
-          <span className="text-text-primary">Related</span>
+          <span className="">Related</span>
         </h1>
       }
-      className="w-full whitespace-normal !rounded-none py-4 md:h-auto"
+      className="h-full w-full whitespace-normal !rounded-none py-4"
       isDropdown={true}
       extra={
         <Dropdown
