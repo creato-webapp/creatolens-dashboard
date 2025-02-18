@@ -20,9 +20,9 @@ function Footer() {
               <Image src="/logo_orange.png" width={40} height={40} alt={'2tag logo'} />
             </div>
             <div className="flex flex-row gap-4">
-              {SOCIAL_MEDIA_LINKS.map(({ alt, src, href }) => (
-                <Link href={href} className="" key={alt}>
-                  <Image width={24} height={24} src={src} alt={alt} className="cursor-pointer fill-black stroke-black" />
+              {SOCIAL_MEDIA_LINKS.map(({ alt, Icon, href }) => (
+                <Link href={href} className="h-6 w-6 items-center justify-center" key={alt}>
+                  <Icon width={24} height={24} />
                 </Link>
               ))}
             </div>
