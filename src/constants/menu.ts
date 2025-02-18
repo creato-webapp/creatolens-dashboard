@@ -1,5 +1,8 @@
-import IMAGE from './image'
+import InstagramIcon from '@components/Icon/InstagramIcon'
 import ROUTE from './route'
+import SpotifyIcon from '@components/Icon/SpotifyIcon'
+import LinkedInIcon from '@components/Icon/LinkedInIcon'
+import YoutubeIcon from '@components/Icon/YoutubeIcon'
 
 export type NavLink = {
   readonly name: string
@@ -96,22 +99,22 @@ export const FOOTER_LINKS_STATIC = [
 export const SOCIAL_MEDIA_LINKS = [
   {
     alt: 'Instagram',
-    src: IMAGE.LOGO_INSTAGRAM,
+    Icon: InstagramIcon,
     href: 'https://www.instagram.com/creatogether.app/',
   },
   {
     alt: 'Linkedin',
-    src: IMAGE.LOGO_LINKEDIN,
+    Icon: LinkedInIcon,
     href: 'https://www.linkedin.com/company/creato-edu/',
   },
   {
     alt: 'Spotify',
-    src: IMAGE.LOGO_SPOTIFY,
+    Icon: SpotifyIcon,
     href: 'https://open.spotify.com/show/1nOYgPbId7Cq8fQoqXuxf5?si=dceab17fa4c04db5&nd=1&dlsi=9c44e2be6f314145',
   },
   {
     alt: 'Youtube',
-    src: IMAGE.LOGO_YOUTUBE,
+    Icon: YoutubeIcon,
     href: 'https://www.youtube.com/@Creatopodcast',
   },
 ] as const
