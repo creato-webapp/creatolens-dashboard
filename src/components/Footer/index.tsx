@@ -13,8 +13,8 @@ function Footer() {
   const footerLinks = session ? FOOTER_LINKS : FOOTER_LINKS_STATIC
   return (
     <footer className="my-8 flex flex-col border-t pt-8 md:p-8 md:px-16">
-      <div className="flex flex-row justify-between">
-        <div className="w-full md:max-w-64">
+      <div className="flex w-full flex-col md:flex-row">
+        <div className="md:max-w-64">
           <div className="flex flex-row items-start justify-between gap-4 md:flex-col">
             <div>
               <Image src="/logo_orange.png" width={40} height={40} alt={'2tag logo'} />
@@ -28,11 +28,11 @@ function Footer() {
             </div>
           </div>
         </div>
-        <div className="flex w-full">
-          <div className="flex w-full flex-col justify-around md:flex-row">
+        <div className="mt-12 flex w-full">
+          <div className="flex w-full flex-col flex-wrap items-start justify-around sm:flex-row">
             {footerLinks.map((items) => {
               return (
-                <div key={items.header} className="mt-6 w-full max-w-64 text-base font-semibold">
+                <div key={items.header} className="ml-2 mt-6 w-fit max-w-64 flex-1 text-base font-semibold md:ml-12 md:mt-0">
                   {items.header}
                   <div className="flex flex-col gap-2 pt-4 md:gap-4 md:pt-6">
                     {items.items.map((link) => {
