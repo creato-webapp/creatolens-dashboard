@@ -14,7 +14,7 @@ export default handler.api({
   [METHOD.POST]: async (req: NextApiRequest, res: NextApiResponse) => {
     const body = req.body as PromptData
 
-    const response = await ImageInstance.post<string>(`/api/image-tagen/prompt/image`, {
+    const response = await ImageInstance.post<string>(`/api/metamove/image/prompt`, {
       prompt: body.input,
       user_id: `web3/${body.key}`,
       aspect_ratio: body.aspectRatio,
