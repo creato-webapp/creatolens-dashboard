@@ -1,7 +1,6 @@
 import React, { useCallback, useState } from 'react'
 
 import IMAGE from '@constants/image'
-import ROUTE from '@constants/route'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
@@ -134,9 +133,6 @@ const NavBar: React.FC = () => {
             label="Resources"
             dropdownWidth="w-48"
           />
-          <Link href={ROUTE.BLOG} className="rounded-md px-4 py-2 text-text-primary hover:bg-neutral-200 hover:text-primary-500">
-            Blog
-          </Link>
         </div>
         {session ? (
           <DropdownMenu
