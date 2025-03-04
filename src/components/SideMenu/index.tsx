@@ -1,31 +1,65 @@
 import Link from 'next/link' // Import Next.js Link
 import { CaretUpIcon } from '@components/Icon'
 import { useState } from 'react'
+import ROUTE from '@constants/route'
 import SubtleButton from '@components/Button/Subtle'
 import LogoutIcon from '@components/Icon/LogOutIcon'
 import useAuth from '@hooks/useAuth'
 import { useRouter } from 'next/router'
-import { FEATURE_LINKS, FEATURE_LINKS_STATIC, SUPPORT_LINKS } from '@constants/menu'
 
 const menus = [
   {
     header: 'Features',
-    items: FEATURE_LINKS,
+    items: [
+      { name: 'Instagram Trend Analysis', path: ROUTE.DASHBOARD, disabled: false },
+      { name: 'Manage Instabot Accounts', path: ROUTE.ACCOUNTS, disabled: false },
+      { name: 'Hashtags Recommendation', path: ROUTE.RECOMMENDATION, disabled: true }, //disabled
+      { name: 'Hashtags-to-Image', path: ROUTE.HASHTAG_TO_IMAGE, disabled: true }, //disabled
+      { name: 'Image-to-Hashtags', path: ROUTE.IMAGE_TO_HASHTAG, disabled: false },
+    ],
   },
+  // {
+  //   header: 'User Settings',
+  //   items: [
+  //     { name: 'Profile Settings', path: ROUTE.ACCOUNTS },
+  //     { name: 'Privacy Settings', path: ROUTE.ACCOUNTS },
+  //   ],
+  // },
   {
     header: 'Support',
-    items: SUPPORT_LINKS,
+    items: [
+      { name: 'Contact', path: ROUTE.CONTACT_US, disabled: false },
+      { name: 'FAQs', path: ROUTE.FAQ, disabled: false },
+      { name: 'Blog', path: ROUTE.BLOG, disabled: false },
+    ],
   },
 ]
 
 const menusStatic = [
   {
     header: 'Features',
-    items: FEATURE_LINKS_STATIC,
+    items: [
+      { name: 'Instagram Trend Analysis', path: ROUTE.STATIC_DASHBOARD, disabled: false },
+      { name: 'Manage Instabot Accounts', path: ROUTE.STATIC_ACCOUNTS, disabled: false },
+      { name: 'Hashtags Recommendation', path: ROUTE.STATIC_RECOMMENDATION, disabled: false }, //disabled
+      { name: 'Hashtags-to-Image', path: ROUTE.STATIC_HASHTAG_TO_IMAGE, disabled: false }, //disabled
+      { name: 'Image-to-Hashtags', path: ROUTE.STATIC_IMAGE_TO_HASHTAG, disabled: false },
+    ],
   },
+  // {
+  //   header: 'User Settings',
+  //   items: [
+  //     { name: 'Profile Settings', path: ROUTE.ACCOUNTS },
+  //     { name: 'Privacy Settings', path: ROUTE.ACCOUNTS },
+  //   ],
+  // },
   {
     header: 'Support',
-    items: SUPPORT_LINKS,
+    items: [
+      { name: 'Contact', path: ROUTE.CONTACT_US, disabled: false },
+      { name: 'FAQs', path: ROUTE.FAQ, disabled: false },
+      { name: 'Blog', path: ROUTE.BLOG, disabled: false },
+    ],
   },
 ]
 

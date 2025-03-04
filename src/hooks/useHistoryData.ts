@@ -7,19 +7,17 @@ import { HistoryRow } from '@services/HistoryHelper'
 
 export const useHistoryData = (query: { user_id: string }) => {
   const {
-    data: histories,
+    data: historys,
     mutate,
     isLoading,
     error,
   } = useRequest<HistoryRow[]>(
-    query.user_id
-      ? [
-          XAPI.IMAGE_HASHTAG_HISTORY,
-          {
-            params: query,
-          },
-        ]
-      : null,
+    [
+      XAPI.IMAGE_HASHTAG_HISTORY,
+      {
+        params: query,
+      },
+    ],
     METHOD.GET,
     {
       suspense: true,
@@ -30,7 +28,7 @@ export const useHistoryData = (query: { user_id: string }) => {
   const removeHistory = useCallback(
     async (post_ids: string[], update_fields: { is_deleted: boolean }) => {
       try {
-        mutate((prevHistories: HistoryRow[]) => prevHistories?.filter((history: HistoryRow) => !post_ids.includes(history.id)), false)
+        mutate((prevHistorys: HistoryRow[]) => prevHistorys?.filter((history: HistoryRow) => !post_ids.includes(history.id)), false)
 
         const body = { post_ids, update_fields }
 
@@ -77,7 +75,7 @@ export const useHistoryData = (query: { user_id: string }) => {
     }
   }
 
-  return { histories, mutate, isLoading, error, removeHistory, toggleFavoriteStatus }
+  return { historys, mutate, isLoading, error, removeHistory, toggleFavoriteStatus }
 }
 
 import { useContext } from 'react'
