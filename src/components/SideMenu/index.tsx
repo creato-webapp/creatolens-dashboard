@@ -5,41 +5,20 @@ import SubtleButton from '@components/Button/Subtle'
 import LogoutIcon from '@components/Icon/LogOutIcon'
 import useAuth from '@hooks/useAuth'
 import { useRouter } from 'next/router'
-import { FEATURE_LINKS, FEATURE_LINKS_STATIC, SUPPORT_LINKS } from '@constants/menu'
-
-const menus = [
-  {
-    header: 'Features',
-    items: FEATURE_LINKS,
-  },
-  {
-    header: 'Support',
-    items: SUPPORT_LINKS,
-  },
-]
-
-const menusStatic = [
-  {
-    header: 'Features',
-    items: FEATURE_LINKS_STATIC,
-  },
-  {
-    header: 'Support',
-    items: SUPPORT_LINKS,
-  },
-]
+import { SIDE_MENU_CONFIG, SIDE_MENU_CONFIG_STATIC } from '@constants/menu'
+import PrimaryButton from '@components/Button/Primary'
 
 const SideMenu = (props: { collapseMenu?: () => void }) => {
   const { collapseMenu } = props
   const [active, setActive] = useState<string>('')
-  const { session, onLogout } = useAuth()
+  const { session, onLogin, onLogout } = useAuth()
   const router = useRouter() // Use Next.js router to get the current path
 
   const toggleMenu = (header: string) => {
     setActive(active === header ? '' : header) // Toggle active state
   }
 
-  const renderMenu = session ? menus : menusStatic
+  const renderMenu = session ? SIDE_MENU_CONFIG : SIDE_MENU_CONFIG_STATIC
 
   return (
     <div className="flex h-full max-h-screen w-full flex-col justify-between rounded-lg border border-neutral-300 p-4 text-base">
@@ -60,7 +39,7 @@ const SideMenu = (props: { collapseMenu?: () => void }) => {
             </button>
             <div className="my-2 border-b border-neutral-300 px-4"></div>
             <div className={`overflow-hidden transition-[max-height] duration-300 ease-in-out ${active === menu.header ? 'max-h-96' : 'max-h-0'}`}>
-              <div className="dropdown-content my-4 flex flex-col items-center border-b border-neutral-300 pb-2">
+              <div className="dropdown-content flex flex-col items-center border-b border-neutral-300 pb-2">
                 {menu.items.map(
                   (item) =>
                     item.path && ( // Only use Link if `link` is provided
@@ -86,10 +65,16 @@ const SideMenu = (props: { collapseMenu?: () => void }) => {
         ))}
       </div>
       <div className="flex items-end justify-center">
-        <SubtleButton onClick={onLogout} className="flex h-auto items-center rounded">
-          <LogoutIcon className="mr-1" size={18} fillColor="fill-neutral-800"></LogoutIcon>
-          Logout
-        </SubtleButton>
+        {session ? (
+          <SubtleButton onClick={onLogout} className="flex h-auto items-center rounded">
+            <LogoutIcon className="mr-1" size={18} fillColor="fill-neutral-800"></LogoutIcon>
+            Logout
+          </SubtleButton>
+        ) : (
+          <PrimaryButton onClick={onLogin} sizes={['s', 's', 's']} className="flex w-full flex-row items-center justify-center gap-4">
+            Log in/ Register
+          </PrimaryButton>
+        )}
       </div>
     </div>
   )
