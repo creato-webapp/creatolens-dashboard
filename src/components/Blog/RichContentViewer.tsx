@@ -1,5 +1,6 @@
 import { Button } from '@components/Button'
 import Divider from '@components/Divider'
+import { FileDownIcon } from 'lucide-react'
 import Image from 'next/image'
 import React from 'react'
 
@@ -132,6 +133,13 @@ interface RichContentNode {
       url: string
     }
     containerData?: ContainerData
+  }
+  fileData?: {
+    src: {
+      id: string
+    }
+    name: string
+    sizeInKb: number
   }
 }
 
@@ -338,9 +346,16 @@ const parseNode = (node: RichContentNode): React.ReactNode => {
 
     case 'LIST_ITEM':
       return (
-        <li key={node.id} className="ml-2 list-outside list-disc">
+        <li key={node.id} className="ml-2 list-outside list-decimal">
           {node.nodes.map((childNode) => parseNode(childNode))}
         </li>
+      )
+
+    case 'ORDERED_LIST':
+      return (
+        <ol key={node.id} className="text-paragraph font-normal">
+          {node.nodes.map((childNode) => parseNode(childNode))}
+        </ol>
       )
 
     case 'DIVIDER':
@@ -376,6 +391,21 @@ const parseNode = (node: RichContentNode): React.ReactNode => {
         >
           {node.buttonData?.text}
         </Button.Outline>
+      )
+    case 'FILE':
+      if (!node.fileData) return null
+      return (
+        <div key={node.id} className="flex flex-col items-start gap-2">
+          <a
+            href={`https://static.wixstatic.com/${node.fileData.src.id}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 rounded-md border border-gray-300 px-4 py-4  font-medium text-gray-700 hover:bg-gray-50"
+          >
+            <FileDownIcon className="h-4 w-4" />
+            {node.fileData.name} ({(node.fileData.sizeInKb / 1024).toFixed(2)} MB)
+          </a>
+        </div>
       )
 
     default:
