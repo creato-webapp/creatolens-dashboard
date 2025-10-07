@@ -1,0 +1,34 @@
+{
+  "navbar": {
+    "feature": "功能",
+    "support": "支援",
+    "resources": "資源",
+    "login_register": "登入 / 註冊",
+    "logout": "登出"
+  },
+  "menu": {
+    "features": {
+      "header": "功能",
+      "instagram_trend_analysis": "Instagram 趨勢分析",
+      "instabot": "Instabot",
+      "hashtags_recommendation": "主題標籤推薦",
+      "hashtags_to_image": "主題標籤轉圖片",
+      "image_to_hashtags": "圖片轉主題標籤"
+    },
+    "support": {
+      "header": "支援",
+      "faqs": "常見問題",
+      "terms_conditions": "條款及細則",
+      "privacy_policy": "私隱政策",
+      "contact_us": "聯絡我們"
+    },
+    "resources": {
+      "header": "資源",
+      "hashtags_keywords": "主題標籤及關鍵字",
+      "blog": "網誌"
+    }
+  },
+  "footer": {
+    "copyright": "©{{year}} ESSAA Limited 版權所有"
+  }
+}

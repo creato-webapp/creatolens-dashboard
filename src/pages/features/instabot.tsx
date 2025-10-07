@@ -1,47 +1,46 @@
 import FeatureLayout, { Card, Guide, Session } from '@components/FeatureLayout'
 import useAuth from '@hooks/useAuth'
+import { useTranslation } from 'react-i18next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 const Instabot = () => {
   const { onLogin } = useAuth()
+  const { t } = useTranslation('features')
 
   return (
-    <FeatureLayout heading={'Instabot'}>
+    <FeatureLayout heading={t('instabot.heading')}>
       <Card
         image="/hashtag/analysis.png"
         video="/features/instabot-video.mp4"
-        heading="What is Instabot?"
-        subheading="Train a personal ai on your data and make images in your style in seconds."
-        description="Instabot acts as a real Instagram user, scraping explore page posts to collect data. It builds a shared library, allowing users to access both personal and collective information."
+        heading={t('instabot.card.heading')}
+        subheading={t('instabot.card.subheading')}
+        description={t('instabot.card.description')}
         buttonUrl="#"
         onLearnMore={onLogin}
       />
       <Session
-        heading="Using Instabot for even more convenience"
-        items={[
-          'Customize the followed niche of your account',
-          'Full access of customized Instagram trend analysis reports',
-          'Contribute your ai model to community library',
-        ]}
+        heading={t('instabot.session.heading')}
+        items={[t('instabot.session.items.customize_niche'), t('instabot.session.items.full_access'), t('instabot.session.items.contribute')]}
       />
       <Guide
-        heading="How to open and connect an Instabot"
-        subheading="Make your own ai model in around 10 minutes."
+        heading={t('instabot.guide.heading')}
+        subheading={t('instabot.guide.subheading')}
         items={[
           {
-            heading: 'Create an Instagram account',
-            content: 'Create a new Instagram account in your device',
+            heading: t('instabot.guide.step1.heading'),
+            content: t('instabot.guide.step1.content'),
           },
           {
-            heading: 'Follow niche',
-            content: 'Follow other interested pages as you use Instagram as usual. We will take that area as your category for the Instabot.',
+            heading: t('instabot.guide.step2.heading'),
+            content: t('instabot.guide.step2.content'),
           },
           {
-            heading: 'Connect Insta-bot with us',
-            content: 'Enter your details for the Instagram account in our system. Wait for a moment for the Instabot to run. You are all set.',
+            heading: t('instabot.guide.step3.heading'),
+            content: t('instabot.guide.step3.content'),
           },
         ]}
         button={{
-          name: 'Create Instabot Now',
+          name: t('instabot.guide.button'),
           url: '',
           onClick: onLogin,
         }}
@@ -49,5 +48,11 @@ const Instabot = () => {
     </FeatureLayout>
   )
 }
+
+export const getStaticProps = async ({ locale }: { locale: string }) => ({
+  props: {
+    ...(await serverSideTranslations(locale, ['features', 'common'])),
+  },
+})
 
 export default Instabot
