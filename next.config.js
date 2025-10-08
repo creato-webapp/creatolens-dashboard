@@ -11,7 +11,12 @@ const nextConfig = {
   reactStrictMode: process.env.NODE_ENV === 'development',
   swcMinify: true,
   images: {
-    domains: ['storage.googleapis.com', 'essaa-creatolen-cdst-lens-image_gen_user_files-sit'],
+    domains: [
+      'storage.googleapis.com',
+      'essaa-creatolen-cdst-lens-image_gen_user_files-sit',
+      '2tag.ai',
+      '2tag-fi446chi3-creato-webapps-projects.vercel.app/en',
+    ],
     remotePatterns: [
       {
         protocol: 'https',
@@ -24,6 +29,7 @@ const nextConfig = {
         pathname: '/**', // Allow all paths under this hostname
       },
     ],
+    formats: ['image/avif', 'image/webp'],
     minimumCacheTTL: 60,
   },
   webpack(config) {
