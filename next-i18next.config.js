@@ -17,17 +17,17 @@ module.exports = {
   // https://www.i18next.com/overview/configuration-options#logging
   debug: false,
   i18n: {
-    defaultLocale: 'en',
+    defaultLocale: 'zh-HK',
     locales: ['en', 'zh-HK'],
   },
-  fallbackLng: 'en',
+  fallbackLng: 'zh-HK',
   initImmediate: false,
   interpolation: {
     escapeValue: false,
   },
   /** To avoid issues when deploying to some paas (vercel...) */
   localePath: typeof window === 'undefined' ? require('path').resolve('./public/locales') : '/locales',
-  ns: ['common', 'error', 'footer', 'hashtag'],
+  ns: ['common', 'error', 'footer', 'hashtag', 'features', 'layout', 'auth', 'faq', 'home', 'contact-us'],
   partialBundledLanguages: isBrowser,
   reloadOnPrerender: process.env.NODE_ENV === 'development',
   use: isBrowser ? [ChainedBackend] : [],

@@ -4,13 +4,18 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 import useAuth from '@hooks/useAuth'
-import { FOOTER_LINKS, FOOTER_LINKS_STATIC, SOCIAL_MEDIA_LINKS } from '@constants/menu'
+import { SOCIAL_MEDIA_LINKS } from '@constants/menu'
 import dayjs from '@utils/dayjs'
+import { useTranslation } from 'next-i18next'
+import { useMenuTranslation } from '@hooks/useMenuTranslation'
 
 function Footer() {
   const { session } = useAuth()
+  const { t } = useTranslation('layout')
+  const { getMenuSections } = useMenuTranslation()
 
-  const footerLinks = session ? FOOTER_LINKS : FOOTER_LINKS_STATIC
+  const footerLinks = getMenuSections(!session)
+
   return (
     <footer className="my-8 flex flex-col border-t pt-8 md:p-8 md:px-16">
       <div className="flex w-full flex-col md:flex-row">
@@ -47,11 +52,10 @@ function Footer() {
               )
             })}
           </div>
-          {/* ©2025 ESSAA Limited All Rights Reserved */}
         </div>
       </div>
       <div className="mt-24 inline-flex w-full flex-col items-center justify-start">
-        <span className="text-base font-semibold leading-none text-neutral-400">{`©${dayjs().get('year')} ESSAA Limited All Rights Reserved`}</span>
+        <span className="text-base font-semibold leading-none text-neutral-400">{t('footer.copyright', { year: dayjs().get('year') })}</span>
       </div>
     </footer>
   )

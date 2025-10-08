@@ -3,6 +3,7 @@ import PrimaryButton from './Button/Primary'
 import router from 'next/router'
 import Breadcrumb from './Breadcrumb'
 import CaretLeftIcon from './Icon/CaretLeftIcon'
+import { useTranslation } from 'next-i18next'
 
 interface IFeatureCard {
   image: string
@@ -48,6 +49,7 @@ interface IFeatureLayout {
 
 export const Card = (props: IFeatureCard) => {
   const { video, heading, subheading, description, buttonUrl, image, onLearnMore } = props
+  const { t } = useTranslation('features')
 
   const handleClick = () => {
     if (onLearnMore) {
@@ -75,7 +77,7 @@ export const Card = (props: IFeatureCard) => {
           <p className="pt-6 text-base text-neutral-800">{description}</p>
         </div>
         <PrimaryButton sizes={['m', 'm', 'm']} className="w-full md:!w-80" onClick={handleClick}>
-          Learn More
+          {t('common.learn_more')}
         </PrimaryButton>
       </div>
     </div>

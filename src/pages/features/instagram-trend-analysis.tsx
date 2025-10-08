@@ -1,42 +1,45 @@
 import FeatureLayout, { Card, Guide, Session } from '@components/FeatureLayout'
 import useAuth from '@hooks/useAuth'
+import { useTranslation } from 'next-i18next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 const InstagramTrendAnalysis = () => {
   const { onLogin } = useAuth()
+  const { t } = useTranslation('features')
 
   return (
-    <FeatureLayout heading={'Instagram Trend Analysis'}>
+    <FeatureLayout heading={t('instagram_trend_analysis.heading')}>
       <Card
         image="/hashtag/analysis.png"
-        heading="Next-level Trend Tracer. Now in 2TAG"
-        subheading="From up-to-date hashtags to topics, Trend Analysis can help you quickly realize the current market trend pattern."
-        description="Trend Analysis lets you monitor and manage scraped posts from the past 3 or 7 days, tracking activity by topic after pairing Instabot with your 2TAG account."
+        heading={t('instagram_trend_analysis.card.heading')}
+        subheading={t('instagram_trend_analysis.card.subheading')}
+        description={t('instagram_trend_analysis.card.description')}
         buttonUrl="#"
         onLearnMore={onLogin}
       />
       <Session
-        heading="What data can be seen in the trend report"
+        heading={t('instagram_trend_analysis.session.heading')}
         items={[
-          'Post scrapped (How many post Instabot was working with in past selected period)',
-          'Top 10 keywords with most appearance in IG algorithm within 3 days or 7 days',
-          "Most repeated posts on Instagram indicate content that captures the algorithm's attention, hence to take reference for your post.",
+          t('instagram_trend_analysis.session.items.post_scrapped'),
+          t('instagram_trend_analysis.session.items.top_keywords'),
+          t('instagram_trend_analysis.session.items.most_repeated'),
         ]}
       />
       <Guide
-        heading="How to use Instagram Trend Analysis in 2TAG"
-        subheading="Make your own trend analysis dashboard with us."
+        heading={t('instagram_trend_analysis.guide.heading')}
+        subheading={t('instagram_trend_analysis.guide.subheading')}
         items={[
           {
-            heading: 'Connect Instabot with us',
-            content: 'Create a new Instabot for specific niche in your IG can help us customize your trend report',
+            heading: t('instagram_trend_analysis.guide.step1.heading'),
+            content: t('instagram_trend_analysis.guide.step1.content'),
           },
           {
-            heading: '3/7 days report',
-            content: 'We will keep making trend data for you in 3 or 7 days',
+            heading: t('instagram_trend_analysis.guide.step2.heading'),
+            content: t('instagram_trend_analysis.guide.step2.content'),
           },
         ]}
         button={{
-          name: 'Make Trend Report Now',
+          name: t('instagram_trend_analysis.guide.button'),
           url: '',
           onClick: onLogin,
         }}
@@ -44,5 +47,11 @@ const InstagramTrendAnalysis = () => {
     </FeatureLayout>
   )
 }
+
+export const getStaticProps = async ({ locale }: { locale: string }) => ({
+  props: {
+    ...(await serverSideTranslations(locale, ['features', 'common'])),
+  },
+})
 
 export default InstagramTrendAnalysis

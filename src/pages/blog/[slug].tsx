@@ -12,8 +12,9 @@ import { getLocaleProps } from '@services/locale'
 import { ArrowLeft, ArrowRight, FolderIcon } from 'lucide-react'
 import Link from 'next/link'
 import { useTranslation } from 'next-i18next'
+import type { items as itemsModule } from '@wix/data'
 
-const createWixClient = () => {
+const createWixClient: () => ReturnType<typeof createClient> & WixWithItems = () => {
   return createClient({
     modules: { items },
     auth: OAuthStrategy({
@@ -35,16 +36,19 @@ export interface BlogPost {
   metaDescription: string
 }
 
+type WixWithItems = { items: typeof itemsModule }
+
 export async function getStaticPaths() {
   const client = createWixClient()
 
   try {
-    const result = await client.items
+    const result: WixWithItems = await client.items
       .query(process.env.WIX_CMS_ID || '')
       .limit(100) // Add limit for better performance
       .find()
 
-    const paths = result.items.map((item) => ({
+    //eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const paths = result.items.map((item: any) => ({
       params: { slug: item.slug || item._id }, // Use slug if available, fallback to ID
     }))
 
@@ -100,7 +104,8 @@ export async function getStaticProps(context: { params: { slug: string }; locale
 
     const otherTopicsData = await getBlogPosts()
     // remove the current blog post from the list
-    const filteredOtherTopicsData = otherTopicsData?.filter((topic) => topic.slug !== context.params.slug)
+    //eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const filteredOtherTopicsData = otherTopicsData?.filter((topic: any) => topic.slug !== context.params.slug)
     const lang = await getLocaleProps(context)
     return {
       props: {
