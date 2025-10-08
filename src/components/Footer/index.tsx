@@ -6,7 +6,7 @@ import Link from 'next/link'
 import useAuth from '@hooks/useAuth'
 import { SOCIAL_MEDIA_LINKS } from '@constants/menu'
 import dayjs from '@utils/dayjs'
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'next-i18next'
 import { useMenuTranslation } from '@hooks/useMenuTranslation'
 
 function Footer() {

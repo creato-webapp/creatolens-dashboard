@@ -84,10 +84,11 @@ export async function getStaticPaths() {
   if (!posts) return { paths: [], fallback: false }
 
   // Get unique categories from all posts
-  const categories = [...new Set(posts.flatMap((post) => post.tags))]
+  //eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const categories = [...new Set(posts.flatMap((post: any) => post.tags))]
 
   const paths = categories.map((category) => ({
-    params: { category: slugify(category) },
+    params: { category: slugify(category as string) },
   }))
 
   return {
@@ -104,7 +105,8 @@ export async function getStaticProps({ params }: { params: { category: string } 
   }
 
   // Filter posts by category
-  const filteredPosts = allPosts.filter((post) => {
+  //eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const filteredPosts = allPosts.filter((post: any) => {
     return post.tags?.map((tag: string) => slugify(tag)).includes(params.category)
   })
 

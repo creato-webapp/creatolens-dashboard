@@ -26,7 +26,7 @@ const LanguageSwitcher: React.FC = () => {
         <ChevronDownIcon className="h-4 w-4 text-neutral-800" />
       </div>
       {isOpen && (
-        <div className="absolute right-0 top-full z-50 mt-1 flex w-40 flex-col rounded-md border bg-white shadow-lg">
+        <div className="absolute right-0 top-full z-50 flex w-40 flex-col rounded-md border bg-white shadow-lg">
           <button
             onClick={() => changeLanguage('en')}
             className={`px-4 py-2 text-left text-sm transition-colors hover:bg-gray-100 ${

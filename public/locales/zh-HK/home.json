@@ -1,0 +1,84 @@
+{
+  "landing": {
+    "title_line1": "獲得互動的神奇工具",
+    "title_highlight": "互動",
+    "subtitle": "關鍵字、SEO 洞察、生成式 AI 三合一",
+    "cta": "開始探索",
+    "no_credit_card": "由 $0 開始。無需信用卡。",
+    "customer_service": "每週 7 天客戶服務"
+  },
+  "features": {
+    "instagram_trend_analysis": {
+      "title": "Instagram 趨勢分析報告",
+      "description": "從最新的主題標籤到話題，趨勢分析可以幫助你快速了解當前市場趨勢模式。",
+      "button": "查看更多"
+    },
+    "instabot": {
+      "title": "Instabot",
+      "description": "Instabot 模擬真實 Instagram 用戶，抓取探索頁面的帖文以收集數據。它建立一個共享資料庫，讓用戶能夠存取個人和集體資訊。",
+      "button": "查看更多"
+    },
+    "hashtags_recommendation": {
+      "title": "主題標籤推薦",
+      "description": "生成基於數據的主題標籤，添加到你的帖文下。增強你的帖文內容，在 Instagram 演算法下被看見",
+      "button": "查看更多"
+    },
+    "hashtags_to_image": {
+      "title": "主題標籤轉圖片",
+      "description": "嘗試新的提示圖片方式，透過 AI 創作讓你的內容更可見",
+      "button": "查看更多"
+    },
+    "image_to_hashtags": {
+      "title": "圖片轉主題標籤",
+      "description": "使用趨勢性、針對性及基於數據的關鍵字來增強你的內容，以獲得最大影響力。",
+      "button": "查看更多"
+    }
+  },
+  "usage": {
+    "heading": "2TAG 能提供什麼？",
+    "subheading": "2TAG 是在社交媒體渠道上提升內容可見度的最簡單方式。",
+    "cards": {
+      "idea_in_hashtag": {
+        "heading": "主題標籤中的想法",
+        "content": "我們解決有效使用主題標籤和推廣 SEO 的挑戰，以提升數碼內容的線上可見度。"
+      },
+      "boosting_organic_reach": {
+        "heading": "提升自然觸及率",
+        "content": "我們確保你的寶貴內容能觸及廣泛且精準的受眾，促進增長並最大化潛在互動。"
+      },
+      "gaining_impressions": {
+        "heading": "獲得曝光",
+        "content": "我們解決數碼內容低曝光率的困擾，提升可見度並擴大訊息的觸及範圍。"
+      }
+    }
+  },
+  "service": {
+    "heading": "誰在使用 2TAG？",
+    "subheading": "加入既快速又簡單。只需幾秒鐘即可開始 — 2TAG 現已開放給所有 Instagram 愛好者。",
+    "roles": {
+      "content_managers": "內容管理員",
+      "individual_creators": "個人創作者",
+      "digital_marketers": "數碼營銷人員",
+      "freelancers": "自由工作者"
+    },
+    "cta": "開始探索"
+  },
+  "testimonials": {
+    "heading": "這些用戶正在使用 2TAG",
+    "subheading": "深受內容創作者、數碼營銷人員等的喜愛和信任",
+    "comments": {
+      "avenna": {
+        "text": "「我能夠根據主題標籤推薦*獲得 5,000+ 自然曝光*」",
+        "title": "旅遊 YouTuber，擁有 3.95K↑ 觀看次數"
+      },
+      "andy": {
+        "text": "「連續使用 3 次後，主題標籤類別的曝光率*增長了 20% 以上*。」",
+        "title": "婚禮攝影師"
+      },
+      "ewen": {
+        "text": "「對我們來說是一個很好的工具，可以在社交媒體上*獲得更多觀眾*觀看我們的影片內容。」",
+        "title": "Instagram 上擁有 30K↑ 粉絲的 KOL"
+      }
+    }
+  }
+}

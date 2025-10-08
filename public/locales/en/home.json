@@ -1,0 +1,84 @@
+{
+  "landing": {
+    "title_line1": "The magical tool that gets",
+    "title_highlight": "ENGAGEMENT",
+    "subtitle": "Keyword, SEO Insight, Gen AI All in one",
+    "cta": "Start Exploring",
+    "no_credit_card": "Start with $0. No credit card needed.",
+    "customer_service": "7 days a week customer services"
+  },
+  "features": {
+    "instagram_trend_analysis": {
+      "title": "Instagram Trend Analysis Report",
+      "description": "From up-to-date hashtags to topics, Trend Analysis can help you quickly realize the current market trend pattern.",
+      "button": "See More"
+    },
+    "instabot": {
+      "title": "Instabot",
+      "description": "Instabot acts as a real Instagram user, scraping explore page posts to collect data. It builds a shared library, allowing users to access both personal and collective information.",
+      "button": "See More"
+    },
+    "hashtags_recommendation": {
+      "title": "Hashtags Recommendation",
+      "description": "Generate data-backed hashtag to add under your post. Enhancing your post content to be seen under the algorithm of Instagram",
+      "button": "See More"
+    },
+    "hashtags_to_image": {
+      "title": "Hashtags-to-Image",
+      "description": "Try new way to prompt the image to make your content visible with AI creation",
+      "button": "See More"
+    },
+    "image_to_hashtags": {
+      "title": "Image-to-Hashtags",
+      "description": "Enhance your content with trending, targeted data-backed keywords for maximum impact.",
+      "button": "See More"
+    }
+  },
+  "usage": {
+    "heading": "What can 2TAG provide?",
+    "subheading": "2TAG is the easiest way to grow content visibility on social media channels.",
+    "cards": {
+      "idea_in_hashtag": {
+        "heading": "Idea in Hashtag",
+        "content": "We solve the challenge of using hashtags and promoting SEO effectively to enhance the online visibility of digital content."
+      },
+      "boosting_organic_reach": {
+        "heading": "Boosting Organic Reach",
+        "content": "We ensure your valuable content reaches a wide and targeted audience, fostering growth and maximizing potential engagement."
+      },
+      "gaining_impressions": {
+        "heading": "Gaining Impressions",
+        "content": "We address the frustration of low impressions on digital content, enhancing visibility and extending the reach of your message."
+      }
+    }
+  },
+  "service": {
+    "heading": "Who uses 2TAG?",
+    "subheading": "Joining is quick and easy. Start in just seconds — 2TAG is now open to all Instagram enthusiasts.",
+    "roles": {
+      "content_managers": "Content Managers",
+      "individual_creators": "Individual Creators",
+      "digital_marketers": "Digital Marketers",
+      "freelancers": "Freelancers"
+    },
+    "cta": "Start Exploring"
+  },
+  "testimonials": {
+    "heading": "These users use 2TAG",
+    "subheading": "Love and trusted by content creators, digital marketers, and more",
+    "comments": {
+      "avenna": {
+        "text": "\"I was able to *get 5,000+ organic impressions* based on the hashtags recommendation\"",
+        "title": "Travel YouTuber with 3.95K↑ view"
+      },
+      "andy": {
+        "text": "\"Impression rates *grew more than 20%* from the hashtag category after 3 time usages in a row. \"",
+        "title": "Wedding Photographer"
+      },
+      "ewen": {
+        "text": "\"A great tool for us to *get more viewers* for our video content on social media.\"",
+        "title": "KOL with 30K↑ followers on Instagram"
+      }
+    }
+  }
+}

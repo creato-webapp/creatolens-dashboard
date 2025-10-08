@@ -1,6 +1,6 @@
 import FeatureLayout, { Card, Guide, Session } from '@components/FeatureLayout'
 import useAuth from '@hooks/useAuth'
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 const Instabot = () => {

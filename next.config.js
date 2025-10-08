@@ -35,6 +35,15 @@ const nextConfig = {
 
     return config
   },
+  async redirects() {
+    return [
+      {
+        source: '/features',
+        destination: '/',
+        permanent: true,
+      },
+    ]
+  },
 }
 
 module.exports = nextConfig

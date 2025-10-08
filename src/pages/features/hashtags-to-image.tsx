@@ -1,7 +1,7 @@
 import PrimaryButton from '@components/Button/Primary'
 import FeatureLayout, { Card, Guide, NumberedList } from '@components/FeatureLayout'
 import useAuth from '@hooks/useAuth'
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 const HashtagsToImage = () => {

@@ -6,7 +6,7 @@ import LogoutIcon from '@components/Icon/LogOutIcon'
 import useAuth from '@hooks/useAuth'
 import { useRouter } from 'next/router'
 import PrimaryButton from '@components/Button/Primary'
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'next-i18next'
 import { useMenuTranslation } from '@hooks/useMenuTranslation'
 
 const SideMenu = (props: { collapseMenu?: () => void }) => {

@@ -1,0 +1,28 @@
+{
+  "page_title": "FAQs",
+  "breadcrumb": "FAQs",
+  "back": "Back",
+  "home": "Home",
+  "questions": {
+    "q1": {
+      "question": "Will social media platforms detect if I'm using AI and reduce my post's promotion?",
+      "answer": "It depends on the platform and its AI policies, but don't worry—2Tag's hashtags are data-backed and open source, which means they're fully available on social media and won't trigger any AI detection issues."
+    },
+    "q2": {
+      "question": "Will using the 2Tag Instabot cause my personal information to be leaked?",
+      "answer": "Nope! The Instabot is only used for customizing trend analysis and hashtag recommendations. We don't collect any personal info, so just avoid sharing anything sensitive like your ID with your Instabot account. Your privacy's safe with us!"
+    },
+    "q3": {
+      "question": "What do I need to download or prepare before using 2Tag?",
+      "answer": "Nothing too complicated! You don't need to be tech-savvy to use 2Tag—it's super easy and available on all devices, including mobile and desktop. We've designed it to be intuitive and user-friendly."
+    },
+    "q4": {
+      "question": "How can I use 2Tag on Instagram?",
+      "answer": "It's simple! Just copy the hashtags we recommend, then paste them under your post like you usually would."
+    },
+    "q5": {
+      "question": "Will the results work with my Instagram account?",
+      "answer": "Absolutely! 2Tag's hashtags are optimized for Instagram's algorithm, based on your account data. This means the hashtags are perfectly tailored to your content and audience, helping you get the most engagement possible!"
+    }
+  }
+}

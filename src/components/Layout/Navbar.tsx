@@ -13,7 +13,7 @@ import Avatar from '@components/Avatar'
 import PrimaryButton from '@components/Button/Primary'
 import SideMenu from '@components/SideMenu'
 import { useDropdown } from '@hooks/useDropdown'
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'next-i18next'
 import LanguageSwitcher from '@components/LanguageSwitcher'
 import { useMenuTranslation } from '@hooks/useMenuTranslation'
 

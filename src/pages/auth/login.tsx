@@ -4,10 +4,13 @@ import { deleteCookie } from 'cookies-next'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { getProviders, signIn, signOut, useSession } from 'next-auth/react'
+import { useTranslation } from 'next-i18next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 import PrimaryButton from '@components/Button/Primary'
 import Card from '@components/Card'
 import { ErrorCodes } from 'enums/ErrorCodeEnums'
+
 interface loginProps {
   providers: Providers
 }
@@ -20,23 +23,13 @@ type Providers = {
   }
 }
 
-const ERROR_MESSAGE: Record<ErrorCodes, string> = {
-  [ErrorCodes.OAuthSignin]: 'Error in constructing an authorization URL.',
-  [ErrorCodes.OAuthCallback]: 'Error in handling the response from the OAuth provider.',
-  [ErrorCodes.OAuthCreateAccount]: 'User not in white list. Please Contact our team for support or questions',
-  [ErrorCodes.EmailCreateAccount]: 'Could not create email provider user in the database.',
-  [ErrorCodes.Callback]: 'Error in the OAuth callback handler route.',
-  [ErrorCodes.OAuthAccountNotLinked]: 'The email on the account is already linked, but not with this OAuth account.',
-  [ErrorCodes.EmailSignin]: 'Sending the email with the verification token failed.',
-  [ErrorCodes.CredentialsSignin]: 'An error occurred during sign-in.',
-  [ErrorCodes.SessionRequired]: 'This page requires you to be signed in at all times.',
-  [ErrorCodes.Default]: 'An error occurred during sign-in.',
-}
-
-export async function getServerSideProps() {
+export async function getServerSideProps({ locale }: { locale: string }) {
   const providers = await getProviders()
   return {
-    props: { providers },
+    props: {
+      providers,
+      ...(await serverSideTranslations(locale, ['auth', 'common'])),
+    },
   }
 }
 
@@ -44,34 +37,42 @@ const Login: FC<loginProps> = ({ providers }) => {
   const { data: session } = useSession()
   const router = useRouter()
   const errorCode = router.query.error as ErrorCodes
+  const { t } = useTranslation('auth')
+
+  const ERROR_MESSAGE: Record<ErrorCodes, string> = {
+    [ErrorCodes.OAuthSignin]: t('errors.oauth_signin'),
+    [ErrorCodes.OAuthCallback]: t('errors.oauth_callback'),
+    [ErrorCodes.OAuthCreateAccount]: t('errors.oauth_create_account'),
+    [ErrorCodes.EmailCreateAccount]: t('errors.email_create_account'),
+    [ErrorCodes.Callback]: t('errors.callback'),
+    [ErrorCodes.OAuthAccountNotLinked]: t('errors.oauth_account_not_linked'),
+    [ErrorCodes.EmailSignin]: t('errors.email_signin'),
+    [ErrorCodes.CredentialsSignin]: t('errors.credentials_signin'),
+    [ErrorCodes.SessionRequired]: t('errors.session_required'),
+    [ErrorCodes.Default]: t('errors.default'),
+  }
 
   const whiteListPrompt = (
     <div className="my-4 text-center">
-      You are not in whitelist.&nbsp;
+      {t('login.whitelist.not_in_whitelist')}&nbsp;
       <a href="https://www.creatogether.app/creatolens/survey" target="_blank" rel="noopener noreferrer">
-        <span className="text-blue-600 underline">Click here</span>
+        <span className="text-blue-600 underline">{t('login.whitelist.click_here')}</span>
       </a>
-      &nbsp;to apply for whitelisting.
-      <br />
-      用戶不在白名單之內，
-      <a href="https://www.creatogether.app/creatolens/survey" target="_blank" rel="noopener noreferrer">
-        <span className="text-blue-600 underline">按此</span>
-      </a>
-      加入申請
+      &nbsp;{t('login.whitelist.to_apply')}
     </div>
   )
 
   const OAuthErrorMessage = ERROR_MESSAGE[errorCode]
 
   return (
-    <Card title="Login Page">
+    <Card title={t('login.page_title')}>
       <div className="flex justify-center">
         {session ? (
           <div>
             <div>
-              <p>Welcome, {session.user?.email}</p>
+              <p>{t('login.welcome', { email: session.user?.email })}</p>
               <Link href="/accounts" legacyBehavior>
-                <button style={{ color: '#0070f3' }}>Go To Account Page</button>
+                <button style={{ color: '#0070f3' }}>{t('login.go_to_account')}</button>
               </Link>
             </div>
             <div>
@@ -82,7 +83,7 @@ const Login: FC<loginProps> = ({ providers }) => {
                   signOut()
                 }}
               >
-                Logout
+                {t('login.logout')}
               </button>
             </div>
           </div>
@@ -92,7 +93,7 @@ const Login: FC<loginProps> = ({ providers }) => {
               whiteListPrompt
             ) : (
               <div className="error-message">
-                <p>You are not signed in.</p>
+                <p>{t('login.not_signed_in')}</p>
                 {OAuthErrorMessage}
               </div>
             )}
@@ -101,7 +102,7 @@ const Login: FC<loginProps> = ({ providers }) => {
                 <div key={provider.name} className="flex justify-center">
                   {provider.name === 'Google' && (
                     <PrimaryButton id={'login'} loading={false} onClick={() => signIn(provider.id)}>
-                      Sign in
+                      {t('login.sign_in')}
                     </PrimaryButton>
                   )}
                 </div>

@@ -1,4 +1,4 @@
-import { useTranslation } from 'react-i18next'
+import { useTranslation } from 'next-i18next'
 import ROUTE from '@constants/route'
 
 export type NavLink = {
@@ -26,11 +26,11 @@ export const useMenuTranslation = () => {
       path: isStatic ? ROUTE.STATIC_ACCOUNTS : ROUTE.ACCOUNTS,
       disabled: false,
     },
-    {
-      name: t('menu.features.hashtags_recommendation'),
-      path: ROUTE.RECOMMENDATION,
-      disabled: false,
-    },
+    // {
+    //   name: t('menu.features.hashtags_recommendation'),
+    //   path: ROUTE.RECOMMENDATION,
+    //   disabled: false,
+    // },
     {
       name: t('menu.features.hashtags_to_image'),
       path: isStatic ? ROUTE.STATIC_HASHTAG_TO_IMAGE : ROUTE.HASHTAG_TO_IMAGE,
@@ -49,16 +49,16 @@ export const useMenuTranslation = () => {
       path: ROUTE.FAQ,
       disabled: false,
     },
-    {
-      name: t('menu.support.terms_conditions'),
-      path: ROUTE.TERMS_AND_CONDITIONS,
-      disabled: false,
-    },
-    {
-      name: t('menu.support.privacy_policy'),
-      path: ROUTE.PRIVACY_POLICY,
-      disabled: false,
-    },
+    // {
+    //   name: t('menu.support.terms_conditions'),
+    //   path: ROUTE.TERMS_AND_CONDITIONS,
+    //   disabled: false,
+    // },
+    // {
+    //   name: t('menu.support.privacy_policy'),
+    //   path: ROUTE.PRIVACY_POLICY,
+    //   disabled: false,
+    // },
     {
       name: t('menu.support.contact_us'),
       path: ROUTE.CONTACT_US,
