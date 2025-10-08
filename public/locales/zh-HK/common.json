@@ -19,5 +19,15 @@
   "delete_selected": "刪除已選項目",
   "delete_all": "刪除全部",
   "delete_all_confirm": "確定要刪除全部歷史紀錄嗎？",
-  "delete_selected_confirm": "確定要刪除已選的歷史紀錄嗎？"
+  "delete_selected_confirm": "確定要刪除已選的歷史紀錄嗎？",
+  "back": "返回",
+  "home": "主頁",
+  "features": "功能",
+  "blog": "博客",
+  "hashtag": "標籤",
+  "hashtags": "標籤",
+  "history": "歷史紀錄",
+  "contact_us": "聯絡我們",
+  "faqs": "常見問題",
+  "category": "分類"
 }

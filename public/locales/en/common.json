@@ -19,5 +19,15 @@
   "delete_selected": "Delete selected",
   "delete_all": "Delete all",
   "delete_all_confirm": "Are you sure you want to delete all history?",
-  "delete_selected_confirm": "Are you sure you want to delete the selected history?"
+  "delete_selected_confirm": "Are you sure you want to delete the selected history?",
+  "back": "Back",
+  "home": "Home",
+  "features": "Features",
+  "blog": "Blog",
+  "hashtag": "Hashtag",
+  "hashtags": "Hashtags",
+  "history": "History",
+  "contact_us": "Contact Us",
+  "faqs": "FAQs",
+  "category": "Category"
 }

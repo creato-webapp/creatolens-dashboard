@@ -3,6 +3,8 @@ import error from '../../public/locales/en/error.json'
 import seo from '../../public/locales/en/seo.json'
 import hashtag from '../../public/locales/en/hashtag.json'
 import blog from '../../public/locales/en/blog.json'
+import layout from '../../public/locales/en/layout.json'
+import guide from '../../public/locales/en/guide.json'
 
 // import footer from '../../public/locales/en/footer.json'
 
@@ -12,6 +14,8 @@ const LOCALE = {
   seo,
   hashtag,
   blog,
+  layout,
+  guide,
   // footer,
 } as const
 
