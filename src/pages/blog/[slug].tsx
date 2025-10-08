@@ -42,7 +42,7 @@ export async function getStaticPaths() {
   const client = createWixClient()
 
   try {
-    const result: WixWithItems = await client.items
+    const result = await client.items
       .query(process.env.WIX_CMS_ID || '')
       .limit(100) // Add limit for better performance
       .find()
