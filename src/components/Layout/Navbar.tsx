@@ -79,15 +79,19 @@ const NavBar: React.FC = () => {
   const { session, onLogin, onLogout } = useAuth()
   const [isMenuCollapse, setIsMenuCollapse] = useState(true)
   const { t } = useTranslation('layout')
-  const { getFeatureLinks, getSupportLinks, getResourceLinks } = useMenuTranslation()
+  const {
+    getFeatureLinks,
+    getSupportLinks,
+    //  getResourceLinks
+  } = useMenuTranslation()
 
   const featureLinks = getFeatureLinks(!session)
   const supportLinks = getSupportLinks()
-  const resourceLinks = getResourceLinks()
+  // const resourceLinks = getResourceLinks()
 
   const { isCollapsed: isFeatureMenuCollapsed, open: openFeatureMenu, close: closeFeatureMenu } = useDropdown()
   const { isCollapsed: isSupportMenuCollapsed, open: openSupportMenu, close: closeSupportMenu } = useDropdown()
-  const { isCollapsed: isResourceMenuCollapsed, open: openResourceMenu, close: closeResourceMenu } = useDropdown()
+  // const { isCollapsed: isResourceMenuCollapsed, open: openResourceMenu, close: closeResourceMenu } = useDropdown()
   const { isCollapsed: isUserMenuCollapsed, open: openUserMenu, close: closeUsermenu } = useDropdown()
 
   const toggleMenu = useCallback(() => {
@@ -133,14 +137,14 @@ const NavBar: React.FC = () => {
             label={t('navbar.support')}
             dropdownWidth="w-48"
           />
-          <DropdownMenu
+          {/* <DropdownMenu
             items={resourceLinks}
             isOpen={!isResourceMenuCollapsed}
             onMouseEnter={openResourceMenu}
             onMouseLeave={closeResourceMenu}
             label={t('navbar.resources')}
             dropdownWidth="w-48"
-          />
+          /> */}
         </div>
         {session ? (
           <DropdownMenu

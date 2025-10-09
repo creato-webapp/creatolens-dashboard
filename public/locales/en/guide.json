@@ -1,0 +1,25 @@
+{
+  "title": "User Guide",
+  "subtitle": "3 Easy Steps to Kick-start",
+  "step1": {
+    "image_alt": "Connect IG",
+    "heading": "Connect an empty IG account to 2Tag",
+    "bullet1": "Use the account to follow about 10 creators in your niche or area.",
+    "bullet2": "Add this account as an Insta-bot in \"Accounts\"",
+    "footer": "We value your privacy, so please refrain from using your active account as the Instagram bot.",
+    "button": "New Account"
+  },
+  "step2": {
+    "image_alt": "Input",
+    "heading": "Input a 5-8 word-prompt",
+    "bullet1": "In a few words, tell us in text what your content is about.",
+    "bullet2": "AI companion will analyze and customize the most relevant hashtag trends for your consideration.",
+    "footer": "Tell us again in another few words and let us work for you again if results are not satisfied."
+  },
+  "step3": {
+    "image_alt": "apply-hashtag",
+    "heading": "Generate Trending Hashtag",
+    "bullet1": "Save or choose hashtag trends based on relevance i.e. 80%, 90%, 95% etc. visibility.",
+    "bullet2": "Ready to use to grow more impressions and reaches"
+  }
+}

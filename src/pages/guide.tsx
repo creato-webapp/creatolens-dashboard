@@ -3,6 +3,7 @@ import React from 'react'
 import ROUTE from '@constants/route'
 import type { NextPage } from 'next'
 import { useRouter } from 'next/router'
+import { useTranslation } from 'next-i18next'
 
 import { Button } from '@components/Button'
 import Card from '@components/Card'
@@ -11,6 +12,7 @@ import PlusIcon from '@components/Icon/PlusIcon'
 
 const Guide: NextPage = () => {
   const router = useRouter()
+  const { t } = useTranslation('guide')
 
   const onClick = () => {
     // Redirect to the "accounts/create" page
@@ -24,41 +26,41 @@ const Guide: NextPage = () => {
           className="flex h-full flex-col justify-between md:h-52"
           childrenStyle="h-full md:gap-3 flex-col flex md:py-24 justify-center"
         >
-          <h1 className="text-title uppercase md:font-extrabold">User Guide</h1>
-          <h3 className="md:font-medium">3 Easy Steps to Kick-start</h3>
+          <h1 className="text-title uppercase md:font-extrabold">{t('title')}</h1>
+          <h3 className="md:font-medium">{t('subtitle')}</h3>
         </Hero>
         <div className="flex w-full flex-col items-center justify-start gap-6 md:flex-row md:flex-wrap md:items-stretch md:justify-center md:gap-12 md:p-12">
           <Card className="mx-6 h-full w-auto rounded-none bg-neutral-50 shadow-lg md:mx-0 md:h-auto md:w-[30%] ">
-            {<img alt="Connect IG" className="h-auto w-full rounded-xl md:shrink-0 " src={'/guide/create-insta-bot.svg'} />}
-            <h2 className="font-extrabold">Connect an empty IG account to 2Tag</h2>
+            {<img alt={t('step1.image_alt')} className="h-auto w-full rounded-xl md:shrink-0 " src={'/guide/create-insta-bot.svg'} />}
+            <h2 className="font-extrabold">{t('step1.heading')}</h2>
             <ul className="line flex list-outside list-disc flex-col gap-6">
-              <li className="mx-2 text-lg">Use the account to follow about 10 creators in your niche or area.</li>
-              <li className="mx-2 text-lg">Add this account as an Insta-bot in “Accounts”</li>
+              <li className="mx-2 text-lg">{t('step1.bullet1')}</li>
+              <li className="mx-2 text-lg">{t('step1.bullet2')}</li>
             </ul>
 
-            <footer> We value your privacy, so please refrain from using your active account as the Instagram bot.</footer>
+            <footer>{t('step1.footer')}</footer>
             <Button.Primary onClick={onClick}>
               <PlusIcon className="mr-2" />
-              New Account
+              {t('step1.button')}
             </Button.Primary>
           </Card>
           <Card className="mx-6 h-full w-auto rounded-none bg-neutral-50 shadow-lg md:mx-0 md:h-auto md:w-[30%]">
-            {<img className="h-auto w-full rounded-xl md:shrink-0 " alt="Input" src={'/guide/hashtag-exploration.svg'} />}
-            <h2>Input a 5-8 word-prompt</h2>
+            {<img className="h-auto w-full rounded-xl md:shrink-0 " alt={t('step2.image_alt')} src={'/guide/hashtag-exploration.svg'} />}
+            <h2>{t('step2.heading')}</h2>
             <ul className="line flex list-outside list-disc flex-col gap-6">
-              <li className="mx-2 text-lg">In a few words, tell us in text what your content is about. </li>
-              <li className="mx-2 text-lg">AI companion will analyze and customize the most relevant hashtag trends for your consideration. </li>
+              <li className="mx-2 text-lg">{t('step2.bullet1')}</li>
+              <li className="mx-2 text-lg">{t('step2.bullet2')}</li>
             </ul>
 
-            <footer>Tell us again in another few words and let us work for you again if results are not satisfied.</footer>
+            <footer>{t('step2.footer')}</footer>
           </Card>
 
           <Card className="mx-6 h-full w-auto rounded-none bg-neutral-50 shadow-lg md:mx-0 md:h-auto md:w-[30%]">
-            <img className="h-auto w-full rounded-xl md:shrink-0" alt="apply-hashtag" src={'/guide/apply-hashtag.svg'} />
-            <h2>Generate Trending Hashtag</h2>
+            <img className="h-auto w-full rounded-xl md:shrink-0" alt={t('step3.image_alt')} src={'/guide/apply-hashtag.svg'} />
+            <h2>{t('step3.heading')}</h2>
             <ul className="line flex list-outside list-disc flex-col gap-6">
-              <li className="mx-2 text-lg"> Save or choose hashtag trends based on relevance i.e. 80%, 90%, 95% etc. visibility.</li>
-              <li className="mx-2 text-lg"> Ready to use to grow more impressions and reaches</li>
+              <li className="mx-2 text-lg">{t('step3.bullet1')}</li>
+              <li className="mx-2 text-lg">{t('step3.bullet2')}</li>
             </ul>
           </Card>
         </div>
