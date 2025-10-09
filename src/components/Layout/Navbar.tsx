@@ -13,10 +13,11 @@ import Avatar from '@components/Avatar'
 import PrimaryButton from '@components/Button/Primary'
 import SideMenu from '@components/SideMenu'
 import { useDropdown } from '@hooks/useDropdown'
+import { useTranslation } from 'next-i18next'
+import LanguageSwitcher from '@components/LanguageSwitcher'
+import { useMenuTranslation } from '@hooks/useMenuTranslation'
 
 const LOGO_SRC = IMAGE.LOGO_2TAG
-
-import { FEATURE_LINKS, FEATURE_LINKS_STATIC, RESOURCE_LINKS, SUPPORT_LINKS } from '@constants/menu'
 
 type NavLink = {
   readonly name: string
@@ -77,10 +78,20 @@ const DropdownMenu: React.FC<DropdownMenuProps> = ({
 const NavBar: React.FC = () => {
   const { session, onLogin, onLogout } = useAuth()
   const [isMenuCollapse, setIsMenuCollapse] = useState(true)
+  const { t } = useTranslation('layout')
+  const {
+    getFeatureLinks,
+    getSupportLinks,
+    //  getResourceLinks
+  } = useMenuTranslation()
+
+  const featureLinks = getFeatureLinks(!session)
+  const supportLinks = getSupportLinks()
+  // const resourceLinks = getResourceLinks()
 
   const { isCollapsed: isFeatureMenuCollapsed, open: openFeatureMenu, close: closeFeatureMenu } = useDropdown()
   const { isCollapsed: isSupportMenuCollapsed, open: openSupportMenu, close: closeSupportMenu } = useDropdown()
-  const { isCollapsed: isResourceMenuCollapsed, open: openResourceMenu, close: closeResourceMenu } = useDropdown()
+  // const { isCollapsed: isResourceMenuCollapsed, open: openResourceMenu, close: closeResourceMenu } = useDropdown()
   const { isCollapsed: isUserMenuCollapsed, open: openUserMenu, close: closeUsermenu } = useDropdown()
 
   const toggleMenu = useCallback(() => {
@@ -108,31 +119,32 @@ const NavBar: React.FC = () => {
         </Link>
       </div>
 
-      <div className="flex flex-row-reverse items-center md:flex-row">
+      <div className="flex flex-row-reverse items-center gap-4 md:flex-row">
+        <LanguageSwitcher />
         <div className="relative mr-4 hidden flex-row items-center gap-4 md:flex">
           <DropdownMenu
-            items={session ? FEATURE_LINKS : FEATURE_LINKS_STATIC}
+            items={featureLinks}
             isOpen={!isFeatureMenuCollapsed}
             onMouseEnter={openFeatureMenu}
             onMouseLeave={closeFeatureMenu}
-            label="Feature"
+            label={t('navbar.feature')}
           />
           <DropdownMenu
-            items={SUPPORT_LINKS}
+            items={supportLinks}
             isOpen={!isSupportMenuCollapsed}
             onMouseEnter={openSupportMenu}
             onMouseLeave={closeSupportMenu}
-            label="Support"
+            label={t('navbar.support')}
             dropdownWidth="w-48"
           />
-          <DropdownMenu
-            items={RESOURCE_LINKS}
+          {/* <DropdownMenu
+            items={resourceLinks}
             isOpen={!isResourceMenuCollapsed}
             onMouseEnter={openResourceMenu}
             onMouseLeave={closeResourceMenu}
-            label="Resources"
+            label={t('navbar.resources')}
             dropdownWidth="w-48"
-          />
+          /> */}
         </div>
         {session ? (
           <DropdownMenu
@@ -144,12 +156,12 @@ const NavBar: React.FC = () => {
             items={[]}
           >
             <div onClick={onLogout} className="block px-4 py-2 text-sm text-neutral-800 transition-colors hover:bg-gray-100">
-              {'Logout'}
+              {t('navbar.logout')}
             </div>
           </DropdownMenu>
         ) : (
           <PrimaryButton onClick={onLogin} sizes={['s', 's', 's']} className="flex w-full flex-row items-center justify-center gap-4">
-            Log in/ Register
+            {t('navbar.login_register')}
           </PrimaryButton>
         )}
       </div>

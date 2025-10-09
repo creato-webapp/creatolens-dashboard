@@ -1,11 +1,25 @@
 import * as React from 'react'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import { ChevronDown, ChevronLeft, ChevronRight, ChevronUp } from 'lucide-react'
 import { DayPicker } from 'react-day-picker'
 
 import { cn } from '@utils/index'
 import { buttonVariants } from '@components/ui/Button'
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>
+
+type ChevronProps = {
+  className?: string
+  disabled?: boolean
+  orientation?: 'up' | 'down' | 'left' | 'right'
+  size?: number
+}
+
+//eslint-disable-next-line @typescript-eslint/no-unused-vars
+const Chevron: React.FC<ChevronProps> = ({ orientation = 'right', className, size = 16, ...rest }) => {
+  const Icon = orientation === 'left' ? ChevronLeft : orientation === 'right' ? ChevronRight : orientation === 'up' ? ChevronUp : ChevronDown
+
+  return <Icon aria-hidden="true" {...rest} className={cn('h-4 w-4', className)} />
+}
 
 function Calendar({ className, classNames, showOutsideDays = true, ...props }: CalendarProps) {
   return (
@@ -37,12 +51,7 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }: C
         day_hidden: 'invisible',
         ...classNames,
       }}
-      components={{
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        IconLeft: ({ ...props }) => <ChevronLeft className="h-4 w-4" />,
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        IconRight: ({ ...props }) => <ChevronRight className="h-4 w-4" />,
-      }}
+      components={{ Chevron }}
       {...props}
     />
   )

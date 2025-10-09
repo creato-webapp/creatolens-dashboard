@@ -1,0 +1,34 @@
+{
+  "navbar": {
+    "feature": "Feature",
+    "support": "Support",
+    "resources": "Resources",
+    "login_register": "Log in/ Register",
+    "logout": "Logout"
+  },
+  "menu": {
+    "features": {
+      "header": "Features",
+      "instagram_trend_analysis": "Instagram Trend Analysis",
+      "instabot": "Instabot",
+      "hashtags_recommendation": "Hashtags Recommendation",
+      "hashtags_to_image": "Hashtags-to-Image",
+      "image_to_hashtags": "Image to Hashtags"
+    },
+    "support": {
+      "header": "Support",
+      "faqs": "FAQs",
+      "terms_conditions": "Terms & Conditions",
+      "privacy_policy": "Privacy Policy",
+      "contact_us": "Contact Us"
+    },
+    "resources": {
+      "header": "Resources",
+      "hashtags_keywords": "Hashtags & Keywords",
+      "blog": "Blog"
+    }
+  },
+  "footer": {
+    "copyright": "©{{year}} ESSAA Limited All Rights Reserved"
+  }
+}

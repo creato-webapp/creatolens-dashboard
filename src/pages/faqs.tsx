@@ -2,34 +2,35 @@ import Breadcrumb from '@components/Breadcrumb'
 import CaretLeftIcon from '@components/Icon/CaretLeftIcon'
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@components/ui/Accordion'
 import router from 'next/router'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { useTranslation } from 'next-i18next'
 
-const faqs = [
-  {
-    heading: 'Will social media platforms detect if I’m using AI and reduce my post’s promotion?',
-    content:
-      "It depends on the platform and its AI policies, but don’t worry—2Tag’s hashtags are data-backed and open source, which means they’re fully available on social media and won't trigger any AI detection issues.",
-  },
-  {
-    heading: 'Will using the 2Tag Instabot cause my personal information to be leaked?',
-    content:
-      'Nope! The Instabot is only used for customizing trend analysis and hashtag recommendations. We don’t collect any personal info, so just avoid sharing anything sensitive like your ID with your Instabot account. Your privacy’s safe with us!',
-  },
-  {
-    heading: 'What do I need to download or prepare before using 2Tag?',
-    content:
-      'Nothing too complicated! You don’t need to be tech-savvy to use 2Tag—it’s super easy and available on all devices, including mobile and desktop. We’ve designed it to be intuitive and user-friendly.',
-  },
-  {
-    heading: 'How can I use 2Tag on Instagram?',
-    content: 'It’s simple! Just copy the hashtags we recommend, then paste them under your post like you usually would.',
-  },
-  {
-    heading: 'Will the results work with my Instagram account?',
-    content:
-      'Absolutely! 2Tag’s hashtags are optimized for Instagram’s algorithm, based on your account data. This means the hashtags are perfectly tailored to your content and audience, helping you get the most engagement possible!',
-  },
-]
 const FAQPage = () => {
+  const { t } = useTranslation('faq')
+
+  const faqs = [
+    {
+      heading: t('questions.q1.question'),
+      content: t('questions.q1.answer'),
+    },
+    {
+      heading: t('questions.q2.question'),
+      content: t('questions.q2.answer'),
+    },
+    {
+      heading: t('questions.q3.question'),
+      content: t('questions.q3.answer'),
+    },
+    {
+      heading: t('questions.q4.question'),
+      content: t('questions.q4.answer'),
+    },
+    {
+      heading: t('questions.q5.question'),
+      content: t('questions.q5.answer'),
+    },
+  ]
+
   const faqSchema = {
     '@context': 'https://schema.org',
     '@type': 'FAQPage',
@@ -50,15 +51,14 @@ const FAQPage = () => {
       </script>
       <div className="w-full max-w-screen-2xl ">
         <div className="hidden md:flex">
-          <Breadcrumb lastItemName="FAQs" />
+          <Breadcrumb lastItemName={t('breadcrumb')} />
         </div>
         <div className="flex flex-row items-center gap-7 py-4">
           <div className="flex cursor-pointer md:hidden" onClick={() => router.push('/')}>
             <CaretLeftIcon size={20} />
           </div>
           <div className="flex w-full flex-row justify-between">
-            <h1 className="py-3 text-heading font-bold text-neutral-800 md:px-16">FAQs</h1>
-            {/* <SubtleButton onClick={expandAll}>Expand All</SubtleButton> */}
+            <h1 className="py-3 text-heading font-bold text-neutral-800 md:px-16">{t('page_title')}</h1>
           </div>
         </div>
         <hr className="my-10 hidden w-full border-t border-neutral-300 first-letter:my-4 md:block" />
@@ -80,4 +80,11 @@ const FAQPage = () => {
     </div>
   )
 }
+
+export const getStaticProps = async ({ locale }: { locale: string }) => ({
+  props: {
+    ...(await serverSideTranslations(locale, ['layout', 'common', 'faq'])),
+  },
+})
+
 export default FAQPage

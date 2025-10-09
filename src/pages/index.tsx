@@ -2,6 +2,8 @@ import type { NextPage } from 'next'
 import { GetServerSideProps, GetServerSidePropsContext, GetServerSidePropsResult } from 'next'
 import { getSession } from 'next-auth/react'
 import React, { memo } from 'react'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { useTranslation } from 'next-i18next'
 
 import LandingHeader from './_templates/LandingHeader'
 import Testimonial from './_templates/Testimonial'
@@ -34,7 +36,9 @@ export const getServerSideProps: GetServerSideProps = async (
     }
   }
   return {
-    props: {},
+    props: {
+      ...(await serverSideTranslations(context.locale || 'zh-HK', ['home', 'layout', 'common'])),
+    },
   }
 }
 
@@ -47,68 +51,68 @@ interface FeatureCardProps {
   link: string
 }
 
-const features: FeatureCardProps[] = [
-  {
-    title: 'Instagram Trend Analysis Report',
-    description: 'From up-to-date hashtags to topics, Trend Analysis can help you quickly realize the current market trend pattern.',
-    button: (
-      <PrimaryButton sizes={['m', 'm', 'm']}>
-        <div className="md:w-96">See More</div>
-      </PrimaryButton>
-    ),
-    image: '/hashtag/analysis.png',
-    link: ROUTE.STATIC_DASHBOARD,
-  },
-  {
-    title: 'Instabot',
-    description:
-      'Instabot acts as a real Instagram user, scraping explore page posts to collect data. It builds a shared library, allowing users to access both personal and collective information.',
-    button: (
-      <PrimaryButton sizes={['m', 'm', 'm']}>
-        <div className="md:w-96">See More</div>
-      </PrimaryButton>
-    ),
-    // image: '/features/instabot-video.mp4',
-    video: '/features/instabot-video.mp4',
-    link: ROUTE.STATIC_ACCOUNTS,
-  },
-  {
-    title: 'Hashtags Recommendation',
-    description: 'Generate data-backed hashtag to add under your post. Enhancing your post content to be seen under the algorithm of Instagram',
-    button: (
-      <PrimaryButton sizes={['m', 'm', 'm']}>
-        <div className="md:w-96">See More</div>
-      </PrimaryButton>
-    ),
-    image: '/hashtag/hashtags-recommendation.png',
-    link: ROUTE.STATIC_RECOMMENDATION,
-  },
-  {
-    title: 'Hashtags-to-Image',
-    description: 'Try new way to prompt the image to make your content visible with AI creation',
-    button: (
-      <PrimaryButton sizes={['m', 'm', 'm']}>
-        <div className="md:w-96">See More</div>
-      </PrimaryButton>
-    ),
-    image: '/hashtag/hashtags-to-image.png',
-    link: ROUTE.STATIC_HASHTAG_TO_IMAGE,
-  },
-  {
-    title: 'Image-to-Hashtags',
-    description: 'Enhance your content with trending, targeted data-backed keywords for maximum impact.',
-    button: (
-      <PrimaryButton sizes={['m', 'm', 'm']}>
-        <div className="md:w-96">See More</div>
-      </PrimaryButton>
-    ),
-    image: '/hashtag/image-to-hashtag.png',
-    link: ROUTE.STATIC_IMAGE_TO_HASHTAG,
-  },
-]
 const TabSession = memo(() => {
+  const { t } = useTranslation('home')
+
+  const features: FeatureCardProps[] = [
+    {
+      title: t('features.instagram_trend_analysis.title'),
+      description: t('features.instagram_trend_analysis.description'),
+      button: (
+        <PrimaryButton sizes={['m', 'm', 'm']}>
+          <div className="md:w-96">{t('features.instagram_trend_analysis.button')}</div>
+        </PrimaryButton>
+      ),
+      image: '/hashtag/analysis.png',
+      link: ROUTE.STATIC_DASHBOARD,
+    },
+    {
+      title: t('features.instabot.title'),
+      description: t('features.instabot.description'),
+      button: (
+        <PrimaryButton sizes={['m', 'm', 'm']}>
+          <div className="md:w-96">{t('features.instabot.button')}</div>
+        </PrimaryButton>
+      ),
+      video: '/features/instabot-video.mp4',
+      link: ROUTE.STATIC_ACCOUNTS,
+    },
+    {
+      title: t('features.hashtags_recommendation.title'),
+      description: t('features.hashtags_recommendation.description'),
+      button: (
+        <PrimaryButton sizes={['m', 'm', 'm']}>
+          <div className="md:w-96">{t('features.hashtags_recommendation.button')}</div>
+        </PrimaryButton>
+      ),
+      image: '/hashtag/hashtags-recommendation.png',
+      link: ROUTE.STATIC_RECOMMENDATION,
+    },
+    {
+      title: t('features.hashtags_to_image.title'),
+      description: t('features.hashtags_to_image.description'),
+      button: (
+        <PrimaryButton sizes={['m', 'm', 'm']}>
+          <div className="md:w-96">{t('features.hashtags_to_image.button')}</div>
+        </PrimaryButton>
+      ),
+      image: '/hashtag/hashtags-to-image.png',
+      link: ROUTE.STATIC_HASHTAG_TO_IMAGE,
+    },
+    {
+      title: t('features.image_to_hashtags.title'),
+      description: t('features.image_to_hashtags.description'),
+      button: (
+        <PrimaryButton sizes={['m', 'm', 'm']}>
+          <div className="md:w-96">{t('features.image_to_hashtags.button')}</div>
+        </PrimaryButton>
+      ),
+      image: '/hashtag/image-to-hashtag.png',
+      link: ROUTE.STATIC_IMAGE_TO_HASHTAG,
+    },
+  ]
   return (
-    <Tabs defaultValue="Instagram Trend Analysis Report" className="flex w-full max-w-screen-xl flex-col px-12">
+    <Tabs defaultValue={features[0].title} className="flex w-full max-w-screen-xl flex-col px-12">
       <TabsList className="flex h-full w-full overflow-x-auto md:flex-wrap">
         {features.map((feature) => (
           <TabsTrigger key={feature.title} value={feature.title} className="my-2">
@@ -154,6 +158,66 @@ const TabSession = memo(() => {
 })
 
 const MobileTabSession = memo(() => {
+  const { t } = useTranslation('home')
+
+  const features: FeatureCardProps[] = [
+    {
+      title: t('features.instagram_trend_analysis.title'),
+      description: t('features.instagram_trend_analysis.description'),
+      button: (
+        <PrimaryButton sizes={['m', 'm', 'm']}>
+          <div className="md:w-96">{t('features.instagram_trend_analysis.button')}</div>
+        </PrimaryButton>
+      ),
+      image: '/hashtag/analysis.png',
+      link: ROUTE.STATIC_DASHBOARD,
+    },
+    {
+      title: t('features.instabot.title'),
+      description: t('features.instabot.description'),
+      button: (
+        <PrimaryButton sizes={['m', 'm', 'm']}>
+          <div className="md:w-96">{t('features.instabot.button')}</div>
+        </PrimaryButton>
+      ),
+      video: '/features/instabot-video.mp4',
+      link: ROUTE.STATIC_ACCOUNTS,
+    },
+    {
+      title: t('features.hashtags_recommendation.title'),
+      description: t('features.hashtags_recommendation.description'),
+      button: (
+        <PrimaryButton sizes={['m', 'm', 'm']}>
+          <div className="md:w-96">{t('features.hashtags_recommendation.button')}</div>
+        </PrimaryButton>
+      ),
+      image: '/hashtag/hashtags-recommendation.png',
+      link: ROUTE.STATIC_RECOMMENDATION,
+    },
+    {
+      title: t('features.hashtags_to_image.title'),
+      description: t('features.hashtags_to_image.description'),
+      button: (
+        <PrimaryButton sizes={['m', 'm', 'm']}>
+          <div className="md:w-96">{t('features.hashtags_to_image.button')}</div>
+        </PrimaryButton>
+      ),
+      image: '/hashtag/hashtags-to-image.png',
+      link: ROUTE.STATIC_HASHTAG_TO_IMAGE,
+    },
+    {
+      title: t('features.image_to_hashtags.title'),
+      description: t('features.image_to_hashtags.description'),
+      button: (
+        <PrimaryButton sizes={['m', 'm', 'm']}>
+          <div className="md:w-96">{t('features.image_to_hashtags.button')}</div>
+        </PrimaryButton>
+      ),
+      image: '/hashtag/image-to-hashtag.png',
+      link: ROUTE.STATIC_IMAGE_TO_HASHTAG,
+    },
+  ]
+
   return (
     <div className="flex flex-col gap-6 ">
       {features.map((feature) => (
@@ -203,29 +267,31 @@ const FeatureSession = memo(() => {
 })
 
 const UsageSession = memo(() => {
+  const { t } = useTranslation('home')
+
   const cards = [
     {
       icon: <LightBulbIcon size={32} />,
-      heading: 'Idea in Hashtag',
-      content: 'We solve the challenge of using hashtags and promoting SEO effectively to enhance the online visibility of digital content.',
+      heading: t('usage.cards.idea_in_hashtag.heading'),
+      content: t('usage.cards.idea_in_hashtag.content'),
     },
     {
       icon: <EyeIcon size={32} />,
-      heading: 'Boosting Organic Reach',
-      content: 'We ensure your valuable content reaches a wide and targeted audience, fostering growth and maximizing potential engagement.',
+      heading: t('usage.cards.boosting_organic_reach.heading'),
+      content: t('usage.cards.boosting_organic_reach.content'),
     },
     {
       icon: <ThumbUpIcon />,
-      heading: 'Gaining Impressions',
-      content: 'We address the frustration of low impressions on digital content, enhancing visibility and extending the reach of your message.',
+      heading: t('usage.cards.gaining_impressions.heading'),
+      content: t('usage.cards.gaining_impressions.content'),
     },
   ]
   return (
     <div className="flex w-full justify-center">
       <div className="session max-w-screen-xl py-6 md:px-12 md:py-16">
         <div>
-          <h2 className="text-heading">{'What can 2TAG provide?'}</h2>
-          <h3 className="pt-2 text-subheading text-neutral-500">{'2TAG is the easiest way to grow content visibility on social media channels.'}</h3>
+          <h2 className="text-heading">{t('usage.heading')}</h2>
+          <h3 className="pt-2 text-subheading text-neutral-500">{t('usage.subheading')}</h3>
         </div>
         <div className="flex flex-col gap-6 pt-4 md:flex-row md:pt-12">
           {cards.map((card) => {
@@ -249,34 +315,33 @@ const UsageSession = memo(() => {
 
 const Service = memo(() => {
   const { onLogin } = useAuth()
+  const { t } = useTranslation('home')
 
   const services = [
     {
       icon: <PenIcon width={40} height={40} />,
-      title: <b className="font-normal text-[#9374FA]">Content Managers</b>,
+      title: <b className="font-normal text-[#9374FA]">{t('service.roles.content_managers')}</b>,
     },
 
     {
       icon: <FinnTheHumanIcon width={40} height={40} />,
-      title: <b className="font-normal text-[#ED6C67]">Individual Creators</b>,
+      title: <b className="font-normal text-[#ED6C67]">{t('service.roles.individual_creators')}</b>,
     },
     {
       icon: <TrendUpIcon width={40} height={40} />,
-      title: <b className="font-normal text-[#00B2FB]">Digital Marketers</b>,
+      title: <b className="font-normal text-[#00B2FB]">{t('service.roles.digital_marketers')}</b>,
     },
     {
       icon: <CoffeeIcon width={40} height={40} />,
-      title: <b className="font-normal text-[#FE7CB5]">Freelancers</b>,
+      title: <b className="font-normal text-[#FE7CB5]">{t('service.roles.freelancers')}</b>,
     },
   ]
   return (
     <div className="flex w-full justify-center">
       <div className="session w-full max-w-screen-xl py-6 md:px-12 md:py-16">
         <div>
-          <h2 className="text-heading">{'Who uses 2TAG?'}</h2>
-          <h3 className="pt-2 text-subheading text-neutral-500">
-            {'Joining is quick and easy. Start in just seconds — 2TAG is now open to all Instagram enthusiasts.'}
-          </h3>
+          <h2 className="text-heading">{t('service.heading')}</h2>
+          <h3 className="pt-2 text-subheading text-neutral-500">{t('service.subheading')}</h3>
         </div>
         <div className="flex flex-col justify-between gap-12 pt-12 md:flex-row">
           {services.map((service, index) => {
@@ -293,7 +358,7 @@ const Service = memo(() => {
         </div>
         <div className="flex w-full items-center justify-center pt-12">
           <PrimaryButton sizes={['l', 'l', 'l']} className="!w-80 drop-shadow-md" onClick={onLogin}>
-            Start Exploring
+            {t('service.cta')}
           </PrimaryButton>
         </div>
       </div>

@@ -1,0 +1,176 @@
+{
+  "hashtags_recommendation": {
+    "heading": "主題標籤推薦",
+    "card": {
+      "heading": "認識由 2TAG 驅動的主題標籤推薦模型",
+      "subheading": "使用文字提示，快速將貼文想法轉化為數據支援的主題標籤，讓你的貼文變得更受歡迎",
+      "description": "生成數據支援的主題標籤添加到你的貼文下。增強你的貼文內容，以便在 Instagram 演算法下被看見"
+    },
+    "session": {
+      "heading": "為什麼使用我們的主題標籤？",
+      "items": {
+        "data_backed": "所有主題標籤都由數據支援，有助於提高貼文的參與度，與其他 AI 產品不同",
+        "specific_terms": "提供特定術語和關鍵字，無需耗時搜索"
+      }
+    },
+    "get_hashtag_now": "立即獲取主題標籤",
+    "explore_heading": "探索主題標籤的可能性",
+    "explore_subheading": "查找 2TAG 的免費主題標籤集，並充分利用你的貼文",
+    "look_for_hashtag": "尋找主題標籤"
+  },
+  "image_to_hashtags": {
+    "heading": "圖片轉主題標籤",
+    "card": {
+      "heading": "將迷人的圖片轉化為主題標籤",
+      "subheading": "使用趨勢、針對性的數據支援關鍵字增強你的內容，以獲得最大影響",
+      "description": "不確定在社交媒體貼文中使用哪些關鍵字？我們已經為你準備好了！只需將圖片上傳到 2TAG，我們的平台將分析它，生成為你的內容量身定制的數據驅動主題標籤。優化你的貼文，提高可見度，使用演算法友好的關鍵字"
+    },
+    "guide": {
+      "heading": "如何生成主題標籤？",
+      "subheading": "只需 3 步即可為你的圖片獲取主題標籤",
+      "step1": {
+        "heading": "上傳圖片",
+        "content": "上傳任何你喜歡的圖片到 2Tag"
+      },
+      "step2": {
+        "heading": "AI 標記",
+        "content": "AI 將分析圖片中的內容"
+      },
+      "step3": {
+        "heading": "獲取主題標籤",
+        "content": "根據識別的標籤，將生成最適合的主題標籤以獲得最佳效果"
+      },
+      "button": "+  立即獲取主題標籤 #"
+    },
+    "benefits": {
+      "heading": "將圖片轉主題標籤用於數位行銷",
+      "improve_reach": {
+        "heading": "1. 提高觸及率",
+        "content": "通過使用針對性和趨勢主題標籤，你的內容變得更容易被發現，將其觸及範圍擴大到更多用戶"
+      },
+      "enhance_relevance": {
+        "heading": "2. 增強相關性",
+        "content": "確保你的主題標籤與圖片內容相匹配，吸引更多參與的受眾"
+      },
+      "save_time": {
+        "heading": "3. 節省時間",
+        "content": "AI 分析你的圖片並立即建議合適的主題標籤，節省手動研究的時間"
+      },
+      "remove_guesswork": {
+        "heading": "4. 消除猜測",
+        "content": "AI 消除了選擇最佳主題標籤的不確定性，提供可靠、有效的數據支援選項"
+      }
+    },
+    "get_hashtag_now": "立即獲取主題標籤"
+  },
+  "hashtags_to_image": {
+    "heading": "主題標籤轉圖片",
+    "card": {
+      "heading": "AI 圖片生成器：從主題標籤和文字創建圖片",
+      "subheading": "嘗試新的方式來提示圖片，使用 AI 創作使你的內容可見",
+      "description": "當使用主題標籤轉圖片 AI 藝術生成器時，2TAG 讓每個人的創意探索變得更容易、更快。使用文字轉圖片來實驗你最瘋狂的想法，以及 AI 支援的主題標籤，或在幾秒鐘內創建引人注目的內容"
+    },
+    "guide": {
+      "heading": "如何生成主題標籤？",
+      "subheading": "只需 3 步即可為你的圖片獲取主題標籤",
+      "step1": {
+        "heading": "上傳圖片",
+        "content": "上傳任何你喜歡的圖片到 2Tag"
+      },
+      "step2": {
+        "heading": "AI 標記",
+        "content": "AI 將分析圖片中的內容"
+      },
+      "step3": {
+        "heading": "獲取主題標籤",
+        "content": "根據識別的標籤，將生成最適合的主題標籤以獲得最佳效果"
+      },
+      "button": "+  立即獲取主題標籤 #"
+    },
+    "benefits": {
+      "heading": "將圖片轉主題標籤用於數位行銷",
+      "improve_reach": {
+        "heading": "1. 提高觸及率",
+        "content": "通過使用針對性和趨勢主題標籤，你的內容變得更容易被發現，將其觸及範圍擴大到更多用戶"
+      },
+      "enhance_relevance": {
+        "heading": "2. 增強相關性",
+        "content": "確保你的主題標籤與圖片內容相匹配，吸引更多參與的受眾"
+      },
+      "save_time": {
+        "heading": "3. 節省時間",
+        "content": "AI 分析你的圖片並立即建議合適的主題標籤，節省手動研究的時間"
+      },
+      "remove_guesswork": {
+        "heading": "4. 消除猜測",
+        "content": "AI 消除了選擇最佳主題標籤的不確定性，提供可靠、有效的數據支援選項"
+      }
+    },
+    "get_hashtag_now": "立即獲取主題標籤"
+  },
+  "instabot": {
+    "heading": "Instabot",
+    "card": {
+      "heading": "什麼是 Instabot？",
+      "subheading": "在你的數據上訓練個人 AI，幾秒鐘內以你的風格製作圖片",
+      "description": "Instabot 作為真實的 Instagram 用戶，抓取探索頁面貼文以收集數據。它建立一個共享庫，允許用戶訪問個人和集體信息"
+    },
+    "session": {
+      "heading": "使用 Instabot 獲得更多便利",
+      "items": {
+        "customize_niche": "自定義你帳戶關注的利基市場",
+        "full_access": "完全訪問自定義的 Instagram 趨勢分析報告",
+        "contribute": "將你的 AI 模型貢獻到社區庫"
+      }
+    },
+    "guide": {
+      "heading": "如何開啟和連接 Instabot",
+      "subheading": "大約 10 分鐘內製作你自己的 AI 模型",
+      "step1": {
+        "heading": "創建 Instagram 帳戶",
+        "content": "在你的設備上創建一個新的 Instagram 帳戶"
+      },
+      "step2": {
+        "heading": "關注利基市場",
+        "content": "像平常使用 Instagram 一樣關注其他感興趣的頁面。我們將把該領域作為你的 Instabot 類別"
+      },
+      "step3": {
+        "heading": "與我們連接 Insta-bot",
+        "content": "在我們的系統中輸入你的 Instagram 帳戶詳細信息。等待片刻讓 Instabot 運行。你已經設置好了"
+      },
+      "button": "立即創建 Instabot"
+    }
+  },
+  "instagram_trend_analysis": {
+    "heading": "Instagram 趨勢分析",
+    "card": {
+      "heading": "下一級趨勢追蹤器。現在在 2TAG 中",
+      "subheading": "從最新的主題標籤到話題，趨勢分析可以幫助你快速了解當前的市場趨勢模式",
+      "description": "趨勢分析讓你監控和管理過去 3 天或 7 天的抓取貼文，在將 Instabot 與你的 2TAG 帳戶配對後按主題追蹤活動"
+    },
+    "session": {
+      "heading": "趨勢報告中可以看到什麼數據",
+      "items": {
+        "post_scrapped": "抓取的貼文（過去選定期間 Instabot 處理了多少貼文）",
+        "top_keywords": "3 天或 7 天內在 IG 演算法中出現最多的前 10 個關鍵字",
+        "most_repeated": "Instagram 上最重複的貼文表明了吸引演算法注意的內容，因此可以作為你貼文的參考"
+      }
+    },
+    "guide": {
+      "heading": "如何在 2TAG 中使用 Instagram 趨勢分析",
+      "subheading": "與我們一起製作你自己的趨勢分析儀表板",
+      "step1": {
+        "heading": "與我們連接 Instabot",
+        "content": "為你的 IG 特定利基創建一個新的 Instabot 可以幫助我們自定義你的趨勢報告"
+      },
+      "step2": {
+        "heading": "3/7 天報告",
+        "content": "我們將繼續為你製作 3 天或 7 天的趨勢數據"
+      },
+      "button": "立即製作趨勢報告"
+    }
+  },
+  "common": {
+    "learn_more": "了解更多"
+  }
+}

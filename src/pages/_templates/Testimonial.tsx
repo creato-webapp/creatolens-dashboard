@@ -1,5 +1,7 @@
 // TestimonialCards.tsx
 import React from 'react'
+import { useTranslation } from 'next-i18next'
+
 interface Comment {
   img?: string
   author: string
@@ -13,28 +15,31 @@ interface TestimonialCardsProps {
   comments?: Comment[]
 }
 
-const testimonial = [
-  {
-    author: 'Avenna Hui',
-    text: '“I was able to *get 5,000+ organic impressions* based on the hashtags recommendation”',
-    title: 'Travel YouTuber with 3.95K↑ view',
-    img: '/userAvenna.jpeg',
-  },
-  {
-    author: 'Andy Ho',
-    text: '“Impression rates *grew more than 20%* from the hashtag category after 3 time usages in a row. ”',
-    title: 'Wedding Photographer',
-    img: './userJacky.jpeg',
-  },
-  {
-    author: 'Ewen Cheuk',
-    text: '“A great tool for us to *get more viewers* for our video content on social media.”',
-    title: 'KOL with 30K↑ followers on Instagram',
-    img: '/userJessica.jpeg',
-  },
-]
+const TestimonialCards: React.FC<TestimonialCardsProps> = () => {
+  const { t } = useTranslation('home')
 
-const TestimonialCards: React.FC<TestimonialCardsProps> = ({ comments = testimonial }: TestimonialCardsProps) => {
+  const testimonial = [
+    {
+      author: 'Avenna Hui',
+      text: t('testimonials.comments.avenna.text'),
+      title: t('testimonials.comments.avenna.title'),
+      img: '/userAvenna.jpeg',
+    },
+    {
+      author: 'Andy Ho',
+      text: t('testimonials.comments.andy.text'),
+      title: t('testimonials.comments.andy.title'),
+      img: './userJacky.jpeg',
+    },
+    {
+      author: 'Ewen Cheuk',
+      text: t('testimonials.comments.ewen.text'),
+      title: t('testimonials.comments.ewen.title'),
+      img: '/userJessica.jpeg',
+    },
+  ]
+
+  const comments = testimonial
   const formatText = (text: string) => {
     const parts = text.split(/\*(.*?)\*/g)
     return parts.map((part, index) =>
@@ -52,8 +57,8 @@ const TestimonialCards: React.FC<TestimonialCardsProps> = ({ comments = testimon
     <div className="flex w-full justify-center py-10">
       <div className="max-w-screen-xl md:px-12">
         <h2 className="mb-14 flex flex-col gap-2">
-          <span className="text-heading">These users use 2TAG</span>
-          <span className="text-subheading text-neutral-500">Love and trusted by content creators, digital marketers, and more</span>
+          <span className="text-heading">{t('testimonials.heading')}</span>
+          <span className="text-subheading text-neutral-500">{t('testimonials.subheading')}</span>
         </h2>
         <div id="testimonial-list" className="grid grid-cols-1 gap-4 md:grid-cols-3">
           {comments?.map((comment, index) => (

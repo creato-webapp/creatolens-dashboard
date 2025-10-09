@@ -1,70 +1,73 @@
 import PrimaryButton from '@components/Button/Primary'
 import FeatureLayout, { Card, Guide, NumberedList } from '@components/FeatureLayout'
 import useAuth from '@hooks/useAuth'
+import { useTranslation } from 'next-i18next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 const HashtagsToImage = () => {
   const { onLogin } = useAuth()
+  const { t } = useTranslation('features')
 
   return (
-    <FeatureLayout heading={'Hashtags-to-Image'}>
+    <FeatureLayout heading={t('hashtags_to_image.heading')}>
       <Card
         image="/hashtag/hashtags-to-image.png"
-        heading="AI Image Generator: Create images from hashtag and text."
-        subheading="Try new way to prompt the image to make your content visible with AI creation"
-        description={`When used Hashtag to Image AI art generator, 2TAG makes creative exploration easier and faster for everyone. Use Text to Image to experiment with your wildest ideas, also AI-backed hashtag, or create eye-catching content in just a few seconds.`}
+        heading={t('hashtags_to_image.card.heading')}
+        subheading={t('hashtags_to_image.card.subheading')}
+        description={t('hashtags_to_image.card.description')}
         buttonUrl="#"
         onLearnMore={onLogin}
       />
 
       <Guide
-        heading="How to generate hashtag?"
-        subheading="Get hashtags for your image in 3 steps."
+        heading={t('hashtags_to_image.guide.heading')}
+        subheading={t('hashtags_to_image.guide.subheading')}
         items={[
           {
-            heading: 'Upload Image',
-            content: 'Upload any image you like to 2Tag',
+            heading: t('hashtags_to_image.guide.step1.heading'),
+            content: t('hashtags_to_image.guide.step1.content'),
           },
           {
-            heading: 'AI Labeling',
-            content: 'AI will analyze what is in the image.',
+            heading: t('hashtags_to_image.guide.step2.heading'),
+            content: t('hashtags_to_image.guide.step2.content'),
           },
           {
-            heading: 'Get Hashtags',
-            content: 'Based on the labels identified, best-fit hashtags will be generated for optimal results.',
+            heading: t('hashtags_to_image.guide.step3.heading'),
+            content: t('hashtags_to_image.guide.step3.content'),
           },
         ]}
         button={{
-          name: '+  Get Hashtags Now #',
+          name: t('hashtags_to_image.guide.button'),
           url: '',
           onClick: onLogin,
         }}
       />
       <div className="py-16">
         <NumberedList
-          heading={'Involve Image-to-Hashtags for digital marketing'}
+          heading={t('hashtags_to_image.benefits.heading')}
           list={[
             {
-              heading: '1. Improves Reach',
-              content: 'By using targeted and trending hashtags, your content becomes more discoverable, expanding its reach to more users.',
+              heading: t('hashtags_to_image.benefits.improve_reach.heading'),
+              content: t('hashtags_to_image.benefits.improve_reach.content'),
             },
             {
-              heading: '2. Enhances Relevance',
-              content: 'Ensures your hashtags match your image content, attracting a more engaged audience.',
+              heading: t('hashtags_to_image.benefits.enhance_relevance.heading'),
+              content: t('hashtags_to_image.benefits.enhance_relevance.content'),
             },
             {
-              heading: '3. Saves Time',
-              content: 'AI analyzes your image and suggests suitable hashtags instantly, saving time for manually researching.',
+              heading: t('hashtags_to_image.benefits.save_time.heading'),
+              content: t('hashtags_to_image.benefits.save_time.content'),
             },
             {
-              heading: '4. Removes Guesswork',
-              content: 'AI takes the uncertainty out of choosing the best hashtags, providing reliable, effective options backed by data.',
+              heading: t('hashtags_to_image.benefits.remove_guesswork.heading'),
+              content: t('hashtags_to_image.benefits.remove_guesswork.content'),
             },
           ]}
         />
         <div className="flex w-full justify-center pt-6">
           <div className="w-full md:w-80 ">
             <PrimaryButton sizes={['l', 'l', 'l']} onClick={onLogin}>
-              Get Hashtag Now
+              {t('hashtags_to_image.get_hashtag_now')}
             </PrimaryButton>
           </div>
         </div>
@@ -72,5 +75,11 @@ const HashtagsToImage = () => {
     </FeatureLayout>
   )
 }
+
+export const getStaticProps = async ({ locale }: { locale: string }) => ({
+  props: {
+    ...(await serverSideTranslations(locale, ['features', 'common'])),
+  },
+})
 
 export default HashtagsToImage
